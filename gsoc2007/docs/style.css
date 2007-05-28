@@ -1,0 +1,71 @@
+/*************************
+  Coppermine Photo Gallery
+  ************************
+  Copyright (c) 2003-2007 Coppermine Dev Team
+  v1.1 originally written by Gregory DEMAR
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  ********************************************
+  Coppermine version: 1.5.0
+  $Source$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**********************************************/
+
+body {
+        color: black;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+        font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        text-decoration: none;
+        color: #0E72A4;
+}
+
+p {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.small {
+        font-size: 9px;
+        text-align:right;
+        margin-top:0px;
+        margin-bottom:0px;
+}
+
+.maintable {
+        border: 1px solid #0E72A4;
+        background-color: #efefef;
+        margin-top: 1px;
+        margin-bottom: 1px;
+}
+
+.tableh1 {
+        background : #0E72A4 ;
+        color : #FFFFFF;
+        padding-top: 3px;
+        padding-right: 10px;
+        padding-bottom: 3px;
+        padding-left: 10px;
+}
+
+.tableb {
+        background: #EFEFEF ;
+        padding-top: 3px;
+        padding-right: 10px;
+        padding-bottom: 3px;
+        padding-left: 10px;
+}
+
+.tablef {
+        background: #D1D7DC;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+}

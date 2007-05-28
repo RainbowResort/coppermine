@@ -1,0 +1,88 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Subversion - Coppermine Photo Gallery - Documentation &amp; Manual</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<meta name="language"    content="en">
+<meta name="copyright"   content="Coppermine dev team">
+<meta name="description" content="Subversion: This part of the documentation is not meant for end users of Coppermine, but only for developers. There is no support for this section, it comes as-is.">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="MSSmartTagsPreventParsing" content="true">
+<meta http-equiv="imagetoolbar" content="no">
+<!--
+  SVN version info:
+  -----------------
+  Coppermine version: 1.5.0
+  $Revision: 3473 $
+  $LastChangedBy: gaugau $
+  $Date: 2007-03-01 19:33:52 +0100 (Do, 01 Mrz 2007) $
+-->
+<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="screen.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="print.css" media="print" />
+<script src="script.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+  cpgDocHeader();
+</script>
+<div id="toc">
+<script type="text/javascript">
+  cpgDocToc();
+</script>
+<noscript>
+<a href="toc.htm">Table of Contents</a>
+</noscript>
+</div>
+
+<a name="subversion"></a><h1>Subversion<a href="#subversion" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h1>
+<p>As Coppermine is a community effort, with various developers working on it simultaneously, there is the need to have a tool that allows the developers to organize their submissions.</p>
+
+<a name="dev_subversion_target_audience"></a><h2>Target audience<a href="#dev_subversion_target_audience" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This part of the documentation is not meant for end users of Coppermine, meaning: you don't have to read this nor do you (as end user) have to check out the Subversion repository. However: if you know your way around in Coppermine and would like to see the bleeding edge of Coppermine technology, you're welcome to read this page and check out Coppermine using Subversion access. Primary target audience for this page are coppermine developers though.</p>
+
+<a name="dev_subversion_caveat"></a><h2>Caveats<a href="#dev_subversion_caveat" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>As suggested in the <a href="testing.htm">testing docs</a>, you (as an end user) are welcome to check out the development versions of Coppermine. However, you have to understand that both subversion access as well as development versions go completely, utterly unsupported.</p>
+
+<a name="dev_subversion_definition"></a><h2>What is subversion?<a href="#dev_subversion_definition" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>Subversion is a revision control system which allows computer software to be developed in an incremental and controlled fashion by a distributed group of programmers. Also commonly referred to as svn or SVN, Subversion is designed specifically to be a modern replacement for CVS. Subversion was created by <a href="http://www.collab.net/" rel="external" class="external">CollabNet</a>, who still maintain the project.</p>
+<p>SVN provides the means to store not only the current version of a piece of source code, but a record of all changes (and who made those changes) that have occurred to that source code. Use of SVN is particularly common on projects with multiple developers, since SVN ensures changes made by one developer are not accidentally removed when another developer posts their changes to the source tree.</p>
+
+<a name="dev_subversion_hosting"></a><h2>Where is the subversion repository hosted?<a href="#dev_subversion_hosting" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>Setting up and maintaining a subversion server is something that you can't accomplish on a &quot;regular&quot; webserver (on shared webhosting). That's why the Coppermine group has decided to host the subversion repository at <a href="http://sourceforge.net/" rel="external" class="external">sourceforge.net</a>, who provide hosting and services for many open source projects. Originally, the Coppermine project started using Sourceforge's CVS services and later moved to SVN.</p>
+
+<a name=""></a><h2>Recommended software<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<ul>
+  <li>Free SVN client for Windows: <a href="http://tortoisesvn.net/" rel="external" class="external">TortoiseSVN</a></li>
+  <li>Official SVN client for Linux and BSD: <a href="http://subversion.tigris.org/" rel="external" class="external">subversion.tigris.org</a></li>
+</ul>
+
+<a name=""></a><h2>Repository structure<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>https://coppermine.svn.sourceforge.net/svnroot/coppermine</p>
+
+<a name=""></a><h2>Checking out<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+
+<a name=""></a><h3>Checking out the entire repository<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+<p> svn co https://coppermine.svn.sourceforge.net/svnroot/coppermine coppermine</p>
+
+<a name=""></a><h3>Checking out a particular Package<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+
+<a name=""></a><h3>Checking out a particular file<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+
+<a name="dev_subversion_download"></a><h2>Is there no single package that I could download instead?<a href="#dev_subversion_download" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>Many end users complain that this sounds too complicated - they ask for a single file that they could download. You have to understand that there <em>are</em> packages for end users - you can get them from the downloads section: download the most recent stable release! Using subversion to check out the development version is only meant for experienced users who are eager to test the unsupported development version. Consider the effort needed to check out using subversion as a ticket that allows you to get the cutting edge of Coppermine. Bottom line: no, there is no single file that you could download instead of checking out the repository.</p>
+
+<a name=""></a><h2>Developers-only<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+
+<a name=""></a><h3>Check out before checking in<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+
+<a name=""></a><h3>Committing your code<a href="#" title="Link to this section"><img src="pics/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+
+<p>tbc</p>
+
+<script type="text/javascript">
+  cpgDocFooter();
+</script>
+
+</body>
+</html>
