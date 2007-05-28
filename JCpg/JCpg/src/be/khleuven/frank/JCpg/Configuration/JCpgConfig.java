@@ -10,7 +10,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
  * 
  * This class contains all the information found in the Cpg _config table.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgConfig implements Serializable {

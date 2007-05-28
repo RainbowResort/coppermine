@@ -12,6 +12,13 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 
+/**
+ * 
+ * Add category manager
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {
 
 	

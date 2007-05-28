@@ -14,7 +14,7 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
  * 
  * The class shows the program's splashscreen
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgSplashscreen extends JFrame{

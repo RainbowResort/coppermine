@@ -5,7 +5,13 @@ import java.io.Serializable;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
 
 
-
+/**
+ * 
+ * Allowed extensions for pictures importation
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilter implements Serializable {
 	
 																	

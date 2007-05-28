@@ -16,7 +16,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * to put it in the database, there it will get an id and we will retrieve it back.
  * If the id is not -1, the edit manager will produce an update query;
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public abstract class JCpgEditManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {

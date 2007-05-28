@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
  * 
  * Takes a path to a file and checks of that file exists. File must be an image.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgImageUrlValidator implements Serializable{

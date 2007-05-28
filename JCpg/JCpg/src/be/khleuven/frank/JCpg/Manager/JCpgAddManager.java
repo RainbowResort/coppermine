@@ -23,7 +23,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * start the right manager.
  * We have three manager classes inheritating from this class: category, album, picture.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntryInterface, Serializable {

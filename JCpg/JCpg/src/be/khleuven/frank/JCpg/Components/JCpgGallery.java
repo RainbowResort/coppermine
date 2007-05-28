@@ -18,6 +18,13 @@ import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
+/**
+ * 
+ * Cpg component: Gallery
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgGallery implements Serializable{
 	
 	

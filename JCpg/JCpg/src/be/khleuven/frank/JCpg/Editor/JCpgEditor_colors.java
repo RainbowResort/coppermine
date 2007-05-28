@@ -15,7 +15,13 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
-
+/**
+ * 
+ * Editor: color correction
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditor_colors extends JCpgEditor{
 	
 	

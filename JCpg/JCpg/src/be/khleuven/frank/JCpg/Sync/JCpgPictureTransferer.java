@@ -24,7 +24,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
  * 
  * Handles the up and download of the user's picture to/from his server.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgPictureTransferer implements Serializable{

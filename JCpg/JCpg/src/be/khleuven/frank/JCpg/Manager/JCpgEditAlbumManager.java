@@ -9,7 +9,13 @@ import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
-
+/**
+ * 
+ * Edit album manager
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTreeEntryInterface, Serializable {
 	
 	

@@ -15,6 +15,13 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Interfaces.JCpgProgressManagerInterface;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
+/**
+ * 
+ * Progress manager can be used for everything that needs a progress bar
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgProgressManager extends JDialog implements JCpgProgressManagerInterface{
 	
 	private JCpgUI ui;

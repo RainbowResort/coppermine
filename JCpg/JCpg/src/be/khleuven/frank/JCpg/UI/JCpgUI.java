@@ -64,7 +64,13 @@ import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 
 
-
+/**
+ * 
+ * Complete JCpg UI
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgUI extends JFrame implements TreeSelectionListener, Serializable{
 	
 	

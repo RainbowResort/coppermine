@@ -18,7 +18,7 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  * 
  * Determines how the pictures in the picture list are rendered
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer {

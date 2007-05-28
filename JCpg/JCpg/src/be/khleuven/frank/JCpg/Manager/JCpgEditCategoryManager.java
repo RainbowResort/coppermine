@@ -8,7 +8,14 @@ import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
-
+/**
+ * 
+ * 
+ * Edit category manager
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditCategoryManager extends JCpgEditManager implements Serializable {
 	
 	

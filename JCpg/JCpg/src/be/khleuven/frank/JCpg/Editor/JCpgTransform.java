@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
  * 
  * Used to transform from Image to BufferedImage and back
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgTransform {

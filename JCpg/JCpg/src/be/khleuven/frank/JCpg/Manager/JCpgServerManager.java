@@ -21,7 +21,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * 
  * Is responsible for asking all the necesarry info to make a connection to the right sql db and tables
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgServerManager extends JFrame implements Serializable{

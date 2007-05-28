@@ -25,6 +25,13 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
+/**
+ * 
+ * Editor: rotate
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditor_rotate extends JCpgEditor{
 
 	JButton rotate90Right, rotate90Left;

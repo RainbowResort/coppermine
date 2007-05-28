@@ -18,7 +18,13 @@ import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
-
+/**
+ * 
+ * Editor: resize
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditor_resize extends JCpgEditor {
 	
 	

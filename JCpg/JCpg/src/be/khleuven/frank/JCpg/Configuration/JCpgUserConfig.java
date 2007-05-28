@@ -2,6 +2,13 @@ package be.khleuven.frank.JCpg.Configuration;
 import java.io.Serializable;
 
 
+/**
+ * 
+ * User configuration
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgUserConfig implements Serializable {
 	
 	private String username, password;

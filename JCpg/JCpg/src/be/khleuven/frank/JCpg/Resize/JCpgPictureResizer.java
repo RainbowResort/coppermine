@@ -29,7 +29,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * 		1) resize picture and get an Image object
  * 		2) resize picture and write to file = make a thumb
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgPictureResizer implements Serializable{

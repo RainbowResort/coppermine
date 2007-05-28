@@ -30,7 +30,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * 
  * Used to get all the necesarry information about the Coppermine user to login to his/her Coppermine account
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgUserManager extends JDialog {

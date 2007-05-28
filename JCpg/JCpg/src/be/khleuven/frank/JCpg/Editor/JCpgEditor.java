@@ -41,7 +41,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * At the moment, we JDialog itself has a size of 1000x700: there's a logo (1000x50) and below 50 pixels is needed for the apply and close button. So de width of the preview panel
  * can max be 1000 pixels, the height has a maximum of 600 pixels.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterface{

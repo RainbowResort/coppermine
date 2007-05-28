@@ -11,9 +11,9 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * 
- * Cpg Album. An album contains a collection of pictures.
+ * Cpg component: album
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgAlbum extends JCpgGallery implements Serializable{

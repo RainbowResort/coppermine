@@ -9,6 +9,13 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 
+/**
+ * 
+ * Edit picture manager
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgEditPictureManager extends JCpgEditManager implements Serializable {
 	
 	

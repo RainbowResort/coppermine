@@ -22,7 +22,13 @@ import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
-
+/**
+ * 
+ * Add picture manager
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {
 
 	

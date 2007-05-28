@@ -14,7 +14,7 @@ import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
  * 
  * Makes the connections with the sql database, executes queries and gives their results back
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgSqlManager implements Serializable{

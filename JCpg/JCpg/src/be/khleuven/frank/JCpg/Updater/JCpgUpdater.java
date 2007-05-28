@@ -10,7 +10,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * 
  * Show update window looking for new updates
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgUpdater extends JCpgProgressManager {

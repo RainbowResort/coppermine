@@ -15,7 +15,7 @@ import be.khleuven.frank.JCpg.Components.JCpgGallery;
  * 
  * Save objects to binary file or delete them from it
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgGallerySaver implements Serializable{

@@ -5,6 +5,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+/**
+ * 
+ * Server configuration
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgServerConfig implements Serializable{
 	
 												

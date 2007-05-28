@@ -11,6 +11,13 @@ import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
+/**
+ * 
+ * Cpg component: picture
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgPicture extends JCpgGallery implements Serializable{
 	
 	

@@ -13,7 +13,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * 
  * Cpg Categories. A categorie contains albums.
  * 
- * @author frank
+ * @author Frank Cleynen
  *
  */
 public class JCpgCategory extends JCpgGallery implements Serializable{

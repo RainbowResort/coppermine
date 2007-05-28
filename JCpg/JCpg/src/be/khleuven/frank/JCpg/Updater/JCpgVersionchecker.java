@@ -18,8 +18,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
  * 
  * Visits the jcpgtool.org website and looks for an update
  * 
- * @author frank
- * @todo: set updatefile url in version file, so this link is dynamic 
+ * @author Frank Cleynen
  *
  */
 public class JCpgVersionchecker {
