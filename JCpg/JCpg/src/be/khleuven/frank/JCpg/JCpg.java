@@ -15,7 +15,7 @@ public class JCpg {
 	
 	public static void main(String[] args) {
 		
-		//new JCpgSplashscreen(359, 76, 2000);
+		new JCpgSplashscreen(359, 76, 2000);
 		new JCpgUI(true);
 		new JCpgUpdater(null, 100);
 
