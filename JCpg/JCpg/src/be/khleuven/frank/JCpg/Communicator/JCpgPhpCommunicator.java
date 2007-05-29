@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -49,7 +50,19 @@ public class JCpgPhpCommunicator {
 	}
 	
 	
-	public boolean performPhpRequest(String request){
+	public boolean performPhpRequest(String url){
+		
+		try {
+			
+			URL requestUrl = new URL(url);
+			
+			requestUrl.openConnection();
+			
+		} catch (Exception e) {
+		
+			System.out.println("JCpgPhpCommunicator: Couldn't send request URL");
+			
+		}
 		
 		return true;
 		
@@ -77,7 +90,7 @@ public class JCpgPhpCommunicator {
 
 		    out.close();
 		    
-		    return true;
+		    return true; // remote response received well
 			
 		} catch (Exception exception) {
 			
