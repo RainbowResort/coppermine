@@ -327,6 +327,17 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 		
 		return this.create;
 	}
+	public JButton getCloseButton(){
+		
+		return this.close;
+		
+	}
+	/**
+	 * 
+	 * Get the reference to the gallery saver object
+	 * 
+	 * @return
+	 */
 	public JCpgGallerySaver getGallerySaver(){
 		
 		return this.gallerySaver;

@@ -21,9 +21,9 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 	
-														//*************************************
-														//				VARIABLES             *
-														//*************************************
+																	//*************************************
+																	//				VARIABLES             *
+																	//*************************************
 	private String keyword = null, alb_password = null, alb_password_hint = null;
 	private int visibility;
 	private boolean uploads, comments, votes;
@@ -36,9 +36,9 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 														
-														//*************************************
-														//				CONSTRUCTORS          *
-														//*************************************
+																	//*************************************
+																	//				CONSTRUCTORS          *
+																	//*************************************
 	/**
 	 * 
 	 * Makes a new JCpgAlbum object
@@ -69,9 +69,9 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 														
-														//*************************************
-														//				SETTERS               *
-														//*************************************
+																	//*************************************
+																	//				SETTERS               *
+																	//*************************************
 	/**
 	 * 
 	 * Set the album id
@@ -212,9 +212,9 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 														
-														//*************************************
-														//				GETTERS               *
-														//*************************************
+																	//*************************************
+																	//				GETTERS               *
+																	//*************************************
 	/**
 	 * 
 	 * Get the album id
@@ -417,9 +417,9 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 														
-														//*************************************
-														//				MUTATORS & OTHERS     *
-														//*************************************
+																	//*************************************
+																	//				MUTATORS & OTHERS     *
+																	//*************************************
 	/**
 	 * 
 	 * Add a picture the the album

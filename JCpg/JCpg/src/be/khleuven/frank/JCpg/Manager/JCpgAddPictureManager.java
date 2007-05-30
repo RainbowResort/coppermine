@@ -1,14 +1,13 @@
 package be.khleuven.frank.JCpg.Manager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -25,6 +24,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 /**
  * 
  * Add picture manager
+ * We need to do a change to the default add manager's size because we need to integrate a filechooser. This way, users can import as many pictures as they want with just one click.
  * 
  * @author Frank Cleynen
  *
@@ -37,11 +37,11 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 																									//*************************************
 																									//				VARIABELS             *
 																									//*************************************
-	JCpgConfig cpgConfig;
+	private JCpgConfig cpgConfig;
 	
-	JFileChooser pictureChooser;
-	JLabel pictureStatus;
-	JButton browse;
+	private JFileChooser pictureChooser;
+	
+	private Dimension screensize;
 	
 	
 	
@@ -132,20 +132,20 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	 */
 	private void doExtraSwingComponents(){
 		
-		pictureStatus = new JLabel();
-		pictureStatus.setBounds(180, 91, 250, 20);
+		screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setBounds((int)(screensize.getWidth()/2)-250, (int)(screensize.getHeight()/2)-250, 500, 500);
 		
-		browse = new JButton("Choose file");
-		browse.setBounds(70, 91, 100, 30);
+		pictureChooser = new JFileChooser();
+		pictureChooser.setFileFilter(new JCpgAllowedExtensionFilter(getCpgConfig()));
+		pictureChooser.setMultiSelectionEnabled(true);
+		pictureChooser.setBounds(0, 100, 495, 345);
 		
-		this.getContentPane().add(pictureStatus);
-		this.getContentPane().add(browse);
+		getCreateButton().setText("Add");
+		getCreateButton().setBounds(70, 450, 100, 30);
 		
-		browse.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt) {
-				browseActionPerformed(evt);
-			}
-		});
+		getCloseButton().setBounds(180, 450, 100, 30);
+		
+		this.getContentPane().add(pictureChooser);
 		
 	}
 	
@@ -153,9 +153,9 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	
 	
 	
-																			//*************************************
-																			//				EVENTS			      *
-																			//*************************************	
+																									//*************************************
+																									//				EVENTS			      			*
+																									//*************************************	
 	/**
 	* 
 	* Perform right actions when create button is clicked.
@@ -165,90 +165,46 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 		JCpgAlbum album = (JCpgAlbum)getNode().getUserObject();
 		
-		// title empty?
-		if(getTitleField().getText().equals("")){
-			
-			getMsgLabel().setText("Title is empty !!");
-			return;
-			
-		}
+		File[] selectedFiles = pictureChooser.getSelectedFiles();
 		
-		// no file choosen
-		if(pictureStatus.getText().equals("")){
-			
-			getMsgLabel().setText("No file choosen !!");
-			return;
-			
-		}
+		for(int i=0; i<selectedFiles.length; i++){
 		
-		// check duplicate
-		for(int i=0; i<album.getPictures().size(); i++){
+			// make new picture
+			ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
+			File source = new File(selectedFiles[i].getAbsolutePath());
+			File destination = new File(getCpgConfig().getValueFor("fullpath") + "userpics/10001/" + selectedFiles[i].getName());
+			JCpgPictureTransferer transferer = new JCpgPictureTransferer();
+			long filesize = 0;
 			
-			if(album.getPictures().get(i).getName().equals(titleField.getText())){
+			try {
 				
-				getMsgLabel().setText("Picture already exists. Choose a different name.");
-				return;
+				filesize = transferer.copyFile(source, destination); // copy picture locally
+				JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + "userpics/10001/", selectedFiles[i].getName());
+				//thumb.makeThumb(getJCpgUIReference().getThumbnailPreferredSize()); memory error
+				
+			} catch (Exception e) {
+				
+				System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
 				
 			}
 			
-		}
-		
-		// make new picture
-		ImageIcon image = new ImageIcon(getFileChooser().getSelectedFile().getAbsolutePath()); // for width and height
-		File source = new File(getFileChooser().getSelectedFile().getAbsolutePath());
-		File destination = new File(getCpgConfig().getValueFor("fullpath") + "userpics/10001/" + getFileChooser().getSelectedFile().getName());
-		JCpgPictureTransferer transferer = new JCpgPictureTransferer();
-		long filesize = 0;
-		
-		try {
+			Date date = new Date(); // used to get number of seconds since 1970 for ctime
+		    
+			JCpgPicture picture = new JCpgPicture(getJCpgUIReference().getUserConfig(), -1, album.getId(), "userpics/10001/", selectedFiles[i].getName(), (int)filesize, (int)filesize, image.getIconWidth(), image.getIconHeight(), 0, (int)date.getTime(), 0, "", 0, 0, getTitleField().getText(), getDescriptionField().getText(), "", true, 0, 0, 0);
 			
-			filesize = transferer.copyFile(source, destination); // copy picture locally
-			JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + "userpics/10001/", getFileChooser().getSelectedFile().getName());
-			//thumb.makeThumb(getJCpgUIReference().getThumbnailPreferredSize()); memory error
+			picture.generateSqlInsertQuery();
 			
-		} catch (Exception e) {
+			album.addPicture(picture);
+			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
+			getNode().add(newNode);
+			SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 			
-			System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
+			getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+			
+			getJCpgUIReference().setEnabled(true);
+			this.dispose();
 			
 		}
-		
-		Date date = new Date(); // used to get number of seconds since 1970 for ctime
-	    
-		JCpgPicture picture = new JCpgPicture(getJCpgUIReference().getUserConfig(), -1, album.getId(), "userpics/10001/", getFileChooser().getSelectedFile().getName(), (int)filesize, (int)filesize, image.getIconWidth(), image.getIconHeight(), 0, (int)date.getTime(), 0, "", 0, 0, getTitleField().getText(), getDescriptionField().getText(), "", true, 0, 0, 0);
-		
-		picture.generateSqlInsertQuery();
-		
-		album.addPicture(picture);
-		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
-		getNode().add(newNode);
-		SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
-		
-		getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
-		
-		getJCpgUIReference().setEnabled(true);
-		this.dispose();
-		
-	}
-	
-	/**
-	 * 
-	 * Actions when the user pushes the 'choose file' button. We fire up a new filechooser with a correct filter attachted to it. The allowed extension we get from the Cpg configuration.
-	 * 
-	 */
-	public void browseActionPerformed(java.awt.event.ActionEvent evt) {
-		
-		pictureChooser = new JFileChooser();
-		
-		JCpgAllowedExtensionFilter filter = new JCpgAllowedExtensionFilter(getCpgConfig());
-		pictureChooser.setFileFilter(filter);
-		
-		int returnVal = pictureChooser.showOpenDialog(this);
-	    
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			
-			pictureStatus.setText(pictureChooser.getSelectedFile().getName());
-			
-	    }
 		
 	}
 		

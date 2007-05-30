@@ -21,11 +21,25 @@ import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 public class JCpgPhpCommunicator {
 	
 	
+	
+																	//*************************************
+																	//				VARIABLES	          *
+																	//*************************************
 	private JCpgUserConfig config = null;
 	
 	
 	
 	
+																	//*************************************
+																	//				CONSTRUCTOR	          *
+																	//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgPhpCommunicator object
+	 * 
+	 * @param config
+	 * 		reference to the current configuration
+	 */
 	public JCpgPhpCommunicator(JCpgUserConfig config){
 		
 		setUserConfig(config);
@@ -34,15 +48,37 @@ public class JCpgPhpCommunicator {
 	
 	
 	
+																	
+																	//*************************************
+																	//				SETTERS		          *
+																	//*************************************
+	/**
+	 * 
+	 * Sets the current configuration
+	 * 
+	 * @param config
+	 * 		the current configuration
+	 */
 	private void setUserConfig(JCpgUserConfig config){
 		
 		this.config = config;
 		
 	}
 	
+																	
 	
 	
 	
+																	//*************************************
+																	//				GETTERS		          *
+																	//*************************************
+	/**
+	 * 
+	 * Get the current configuration
+	 * 
+	 * @return
+	 * 		the current configuration
+	 */
 	public JCpgUserConfig getConfig(){
 		
 		return this.config;
@@ -50,6 +86,20 @@ public class JCpgPhpCommunicator {
 	}
 	
 	
+	
+																	
+																	//*************************************
+																	//				MUTATORS & OTHERS	  *
+																	//*************************************
+	/**
+	 * 
+	 * Go to a URL to get a XML server response
+	 * 
+	 * @param url
+	 * 		the URL to go to
+	 * @return
+	 * 		true if it was visited successfully, else false
+	 */
 	public boolean performPhpRequest(String url){
 		
 		try {
@@ -67,6 +117,15 @@ public class JCpgPhpCommunicator {
 		return true;
 		
 	}
+	/**
+	 * 
+	 * Get the XML server response
+	 * 
+	 * @param url
+	 * 		URL where the server response can be found
+	 * @return
+	 * 		true if the server response was collected successfully, else false
+	 */
 	public boolean getXmlResult(String url){
 		
 		try {
