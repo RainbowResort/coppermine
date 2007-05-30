@@ -63,17 +63,19 @@ public class JCpgSplashscreen extends JFrame{
 	 * 		width of the splashscreen
 	 * @param height
 	 * 		height of the splashscreen
+	 * @param logopath
+	 * 		path to the picture to be shown
 	 * @param seconds
 	 * 		number of seconds to show the splashscreen
 	 * 
 	 */
-	public JCpgSplashscreen(int width, int height, int seconds){
+	public JCpgSplashscreen(int width, int height, String logopath, int seconds){
 		
 		setSplashscreenSize(width, height);
 		
 		splash = new JWindow();
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
-		logo = new JLabel(new JCpgImageUrlValidator("data/splash.jpg").createImageIcon(), JLabel.CENTER);
+		logo = new JLabel(new JCpgImageUrlValidator(logopath).createImageIcon(), JLabel.CENTER);
 		
 		splash.setBounds((screensize.width/2)-(getSplashscreenWidth()/2), (screensize.height/2)-(getSplashscreenHeight()/2), getSplashscreenWidth(), getSplashscreenHeight());
 		
@@ -93,6 +95,31 @@ public class JCpgSplashscreen extends JFrame{
 		splash.dispose();
 		this.setVisible(false);
 		this.dispose();
+		
+	}
+	/**
+	 * 
+	 * Used to show a splashwindow we want to close ourselves
+	 * 
+	 * @param width
+	 * 		width of the splashscreen
+	 * @param height
+	 * 		height of the splashscreen
+	 * @param logopath
+	 * 		path to the picture to be shown
+	 */
+	public JCpgSplashscreen(int width, int height, String logopath){
+		
+		setSplashscreenSize(width, height);
+		
+		splash = new JWindow();
+		screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		logo = new JLabel(new JCpgImageUrlValidator(logopath).createImageIcon(), JLabel.CENTER);
+		
+		splash.setBounds((screensize.width/2)-(getSplashscreenWidth()/2), (screensize.height/2)-(getSplashscreenHeight()/2), getSplashscreenWidth(), getSplashscreenHeight());
+		
+		splash.getContentPane().add(logo, BorderLayout.CENTER);
+		splash.setVisible(true);
 		
 	}
 	
@@ -150,6 +177,15 @@ public class JCpgSplashscreen extends JFrame{
 	public int getSplashscreenHeight(){
 		
 		return this.userManagerHeight;
+		
+	}
+	
+	
+	public void closeSplash(){
+		
+		splash.dispose();
+		this.setVisible(false);
+		this.dispose();
 		
 	}
 	

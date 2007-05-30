@@ -32,7 +32,7 @@ public class JCpg {
 	
 	public static void main(String[] args) {
 		
-		new JCpgSplashscreen(359, 76, 2000);
+		new JCpgSplashscreen(359, 76, "data/splash.jpg" ,2000);
 		JCpgUI ui = new JCpgUI(true);
 		new JCpgUpdater(ui, 100);
 

@@ -671,7 +671,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		if(getOnlinemode()){ // if true, we are online
 			
 			this.setEnabled(false);
+			JCpgSplashscreen splash = new JCpgSplashscreen(359, 76, "data/syncing.jpg");
 			new JCpgSyncer(this, getSqlManager()).sync();
+			splash.closeSplash();
+			this.setEnabled(true);
 			
 		}else{ // offline, let user go online
 			
