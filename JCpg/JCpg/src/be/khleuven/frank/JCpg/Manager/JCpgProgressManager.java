@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2997  Frank Cleynen
+Copyright (C) 2007  Frank Cleynen
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -19,14 +19,18 @@ package be.khleuven.frank.JCpg.Manager;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JWindow;
 
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Interfaces.JCpgProgressManagerInterface;
@@ -41,7 +45,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  */
 public class JCpgProgressManager extends JDialog implements JCpgProgressManagerInterface{
 	
-	private JCpgUI ui;
+	private Window parent;
 	
 	private JProgressBar progress;
 	private JLabel logo, title, finished;
@@ -49,6 +53,7 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	private String logopath = null;
 	private int maximumprogress = 0;
+	private boolean showCloseButton, autoClose;
 	
 	private Dimension screensize;
 	
@@ -57,18 +62,24 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	 * 
 	 * Create new JCpgUpdater object
 	 * 
-	 * @param ui
-	 * 		reference to the JCpg ui
+	 * @param parent
+	 * 		reference to the parent Swing component
 	 * @param maximum
 	 * 		maximum value of progressbar
+	 * @param showCloseButton
+	 * 		is the close button shown or not
+	 * @param autoClose
+	 * 		make the window disappear after the progressbar hits 100%
 	 */
-	public JCpgProgressManager(JCpgUI ui, int maximum, String logopath){
+	public JCpgProgressManager(Window parent, int maximum, String logopath, boolean showCloseButton, boolean autoClose){
 		
-		//ui.setEnabled(false);
+		parent.setEnabled(false);
 		
-		setJCpgUIReference(ui);
+		setParent(parent);
 		setMaximum(maximum);
 		setLogopath(logopath);
+		setShowCloseButton(showCloseButton);
+		setAutoClose(autoClose);
 		
 		initComponents();
 		boundComponents();
@@ -80,14 +91,14 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	/**
 	 * 
-	 * Set the JCpgUi reference
+	 * Set the parent reference
 	 * 
-	 * @param ui
-	 * 		the JCpgUi reference
+	 * @param parent
+	 * 		the parent reference
 	 */
-	private void setJCpgUIReference(JCpgUI ui){
+	private void setParent(Window parent){
 		
-		this.ui = ui;
+		this.parent = parent;
 		
 	}
 	private void setMaximum(int maximum){
@@ -100,6 +111,16 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		this.logopath = logopath;
 		
 	}
+	private void setShowCloseButton(boolean showCloseButton){
+		
+		this.showCloseButton = showCloseButton;
+		
+	}
+	private void setAutoClose(boolean autoClose){
+		
+		this.autoClose = autoClose;
+		
+	}
 	
 	
 	
@@ -109,14 +130,14 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	/**
 	 * 
-	 * Get the JCpgUi reference
+	 * Get the parent reference
 	 * 
 	 * @return
-	 * 		the JCpgUi reference
+	 * 		the parent reference
 	 */
-	public JCpgUI getJCpgUI(){
+	public Window getParent(){
 		
-		return this.ui;
+		return this.parent;
 		
 	}
 	public int getMaximum(){
@@ -127,6 +148,16 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	public String getLogopath(){
 		
 		return this.logopath;
+		
+	}
+	public boolean getShowCloseButton(){
+		
+		return this.showCloseButton;
+		
+	}
+	public boolean getAutoClose(){
+		
+		return this.autoClose;
 		
 	}
 	/**
@@ -202,7 +233,7 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		this.getContentPane().add(title);
 		this.getContentPane().add(progress);
 		this.getContentPane().add(finished);
-		this.getContentPane().add(close);
+		if(getShowCloseButton()) this.getContentPane().add(close);
 		this.setVisible(true);
 		
 	}
@@ -218,9 +249,25 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	private void closeActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		//getJCpgUI().setEnabled(true);
+		getParent().setEnabled(true);
 		this.dispose();
     	
+	}
+	public void changeProgressbarValue(int value){
+		
+		progress.setValue(value);
+		
+		if(progress.getValue() == progress.getMaximum()){
+			
+			finished.setText("Done!");
+			
+		}else if(progress.getValue() == progress.getMaximum() && getAutoClose()){
+			
+			getParent().setEnabled(true);
+			this.dispose();
+			
+		}
+		
 	}
 
 
@@ -228,6 +275,7 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	public boolean doAction() {
 		
 		return false;
+		
 	}
 
 }

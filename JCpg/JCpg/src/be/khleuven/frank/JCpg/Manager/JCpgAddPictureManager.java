@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2997  Frank Cleynen
+Copyright (C) 2007  Frank Cleynen
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -184,6 +184,8 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 		File[] selectedFiles = pictureChooser.getSelectedFiles();
 		
+		JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length-1, "data/updater_logo.jpg", false, true); // new progress manager
+		
 		for(int i=0; i<selectedFiles.length; i++){
 		
 			// make new picture
@@ -214,12 +216,12 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 			album.addPicture(picture);
 			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
 			getNode().add(newNode);
-			SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 			
 			getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
 			
-			getJCpgUIReference().setEnabled(true);
-			this.dispose();
+			progress.changeProgressbarValue(i);
+			
+			SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 			
 		}
 		

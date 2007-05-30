@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2997  Frank Cleynen
+Copyright (C) 2007  Frank Cleynen
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -33,8 +33,8 @@ public class JCpg {
 	public static void main(String[] args) {
 		
 		new JCpgSplashscreen(359, 76, 2000);
-		new JCpgUI(true);
-		new JCpgUpdater(null, 100);
+		JCpgUI ui = new JCpgUI(true);
+		new JCpgUpdater(ui, 100);
 
 	}
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2997  Frank Cleynen
+Copyright (C) 2007  Frank Cleynen
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -16,6 +16,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 package be.khleuven.frank.JCpg.Updater;
+
+import java.awt.Window;
+
+import javax.swing.JWindow;
 
 import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
@@ -36,9 +40,9 @@ public class JCpgUpdater extends JCpgProgressManager {
 	
 	
 	
-	public JCpgUpdater(JCpgUI ui, int maximum){
+	public JCpgUpdater(Window parent, int maximum){
 		
-		super(ui, maximum, "data/updater_logo.jpg");
+		super(parent, maximum, "data/updater_logo.jpg", true, false);
 		doAction();
 		
 	}
@@ -56,7 +60,7 @@ public class JCpgUpdater extends JCpgProgressManager {
 				if(vc.newVersionAvailable()){ // check for new version
 					
 					changeProgressMaximum(vc.getUpdatefileSize()); // set maximum of progressbar to updatefile size
-					vc.getUpdate(getProgressBar()); // get the actual update file
+					vc.getUpdate(this); // get the actual update file and update progressbar
 					
 				}
 				

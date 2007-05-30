@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2997  Frank Cleynen
+Copyright (C) 2007  Frank Cleynen
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -28,6 +28,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import javax.swing.JProgressBar;
+
+import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 
 /**
  * 
@@ -299,7 +301,7 @@ public class JCpgVersionchecker {
 	 * @return
 	 * 		true if the update file was downloaded succesfully, else false
 	 */
-	public boolean getUpdate(JProgressBar progress){
+	public boolean getUpdate(JCpgProgressManager progressManager){
 		
 	    try {
 	    	
@@ -319,7 +321,7 @@ public class JCpgVersionchecker {
 				
 				out.write(buffer, 0, numRead);
 				readBytes = readBytes + numRead;
-				progress.setValue(readBytes);
+				progressManager.changeProgressbarValue(readBytes);
 				
 			}
 
