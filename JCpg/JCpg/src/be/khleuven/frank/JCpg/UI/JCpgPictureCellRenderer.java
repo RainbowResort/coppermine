@@ -41,7 +41,6 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 	
 	private GridBagLayout gbl = new GridBagLayout();
 	private GridBagConstraints gblc = new GridBagConstraints();
-	private int y = 0;
 	
 	public JCpgPictureCellRenderer() {
 		
@@ -62,9 +61,11 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 
         // determine grid position
     	System.out.println(index);
-        gblc.gridx = index % 10;
-        gblc.gridy = getDeler(index, 10);
-        
+    	gblc.gridx = index;
+        //gblc.gridx = index % 10;
+        //gblc.gridy = getDeler(index, 10);
+    	gblc.gridy = 1;
+    	
     	this.add(label, gblc);
         
         return this;

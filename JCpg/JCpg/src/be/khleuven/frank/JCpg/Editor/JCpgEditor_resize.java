@@ -98,19 +98,19 @@ public class JCpgEditor_resize extends JCpgEditor {
 	private void doExtraSwingComponents(){
 		
 		newWidthLabel = new JLabel("New width (>0): ");
-		newWidthLabel.setBounds(510, 60, 150, 20);
+		newWidthLabel.setBounds(250, 665, 120, 20);
 		newHeightLabel = new JLabel("New height (>0): ");
-		newHeightLabel.setBounds(510, 90, 150, 20);
+		newHeightLabel.setBounds(490, 665, 120, 20);
 		
 		newWidthField = new JTextField();
-		newWidthField.setBounds(670, 60, 100, 20);
+		newWidthField.setBounds(380, 665, 100, 20);
 		newWidthField.setText(getBufferedPreview().getWidth() + "");
 		newHeightField = new JTextField();
-		newHeightField.setBounds(670, 90, 100, 20);
+		newHeightField.setBounds(620, 665, 100, 20);
 		newHeightField.setText(getBufferedPreview().getHeight() + "");
 		
 		preview = new JButton("Preview");
-		preview.setBounds(670, 120, 100, 30);
+		preview.setBounds(750, 660, 100, 30);
 		
 		this.getContentPane().add(newWidthLabel);
 		this.getContentPane().add(newHeightLabel);

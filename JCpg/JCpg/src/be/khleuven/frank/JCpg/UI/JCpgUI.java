@@ -51,7 +51,6 @@ import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
@@ -65,7 +64,6 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 
 
@@ -710,7 +708,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		if(node != null && node.getLevel() == 3){
 		
-			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(500, 600));
+			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
 		}
 		
@@ -726,7 +724,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		if(node != null && node.getLevel() == 3){
 		
-			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(500, 600));
+			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(600, 600));
 			
 		}
 		
@@ -742,7 +740,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		if(node != null && node.getLevel() == 3){
 		
-			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(500, 600));
+			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
 		}
 		
@@ -777,7 +775,15 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	    	
 	    	return;
 	    	
-	    }else if(node.getLevel() == 2){ // leaf is album	
+	    }else if(node.getLevel() == 1){ // leaf is category	
+	    
+	    	explorer.removeAll(); // clear explorer
+	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
+	    	
+		}else if(node.getLevel() == 2){ // leaf is album	
+	    	
+	    	explorer.removeAll(); // clear explorer
+	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 	    	
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 	    	pictureListModel.clear();

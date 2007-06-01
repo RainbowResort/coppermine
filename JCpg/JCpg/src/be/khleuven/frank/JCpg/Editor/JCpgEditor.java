@@ -167,6 +167,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		this.previewSize = previewSize;
 		
 	}
+	/**
+	 * 
+	 * Set the buffered preview image
+	 * 
+	 * @param picture
+	 * 		ImageIcon that will be converted to the buffered previes image
+	 */
 	private void setBufferedPreview(ImageIcon picture){
 		
 		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
@@ -253,6 +260,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		return this.previewBuffered;
 		
 	}
+	/**
+	 * 
+	 * Get a reference to the transformer
+	 * 
+	 * @return
+	 * 		a reference to the transformer
+	 */
 	public JCpgTransform getTransformer(){
 		
 		return this.transformer;

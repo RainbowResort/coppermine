@@ -79,18 +79,18 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	private void doExtraSwingComponents(){
 		
 		rotate90Right = new JButton("90¡ >");
-		rotate90Right.setBounds(510, 60, 100, 30);
+		rotate90Right.setBounds(280, 660, 100, 30);
 		rotate90Left = new JButton("90¡ <");
-		rotate90Left.setBounds(620, 60, 100, 30);
+		rotate90Left.setBounds(390, 660, 100, 30);
 		
 		customLabel = new JLabel("Custom rotation: ");
-		customLabel.setBounds(510, 100, 150, 20);
+		customLabel.setBounds(520, 665, 150, 20);
 		
 		customRotation = new JTextField();
-		customRotation.setBounds(670, 100, 100, 20);
+		customRotation.setBounds(680, 665, 100, 20);
 		
 		preview = new JButton("Preview");
-		preview.setBounds(780, 93, 100, 30);
+		preview.setBounds(800, 660, 100, 30);
 		
 		this.getContentPane().add(rotate90Right);
 		this.getContentPane().add(rotate90Left);
