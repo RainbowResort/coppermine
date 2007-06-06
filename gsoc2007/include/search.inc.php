@@ -42,9 +42,11 @@ if (!isset($USER['search']['params'])){
         $USER['search']['params']['title'] = $USER['search']['params']['caption'] = $USER['search']['params']['keywords'] = $USER['search']['params']['filename'] = 1;
 }
 
-if (isset($_GET['album']) && $_GET['album'] == 'search')
-        $_GET = $USER['search'];
+if (isset($_GET['params'])) unset($_GET['album']);
 
+if (isset($_GET['album']) && $_GET['album'] == 'search') {
+        $_GET = $USER['search'];
+}
 
 $type = $_GET['type'] == 'AND' ? " AND " : " OR ";
 
