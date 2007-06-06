@@ -32,6 +32,18 @@ CREATE TABLE IF NOT EXISTS CPG_sessions (
 
 
 #
+# Table structure for table `CPG_categorymap`
+#
+
+CREATE TABLE IF NOT EXISTS `CPG_categorymap` (
+  cid int(11) NOT NULL COMMENT 'Id of the category',
+  group_id int(11) NOT NULL COMMENT 'Id of the group',
+  PRIMARY KEY  (cid,group_id)
+) ENGINE=MyISAM COMMENT='Holds the categories where groups can create albums';
+
+
+
+#
 # Table structure for table `CPG_filetypes`
 #
 

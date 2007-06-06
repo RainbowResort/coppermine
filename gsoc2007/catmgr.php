@@ -120,6 +120,38 @@ function cat_list_box($cid, &$parent, $on_change_refresh = true)
 
     return $lb;
 }
+//user-creatable public albums
+function usergroup_list_box($cid){
+	global $CONFIG;
+	
+	//get the category info from the db
+	$sql = "SELECT  ug.group_name AS name, ug.group_id AS id, catm.group_id AS catm_gid FROM {$CONFIG['TABLE_USERGROUPS']} AS ug LEFT JOIN {$CONFIG['TABLE_CATMAP']} AS catm ON catm.group_id=ug.group_id AND catm.cid=" . $cid;
+	$result = cpg_db_query($sql);
+	$rowset = cpg_db_fetch_rowset($result);
+	
+	//put the values in an array for ease of use and clean code for now
+	foreach ($rowset as $row) {
+		$groups[$row['id']]['name'] = $row['name'];
+		if($row['catm_gid'] != null) {
+			$groups[$row['id']]['selected'] = 'true';
+		}else {
+			$groups[$row['id']]['selected'] = 'false';
+		}
+	}
+	
+	//create listbox
+	$ug_lb = '<select name="user_groups[]" class="listbox" multiple>';
+	
+	//loop through all groups
+	foreach ($groups as $id => $values) {
+		$ug_lb .= '		<option value="' . $id . '"' . ($values['selected']=='true'? 'selected="selected"':'') . ' >' . $values['name'] . '</option>\n';
+	}
+	
+	$ug_lb .= '</select>';
+	
+	//return listbox
+	return $ug_lb;
+}
 
 function form_alb_thumb()
 {
@@ -334,6 +366,17 @@ switch ($op) {
                 }else{
                         cpg_db_query("UPDATE {$CONFIG['TABLE_CATEGORIES']} SET name='$name', description='$description', thumb='$thumb' WHERE cid = '$cid' LIMIT 1");
                 }
+				
+		//insert in categorymap
+		//first delete all of this category in categorymap
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CATMAP']} WHERE cid='$cid'");
+		
+		//then add the new ones
+		if (isset($_POST['user_groups']) && !empty($_POST['user_groups'])) {
+			foreach ($_POST['user_groups'] as $key) {
+				cpg_db_query("INSERT INTO {$CONFIG['TABLE_CATMAP']} (cid, group_id) VALUES('$cid', '$key')");
+			}
+		}
         break;
 
     case 'createcat':
@@ -351,6 +394,13 @@ switch ($op) {
         $description = addslashes($_POST['description']);
 
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_CATEGORIES']} (pos, parent, name, description) VALUES ('10000', '$parent', '$name', '$description')");
+		
+		//insert in categorymap
+		if (isset($_POST['user_groups']) && !empty($_POST['user_groups'])) {
+			foreach ($_POST['user_groups'] as $key) {
+				cpg_db_query("INSERT INTO {$CONFIG['TABLE_CATMAP']} (cid, group_id) VALUES('$cid', '$key')");
+			}
+		}
         break;
 
     case 'deletecat':
@@ -366,6 +416,9 @@ switch ($op) {
         $result = cpg_db_query("UPDATE {$CONFIG['TABLE_CATEGORIES']} SET parent='$parent' WHERE parent = '$cid'");
         $result = cpg_db_query("UPDATE {$CONFIG['TABLE_ALBUMS']} SET category='$parent' WHERE category = '$cid'");
         $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_CATEGORIES']} WHERE cid='$cid' LIMIT 1");
+		
+		//delete from categorymap
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CATMAP']} WHERE cid='$cid'");
         break;
 }
 
@@ -499,6 +552,7 @@ echo "<br />\n";
 
 starttable('100%', $lang_catmgr_php['update_create'], 2);
 $lb = cat_list_box($current_category['parent'], $current_category['cid'], false);
+$ug_lb = usergroup_list_box($current_category['cid']);
 $op = $current_category['cid'] ? 'updatecat' : 'createcat';
 if ($CONFIG['show_bbcode_help']) {$description_help .= '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);}
 echo <<<EOT
@@ -512,6 +566,14 @@ echo <<<EOT
                 $lb
                 </td>
         </tr>
+		<tr>
+			<td width="40%" class="tableb">
+						{$lang_catmgr_php['group_create_alb']}
+		</td>
+		<td width="60%" class="tableb" valign="top">
+				$ug_lb
+				</td>
+		</tr>
         <tr>
             <td width="40%" class="tableb">
                         {$lang_catmgr_php['cat_title']}
