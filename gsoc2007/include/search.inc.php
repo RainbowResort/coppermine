@@ -29,7 +29,7 @@ $sort_array = array('na' => 'filename ASC', 'nd' => 'filename DESC', 'ta'=>'titl
 $sort_code = isset($USER['sort'])? $USER['sort'] : $CONFIG['default_sort_order'];
 $sort_order = isset($sort_array[$sort_code]) ? $sort_array[$sort_code] : $sort_array[$CONFIG['default_sort_order']];
 
-$allowed = array('title', 'caption', 'keywords', 'owner_name', 'filename', 'pic_raw_ip', 'pic_hrd_ip', 'user1', 'user2', 'user3', 'user4');
+$allowed = array('title', 'caption', 'keywords', 'owner_name', 'filename', 'pic_raw_ip', 'pic_hdr_ip', 'user1', 'user2', 'user3', 'user4');
 
 $mb_charset = stristr($multibyte_charset, $charset);
 
@@ -43,14 +43,14 @@ if (!isset($USER['search']['params'])){
 }
 
 if (isset($_GET['album']) && $_GET['album'] == 'search')
-        $_POST = $USER['search'];
+        $_GET = $USER['search'];
 
 
-$type = $_POST['type'] == 'AND' ? " AND " : " OR ";
+$type = $_GET['type'] == 'AND' ? " AND " : " OR ";
 
-if (isset($_POST['params']['pic_raw_ip'])) $_POST['params']['pic_hdr_ip']  = $_POST['params']['pic_raw_ip'];
+if (isset($_GET['params']['pic_raw_ip'])) $_GET['params']['pic_hdr_ip'] = $_GET['params']['pic_raw_ip'];
 
-if ($search_string && isset($_POST['params'])) {
+if ($search_string && isset($_GET['params'])) {
         $sql = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE ";
         $search_string = strtr($search_string, array('_' => '\_', '%' => '\%', '*' => '%'));
         $split_search = explode(' ', $search_string);
@@ -60,23 +60,24 @@ if ($search_string && isset($_POST['params'])) {
           $word = addslashes($word);
           $fields = array();
 
-          foreach ($_POST['params'] as $param => $value){
+          foreach ($_GET['params'] as $param => $value){
             if (in_array($param, $allowed))$fields[] = "$param LIKE '%$word%'";
           }
           $sections[] = '(' . implode(' OR ', $fields) . ')';
         }
 
         $sql .= '(' . implode($type, $sections) . ')';
-
-        $sql .= $_POST['newer_than'] ? ' AND ctime > UNIX_TIMESTAMP() - '.( (int) $_POST['newer_than'] * 60*60*24) : '';
-        $sql .= $_POST['older_than'] ? ' AND ctime < UNIX_TIMESTAMP() - '.( (int) $_POST['older_than'] * 60*60*24) : '';
-       $sql .=  " $ALBUM_SET AND approved = 'YES'";
-
+        
+        $sql .= $_GET['newer_than'] ? ' AND ( ctime > UNIX_TIMESTAMP() - '.( (int) $_GET['newer_than'] * 60*60*24).')' : '';
+        $sql .= $_GET['older_than'] ? ' AND ( ctime < UNIX_TIMESTAMP() - '.( (int) $_GET['older_than'] * 60*60*24).')' : '';
+        $sql .=  " $ALBUM_SET AND approved = 'YES'";
+        
         $temp = str_replace('SELECT *', 'SELECT COUNT(*)', $sql);
         $result = cpg_db_query($temp);
         $row = mysql_fetch_row($result);
         $count = $row[0];
 
+                                              
         $sql .= " ORDER BY $sort_order $limit";
         $result = cpg_db_query($sql);
         $rowset = cpg_db_fetch_rowset($result);
