@@ -193,7 +193,7 @@ public class JCpgUserManager extends JDialog {
 		
 		this.setBounds((screensize.width/2)-(getUserManagerWidth()/2), (screensize.height/2)-(getUserManagerHeight()/2), getUserManagerWidth(), getUserManagerHeight());
 		
-		connectionStatus.setBounds(180, 151, 300, 20);
+		connectionStatus.setBounds(290, 151, 300, 20);
 		
 		logo.setBounds(0, 0, 500, 50);
 		server.setBounds(70, 60, 100, 20);
@@ -333,7 +333,7 @@ public class JCpgUserManager extends JDialog {
         	connectionStatus.setText("Connected to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
         	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem())); // Extract the configuration
         	
-        	getJCpgInterface().updateScreenInformation(); // show which server we are connected to
+        	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
         	
         	new JCpgSyncer(getJCpgInterface(), sqlManager).loadGallery(); // load gallery and show contents on screen
         	getJCpgInterface().buildTree();
@@ -387,7 +387,7 @@ public class JCpgUserManager extends JDialog {
 			
 			JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object for connecting
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
-	        getJCpgInterface().updateScreenInformation("WORKING OFFLINE");
+	        //getJCpgInterface().getParent().setName("JCpg - OFFLINE"); // let user know we are online
 	        
 	        new JCpgSyncer(getJCpgInterface(), sqlManager).loadGallery(); // load gallery saved on disk
 	        getJCpgInterface().buildTree(); // build the tree with loaded information

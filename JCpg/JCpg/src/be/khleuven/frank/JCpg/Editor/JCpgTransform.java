@@ -165,7 +165,7 @@ public class JCpgTransform {
      * @return
      * 		and Image object from the given BufferedImage object
      */
-    public static Image toImage(BufferedImage bufferedImage) {
+    public Image toImage(BufferedImage bufferedImage) {
     	
         return Toolkit.getDefaultToolkit().createImage(bufferedImage.getSource());
         

@@ -34,7 +34,7 @@ public class JCpg {
 		
 		new JCpgSplashscreen(359, 76, "data/splash.jpg" ,2000);
 		JCpgUI ui = new JCpgUI(true);
-		new JCpgUpdater(ui, 100);
+		// new JCpgUpdater(ui, 100);
 
 	}
 

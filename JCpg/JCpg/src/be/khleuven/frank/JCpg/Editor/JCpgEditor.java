@@ -19,6 +19,7 @@ package be.khleuven.frank.JCpg.Editor;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -72,6 +73,8 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	private JPanel preview;
 	
 	private BufferedImage previewBuffered;
+	
+	private JButton image = new JButton();
 	
 	private JCpgTransform transformer = new JCpgTransform();
 	
@@ -272,6 +275,18 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		return this.transformer;
 		
 	}
+	/**
+	 * 
+	 * Get a reference to the JButton which holds the preview image
+	 * 
+	 * @return
+	 * 		a reference to the JButton which holds the preview image
+	 */
+	public JButton getImageButton(){
+		
+		return this.image;
+		
+	}
 	
 	
 	
@@ -294,6 +309,8 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		this.setLayout(null);
 		this.setAlwaysOnTop(true);
 		
+		//image.setEnabled(false); solves disappearance of black rectangles but button will be greyscale :s:s
+		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		logo = new JLabel(new JCpgImageUrlValidator("data/editphoto.jpg").createImageIcon(), JLabel.CENTER); // 1000x50
@@ -301,6 +318,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		preview = new JPanel();
 		preview.setBorder(new EtchedBorder());
 		preview.setLayout(new FlowLayout());
+		preview.setOpaque(false);
 		
 		apply = new JButton("Apply");
 		close = new JButton("Close");
@@ -392,7 +410,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
     	Image imageFromBuffered = transformer.toImage(picture);
     	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
     	
-    	JButton image = new JButton(imageIcon);
+    	getImageButton().setIcon(imageIcon);
     	Dimension realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
     	image.setPreferredSize(realSize);
     	getPreview().removeAll();

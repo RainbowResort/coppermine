@@ -103,9 +103,9 @@ public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTree
 	*/
 	public void createActionPerformed(java.awt.event.ActionEvent evt) {
 	
-		if(getTitleField().getText().equals("") || getDescriptionField().getText().equals("")){
+		if(getTitleField().getText().equals("")){
 		
-			getMsgLabel().setText("Some fields are still empty!");
+			getMsgLabel().setText("An empty title is not allowed");
 			
 		}else{
 			

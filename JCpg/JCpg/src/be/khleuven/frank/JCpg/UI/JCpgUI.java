@@ -53,6 +53,7 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
 import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
@@ -63,6 +64,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 
@@ -98,7 +100,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	
 	private JSplitPane splitPane, megaSplitPane;
 	
-	private JLabel albums, currentServer;
 	private JList pictureList;
 	private ListSelectionModel pictureListSelectionModel;
 	private DefaultListModel pictureListModel;
@@ -107,7 +108,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private JPanel albumcontrol;
 	private JScrollPane explorerscroll;
 	private JButton edit_crop, edit_colorcorrection, edit_resize, edit_rotate;
-	private JButton control_new, control_delete, control_sync, control_edit;
+	private JButton control_new, control_delete, control_sync, control_edit, control_preview;
 	private JButton closeMegaExplorer;
 	private JTree tree;
 	private JScrollPane treeView, megaTreeView;
@@ -189,13 +190,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private void initComponents(){
 		
 		this.setLayout(null);
+		super.setName("JCpg");
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
-		buttonPreferredSize = new Dimension(35, 35);
+		buttonPreferredSize = new Dimension(30, 30);
 		thumbnailPreferredSize = new Dimension(100, 100);
-		
-		albums = new JLabel("My Albums");
-		currentServer = new JLabel("Current server: ");
 		
 		pictureListModel = new DefaultListModel();
 		pictureList = new JList(pictureListModel);
@@ -236,6 +235,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		control_edit = new JButton();
 		control_edit.setIcon(new JCpgImageUrlValidator("data/edit.gif").createImageIcon());
 		control_edit.setToolTipText("Edit");
+		control_preview = new JButton();
+		control_preview.setIcon(new JCpgImageUrlValidator("data/control_preview.gif").createImageIcon());
+		control_preview.setToolTipText("Preview Album");
 		closeMegaExplorer = new JButton();
 		closeMegaExplorer.setIcon(new JCpgImageUrlValidator("data/close.jpg").createImageIcon());
 		closeMegaExplorer.setToolTipText("Close view");
@@ -282,6 +284,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 			}
 		});
 		
+		control_preview.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				control_previewActionPerformed(evt);
+			}
+		});
+		
 		edit_crop.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				edit_cropActionPerformed(evt);
@@ -324,10 +332,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		framesize = this.getSize();
 		
-		albums.setBounds(50, 0, 85, 20);
-		currentServer.setBounds((screensize.width/2)-250, 0, 500, 20);
-		
-		pictureView.setBounds(0, 25, framesize.width, 101);
+		pictureView.setBounds(0, 0, framesize.width, 100);
 		
 		explorer.setBorder(new EtchedBorder());
 		explorer.setLayout(new FlowLayout()); // give the thumbs a preferred size. The flowlayout manager will take care of the rest.
@@ -338,18 +343,20 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		albumcontrol.setBorder(new EtchedBorder());
 		albumcontrol.setLayout(new FlowLayout());
 		
-		splitPane.setBounds(0, 126, framesize.width, framesize.height - 271);
-		megaSplitPane.setBounds(0, 25, framesize.width, framesize.height - 170);
+		splitPane.setBounds(0, 100, framesize.width, framesize.height - 245);
+		megaSplitPane.setBounds(0, 0, framesize.width, framesize.height - 145);
 		
 		edit_crop.setPreferredSize(buttonPreferredSize);
 		edit_colorcorrection.setPreferredSize(buttonPreferredSize);
 		edit_resize.setPreferredSize(buttonPreferredSize);
 		edit_rotate.setPreferredSize(buttonPreferredSize);
+		closeMegaExplorer.setPreferredSize(buttonPreferredSize);
+		
 		control_new.setPreferredSize(buttonPreferredSize);
 		control_delete.setPreferredSize(buttonPreferredSize);
 		control_sync.setPreferredSize(buttonPreferredSize);
 		control_edit.setPreferredSize(buttonPreferredSize);
-		closeMegaExplorer.setPreferredSize(buttonPreferredSize);
+		control_preview.setPreferredSize(buttonPreferredSize);
 		
 	}
 	/**
@@ -359,8 +366,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	 */
 	private void placeComponents(){
 		
-		this.getContentPane().add(albums);
-		this.getContentPane().add(currentServer);
 		this.getContentPane().add(pictureView);
 		this.getContentPane().add(explorerscroll);
 		tools.add(edit_rotate);
@@ -373,6 +378,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		albumcontrol.add(control_new);
 		albumcontrol.add(control_delete);
 		albumcontrol.add(control_edit);
+		albumcontrol.add(control_preview);
 		this.getContentPane().add(albumcontrol);
 		this.getContentPane().add(splitPane);
 		this.getContentPane().add(megaSplitPane);
@@ -659,6 +665,17 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		}
 		
     }
+	private void control_previewActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		
+		if(node != null && node.getLevel() == 2){
+		
+			new JCpgPreviewer(this, (JCpgAlbum)node.getUserObject());
+			
+		}
+		
+	}
 	/**
 	 * 
 	 * Action when user clicks on 'sync' button. 
@@ -692,7 +709,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		if(node != null && node.getLevel() == 3){
 		
-			// start crop editor
+			new JCpgEditor_crop(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
 		}
 		
@@ -849,27 +866,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	public void addUserConfig(JCpgUserConfig userConfig){
 		
 		this.userConfig = userConfig;
-		
-	}
-	/**
-	 * 
-	 * After the user presses the connect button, the userManager's JWindow says the JCpgInterface to redraw his server information.
-	 * Basicly this is just a label which tells the user to which server he is currently connected to.
-	 *
-	 */
-	public void updateScreenInformation(){
-		
-		currentServer.setText("Current server: " + getUserConfig().getServerConfig().getServer());
-		
-	}
-	/**
-	 * 
-	 * Provide a custom message to the current server label. Used when working offline.
-	 *
-	 */
-	public void updateScreenInformation(String customMessage){
-		
-		currentServer.setText(customMessage);
 		
 	}
 	/**
