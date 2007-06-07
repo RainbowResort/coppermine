@@ -58,7 +58,7 @@ if ($search_string && isset($_GET['params'])) {
         $sections = array();
 
         if($_GET['type'] == 'regex') {
-                $USER['search']['type'] = 'regex';
+                $search_string = preg_replace('/[^\w\+\*\?\{\,\}\|\(\)\\\^\$\[\]\:\<\>\-\.]/','',$search_string);
                 $search_string = addslashes($search_string);
                 foreach($_GET['params'] as $param => $value) {
                         if (in_array($param, $allowed)) $fields[] = "$param REGEXP '$search_string'";
