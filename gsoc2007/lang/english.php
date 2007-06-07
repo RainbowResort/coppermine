@@ -1785,6 +1785,7 @@ $lang_search_php = array(
   'days' => 'days',
   'all_words' => 'Match all words (AND)',
   'any_words' => 'Match any words (OR)',
+  'regex' => 'Match regular expressions',
 );
 
 }

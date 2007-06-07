@@ -46,6 +46,7 @@ if (isset($_GET['params'])) unset($_GET['album']);
 
 if (isset($_GET['album']) && $_GET['album'] == 'search') {
         $_GET = $USER['search'];
+        $_GET['type'] = $USER['search']['type'];
 }
 
 $type = $_GET['type'] == 'AND' ? " AND " : " OR ";
@@ -54,31 +55,40 @@ if (isset($_GET['params']['pic_raw_ip'])) $_GET['params']['pic_hdr_ip'] = $_GET[
 
 if ($search_string && isset($_GET['params'])) {
         $sql = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE ";
-        $search_string = strtr($search_string, array('_' => '\_', '%' => '\%', '*' => '%'));
-        $split_search = explode(' ', $search_string);
         $sections = array();
 
-        foreach($split_search as $word) {
-          $word = addslashes($word);
-          $fields = array();
+        if($_GET['type'] == 'regex') {
+                $USER['search']['type'] = 'regex';
+                $search_string = addslashes($search_string);
+                foreach($_GET['params'] as $param => $value) {
+                        if (in_array($param, $allowed)) $fields[] = "$param REGEXP '$search_string'";
+                }
+                $sql .= ('((' . implode(' OR ', $fields) . '))');
+        } else {
+                $search_string = strtr($search_string, array('_' => '\_', '%' => '\%', '*' => '%'));
+                $split_search = explode(' ', $search_string);
 
-          foreach ($_GET['params'] as $param => $value){
-            if (in_array($param, $allowed))$fields[] = "$param LIKE '%$word%'";
-          }
-          $sections[] = '(' . implode(' OR ', $fields) . ')';
+                foreach($split_search as $word) {
+                        $word = addslashes($word);
+                        $fields = array();
+
+                        foreach ($_GET['params'] as $param => $value){
+                                if (in_array($param, $allowed))$fields[] = "$param LIKE '%$word%'";
+                        }
+                        $sections[] = '(' . implode(' OR ', $fields) . ')';
+                }
+
+                $sql .= '(' . implode($type, $sections) . ')';
         }
 
-        $sql .= '(' . implode($type, $sections) . ')';
-        
         $sql .= $_GET['newer_than'] ? ' AND ( ctime > UNIX_TIMESTAMP() - '.( (int) $_GET['newer_than'] * 60*60*24).')' : '';
         $sql .= $_GET['older_than'] ? ' AND ( ctime < UNIX_TIMESTAMP() - '.( (int) $_GET['older_than'] * 60*60*24).')' : '';
         $sql .=  " $ALBUM_SET AND approved = 'YES'";
-        
+
         $temp = str_replace('SELECT *', 'SELECT COUNT(*)', $sql);
         $result = cpg_db_query($temp);
         $row = mysql_fetch_row($result);
         $count = $row[0];
-
                                               
         $sql .= " ORDER BY $sort_order $limit";
         $result = cpg_db_query($sql);
@@ -86,7 +96,5 @@ if ($search_string && isset($_GET['params'])) {
         mysql_free_result($result);
 
         if ($set_caption) build_caption($rowset);
-
-
 }
 ?>

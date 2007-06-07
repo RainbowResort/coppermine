@@ -84,7 +84,7 @@ if (isset($_GET['album'])) $album = $_GET['album'];
 
 if (isset($_GET['search'])) {
     // find out if a parameter has been submitted at all
-    $allowed = array('title', 'caption', 'keywords', 'owner_name', 'filename', 'pic_raw_ip', 'pic_hrd_ip', 'user1', 'user2', 'user3', 'user4');
+    $allowed = array('title', 'caption', 'keywords', 'owner_name', 'type', 'filename', 'pic_raw_ip', 'pic_hrd_ip', 'user1', 'user2', 'user3', 'user4');
     foreach ($allowed as $key) {
         if (isset($_GET[$key]) == TRUE) {
             $_GET['params'][$key] = $_GET[$key];
@@ -95,7 +95,7 @@ if (isset($_GET['search'])) {
         $album = 'search';
 }
 if (isset($_GET['search'])) {
-    $USER['search'] = array('search' => $_GET['search']);
+    $USER['search'] = array('search' => $_GET['search'],'type' => $_GET['type']);
 }
 
 if (isset($_GET['page'])) {
