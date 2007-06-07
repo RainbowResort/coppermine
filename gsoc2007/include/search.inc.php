@@ -33,6 +33,8 @@ $allowed = array('title', 'caption', 'keywords', 'owner_name', 'filename', 'pic_
 
 $mb_charset = stristr($multibyte_charset, $charset);
 
+$search_string = str_replace('&quot;', '"', $search_string);
+$search_string = str_replace('\'', '"', $search_string);
 $search_string = preg_replace('/&.*;/i', '', $search_string);
 
 if (!$mb_charset)
@@ -66,20 +68,36 @@ if ($search_string && isset($_GET['params'])) {
                 $sql .= ('((' . implode(' OR ', $fields) . '))');
         } else {
                 $search_string = strtr($search_string, array('_' => '\_', '%' => '\%', '*' => '%'));
-                $split_search = explode(' ', $search_string);
 
-                foreach($split_search as $word) {
-                        $word = addslashes($word);
-                        $fields = array();
-
-                        foreach ($_GET['params'] as $param => $value){
-                                if (in_array($param, $allowed))$fields[] = "$param LIKE '%$word%'";
+                $quote_offset = (preg_match('^(\s)*\"',$search_string) + 1);
+                $split_search = explode('"',$search_string);
+                foreach($split_search as $index => $string) {
+                        if(($index & 1) && strlen($string)) {
+                                $fields = array();
+                                foreach ($_GET['params'] as $param => $value){
+                                        if (in_array($param, $allowed)) $fields[] = "$param LIKE '%$string%'";
+                                }
+                                $sections[] = '(' . implode(' OR ', $fields) . ')';                                
+                        } else if (strlen($string)) {
+                                $words = explode(' ', $string);
+                                foreach($words as $word) {
+                                        if(strlen($word)) {
+                                                $word = addslashes($word);
+                                                $fields = array();
+                                                foreach ($_GET['params'] as $param => $value){
+                                                        if (in_array($param, $allowed)) $fields[] = "$param LIKE '%$word%'";
+                                                }
+                                                $sections[] = '(' . implode(' OR ', $fields) . ')';                                                
+                                        }
+                                }
                         }
-                        $sections[] = '(' . implode(' OR ', $fields) . ')';
                 }
+                
 
                 $sql .= '(' . implode($type, $sections) . ')';
         }
+        
+        file_put_contents('sql.dat',$sql);
 
         $sql .= $_GET['newer_than'] ? ' AND ( ctime > UNIX_TIMESTAMP() - '.( (int) $_GET['newer_than'] * 60*60*24).')' : '';
         $sql .= $_GET['older_than'] ? ' AND ( ctime < UNIX_TIMESTAMP() - '.( (int) $_GET['older_than'] * 60*60*24).')' : '';

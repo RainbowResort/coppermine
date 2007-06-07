@@ -92,6 +92,7 @@ if (isset($_GET['search'])) {
     }
         $USER['search'] = $_GET;
         $USER['search']['search'] = utf_replace($USER['search']['search']);
+        $USER['search']['search'] = str_replace('&quot;','\'',$USER['search']['search']);
         $album = 'search';
 }
 // Commented out by drhammond 
