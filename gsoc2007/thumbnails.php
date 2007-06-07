@@ -94,9 +94,11 @@ if (isset($_GET['search'])) {
         $USER['search']['search'] = utf_replace($USER['search']['search']);
         $album = 'search';
 }
-if (isset($_GET['search'])) {
-    $USER['search'] = array('search' => $_GET['search'],'type' => $_GET['type']);
-}
+// Commented out by drhammond 
+// Overwrites $USER values set above incorrectly/unnecessarily
+//if (isset($_GET['search'])) {
+ //   $USER['search'] = array('search' => $_GET['search'],'type' => $_GET['type']);
+//}
 
 if (isset($_GET['page'])) {
     $page = max((int)$_GET['page'], 1);
