@@ -222,7 +222,14 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File("albums/" + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File("albums/" + getPicture().getFilePath() + getPicture().getFileName()));
+            
+			// change picture size information
+			getPicture().changeWidth(rwidth);
+			getPicture().changeHeight(rheight);
+			
+			// TODO: adjust thumb + refresh in explorer view
+            
             getJCpgUI().setEnabled(true);
             this.dispose();
             
