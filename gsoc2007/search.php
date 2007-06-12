@@ -67,6 +67,7 @@ echo <<< EOT
                 <input type="hidden" name="album" value="search" />
             </td>
         </tr>
+
                 <tr>
                         <td class="tableb">
                                 <table align="center" width="60%">
@@ -97,7 +98,7 @@ echo <<< EOT
                                         </tr>
                                         <tr>
                                                 <td><input type="checkbox" name="filename" id="filename" class="checkbox" /><label for="filename" class="clickable_option">{$lang_common['filename']}</label></td>
-                                                <td>&nbsp;</td>
+                                                <td><input type="checkbox" name=""></td>
                                         </tr>
                                                 $customs
                                                 $ip
@@ -109,6 +110,22 @@ EOT;
 
 endtable();
 echo '</form>';
+echo '<br/><form method="get" action="albcatsearch.php" name="searchalbcat" id="cpgform4">';
+
+starttable('60%', $lang_search_php['album_category_title']);
+
+echo <<< EOT
+
+<tr>
+<td class="tableb" align="center" >
+<input type="text" style="width: 80%" name="search" maxlength="255" value="" class="textinput" />
+<input type="submit" value="{$lang_search_php['submit_search']}" class="button" />
+</td>
+</tr>
+
+EOT;
+
+endtable();
 
 if ($CONFIG['clickable_keyword_search'] != 0) {
     include('include/keyword.inc.php');

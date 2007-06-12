@@ -1772,6 +1772,7 @@ if (defined('SEARCH_PHP')){
 
 $lang_search_php = array(
   'title' => 'Search the file collection',
+  'album_category_title' => 'Search Album and Category Names',
   'submit_search' => 'search',
   'keyword_list_title' => 'Keyword list',
   'keyword_msg' => 'The above list is not all inclusive. It does not include words from photo titles or descriptions. Try a full-text search.',
@@ -1834,6 +1835,15 @@ if (defined('SEARCHNEW_PHP')) $lang_search_new_php = array(
   'edit_properties' => 'Album properties',
   'view_thumbs' => 'Thumbnail view',
 );
+
+// ------------------------------------------------------------------------- //
+// File abcatsearch.php
+// ------------------------------------------------------------------------- //
+
+if (defined('ALBCATSEARCH_PHP')) $lang_search_php = array(
+   'results' => 'Album and Category Search Results',
+);
+
 
 // ------------------------------------------------------------------------- //
 //File send_activation.php
