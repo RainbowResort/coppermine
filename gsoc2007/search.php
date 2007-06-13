@@ -98,7 +98,7 @@ echo <<< EOT
                                         </tr>
                                         <tr>
                                                 <td><input type="checkbox" name="filename" id="filename" class="checkbox" /><label for="filename" class="clickable_option">{$lang_common['filename']}</label></td>
-                                                <td><input type="checkbox" name=""></td>
+                                                <td>&nbsp;</td>
                                         </tr>
                                                 $customs
                                                 $ip
