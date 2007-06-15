@@ -72,7 +72,7 @@ echo <<< EOT
                         <td class="tableb">
                                 <table align="center" width="60%">
                                         <tr>
-                                                <td>{$lang_search_php['fields']}:</td>
+                                                <td>{$lang_search_php['imgfields']}:</td>
                                                 <td align="center">{$lang_search_php['age']}:</td>
                                         </tr>
                                         <tr>
@@ -100,6 +100,26 @@ echo <<< EOT
                                                 <td><input type="checkbox" name="filename" id="filename" class="checkbox" /><label for="filename" class="clickable_option">{$lang_common['filename']}</label></td>
                                                 <td>&nbsp;</td>
                                         </tr>
+                                        <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                        </tr>
+
+                                        <tr>
+                                                <td>{$lang_search_php['albcatfields']}:</td>
+                                                <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                                <td><input type="checkbox" name="album_title" id="album_title" class="checkbox" /><label for="album_title" class="clickable_option">{$lang_search_php['album_title']}</label></td>
+                                                <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                                <td><input type="checkbox" name="category_title" id="category_title" class="checkbox" /><label for="category_title" class="clickable_option">{$lang_search_php['category_title']}</label></td>
+                                                <td>&nbsp;</td>
+                                        </tr>
+
+
+
                                                 $customs
                                                 $ip
                                 </table>
@@ -109,23 +129,7 @@ EOT;
 
 
 endtable();
-echo '</form>';
-echo '<br/><form method="get" action="albcatsearch.php" name="searchalbcat" id="cpgform4">';
 
-starttable('60%', $lang_search_php['album_category_title']);
-
-echo <<< EOT
-
-<tr>
-<td class="tableb" align="center" >
-<input type="text" style="width: 80%" name="search" maxlength="255" value="" class="textinput" />
-<input type="submit" value="{$lang_search_php['submit_search']}" class="button" />
-</td>
-</tr>
-
-EOT;
-
-endtable();
 
 if ($CONFIG['clickable_keyword_search'] != 0) {
     include('include/keyword.inc.php');

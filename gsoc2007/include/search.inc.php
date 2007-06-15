@@ -56,16 +56,17 @@ $type = $_GET['type'] == 'AND' ? " AND " : " OR ";
 if (isset($_GET['params']['pic_raw_ip'])) $_GET['params']['pic_hdr_ip'] = $_GET['params']['pic_raw_ip'];
 
 if ($search_string && isset($_GET['params'])) {
-        $sql = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE ";
         $sections = array();
-
+        $albcat_terms = array(); // For Album & Category Title Search: populated as needed
         if($_GET['type'] == 'regex') {
+                $fields = array();
                 $search_string = preg_replace('/[^\w\+\*\?\{\,\}\|\(\)\\\^\$\[\]\:\<\>\-\.]/','',$search_string);
                 $search_string = addslashes($search_string);
+                if (isset($_GET['album_title']) || isset($_GET['category_title'])) $albcat_terms[] = " REGEXP '$search_string'";                
                 foreach($_GET['params'] as $param => $value) {
                         if (in_array($param, $allowed)) $fields[] = "$param REGEXP '$search_string'";
                 }
-                $sql .= ('((' . implode(' OR ', $fields) . '))');
+                $sql .= count($fields) ? ('((' . implode(' OR ', $fields) . '))') : '';
         } else {
                 $search_string = strtr($search_string, array('_' => '\_', '%' => '\%', '*' => '%'));
 
@@ -74,35 +75,86 @@ if ($search_string && isset($_GET['params'])) {
                 foreach($split_search as $index => $string) {
                         if(($index & 1) && strlen($string)) {
                                 $fields = array();
+                                if (isset($_GET['album_title']) || isset($_GET['category_title'])) $albcat_terms[] = " LIKE '$string'";                                
                                 foreach ($_GET['params'] as $param => $value){
                                         if (in_array($param, $allowed)) $fields[] = "$param LIKE '%$string%'";
                                 }
-                                $sections[] = '(' . implode(' OR ', $fields) . ')';                                
+                                $sections[] = count($fields) ? '(' . implode(' OR ', $fields) . ')' : '';  
                         } else if (strlen($string)) {
                                 $words = explode(' ', $string);
                                 foreach($words as $word) {
                                         if(strlen($word)) {
                                                 $word = addslashes($word);
                                                 $fields = array();
+                                                if (isset($_GET['album_title']) || isset($_GET['category_title'])) $albcat_terms[] = " LIKE '%$word%'";
                                                 foreach ($_GET['params'] as $param => $value){
                                                         if (in_array($param, $allowed)) $fields[] = "$param LIKE '%$word%'";
                                                 }
-                                                $sections[] = '(' . implode(' OR ', $fields) . ')';                                                
+                                                $sections[] = count($fields) ? '(' . implode(' OR ', $fields) . ')' : '';  
                                         }
                                 }
                         }
                 }
                 
-
-                $sql .= '(' . implode($type, $sections) . ')';
+                $sql .= count($sections) ? '(' . implode($type, $sections) . ')' : '0';
         }
-        
-        file_put_contents('sql.dat',$sql);
+
 
         $sql .= $_GET['newer_than'] ? ' AND ( ctime > UNIX_TIMESTAMP() - '.( (int) $_GET['newer_than'] * 60*60*24).')' : '';
         $sql .= $_GET['older_than'] ? ' AND ( ctime < UNIX_TIMESTAMP() - '.( (int) $_GET['older_than'] * 60*60*24).')' : '';
         $sql .=  " $ALBUM_SET AND approved = 'YES'";
 
+        if(isset($_GET['album_title'])) {
+                
+                $album_query = "SELECT * FROM `{$CONFIG['TABLE_ALBUMS']}` WHERE (`title` " . implode(" $type `title` ",$albcat_terms) . ')';
+                $result = cpg_db_query($album_query);
+                if(mysql_num_rows($result) > 0) {
+                        starttable('100%', $lang_meta_album_names['album_search'],2);
+                        while($alb = mysql_fetch_array($result,MYSQL_ASSOC))
+                        {
+                                ?>
+                                <tr>
+                                <td width="40%"><a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> <?php echo $alb['title']; ?> </a></td>
+                                        <td><?php if ($alb['description'] == "") { echo '&nbsp;'; }else { echo $alb['description']; } ?></td>
+                                        </tr>
+                                        <?php
+                        }
+                        endtable();
+                        echo '<br/>';                        
+                }
+        }
+                                              
+        if(isset($_GET['category_title'])) {
+                $category_query = "SELECT * FROM `{$CONFIG['TABLE_CATEGORIES']}` WHERE (`name` " . implode(" $type `name` ",$albcat_terms) . ')';
+                $result = cpg_db_query($category_query);
+                if(mysql_num_rows($result) > 0) {
+                        starttable('100%', $lang_meta_album_names['category_search'],2);
+                        while($cat = mysql_fetch_array($result,MYSQL_ASSOC))
+                        {
+                                ?>
+                                        <tr>
+                                                <td width="40%"> <a href="<?php printf("index.php?cat=%u", $cat['cid']); ?> "><?php echo $cat['name']; ?> </a></td>
+                                                <td> <?php if ($cat['description'] == "") { echo '&nbsp;'; }else { echo $cat['description']; } ?></td>
+                                        </tr>
+                                <?php
+                        }
+                        endtable();
+                        echo '<br/>';
+                }
+        }                                              
+
+        // Make sure they selected some parameter other than album/category
+        $other=0;
+        foreach ($_GET['params'] as $param => $value){
+                if (in_array($param, $allowed)) $other=1;
+        }
+        
+        
+        if(!$other) $sql = '0';
+                                              
+                                              
+        $sql = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE " . $sql;
+                                              
         $temp = str_replace('SELECT *', 'SELECT COUNT(*)', $sql);
         $result = cpg_db_query($temp);
         $row = mysql_fetch_row($result);

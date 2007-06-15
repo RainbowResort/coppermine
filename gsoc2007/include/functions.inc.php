@@ -1856,7 +1856,7 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
 
         $thumb_per_page = $thumbcols * $thumbrows;
         $lower_limit = ($page-1) * $thumb_per_page;
-
+        
         $pic_data = get_pic_data($album, $thumb_count, $album_name, $lower_limit, $thumb_per_page);
 
         $total_pages = ceil($thumb_count / $thumb_per_page);
