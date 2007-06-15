@@ -75,7 +75,7 @@ if ($search_string && isset($_GET['params'])) {
                 foreach($split_search as $index => $string) {
                         if(($index & 1) && strlen($string)) {
                                 $fields = array();
-                                if (isset($_GET['album_title']) || isset($_GET['category_title'])) $albcat_terms[] = " LIKE '$string'";                                
+                                if (isset($_GET['album_title']) || isset($_GET['category_title'])) $albcat_terms[] = " LIKE '%$string%'";                                
                                 foreach ($_GET['params'] as $param => $value){
                                         if (in_array($param, $allowed)) $fields[] = "$param LIKE '%$string%'";
                                 }
@@ -105,8 +105,8 @@ if ($search_string && isset($_GET['params'])) {
         $sql .=  " $ALBUM_SET AND approved = 'YES'";
 
         if(isset($_GET['album_title'])) {
-                
                 $album_query = "SELECT * FROM `{$CONFIG['TABLE_ALBUMS']}` WHERE (`title` " . implode(" $type `title` ",$albcat_terms) . ')';
+                file_put_contents('sql.dat',$album_query);
                 $result = cpg_db_query($album_query);
                 if(mysql_num_rows($result) > 0) {
                         starttable('100%', $lang_meta_album_names['album_search'],2);

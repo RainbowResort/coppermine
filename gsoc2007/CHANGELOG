@@ -26,6 +26,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2007-06-07 [A] Added Album and Category Title Search {drhammond}
 2007-06-07 [A] Added phrase searching by double quotes {drhammond}
 2007-06-07 [A] Added regular expressions to search {drhammond}
 2007-06-06 [B] Fixed search parameters being ignored {drhammond}
