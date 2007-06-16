@@ -1507,6 +1507,7 @@ if (defined('MODIFYALB_PHP')) $lang_modifyalb_php = array(
   'can_post_comments' => 'Visitors can post comments',
   'can_rate' => 'Visitors can rate files',
   'user_gal' => 'User Gallery',
+  'my_gal' => '* My Gallery *',
   'no_cat' => '* No category *',
   'alb_empty' => 'Album is empty',
   'last_uploaded' => 'Last uploaded',

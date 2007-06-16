@@ -1610,6 +1610,7 @@ if (defined('MODIFYALB_PHP')) $lang_modifyalb_php = array(
   'can_post_comments' => 'Besucher können Kommentare abgeben',
   'can_rate' => 'Besucher können Dateien bewerten',
   'user_gal' => 'Benutzer-Galerie',
+  'my_gal' => '* meine Galerie *',
   'no_cat' => '* keine Kategorie *',
   'alb_empty' => 'Album ist leer',
   'last_uploaded' => 'Letzte Datei, die hochgeladen wurde',

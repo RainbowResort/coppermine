@@ -68,18 +68,32 @@ if (GALLERY_ADMIN_MODE) {
   $data[] = array($lang_modifyalb_php['can_moderate'], 'moderator_group', 8);
 }
 
+/**
+ * get_subcat_data()
+ *
+ * @param integer $parent
+ * @param string $ident
+ **/
 function get_subcat_data($parent, $ident = '')
 {
-    global $CONFIG, $CAT_LIST;
+	global $CONFIG, $CAT_LIST, $USER_DATA;
+		
+	//select cats where the users can change the albums
+	$group_id = $USER_DATA['group_id'];
+	//$result = cpg_db_query("SELECT cats.cid, cats.name, cats.description FROM {$CONFIG['TABLE_CATEGORIES']} AS cats INNER JOIN {$CONFIG['TABLE_CATMAP']} AS catmap ON cats.parent = '$parent' AND cats.cid != 1 AND cats.cid = catmap.cid ORDER BY pos");
+	$result = cpg_db_query("SELECT cid, name, description FROM {$CONFIG['TABLE_CATEGORIES']} WHERE parent = '$parent' AND cid != 1 ORDER BY pos");
 
-    $result = cpg_db_query("SELECT cid, name, description FROM {$CONFIG['TABLE_CATEGORIES']} WHERE parent = '$parent' AND cid != 1 ORDER BY pos");
-    if (mysql_num_rows($result) > 0) {
-        $rowset = cpg_db_fetch_rowset($result);
-        foreach ($rowset as $subcat) {
-            $CAT_LIST[] = array($subcat['cid'], $ident . $subcat['name']);
-            get_subcat_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;');
-        }
-    }
+	if (mysql_num_rows($result) > 0) {
+		$rowset = cpg_db_fetch_rowset($result);
+		foreach ($rowset as $subcat) {
+			$check_group = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_CATMAP']} WHERE group_id = '$group_id' AND cid=".$subcat['cid']);
+			$check_group_rowset = cpg_db_fetch_rowset($check_group);
+			if($check_group_rowset){
+				$CAT_LIST[] = array($subcat['cid'], $ident . $subcat['name']);
+			}
+			get_subcat_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;');
+		}
+	}
 }
 
 function form_label($text)
@@ -145,23 +159,26 @@ function form_category($text, $name)
 {
     global $ALBUM_DATA, $CAT_LIST, $USER_DATA, $lang_modifyalb_php;
 
-    if (!GALLERY_ADMIN_MODE || $ALBUM_DATA['category'] > FIRST_USER_CAT) {
-        echo <<<EOT
-        <tr>
-            <td class="tableb">
-                        $text
-        </td>
-        <td class="tableb" valign="top">
-                        <i>{$lang_modifyalb_php['user_gal']}</i>
-                        <input type="hidden" name="$name" value="{$ALBUM_DATA['category']}" />
-                </td>
-
-EOT;
-        return;
-    }
+//    if (!GALLERY_ADMIN_MODE || $ALBUM_DATA['category'] > FIRST_USER_CAT) {
+//        echo <<<EOT
+//        <tr>
+//            <td class="tableb">
+//                        $text
+//        </td>
+//        <td class="tableb" valign="top">
+//                        <i>{$lang_modifyalb_php['user_gal']}</i>
+//                        <input type="hidden" name="$name" value="{$ALBUM_DATA['category']}" />
+//                </td>
+//
+//EOT;
+//        return;
+//    }
 
     $CAT_LIST = array();
-    $CAT_LIST[] = array(0, $lang_modifyalb_php['no_cat']);
+	//only add 'no category' when user is admin
+	if (GALLERY_ADMIN_MODE){$CAT_LIST[] = array(0, $lang_modifyalb_php['no_cat']);}
+	//add user catergorie 
+	$CAT_LIST[] = array((FIRST_USER_CAT + USER_ID), $lang_modifyalb_php['my_gal']);
     get_subcat_data(0, '');
 
     echo <<<EOT
@@ -484,9 +501,23 @@ function alb_list_box()
         while ($row = mysql_fetch_array($result)) $rowset[] = $row;
         mysql_free_result($result);
     } else {
-        $result = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = '" . (FIRST_USER_CAT + USER_ID) . "' ORDER BY title");
-        $rowset = cpg_db_fetch_rowset($result);
-        mysql_free_result($result);
+		//Only list the albums owned by the user
+		$cat = USER_ID + FIRST_USER_CAT;
+		$user_id = USER_ID;
+		
+		//get albums in "my albums"
+		$result1 = cpg_db_query("SELECT aid , title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = $cat");
+		$rowset1 = cpg_db_fetch_rowset($result1);
+		mysql_free_result($result1);
+		
+		//get public albums
+		$result2 = cpg_db_query("SELECT alb.aid AS aid, CONCAT_WS('', '(', cat.name, ') ', alb.title) AS title FROM {$CONFIG['TABLE_ALBUMS']} AS alb INNER JOIN {$CONFIG['TABLE_CATEGORIES']} AS cat ON alb.owner = '$user_id' AND alb.category = cat.cid ORDER BY alb.category DESC, alb.pos ASC");
+		$rowset2 = cpg_db_fetch_rowset($result2);
+        mysql_free_result($result2);
+		
+		//merge rowsets
+		$rowset = array_merge($rowset1, $rowset2);
+		
     }
 
     if (count($rowset)) {
@@ -519,9 +550,6 @@ if (!$CLEAN['album']) {
 $cat = $ALBUM_DATA['category'];
 $actual_cat = $cat;
 
-if (!GALLERY_ADMIN_MODE && $ALBUM_DATA['category'] != FIRST_USER_CAT + USER_ID) {
-    cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
-}
 
 
 //////////// main code start ///////////////////

@@ -26,9 +26,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2007-06-17 [A] Added GUI ability of user-creatable albums in admin allowed categories {SaWey}
 2007-06-07 [A] Added Album and Category Title Search {drhammond}
 2007-06-07 [A] Added phrase searching by double quotes {drhammond}
 2007-06-07 [A] Added regular expressions to search {drhammond}
+2007-06-06 [A] Added GUI for the user-creatable albums in admin allowed categories {SaWey}
 2007-06-06 [B] Fixed search parameters being ignored {drhammond}
 2007-05-21 [C] Removed deprecated HTML tags from email templates {GauGau}
 2007-05-21 [C] Replaced hard-coded bold tags with corresponding CSS formats in theme files {GauGau}

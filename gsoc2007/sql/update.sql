@@ -242,6 +242,7 @@ ALTER TABLE `CPG_categories` ADD `thumb` INT NOT NULL AFTER `parent` ;
 
 # Modify structure for multi album pictures
 ALTER TABLE `CPG_albums` ADD `keyword` VARCHAR( 50 ) NOT NULL ;
+ALTER TABLE `CPG_albums` ADD `owner` int(11)  NOT NULL DEFAULT '1' AFTER `category`;
 
 
 #

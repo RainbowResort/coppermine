@@ -58,6 +58,7 @@ CREATE TABLE CPG_albums (
   votes enum('YES','NO') NOT NULL default 'YES',
   pos int(11) NOT NULL default '0',
   category int(11) NOT NULL default '0',
+  owner int(11) NOT NULL DEFAULT '1',
   thumb int(11) NOT NULL default '0',
   keyword VARCHAR( 50 ),
   alb_password VARCHAR( 32 ),

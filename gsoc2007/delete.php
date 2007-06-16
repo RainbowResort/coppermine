@@ -253,7 +253,20 @@ switch ($what) {
         if (!(GALLERY_ADMIN_MODE || USER_ADMIN_MODE)) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 
         if (!GALLERY_ADMIN_MODE) {
-            $restrict = "AND category = '" . (FIRST_USER_CAT + USER_ID) . "'";
+			//restrict to allowed categories of user
+			//first get allowed categories
+			global $USER_DATA;
+			$group_id = $USER_DATA['group_id'];
+			$result = cpg_db_query("SELECT DISTINCT cid FROM cpg150_categorymap WHERE group_id = $group_id");
+			$rowset = cpg_db_fetch_rowset($result);
+			
+			//add allowed categories to the restriction		
+            $restrict = "AND (category = '" . (FIRST_USER_CAT + USER_ID) . "'";
+			
+			foreach($rowset as $key => $value){
+				$restrict .= " OR category = '" . $value['cid'] . "'";
+			}
+			$restrict .= ")";
         } else {
             $restrict = '';
         }
@@ -261,16 +274,19 @@ switch ($what) {
         pageheader($lang_delete_php['alb_mgr']);
         starttable("100%", $lang_delete_php['alb_mgr'], 6);
 
-        $orig_sort_order = parse_list($_POST['sort_order']);
-        foreach ($orig_sort_order as $album) {
-            $op = parse_orig_sort_order($album);
-            if (count ($op) == 2) {
-                $query = "UPDATE $CONFIG[TABLE_ALBUMS] SET pos='{$op['pos']}' WHERE aid='{$op['aid']}' $restrict LIMIT 1";
-                cpg_db_query($query);
-            } else {
-                cpg_die (sprintf(CRITICAL_ERROR, $lang_delete_php['err_invalid_data'], $_POST['sort_order']), __FILE__, __LINE__);
-            }
-        }
+		//prevent sorting of the albums if not admin or in own album
+		if(GALLERY_ADMIN_MODE || $_POST['cat'] == FIRST_USER_CAT + USER_ID){
+			$orig_sort_order = parse_list($_POST['sort_order']);
+			foreach ($orig_sort_order as $album) {
+				$op = parse_orig_sort_order($album);
+				if (count ($op) == 2) {
+					$query = "UPDATE $CONFIG[TABLE_ALBUMS] SET pos='{$op['pos']}' WHERE aid='{$op['aid']}' $restrict LIMIT 1";
+					cpg_db_query($query);
+				} else {
+					cpg_die (sprintf(CRITICAL_ERROR, $lang_delete_php['err_invalid_data'], $_POST['sort_order']), __FILE__, __LINE__);
+				}
+			}
+		}
 
         $to_delete = parse_list($_POST['delete_album']);
         foreach ($to_delete as $album_id) {
@@ -286,13 +302,11 @@ switch ($what) {
                 case '0':
                     break;
                 case '1':
-                    if (GALLERY_ADMIN_MODE) {
-                        $category = (int)$_POST['cat'];
-                    } else {
-                        $category = FIRST_USER_CAT + USER_ID;
-                    }
+                    $category = (int)$_POST['cat'];
+					$user_id = USER_ID;
+					
                     echo "<tr><td colspan=\"6\" class=\"tableb\">" . sprintf($lang_delete_php['create_alb'], $op['album_nm']) . "</td></tr>\n";
-                    $query = "INSERT INTO {$CONFIG['TABLE_ALBUMS']} (category, title, uploads, pos, description) VALUES ('$category', '" . addslashes($op['album_nm']) . "', 'NO',  '{$op['album_sort']}', '')";
+                    $query = "INSERT INTO {$CONFIG['TABLE_ALBUMS']} (category, title, uploads, pos, description, owner) VALUES ('$category', '" . addslashes($op['album_nm']) . "', 'NO',  '{$op['album_sort']}', '', '$user_id')";
                     cpg_db_query($query);
                     break;
                 case '2':
