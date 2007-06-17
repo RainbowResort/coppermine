@@ -860,6 +860,9 @@ if (defined('ADMIN_PHP')) $lang_admin_data = array(
   array('Allow users to delete their own user account', 'allow_user_account_delete', 1, 'f=configuration.htm&amp;as=admin_user_allow_account_delete&amp;ae=admin_user_allow_account_delete_end'), // cpg1.5.x
 
   array('Allow users to retain control over their pics in public galleries', 'users_can_edit_pics', 1, 'f=configuration.htm&amp;as=admin_user_editpics_public_start&amp;ae=admin_user_editpics_public_end'),
+  
+  array('Allow users to move their albums from/to allowed categories', 'allow_user_move_album', 1, 'f=configuration.htm&amp;as=admin_user_move_album_start&amp;ae=admin_user_move_album_end'),// cpg1.5.x
+  
   array('Number of failed login attempts until temporary ban (to avoid brute force attacks)', 'login_threshold', 0, 'f=configuration.htm&amp;as=admin_user_login_start&amp;ae=admin_user_login_end'),
   array('Duration of a temporary ban after failed logins', 'login_expiry', 0, 'f=configuration.htm&amp;as=admin_user_login_start&amp;ae=admin_user_login_end'),
   array('Enable Report to Admin', 'report_post', 1, 'f=configuration.htm&amp;as=admin_user_enable_report&amp;ae=admin_user_enable_report_end'),

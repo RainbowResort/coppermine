@@ -628,3 +628,6 @@ INSERT INTO CPG_config VALUES ('display_stats_on_index', '1');
 
 # Enable "browse by date" meta album
 INSERT INTO CPG_config VALUES ('browse_by_date', '0');
+
+# Allow users to move their albums from/to categories
+INSERT INTO CPG_config VALUES ('allow_user_move_album', '0');

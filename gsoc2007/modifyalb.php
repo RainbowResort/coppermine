@@ -157,22 +157,30 @@ EOT;
 
 function form_category($text, $name)
 {
-    global $ALBUM_DATA, $CAT_LIST, $USER_DATA, $lang_modifyalb_php;
+    global $ALBUM_DATA, $CAT_LIST, $USER_DATA, $lang_modifyalb_php, $CONFIG;
 
-//    if (!GALLERY_ADMIN_MODE || $ALBUM_DATA['category'] > FIRST_USER_CAT) {
-//        echo <<<EOT
-//        <tr>
-//            <td class="tableb">
-//                        $text
-//        </td>
-//        <td class="tableb" valign="top">
-//                        <i>{$lang_modifyalb_php['user_gal']}</i>
-//                        <input type="hidden" name="$name" value="{$ALBUM_DATA['category']}" />
-//                </td>
-//
-//EOT;
-//        return;
-//    }
+	//check if users are allowed to move their albums
+    if ($CONFIG['allow_user_move_album'] == 0) {
+		//get category name
+		$cat_name = $lang_modifyalb_php['user_gal'];
+		if($ALBUM_DATA['category'] != (FIRST_USER_CAT + USER_ID)){
+			$result = cpg_db_query("SELECT name FROM {$CONFIG['TABLE_CATEGORIES']} WHERE cid = '" . $ALBUM_DATA['category'] . "' LIMIT 1");
+			$cat_name = cpg_db_fetch_row($result);
+			$cat_name = $cat_name['name'];
+		}
+        echo <<<EOT
+        <tr>
+            <td class="tableb">
+                        $text
+        </td>
+        <td class="tableb" valign="top">
+                        <i>{$cat_name}</i>
+                        <input type="hidden" name="$name" value="{$ALBUM_DATA['category']}" />
+                </td>
+
+EOT;
+        return;
+    }
 
     $CAT_LIST = array();
 	//only add 'no category' when user is admin
