@@ -19,19 +19,15 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
  * Cpg component: album
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
@@ -41,10 +37,23 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 																	//*************************************
 																	//				VARIABLES             *
 																	//*************************************
-	private String keyword = null, alb_password = null, alb_password_hint = null;
+	private String keyword = null ;
+																	//*************************************
+																	//				VARIABLES             *
+																	//*************************************
+	private String alb_password = null ;
+																	//*************************************
+																	//				VARIABLES             *
+																	//*************************************
+	private String alb_password_hint = null ;
 	private int visibility;
-	private boolean uploads, comments, votes;
-	private int id, position, thumb, category;
+	private boolean uploads;
+	private boolean comments;
+	private boolean votes;
+	private int id;
+	private int position;
+	private int thumb;
+	private int category;
 	private ArrayList<JCpgPicture> pictures = new ArrayList<JCpgPicture>();
 	
 	
@@ -548,6 +557,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	public String generateSqlDeleteQuery(){
 		
 		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "_albums WHERE title = '" + getName() + "'";
+		
 		return sqlquery;
 		
 	}

@@ -17,29 +17,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Updater;
 
-import java.awt.Window;
-
-import javax.swing.JWindow;
-
 import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
+import java.awt.Window;
+import javax.swing.JWindow;
 
 
 
 
 /**
- * 
  * Show update window looking for new updates
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgUpdater extends JCpgProgressManager {
 	
+	
+																									
+																									//*************************************
+																									//				VARIABLES             *
+																									//*************************************
 	JCpgVersionchecker vc = new JCpgVersionchecker("http://ardella.madoka.be/jcpg/updater/version.dat");
 	
 	
 	
+	
+																																																	
+																									//*************************************
+																									//				CONSTRUCTOR           *
+																									//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgUpdater object
+	 * 
+	 * @param parent
+	 * 		the parent window, the window from where this updater was called
+	 * @param maximum
+	 * 		maximum of the progressbar
+	 */
 	public JCpgUpdater(Window parent, int maximum){
 		
 		super(parent, maximum, "data/updater_logo.jpg", true, false);
@@ -49,8 +63,15 @@ public class JCpgUpdater extends JCpgProgressManager {
 	
 	
 	
-	
-	
+																									
+																									//*************************************
+																									//				MUTATORS & OTHERS     *
+																									//*************************************																							
+	/**
+	 * 
+	 * This is the interface implementation. You can undertake certain self implemented actions while the updater is active.
+	 * 
+	 */
 	public boolean doAction() {
 		
 		if(vc.downloadRemoteVersionFile()){ // download the remote version file

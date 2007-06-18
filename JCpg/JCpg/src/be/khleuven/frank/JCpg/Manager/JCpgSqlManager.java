@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,16 +25,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-
 
 
 /**
- * 
  * Makes the connections with the sql database, executes queries and gives their results back
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgSqlManager implements Serializable{
 	
@@ -43,8 +39,8 @@ public class JCpgSqlManager implements Serializable{
 																				//*************************************
 																				//				VARIABLES             *
 																				//*************************************
-	JCpgServerConfig serverConfig = null;
-	Connection connection = null;
+	private JCpgServerConfig serverConfig = null;
+	private Connection connection = null;
 	
 	
 	
@@ -141,18 +137,22 @@ public class JCpgSqlManager implements Serializable{
 	 * Try to make a connection to the database. This connection can then later be used to execute sql queries
 	 * 
 	 * @return
+	 * 		-1 if the connection fails, otherwhise 0.
 	 */
 	public int connect(){
 		
 		try {
 			
-			Class.forName("org.gjt.mm.mysql.Driver").newInstance();
+			getClass().getResource("mysql-connector-java-5.0.5-bin.jar");
+			Class.forName("org.gjt.mm.mysql.Driver").newInstance(); // error on runnable jar
 			Connection connection = DriverManager.getConnection(serverConfig.getFullServer(), serverConfig.getUsername(), serverConfig.getPwd());
 			setConnection(connection);
 			
 		} catch (Exception e) {
 			
 			System.out.println("SqlManager: couldn't connect to sql server.");
+			e.printStackTrace();
+			
 			return -1;
 			
 		}
@@ -167,7 +167,7 @@ public class JCpgSqlManager implements Serializable{
 	 * @param query
 	 * 		the sql query
 	 * @return
-	 * 		the resulting resultset
+	 * 		the resulting resultset or null
 	 */
 	public ResultSet sqlExecute(String query){
 		

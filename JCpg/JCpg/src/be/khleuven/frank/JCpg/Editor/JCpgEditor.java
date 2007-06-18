@@ -17,6 +17,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Interfaces.JCpgMyEditorInterface;
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -27,7 +31,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,21 +41,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Interfaces.JCpgMyEditorInterface;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 
 /**
- * 
- * This class is used to do the basic photo editing. This is a parent class for all windows providing their editing.
- * This class basicly will make a std window with and apply and close button.
- * At the moment, we JDialog itself has a size of 1000x700: there's a logo (1000x50) and below 50 pixels is needed for the apply and close button. So de width of the preview panel
- * can max be 1000 pixels, the height has a maximum of 600 pixels.
- * 
- * @author Frank Cleynen
- *
+ * This class is used to do the basic photo editing. This is a parent class for all windows providing their editing. This class basicly will make a std window with and apply and close button. At the moment, we JDialog itself has a size of 1000x700: there's a logo (1000x50) and below 50 pixels is needed for the apply and close button. So de width of the preview panel can max be 1000 pixels, the height has a maximum of 600 pixels.
+ * @author    Frank Cleynen
  */
 public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterface{
 	
@@ -66,10 +58,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	private JCpgUI jCpgUIReference;
 	private JCpgPicture picture;
 	
-	private Dimension screensize, previewPosition, previewSize;
+	private Dimension screensize;
+	private Dimension previewPosition;
+	private Dimension previewSize;
 	
 	private JLabel logo;
-	private JButton apply, close;
+	private JButton apply;
+	private JButton close;
 	private JPanel preview;
 	
 	private BufferedImage previewBuffered;
@@ -182,6 +177,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
 		
 	}
+
 	
 	
 	

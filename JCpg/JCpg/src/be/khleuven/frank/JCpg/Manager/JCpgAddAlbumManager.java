@@ -90,6 +90,7 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 			if(category.getAlbums().get(i).getName().equals(titleField.getText())){
 				
 				getMsgLabel().setText("Album already exists. Choose a different name.");
+				
 				return;
 				
 			}

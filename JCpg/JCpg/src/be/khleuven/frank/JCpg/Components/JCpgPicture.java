@@ -19,20 +19,16 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 
 /**
- * 
  * Cpg component: picture
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgPicture extends JCpgGallery implements Serializable{
 	
@@ -42,8 +38,63 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 											//*************************************
 											//				VARIABLES	          *
 											//*************************************
-	private int id, aid, pwidth, pheight, ownerid, picrating, votes, ctime, galleryicon, urlprefix, position, filesize, totalfilesize, hits;
-	private String filename = null, filepath = null, ownername = null, keywords = null;
+	private int id;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int aid;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int pwidth;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int pheight;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int ownerid;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int picrating;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int votes;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int ctime;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int galleryicon;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int urlprefix;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int position;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int filesize;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int totalfilesize;
+											//*************************************
+											//				VARIABLES	          *
+											//*************************************
+	private int hits;
+	private String filename = null ;
+	private String filepath = null ;
+	private String ownername = null ;
+	private String keywords = null ;
 	private Date mtime = null;
 	private boolean approved;
 											

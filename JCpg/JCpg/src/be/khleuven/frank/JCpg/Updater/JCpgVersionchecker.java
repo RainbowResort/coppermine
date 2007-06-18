@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Updater;
 
+import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,30 +27,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
 import javax.swing.JProgressBar;
 
-import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
-
 /**
- * 
  * Visits the jcpgtool.org website and looks for an update
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgVersionchecker {
 	
 	
 	
-	
-	private String versionUrl = null, updateUrl = null;
+																									//*************************************
+																									//				VARIABLES             *
+																									//*************************************
+	private String versionUrl = null ;
+																									//*************************************
+																									//				VARIABLES             *
+																									//*************************************
+	private String updateUrl = null ;
 	private int updatefileSize = 0;
 	private double serverVersion = 0.0;
 	
 	
-	
-	
+																									
+																									//*************************************
+																									//				CONSTRUCTORS										*
+																									//*************************************
 	/**
 	 * 
 	 * Create a new Versionchecker object
@@ -69,8 +72,10 @@ public class JCpgVersionchecker {
 	
 	
 	
-	
-	
+																									
+																									//*************************************
+																									//				SETTERS	              *
+																									//*************************************
 	/**
 	 * 
 	 * Set the server version
@@ -123,9 +128,17 @@ public class JCpgVersionchecker {
 	
 	
 	
-	
-	
-	
+																									
+																									//*************************************
+																									//				GETTERS	              *
+																									//*************************************
+	/**
+	 * 
+	 * Get the version currently on the server
+	 * 
+	 * @return
+	 * 		the version currently on the server
+	 */
 	public double getServerVersion(){
 		
 		return this.serverVersion;
@@ -171,8 +184,10 @@ public class JCpgVersionchecker {
 	
 	
 	
-	
-	
+																									
+																									//*************************************
+																									//				MUTATORS & OTHERS					*
+																									//*************************************
 	/**
 	 * 
 	 * Download remote version file

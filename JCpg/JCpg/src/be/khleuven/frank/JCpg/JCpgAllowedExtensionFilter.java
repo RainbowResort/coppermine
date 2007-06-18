@@ -17,18 +17,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg;
 
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
 import java.io.File;
 import java.io.Serializable;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-
 
 /**
- * 
  * Allowed extensions for pictures importation
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilter implements Serializable {
 	

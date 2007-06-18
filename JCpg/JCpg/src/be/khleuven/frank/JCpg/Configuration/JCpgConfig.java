@@ -17,19 +17,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Configuration;
 
+import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
-
 /**
- * 
  * This class contains all the information found in the Cpg _config table.
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgConfig implements Serializable {
 	

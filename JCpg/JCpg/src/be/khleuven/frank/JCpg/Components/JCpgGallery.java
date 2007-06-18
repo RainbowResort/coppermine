@@ -19,25 +19,20 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import javax.swing.tree.TreePath;
-
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
- * 
  * Cpg component: Gallery
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgGallery implements Serializable{
 	
@@ -46,7 +41,11 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				VARIABLES             *
 														//*************************************
-	private String name = null, description = null;
+	private String name = null ;
+														//*************************************
+														//				VARIABLES             *
+														//*************************************
+	private String description = null ;
 	private JCpgUserConfig userConfig;
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<String> deleteQueries = new ArrayList<String>(); // used to store deletion queries. Needed because the object itself will be deleted so we can't get the query from the object anymore

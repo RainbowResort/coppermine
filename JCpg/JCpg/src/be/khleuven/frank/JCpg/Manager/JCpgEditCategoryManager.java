@@ -17,22 +17,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Components.JCpgCategory;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.Serializable;
-
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import be.khleuven.frank.JCpg.Components.JCpgCategory;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 
 /**
- * 
- * 
  * Edit category manager
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgEditCategoryManager extends JCpgEditManager implements Serializable {
 	

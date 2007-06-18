@@ -80,6 +80,7 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		if(titleField.getText().equals("")){
 			
 			getMsgLabel().setText("Title is empty !!");
+			
 			return;
 			
 		}
@@ -90,6 +91,7 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 			if(gallery.getCategories().get(i).getName().equals(titleField.getText())){
 				
 				getMsgLabel().setText("Category already exists. Choose a different name.");
+				
 				return;
 				
 			}

@@ -21,19 +21,30 @@ import java.io.Serializable;
 
 
 /**
- * 
  * User configuration
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgUserConfig implements Serializable {
 	
-	private String username, password;
+	
+																										
+																										//*************************************
+																										//				VARIABLES	          *
+																										//*************************************
+	private String username;
+																										//*************************************
+																										//				VARIABLES	          *
+																										//*************************************
+	private String password;
 	private JCpgServerConfig serverConfig;
 	
+																										
 	
 	
+	
+																										//*************************************
+																										//				CONSTRUCTOR	          *
+																										//*************************************
 	/**
 	 * 
 	 * Makes a new JcpgUserConfig
@@ -52,8 +63,17 @@ public class JCpgUserConfig implements Serializable {
 		setServerConfig(serverConfig);
 		
 	}
+																										
 	
 	
+	
+	
+	
+	
+	
+																										//*************************************
+																										//				SETTERS					          *
+																										//*************************************
 	/**
 	 * 
 	 * Set the userconfig username
@@ -92,8 +112,10 @@ public class JCpgUserConfig implements Serializable {
 	}
 	
 	
-	
-	
+																										
+																										//*************************************
+																										//				GETTERS					          *
+																										//*************************************
 	/**
 	 * 
 	 * Get the userconfig username

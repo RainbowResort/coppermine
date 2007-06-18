@@ -17,6 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -25,22 +28,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
  * Is responsible for asking all the necesarry info to make a connection to the right sql db and tables
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgServerManager extends JFrame implements Serializable{
 	
@@ -51,15 +46,29 @@ public class JCpgServerManager extends JFrame implements Serializable{
 																	//				VARIABLES	          *
 																	//*************************************
 	private Dimension screensize;
-	private JLabel logo, configName, connectionStatus, username, password, server, prefix, database;
-	private JTextField configNameField, usernameField, passwordField, prefixField, databaseField, serverField;
-	private JButton save, delete;
+	private JLabel logo;
+	private JLabel configName;
+	private JLabel connectionStatus;
+	private JLabel username;
+	private JLabel password;
+	private JLabel server;
+	private JLabel prefix;
+	private JLabel database;
+	private JTextField configNameField;
+	private JTextField usernameField;
+	private JTextField passwordField;
+	private JTextField prefixField;
+	private JTextField databaseField;
+	private JTextField serverField;
+	private JButton save;
+	private JButton delete;
 	
 	private JCpgUI jCpgInterface;
 	private JCpgServerConfig serverConfig;
 	private JCpgUserManager userManager;
 	
-	private int serverManagerWidth, serverManagerHeight;
+	private int serverManagerWidth;
+	private int serverManagerHeight;
 	
 	
 																	

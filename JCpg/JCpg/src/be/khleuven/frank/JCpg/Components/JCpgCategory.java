@@ -19,19 +19,15 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
  * Cpg Categories. A categorie contains albums.
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgCategory extends JCpgGallery implements Serializable{
 																						
@@ -41,7 +37,23 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 																						//*************************************
 																						//				VARIABELS             *
 																						//*************************************
-	private int id, ownerid, position, parent, thumb;
+	private int id;
+																						//*************************************
+																						//				VARIABELS             *
+																						//*************************************
+	private int ownerid;
+																						//*************************************
+																						//				VARIABELS             *
+																						//*************************************
+	private int position;
+																						//*************************************
+																						//				VARIABELS             *
+																						//*************************************
+	private int parent;
+																						//*************************************
+																						//				VARIABELS             *
+																						//*************************************
+	private int thumb;
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 
 	

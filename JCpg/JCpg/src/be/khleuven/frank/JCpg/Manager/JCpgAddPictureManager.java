@@ -17,34 +17,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
+import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
-import be.khleuven.frank.JCpg.Components.JCpgAlbum;
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
-import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
-import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 
 /**
- * 
- * Add picture manager
- * We need to do a change to the default add manager's size because we need to integrate a filechooser. This way, users can import as many pictures as they want with just one click.
- * 
- * @author Frank Cleynen
- *
+ * Add picture manager We need to do a change to the default add manager's size because we need to integrate a filechooser. This way, users can import as many pictures as they want with just one click.
+ * @author    Frank Cleynen
  */
 public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {
 
@@ -138,6 +132,9 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 	}
 	
+	
+	
+	
 																									
 																									//*************************************
 																									//				MUTATORS & OTHERS     *
@@ -184,46 +181,56 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 		File[] selectedFiles = pictureChooser.getSelectedFiles();
 		
-		JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length-1, "data/updater_logo.jpg", false, true); // new progress manager
-		
-		for(int i=0; i<selectedFiles.length; i++){
-		
-			// make new picture
-			ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
-			File source = new File(selectedFiles[i].getAbsolutePath());
-			File destination = new File(getCpgConfig().getValueFor("fullpath") + "userpics/10001/" + selectedFiles[i].getName());
-			JCpgPictureTransferer transferer = new JCpgPictureTransferer();
-			long filesize = 0;
+		if(selectedFiles.length > 0){ // only proceed if user selected file(s)
 			
-			try {
+			JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length-1, "data/updater_logo.jpg", false, true); // new progress manager
+		
+			for(int i=0; i<selectedFiles.length; i++){
+			
+				// make new picture
+				ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
+				File source = new File(selectedFiles[i].getAbsolutePath());
+				File destination = new File(getCpgConfig().getValueFor("fullpath") + "userpics/10001/" + selectedFiles[i].getName());
+				JCpgPictureTransferer transferer = new JCpgPictureTransferer();
+				long filesize = 0;
 				
-				filesize = transferer.copyFile(source, destination); // copy picture locally
-				JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + "userpics/10001/", selectedFiles[i].getName());
-				//thumb.makeThumb(getJCpgUIReference().getThumbnailPreferredSize()); memory error
+				try {
+					
+					filesize = transferer.copyFile(source, destination); // copy picture locally
+					JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + "userpics/10001/", selectedFiles[i].getName());
+					//thumb.makeThumb(getJCpgUIReference().getThumbnailPreferredSize()); memory error
+					
+				} catch (Exception e) {
+					
+					System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
+					
+				}
 				
-			} catch (Exception e) {
+				Date date = new Date(); // used to get number of seconds since 1970 for ctime
+			    
+				JCpgPicture picture = new JCpgPicture(getJCpgUIReference().getUserConfig(), -1, album.getId(), "userpics/10001/", selectedFiles[i].getName(), (int)filesize, (int)filesize, image.getIconWidth(), image.getIconHeight(), 0, (int)date.getTime(), 0, "", 0, 0, getTitleField().getText(), getDescriptionField().getText(), "", true, 0, 0, 0);
 				
-				System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
+				picture.generateSqlInsertQuery();
+				
+				album.addPicture(picture);
+				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
+				getNode().add(newNode);
+				
+				getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+				
+				progress.changeProgressbarValue(i);
+				
+				SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 				
 			}
 			
-			Date date = new Date(); // used to get number of seconds since 1970 for ctime
-		    
-			JCpgPicture picture = new JCpgPicture(getJCpgUIReference().getUserConfig(), -1, album.getId(), "userpics/10001/", selectedFiles[i].getName(), (int)filesize, (int)filesize, image.getIconWidth(), image.getIconHeight(), 0, (int)date.getTime(), 0, "", 0, 0, getTitleField().getText(), getDescriptionField().getText(), "", true, 0, 0, 0);
-			
-			picture.generateSqlInsertQuery();
-			
-			album.addPicture(picture);
-			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
-			getNode().add(newNode);
-			
-			getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
-			
-			progress.changeProgressbarValue(i);
-			
-			SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
+			getJCpgUIReference().setEnabled(true);
+			this.dispose();
 			
 		}
+		
+		getJCpgUIReference().setEnabled(true);
+		this.dispose();
 		
 	}
 		

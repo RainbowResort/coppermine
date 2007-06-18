@@ -17,6 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Previewer;
 
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Editor.JCpgTransform;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -28,7 +31,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,16 +40,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
-import be.khleuven.frank.JCpg.Components.JCpgAlbum;
-import be.khleuven.frank.JCpg.Editor.JCpgTransform;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
  * This class will make it possible to preview the pictures in an album.
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgPreviewer extends JDialog {
 	
@@ -91,7 +86,7 @@ public class JCpgPreviewer extends JDialog {
 		boundComponents();
 		placeComponents();
 		
-		startPreview(1, "data/createalbum_logo.jpg", "data/createcategory_logo.jpg");
+		s("data/createalbum_logo.jpg", "data/createcategory_logo.jpg");
 		
 	}
 	
@@ -338,5 +333,57 @@ public class JCpgPreviewer extends JDialog {
 		}
         
     }
+	
+	
+	private void s(String p1, String p2){
+		
+		try{
+			
+			JButton image;
+			Dimension realSize;
+			
+			BufferedImage pic1 = ImageIO.read(new File(p1)); // begin pictures
+			BufferedImage pic2 = ImageIO.read(new File(p2)); // end picture
+			
+			Image imageFromBuffered = transformer.toImage(pic1);
+	    	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
+		    
+	    	image = new JButton(imageIcon);
+	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+	    	image.setPreferredSize(realSize);
+	    	getPreview().removeAll();
+	    	getPreview().add(image);
+	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
+	    	
+	    	for(int i=0; i<100000; i++){
+		    	
+		    	image.repaint();
+		    	
+		    	System.out.println(i);
+	    		
+	    	}
+	    	
+	    	imageFromBuffered = transformer.toImage(pic2);
+	    	imageIcon = new ImageIcon(imageFromBuffered);
+		    
+	    	image = new JButton(imageIcon);
+	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+	    	image.setPreferredSize(realSize);
+	    	getPreview().removeAll();
+	    	getPreview().add(image);
+	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
+	    	
+	    	for(int i=0; i<100000; i++){
+	    		
+	    		getPreview().removeAll();
+		    	getPreview().add(image);
+		    	
+		    	System.out.println(i);
+	    		
+	    	}
+    	
+		}catch(Exception e){}
+		
+	}
 
 }

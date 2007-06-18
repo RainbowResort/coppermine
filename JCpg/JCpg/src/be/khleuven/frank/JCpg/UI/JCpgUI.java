@@ -17,16 +17,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.UI;
 
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgCategory;
+import be.khleuven.frank.JCpg.Components.JCpgGallery;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
+import be.khleuven.frank.JCpg.Manager.JCpgAddCategoryManager;
+import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
+import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
+import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
+import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.Serializable;
-
 import java.util.Enumeration;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,36 +64,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Components.JCpgAlbum;
-import be.khleuven.frank.JCpg.Components.JCpgCategory;
-import be.khleuven.frank.JCpg.Components.JCpgGallery;
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
-import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
-import be.khleuven.frank.JCpg.Manager.JCpgAddCategoryManager;
-import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
-import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
-import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
-import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
-
 
 /**
- * 
  * Complete JCpg UI
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgUI extends JFrame implements TreeSelectionListener, Serializable{
 	
@@ -98,7 +91,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private boolean onlinemode = false; // false if we work offline, true if we work online
 	private boolean megaExplorerActive = false; // when in mega explorer mode, only the tree and one big list with many rows of photo's is visible. If a photo is selected, we switch to one row of photo's at the top with the explorer below
 	
-	private JSplitPane splitPane, megaSplitPane;
+	private JSplitPane splitPane;
+	private JSplitPane megaSplitPane;
 	
 	private JList pictureList;
 	private ListSelectionModel pictureListSelectionModel;
@@ -107,12 +101,21 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private JPanel tools;
 	private JPanel albumcontrol;
 	private JScrollPane explorerscroll;
-	private JButton edit_crop, edit_colorcorrection, edit_resize, edit_rotate;
-	private JButton control_new, control_delete, control_sync, control_edit, control_preview;
+	private JButton edit_crop;
+	private JButton edit_colorcorrection;
+	private JButton edit_resize;
+	private JButton edit_rotate;
+	private JButton control_new;
+	private JButton control_delete;
+	private JButton control_sync;
+	private JButton control_edit;
+	private JButton control_preview;
 	private JButton closeMegaExplorer;
 	private JTree tree;
-	private JScrollPane treeView, megaTreeView;
-	private JScrollPane pictureView, megaPictureView;
+	private JScrollPane treeView;
+	private JScrollPane megaTreeView;
+	private JScrollPane pictureView;
+	private JScrollPane megaPictureView;
 	private DefaultMutableTreeNode root;
 	
 	

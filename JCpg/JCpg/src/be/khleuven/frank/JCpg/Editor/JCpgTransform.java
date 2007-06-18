@@ -41,10 +41,15 @@ import javax.swing.ImageIcon;
  */
 public class JCpgTransform {
 	
+	
+	
+	
+	
 	public JCpgTransform(){
 		
-		
 	}
+
+
 	
 	
 	/**

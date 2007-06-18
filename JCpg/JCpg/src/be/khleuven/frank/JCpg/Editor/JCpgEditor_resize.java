@@ -17,13 +17,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,17 +33,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 
 /**
- * 
  * Editor: resize
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgEditor_resize extends JCpgEditor {
 	
@@ -51,13 +46,18 @@ public class JCpgEditor_resize extends JCpgEditor {
 																			//*************************************
 																			//				VARIABLES             *
 																			//*************************************
-	JCpgPictureResizer resizer = new JCpgPictureResizer();
+	private JCpgPictureResizer resizer = new JCpgPictureResizer();
 	
-	JLabel newWidthLabel, newHeightLabel;
-	JTextField newWidthField, newHeightField;
-	JButton preview;
+	private JLabel newWidthLabel;
+	private JLabel newHeightLabel;
+	private JTextField newWidthField;
+	private JTextField newHeightField;
+	private JButton preview;
 	
 																			
+	
+	
+	
 	
 	
 	
@@ -83,6 +83,10 @@ public class JCpgEditor_resize extends JCpgEditor {
 		doExtraSwingComponents();
 		
 	}
+	
+	
+	
+	
 	
 	
 	

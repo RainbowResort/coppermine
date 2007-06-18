@@ -24,11 +24,8 @@ import java.security.NoSuchAlgorithmException;
 
 
 /**
- * 
  * Server configuration
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgServerConfig implements Serializable{
 	
@@ -38,7 +35,27 @@ public class JCpgServerConfig implements Serializable{
 																//*************************************
 																//				VARIABLES             *
 																//*************************************
-	String server = null, username = null, pwd = null, database = null, prefix = null, configName = null;
+	String server = null ;
+																//*************************************
+																//				VARIABLES             *
+																//*************************************
+	String username = null ;
+																//*************************************
+																//				VARIABLES             *
+																//*************************************
+	String pwd = null ;
+																//*************************************
+																//				VARIABLES             *
+																//*************************************
+	String database = null ;
+																//*************************************
+																//				VARIABLES             *
+																//*************************************
+	String prefix = null ;
+																//*************************************
+																//				VARIABLES             *
+																//*************************************
+	String configName = null ;
 	
 	
 	
@@ -149,6 +166,13 @@ public class JCpgServerConfig implements Serializable{
 																//*************************************
 																//				GETTERS		          *
 																//*************************************
+	/**
+	 * 
+	 * Get the configuration name
+	 * 
+	 * @return
+	 * 		the configuration name
+	 */	
 	public String getConfigName(){
 		
 		return this.configName;
@@ -237,43 +261,89 @@ public class JCpgServerConfig implements Serializable{
 		
 	    MessageDigest m=MessageDigest.getInstance("MD5");
 	    m.update(getPwd().getBytes(),0,getPwd().length());
+	    
 	    return new BigInteger(1,m.digest()).toString(16);
 	    
 	}
 	
-	
+	/**
+	 * 
+	 * Override for the toString methode. Gives back the config name
+	 * 
+	 */
 	public String toString(){
 		
 		return getConfigName();
 		
 	}
 	
-	
+	/**
+	 * 
+	 * Change the configuration name
+	 * 
+	 * @param configName
+	 * 		the new config name
+	 */
 	public void changeConfigName(String configName){
 		
 		setConfigName(configName);
 		
 	}
+	/**
+	 * 
+	 * Change the servername
+	 * 
+	 * @param server
+	 * 		the new servername
+	 */
 	public void changeServer(String server){
 		
 		setServer(server);
 		
 	}
+	/**
+	 * 
+	 * Change the username
+	 * 
+	 * @param username
+	 * 		the new username
+	 */
 	public void changeUsername(String username){
 		
 		setUsername(username);
 		
 	}
+	/**
+	 * 
+	 * Change the password
+	 * 
+	 * @param pwd
+	 * 		the new password
+	 */
 	public void changePassword(String pwd){
 		
 		setPwd(pwd);
 		
 	}
+	/**
+	 * 
+	 * Change the database
+	 * 
+	 * @param database
+	 * 		the new database
+	 */
 	public void changeDatabase(String database){
 		
 		setDatabase(database);
 		
 	}
+	/**
+	 * 
+	 * Change the prefix
+	 * 
+	 * @param prefix
+	 * 		the new prefix
+	 */
 	public void changePrefix(String prefix){
 		
 		setPrefix(prefix);

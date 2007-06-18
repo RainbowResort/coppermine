@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Communicator;
 
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,15 +25,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-
 
 /**
- * 
  * Does GET and POST HTTP request to generate and receive XML files to / from Nitin's Coppermine API
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgPhpCommunicator {
 	

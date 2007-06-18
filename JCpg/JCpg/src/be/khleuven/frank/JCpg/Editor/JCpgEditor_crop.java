@@ -17,6 +17,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -30,14 +32,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
-
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
@@ -60,9 +58,15 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 																			//				VARIABLES             *
 																			//*************************************
 	private Rectangle crop = null; // this is the rectangle used to point to the area that has to be cropped
-	private JButton xplus, xminus, yplus, yminus; // used to make the rectangle bigger/smaller
+	private JButton xplus;
+	private JButton xminus;
+	private JButton yplus;
+	private JButton yminus;
 	
-	private int rwidth = 300, rheight = 300, rx = getPreviewSize().width/2-getPicture().getpWidth()/2 + 75, ry = 59 + 50; // rectangle's width, height, x and y position
+	private int rwidth = 300 ;
+	private int rheight = 300 ;
+	private int rx = getPreviewSize ( ) . width / 2 - getPicture ( ) . getpWidth ( ) / 2 + 75 ;
+	private int ry = 59 + 50 ;
 	
 	private int LEFT = getPreviewSize().width/2-getPicture().getpWidth()/2;
 	private int UP = 59;
@@ -73,7 +77,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 	
 	private Point offset = new Point();
 	
-	private Rectangle fillerleft = new Rectangle(), fillerright = new Rectangle(), fillerup = new Rectangle(), fillerdown = new Rectangle(); // rectangles used to make everything black that isn't selected
+	private Rectangle fillerleft = new Rectangle ( ) ;
+	private Rectangle fillerright = new Rectangle ( ) ;
+	private Rectangle fillerup = new Rectangle ( ) ;
+	private Rectangle fillerdown = new Rectangle ( ) ;
 	
 	
 	
@@ -159,7 +166,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		repaint();
 
 	}
-	
+	/**
+	 * 
+	 * Overrided version of the paint methode: paint the crop square and the excluding black squares
+	 * 
+	 */
 	public void paint(Graphics g){
 		
         super.paint(g);
@@ -244,7 +255,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		return null;
 		
 	}
-	
+	/**
+	 * 
+	 * Make crop square wider (horizontal)
+	 * 
+	 */
 	private void xplusActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		Point position = crop.getLocation();
@@ -257,6 +272,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		}
     	
 	}
+	/**
+	 * 
+	 * Make crop square smaller (horizontal)
+	 * 
+	 */
 	private void xminusActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		Point position = crop.getLocation();
@@ -269,6 +289,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		}
 	    	
 	}
+	/**
+	 * 
+	 * Make crop square wider (vertical)
+	 * 
+	 */
 	private void yplusActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		Point position = crop.getLocation();
@@ -281,6 +306,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		}
 		
 	}
+	/**
+	 * 
+	 * Make crop square smaller (vertical)
+	 * 
+	 */
 	private void yminusActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		Point position = crop.getLocation();
@@ -296,7 +326,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 
 
 
-
+	/**
+	 * 
+	 * Move the square with the mouse
+	 * 
+	 */
 	public void mouseClicked(MouseEvent e) {
 		
 		Point p = e.getPoint();

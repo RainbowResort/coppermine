@@ -17,6 +17,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,7 +35,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -37,19 +42,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
  * Used to get all the necesarry information about the Coppermine user to login to his/her Coppermine account
- * 
- * @author Frank Cleynen
- *
+ * @author    Frank Cleynen
  */
 public class JCpgUserManager extends JDialog {
 	
@@ -64,14 +59,22 @@ public class JCpgUserManager extends JDialog {
 	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
 	
 	private Dimension screensize;
-	private JLabel logo, connectionStatus, username, password, server;
+	private JLabel logo;
+	private JLabel connectionStatus;
+	private JLabel username;
+	private JLabel password;
+	private JLabel server;
 	private JComboBox serverList;
-	private JTextField usernameField, passwordField;
-	private JButton connect, selectServer, startOffline;
+	private JTextField usernameField;
+	private JTextField passwordField;
+	private JButton connect;
+	private JButton selectServer;
+	private JButton startOffline;
 	
 	private JCpgUI jCpgInterface;
 	
-	private int userManagerWidth, userManagerHeight;
+	private int userManagerWidth;
+	private int userManagerHeight;
 	
 	private String[] defaultServer = {"ArDelLa", "ardella16", "default"}; // for testing: username, pwd, saved server config name
 	
@@ -193,7 +196,7 @@ public class JCpgUserManager extends JDialog {
 		
 		this.setBounds((screensize.width/2)-(getUserManagerWidth()/2), (screensize.height/2)-(getUserManagerHeight()/2), getUserManagerWidth(), getUserManagerHeight());
 		
-		connectionStatus.setBounds(290, 151, 300, 20);
+		connectionStatus.setBounds(75, 160, 500, 20);
 		
 		logo.setBounds(0, 0, 500, 50);
 		server.setBounds(70, 60, 100, 20);

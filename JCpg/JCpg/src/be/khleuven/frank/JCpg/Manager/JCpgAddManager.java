@@ -17,12 +17,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -31,18 +33,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
-import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-
 /**
- * 
- * This class will take care of all the actions when the user clicks on the + button. First we will determine which node is selected in the tree, determine the type of this node and then
- * start the right manager.
- * We have three manager classes inheritating from this class: category, album, picture.
- * 
- * @author Frank Cleynen
- *
+ * This class will take care of all the actions when the user clicks on the + button. First we will determine which node is selected in the tree, determine the type of this node and then start the right manager. We have three manager classes inheritating from this class: category, album, picture.
+ * @author    Frank Cleynen
  */
 public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntryInterface, Serializable {
 												
@@ -61,7 +54,8 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 	protected JLabel msg;
 	protected JTextField titleField;
 	protected JTextField descriptionField;
-	private JButton create, close;
+	private JButton create;
+	private JButton close;
 	private ImageIcon logoIcon;
 	
 	private Dimension screensize;
