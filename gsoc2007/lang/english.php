@@ -1433,6 +1433,7 @@ $lang_list_albums = array(
   'n_link_pictures' => '%s linked files',
   'total_pictures' => '%s files total',
   'alb_hits' => 'Album viewed %s times', // cpg1.5.x
+  'from_categorie' => ' - From Categorie: ', // cpg1.5.x
 );
 
 }

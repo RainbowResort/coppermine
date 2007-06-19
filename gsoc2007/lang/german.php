@@ -1515,6 +1515,8 @@ $lang_list_albums = array(
   'last_added' => ', letzte Aktualisierung am %s',
   'n_link_pictures' => '%s verknüpfte Dateien',
   'total_pictures' => '%s Dateien insgesamt',
+  'alb_hits' => 'Album gesehene %s Zeiten', // cpg1.5.x
+  'from_categorie' => ' - von der Kategorie: ', // cpg1.5.x
 );
 
 }
