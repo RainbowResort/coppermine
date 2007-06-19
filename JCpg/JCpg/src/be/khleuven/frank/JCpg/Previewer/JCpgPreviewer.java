@@ -44,7 +44,7 @@ import javax.swing.border.EtchedBorder;
  * This class will make it possible to preview the pictures in an album.
  * @author    Frank Cleynen
  */
-public class JCpgPreviewer extends JDialog {
+public class JCpgPreviewer extends JDialog{
 	
 	
 	
@@ -85,8 +85,6 @@ public class JCpgPreviewer extends JDialog {
 		initComponents();
 		boundComponents();
 		placeComponents();
-		
-		s("data/createalbum_logo.jpg", "data/createcategory_logo.jpg");
 		
 	}
 	
@@ -232,7 +230,7 @@ public class JCpgPreviewer extends JDialog {
 		
 		close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
-				//closeActionPerformed(evt);
+				closeActionPerformed(evt);
 			}
 		});
 		
@@ -250,7 +248,7 @@ public class JCpgPreviewer extends JDialog {
 		
 		preview.setBounds(0, 0, 1000, 700);
 		
-		close.setBounds(120, 660, 100, 30);
+		close.setBounds(450, 660, 100, 30);
 	
 	}
 	/**
@@ -266,7 +264,47 @@ public class JCpgPreviewer extends JDialog {
 		
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	public void run(){
+		
+		try{
+			
+			JButton image;
+			Dimension realSize;
+			
+			BufferedImage pic1 = ImageIO.read(new File("data/createalbum_logo.jpg")); // begin pictures
+			
+			Image imageFromBuffered = transformer.toImage(pic1);
+	    	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
+		    
+	    	image = new JButton(imageIcon);
+	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+	    	image.setPreferredSize(realSize);
+	    	getPreview().removeAll();
+	    	getPreview().add(image);
+	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
+    	
+		}catch(Exception e){}
+		
+	}
+	
+	
+	
+	
+	
 
+	
+	
+	
+	
+	
+	
 	
 	
 	public static Color combine(Color c1, Color c2, double alpha) {
@@ -278,7 +316,6 @@ public class JCpgPreviewer extends JDialog {
         return new Color(r, g, b);
         
     }
-	
 	public void startPreview(int frames, String pic1path, String pic2path) {
 		
 		int color, r, g, b;
@@ -335,54 +372,15 @@ public class JCpgPreviewer extends JDialog {
     }
 	
 	
-	private void s(String p1, String p2){
+
+	
+	
+	
+	
+	private void closeActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		try{
-			
-			JButton image;
-			Dimension realSize;
-			
-			BufferedImage pic1 = ImageIO.read(new File(p1)); // begin pictures
-			BufferedImage pic2 = ImageIO.read(new File(p2)); // end picture
-			
-			Image imageFromBuffered = transformer.toImage(pic1);
-	    	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
-		    
-	    	image = new JButton(imageIcon);
-	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-	    	image.setPreferredSize(realSize);
-	    	getPreview().removeAll();
-	    	getPreview().add(image);
-	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
-	    	
-	    	for(int i=0; i<100000; i++){
-		    	
-		    	image.repaint();
-		    	
-		    	System.out.println(i);
-	    		
-	    	}
-	    	
-	    	imageFromBuffered = transformer.toImage(pic2);
-	    	imageIcon = new ImageIcon(imageFromBuffered);
-		    
-	    	image = new JButton(imageIcon);
-	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-	    	image.setPreferredSize(realSize);
-	    	getPreview().removeAll();
-	    	getPreview().add(image);
-	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
-	    	
-	    	for(int i=0; i<100000; i++){
-	    		
-	    		getPreview().removeAll();
-		    	getPreview().add(image);
-		    	
-		    	System.out.println(i);
-	    		
-	    	}
-    	
-		}catch(Exception e){}
+		getJCpgUI().setEnabled(true);
+		this.dispose();
 		
 	}
 

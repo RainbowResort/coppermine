@@ -136,8 +136,7 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
         
         if(allowedExtensions.equals("ALL")){
         	
-	        if(filename.endsWith(".jpg") || filename.endsWith(".gif") || filename.endsWith(".png") || filename.endsWith(".bmp")
-	        		|| filename.endsWith(".JPG") || filename.endsWith(".GIF") || filename.endsWith(".PNG") || filename.endsWith(".BMP")){
+	        if(filename.toLowerCase().endsWith(".jpg") || filename.toLowerCase().endsWith(".gif") || filename.toLowerCase().endsWith(".png") || filename.toLowerCase().endsWith(".bmp")){
 	        	
 	        	return true;
 	        	

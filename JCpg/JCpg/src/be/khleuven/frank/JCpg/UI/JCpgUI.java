@@ -247,7 +247,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		root = new DefaultMutableTreeNode(gallery);
 		tree = new JTree(root);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		treeView = new JScrollPane(tree);
 		treeView.setMinimumSize(new Dimension(200, 400));

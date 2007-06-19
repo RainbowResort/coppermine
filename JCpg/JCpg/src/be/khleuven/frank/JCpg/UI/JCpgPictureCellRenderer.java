@@ -37,37 +37,54 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  * @author Frank Cleynen
  *
  */
-public class JCpgPictureCellRenderer extends JLabel implements ListCellRenderer {
+public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer {
+	
+	private GridBagLayout gbl = new GridBagLayout();
+	private GridBagConstraints gblc = new GridBagConstraints();
+	
+	public JCpgPictureCellRenderer() {
+		
+        setOpaque(false); // transparent
+        this.setLayout(gbl); // we will use the grid layout
+        this.removeAll();
+        
+        gblc.insets = new Insets(10,10,10,10);
+        gblc.weighty = 1;
+        gblc.weightx = 1;
+    	
+	}
 	
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     	
-    	setHorizontalAlignment(CENTER);
-        setVerticalAlignment(CENTER);
+    	JCpgPicture picture = (JCpgPicture)value;
+    	JLabel label = new JLabel(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
+
+        // determine grid position
+    	System.out.println(index);
+    	gblc.gridx = index;
+        //gblc.gridx = index % 10;
+        //gblc.gridy = getDeler(index, 10);
+    	gblc.gridy = 1;
     	
-    	JCpgPicture picture = (JCpgPicture)list.getModel().getElementAt(index);
-       
-        setIcon(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
-        setSize(400, 400);
-        
-        if (isSelected) {
-        	
-            setBackground(list.getSelectionBackground());
-	        setForeground(list.getSelectionForeground());
-	        
-	    }
-        else {
-        	
-	       setBackground(list.getBackground());
-	       setForeground(list.getForeground());
-	       
-	    }
-        
-	    setEnabled(list.isEnabled());
-	    setFont(list.getFont());
-        setOpaque(true);
+    	this.add(label, gblc);
         
         return this;
         
+    }
+    
+    private int getDeler(int source, int cutoff){
+    	
+    	int count = 0;
+    	
+    	while(source > cutoff){
+    		
+    		source = source - cutoff;
+    		count++;
+    		
+    	}
+    	
+    	return count;
+    	
     }
     
 }

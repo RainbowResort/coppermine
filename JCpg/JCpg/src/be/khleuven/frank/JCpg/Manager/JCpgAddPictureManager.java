@@ -24,6 +24,7 @@ import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
 import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
+import be.khleuven.frank.JCpg.UI.JCpgFilechooserImagePreview;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -134,7 +135,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	
 	
 	
-	
+
 																									
 																									//*************************************
 																									//				MUTATORS & OTHERS     *
@@ -153,6 +154,11 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		pictureChooser.setFileFilter(new JCpgAllowedExtensionFilter(getCpgConfig()));
 		pictureChooser.setMultiSelectionEnabled(true);
 		pictureChooser.setBounds(0, 100, 495, 345);
+		
+		JCpgFilechooserImagePreview imagePreview = new JCpgFilechooserImagePreview();
+		
+		pictureChooser.setAccessory(imagePreview); // add picture preview when adding pictures
+		pictureChooser.addPropertyChangeListener(imagePreview);
 		
 		getCreateButton().setText("Add");
 		getCreateButton().setBounds(70, 450, 100, 30);
@@ -198,7 +204,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					
 					filesize = transferer.copyFile(source, destination); // copy picture locally
 					JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + "userpics/10001/", selectedFiles[i].getName());
-					//thumb.makeThumb(getJCpgUIReference().getThumbnailPreferredSize()); memory error
+					thumb.makeThumb();
 					
 				} catch (Exception e) {
 					
@@ -224,6 +230,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 				
 			}
 			
+			progress.dispose();
 			getJCpgUIReference().setEnabled(true);
 			this.dispose();
 			

@@ -224,28 +224,34 @@ public class JCpgPictureResizer implements Serializable{
 	 * @param dimension
 	 * 		preferred dimension of the thumb
 	 */
-	public void makeThumb(Dimension dimension){
+	public void makeThumb(){
 		
-		ImageIcon imageIcon = new ImageIcon(getPath() + getFilename());
-		Image image = imageIcon.getImage();
-		BufferedImage bufferedImage = transformer.toBufferedImage(image);
+		File in = new File(getPath() + getFilename()); // read image
 		
-		AffineTransform tx = new AffineTransform();
-	    tx.scale(dimension.getWidth(), dimension.getHeight());
-	    
-	    AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-	    bufferedImage = op.filter(bufferedImage, null);
-	    
-	    try {
-	    	
-			ImageIO.write(bufferedImage, getFilename().substring(getFilename().length()-3, getFilename().length()), new File(getPath() + "thumb_" + getFilename()));
-		
-	    } catch (IOException e) {
-	    	
-			System.out.println("JCpgPicterResizer: Couldn't make thumb");
+		try {
+			
+			BufferedImage bi = ImageIO.read(in);
+			
+			Image im = bi.getScaledInstance(new Integer(getUi().getCpgConfig().getValueFor("thumb_width")), -1, 0); // use scale and let Java scale height (use scale from Cpg configuration)
+			
+			File out = new File (getPath() + "thumb_" + getFilename()); // write file
+			
+			String imagetype = getFilename().substring(getFilename().length()-3, getFilename().length());
+		    
+		    if(imagetype.equals("jpg")){
+		    	
+		    	imagetype = "jpeg";
+		    	
+		    }
+		    
+			ImageIO.write (JCpgTransform.toBufferedImage(im), imagetype, out);
+			
+		} catch (IOException e) {
+			
+			System.out.println("JCpgPictureResizer: couldn't read/write image to make thumb");
 			
 		}
-		
+
 	}
 
 }
