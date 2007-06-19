@@ -42,9 +42,6 @@ public class JCpgGallery implements Serializable{
 														//				VARIABLES             *
 														//*************************************
 	private String name = null ;
-														//*************************************
-														//				VARIABLES             *
-														//*************************************
 	private String description = null ;
 	private JCpgUserConfig userConfig;
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();

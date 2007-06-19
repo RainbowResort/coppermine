@@ -41,9 +41,6 @@ public class JCpgVersionchecker {
 																									//				VARIABLES             *
 																									//*************************************
 	private String versionUrl = null ;
-																									//*************************************
-																									//				VARIABLES             *
-																									//*************************************
 	private String updateUrl = null ;
 	private int updatefileSize = 0;
 	private double serverVersion = 0.0;

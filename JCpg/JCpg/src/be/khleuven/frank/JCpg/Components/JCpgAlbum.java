@@ -38,13 +38,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 																	//				VARIABLES             *
 																	//*************************************
 	private String keyword = null ;
-																	//*************************************
-																	//				VARIABLES             *
-																	//*************************************
 	private String alb_password = null ;
-																	//*************************************
-																	//				VARIABLES             *
-																	//*************************************
 	private String alb_password_hint = null ;
 	private int visibility;
 	private boolean uploads;

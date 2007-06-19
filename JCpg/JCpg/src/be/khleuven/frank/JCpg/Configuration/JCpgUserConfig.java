@@ -32,9 +32,6 @@ public class JCpgUserConfig implements Serializable {
 																										//				VARIABLES	          *
 																										//*************************************
 	private String username;
-																										//*************************************
-																										//				VARIABLES	          *
-																										//*************************************
 	private String password;
 	private JCpgServerConfig serverConfig;
 	

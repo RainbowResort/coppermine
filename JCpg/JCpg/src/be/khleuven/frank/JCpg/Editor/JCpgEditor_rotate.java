@@ -41,11 +41,11 @@ import javax.swing.JTextField;
  */
 public class JCpgEditor_rotate extends JCpgEditor{
 
-	JButton rotate90Right;
-	JButton rotate90Left;
-	JLabel customLabel;
-	JTextField customRotation;
-	JButton preview;
+	private JButton rotate90Right;
+	private JButton rotate90Left;
+	private JLabel customLabel;
+	private JTextField customRotation;
+	private JButton preview;
 	
 	
 	

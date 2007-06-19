@@ -44,17 +44,22 @@ public class JCpgPictureCellRenderer extends JLabel implements ListCellRenderer 
     	setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
     	
-    	JCpgPicture selectedPicture = (JCpgPicture)list.getModel().getElementAt(index);
+    	JCpgPicture picture = (JCpgPicture)list.getModel().getElementAt(index);
        
-        setIcon(new JCpgImageUrlValidator("albums/" + selectedPicture.getFilePath() + "thumb_" + selectedPicture.getFileName()).createImageIcon());
+        setIcon(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
+        setSize(400, 400);
         
         if (isSelected) {
+        	
             setBackground(list.getSelectionBackground());
 	        setForeground(list.getSelectionForeground());
+	        
 	    }
         else {
+        	
 	       setBackground(list.getBackground());
 	       setForeground(list.getForeground());
+	       
 	    }
         
 	    setEnabled(list.isEnabled());

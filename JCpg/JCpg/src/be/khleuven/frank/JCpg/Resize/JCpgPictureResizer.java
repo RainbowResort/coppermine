@@ -48,9 +48,6 @@ public class JCpgPictureResizer implements Serializable{
 																	//				VARIABLES	          *
 																	//*************************************
 	private String path;
-																	//*************************************
-																	//				VARIABLES	          *
-																	//*************************************
 	private String filename;
 	private JCpgTransform transformer;
 	private JCpgUI ui;

@@ -38,21 +38,9 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 																						//				VARIABELS             *
 																						//*************************************
 	private int id;
-																						//*************************************
-																						//				VARIABELS             *
-																						//*************************************
 	private int ownerid;
-																						//*************************************
-																						//				VARIABELS             *
-																						//*************************************
 	private int position;
-																						//*************************************
-																						//				VARIABELS             *
-																						//*************************************
 	private int parent;
-																						//*************************************
-																						//				VARIABELS             *
-																						//*************************************
 	private int thumb;
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 
