@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2007-06-20 [B] Updated permissions when admin restricts users creating albums in categories + fixed some permissions {SaWey}
+2007-06-19 [A] Added added ability of users to edit the albums they own {SaWey}
 2007-06-17 [A] Added GUI ability of user-creatable albums in admin allowed categories {SaWey}
 2007-06-07 [A] Added Album and Category Title Search {drhammond}
 2007-06-07 [A] Added phrase searching by double quotes {drhammond}
