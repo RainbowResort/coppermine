@@ -684,7 +684,7 @@ function list_albums()
 */
 function album_adm_menu($aid, $cat)
 {
-	global $CONFIG, $USER_DATA;
+	global $CONFIG, $USER_DATA, $lang_album_admin_menu;
 	
 	//check if user is allowed to edit album
 	if(USER_ADMIN_MODE){
@@ -692,6 +692,16 @@ function album_adm_menu($aid, $cat)
 		//check if it is the user's gallery
 		if($cat == USER_ID + FIRST_USER_CAT){			
 			return html_albummenu($aid);
+		}
+	
+		//check if admin allows editing	after closing category
+		if($CONFIG['allow_user_edit_after_cat_close'] == 0){
+			//Disallowed -> Check if albums is in such a category
+			$result = cpg_db_query("SELECT DISTINCT alb.category FROM {$CONFIG['TABLE_ALBUMS']} AS alb INNER JOIN {$CONFIG['TABLE_CATMAP']} AS catm ON alb.category=catm.cid WHERE alb.owner = '" . $USER_DATA['user_id'] . "' AND alb.aid='$aid' AND catm.group_id='" . $USER_DATA['group_id'] . "'");
+			$allowed_albums = cpg_db_fetch_rowset($result);
+			if($allowed_albums[0]['category']!=''){
+				return "<b>" . $lang_album_admin_menu['cat_locked'] . "</b>";
+			}
 		}
 	
 		//get list of allowed albums

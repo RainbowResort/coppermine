@@ -204,7 +204,7 @@ switch ($event) {
     // Update album
 
     case 'album_update':
-        if (!(USER_ADMIN_MODE || GALLERY_ADMIN_MODE)) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
+        if (!(user_is_allowed() || GALLERY_ADMIN_MODE)) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
 
         $aid = (int)$_POST['aid'];
         $title = addslashes(trim($_POST['title']));
@@ -321,7 +321,7 @@ switch ($event) {
         $user3 = addslashes($_POST['user3']);
         $user4 = addslashes($_POST['user4']);
         // Check if the album id provided is valid
-        if (!GALLERY_ADMIN_MODE) {
+        if (!(GALLERY_ADMIN_MODE || user_is_allowed())) {
             $result = cpg_db_query("SELECT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid='$album' and (uploads = 'YES' OR category = '" . (USER_ID + FIRST_USER_CAT) . "')");
             if (mysql_num_rows($result) == 0)cpg_die(ERROR, $lang_db_input_php['unknown_album'], __FILE__, __LINE__);
             $row = mysql_fetch_array($result);
@@ -454,5 +454,40 @@ switch ($event) {
 
     default:
         cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
+}
+/**
+* user_is_allowed()
+*
+* This has been added to keep the other functions clean.
+*
+* @return boolean $check_approve
+*/
+function user_is_allowed(){
+	$check_approve = false;
+	global $USER_DATA, $CONFIG;
+	//get albums this user can edit
+	$album_id = (int)$_POST[['aid'];
+	
+	$result = cpg_db_query("SELECT DISTINCT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE owner = '" . $USER_DATA['user_id'] . "' AND aid='$album_id'");
+	$allowed_albums = cpg_db_fetch_rowset($result);
+	if($allowed_albums!=''){
+		$check_approve = true;
+	}
+	
+	//check if admin allows editing	after closing category
+	if($CONFIG['allow_user_edit_after_cat_close'] == 0){
+		//Disallowed -> Check if album is in such a category
+		$result = cpg_db_query("SELECT DISTINCT aid FROM {$CONFIG['TABLE_ALBUMS']} AS alb INNER JOIN {$CONFIG['TABLE_CATMAP']} AS catm ON alb.category=catm.cid WHERE alb.owner = '" . $USER_DATA['user_id'] . "' AND alb.aid='$album_id' AND catm.group_id='" . $USER_DATA['group_id'] . "'");
+		$allowed_albums = cpg_db_fetch_rowset($result);
+		if($allowed_albums!='' && $cat != (FIRST_USER_CAT + USER_ID)){
+			$check_approve = false;
+		}
+		$result = cpg_db_query("SELECT DISTINCT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE owner = '" . $USER_DATA['user_id'] . "' AND aid='$album_id'");
+		$allowed_albums = cpg_db_fetch_rowset($result);
+		if($allowed_albums[0]['category']==(FIRST_USER_CAT + USER_ID)){
+			$check_approve = true;
+		}
+	}	
+	return $check_approve;
 }
 ?>

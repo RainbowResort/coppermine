@@ -862,6 +862,7 @@ if (defined('ADMIN_PHP')) $lang_admin_data = array(
   array('Allow users to retain control over their pics in public galleries', 'users_can_edit_pics', 1, 'f=configuration.htm&amp;as=admin_user_editpics_public_start&amp;ae=admin_user_editpics_public_end'),
   
   array('Allow users to move their albums from/to allowed categories', 'allow_user_move_album', 1, 'f=configuration.htm&amp;as=admin_user_move_album_start&amp;ae=admin_user_move_album_end'),// cpg1.5.x
+  array('Allow users to edit their albums when it is in a locked category', 'allow_user_edit_after_cat_close', 1, 'f=configuration.htm&amp;as=admin_user_edit_after_cat_close_start&amp;ae=admin_user_edit_after_cat_close_end'),// cpg1.5.x
   
   array('Number of failed login attempts until temporary ban (to avoid brute force attacks)', 'login_threshold', 0, 'f=configuration.htm&amp;as=admin_user_login_start&amp;ae=admin_user_login_end'),
   array('Duration of a temporary ban after failed logins', 'login_expiry', 0, 'f=configuration.htm&amp;as=admin_user_login_start&amp;ae=admin_user_login_end'),
@@ -1410,6 +1411,7 @@ $lang_album_admin_menu = array(
   'delete' => 'DELETE',
   'modify' => 'PROPERTIES',
   'edit_pics' => 'EDIT FILES',
+  'cat_locked' => 'This album has been locked for editing', // cpg 1.5.x
 );
 
 $lang_list_categories = array(

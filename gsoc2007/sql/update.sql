@@ -631,3 +631,6 @@ INSERT INTO CPG_config VALUES ('browse_by_date', '0');
 
 # Allow users to move their albums from/to categories
 INSERT INTO CPG_config VALUES ('allow_user_move_album', '0');
+
+# Allow users to edit pics after admin closed category
+INSERT INTO CPG_config VALUES ('allow_user_edit_after_cat_close', '1');
