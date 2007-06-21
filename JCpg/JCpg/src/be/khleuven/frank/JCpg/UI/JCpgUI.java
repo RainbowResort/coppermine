@@ -203,16 +203,15 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		pictureList = new JList(pictureListModel);
 		pictureList.setBorder(new EtchedBorder());
 		pictureListSelectionModel = pictureList.getSelectionModel();
-		pictureList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer());
+		
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
+		explorerscroll = new JScrollPane(explorer);
 		
 		explorer = new JPanel();
 		tools = new JPanel();
 		albumcontrol = new JPanel();
-		
-		explorerscroll = new JScrollPane(explorer);
 		
 		edit_crop = new JButton();
 		edit_crop.setIcon(new JCpgImageUrlValidator("data/edit_cut.jpg").createImageIcon());
@@ -531,18 +530,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		JButton image = new JButton(); // make button with picture
 		JCpgPicture selectedPicture = (JCpgPicture)pictureList.getSelectedValue();
-    	image.setIcon(new JCpgImageUrlValidator("albums/" + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
-    	image.setToolTipText(selectedPicture.getFileName());
-    	Dimension realSize = new Dimension(selectedPicture.getpWidth(), selectedPicture.getpHeight());
-    	image.setPreferredSize(realSize);
-    	
-    	getTree().addSelectionPath(selectedPicture.getTreePath());
-    	
-    	explorer.removeAll(); // add picture to explorer pane
-    	explorer.add(image);
-    	
-    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
-    	SwingUtilities.updateComponentTreeUI(getTree()); // workaround for Java bug 4173369
+		
+		if(selectedPicture != null){
+			
+	    	image.setIcon(new JCpgImageUrlValidator("albums/" + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
+	    	image.setToolTipText(selectedPicture.getFileName());
+	    	Dimension realSize = new Dimension(selectedPicture.getpWidth(), selectedPicture.getpHeight());
+	    	image.setPreferredSize(realSize);
+	    	
+	    	getTree().addSelectionPath(selectedPicture.getTreePath());
+	    	
+	    	explorer.removeAll(); // add picture to explorer pane
+	    	explorer.add(image);
+	    	
+	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
+	    	SwingUtilities.updateComponentTreeUI(getTree()); // workaround for Java bug 4173369
+	    
+		}
     	
 	}
 	/**
@@ -580,61 +584,69 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	 */
 	private void control_deleteActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		TreePath[] selectedPaths = tree.getSelectionPaths();
 		
-		if (node == null){ // no node selected
+		for(int i=0; i<selectedPaths.length; i++){
 			
-	    	return;
-	    	
-		}else if(node.getLevel() == 1){ // leaf is category
+			TreePath treePath = selectedPaths[i];
 			
-			JCpgCategory category = (JCpgCategory)node.getUserObject();
-			DefaultMutableTreeNode galleryParentNode = (DefaultMutableTreeNode)node.getParent();
-	    	JCpgGallery galleryParent = (JCpgGallery)galleryParentNode.getUserObject();
-	    	
-	    	galleryParent.deleteCategory(category);
-	    	category.delete(this); // delete category and all underlying components. Generate DELETE query if needed
-	    	node.removeFromParent();
-	    	
-	    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-	    	pictureListModel.clear();
-	    	pictureList.removeAll();
-	    	explorer.removeAll();
-	    	
-	    }else if(node.getLevel() == 2){ // leaf is album
-	    	
-	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
-	    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
-	    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
-	    	
-	    	albumParent.deleteAlbum(album);
-	    	album.delete(this); // delete album and all underlying components. Generate DELETE query if needed
-	    	node.removeFromParent();
-	    	
-	    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-	    	pictureListModel.clear();
-	    	pictureList.removeAll();
-	    	explorer.removeAll();
-	    	
-	    }else if(node.getLevel() == 3){ // leaf is picture
-	    	
-	    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
-	    	DefaultMutableTreeNode pictureParentNode = (DefaultMutableTreeNode)node.getParent();
-	    	JCpgAlbum pictureParent = (JCpgAlbum)pictureParentNode.getUserObject();
-	    	
-	    	pictureParent.deletePicture(picture);
-	    	picture.delete(this); // delete pictureobject + files. Generate DELETE query if needed
-	    	node.removeFromParent();
-	   
-	    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-	    	pictureListModel.clear();
-	    	pictureList.removeAll();
-	    	explorer.removeAll();
-	    	
-	    }
-		
-		new JCpgGallerySaver().saveGallery(getGallery()); // save gallery
-		gallery.toXML();
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)treePath.getLastPathComponent();
+			
+			if (node == null){ // no node selected
+				
+		    	return;
+		    	
+			}else if(node.getLevel() == 1){ // leaf is category
+				
+				JCpgCategory category = (JCpgCategory)node.getUserObject();
+				DefaultMutableTreeNode galleryParentNode = (DefaultMutableTreeNode)node.getParent();
+		    	JCpgGallery galleryParent = (JCpgGallery)galleryParentNode.getUserObject();
+		    	
+		    	galleryParent.deleteCategory(category);
+		    	category.delete(this); // delete category and all underlying components. Generate DELETE query if needed
+		    	node.removeFromParent();
+		    	
+		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+		    	pictureListModel.clear();
+		    	pictureList.removeAll();
+		    	explorer.removeAll();
+		    	
+		    }else if(node.getLevel() == 2){ // leaf is album
+		    	
+		    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
+		    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
+		    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
+		    	
+		    	albumParent.deleteAlbum(album);
+		    	album.delete(this); // delete album and all underlying components. Generate DELETE query if needed
+		    	node.removeFromParent();
+		    	
+		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+		    	pictureListModel.clear();
+		    	pictureList.removeAll();
+		    	explorer.removeAll();
+		    	
+		    }else if(node.getLevel() == 3){ // leaf is picture
+		    	
+		    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
+		    	DefaultMutableTreeNode pictureParentNode = (DefaultMutableTreeNode)node.getParent();
+		    	JCpgAlbum pictureParent = (JCpgAlbum)pictureParentNode.getUserObject();
+		    	
+		    	pictureParent.deletePicture(picture);
+		    	picture.delete(this); // delete pictureobject + files. Generate DELETE query if needed
+		    	node.removeFromParent();
+		   
+		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+		    	pictureListModel.clear();
+		    	pictureList.removeAll();
+		    	explorer.removeAll();
+		    	
+		    }
+			
+			new JCpgGallerySaver().saveGallery(getGallery()); // save gallery
+			gallery.toXML();
+			
+		}
 		
     }
 	/**
@@ -674,7 +686,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		if(node != null && node.getLevel() == 2){
 		
-			new JCpgPreviewer(this, (JCpgAlbum)node.getUserObject());
+			new JCpgPreviewer(this, (JCpgAlbum)node.getUserObject()).startPreview();
 			
 		}
 		
@@ -947,8 +959,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 
 			}
 			
-			//new JCpgGallerySaver().saveGallery(gallery); // save gallery
-			//gallery.toXML();
 		}
 		
 	}
@@ -1067,7 +1077,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 			edit_resize.setVisible(true);
 			edit_colorcorrection.setVisible(true);
 			
-			pictureList.setVisibleRowCount(1);
+			//pictureList.setVisibleRowCount(1);
 			
 		}
 		

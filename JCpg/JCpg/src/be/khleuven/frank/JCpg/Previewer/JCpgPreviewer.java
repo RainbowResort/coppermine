@@ -18,27 +18,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Previewer;
 
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Editor.JCpgTransform;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * This class will make it possible to preview the pictures in an album.
@@ -58,10 +67,16 @@ public class JCpgPreviewer extends JDialog{
 	
 	private JButton close;
 	private JPanel preview;
+	private JSlider timeslider;
 	
 	private BufferedImage previewBuffered;
 	
 	private JCpgTransform transformer = new JCpgTransform();
+	
+	private Image currentLoadedImage; // holds the currently loaded image to display
+	private int currentIndex = 0; // current index for picture array
+	private boolean running = true; // as long as this is true, the preview threads will continue running
+	private int timeslice = 1000; // time between 2 images
 	
 	
 	
@@ -115,18 +130,6 @@ public class JCpgPreviewer extends JDialog{
 	private void setAlbum(JCpgAlbum album){
 		
 		this.album = album;
-		
-	}
-	/**
-	 * 
-	 * Set the buffered preview image
-	 * 
-	 * @param picture
-	 * 		ImageIcon that will be converted to the buffered previes image
-	 */
-	private void setBufferedPreview(ImageIcon picture){
-		
-		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
 		
 	}
 	
@@ -228,11 +231,20 @@ public class JCpgPreviewer extends JDialog{
 		
 		close = new JButton("Close");
 		
+		timeslider = new JSlider(500, 5000);
+		timeslider.setValue(1000);
+		
 		close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				closeActionPerformed(evt);
 			}
 		});
+		
+		timeslider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent evt) {
+				timesliderValueChanged(evt);
+			}
+	    });
 		
 	}
 	/**
@@ -245,10 +257,13 @@ public class JCpgPreviewer extends JDialog{
 		this.setBounds((int)(screensize.getWidth()/2)-500, (int)(screensize.getHeight()/2)-350, 1000, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setUndecorated(true);
+		this.setBackground(new Color(0, 138, 196));
 		
 		preview.setBounds(0, 0, 1000, 700);
 		
 		close.setBounds(450, 660, 100, 30);
+		
+		timeslider.setBounds(570, 660, 300, 20);
 	
 	}
 	/**
@@ -260,6 +275,7 @@ public class JCpgPreviewer extends JDialog{
 		
 		this.getContentPane().add(preview);
 		this.getContentPane().add(close);
+		this.getContentPane().add(timeslider);
 		this.setVisible(true);
 		
 	}
@@ -270,118 +286,101 @@ public class JCpgPreviewer extends JDialog{
 	
 	
 	
-	
-	public void run(){
+	/**
+	 * 
+	 * This methode will create 2 threads that run 'at the same time'. This is needed to do the previewing correctly. One thread shows the currently loaded picture, the other thread is used
+	 * as a timer. Each time the timer finishes, he recalculates the currentIndex variable and sets it to the next picture of the album.
+	 *
+	 */
+	public void startPreview() {
 		
-		try{
+		final ArrayList<JCpgPicture> pictures = getAlbum().getPictures();
+
+		// first thread: show the currently loaded picture
+		Thread t1 = new Thread(new Runnable() {
 			
-			JButton image;
-			Dimension realSize;
+			public void run() {
+				
+				while(running){
+					
+					repaint();
+				
+				}
+				
+			}
 			
-			BufferedImage pic1 = ImageIO.read(new File("data/createalbum_logo.jpg")); // begin pictures
+		});
+
+		// second thread: do the waiting and recalculate the currentIndex variable and load that picture
+		// TODO: overhead still remains: always loading the pictures will take a lot of RAM
+		Thread t2 = new Thread(new Runnable() {
 			
-			Image imageFromBuffered = transformer.toImage(pic1);
-	    	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
-		    
-	    	image = new JButton(imageIcon);
-	    	realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-	    	image.setPreferredSize(realSize);
-	    	getPreview().removeAll();
-	    	getPreview().add(image);
-	    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
-    	
-		}catch(Exception e){}
+			public void run() {
+				
+				while(running){
+					
+					try {
+						
+						Thread.sleep(timeslice);
+						
+						currentIndex = (currentIndex+1)%pictures.size(); // stay in the correct range of the album's size
+						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File("albums/"+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
+						
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+						
+					}
+					
+				}
+				
+			}
+			
+		});
+
+		// start the threads
+		t1.start();
+		t2.start();
+
+	}
+	/**
+	 * 
+	 * Override the paint function: draw the currently loaded picture
+	 * 
+	 */
+	public void paint(Graphics g){
+		
+		super.paint(g);
+		
+		try {
+			
+			g.drawImage(currentLoadedImage, 500 - currentLoadedImage.getWidth(null)/2, 10, this);
+			
+		} catch (Exception e) {}
 		
 	}
 	
 	
-	
-	
-	
 
 	
 	
 	
-	
-	
-	
-	
-	
-	public static Color combine(Color c1, Color c2, double alpha) {
-		
-        int r = (int) (alpha * c1.getRed()   + (1 - alpha) * c2.getRed());
-        int g = (int) (alpha * c1.getGreen() + (1 - alpha) * c2.getGreen());
-        int b = (int) (alpha * c1.getBlue()  + (1 - alpha) * c2.getBlue());
-        
-        return new Color(r, g, b);
-        
-    }
-	public void startPreview(int frames, String pic1path, String pic2path) {
-		
-		int color, r, g, b;
-        
-		try {
-			
-			BufferedImage pic1 = ImageIO.read(new File(pic1path)); // begin pictures
-			BufferedImage pic2 = ImageIO.read(new File(pic2path)); // end picture
-			
-		    int width  = pic1.getWidth();
-		    int height = pic1.getHeight();
-		        
-		    BufferedImage pic = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		    Graphics2D g2d = pic.createGraphics();    // Get a Graphics2D object
-		        
-		    for (int n = 0; n <= frames; n++) {
-
-				double alpha = 1.0 * n / frames;
-
-				for (int i = 0; i < width; i++) {
-
-					for (int j = 0; j < height; j++) {
-
-						color = pic1.getRGB(i, j);
-						Color c1 = new Color((color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, color & 0x000000ff);
-
-						color = pic2.getRGB(i, j);
-						Color c2 = new Color((color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, color & 0x000000ff);
-
-						g2d.setColor(combine(c2, c1, alpha));
-						g2d.drawLine(i, j, i, j);
-
-					}
-
-				}
-
-				Image imageFromBuffered = transformer.toImage(pic);
-		    	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
-			    
-		    	JButton image = new JButton(imageIcon);
-		    	Dimension realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-		    	image.setPreferredSize(realSize);
-		    	getPreview().removeAll();
-		    	getPreview().add(image);
-		    	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
-				
-			}
-		        
-		} catch (IOException e) {
-			
-			
-		}
-        
-    }
-	
-	
-
-	
-	
-	
-	
+	/**
+	 * 
+	 * Perform right actions when user clicks the close button
+	 * 
+	 */
 	private void closeActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		getJCpgUI().setEnabled(true);
 		this.dispose();
 		
+	}
+	
+	private void timesliderValueChanged(ChangeEvent evt) {
+		
+		timeslice = timeslider.getValue();
+    	
 	}
 
 }

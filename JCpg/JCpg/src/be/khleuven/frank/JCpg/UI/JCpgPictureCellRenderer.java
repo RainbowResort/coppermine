@@ -48,9 +48,10 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         this.setLayout(gbl); // we will use the grid layout
         this.removeAll();
         
+        gblc.fill = GridBagConstraints.HORIZONTAL;
         gblc.insets = new Insets(10,10,10,10);
-        gblc.weighty = 1;
-        gblc.weightx = 1;
+        //gblc.weighty = 1;
+        //gblc.weightx = 1;
     	
 	}
 	
@@ -60,7 +61,6 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	JLabel label = new JLabel(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
 
         // determine grid position
-    	System.out.println(index);
     	gblc.gridx = index;
         //gblc.gridx = index % 10;
         //gblc.gridy = getDeler(index, 10);
