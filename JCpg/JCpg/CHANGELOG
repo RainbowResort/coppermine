@@ -1,0 +1,19 @@
+Added an Album Previewer using threads. Needs better memory usage
+Simplified the code for making thumbnailes. Works always now
+Images are previewed when selected in the Add Picture Manager
+Added crop effect. Needs mouse listener
+Made UI 100% resolution independent (only on mac)
+Did small changes to UI: deleted 'My Albums' and 'Current Server' label
+Made changes to the cell renderer -> grid bag
+Now possible to add infinite number of pictures with add manager
+Added an auto update feature
+Added mega explorer view so there are now 2 possible views: 1 with tree and mega explorer with all photo's of the selected album, 1 with tree, list and preview pane
+Added offline mode. A user can now start working online or offline. Offline will load the current state on the disk.
+Adding synchronisation. While waiting for Nitin's API to do the job I created the syncing by using SQL queries and FTP
+Added new effect: rotation. Still needs some improvements because the pictures are also moved when rotated
+Did small UI change using a large JSplitpane for the tree and previewpane
+Seperated SQL login manager into User Manager and Server Manager
+Added basic photo editing tools like resize and edit colors
+Added edit managers for categories, albums, pictures
+Added a SQL login manager
+Added simple UI containing a tree, a list and one big pane for picture previewing
