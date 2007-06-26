@@ -1,3 +1,7 @@
+Partially ported JCpg to JVM 6.0
+Fixed bug when saving the gallery to current.dat when deleting categories
+Added a Confirm Manager class so users can confirm certain actions
+Changed colors of UI
 Added an Album Previewer using threads. Needs better memory usage
 Simplified the code for making thumbnailes. Works always now
 Images are previewed when selected in the Add Picture Manager
