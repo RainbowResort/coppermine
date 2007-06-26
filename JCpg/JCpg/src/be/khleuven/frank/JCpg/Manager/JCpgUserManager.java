@@ -390,7 +390,7 @@ public class JCpgUserManager extends JDialog {
 			
 			JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object for connecting
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
-	        //getJCpgInterface().getParent().setName("JCpg - OFFLINE"); // let user know we are online
+	        //getJCpgInterface().getParent().setName("JCpg - OFFLINE"); // let user know we are offline
 	        
 	        new JCpgSyncer(getJCpgInterface(), sqlManager).loadGallery(); // load gallery saved on disk
 	        getJCpgInterface().buildTree(); // build the tree with loaded information

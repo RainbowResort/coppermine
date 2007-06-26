@@ -253,6 +253,7 @@ public class JCpgSyncer {
 							
 							// TEMPORARY: ONLY FOR VGO, FOR CPG USE API
 							// UPLOAD NEW PICTURES VIA FTP
+							/*
 							ftp = new JCpgFTP(false);
 							try {
 								
@@ -269,6 +270,7 @@ public class JCpgSyncer {
 							} catch (UnknownHostException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
 							
 							// END TEMPORARY
+							*/
 							
 						} catch (SQLException e) {
 							

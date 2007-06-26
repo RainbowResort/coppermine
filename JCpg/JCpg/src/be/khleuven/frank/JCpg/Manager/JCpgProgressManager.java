@@ -210,7 +210,7 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	private void boundComponents(){
 		
 		this.setBounds((int)(screensize.getWidth()/2)-250, (int)(screensize.getHeight()/2)-100, 500, 200);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		
 		logo.setBounds(0, 0, 500, 50);

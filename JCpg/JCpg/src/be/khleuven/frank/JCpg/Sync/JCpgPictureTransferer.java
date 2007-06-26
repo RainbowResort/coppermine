@@ -254,6 +254,7 @@ public class JCpgPictureTransferer implements Serializable{
 				// download and save
 				URL url = new URL(getRoot() + getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()); // link to remote file
 				new File(getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath()).mkdirs(); // make directory structure if not existing
+				System.out.println(getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath());
 				out = new BufferedOutputStream(new FileOutputStream(getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
 				conn = url.openConnection();
 				in = conn.getInputStream();

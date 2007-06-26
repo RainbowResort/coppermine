@@ -31,6 +31,7 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgConfirmManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
@@ -39,6 +40,8 @@ import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -61,6 +64,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -81,7 +85,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private JCpgSqlManager sqlManager;
 	private JCpgConfig cpgConfig;
 	
-	private static JCpgGallery gallery = new JCpgGallery(null, "My Coppermine Gallery", "Default gallery"); // default static gallery to store all albums and then save to file
+	private static JCpgGallery gallery = new JCpgGallery(null, "My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
 	private Dimension screensize;
 	private Dimension framesize;
@@ -207,51 +211,68 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
+		megaPictureView.setBackground(new Color(230, 230, 230));
 		explorerscroll = new JScrollPane(explorer);
 		
 		explorer = new JPanel();
+		explorer.setBackground(new Color(230, 230, 230));
 		tools = new JPanel();
+		tools.setBackground(new Color(168, 168, 168));
 		albumcontrol = new JPanel();
+		albumcontrol.setBackground(new Color(168, 168, 168));
 		
 		edit_crop = new JButton();
 		edit_crop.setIcon(new JCpgImageUrlValidator("data/edit_cut.jpg").createImageIcon());
 		edit_crop.setToolTipText("Cut");
+		edit_crop.setBackground(new Color(168, 168, 168));
 		edit_colorcorrection = new JButton();
 		edit_colorcorrection.setIcon(new JCpgImageUrlValidator("data/edit_colors.jpg").createImageIcon());
 		edit_colorcorrection.setToolTipText("Correct colors");
+		edit_colorcorrection.setBackground(new Color(168, 168, 168));
 		edit_resize = new JButton();
 		edit_resize.setIcon(new JCpgImageUrlValidator("data/edit_resize.jpg").createImageIcon());
 		edit_resize.setToolTipText("Resize");
+		edit_resize.setBackground(new Color(168, 168, 168));
 		edit_rotate = new JButton();
 		edit_rotate.setIcon(new JCpgImageUrlValidator("data/edit_rotate.jpg").createImageIcon());
 		edit_rotate.setToolTipText("Rotate");
+		edit_rotate.setBackground(new Color(168, 168, 168));
 		control_new = new JButton();
 		control_new.setIcon(new JCpgImageUrlValidator("data/album_add.jpg").createImageIcon());
 		control_new.setToolTipText("New album");
+		control_new.setBackground(new Color(168, 168, 168));
 		control_delete = new JButton();
 		control_delete.setIcon(new JCpgImageUrlValidator("data/album_delete.jpg").createImageIcon());
 		control_delete.setToolTipText("Delete album");
 		control_sync = new JButton();
 		control_sync.setIcon(new JCpgImageUrlValidator("data/sync.gif").createImageIcon());
 		control_sync.setToolTipText("Sync your gallery");
+		control_sync.setBackground(new Color(168, 168, 168));
 		control_edit = new JButton();
 		control_edit.setIcon(new JCpgImageUrlValidator("data/edit.gif").createImageIcon());
 		control_edit.setToolTipText("Edit");
+		control_edit.setBackground(new Color(168, 168, 168));
 		control_preview = new JButton();
 		control_preview.setIcon(new JCpgImageUrlValidator("data/control_preview.gif").createImageIcon());
 		control_preview.setToolTipText("Preview Album");
+		control_preview.setBackground(new Color(168, 168, 168));
 		closeMegaExplorer = new JButton();
 		closeMegaExplorer.setIcon(new JCpgImageUrlValidator("data/close.jpg").createImageIcon());
 		closeMegaExplorer.setToolTipText("Close view");
+		closeMegaExplorer.setBackground(new Color(168, 168, 168));
 		
 		root = new DefaultMutableTreeNode(gallery);
 		tree = new JTree(root);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
+		tree.setBackground(new Color(230, 237, 248));
+		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)tree.getCellRenderer();
 		treeView = new JScrollPane(tree);
 		treeView.setMinimumSize(new Dimension(200, 400));
+		treeView.setBackground(new Color(230, 237, 248));
 		megaTreeView = new JScrollPane();
 		megaTreeView.setMinimumSize(new Dimension(200, 501));
+		megaTreeView.setBackground(new Color(230, 237, 248));
 		
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, explorer);
 		megaSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, megaTreeView, megaPictureView);
@@ -331,7 +352,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private void boundComponents(){
 		
 		this.setBounds(0, 0, screensize.width, screensize.height);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		framesize = this.getSize();
 		
 		pictureView.setBounds(0, 0, framesize.width, 100);
@@ -584,69 +605,75 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	 */
 	private void control_deleteActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		TreePath[] selectedPaths = tree.getSelectionPaths();
+		//JCpgConfirmManager confirmManager = new JCpgConfirmManager(this, new JCpgImageUrlValidator("data/confirm_logo.jpg").createImageIcon());
 		
-		for(int i=0; i<selectedPaths.length; i++){
+		//if(!confirmManager.isEnabled()){
 			
-			TreePath treePath = selectedPaths[i];
+			TreePath[] selectedPaths = tree.getSelectionPaths();
 			
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)treePath.getLastPathComponent();
-			
-			if (node == null){ // no node selected
+			for(int i=0; i<selectedPaths.length; i++){
 				
-		    	return;
-		    	
-			}else if(node.getLevel() == 1){ // leaf is category
+				TreePath treePath = selectedPaths[i];
 				
-				JCpgCategory category = (JCpgCategory)node.getUserObject();
-				DefaultMutableTreeNode galleryParentNode = (DefaultMutableTreeNode)node.getParent();
-		    	JCpgGallery galleryParent = (JCpgGallery)galleryParentNode.getUserObject();
-		    	
-		    	galleryParent.deleteCategory(category);
-		    	category.delete(this); // delete category and all underlying components. Generate DELETE query if needed
-		    	node.removeFromParent();
-		    	
-		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-		    	pictureListModel.clear();
-		    	pictureList.removeAll();
-		    	explorer.removeAll();
-		    	
-		    }else if(node.getLevel() == 2){ // leaf is album
-		    	
-		    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
-		    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
-		    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
-		    	
-		    	albumParent.deleteAlbum(album);
-		    	album.delete(this); // delete album and all underlying components. Generate DELETE query if needed
-		    	node.removeFromParent();
-		    	
-		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-		    	pictureListModel.clear();
-		    	pictureList.removeAll();
-		    	explorer.removeAll();
-		    	
-		    }else if(node.getLevel() == 3){ // leaf is picture
-		    	
-		    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
-		    	DefaultMutableTreeNode pictureParentNode = (DefaultMutableTreeNode)node.getParent();
-		    	JCpgAlbum pictureParent = (JCpgAlbum)pictureParentNode.getUserObject();
-		    	
-		    	pictureParent.deletePicture(picture);
-		    	picture.delete(this); // delete pictureobject + files. Generate DELETE query if needed
-		    	node.removeFromParent();
-		   
-		    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-		    	pictureListModel.clear();
-		    	pictureList.removeAll();
-		    	explorer.removeAll();
-		    	
-		    }
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)treePath.getLastPathComponent();
+				
+				if (node == null){ // no node selected
+					
+			    	return;
+			    	
+				}else if(node.getLevel() == 1){ // leaf is category
+					
+					JCpgCategory category = (JCpgCategory)node.getUserObject();
+					DefaultMutableTreeNode categoryParentNode = (DefaultMutableTreeNode)node.getParent();
+			    	JCpgGallery galleryParent = (JCpgGallery)categoryParentNode.getUserObject();
+			    	
+			    	getGallery().deleteCategory(category);
+			    	category.delete(this); // delete category and all underlying components. Generate DELETE query if needed
+			    	node.removeFromParent();
+			    	
+			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+			    	pictureListModel.clear();
+			    	pictureList.removeAll();
+			    	explorer.removeAll();
+			    	
+			    }else if(node.getLevel() == 2){ // leaf is album
+			    	
+			    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
+			    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
+			    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
+			    	
+			    	albumParent.deleteAlbum(album);
+			    	album.delete(this); // delete album and all underlying components. Generate DELETE query if needed
+			    	node.removeFromParent();
+			    	
+			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+			    	pictureListModel.clear();
+			    	pictureList.removeAll();
+			    	explorer.removeAll();
+			    	
+			    }else if(node.getLevel() == 3){ // leaf is picture
+			    	
+			    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
+			    	DefaultMutableTreeNode pictureParentNode = (DefaultMutableTreeNode)node.getParent();
+			    	JCpgAlbum pictureParent = (JCpgAlbum)pictureParentNode.getUserObject();
+			    	
+			    	pictureParent.deletePicture(picture);
+			    	picture.delete(this); // delete pictureobject + files. Generate DELETE query if needed
+			    	node.removeFromParent();
+			   
+			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+			    	pictureListModel.clear();
+			    	pictureList.removeAll();
+			    	explorer.removeAll();
+			    	
+			    }
+				
+				new JCpgGallerySaver().saveGallery(getGallery()); // save gallery
+				getGallery().toXML();
+				
+			}
 			
-			new JCpgGallerySaver().saveGallery(getGallery()); // save gallery
-			gallery.toXML();
-			
-		}
+		//}
 		
     }
 	/**
@@ -685,8 +712,14 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
 		if(node != null && node.getLevel() == 2){
+			
+			JCpgAlbum album = (JCpgAlbum)node.getUserObject();
+			
+			if(album.getPictures().size() > 0){
 		
-			new JCpgPreviewer(this, (JCpgAlbum)node.getUserObject()).startPreview();
+				new JCpgPreviewer(this, album).startPreview();
+				
+			}
 			
 		}
 		

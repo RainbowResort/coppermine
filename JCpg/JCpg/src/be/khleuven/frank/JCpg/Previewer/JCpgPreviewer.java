@@ -255,7 +255,7 @@ public class JCpgPreviewer extends JDialog{
 	private void boundComponents(){
 		
 		this.setBounds((int)(screensize.getWidth()/2)-500, (int)(screensize.getHeight()/2)-350, 1000, 700);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0, 138, 196));
 		
