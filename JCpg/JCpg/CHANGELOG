@@ -1,3 +1,7 @@
+Filled in username and pwd are now stored in file
+Hardcoded username and pwd are now removed
+Fixed bug where JCpg always added a _ after the user's prefix
+Fixed a bug where the z order of windows were not ok
 Partially ported JCpg to JVM 6.0
 Fixed bug when saving the gallery to current.dat when deleting categories
 Added a Confirm Manager class so users can confirm certain actions

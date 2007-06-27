@@ -299,7 +299,7 @@ public class JCpgSyncer {
 	 */
 	public void loadGallery(){
 		
-		File gallery = new File("current.dat");
+		File gallery = new File("config/current.dat");
 		
 		if(gallery.exists()){ // only load if the file exists
 		
@@ -337,9 +337,9 @@ public class JCpgSyncer {
 		
 		
 		// FIRST CHECK SERVER ITEM, THEN LOOK LOCALLY
-		String table_categories = getUi().getUserConfig().getServerConfig().getPrefix() + "_categories";
-		String table_albums = getUi().getUserConfig().getServerConfig().getPrefix() + "_albums";
-		String table_pictures = getUi().getUserConfig().getServerConfig().getPrefix() + "_pictures";
+		String table_categories = getUi().getUserConfig().getServerConfig().getPrefix() + "categories";
+		String table_albums = getUi().getUserConfig().getServerConfig().getPrefix() + "albums";
+		String table_pictures = getUi().getUserConfig().getServerConfig().getPrefix() + "pictures";
 		
 		ResultSet rs_categories = getSqlManager().sqlExecute("SELECT * FROM " + table_categories);
 		

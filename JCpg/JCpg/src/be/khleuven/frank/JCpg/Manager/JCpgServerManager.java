@@ -29,7 +29,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -37,7 +37,7 @@ import javax.swing.JTextField;
  * Is responsible for asking all the necesarry info to make a connection to the right sql db and tables
  * @author    Frank Cleynen
  */
-public class JCpgServerManager extends JFrame implements Serializable{
+public class JCpgServerManager extends JDialog implements Serializable{
 	
 	
 	
@@ -91,6 +91,7 @@ public class JCpgServerManager extends JFrame implements Serializable{
 	 */
 	public JCpgServerManager(int width, int height, JCpgUI jCpgInterface, JCpgServerConfig serverConfig, JCpgUserManager userManager){
 		
+		super(userManager); // on top of userManager
 		jCpgInterface.setEnabled(false);
 		
 		setServerManagerSize(width, height);
@@ -183,7 +184,6 @@ public class JCpgServerManager extends JFrame implements Serializable{
 	private void initComponents(){
 		
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		this.setUndecorated(true);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -397,7 +397,7 @@ public class JCpgServerManager extends JFrame implements Serializable{
 	 */
 	private void deleteActionPerformed(java.awt.event.ActionEvent evt) {
     	
-		File cwd = new File(".");
+		File cwd = new File("config/");
 		
 		String[] files = cwd.list();
 		
@@ -465,10 +465,10 @@ public class JCpgServerManager extends JFrame implements Serializable{
 		
 		try {
 			
-			File current = new File(configNameField.getText() + ".cfg");
+			File current = new File("config/" + configNameField.getText() + ".cfg");
 			if(current.exists()) current.delete(); // delete of existing
 			
-			fos = new FileOutputStream(configNameField.getText() + ".cfg", false); // this file always contains the most current state of the server we know of, false = overwrite
+			fos = new FileOutputStream("config/" + configNameField.getText() + ".cfg", false); // this file always contains the most current state of the config we know of, false = overwrite
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 	        oos.writeObject(getServerConfig());
 	        oos.close();

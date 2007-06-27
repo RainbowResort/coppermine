@@ -325,11 +325,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
     		for(int j=0; j<album.getPictures().size(); j++){
     				
     			JCpgPicture picture = album.getPictures().get(j);
-    			if (picture.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(picture.generateSqlDeleteQuery());
-    			File delete = new File("albums/" + picture.getFilePath() + picture.getFileName());
-    			delete.delete();
-    			delete = new File("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName());
-        		delete.delete();
+    			picture.delete(jCpgUIReference);
     			picture = null;
     				
     		}
@@ -363,7 +359,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateSqlInsertQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "_categories(owner_id, name, description, pos, parent, thumb) VALUES(" + getOwnerId() + ", '" + getName() + "', '" + getDescription() + 
+		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "categories(owner_id, name, description, pos, parent, thumb) VALUES(" + getOwnerId() + ", '" + getName() + "', '" + getDescription() + 
 		"', " + getPosition() + ", " + getParent() + ", " + getThumb() + ")";
 		changeSqlQuery(sqlquery);
 		
@@ -376,7 +372,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateSqlUpdateQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "_categories owner_id=" + getOwnerId() + ", name='" + getName() + "', description='" + getDescription() + 
+		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "categories owner_id=" + getOwnerId() + ", name='" + getName() + "', description='" + getDescription() + 
 		"', pos=" + getPosition() + ", parent=" + getParent() + ", thumb=" + getThumb() + " WHERE cid=" + getId();
 		changeSqlQuery(sqlquery);
 		
@@ -388,7 +384,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	 */
 	public String generateSqlDeleteQuery(){
 		
-		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "_categories WHERE name = '" + getName() + "'";
+		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
 		return sqlquery;
 		
 	}
@@ -400,7 +396,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateIdFetchQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "_categories.cid FROM " + getUserConfig().getServerConfig().getPrefix() + "_categories WHERE name = '" + getName() + "'";
+		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "categories.cid FROM " + getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
 		changeSqlQuery(sqlquery);
 		
 	}

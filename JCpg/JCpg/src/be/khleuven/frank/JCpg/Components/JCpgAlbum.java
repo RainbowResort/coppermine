@@ -474,12 +474,8 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 		for(int i=0; i<getPictures().size(); i++){
     		
 			JCpgPicture picture = getPictures().get(i);
-			if (picture.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(picture.generateSqlDeleteQuery());
-    		File delete = new File("albums/" + picture.getFilePath() + picture.getFileName());
-    		delete.delete();
-    		delete = new File("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName());
-    		delete.delete();
-    		picture = null;
+			picture.delete(jCpgUIReference);
+			picture = null;
     		
 		}
 		
@@ -521,7 +517,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	public void generateSqlInsertQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "_albums(title, description, visibility, uploads, comments, votes, pos, category, thumb, keyword, alb_password, alb_password_hint) " +
+		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "albums(title, description, visibility, uploads, comments, votes, pos, category, thumb, keyword, alb_password, alb_password_hint) " +
 							"VALUES('" + getName() + "', '" + getDescription() + "', " + getVisibility() + 
 							", " + getUploads() + ", " + getComments() + ", " + getVotes() + ", " + getPosition() + ", " + getCategory() + ", " + getThumb() +
 							", '" + getKeyword() + "', '" + getAlbPassword() + "', '" + getAlbPasswordHint() + "')";
@@ -536,7 +532,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	public void generateSqlUpdateQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "_albums SET title='" + getName() + "', description='" + getDescription() + "', visibility=" + getVisibility() + 
+		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "albums SET title='" + getName() + "', description='" + getDescription() + "', visibility=" + getVisibility() + 
 							", uploads=" + getUploads() + ", comments=" + getComments() + ", votes=" + getVotes() + ", pos=" + getPosition() + ", category=" + getCategory() + ", thumb=" + getThumb() +
 							", keyword='" + getKeyword() + "', alb_password='" + getAlbPassword() + "', alb_password_hint='" + getAlbPasswordHint() + "'"
 							+ " WHERE aid=" + getId();
@@ -550,7 +546,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	 */
 	public String generateSqlDeleteQuery(){
 		
-		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "_albums WHERE title = '" + getName() + "'";
+		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "albums WHERE title = '" + getName() + "'";
 		
 		return sqlquery;
 		
@@ -563,7 +559,7 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	public void generateIdFetchQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "_albums.aid FROM " + getUserConfig().getServerConfig().getPrefix() + "_albums WHERE title = '" + getName() + "'";
+		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "albums.aid FROM " + getUserConfig().getServerConfig().getPrefix() + "albums WHERE title = '" + getName() + "'";
 		changeSqlQuery(sqlquery);
 		
 	}

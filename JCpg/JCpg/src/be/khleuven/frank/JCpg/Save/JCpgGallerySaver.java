@@ -65,10 +65,10 @@ public class JCpgGallerySaver implements Serializable{
 		
 		try {
 			
-			File current = new File("current.dat");
+			File current = new File("config/current.dat");
 			if(current.exists()) current.delete(); // delete of existing
 			
-			fos = new FileOutputStream("current.dat", false); // this file always contains the most current state of the server we know of, false = overwrite
+			fos = new FileOutputStream("config/current.dat", false); // this file always contains the most current state of the server we know of, false = overwrite
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 	        oos.writeObject(gallery);
 	        
@@ -102,7 +102,7 @@ public class JCpgGallerySaver implements Serializable{
 		
 		try {
 			
-			FileInputStream istream = new FileInputStream("current.dat");
+			FileInputStream istream = new FileInputStream("config/current.dat");
 			ObjectInputStream p = new ObjectInputStream(istream);
 			JCpgGallery gallery = (JCpgGallery)p.readObject();
 			istream.close();

@@ -86,6 +86,7 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 	*/
 	public JCpgAddManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node){
 		
+		super(jCpgUIReference);
 		jCpgUIReference.setEnabled(false);
 		setLogo(logo);
 		setJCpgUIReference(jCpgUIReference);
@@ -164,7 +165,6 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 	private void initComponents(){
 	
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		

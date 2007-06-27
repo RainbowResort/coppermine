@@ -282,7 +282,7 @@ public class JCpgVersionchecker {
 		// read local version
 		try {
 			
-	        BufferedReader in = new BufferedReader(new FileReader("version.dat")); // read version on disk
+	        BufferedReader in = new BufferedReader(new FileReader("config/version.dat")); // read version on disk
 	        currentversion = new Double(in.readLine());
 	        in.close();
 	        

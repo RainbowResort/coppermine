@@ -35,12 +35,12 @@ public class JCpgServerConfig implements Serializable{
 																//*************************************
 																//				VARIABLES             *
 																//*************************************
-	String server = null ;
-	String username = null ;
-	String pwd = null ;
-	String database = null ;
-	String prefix = null ;
-	String configName = null ;
+	private String server = null ;
+	private String username = null ;
+	private String pwd = null ;
+	private String database = null ;
+	private String prefix = null ;
+	private String configName = null ;
 	
 	
 	

@@ -84,6 +84,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private JCpgUserConfig userConfig;
 	private JCpgSqlManager sqlManager;
 	private JCpgConfig cpgConfig;
+	private JCpgUI globalUi = this;
 	
 	private static JCpgGallery gallery = new JCpgGallery(null, "My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
@@ -94,6 +95,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	
 	private boolean onlinemode = false; // false if we work offline, true if we work online
 	private boolean megaExplorerActive = false; // when in mega explorer mode, only the tree and one big list with many rows of photo's is visible. If a photo is selected, we switch to one row of photo's at the top with the explorer below
+	private boolean isSyncing; // used to synchronise syncing threads
 	
 	private JSplitPane splitPane;
 	private JSplitPane megaSplitPane;
@@ -731,14 +733,46 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	 */
 	private void syncActionPerformed(java.awt.event.ActionEvent evt) {
 		
+		this.setEnabled(false);
+		
 		if(getOnlinemode()){ // if true, we are online
+			/*
+			Thread t1 = new Thread(new Runnable() {
+				
+				public void run() {
+					
+					JCpgSplashscreen splash = new JCpgSplashscreen(359, 76, "data/syncing.jpg");
+					
+					while(isSyncing) {};
+					
+					splash.setVisible(false);
+					splash.dispose();
+					globalUi.setEnabled(true);
+					
+				}
+				
+			});
 			
-			this.setEnabled(false);
-			JCpgSplashscreen splash = new JCpgSplashscreen(359, 76, "data/syncing.jpg");
-			new JCpgSyncer(this, getSqlManager()).sync();
-			splash.closeSplash();
-			this.setEnabled(true);
+			Thread t2 = new Thread(new Runnable() {
+				
+				public void run() {
+					
+					isSyncing = true; 
+					new JCpgSyncer(globalUi, getSqlManager()).sync();
+					isSyncing = false;
+					
+				}
+				
+			});
 			
+			t2.start();
+			t1.start();
+		*/
+		
+		new JCpgSyncer(globalUi, getSqlManager()).sync();
+		
+		this.setEnabled(true);
+		
 		}else{ // offline, let user go online
 			
 			new JCpgUserManager(500, 200, this);

@@ -727,7 +727,7 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	public void generateSqlInsertQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "_pictures(aid, filepath, filename, filesize, total_filesize, pwidth, pheight, hits, ctime, owner_id, owner_name, pic_rating, votes, title, caption, keywords, approved, galleryicon, url_prefix, position)" +
+		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "pictures(aid, filepath, filename, filesize, total_filesize, pwidth, pheight, hits, ctime, owner_id, owner_name, pic_rating, votes, title, caption, keywords, approved, galleryicon, url_prefix, position)" +
 			" VALUES(" + getAid() + ", '" + getFilePath() + "', '" + getFileName() + "', " + getFilesize() + ", " + getTotalFileSize() + ", " + getpWidth() + ", " + getpHeight()
 			+ ", " + getHits() + ", " + getcTime() + ", " + getOwnerId() + ", '" + getOwnerName() + "', " + getPicRating() + ", " + getVotes() + ", '" + getName() + "', '"
 			+ getCaption() + "', '" + getKeywords() + "', " + getApproved() + ", " + getGalleryIcon() + ", " + getUrlPrefix() + ", " + getPosition() + ")";
@@ -742,7 +742,7 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	public void generateSqlUpdateQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "_pictures SET aid=" + getAid() + ", filepath='" + getFilePath() + "', filename='" + getFileName() + 
+		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "pictures SET aid=" + getAid() + ", filepath='" + getFilePath() + "', filename='" + getFileName() + 
 		"', filesize=" + getFilesize() + ", total_filesize=" + getTotalFileSize() + ", pwidth=" + getpWidth() + ", pheight=" + getpHeight() + ", hits=" + getHits()
 		+ ", ctime=" + getcTime() + ", owner_id=" + getOwnerId() + ", owner_name='" + getOwnerName() + "', pic_rating=" + getPicRating() + ", votes=" + getVotes() + ", title='" + getName() 
 		+ "', caption='" + getCaption() + "', keywords='" + getKeywords() + "', approved=" + getApproved() + ", galleryicon=" + getGalleryIcon() + ", url_prefix=" + getUrlPrefix() + ", position=" + getPosition() 
@@ -757,7 +757,7 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	 */
 	public String generateSqlDeleteQuery(){
 		
-		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "_pictures WHERE filename = '" + getFileName() + "'";
+		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "pictures WHERE filename = '" + getFileName() + "'";
 		return sqlquery;
 		
 	}
@@ -769,7 +769,7 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	public void generateIdFetchQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "_pictures.pid FROM " + getUserConfig().getServerConfig().getPrefix() + "_pictures WHERE filename = '" + getFileName() + "'";
+		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "pictures.pid FROM " + getUserConfig().getServerConfig().getPrefix() + "pictures WHERE filename = '" + getFileName() + "'";
 		changeSqlQuery(sqlquery);
 		
 	}

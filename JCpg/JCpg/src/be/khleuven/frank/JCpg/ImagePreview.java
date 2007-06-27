@@ -10,6 +10,13 @@ import java.awt.*;
 import javax.imageio.*;
 import java.io.*;
 
+/**
+ * 
+ * TEST FILE
+ * 
+ * @author frank
+ *
+ */
 public class ImagePreview extends JPanel implements PropertyChangeListener {
     private JFileChooser jfc;
     private Image img;

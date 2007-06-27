@@ -71,6 +71,8 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	 */
 	public JCpgProgressManager(Window parent, int maximum, String logopath, boolean showCloseButton, boolean autoClose){
 		
+		super(parent);
+		
 		parent.setEnabled(false);
 		
 		setParent(parent);
@@ -185,7 +187,6 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	private void initComponents(){
 		
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		
 		progress = new JProgressBar(0, getMaximum());
 		logo = new JLabel(new JCpgImageUrlValidator(getLogopath()).createImageIcon(), JLabel.CENTER); // 500x50

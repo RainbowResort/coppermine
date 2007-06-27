@@ -27,9 +27,16 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -55,7 +62,7 @@ public class JCpgUserManager extends JDialog {
 																		//*************************************
 																		//				VARIABLES	          *
 																		//*************************************
-	private JCpgServerConfig serverConfig; // currently selected config in list
+	private JCpgServerConfig serverConfig = null; // currently selected config in list
 	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
 	
 	private Dimension screensize;
@@ -75,8 +82,6 @@ public class JCpgUserManager extends JDialog {
 	
 	private int userManagerWidth;
 	private int userManagerHeight;
-	
-	private String[] defaultServer = {"ArDelLa", "ardella16", "default"}; // for testing: username, pwd, saved server config name
 	
 	
 	
@@ -99,6 +104,7 @@ public class JCpgUserManager extends JDialog {
 	 */
 	public JCpgUserManager(int width, int height, JCpgUI jCpgInterface){
 		
+		super(jCpgInterface); // on top of jCpgInterface
 		jCpgInterface.setEnabled(false);
 		
 		setUserManagerSize(width, height);
@@ -109,6 +115,8 @@ public class JCpgUserManager extends JDialog {
 		placeComponents();
 		
 		addActionListeners();
+		
+		readUserconfig();
 		
 	}
 	
@@ -162,7 +170,6 @@ public class JCpgUserManager extends JDialog {
 	private void initComponents(){
 		
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		this.setUndecorated(true);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -174,13 +181,11 @@ public class JCpgUserManager extends JDialog {
 		password = new JLabel("Password");
 		
 		usernameField = new JTextField();
-		usernameField.setText(defaultServer[0]);
 		
 		serverList = new JComboBox();
 		fillServerList(); // read all cfg files in cwd and add to list
 		
 		passwordField = new JTextField();
-		passwordField.setText(defaultServer[1]);
 		
 		connect = new JButton("Connect");
 		selectServer = new JButton("Edit");
@@ -280,6 +285,16 @@ public class JCpgUserManager extends JDialog {
 		return this.jCpgInterface;
 		
 	}
+	public String getUsername(){
+		
+		return this.usernameField.getText();
+		
+	}
+	public String getPassword(){
+		
+		return this.passwordField.getText();
+		
+	}
 	
 	
 	
@@ -330,10 +345,14 @@ public class JCpgUserManager extends JDialog {
 		
         if(sqlManager.connect() != -1 && !login()){ // connection goes well => go to JCpgInterface
         	
+        	writeUserConfig();
+        	
         	getJCpgInterface().changeOnlinemode(true); // we go into online mode
         	
         	getJCpgInterface().addSqlManager(sqlManager);
+        	
         	connectionStatus.setText("Connected to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
+        	
         	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem())); // Extract the configuration
         	
         	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
@@ -381,6 +400,8 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private void startOfflineActionPerformed(java.awt.event.ActionEvent evt) {
 		
+		writeUserConfig();
+		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
     	
 		// only load saved gallery if the root of the gallery tree has one child or more. This indicates the gallery already has been loaded and the user just clicked the sync button
@@ -420,20 +441,20 @@ public class JCpgUserManager extends JDialog {
 		
 		serverList.removeAllItems(); // clear list, then rebuild.
 		
-		File cwd = new File(".");
-		
+		File cwd = new File("config/");
+
 		String[] files = cwd.list();
 		
 		File current;
 		for(int i=0; i<files.length; i++){
 			
-			current = new File(files[i]);
+			current = new File("config/" + files[i]);
 			
 			if(current.isFile() && files[i].endsWith(".cfg")){
 				
 				try{
 					
-					FileInputStream fistream = new FileInputStream(files[i]);
+					FileInputStream fistream = new FileInputStream("config/" + files[i]);
 					ObjectInputStream oistream = new ObjectInputStream(fistream);
 	
 					serverList.addItem((JCpgServerConfig)oistream.readObject());
@@ -466,7 +487,7 @@ public class JCpgUserManager extends JDialog {
 		
 		try {
 			
-			ResultSet rs_userid = sqlManager.sqlExecute("SELECT * FROM " + getJCpgInterface().getUserConfig().getServerConfig().getPrefix() + "_users WHERE user_active=TRUE AND user_name='" + usernameField.getText() + "' AND user_password='" + getPwdMd5() + "'");
+			ResultSet rs_userid = sqlManager.sqlExecute("SELECT * FROM " + getJCpgInterface().getUserConfig().getServerConfig().getPrefix() + "users WHERE user_active=TRUE AND user_name='" + usernameField.getText() + "' AND user_password='" + getPwdMd5() + "'");
 		
 			try {
 				
@@ -509,6 +530,54 @@ public class JCpgUserManager extends JDialog {
 	    return new BigInteger(1,m.digest()).toString(16);
 	    
 	}
+	private void readUserconfig(){
+		
+        try {
+        	
+        	File f = new File("config/usercfg.dat");
+        	
+        	if(f.exists()){
+        	
+				FileReader input = new FileReader("config/usercfg.dat");
 	
+				BufferedReader bufRead = new BufferedReader(input);
+				
+	            String line;
+	          
+	            line = bufRead.readLine();
+	            usernameField.setText(line);
+	            
+	            line = bufRead.readLine();
+	            passwordField.setText(line);
+	            
+	            bufRead.close();
+	            
+        	}
 
+		}catch (IOException e){
+			
+            e.printStackTrace();
+            
+        }
+		
+	}
+	private void writeUserConfig(){
+		
+	    try {
+	    	
+	    	File delete = new File("config/usercfg.dat");
+	    	if(delete.exists()) delete.delete();
+	    	
+	        BufferedWriter out = new BufferedWriter(new FileWriter("config/usercfg.dat"));
+	        out.write(usernameField.getText() + "\n");
+	        out.write(passwordField.getText());
+	        out.close();
+	        
+	    } catch (IOException e) {
+	    	
+	    	
+	    }
+		
+	}
+	
 }

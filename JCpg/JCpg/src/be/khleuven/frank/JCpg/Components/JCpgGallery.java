@@ -408,10 +408,10 @@ public class JCpgGallery implements Serializable{
 		// write file
 		try {
 			
-			File xmlfile = new File("gallery.xml"); // delete file if existing
+			File xmlfile = new File("config/gallery.xml"); // delete file if existing
 			if(xmlfile.exists()) xmlfile.delete();
 			
-	        BufferedWriter out = new BufferedWriter(new FileWriter("gallery.xml"));
+	        BufferedWriter out = new BufferedWriter(new FileWriter("config/gallery.xml"));
 	        
 	        for(int i=0; i<xml.size(); i++){
 	        	
@@ -449,10 +449,7 @@ public class JCpgGallery implements Serializable{
     				
     				JCpgPicture picture = album.getPictures().get(k);
     				if (picture.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(picture.generateSqlDeleteQuery());
-    				File delete = new File("albums/" + picture.getFilePath() + picture.getFileName());
-    				delete.delete();
-    				delete = new File("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName());
-    	    		delete.delete();
+    				picture.delete(jCpgUIReference);
     				picture = null;
     				
     			}

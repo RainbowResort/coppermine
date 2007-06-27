@@ -149,7 +149,7 @@ public class JCpgConfig implements Serializable {
 	 */
 	private void getCpgConfiguration(){
 		
-		String table_config = getServerConfig().getPrefix() + "_config";
+		String table_config = getServerConfig().getPrefix() + "config";
 		ResultSet rs_config = getSqlManager().sqlExecute("SELECT * FROM " + table_config);
 		
 		try {
