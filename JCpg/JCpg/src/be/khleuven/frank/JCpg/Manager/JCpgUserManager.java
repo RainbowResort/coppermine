@@ -43,12 +43,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ListIterator;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
 /**
  * Used to get all the necesarry information about the Coppermine user to login to his/her Coppermine account
@@ -535,51 +544,50 @@ public class JCpgUserManager extends JDialog {
 	}
 	private void readUserconfig(){
 		
-        try {
-        	
-        	File f = new File("config/usercfg.dat");
-        	
-        	if(f.exists()){
-        	
-				FileReader input = new FileReader("config/usercfg.dat");
-	
-				BufferedReader bufRead = new BufferedReader(input);
-				
-	            String line;
-	          
-	            line = bufRead.readLine();
-	            usernameField.setText(line);
-	            
-	            line = bufRead.readLine();
-	            passwordField.setText(line);
-	            
-	            bufRead.close();
-	            
-        	}
-
-		}catch (IOException e){
+		SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+		
+		try {
 			
-            e.printStackTrace();
-            
-        }
+			Document doc = builder.build("config/usercfg.xml");
+		
+			Element userconfig = doc.getRootElement();
+			
+			usernameField.setText(userconfig.getAttribute("username").getValue());
+			passwordField.setText(userconfig.getAttribute("password").getValue());
+			
+		} catch (JDOMException e1) {
+			
+			System.out.println("JCpgUserManager: couldn't load usercfg.xml");
+			
+		}
 		
 	}
 	private void writeUserConfig(){
 		
-	    try {
-	    	
-	    	File delete = new File("config/usercfg.dat");
-	    	if(delete.exists()) delete.delete();
-	    	
-	        BufferedWriter out = new BufferedWriter(new FileWriter("config/usercfg.dat"));
-	        out.write(usernameField.getText() + "\n");
-	        out.write(passwordField.getText());
-	        out.close();
-	        
-	    } catch (IOException e) {
-	    	
-	    	
-	    }
+		Element userconfig = new Element("userconfig");
+		
+		userconfig.setAttribute("username", usernameField.getText());
+		userconfig.setAttribute("password", passwordField.getText());
+		
+		// write file
+		Document doc=new Document(userconfig);
+		
+		XMLOutputter out = new XMLOutputter();
+		
+		out.setIndent(true);
+		out.setNewlines(true);
+		
+		try{
+			
+			FileOutputStream file = new FileOutputStream("config/usercfg.xml");
+			
+			out.output(doc , file);	
+			
+		}catch(Exception e){
+			
+			e.printStackTrace();
+			
+		}
 		
 	}
 	

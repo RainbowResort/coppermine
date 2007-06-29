@@ -284,23 +284,13 @@ public class JCpgGallerySaver implements Serializable{
 		out.setIndent(true);
 		out.setNewlines(true);
 		
-		FileOutputStream file=null;
-		
 		try{
 			
-			file = new FileOutputStream("config/gallery.xml");
+			FileOutputStream file = new FileOutputStream("config/usercfg.xml");
+			
+			out.output(doc , file);	
 			
 		}catch(Exception e){
-			
-			e.printStackTrace();
-			
-		}
-		
-		try{	  
-			
-			out.output(doc , file);	   
-			
-		}catch(IOException e){
 			
 			e.printStackTrace();
 			
