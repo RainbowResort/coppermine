@@ -20,11 +20,24 @@ package be.khleuven.frank.JCpg.Save;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
 
 
 
@@ -38,6 +51,8 @@ import be.khleuven.frank.JCpg.Components.JCpgGallery;
 public class JCpgGallerySaver implements Serializable{
 	
 	
+	private JCpgGallery gallery = null;
+	
 	
 	
 																				
@@ -49,9 +64,37 @@ public class JCpgGallerySaver implements Serializable{
 	 * Makes a new JCpgGallerySaver object, no arguments
 	 *
 	 */
+	public JCpgGallerySaver(JCpgGallery gallery){
+		
+		setGallery(gallery);
+		
+	}
 	public JCpgGallerySaver(){
 		
 	}
+	
+	
+	
+	
+	private void setGallery(JCpgGallery gallery){
+		
+		this.gallery = gallery;
+		
+	}
+	
+	public JCpgGallery getGallery(){
+		
+		return this.gallery;
+		
+	}
+	
+	public void changeGallery(JCpgGallery gallery){
+		
+		setGallery(gallery);
+		
+	}
+	
+	
 	/**
 	 * 
 	 * Makes a new JCpgGallerySaver object, no arguments
@@ -59,28 +102,9 @@ public class JCpgGallerySaver implements Serializable{
 	 * @param gallery
 	 * 		reference to the gallery that has to be saved
 	 */
-	public void saveGallery(JCpgGallery gallery){
+	public void saveGallery(){
 		
-		FileOutputStream fos;
-		
-		try {
-			
-			File current = new File("config/current.dat");
-			if(current.exists()) current.delete(); // delete of existing
-			
-			fos = new FileOutputStream("config/current.dat", false); // this file always contains the most current state of the server we know of, false = overwrite
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-	        oos.writeObject(gallery);
-	        
-	        oos.close();
-	        
-	        System.out.println("JCpgGallerySaver: gallery saved sucessfully to current.dat");
-	        
-		} catch (Exception e) {
-			
-			System.out.println("JCpgGallerySaver: couldn't save gallery to current.dat");
-			
-		}
+		toXML();
 		
 	}
 	
@@ -100,23 +124,188 @@ public class JCpgGallerySaver implements Serializable{
 	 */
 	public JCpgGallery loadGallery(){
 		
+		SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+		
 		try {
 			
-			FileInputStream istream = new FileInputStream("config/current.dat");
-			ObjectInputStream p = new ObjectInputStream(istream);
-			JCpgGallery gallery = (JCpgGallery)p.readObject();
-			istream.close();
+			Document doc = builder.build("config/gallery.xml");
+		
+			Element egallery = doc.getRootElement();
 			
-			return gallery;
+			List content1 = egallery.getChildren();
+			ListIterator it1 = content1.listIterator();
 			
-		} catch (Exception e) {
+			while(it1.hasNext()){
+				
+				Element element1 = (Element)it1.next();
+				
+				if(element1.getName().equals("category")){
+					
+					JCpgCategory category = new JCpgCategory(element1.getAttribute("cid").getIntValue(), element1.getAttribute("ownerid").getIntValue(), element1.getAttribute("name").getValue(), element1.getAttribute("description").getValue(), element1.getAttribute("position").getIntValue(), element1.getAttribute("parent").getIntValue(), element1.getAttribute("thumb").getIntValue());
+					getGallery().addCategory(category);
+				
+					List content2 = element1.getChildren();
+					ListIterator it2 = content2.listIterator();
+					
+					while(it2.hasNext()){
+						
+						Element element2 = (Element)it2.next();
+						
+						if(element2.getName().equals("album")){
+						
+							JCpgAlbum album = new JCpgAlbum(element2.getAttribute("aid").getIntValue(), element2.getAttribute("title").getValue(), element2.getAttribute("description").getValue(), element2.getAttribute("visibility").getIntValue(), element2.getAttribute("uploads").getBooleanValue(), element2.getAttribute("comments").getBooleanValue(), element2.getAttribute("votes").getBooleanValue(), element2.getAttribute("position").getIntValue(), element2.getAttribute("category").getIntValue(), element2.getAttribute("thumb").getIntValue(), element2.getAttribute("keywords").getValue(), element2.getAttribute("password").getValue(), element2.getAttribute("passwordhint").getValue());
+							category.addAlbum(album);
+							
+							List content3 = element2.getChildren();
+							ListIterator it3 = content3.listIterator();
+							
+							while(it3.hasNext()){
+								
+								Element element3 = (Element)it3.next();
+								
+								if(element3.getName().equals("picture")){
+									
+									JCpgPicture picture = new JCpgPicture(element3.getAttribute("pid").getIntValue(), element3.getAttribute("aid").getIntValue(), element3.getAttribute("filepath").getValue(), element3.getAttribute("filename").getValue(), element3.getAttribute("filesize").getIntValue(), element3.getAttribute("totalfilesize").getIntValue(), element3.getAttribute("width").getIntValue(), element3.getAttribute("height").getIntValue(), element3.getAttribute("hits").getIntValue(), element3.getAttribute("ctime").getIntValue(), element3.getAttribute("ownerid").getIntValue(), element3.getAttribute("ownername").getValue(), element3.getAttribute("rating").getIntValue(), element3.getAttribute("votes").getIntValue(), element3.getAttribute("title").getValue(), element3.getAttribute("caption").getValue(), element3.getAttribute("keywords").getValue(), element3.getAttribute("approved").getBooleanValue(), element3.getAttribute("galleryicon").getIntValue(), element3.getAttribute("urlprefix").getIntValue(), element3.getAttribute("position").getIntValue());
+									album.addPicture(picture);
+									
+								}
+								
+							}
+						
+						}
+						
+					}
+					
+				}
+				
+			}
 			
-			System.out.println("JCpgGallerySaver: couldn't load gallery from current.dat");
+		} catch (JDOMException e1) {
+			
+			System.out.println("JCpgGallery: couldn't load gallery.xml");
 			
 		}
 		
 		return null;
 		
+	}
+	/**
+	 * 
+	 * Generate xml file which represents the current state of the local coppermine gallery
+	 * We will use the JDOM API to generate the xml file
+	 *
+	 */
+	public void toXML(){
+		
+		Element egallery = new Element("gallery");
+		
+		ArrayList<String> xml = new ArrayList<String>();
+		
+		for(int i=0; i<getGallery().getCategories().size(); i++){
+			
+			JCpgCategory category = getGallery().getCategories().get(i);
+			
+			Element ecategory = new Element("category");
+			
+			ecategory.setAttribute("cid", category.getId() + "");
+			ecategory.setAttribute("ownerid", category.getOwnerId() + "");
+			ecategory.setAttribute("name", category.getName());
+			ecategory.setAttribute("description", category.getDescription());
+			ecategory.setAttribute("position", category.getPosition() + "");
+			ecategory.setAttribute("parent", category.getParent() + "");
+			ecategory.setAttribute("thumb", category.getThumb() + "");
+			
+			egallery.addContent(ecategory);
+			
+			for(int j=0; j<category.getAlbums().size(); j++){
+				
+				JCpgAlbum album = category.getAlbums().get(j);
+				
+				Element eAlbum = new Element("album");
+				
+				eAlbum.setAttribute("aid", album.getId() + "");
+				eAlbum.setAttribute("title", album.getName());
+				eAlbum.setAttribute("description", album.getDescription());
+				eAlbum.setAttribute("visibility", album.getVisibility() + "");
+				eAlbum.setAttribute("uploads", album.getUploads() + "");
+				eAlbum.setAttribute("comments", album.getComments() + "");
+				eAlbum.setAttribute("votes", album.getVotes() + "");
+				eAlbum.setAttribute("position", album.getPosition() + "");
+				eAlbum.setAttribute("category", album.getCategory() + "");
+				eAlbum.setAttribute("thumb", album.getThumb() + "");
+				eAlbum.setAttribute("keywords", album.getKeyword());
+				eAlbum.setAttribute("password", album.getAlbPassword());
+				eAlbum.setAttribute("passwordhint", album.getAlbPasswordHint());
+				
+				ecategory.addContent(eAlbum);
+				
+				for(int k=0; k<album.getPictures().size(); k++){
+					
+					JCpgPicture picture = album.getPictures().get(k);
+					
+					Element ePicture = new Element("picture");
+					
+					ePicture.setAttribute("pid", picture.getId() + "");
+					ePicture.setAttribute("aid", picture.getAid() + "");
+					ePicture.setAttribute("filepath", picture.getFilePath());
+					ePicture.setAttribute("filename", picture.getFileName());
+					ePicture.setAttribute("filesize", picture.getFilesize() + "");
+					ePicture.setAttribute("totalfilesize", picture.getTotalFileSize() + "");
+					ePicture.setAttribute("width", picture.getpWidth() + "");
+					ePicture.setAttribute("height", picture.getpHeight() + "");
+					ePicture.setAttribute("hits", picture.getHits() + "");
+					ePicture.setAttribute("mtime", picture.getmTime() + "");
+					ePicture.setAttribute("ctime", picture.getcTime() + "");
+					ePicture.setAttribute("ownerid", picture.getOwnerId() + "");
+					ePicture.setAttribute("ownername", picture.getOwnerName());
+					ePicture.setAttribute("rating", picture.getPicRating() + "");
+					ePicture.setAttribute("votes", picture.getVotes() + "");
+					ePicture.setAttribute("title", picture.getName());
+					ePicture.setAttribute("caption", picture.getCaption());
+					ePicture.setAttribute("keywords", picture.getKeywords());
+					ePicture.setAttribute("approved", picture.getApproved() + "");
+					ePicture.setAttribute("galleryicon", picture.getGalleryIcon() + "");
+					ePicture.setAttribute("urlprefix", picture.getUrlPrefix() + "");
+					ePicture.setAttribute("position", picture.getPosition() + "");
+					
+					eAlbum.addContent(ePicture);
+					
+				}
+				
+			}
+			
+		}
+		
+		// write file
+		Document doc=new Document(egallery);
+		
+		XMLOutputter out = new XMLOutputter();
+		
+		out.setIndent(true);
+		out.setNewlines(true);
+		
+		FileOutputStream file=null;
+		
+		try{
+			
+			file = new FileOutputStream("config/gallery.xml");
+			
+		}catch(Exception e){
+			
+			e.printStackTrace();
+			
+		}
+		
+		try{	  
+			
+			out.output(doc , file);	   
+			
+		}catch(IOException e){
+			
+			e.printStackTrace();
+			
+		}
+
 	}
 
 }

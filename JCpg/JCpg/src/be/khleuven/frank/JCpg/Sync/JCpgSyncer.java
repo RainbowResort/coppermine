@@ -253,7 +253,7 @@ public class JCpgSyncer {
 							
 							// TEMPORARY: ONLY FOR VGO, FOR CPG USE API
 							// UPLOAD NEW PICTURES VIA FTP
-							/*
+							
 							ftp = new JCpgFTP(false);
 							try {
 								
@@ -270,7 +270,7 @@ public class JCpgSyncer {
 							} catch (UnknownHostException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
 							
 							// END TEMPORARY
-							*/
+							
 							
 						} catch (SQLException e) {
 							
@@ -288,41 +288,7 @@ public class JCpgSyncer {
 		
 		extractDatabase(); // extract from database the components that are not yet in the current state
 		
-		new JCpgGallerySaver().saveGallery(getUi().getGallery()); // save gallery
-		getUi().getGallery().toXML();
-		
-	}
-	/**
-	 * 
-	 * Load the current saved gallery from disk
-	 *
-	 */
-	public void loadGallery(){
-		
-		File gallery = new File("config/current.dat");
-		
-		if(gallery.exists()){ // only load if the file exists
-		
-			try {
-				
-				FileInputStream fistream;
-				
-				fistream = new FileInputStream(gallery);
-				ObjectInputStream oistream = new ObjectInputStream(fistream);
-		
-				JCpgGallery loadedGallery = (JCpgGallery)oistream.readObject();
-				
-				getUi().changeGallery(loadedGallery); // overwrite current gallery
-			
-				oistream.close();
-			
-			} catch (Exception e) {
-				
-				System.out.println("JCpgUI: couldn't load current.dat");
-				
-			}
-			
-		}
+		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
 		
 	}
 	/**
@@ -353,7 +319,7 @@ public class JCpgSyncer {
 				
 				if(getUi().getGallery().getCategory(rs_categories.getString("name")) == null && !rs_categories.getString("name").equals("User galleries")){ // no such category found => make new one from database
 				
-					category = new JCpgCategory(getUi().getUserConfig(), rs_categories.getInt("cid"), rs_categories.getInt("owner_id"), rs_categories.getString("name"), rs_categories.getString("description"), rs_categories.getInt("pos"), rs_categories.getInt("parent"), rs_categories.getInt("thumb"));
+					category = new JCpgCategory(rs_categories.getInt("cid"), rs_categories.getInt("owner_id"), rs_categories.getString("name"), rs_categories.getString("description"), rs_categories.getInt("pos"), rs_categories.getInt("parent"), rs_categories.getInt("thumb"));
 					
 					getUi().getGallery().addCategory(category);
 					treeCategory = new DefaultMutableTreeNode(category);
@@ -382,7 +348,7 @@ public class JCpgSyncer {
 					
 					if(category.getAlbum(rs_albums.getString("title")) == null){ // no such album found => make new one from database
 						
-						album = new JCpgAlbum(getUi().getUserConfig(), rs_albums.getInt("aid"), rs_albums.getString("title"), rs_albums.getString("description"), rs_albums.getInt("visibility"), rs_albums.getBoolean("uploads"), rs_albums.getBoolean("comments"), rs_albums.getBoolean("votes"), rs_albums.getInt("pos"), rs_albums.getInt("category"), rs_albums.getInt("thumb"), rs_albums.getString("keyword"), rs_albums.getString("alb_password"), rs_albums.getString("alb_password_hint"));
+						album = new JCpgAlbum(rs_albums.getInt("aid"), rs_albums.getString("title"), rs_albums.getString("description"), rs_albums.getInt("visibility"), rs_albums.getBoolean("uploads"), rs_albums.getBoolean("comments"), rs_albums.getBoolean("votes"), rs_albums.getInt("pos"), rs_albums.getInt("category"), rs_albums.getInt("thumb"), rs_albums.getString("keyword"), rs_albums.getString("alb_password"), rs_albums.getString("alb_password_hint"));
 						
 						category.addAlbum(album);
 						treeAlbum = new DefaultMutableTreeNode(album);
@@ -410,7 +376,7 @@ public class JCpgSyncer {
 						
 						if(album.getPicture(rs_pictures.getString("filename")) == null){ // no such picture found => make new one from database
 						
-							picture = new JCpgPicture(getUi().getUserConfig(), rs_pictures.getInt("pid"), rs_pictures.getInt("aid"), rs_pictures.getString("filepath"), rs_pictures.getString("filename"), rs_pictures.getInt("filesize"), rs_pictures.getInt("total_filesize"), rs_pictures.getInt("pwidth"), rs_pictures.getInt("pheight"), rs_pictures.getInt("hits"), rs_pictures.getInt("ctime") ,rs_pictures.getInt("owner_id"), rs_pictures.getString("owner_name"), rs_pictures.getInt("pic_rating"), rs_pictures.getInt("votes"), rs_pictures.getString("title"), rs_pictures.getString("caption"), rs_pictures.getString("keywords"), rs_pictures.getBoolean("approved"), rs_pictures.getInt("galleryicon"), rs_pictures.getInt("url_prefix"), rs_pictures.getInt("position"));
+							picture = new JCpgPicture(rs_pictures.getInt("pid"), rs_pictures.getInt("aid"), rs_pictures.getString("filepath"), rs_pictures.getString("filename"), rs_pictures.getInt("filesize"), rs_pictures.getInt("total_filesize"), rs_pictures.getInt("pwidth"), rs_pictures.getInt("pheight"), rs_pictures.getInt("hits"), rs_pictures.getInt("ctime") ,rs_pictures.getInt("owner_id"), rs_pictures.getString("owner_name"), rs_pictures.getInt("pic_rating"), rs_pictures.getInt("votes"), rs_pictures.getString("title"), rs_pictures.getString("caption"), rs_pictures.getString("keywords"), rs_pictures.getBoolean("approved"), rs_pictures.getInt("galleryicon"), rs_pictures.getInt("url_prefix"), rs_pictures.getInt("position"));
 							
 							album.addPicture(picture);
 							treePicture = new DefaultMutableTreeNode(picture);
@@ -419,7 +385,7 @@ public class JCpgSyncer {
 							picture.changeTreePath(new TreePath(treePicture.getPath())); // add treePath
 							
 							new JCpgPictureTransferer(getSqlManager(), getUi().getUserConfig().getServerConfig(), getUi().getCpgConfig(), picture).downloadImage();
-							JCpgPicture thumb = new JCpgPicture(getUi().getUserConfig(), rs_pictures.getInt("pid"), rs_pictures.getInt("aid"), rs_pictures.getString("filepath"), "thumb_" + rs_pictures.getString("filename"), rs_pictures.getInt("filesize"), rs_pictures.getInt("total_filesize"), rs_pictures.getInt("pwidth"), rs_pictures.getInt("pheight"), rs_pictures.getInt("hits"), rs_pictures.getInt("ctime"), rs_pictures.getInt("owner_id"), rs_pictures.getString("owner_name"), rs_pictures.getInt("pic_rating"), rs_pictures.getInt("votes"), rs_pictures.getString("title"), rs_pictures.getString("caption"), rs_pictures.getString("keywords"), rs_pictures.getBoolean("approved"), rs_pictures.getInt("galleryicon"), rs_pictures.getInt("url_prefix"), rs_pictures.getInt("position"));
+							JCpgPicture thumb = new JCpgPicture(rs_pictures.getInt("pid"), rs_pictures.getInt("aid"), rs_pictures.getString("filepath"), "thumb_" + rs_pictures.getString("filename"), rs_pictures.getInt("filesize"), rs_pictures.getInt("total_filesize"), rs_pictures.getInt("pwidth"), rs_pictures.getInt("pheight"), rs_pictures.getInt("hits"), rs_pictures.getInt("ctime"), rs_pictures.getInt("owner_id"), rs_pictures.getString("owner_name"), rs_pictures.getInt("pic_rating"), rs_pictures.getInt("votes"), rs_pictures.getString("title"), rs_pictures.getString("caption"), rs_pictures.getString("keywords"), rs_pictures.getBoolean("approved"), rs_pictures.getInt("galleryicon"), rs_pictures.getInt("url_prefix"), rs_pictures.getInt("position"));
 							new JCpgPictureTransferer(getSqlManager(), getUi().getUserConfig().getServerConfig(), getUi().getCpgConfig(), thumb).downloadImage();
 						
 						}
@@ -428,8 +394,8 @@ public class JCpgSyncer {
 
 				}
 				
-				new JCpgGallerySaver().saveGallery(getUi().getGallery()); // save gallery
-				getUi().getGallery().toXML();
+				new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+
 			}
 				
 		} catch (SQLException e) {
@@ -491,8 +457,7 @@ public class JCpgSyncer {
 					
 				}
 				
-				new JCpgGallerySaver().saveGallery(getUi().getGallery()); // save gallery
-				getUi().getGallery().toXML();
+				new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
 				
 			}
 				

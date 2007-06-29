@@ -98,8 +98,9 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 		}
 		
 		// make new album
-		JCpgAlbum album = new JCpgAlbum(getJCpgUIReference().getUserConfig(), -1, getTitleField().getText(), getDescriptionField().getText(), 0, true, true, true, 0, category.getId(), 0, getDescriptionField().getText(), "", "");
+		JCpgAlbum album = new JCpgAlbum(-1, getTitleField().getText(), getDescriptionField().getText(), 0, true, true, true, 0, category.getId(), 0, getDescriptionField().getText(), "", "");
 		
+		album.addUi(super.getJCpgUIReference());
 		album.generateSqlInsertQuery();
 		
 		category.addAlbum(album);
@@ -107,7 +108,7 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 		getNode().add(newNode);
 		SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 		
-		getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+		getGallerySaver().saveGallery(); // save current gallery state
 		
 		getJCpgUIReference().setEnabled(true);
 		this.dispose();

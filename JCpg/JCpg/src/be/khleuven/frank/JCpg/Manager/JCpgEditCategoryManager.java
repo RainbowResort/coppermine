@@ -138,14 +138,14 @@ public class JCpgEditCategoryManager extends JCpgEditManager implements Serializ
 				
 			}
 			
-			getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+			getGallerySaver().saveGallery(); // save current gallery state
 
 			this.dispose();
 			getJCpgUIReference().setEnabled(true);
 			
 		}
 		
-		getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+		getGallerySaver().saveGallery(); // save current gallery state
 		
 	}
 

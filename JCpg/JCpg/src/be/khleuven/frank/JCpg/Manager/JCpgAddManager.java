@@ -87,13 +87,18 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 	public JCpgAddManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node){
 		
 		super(jCpgUIReference);
+		
 		jCpgUIReference.setEnabled(false);
+		
 		setLogo(logo);
 		setJCpgUIReference(jCpgUIReference);
 		setNode(node);
+		
 		initComponents();
 		boundComponents();
 		placeComponents();
+		
+		getGallerySaver().changeGallery(jCpgUIReference.getGallery());
 		
 	}
 

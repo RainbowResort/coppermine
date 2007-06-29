@@ -21,6 +21,7 @@ import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
@@ -62,7 +63,6 @@ public class JCpgUserManager extends JDialog {
 																		//*************************************
 																		//				VARIABLES	          *
 																		//*************************************
-	private JCpgServerConfig serverConfig = null; // currently selected config in list
 	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
 	
 	private Dimension screensize;
@@ -353,11 +353,11 @@ public class JCpgUserManager extends JDialog {
         	
         	connectionStatus.setText("Connected to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
         	
-        	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem())); // Extract the configuration
+        	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem(), getJCpgInterface().getOnlinemode())); // Extract the configuration
         	
         	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
         	
-        	new JCpgSyncer(getJCpgInterface(), sqlManager).loadGallery(); // load gallery and show contents on screen
+        	new JCpgGallerySaver().loadGallery(); // load gallery and show contents on screen
         	getJCpgInterface().buildTree();
         	
         	new JCpgSyncer(getJCpgInterface(), sqlManager).extractDatabase(); // look if their maybe more information in the online database to add to the local state
@@ -403,17 +403,20 @@ public class JCpgUserManager extends JDialog {
 		writeUserConfig();
 		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
+		
+		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), (JCpgServerConfig)serverList.getSelectedItem()));
+		JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object
+		getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem(), getJCpgInterface().getOnlinemode())); // Extract the configuration
     	
 		// only load saved gallery if the root of the gallery tree has one child or more. This indicates the gallery already has been loaded and the user just clicked the sync button
 		// in offline mode, which will trigger the usermanager to display so the user can connect.
 		// if, at this point, he again clicks the offline button, the gallery will be loaded again and displayed double in the tree. This if-statement resolves that.
 		if(((DefaultMutableTreeNode)getJCpgInterface().getTree().getModel().getRoot()).getChildCount() == 0){
 			
-			JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object for connecting
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
 	        //getJCpgInterface().getParent().setName("JCpg - OFFLINE"); // let user know we are offline
 	        
-	        new JCpgSyncer(getJCpgInterface(), sqlManager).loadGallery(); // load gallery saved on disk
+	        new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
 	        getJCpgInterface().buildTree(); // build the tree with loaded information
 	        
 		}

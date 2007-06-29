@@ -86,7 +86,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	private JCpgConfig cpgConfig;
 	private JCpgUI globalUi = this;
 	
-	private static JCpgGallery gallery = new JCpgGallery(null, "My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
+	private static JCpgGallery gallery = new JCpgGallery("My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
 	private Dimension screensize;
 	private Dimension framesize;
@@ -148,6 +148,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		boundComponents();
 		placeComponents();
 		controlMegaExplorerActive();
+		getGallery().addUi(this);
 		new JCpgUserManager(500, 200, this);
 		
 	}
@@ -156,18 +157,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	
 	
 	
-	/**
-	 * 
-	 * Set a (loaded) gallery
-	 * 
-	 * @param gallery
-	 * 		(loaded) gallery
-	 */
-	private void setGallery(JCpgGallery gallery){
-		
-		this.gallery = gallery;
-		
-	}
 	/**
 	 * 
 	 * Set the megaExplorerActive flag
@@ -581,19 +570,21 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
+		Object object = node.getUserObject();
+		
 		if (node == null){ // no node selected
 			
 	    	return;
 	    	
-		}else if(node.getLevel() == 0){ // add category
+		}else if(object.getClass().equals(JCpgGallery.class)){ // add category
 			
 			new JCpgAddCategoryManager(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node);
 		
-		}else if(node.getLevel() == 1){ // add album
+		}else if(object.getClass().equals(JCpgCategory.class)){ // add album
 			
 			new JCpgAddAlbumManager(this, new JCpgImageUrlValidator("data/createalbum_logo.jpg").createImageIcon(), node);
 		
-		}else if(node.getLevel() == 2){ // add picture
+		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
 			new JCpgAddPictureManager(this, getCpgConfig(), new JCpgImageUrlValidator("data/createpicture_logo.jpg").createImageIcon(), node);
 		
@@ -619,11 +610,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 				
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode)treePath.getLastPathComponent();
 				
+				Object object = node.getUserObject();
+				
 				if (node == null){ // no node selected
 					
 			    	return;
 			    	
-				}else if(node.getLevel() == 1){ // leaf is category
+				}else if(object.getClass().equals(JCpgCategory.class)){ // leaf is category
 					
 					JCpgCategory category = (JCpgCategory)node.getUserObject();
 					DefaultMutableTreeNode categoryParentNode = (DefaultMutableTreeNode)node.getParent();
@@ -638,7 +631,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 			    	pictureList.removeAll();
 			    	explorer.removeAll();
 			    	
-			    }else if(node.getLevel() == 2){ // leaf is album
+			    }else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 			    	
 			    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 			    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
@@ -653,7 +646,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 			    	pictureList.removeAll();
 			    	explorer.removeAll();
 			    	
-			    }else if(node.getLevel() == 3){ // leaf is picture
+			    }else if(object.getClass().equals(JCpgPicture.class)){ // leaf is picture
 			    	
 			    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
 			    	DefaultMutableTreeNode pictureParentNode = (DefaultMutableTreeNode)node.getParent();
@@ -670,8 +663,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 			    	
 			    }
 				
-				new JCpgGallerySaver().saveGallery(getGallery()); // save gallery
-				getGallery().toXML();
+				new JCpgGallerySaver(getGallery()).saveGallery(); // save gallery
 				
 			}
 			
@@ -687,21 +679,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
+		Object object = node.getUserObject();
+		
 		if (node == null){
 			
 	    	return;
 	    	
-		}else if(node.getLevel() == 1){
+		}else if(object.getClass().equals(JCpgCategory.class)){ // category
 			
 			new JCpgEditCategoryManager(this, new JCpgImageUrlValidator("data/editcategory_logo.jpg").createImageIcon(), node);
 			SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
 		
-		}else if(node.getLevel() == 2){
+		}else if(object.getClass().equals(JCpgAlbum.class)){ // album
 			
 			new JCpgEditAlbumManager(this, new JCpgImageUrlValidator("data/editalbum_logo.jpg").createImageIcon(), node);
 			SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
 		
-		}else if(node.getLevel() == 3){
+		}else if(object.getClass().equals(JCpgPicture.class)){ // picture
 			
 			new JCpgEditPictureManager(this, new JCpgImageUrlValidator("data/editpicture_logo.jpg").createImageIcon(), node);
 			SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
@@ -935,7 +929,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	protected void addServerConfig(JCpgUserConfig userConfig){
 		
 		this.userConfig = userConfig;
-		getGallery().changeUserConfig(userConfig);
 		
 	}
 	/**
@@ -972,18 +965,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	public void addCpgConfig(JCpgConfig config){
 		
 		this.cpgConfig = config;
-		
-	}
-	/**
-	 * 
-	 * Change the gallery. Used when loading a gallery from disk
-	 * 
-	 * @param gallery
-	 * 		new (loaded) gallery
-	 */
-	public void changeGallery(JCpgGallery gallery){
-		
-		setGallery(gallery);
 		
 	}
 	/**

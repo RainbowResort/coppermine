@@ -19,9 +19,7 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -42,6 +40,8 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	private int position;
 	private int parent;
 	private int thumb;
+	
+	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 
 	
@@ -69,9 +69,9 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	 * @param parent
 	 * 		the parent category
 	 */
-	public JCpgCategory(JCpgUserConfig userConfig, int id, int ownerid, String name, String description, int position, int parent, int thumb){
+	public JCpgCategory(int id, int ownerid, String name, String description, int position, int parent, int thumb){
 		
-		super(userConfig, name, description);
+		super(name, description);
 		setId(id);
 		setOwnerid(ownerid);
 		setPosition(position);
@@ -224,6 +224,18 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	}
 	/**
 	 * 
+	 * Get the category arraylist with subcategories
+	 * 
+	 * @return
+	 * 		the category arraylist with subcategories
+	 */
+	public ArrayList<JCpgCategory> getCategories(){
+		
+		return this.categories;
+		
+	} 
+	/**
+	 * 
 	 * Get a specific album based on its name
 	 * 
 	 * @param name
@@ -240,6 +252,32 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 			if(album.getName().equals(name)){
 				
 				return album; // album found
+				
+			}
+			
+		}
+		
+		return null; // nothing found
+		
+	}
+	/**
+	 * 
+	 * Get a specific subcategory based on its name
+	 * 
+	 * @param name
+	 * 		name of the subcategory you search
+	 * @return
+	 * 		the subcategory if it has been found, else null
+	 */
+	public JCpgCategory getCategory(String name){
+		
+		for(int i=0; i<getCategories().size(); i++){
+			
+			JCpgCategory category = getCategories().get(i);
+			
+			if(category.getName().equals(name)){
+				
+				return category; // category found
 				
 			}
 			
@@ -295,7 +333,19 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	 */
 	public void addAlbum(JCpgAlbum album){
 		
-		this.albums.add(album);
+		getAlbums().add(album);
+		
+	}
+	/**
+	 * 
+	 * Add a subcategory to the category
+	 * 
+	 * @param category
+	 * 		the subcategory to add
+	 */
+	public void addCategory(JCpgCategory category){
+		
+		getCategories().add(category);
 		
 	}
 	/**
@@ -312,11 +362,53 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	}
 	/**
 	 * 
+	 * Delete a subcategory from the category
+	 * 
+	 * @param category
+	 * 		the subcategory to delete
+	 */
+	public void deleteCategory(JCpgCategory category){
+		
+		getCategories().remove(category);
+		
+	}
+	/**
+	 * 
 	 * Used when deleting a category. All its albums and the pictures in their will be deleted.
 	 * 
 	 */
 	public void delete(JCpgUI jCpgUIReference){
 		
+		// delete subcategories and everything in it
+		for(int i=0; i<getCategories().size(); i++){
+			
+			JCpgCategory category = getCategories().get(i);
+			if (category.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(category.generateSqlDeleteQuery());
+		
+			for(int j=0; j<category.getAlbums().size(); j++){
+	    		
+				JCpgAlbum album = category.getAlbums().get(j);
+				if (album.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(album.generateSqlDeleteQuery());
+	
+	    		for(int k=0; k<album.getPictures().size(); k++){
+	    				
+	    			JCpgPicture picture = album.getPictures().get(k);
+	    			picture.delete(jCpgUIReference);
+	    			picture = null;
+	    				
+	    		}
+	    		
+	    		album.getPictures().clear();
+	    		album = null;
+	    		
+	    	}
+			
+			category.getAlbums().clear();
+			if (category.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(category.generateSqlDeleteQuery()); // delete subcategory itself
+			
+		}
+		
+		// delete albums
 		for(int i=0; i<getAlbums().size(); i++){
     		
 			JCpgAlbum album = getAlbums().get(i);
@@ -336,7 +428,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
     	}
 		
 		getAlbums().clear();
-		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // delete category itself
+		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // delete subcategory itself
 		
 	}
 	/**
@@ -359,7 +451,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateSqlInsertQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUserConfig().getServerConfig().getPrefix() + "categories(owner_id, name, description, pos, parent, thumb) VALUES(" + getOwnerId() + ", '" + getName() + "', '" + getDescription() + 
+		String sqlquery = "INSERT INTO " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories(owner_id, name, description, pos, parent, thumb) VALUES(" + getOwnerId() + ", '" + getName() + "', '" + getDescription() + 
 		"', " + getPosition() + ", " + getParent() + ", " + getThumb() + ")";
 		changeSqlQuery(sqlquery);
 		
@@ -372,7 +464,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateSqlUpdateQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUserConfig().getServerConfig().getPrefix() + "categories owner_id=" + getOwnerId() + ", name='" + getName() + "', description='" + getDescription() + 
+		String sqlquery = "UPDATE " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories owner_id=" + getOwnerId() + ", name='" + getName() + "', description='" + getDescription() + 
 		"', pos=" + getPosition() + ", parent=" + getParent() + ", thumb=" + getThumb() + " WHERE cid=" + getId();
 		changeSqlQuery(sqlquery);
 		
@@ -384,7 +476,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	 */
 	public String generateSqlDeleteQuery(){
 		
-		String sqlquery = "DELETE FROM " + getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
+		String sqlquery = "DELETE FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
 		return sqlquery;
 		
 	}
@@ -396,7 +488,7 @@ public class JCpgCategory extends JCpgGallery implements Serializable{
 	public void generateIdFetchQuery(){
 		
 		changeMustSync(true);
-		String sqlquery = "SELECT " + getUserConfig().getServerConfig().getPrefix() + "categories.cid FROM " + getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
+		String sqlquery = "SELECT " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories.cid FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
 		changeSqlQuery(sqlquery);
 		
 	}

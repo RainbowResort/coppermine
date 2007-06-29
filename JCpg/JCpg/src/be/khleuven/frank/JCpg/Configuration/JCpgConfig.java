@@ -37,6 +37,7 @@ public class JCpgConfig implements Serializable {
 	private JCpgSqlManager sqlmanager;
 	private JCpgServerConfig serverConfig;
 	private ArrayList<String> configEntries = new ArrayList<String>();
+	private boolean mode;
 	
 	
 	
@@ -54,11 +55,14 @@ public class JCpgConfig implements Serializable {
 	 * 		reference to a sql manager
 	 * @param serverConfig
 	 * 		reference to the current server config
+	 * @param online
+	 * 		are we online or offline
 	 */
-	public JCpgConfig(JCpgSqlManager sqlmanager, JCpgServerConfig serverConfig){
+	public JCpgConfig(JCpgSqlManager sqlmanager, JCpgServerConfig serverConfig, boolean online){
 		
 		setSqlManager(sqlmanager);
 		setServerConfig(serverConfig);
+		setOnlineMode(online);
 		getCpgConfiguration();
 		
 	}
@@ -94,6 +98,11 @@ public class JCpgConfig implements Serializable {
 	private void setServerConfig(JCpgServerConfig serverConfig){
 		
 		this.serverConfig = serverConfig;
+		
+	}
+	private void setOnlineMode(boolean mode){
+		
+		this.mode = mode;
 		
 	}
 	
@@ -141,7 +150,11 @@ public class JCpgConfig implements Serializable {
 		return this.configEntries;
 		
 	}
-	
+	public boolean getOnlineMode(){
+		
+		return this.mode;
+		
+	}
 	/**
 	 * 
 	 * Extract configuration. Always extracted per pair.
@@ -149,23 +162,28 @@ public class JCpgConfig implements Serializable {
 	 */
 	private void getCpgConfiguration(){
 		
-		String table_config = getServerConfig().getPrefix() + "config";
-		ResultSet rs_config = getSqlManager().sqlExecute("SELECT * FROM " + table_config);
+		// online get config if we are online
+		if(getOnlineMode()){
 		
-		try {
+			String table_config = getServerConfig().getPrefix() + "config";
+			ResultSet rs_config = getSqlManager().sqlExecute("SELECT * FROM " + table_config);
 			
-			while (rs_config.next()) {
+			try {
 				
-				configEntries.add(rs_config.getString("name"));
-				configEntries.add(rs_config.getString("value"));
+				while (rs_config.next()) {
+					
+					configEntries.add(rs_config.getString("name"));
+					configEntries.add(rs_config.getString("value"));
+					
+				}
+				
+			} catch (SQLException e) {
+				
+				System.out.println("JCpgConfig: Couldn't extract from sql query result");
 				
 			}
 			
-		} catch (SQLException e) {
-			
-			System.out.println("JCpgConfig: Couldn't extract from sql query result");
-			
-		}
+		}	
 		
 	}
 	/**

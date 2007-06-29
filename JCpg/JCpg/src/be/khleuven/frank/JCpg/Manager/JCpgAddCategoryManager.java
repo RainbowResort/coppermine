@@ -99,8 +99,9 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		}
 		
 		// make new category
-		JCpgCategory category = new JCpgCategory(getJCpgUIReference().getUserConfig(), -1, -1, getTitleField().getText(), getDescriptionField().getText(), -1, 0, 0);
+		JCpgCategory category = new JCpgCategory(-1, -1, getTitleField().getText(), getDescriptionField().getText(), -1, 0, 0);
 		
+		category.addUi(super.getJCpgUIReference());
 		category.generateSqlInsertQuery();
 		
 		gallery.addCategory(category);
@@ -108,7 +109,7 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		getNode().add(newNode);
 		SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369
 		
-		getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+		getGallerySaver().saveGallery(); // save current gallery state
 		
 		getJCpgUIReference().setEnabled(true);
 		this.dispose();

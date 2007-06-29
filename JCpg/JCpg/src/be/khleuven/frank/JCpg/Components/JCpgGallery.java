@@ -23,11 +23,14 @@ import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.tree.TreePath;
+import org.jdom.*;
+import org.jdom.output.*;
 
 
 /**
@@ -41,9 +44,10 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				VARIABLES             *
 														//*************************************
+	private JCpgUI ui = null;
 	private String name = null ;
 	private String description = null ;
-	private JCpgUserConfig userConfig;
+	//private JCpgUserConfig userConfig;
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<String> deleteQueries = new ArrayList<String>(); // used to store deletion queries. Needed because the object itself will be deleted so we can't get the query from the object anymore
 	
@@ -65,11 +69,10 @@ public class JCpgGallery implements Serializable{
 	 * active at the same time.
 	 * 
 	 */
-	public JCpgGallery(JCpgUserConfig userConfig, String name, String description){
+	public JCpgGallery(String name, String description){
 		
 		setName(name);
 		setDescription(description);
-		setUserConfig(userConfig);
 		
 	}
 	
@@ -79,6 +82,11 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				SETTERS	              *
 														//*************************************
+	private void setUi(JCpgUI ui){
+		
+		this.ui = ui;
+		
+	}
 	/**
 	 * 
 	 * Set the gallery name
@@ -110,11 +118,11 @@ public class JCpgGallery implements Serializable{
 	 * @param userConfig
 	 * 		the gallery userConfig
 	 */
-	private void setUserConfig(JCpgUserConfig userConfig){
+	/*private void setUserConfig(JCpgUserConfig userConfig){
 		
 		this.userConfig = userConfig;
 		
-	}
+	}*/
 	
 	
 	
@@ -126,6 +134,11 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				GETTERS               *
 														//*************************************
+	public JCpgUI getUi(){
+
+		return this.ui;
+		
+	}
 	/**
 	 * 
 	 * Get the gallery name
@@ -169,11 +182,11 @@ public class JCpgGallery implements Serializable{
 	 * @return
 	 * 		the gallery user config
 	 */
-	public JCpgUserConfig getUserConfig(){
+	/*public JCpgUserConfig getUserConfig(){
 		
 		return this.userConfig;
 		
-	}
+	}*/
 	/**
 	 * 
 	 * Get an arraylist with the albums in this gallery
@@ -280,6 +293,11 @@ public class JCpgGallery implements Serializable{
 		getCategories().add(category);
 		
 	}
+	public void addUi(JCpgUI ui){
+		
+		setUi(ui);
+		
+	}
 	/**
 	 * 
 	 * Delete an album from the gallery
@@ -323,111 +341,11 @@ public class JCpgGallery implements Serializable{
 	 * @param userConfig
 	 * 		the new user configuration
 	 */
-	public void changeUserConfig(JCpgUserConfig userConfig){
+	/*public void changeUserConfig(JCpgUserConfig userConfig){
 		
 		setUserConfig(userConfig);
 		
-	}
-	/**
-	 * 
-	 * Generate xml file which represents the current state of the local coppermine gallery
-	 *
-	 */
-	public void toXML(){
-		
-		ArrayList<String> xml = new ArrayList<String>();
-		
-		xml.add("<?xml version=\"1.0\"?>");
-		xml.add("<gallery>");
-		
-		for(int i=0; i<getCategories().size(); i++){
-			
-			JCpgCategory category = getCategories().get(i);
-			xml.add("\t" + "<category>");
-			xml.add("\t\t" + "<name>" + category.getName() + "</name>");
-			xml.add("\t\t" + "<description>" + category.getDescription() + "</description>");
-			xml.add("\t\t" + "<position>" + category.getPosition() + "</position>");
-			xml.add("\t\t" + "<parent>" + category.getParent() + "</parent>");
-			
-			for(int j=0; j<category.getAlbums().size(); j++){
-				
-				JCpgAlbum album = category.getAlbums().get(j);
-				xml.add("\t\t" + "<album>");
-				xml.add("\t\t\t" + "<title>" + album.getName() + "</title>");
-				xml.add("\t\t\t" + "<description>" + album.getDescription() + "</description>");
-				xml.add("\t\t\t" + "<visibility>" + album.getVisibility() + "</visiblity>");
-				xml.add("\t\t\t" + "<uploads>" + album.getUploads() + "</uploads>");
-				xml.add("\t\t\t" + "<comments>" + album.getComments() + "</comments>");
-				xml.add("\t\t\t" + "<votes>" + album.getVotes() + "</votes>");
-				xml.add("\t\t\t" + "<position>" + album.getPosition() + "</position>");
-				xml.add("\t\t\t" + "<category>" + album.getCategory() + "</category>");
-				xml.add("\t\t\t" + "<thumb>" + album.getThumb() + "</thumb>");
-				xml.add("\t\t\t" + "<keyword>" + album.getKeyword() + "</keyword>");
-				xml.add("\t\t\t" + "<password>" + album.getAlbPassword() + "</password>");
-				xml.add("\t\t\t" + "<passwordhint>" + album.getAlbPasswordHint() + "</passwordhint>");
-				
-				for(int k=0; k<album.getPictures().size(); k++){
-					
-					JCpgPicture picture = album.getPictures().get(k);
-					xml.add("\t\t\t" + "<picture>");
-					xml.add("\t\t\t\t" + "<aid>" + picture.getAid() + "</aid>");
-					xml.add("\t\t\t\t" + "<filepath>" + picture.getFilePath() + "</filepath>");
-					xml.add("\t\t\t\t" + "<filename>" + picture.getFileName() + "</filename>");
-					xml.add("\t\t\t\t" + "<filesize>" + picture.getFilesize() + "</filesize>");
-					xml.add("\t\t\t\t" + "<totalfilesize>" + picture.getTotalFileSize() + "</totalfilesize>");
-					xml.add("\t\t\t\t" + "<width>" + picture.getpWidth() + "</width>");
-					xml.add("\t\t\t\t" + "<height>" + picture.getpHeight() + "</height>");
-					xml.add("\t\t\t\t" + "<hits>" + picture.getHits() + "</hits>");
-					xml.add("\t\t\t\t" + "<mtime>" + picture.getmTime() + "</mtime>");
-					xml.add("\t\t\t\t" + "<ctime>" + picture.getcTime() + "</ctime>");
-					xml.add("\t\t\t\t" + "<ownerid>" + picture.getOwnerId() + "</ownerid>");
-					xml.add("\t\t\t\t" + "<ownername>" + picture.getOwnerName() + "</ownername>");
-					xml.add("\t\t\t\t" + "<rating>" + picture.getPicRating() + "</rating>");
-					xml.add("\t\t\t\t" + "<votes>" + picture.getVotes() + "</votes>");
-					xml.add("\t\t\t\t" + "<title>" + picture.getName() + "</title>");
-					xml.add("\t\t\t\t" + "<caption>" + picture.getCaption() + "</caption>");
-					xml.add("\t\t\t\t" + "<keywords>" + picture.getKeywords() + "</keywords>");
-					xml.add("\t\t\t\t" + "<approved>" + picture.getApproved() + "</approved>");
-					xml.add("\t\t\t\t" + "<galleryicon>" + picture.getGalleryIcon() + "</galleryicon>");
-					xml.add("\t\t\t\t" + "<urlprefix>" + picture.getUrlPrefix() + "</urlprefix>");
-					xml.add("\t\t\t\t" + "<position>" + picture.getPosition() + "</position>");
-					xml.add("\t\t\t" + "</picture>");
-					
-				}
-				
-				xml.add("\t\t" + "</album>");
-				
-			}
-			
-			xml.add("\t" + "</category>");
-			
-		}
-		
-		xml.add("</gallery>");
-		
-		// write file
-		try {
-			
-			File xmlfile = new File("config/gallery.xml"); // delete file if existing
-			if(xmlfile.exists()) xmlfile.delete();
-			
-	        BufferedWriter out = new BufferedWriter(new FileWriter("config/gallery.xml"));
-	        
-	        for(int i=0; i<xml.size(); i++){
-	        	
-	        	out.write(xml.get(i) + "\n");
-	        	
-	        }
-	        
-	        out.close();
-	        
-	    } catch (IOException e) {
-	    	
-	    	System.out.println("JCpgGallery: couldn't write XML file");
-	    	
-	    }
-	    
-	}
+	}*/
 	/**
 	 * 
 	 * Deletes a gallery. Of course the main gallery can't be deleted, but all the other stuff can. Everything in the tree will be deleted. The JCpgUIReference is needed to get the reference

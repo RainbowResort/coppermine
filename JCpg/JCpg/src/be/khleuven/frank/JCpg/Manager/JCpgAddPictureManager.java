@@ -214,15 +214,16 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 
 				Date date = new Date(); // used to get number of seconds since 1970 for ctime
 
-				JCpgPicture picture = new JCpgPicture(getJCpgUIReference().getUserConfig(), -1, album.getId(), "userpics/10001/",selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+				JCpgPicture picture = new JCpgPicture(-1, album.getId(), "userpics/10001/",selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
 
+				picture.addUi(super.getJCpgUIReference());
 				picture.generateSqlInsertQuery();
 
 				album.addPicture(picture);
 				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
 				getNode().add(newNode);
 
-				getGallerySaver().saveGallery(getJCpgUIReference().getGallery()); // save current gallery state
+				getGallerySaver().saveGallery(); // save current gallery state
 
 				progress.changeProgressbarValue(i);
 
