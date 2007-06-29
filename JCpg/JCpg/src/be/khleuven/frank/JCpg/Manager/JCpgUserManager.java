@@ -546,18 +546,24 @@ public class JCpgUserManager extends JDialog {
 		
 		SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
 		
-		try {
-			
-			Document doc = builder.build("config/usercfg.xml");
+		File file = new File("config/usercfg.xml");
 		
-			Element userconfig = doc.getRootElement();
+		if(file.exists()){
+		
+			try {
+				
+				Document doc = builder.build("config/usercfg.xml");
 			
-			usernameField.setText(userconfig.getAttribute("username").getValue());
-			passwordField.setText(userconfig.getAttribute("password").getValue());
-			
-		} catch (JDOMException e1) {
-			
-			System.out.println("JCpgUserManager: couldn't load usercfg.xml");
+				Element userconfig = doc.getRootElement();
+				
+				usernameField.setText(userconfig.getAttribute("username").getValue());
+				passwordField.setText(userconfig.getAttribute("password").getValue());
+				
+			} catch (JDOMException e1) {
+				
+				System.out.println("JCpgUserManager: couldn't load usercfg.xml");
+				
+			}
 			
 		}
 		
