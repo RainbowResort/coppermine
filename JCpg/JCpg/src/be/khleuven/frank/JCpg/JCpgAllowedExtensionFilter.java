@@ -131,6 +131,13 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
         String filename = file.getName();
         String allowedExtensions = null;
         
+        
+        if(file.isDirectory()){ // also allow dirs
+        	
+        	return true;
+        	
+        }
+        
         // if the config says 'ALL', we here manually add all the allowed extensions, otherwhise we will use the config setting
         allowedExtensions = getCpgConfig().getValueFor("allowed_img_types");
         
