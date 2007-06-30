@@ -106,7 +106,6 @@ if ($search_string && isset($_GET['params'])) {
 
         if(isset($_GET['album_title'])) {
                 $album_query = "SELECT * FROM `{$CONFIG['TABLE_ALBUMS']}` WHERE (`title` " . implode(" $type `title` ",$albcat_terms) . ')';
-                file_put_contents('sql.dat',$album_query);
                 $result = cpg_db_query($album_query);
                 if(mysql_num_rows($result) > 0) {
                         starttable('100%', $lang_meta_album_names['album_search'],2);
