@@ -74,7 +74,19 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 	*/
 	public void createActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		JCpgGallery gallery = (JCpgGallery)getNode().getUserObject();
+		Object object = getNode().getUserObject();
+		
+		JCpgGallery parent = null;
+		
+		if(object.getClass().equals(JCpgGallery.class)){
+		
+			parent = (JCpgGallery)getNode().getUserObject();
+			
+		}else if(object.getClass().equals(JCpgCategory.class)){
+		
+			parent = (JCpgCategory)getNode().getUserObject();
+			
+		}
 		
 		// title empty?
 		if(titleField.getText().equals("")){
@@ -86,9 +98,9 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		}
 		
 		// check duplicate
-		for(int i=0; i<gallery.getCategories().size(); i++){
+		for(int i=0; i<parent.getCategories().size(); i++){
 			
-			if(gallery.getCategories().get(i).getName().equals(titleField.getText())){
+			if(parent.getCategories().get(i).getName().equals(titleField.getText())){
 				
 				getMsgLabel().setText("Category already exists. Choose a different name.");
 				
@@ -104,7 +116,7 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		category.addUi(super.getJCpgUIReference());
 		category.generateSqlInsertQuery();
 		
-		gallery.addCategory(category);
+		parent.addCategory(category);
 		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(category);
 		getNode().add(newNode);
 		SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369

@@ -17,12 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Save;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -201,6 +196,66 @@ public class JCpgGallerySaver implements Serializable{
 		
 		ArrayList<String> xml = new ArrayList<String>();
 		
+		// albums in main gallery
+		for(int i=0; i<getGallery().getAlbums().size(); i++){
+			
+			JCpgAlbum album = getGallery().getAlbums().get(i);
+			
+			Element eAlbum = new Element("album");
+			
+			eAlbum.setAttribute("aid", album.getId() + "");
+			eAlbum.setAttribute("title", album.getName());
+			eAlbum.setAttribute("description", album.getDescription());
+			eAlbum.setAttribute("visibility", album.getVisibility() + "");
+			eAlbum.setAttribute("uploads", album.getUploads() + "");
+			eAlbum.setAttribute("comments", album.getComments() + "");
+			eAlbum.setAttribute("votes", album.getVotes() + "");
+			eAlbum.setAttribute("position", album.getPosition() + "");
+			eAlbum.setAttribute("category", album.getCategory() + "");
+			eAlbum.setAttribute("thumb", album.getThumb() + "");
+			eAlbum.setAttribute("keywords", album.getKeyword());
+			eAlbum.setAttribute("password", album.getAlbPassword());
+			eAlbum.setAttribute("passwordhint", album.getAlbPasswordHint());
+			
+			egallery.addContent(eAlbum);
+			
+			for(int j=0; j<album.getPictures().size(); j++){
+				
+				JCpgPicture picture = album.getPictures().get(j);
+				
+				Element ePicture = new Element("picture");
+				
+				ePicture.setAttribute("pid", picture.getId() + "");
+				ePicture.setAttribute("aid", picture.getAid() + "");
+				ePicture.setAttribute("filepath", picture.getFilePath());
+				ePicture.setAttribute("filename", picture.getFileName());
+				ePicture.setAttribute("filesize", picture.getFilesize() + "");
+				ePicture.setAttribute("totalfilesize", picture.getTotalFileSize() + "");
+				ePicture.setAttribute("width", picture.getpWidth() + "");
+				ePicture.setAttribute("height", picture.getpHeight() + "");
+				ePicture.setAttribute("hits", picture.getHits() + "");
+				ePicture.setAttribute("mtime", picture.getmTime() + "");
+				ePicture.setAttribute("ctime", picture.getcTime() + "");
+				ePicture.setAttribute("ownerid", picture.getOwnerId() + "");
+				ePicture.setAttribute("ownername", picture.getOwnerName());
+				ePicture.setAttribute("rating", picture.getPicRating() + "");
+				ePicture.setAttribute("votes", picture.getVotes() + "");
+				ePicture.setAttribute("title", picture.getName());
+				ePicture.setAttribute("caption", picture.getCaption());
+				ePicture.setAttribute("keywords", picture.getKeywords());
+				ePicture.setAttribute("approved", picture.getApproved() + "");
+				ePicture.setAttribute("galleryicon", picture.getGalleryIcon() + "");
+				ePicture.setAttribute("urlprefix", picture.getUrlPrefix() + "");
+				ePicture.setAttribute("position", picture.getPosition() + "");
+				
+				eAlbum.addContent(ePicture);
+				
+			}
+			
+		}
+		
+		
+		// categories in main gallery
 		for(int i=0; i<getGallery().getCategories().size(); i++){
 			
 			JCpgCategory category = getGallery().getCategories().get(i);

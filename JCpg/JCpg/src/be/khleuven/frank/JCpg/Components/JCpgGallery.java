@@ -19,18 +19,12 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import javax.swing.tree.TreePath;
-import org.jdom.*;
-import org.jdom.output.*;
+
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
@@ -47,8 +41,9 @@ public class JCpgGallery implements Serializable{
 	private JCpgUI ui = null;
 	private String name = null ;
 	private String description = null ;
-	//private JCpgUserConfig userConfig;
+	private int id = 0; // just to make it complete
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
+	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 	private ArrayList<String> deleteQueries = new ArrayList<String>(); // used to store deletion queries. Needed because the object itself will be deleted so we can't get the query from the object anymore
 	
 	private boolean mustSync = false; // used to indicate if there's anything new about this object. If yes, a SQL query us generated and needs to be executed.
@@ -111,18 +106,6 @@ public class JCpgGallery implements Serializable{
 		this.description = description;
 		
 	}
-	/**
-	 * 
-	 * Set the gallery userConfig
-	 * 
-	 * @param userConfig
-	 * 		the gallery userConfig
-	 */
-	/*private void setUserConfig(JCpgUserConfig userConfig){
-		
-		this.userConfig = userConfig;
-		
-	}*/
 	
 	
 	
@@ -134,6 +117,11 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				GETTERS               *
 														//*************************************
+	public int getId(){
+		
+		return this.id;
+		
+	}
 	public JCpgUI getUi(){
 
 		return this.ui;
@@ -177,26 +165,52 @@ public class JCpgGallery implements Serializable{
 	}
 	/**
 	 * 
-	 * Get the gallery user config
-	 * 
-	 * @return
-	 * 		the gallery user config
-	 */
-	/*public JCpgUserConfig getUserConfig(){
-		
-		return this.userConfig;
-		
-	}*/
-	/**
-	 * 
 	 * Get an arraylist with the albums in this gallery
 	 * 
 	 * @return
 	 * 		an arraylist with the albums in this gallery
 	 */
+	public ArrayList<JCpgAlbum> getAlbums(){
+		
+		return this.albums;
+		
+	}
+	/**
+	 * 
+	 * Get an arraylist with the categories in this gallery
+	 * 
+	 * @return
+	 * 		an arraylist with the categories in this gallery
+	 */
 	public ArrayList<JCpgCategory> getCategories(){
 		
 		return this.categories;
+		
+	}
+	/**
+	 * 
+	 * Get a specific album based on its name
+	 * 
+	 * @param name
+	 * 		name of the album you search
+	 * @return
+	 * 		the album if it has been found, else null
+	 */
+	public JCpgAlbum getAlbum(String name){
+		
+		for(int i=0; i<getAlbums().size(); i++){
+			
+			JCpgAlbum album = getAlbums().get(i);
+			
+			if(album.getName().equals(name)){
+				
+				return album; // album found
+				
+			}
+			
+		}
+		
+		return null; // nothing found
 		
 	}
 	/**
@@ -285,14 +299,33 @@ public class JCpgGallery implements Serializable{
 	 * 
 	 * Add an album to the gallery
 	 * 
-	 * @param jCpgAlbum
+	 * @param album
 	 *		the album to add
+	 */
+	public void addAlbum(JCpgAlbum album){
+		
+		getAlbums().add(album);
+		
+	}
+	/**
+	 * 
+	 * Add a category to the gallery
+	 * 
+	 * @param category
+	 *		the category to add
 	 */
 	public void addCategory(JCpgCategory category){
 		
 		getCategories().add(category);
 		
 	}
+	/**
+	 * 
+	 * Add ui reference to this gallery
+	 * 
+	 * @param ui
+	 * 		ui reference
+	 */
 	public void addUi(JCpgUI ui){
 		
 		setUi(ui);
@@ -302,8 +335,20 @@ public class JCpgGallery implements Serializable{
 	 * 
 	 * Delete an album from the gallery
 	 * 
-	 * @param jCpgAlbum
+	 * @param album
 	 * 		the album to delete
+	 */
+	public void deleteAlbum(JCpgAlbum album){
+		
+		getAlbums().remove(album);
+		
+	}
+	/**
+	 * 
+	 * Delete a category from the gallery
+	 * 
+	 * @param category
+	 * 		the category to delete
 	 */
 	public void deleteCategory(JCpgCategory category){
 		
@@ -334,18 +379,6 @@ public class JCpgGallery implements Serializable{
 		setDescription(description);
 		
 	}
-	/**
-	 * 
-	 * Change the gallery user configuration
-	 * 
-	 * @param userConfig
-	 * 		the new user configuration
-	 */
-	/*public void changeUserConfig(JCpgUserConfig userConfig){
-		
-		setUserConfig(userConfig);
-		
-	}*/
 	/**
 	 * 
 	 * Deletes a gallery. Of course the main gallery can't be deleted, but all the other stuff can. Everything in the tree will be deleted. The JCpgUIReference is needed to get the reference

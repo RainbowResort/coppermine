@@ -25,6 +25,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgCategory;
+import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
@@ -74,7 +75,19 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 	*/
 	public void createActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		JCpgCategory category = (JCpgCategory)getNode().getUserObject();
+		Object object = getNode().getUserObject();
+		
+		JCpgGallery parent = null;
+		
+		if(object.getClass().equals(JCpgGallery.class)){
+		
+			parent = (JCpgGallery)getNode().getUserObject();
+			
+		}else if(object.getClass().equals(JCpgCategory.class)){
+		
+			parent = (JCpgCategory)getNode().getUserObject();
+			
+		}
 		
 		// title empty?
 		if(titleField.getText().equals("")){
@@ -85,9 +98,9 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 		}
 		
 		// check duplicate
-		for(int i=0; i<category.getAlbums().size(); i++){
+		for(int i=0; i<parent.getAlbums().size(); i++){
 			
-			if(category.getAlbums().get(i).getName().equals(titleField.getText())){
+			if(parent.getAlbums().get(i).getName().equals(titleField.getText())){
 				
 				getMsgLabel().setText("Album already exists. Choose a different name.");
 				
@@ -98,12 +111,12 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 		}
 		
 		// make new album
-		JCpgAlbum album = new JCpgAlbum(-1, getTitleField().getText(), getDescriptionField().getText(), 0, true, true, true, 0, category.getId(), 0, getDescriptionField().getText(), "", "");
+		JCpgAlbum album = new JCpgAlbum(-1, getTitleField().getText(), getDescriptionField().getText(), 0, true, true, true, 0, parent.getId(), 0, getDescriptionField().getText(), "", "");
 		
 		album.addUi(super.getJCpgUIReference());
 		album.generateSqlInsertQuery();
 		
-		category.addAlbum(album);
+		parent.addAlbum(album);
 		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(album);
 		getNode().add(newNode);
 		SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for Java bug 4173369

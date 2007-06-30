@@ -31,6 +31,8 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerCategory;
+import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
 import be.khleuven.frank.JCpg.Manager.JCpgConfirmManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
@@ -578,11 +580,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	    	
 		}else if(object.getClass().equals(JCpgGallery.class)){ // add category
 			
-			new JCpgAddCategoryManager(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node);
+			String[] options = {"album", "category"};
+			new JCpgAddSelectManagerGallery(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node, options);
 		
 		}else if(object.getClass().equals(JCpgCategory.class)){ // add album
 			
-			new JCpgAddAlbumManager(this, new JCpgImageUrlValidator("data/createalbum_logo.jpg").createImageIcon(), node);
+			String[] options = {"album", "category"};
+			new JCpgAddSelectManagerCategory(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node, options);
 		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
@@ -863,17 +867,19 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 		
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 	    
+	    Object object = node.getUserObject();
+	    
 	    // do correct typecasting and actions
 	    if (node == null){
 	    	
 	    	return;
 	    	
-	    }else if(node.getLevel() == 1){ // leaf is category	
+	    }else if(object.getClass().equals(JCpgCategory.class)){ // leaf is category	
 	    
 	    	explorer.removeAll(); // clear explorer
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 	    	
-		}else if(node.getLevel() == 2){ // leaf is album	
+		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album	
 	    	
 	    	explorer.removeAll(); // clear explorer
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
@@ -887,7 +893,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, Serializabl
 	    	
 	    	}
 	    	
-	    }else if(node.getLevel() == 3){ // leaf is picture
+	    }else if(object.getClass().equals(JCpgPicture.class)){ // leaf is picture
 	    	
 	    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
 	    	JButton image = new JButton();
