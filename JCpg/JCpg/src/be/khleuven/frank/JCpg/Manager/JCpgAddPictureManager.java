@@ -192,7 +192,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 			JCpgProgressManager progress = new JCpgProgressManager(this,selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
 
 			for (int i = 0; i < selectedFiles.length; i++) {
-
+				
 				// make new picture
 				ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
 				File source = new File(selectedFiles[i].getAbsolutePath());

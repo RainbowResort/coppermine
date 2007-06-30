@@ -364,7 +364,7 @@ public class JCpgUserManager extends JDialog {
         	
         	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
         	
-        	new JCpgGallerySaver().loadGallery(); // load gallery and show contents on screen
+        	new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
         	getJCpgInterface().buildTree();
         	
         	new JCpgSyncer(getJCpgInterface(), sqlManager).extractDatabase(); // look if their maybe more information in the online database to add to the local state

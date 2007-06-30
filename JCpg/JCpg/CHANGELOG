@@ -1,3 +1,5 @@
+ServerManager uses XML now
+UserManager uses XML now
 Complete XML transition: only XML is usedto store the current gallery state in disk
 Filled in username and pwd are now stored in file
 Hardcoded username and pwd are now removed
