@@ -286,7 +286,7 @@ public class JCpgGallerySaver implements Serializable{
 		
 		try{
 			
-			FileOutputStream file = new FileOutputStream("config/usercfg.xml");
+			FileOutputStream file = new FileOutputStream("config/gallery.xml");
 			
 			out.output(doc , file);	
 			

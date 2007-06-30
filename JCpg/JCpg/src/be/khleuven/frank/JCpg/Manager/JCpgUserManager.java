@@ -72,8 +72,6 @@ public class JCpgUserManager extends JDialog {
 																		//*************************************
 																		//				VARIABLES	          *
 																		//*************************************
-	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
-	
 	private Dimension screensize;
 	private JLabel logo;
 	private JLabel connectionStatus;
@@ -347,10 +345,10 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private void ConnectActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), (JCpgServerConfig)serverList.getSelectedItem()));
-    	JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object for connecting
+		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
+    	JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
     	
-		connectionStatus.setText("Trying to connect to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
+		connectionStatus.setText("Trying to connect to " + (readServerConfig()).getFullServer());
 		
         if(sqlManager.connect() != -1 && !login()){ // connection goes well => go to JCpgInterface
         	
@@ -360,9 +358,9 @@ public class JCpgUserManager extends JDialog {
         	
         	getJCpgInterface().addSqlManager(sqlManager);
         	
-        	connectionStatus.setText("Connected to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
+        	connectionStatus.setText("Connected to " + (readServerConfig()).getFullServer());
         	
-        	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem(), getJCpgInterface().getOnlinemode())); // Extract the configuration
+        	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
         	
         	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
         	
@@ -376,7 +374,7 @@ public class JCpgUserManager extends JDialog {
         	
         }else{
         	
-        	connectionStatus.setText("Unable to connected to " + ((JCpgServerConfig)serverList.getSelectedItem()).getFullServer());
+        	connectionStatus.setText("Unable to connected to " + (readServerConfig()).getFullServer());
         	
         }
 		
@@ -392,11 +390,11 @@ public class JCpgUserManager extends JDialog {
 		
 		if(serverList.getItemCount() == 0){
 			
-			new JCpgServerManager(500, 200, getJCpgInterface(), defaultServerConfig, this);
+			new JCpgServerManager(500, 200, getJCpgInterface(), "", this);
 		
 		}else{
 		
-			new JCpgServerManager(500, 200, getJCpgInterface(), (JCpgServerConfig)serverList.getSelectedItem(), this);
+			new JCpgServerManager(500, 200, getJCpgInterface(), (String)serverList.getSelectedItem(), this);
 			
 		}
 		
@@ -413,9 +411,9 @@ public class JCpgUserManager extends JDialog {
 		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
 		
-		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), (JCpgServerConfig)serverList.getSelectedItem()));
-		JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object
-		getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, (JCpgServerConfig)serverList.getSelectedItem(), getJCpgInterface().getOnlinemode())); // Extract the configuration
+		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
+		JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object
+		getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
     	
 		// only load saved gallery if the root of the gallery tree has one child or more. This indicates the gallery already has been loaded and the user just clicked the sync button
 		// in offline mode, which will trigger the usermanager to display so the user can connect.
@@ -464,21 +462,11 @@ public class JCpgUserManager extends JDialog {
 			
 			if(current.isFile() && files[i].endsWith(".cfg")){
 				
-				try{
-					
-					FileInputStream fistream = new FileInputStream("config/" + files[i]);
-					ObjectInputStream oistream = new ObjectInputStream(fistream);
-	
-					serverList.addItem((JCpgServerConfig)oistream.readObject());
-	
-					oistream.close();
-					
-				}catch(Exception e){
-					
-					System.out.println("JCpgUserManager: couldn't load " + files[i]);
-					e.printStackTrace();
-					
-				}
+				String filename = current.getName();
+				
+				filename = filename.substring(0, filename.length()-4);
+				
+				serverList.addItem(filename);
 				
 			}
 			
@@ -494,38 +482,38 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private boolean login(){
 		
-		JCpgSqlManager sqlManager = new JCpgSqlManager((JCpgServerConfig)serverList.getSelectedItem()); // make new sqlmanager object for connecting
+		JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
 		sqlManager.connect(); // this is possible because it has just been checked in the connect button event
-		
+					
 		try {
-			
+						
 			ResultSet rs_userid = sqlManager.sqlExecute("SELECT * FROM " + getJCpgInterface().getUserConfig().getServerConfig().getPrefix() + "users WHERE user_active=TRUE AND user_name='" + usernameField.getText() + "' AND user_password='" + getPwdMd5() + "'");
-		
+					
 			try {
-				
+							
 				if(rs_userid.next() == false){
-					
+								
 					return true;
-					
+								
 				}
-				
+							
 			} catch (SQLException e) {
-				
+							
 				e.printStackTrace();
 				return false; // no such user
-				
+							
 			}
-			
+					
 			return false;
-			
+						
 		} catch (NoSuchAlgorithmException e) {
-			
-			System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
-			
+						
+				System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
+						
 		}
-		
+					
 		return false;
-		
+
 	}
 	/**
 	 * 
@@ -594,6 +582,47 @@ public class JCpgUserManager extends JDialog {
 			e.printStackTrace();
 			
 		}
+		
+	}
+	private JCpgServerConfig readServerConfig(){
+		
+		if(!serverList.getSelectedItem().equals("")){
+			
+			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+			
+			File file = new File("config/" + serverList.getSelectedItem() + ".cfg");
+			
+			if(file.exists()){
+			
+				try {
+					
+					Document doc = builder.build("config/" + serverList.getSelectedItem() + ".cfg");
+				
+					Element userconfig = doc.getRootElement();
+					
+					JCpgServerConfig serverConfig = new JCpgServerConfig(userconfig.getAttribute("configname").getValue(), userconfig.getAttribute("server").getValue(), userconfig.getAttribute("username").getValue(), userconfig.getAttribute("password").getValue(), userconfig.getAttribute("database").getValue(), userconfig.getAttribute("prefix").getValue());
+					
+					return serverConfig;
+					
+				} catch (JDOMException e1) {
+					
+					System.out.println("JCpgUserManager: couldn't load server configuration");
+					
+				}
+				
+			}else{
+				
+				connectionStatus.setText("No available server configuration!");
+				
+				return null;
+				
+			}
+			
+			return null;
+			
+		}
+		
+		return null;
 		
 	}
 	

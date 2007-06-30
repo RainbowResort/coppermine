@@ -33,6 +33,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+
 /**
  * Is responsible for asking all the necesarry info to make a connection to the right sql db and tables
  * @author    Frank Cleynen
@@ -45,6 +51,8 @@ public class JCpgServerManager extends JDialog implements Serializable{
 																	//*************************************
 																	//				VARIABLES	          *
 																	//*************************************
+	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
+	
 	private Dimension screensize;
 	private JLabel logo;
 	private JLabel configName;
@@ -64,7 +72,7 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	private JButton delete;
 	
 	private JCpgUI jCpgInterface;
-	private JCpgServerConfig serverConfig;
+	private String serverConfig;
 	private JCpgUserManager userManager;
 	
 	private int serverManagerWidth;
@@ -87,9 +95,9 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 * @param height
 	 * 		height of the JCpgUserManager screen
 	 * @param serverConfig
-	 * 		a reference to a JCpgServerConfig object used to fill in the text field. If you want to have a new config, send along an empty serverConfig
+	 * 		name of server config xml file
 	 */
-	public JCpgServerManager(int width, int height, JCpgUI jCpgInterface, JCpgServerConfig serverConfig, JCpgUserManager userManager){
+	public JCpgServerManager(int width, int height, JCpgUI jCpgInterface, String serverConfig, JCpgUserManager userManager){
 		
 		super(userManager); // on top of userManager
 		jCpgInterface.setEnabled(false);
@@ -148,7 +156,7 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 * @param serverConfig
 	 * 		the current server configuration
 	 */
-	private void setServerConfig(JCpgServerConfig serverConfig){
+	private void setServerConfig(String serverConfig){
 		
 		this.serverConfig = serverConfig;
 		
@@ -317,7 +325,7 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 * @return
 	 * 		the current server configuration
 	 */
-	public JCpgServerConfig getServerConfig(){
+	public String getServerConfig(){
 		
 		return this.serverConfig;
 		
@@ -375,13 +383,6 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 */
 	private void saveActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		getServerConfig().changeDatabase(databaseField.getText()); // do this first because it's used in making the complete server string
-		getServerConfig().changeServer(serverField.getText());
-		getServerConfig().changeUsername(usernameField.getText());
-		getServerConfig().changePassword(passwordField.getText());
-		getServerConfig().changePrefix(prefixField.getText());
-		getServerConfig().changeConfigName(configNameField.getText());
-		
 		saveServerConfig();
 		
 		getUserManager().fillServerList();
@@ -396,24 +397,20 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 * 
 	 */
 	private void deleteActionPerformed(java.awt.event.ActionEvent evt) {
-    	
-		File cwd = new File("config/");
 		
-		String[] files = cwd.list();
+		File file = new File("config/" + configNameField.getText() + ".cfg");
 		
-		File current;
-		for(int i=0; i<files.length; i++){
+		if(file.exists()){
 			
-			current = new File(files[i]);
+			file.delete();
+		
+			emptyDialogFields();
 			
-			if(current.isFile() && files[i].startsWith(configNameField.getText()) && files[i].endsWith(".cfg")){
-				
-				current.delete();
-				emptyDialogFields();
-				
-			}
+			userManager.fillServerList();
 			
-		}
+			this.dispose();
+		
+		}	
 		
     }
 	
@@ -446,12 +443,45 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 */
 	private void readServerConfig(){
 		
-		configNameField.setText(getServerConfig().getConfigName());
-		serverField.setText(getServerConfig().getServer());
-		usernameField.setText(getServerConfig().getUsername());
-		passwordField.setText(getServerConfig().getPwd());
-		prefixField.setText(getServerConfig().getPrefix());
-		databaseField.setText(getServerConfig().getDatabase());
+		if(!getServerConfig().equals("")){
+			
+			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+			
+			File file = new File("config/" + getServerConfig() + ".cfg");
+			
+			if(file.exists()){
+			
+				try {
+					
+					Document doc = builder.build("config/" + getServerConfig() + ".cfg");
+				
+					Element userconfig = doc.getRootElement();
+					
+					configNameField.setText(userconfig.getAttribute("configname").getValue());
+					serverField.setText(userconfig.getAttribute("server").getValue());
+					usernameField.setText(userconfig.getAttribute("username").getValue());
+					passwordField.setText(userconfig.getAttribute("password").getValue());
+					prefixField.setText(userconfig.getAttribute("prefix").getValue());
+					databaseField.setText(userconfig.getAttribute("database").getValue());
+					
+				} catch (JDOMException e1) {
+					
+					System.out.println("JCpgServerManager: couldn't load server configuration");
+					
+				}
+				
+			}
+			
+		}else{
+			
+			configNameField.setText(defaultServerConfig.getConfigName());
+			serverField.setText(defaultServerConfig.getServer());
+			usernameField.setText(defaultServerConfig.getUsername());
+			passwordField.setText(defaultServerConfig.getPwd());
+			prefixField.setText(defaultServerConfig.getPrefix());
+			databaseField.setText(defaultServerConfig.getDatabase());
+			
+		}
 		
 	}
 	/**
@@ -461,21 +491,35 @@ public class JCpgServerManager extends JDialog implements Serializable{
 	 */
 	private void saveServerConfig(){
 		
-		FileOutputStream fos;
+		File current = new File("config/" + configNameField.getText() + ".cfg");
+		if(current.exists()) current.delete(); // delete of existing
 		
-		try {
+		Element serverconfig = new Element("serverconfig");
+		
+		serverconfig.setAttribute("configname", configNameField.getText());
+		serverconfig.setAttribute("server", serverField.getText());
+		serverconfig.setAttribute("username", usernameField.getText());
+		serverconfig.setAttribute("password", passwordField.getText());
+		serverconfig.setAttribute("prefix", prefixField.getText());
+		serverconfig.setAttribute("database", databaseField.getText());
+		
+		// write file
+		Document doc=new Document(serverconfig);
+		
+		XMLOutputter out = new XMLOutputter();
+		
+		out.setIndent(true);
+		out.setNewlines(true);
+		
+		try{
 			
-			File current = new File("config/" + configNameField.getText() + ".cfg");
-			if(current.exists()) current.delete(); // delete of existing
+			FileOutputStream file = new FileOutputStream("config/" + configNameField.getText() + ".cfg");
 			
-			fos = new FileOutputStream("config/" + configNameField.getText() + ".cfg", false); // this file always contains the most current state of the config we know of, false = overwrite
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-	        oos.writeObject(getServerConfig());
-	        oos.close();
-	        
-		} catch (Exception e) {
+			out.output(doc , file);	
 			
-			System.out.println("JCpgServerManager: couldn't save configuration to " + configNameField.getText() + ".cfg");
+		}catch(Exception e){
+			
+			e.printStackTrace();
 			
 		}
 		
