@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg;
 import java.io.File;
-import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
 
@@ -25,7 +25,7 @@ import javax.swing.ImageIcon;
  * Takes a path to a file and checks of that file exists. File must be an image.
  * @author    Frank Cleynen
  */
-public class JCpgImageUrlValidator implements Serializable{
+public class JCpgImageUrlValidator{
 	
 	
 	

@@ -17,10 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Sync;
 
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 import java.awt.Dimension;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -29,9 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
+
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 
 
 
@@ -40,7 +40,7 @@ import java.net.URLConnection;
  * Handles the up and download of the user's picture to/from his server.
  * @author    Frank Cleynen
  */
-public class JCpgPictureTransferer implements Serializable{
+public class JCpgPictureTransferer{
 	
 	
 	

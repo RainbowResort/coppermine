@@ -17,44 +17,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.UI;
 
-import be.khleuven.frank.JCpg.Components.JCpgAlbum;
-import be.khleuven.frank.JCpg.Components.JCpgCategory;
-import be.khleuven.frank.JCpg.Components.JCpgGallery;
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
-import be.khleuven.frank.JCpg.Manager.JCpgAddCategoryManager;
-import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
-import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerCategory;
-import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
-import be.khleuven.frank.JCpg.Manager.JCpgConfirmManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
-import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
-import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
-import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
-import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
 import java.util.Enumeration;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -70,12 +43,35 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgCategory;
+import be.khleuven.frank.JCpg.Components.JCpgGallery;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
+import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
+import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerCategory;
+import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
+import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
+import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
+import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
+import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
+
 
 /**
  * Complete JCpg UI
  * @author    Frank Cleynen
  */
-public class JCpgUI extends JFrame implements TreeSelectionListener, Serializable{
+public class JCpgUI extends JFrame implements TreeSelectionListener{
 	
 	
 	

@@ -17,8 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
-import java.io.Serializable;
-
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -37,7 +35,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * @author Frank Cleynen
  *
  */
-public abstract class JCpgEditManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {
+public abstract class JCpgEditManager extends JCpgAddManager implements JCpgAddTreeEntryInterface {
 
 	
 	

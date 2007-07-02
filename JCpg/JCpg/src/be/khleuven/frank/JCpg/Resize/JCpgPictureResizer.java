@@ -17,18 +17,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Resize;
 
-import be.khleuven.frank.JCpg.Editor.JCpgTransform;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
+
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
+import be.khleuven.frank.JCpg.Editor.JCpgTransform;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 
@@ -37,7 +35,7 @@ import javax.swing.ImageIcon;
  * Used to resize pictures: 1) resize picture and get an Image object 2) resize picture and write to file = make a thumb
  * @author    Frank Cleynen
  */
-public class JCpgPictureResizer implements Serializable{
+public class JCpgPictureResizer{
 	
 	
 	

@@ -19,7 +19,6 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.tree.TreePath;
@@ -31,7 +30,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * Cpg component: Gallery
  * @author    Frank Cleynen
  */
-public class JCpgGallery implements Serializable{
+public class JCpgGallery{
 	
 	
 	
@@ -46,7 +45,7 @@ public class JCpgGallery implements Serializable{
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 	private ArrayList<String> deleteQueries = new ArrayList<String>(); // used to store deletion queries. Needed because the object itself will be deleted so we can't get the query from the object anymore
 	
-	private boolean mustSync = false; // used to indicate if there's anything new about this object. If yes, a SQL query us generated and needs to be executed.
+	private boolean mustSync = false; // used to indicate if there's anything new about this object. If yes, a SQL query is generated and needs to be executed.
 	private String sqlquery = ""; // when mustSync becomes true, this variable will be filled with the right query and must be executed during the next sync
 
 	private TreePath treePath; // holds the path in the tree to the object so if we select a picture in the pictureList we can also make it selected in the tree
@@ -77,6 +76,14 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				SETTERS	              *
 														//*************************************
+	/**
+	 * 
+	 * Set the ui reference
+	 * 
+	 * @param ui
+	 * 		the ui reference
+	 * 
+	 */
 	private void setUi(JCpgUI ui){
 		
 		this.ui = ui;
@@ -117,11 +124,25 @@ public class JCpgGallery implements Serializable{
 														//*************************************
 														//				GETTERS               *
 														//*************************************
+	/**
+	 * 
+	 * Get gallery id. This is not important because its id is not needed for making sql queries or so but we need this to make the whole inheritance compleet
+	 * 
+	 * @return
+	 * 		the gallery id
+	 */
 	public int getId(){
 		
 		return this.id;
 		
 	}
+	/**
+	 * 
+	 * Get the ui reference
+	 * 
+	 * @return
+	 * 		the ui reference
+	 */
 	public JCpgUI getUi(){
 
 		return this.ui;
@@ -385,6 +406,7 @@ public class JCpgGallery implements Serializable{
 	 * to the main gallery and add sql delete queries of all tree elements.
 	 * 
 	 * @param jCpgUIReference
+	 * 		reference to ui
 	 */
 	public void delete(JCpgUI jCpgUIReference){
 		
@@ -439,6 +461,13 @@ public class JCpgGallery implements Serializable{
 		this.mustSync = mustSync;
 		
 	}
+	/**
+	 * 
+	 * Change the treepath
+	 * 
+	 * @param treePath
+	 * 		the new treepath
+	 */
 	public void changeTreePath(TreePath treePath){
 		
 		this.treePath = treePath;

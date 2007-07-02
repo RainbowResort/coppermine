@@ -17,13 +17,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
 
 
 
@@ -31,7 +31,7 @@ import java.sql.Statement;
  * Makes the connections with the sql database, executes queries and gives their results back
  * @author    Frank Cleynen
  */
-public class JCpgSqlManager implements Serializable{
+public class JCpgSqlManager{
 	
 	
 	

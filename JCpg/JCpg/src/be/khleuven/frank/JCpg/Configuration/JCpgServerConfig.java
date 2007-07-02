@@ -17,7 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Configuration;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -27,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
  * Server configuration
  * @author    Frank Cleynen
  */
-public class JCpgServerConfig implements Serializable{
+public class JCpgServerConfig{
 	
 												
 	
@@ -45,20 +44,26 @@ public class JCpgServerConfig implements Serializable{
 	
 	
 	
-															
+																														
 																//*************************************
 																//				CONSTRUCTORS          *
 																//*************************************
 	/**
 	 * 
-	 * Make a new ServerConfig object
+	 * Makes a new JCpgServerConfig object
 	 * 
+	 * @param configName
+	 * 		the name of this configuration
 	 * @param server
-	 * 		the servername
+	 * 		sql server
 	 * @param username
-	 * 		the username
+	 * 		sql username
 	 * @param pwd
-	 * 		the user's password
+	 * 		sql password
+	 * @param database
+	 * 		sql database
+	 * @param prefix
+	 * 		cpg prefix
 	 */
 	public JCpgServerConfig(String configName, String server, String username, String pwd, String database, String prefix){
 		
@@ -79,6 +84,14 @@ public class JCpgServerConfig implements Serializable{
 																//*************************************
 																//				SETTERS		          *
 																//*************************************
+	/**
+	 * 
+	 * Set the configuration name
+	 * 
+	 * @param configName
+	 * 		the name of the configuration
+	 * 
+	 */
 	private void setConfigName(String configName){
 		
 		this.configName = configName;

@@ -19,15 +19,15 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-import java.io.Serializable;
 import java.util.ArrayList;
+
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * Cpg Categories. A categorie contains albums.
  * @author    Frank Cleynen
  */
-public class JCpgCategory extends JCpgGallery implements Serializable{
+public class JCpgCategory extends JCpgGallery{
 																						
 	
 	

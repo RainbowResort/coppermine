@@ -19,17 +19,15 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
-import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
+
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * Cpg component: album
  * @author    Frank Cleynen
  */
-public class JCpgAlbum extends JCpgGallery implements Serializable{
+public class JCpgAlbum extends JCpgGallery{
 	
 	
 	
@@ -55,20 +53,45 @@ public class JCpgAlbum extends JCpgGallery implements Serializable{
 	
 	
 	
-														
+																														
 																	//*************************************
 																	//				CONSTRUCTORS          *
-																	//*************************************
+																	//*************************************														
 	/**
 	 * 
 	 * Makes a new JCpgAlbum object
 	 * 
+	 * @param id
+	 * 		album id (-1 means not in database)
 	 * @param title
-	 * 		the title of the album
+	 * 		album title
+	 * @param description
+	 * 		album description
+	 * @param visibility
+	 * 		album visibility
+	 * @param uploads
+	 * 		album uploads
+	 * @param comments
+	 * 		album comments
+	 * @param votes
+	 * 		album votes
+	 * @param position
+	 * 		album position
+	 * @param category
+	 * 		album category
+	 * @param thumb
+	 * 		album thumb
+	 * @param keyword
+	 * 		album keyword
+	 * @param alb_password
+	 * 		album password
+	 * @param alb_password_hint
+	 * 		album password hint
 	 */
 	public JCpgAlbum(int id, String title, String description, int visibility, boolean uploads, boolean comments, boolean votes, int position, int category, int thumb, String keyword, String alb_password, String alb_password_hint){
 		
 		super(title, description);
+		
 		setId(id);
 		setVisibility(visibility);
 		setUploads(uploads);

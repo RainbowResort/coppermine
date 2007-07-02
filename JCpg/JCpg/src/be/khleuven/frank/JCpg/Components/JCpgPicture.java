@@ -19,18 +19,17 @@ package be.khleuven.frank.JCpg.Components;
 
 
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.io.File;
-import java.io.Serializable;
 import java.util.Date;
+
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
  * Cpg component: picture
  * @author    Frank Cleynen
  */
-public class JCpgPicture extends JCpgGallery implements Serializable{
+public class JCpgPicture extends JCpgGallery{
 	
 	
 	
@@ -66,7 +65,7 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	
 	
 	
-	
+											
 											//*************************************
 											//				CONSTRUCTORS          *
 											//*************************************
@@ -74,11 +73,49 @@ public class JCpgPicture extends JCpgGallery implements Serializable{
 	 * 
 	 * Makes a new JCpgPicture object
 	 * 
-	 * @param name
-	 * 		the name of the picture
-	 * @param fileUrl
-	 * 		the URL to the file on the disk
-	 */	
+	 * @param id
+	 * 		the picture id
+	 * @param aid
+	 * 		the album id
+	 * @param filepath
+	 * 		picture filepath
+	 * @param filename
+	 * 		picture filename
+	 * @param filesize
+	 * 		picture filesize
+	 * @param totalfilesize
+	 * 		picture total filesize
+	 * @param pwidth
+	 * 		picture width
+	 * @param pheight
+	 * 		picture height
+	 * @param hits
+	 * 		picture hits
+	 * @param ctime
+	 * 		picture creation time
+	 * @param ownerid
+	 * 		picture owner id
+	 * @param ownername
+	 * 		picture owner name
+	 * @param picrating
+	 * 		picture rating
+	 * @param votes
+	 * 		picture votes
+	 * @param title
+	 * 		picture title
+	 * @param caption
+	 * 		picture caption
+	 * @param keywords
+	 * 		picture keywords
+	 * @param approved
+	 * 		picture approved
+	 * @param galleryicon
+	 * 		picture gallery icon
+	 * @param urlprefix
+	 * 		picture url prefix
+	 * @param position
+	 * 		picture position
+	 */
 	public JCpgPicture(int id, int aid, String filepath, String filename, int filesize, int totalfilesize, int pwidth, int pheight, int hits, int ctime, int ownerid, String ownername,
 			int picrating, int votes, String title, String caption, String keywords, boolean approved, int galleryicon, int urlprefix, int position){
 		

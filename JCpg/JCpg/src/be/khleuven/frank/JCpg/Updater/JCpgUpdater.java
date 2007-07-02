@@ -17,11 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Updater;
 
-import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Window;
-import javax.swing.JWindow;
 
+import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 
 
 

@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Save;
 
 import java.io.FileOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -43,7 +42,7 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  * @author Frank Cleynen
  *
  */
-public class JCpgGallerySaver implements Serializable{
+public class JCpgGallerySaver{
 	
 	
 	private JCpgGallery gallery = null;

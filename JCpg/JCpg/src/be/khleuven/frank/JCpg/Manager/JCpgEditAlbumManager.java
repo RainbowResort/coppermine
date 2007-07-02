@@ -17,19 +17,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
+import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
-import java.io.Serializable;
-import javax.swing.ImageIcon;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 
 /**
  * Edit album manager
  * @author    Frank Cleynen
  */
-public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTreeEntryInterface, Serializable {
+public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTreeEntryInterface {
 	
 	
 																					

@@ -4,7 +4,7 @@ Found bug in Mac OS X Aqua UI classes when adding pictures
 Fixed bug where it was possible there were no allowed files to select in the Picture Adder
 ServerManager uses XML now
 UserManager uses XML now
-Complete XML transition: only XML is usedto store the current gallery state in disk
+Complete XML transition: only XML is used to store the current gallery state in disk
 Filled in username and pwd are now stored in file
 Hardcoded username and pwd are now removed
 Fixed bug where JCpg always added a _ after the user's prefix

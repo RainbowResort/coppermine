@@ -17,17 +17,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -39,11 +35,15 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
+
 /**
  * Is responsible for asking all the necesarry info to make a connection to the right sql db and tables
  * @author    Frank Cleynen
  */
-public class JCpgServerManager extends JDialog implements Serializable{
+public class JCpgServerManager extends JDialog{
 	
 	
 	

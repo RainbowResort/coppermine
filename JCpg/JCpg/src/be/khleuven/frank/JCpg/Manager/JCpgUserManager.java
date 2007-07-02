@@ -17,34 +17,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
-import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.ListIterator;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -58,6 +41,14 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
+
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * Used to get all the necesarry information about the Coppermine user to login to his/her Coppermine account

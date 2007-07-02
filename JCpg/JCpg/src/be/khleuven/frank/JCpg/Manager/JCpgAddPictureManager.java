@@ -17,31 +17,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Manager;
 
-import be.khleuven.frank.JCpg.Components.JCpgAlbum;
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
-import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
-import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
-import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
-import be.khleuven.frank.JCpg.UI.JCpgFilechooserImagePreview;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.Serializable;
 import java.util.Date;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
+import be.khleuven.frank.JCpg.Components.JCpgAlbum;
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
+import be.khleuven.frank.JCpg.UI.JCpgFilechooserImagePreview;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
  * Add picture manager We need to do a change to the default add manager's size because we need to integrate a filechooser. This way, users can import as many pictures as they want with just one click.
  * @author    Frank Cleynen
  */
-public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTreeEntryInterface, Serializable {
+public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTreeEntryInterface {
 
 	
 	
