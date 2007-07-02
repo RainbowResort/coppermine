@@ -23,6 +23,11 @@ $thisplugin->add_action('plugin_configure','annotate_configure');
 $thisplugin->add_action('plugin_uninstall','annotate_uninstall');
 $thisplugin->add_action('plugin_cleanup','annotate_cleanup');
 
+// Add Configuration Button for Admins
+
+$thisplugin->add_action('page_start','annotate_page_start');
+
+
 function annotate_meta(){
 
 	$meta  = "\n" . '<script src="plugins/annotate/lib/httpreq.js" type="text/javascript"></script>';
@@ -251,7 +256,6 @@ function annotate_install() {
                         } else {
                                 $sql = "INSERT INTO {$CONFIG['TABLE_CONFIG']} (name,value) VALUES ('tag_allow_{$option}','0');";                                
                         }
-                        echo $sql;
                         cpg_db_query($sql);
                 }
 
@@ -295,4 +299,29 @@ function annotate_configure() {
                 <input type="submit" name="submit" value="submit">
                 </form>
         <?php
+}
+
+// Based off 
+function annotate_page_start() {
+	global $CONFIG;
+        
+	if (GALLERY_ADMIN_MODE) {
+		annotate_add_config_button('index.php?file=annotate/plugin_config','Photo Tagging Settings','','Tagging Settings');
+	}
+}
+
+function annotate_add_config_button($href,$title,$target,$link)
+{
+        global $template_gallery_admin_menu;
+        
+        $new_template = $template_gallery_admin_menu;
+        $button = template_extract_block($new_template,'documentation');
+        $params = array(
+                        '{DOCUMENTATION_HREF}' => $href,
+                        '{DOCUMENTATION_TITLE}' => $title,
+                        'target="cpg_documentation"' => $target,
+                        '{DOCUMENTATION_LNK}' => $link,
+                        );
+        $new_button="<!-- BEGIN $link -->".template_eval($button,$params)."<!-- END $link -->\n";
+        template_extract_block($template_gallery_admin_menu,'documentation',"<!-- BEGIN documentation -->" . $button . "<!-- END documentation -->\n" . $new_button);
 }
