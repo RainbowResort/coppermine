@@ -1,3 +1,4 @@
+Because of the complete XML transition, I removed all implementations of the Java Serialisable class
 A category can have subcategories and albums
 The main gallery can now also have albums
 Found bug in Mac OS X Aqua UI classes when adding pictures

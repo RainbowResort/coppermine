@@ -577,12 +577,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		}else if(object.getClass().equals(JCpgGallery.class)){ // add category
 			
 			String[] options = {"album", "category"};
-			new JCpgAddSelectManagerGallery(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node, options);
+			new JCpgAddSelectManagerGallery(this, new JCpgImageUrlValidator("data/wtc_logo.jpg").createImageIcon(), node, options);
 		
 		}else if(object.getClass().equals(JCpgCategory.class)){ // add album
 			
 			String[] options = {"album", "category"};
-			new JCpgAddSelectManagerCategory(this, new JCpgImageUrlValidator("data/createcategory_logo.jpg").createImageIcon(), node, options);
+			new JCpgAddSelectManagerCategory(this, new JCpgImageUrlValidator("data/wtc_logo.jpg").createImageIcon(), node, options);
 		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
