@@ -21,17 +21,50 @@
  * Class specifying everthing about the display structure
  */
 class displayspecs {
-  var $userpersonalfields, $groupfields, $messagecode;
+  var $userpersonalfields, $groupfields, $messagecode, $configfields;
 
   function initialize() {
     // Database connection settings
 
     $this->userpersonalfields = array(
-       'username', 'user_id', 'email', 'regdate', 'lastvisit', 'active', 'group_id'
+       'username', 'user_id', 'email', 'regdate', 'lastvisit', 'active'
     );
 
     $this->groupfields = array(
        'groupname', 'group_id', 'admin'
+    );
+
+    $this->configfields = array(
+      'albums_per_page',
+      'album_list_cols',
+      'display_pic_info',
+      'alb_list_thumb_size',
+      'allowed_mov_types',
+      'allowed_doc_types',
+      'allowed_snd_types',
+      'allowed_img_types',
+      'allow_private_albums',
+      'allow_user_registration',
+      'user_registration_disclaimer',
+      'allow_unlogged_access',
+      'allow_duplicate_emails_addr',
+      'caption_in_thumbview',
+      'views_in_thumbview',
+      'charset',
+      'cookie_name',
+      'cookie_path',
+      'debug_mode',
+      'debug_notice',
+      'default_dir_mode',
+      'default_file_mode',
+      'default_sort_order',
+      'ecards_more_pic_target',
+      'home_target',
+      'custom_lnk_name',
+      'custom_lnk_url', 
+      'enable_smilies',
+      'filter_bad_words',
+      'forbiden_fname_char'
     );
 
     $this->messagecode = array(
@@ -41,7 +74,10 @@ class displayspecs {
        'unknown_query' => 3,
        'unknown_user' => 4,
        'no_perms' => 5,
-       'install_error' => 6
+       'install_error' => 6,
+       'init_error' => 7,
+       'user_error' => 8,
+       'usergroup_error' => 9
     );
   }
 }

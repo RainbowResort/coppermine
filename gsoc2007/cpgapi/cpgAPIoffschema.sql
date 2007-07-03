@@ -16,13 +16,13 @@
 ##  $Date: 6:02 PM 6/2/2007 $
 ##  ********************************************
 
-DROP TABLE CPG_apisession;
 DROP TABLE CPG_albums;
 DROP TABLE CPG_categories;
 DROP TABLE CPG_comments;
 DROP TABLE CPG_config;
 DROP TABLE CPG_pictures;
 DROP TABLE CPG_usergroups;
+DROP TABLE CPG_userxgroup;
 DROP TABLE CPG_users;
 DROP TABLE CPG_votes;
 DROP TABLE CPG_banned;

@@ -1,0 +1,270 @@
+<HTML>
+<HEAD>
+<TITLE>Coppermine Photo Gallery</TITLE>
+
+<LINK REL="stylesheet" TYPE="text/css" HREF="css/basic.css" />
+
+<SCRIPT SRC="script/xparse.js"></SCRIPT> 
+<SCRIPT SRC="script/ajax.js"></SCRIPT> 
+<SCRIPT SRC="script/cookies.js"></SCRIPT> 
+
+<SCRIPT LANGUAGE="javascript">
+  function getVars(page)
+  {
+    var vars = [], hash;
+    var hashes = page.split('&');
+    for(var i = 0; i < hashes.length; i++) {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  }
+
+  function jumppage(page, redirect) {
+     if(redirect==1) {
+        window.location = "index.htm?" + page;
+     }
+
+     var vars = getVars(page);
+     
+     if(document.getElementById(vars['pg']))
+       document.getElementById("pagediv").innerHTML = document.getElementById(vars['pg']).innerHTML.replace("%userid%", readCookie("username")); 
+     else
+       document.getElementById("pagediv").innerHTML = document.getElementById("error404").innerHTML.replace("%userid%", readCookie("username")); 
+  }
+
+  function xmlParserGet(xmldoc, tagname) {
+     for(var i = 0; i < xmldoc.contents.length; i++) {
+        if(xmldoc.contents[i].type="element")
+           if(xmldoc.contents[i].name == tagname) return xmldoc.contents[i];
+     }
+     return null;
+  }
+
+  function xmlParserGetValue(xmldoc, tagname) {
+     for(var i = 0; i < xmldoc.contents.length; i++) {
+        if(xmldoc.contents[i].type="element")
+           if(xmldoc.contents[i].name == tagname) return xmldoc.contents[i].value;
+     }
+     return null;
+  }
+
+  function logintry(formelem) {
+     if (formelem.username.value=="") {
+        alert("You must enter a username");
+        return false;
+     }
+     if (formelem.password.value=="") {
+        alert("You must enter a password");
+        return false;
+     }
+
+     xmlhttpPost("webapi.php?query=login&username="+formelem.username.value+"&password="+formelem.password.value, function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "0") {
+           createCookie("username", formelem.username.value, 1);
+           createCookie("sessionkey", xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "userdata"), "sessionkey").contents[0].value, 1);
+           jumppage("pg=userdiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+        }
+     });
+
+     return false;
+  }
+
+  function installtry(formelem) {
+     xmlhttpPost("webapi.php?query=install&adminusername="+formelem.username.value+"&adminpassword="+formelem.password.value+"&adminemail="+formelem.email.value+"&prefix="+formelem.prefix.value+"&dbserver="+formelem.dbserver.value+"&dbname="+formelem.dbname.value+"&dbuser="+formelem.dbuser.value+"&dbpass="+formelem.dbpass.value, function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "0") {
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+        }
+     });
+
+     return false;
+  }
+
+
+  function forgotpasstry(formelem) {
+     if (formelem.username.value=="") {
+        alert("You must enter a username");
+        return false;
+     }
+     if (formelem.email.value=="") {
+        alert("You must enter an email address");
+        return false;
+     }
+
+     xmlhttpPost("http://www.nitingupta.org", function (returnText) {
+        alert(returnText);
+     });
+
+     return false;
+  }
+
+  function registertry(formelem) {
+     if (formelem.username.value=="") {
+        alert("You must enter a username");
+        return false;
+     }
+     if (formelem.password.value=="") {
+        alert("You must enter a password");
+        return false;
+     }
+     if (formelem.email.value=="") {
+        alert("You must enter an email address");
+        return false;
+     }
+
+     xmlhttpPost("http://www.nitingupta.org", function (returnText) {
+        alert(returnText);
+     });
+
+     return false;
+  }
+
+
+  function logout() {
+     xmlhttpPost("webapi.php?query=logout&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "0") {
+           eraseCookie("username");
+           eraseCookie("sessionkey");
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+        }
+     });
+  }
+
+
+</SCRIPT>
+</HEAD>
+<BODY>
+<DIV ID=pagediv>
+</DIV>
+
+<DIV ID=logindiv STYLE="visibility:hidden">
+<CENTER>
+<FORM NAME=loginform onSubmit="return logintry(this)">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<INPUT TYPE=hidden NAME=pg VALUE=logindiv>
+<TR><TD COLSPAN=2>Login&nbsp;|&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>&nbsp;|&nbsp;<A HREF="javascript: jumppage('pg=registerdiv', 0)">Register</A></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE=Login SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+<DIV ID=registerdiv STYLE="visibility:hidden">
+<CENTER>
+<FORM NAME=registerform onSubmit="return registertry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=registerdiv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;|&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>&nbsp;|&nbsp;Register</TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
+<TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE=Register SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+<DIV ID=installdiv STYLE="visibility:hidden">
+<CENTER>
+<FORM NAME=installform onSubmit="return installtry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=registerdiv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD><B>First time install</B></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD><B>Administrator</B></TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
+<TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
+<TR><TD><B>Database</B></TD></TR>
+<TR><TD>Host: </TD><TD><INPUT TYPE=text NAME=dbserver VALUE="localhost" SIZE=32></TD></TR>
+<TR><TD>Database: </TD><TD><INPUT TYPE=text NAME=dbname SIZE=32></TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=dbuser SIZE=32></TD></TR>
+<TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=dbpass SIZE=32></TD></TR>
+<TR><TD>Prefix: </TD><TD><INPUT TYPE=text NAME=prefix VALUE="capi_" SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE=Install SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+<DIV ID=forgotpassdiv STYLE="visibility:hidden">
+<CENTER>
+<FORM NAME=forgotpassform onSubmit="return forgotpasstry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=forgotpassdiv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;|&nbsp;Forgot Password&nbsp;|&nbsp;<A HREF="javascript: jumppage('pg=registerdiv', 0)">Register</A></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE="Retrieve Password" SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+
+<DIV ID=userdiv STYLE="visibility:hidden">
+<CENTER>
+Welcome to your homepage %userid%. <A HREF="javascript: logout();">Logout</A>
+</CENTER>
+</DIV>
+
+<DIV ID=error404 STYLE="visibility:hidden">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD>
+Error 404: This page could not be found
+</TD></TR>
+</TABLE>
+</DIV>
+
+
+<SCRIPT LANGUAGE="javascript">
+/* Check installation */
+
+var config;
+
+xmlhttpPost("webapi.php?query=getconfig", function (returnText) {
+  config = Xparse(returnText);
+  var messagecode = xmlParserGet(xmlParserGet(config, "catalog"), "messagecode").contents[0].value;
+  if (messagecode == "7") {
+     jumppage("pg=installdiv", 0);
+  }  else {
+
+     // Allow registration?
+     if (xmlParserGet(xmlParserGet(xmlParserGet(config, "catalog"), "config"), "allow_user_registration").contents[0].value == "0") {
+        document.getElementById("registerdiv").innerHTML = "";
+     }
+
+
+     var params = (window.location.href.indexOf('?')==-1)? "" : window.location.href.slice(window.location.href.indexOf('?') + 1);
+     if (params == "") {
+        if (readCookie("username")) {
+           jumppage("pg=userdiv", 0);
+        }  else {
+           jumppage("pg=logindiv", 0);
+     }
+     }  else {
+        jumppage(params, 0);
+     }
+  }
+});
+</SCRIPT>
+</BODY>
+</HTML>

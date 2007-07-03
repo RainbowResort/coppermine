@@ -21,7 +21,7 @@
  * Class specifying everthing about the database structure
  */
 class dbspecs {
-  var $db, $table, $usertable, $groupstable, $usergroupstable, $field, $group;
+  var $db, $table, $usertable, $groupstable, $configtable, $usergroupstable, $field, $group, $userxgroup;
   var $dbactive = false;
 
   function initialize() {
@@ -39,13 +39,17 @@ class dbspecs {
     // Board table names
     $this->table = array(
         'users' => 'users',
-        'groups' => 'usergroups'
+        'userxgroup' => 'userxgroup',
+        'groups' => 'usergroups',
+        'config' => 'config'
     );
 	
     // Derived full table names
     $this->usertable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['users'];
+    $this->userxgrouptable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['userxgroup'];
     $this->groupstable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['groups'];
-		
+    $this->configtable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['config'];
+
     // Table field names
     $this->field = array(
         'username' => 'user_name', // name of 'username' field in users table
@@ -55,7 +59,13 @@ class dbspecs {
         'regdate' => 'user_regdate', // name of 'registered' field in users table
         'lastvisit' => 'user_lastvisit', // last time user logged in
         'active' => 'user_active', // is user account active?
-        'group_id' => 'user_group' // group this user belongs to
+        'sessionkey' => 'user_sessionkey' // session key if the user is logged in
+    );
+
+    // Table userxgroup values
+    $this->userxgroup = array(
+        'user_id' => 'user_id', // name of 'id' field in users table
+        'group_id' => 'group_id' // group this user belongs to
     );
 
     // Group field names
@@ -75,7 +85,6 @@ class dbspecs {
         'num_file_upload' => 'num_file_upload',
         'num_URI_upload' => 'num_URI_upload'
     );
-
   }
 
   function sql_connect() {
@@ -92,6 +101,10 @@ class dbspecs {
   function sql_query($sqlquery) {
     $results = mysql_query($sqlquery);
     return $results;
+  }
+
+  function sql_update($sqlquery) {
+    mysql_query($sqlquery);
   }
 
 }

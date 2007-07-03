@@ -25,7 +25,7 @@ require('include/sql_parse.php');
 class install {
 
   function newinstall($dbserver, $dbuser, $dbpass, $dbname, $prefix, $adminusername, $adminpassword, $adminemail) {
-     global $DFLT, $CF, $DBS, $CONFIG;
+     global $DFLT, $CF, $DBS, $CONFIG, $MESSAGECODE;
 
      $cnf = "<?php\n";
      $cnf.= "// Coppermine configuration file\n";
@@ -57,8 +57,12 @@ class install {
      }
 
      // Insert the admin account
-     $sql_query .= "INSERT INTO CPG_users (user_id, user_group, user_active, user_name, user_password, user_lastvisit, user_regdate, user_group_list, user_email, user_profile1, user_profile2, user_profile3, user_profile4, user_profile5, user_profile6, user_actkey ) VALUES (1, 1, 'YES', '{$adminusername}', md5('{$adminpassword}'), NOW(), NOW(), '', '{$adminemail}', '', '', '', '', '', '', '');\n";
+     $sql_query .= "INSERT INTO CPG_users (user_id, user_active, user_name, user_password, user_lastvisit, user_regdate, user_email, user_profile1, user_profile2, user_profile3, user_profile4, user_profile5, user_profile6, user_actkey, user_sessionkey ) VALUES (1, 'YES', '{$adminusername}', md5('{$adminpassword}'), NOW(), NOW(), '{$adminemail}', '', '', '', '', '', '', '', '');\n";
+
+     $sql_query .= "INSERT INTO CPG_userxgroup (user_id, group_id) VALUES (1, 1);\n";
+
      $sql_query .= "REPLACE INTO CPG_config VALUES ('gallery_admin_email', '{$adminemail}');\n";
+
      // Test write permissions for main dir
      if (!is_writable('.')) {
          $sql_query .= "REPLACE INTO CPG_config VALUES ('default_dir_mode', '0777');\n";
@@ -86,7 +90,7 @@ class install {
   }
   
   function uninstall() {
-     global $DFLT, $CF, $DBS, $CONFIG;
+     global $DFLT, $CF, $DBS, $CONFIG, $MESSAGECODE;
 
      $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'r') or $CF->unsafeexit("install_error", "Cannot open config file");
      fclose($fh);

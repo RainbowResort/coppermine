@@ -1,0 +1,8 @@
+http://localhost/Woppermine/webapi.php?query=install&dbserver=localhost&dbuser=root&dbpass=rootwdp&dbname=coppermine&prefix=capi_&adminusername=niting&adminpassword=simple&adminemail=xnitingupta@gmail.com
+http://localhost/Woppermine/webapi.php?query=uninstall
+http://localhost/Woppermine/webapi.php?query=showusers&username=niting
+http://localhost/Woppermine/webapi.php?query=adduser&username=niting&addusername=rajiv&password=test&email=rajiv@gmail.com&active=YES&group_id=2
+http://localhost/Woppermine/webapi.php?query=removeuser&username=niting&addusername=rajiv
+http://localhost/Woppermine/webapi.php?query=showgroups&username=niting
+http://localhost/Woppermine/webapi.php?query=addusertogroup&username=niting&addusername=rajiv&group_id=4
+http://localhost/Woppermine/webapi.php?query=removeuserfromgroup&username=niting&addusername=rajiv&group_id=4

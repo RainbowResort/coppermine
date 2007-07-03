@@ -1,0 +1,24 @@
+BODY {
+     font: normal 9pt/14pt sans-serif, verdana, Helvetica, Arial;
+}
+
+TABLE {
+     font: normal 9pt/14pt sans-serif, verdana, Helvetica, Arial;
+}
+
+UL {
+    list-style-type: square; MARGIN-BOTTOM: 8px; MARGIN-TOP: 8px;
+}
+
+A:HOVER {
+   text-decoration: none;
+   color: #0000FF;
+}
+A:VISITED {
+   text-decoration: none;
+   color: #0000FF;
+}
+A {
+   text-decoration: none;
+   color: #0000FF;
+}
