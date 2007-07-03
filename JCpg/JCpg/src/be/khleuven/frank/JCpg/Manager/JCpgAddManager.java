@@ -47,7 +47,7 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 																				//				VARIABELS             *
 																				//*************************************
 	private JCpgUI jCpgUIReference;
-	private JCpgGallerySaver gallerySaver = new JCpgGallerySaver();
+	private JCpgGallerySaver gallerySaver;
 	
 	private JLabel logo;
 	private JLabel title;
@@ -99,7 +99,7 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 		boundComponents();
 		placeComponents();
 		
-		getGallerySaver().changeGallery(jCpgUIReference.getGallery());
+		gallerySaver = new JCpgGallerySaver(jCpgUIReference.getGallery());
 		
 	}
 

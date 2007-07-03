@@ -189,6 +189,16 @@ public class JCpgUserManager extends JDialog {
 		selectServer = new JButton("Edit");
 		startOffline = new JButton("Offline");
 		
+		// make the offline button inactive if there is no local cpg config xml file
+		File file = new File("config/config.xml");
+		
+		if(!file.exists()) {
+			
+			startOffline.setEnabled(false);
+			connectionStatus.setText("No local configuration. You need to connect first.");
+			
+		}
+		
 	}
 	/**
 	 * 

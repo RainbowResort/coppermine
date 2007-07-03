@@ -17,9 +17,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Configuration;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.Text;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
 import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 
@@ -178,28 +189,104 @@ public class JCpgConfig {
 	 */
 	private void getCpgConfiguration(){
 		
-		// get config if we are online
+		// if we are online, get the current config
 		if(getOnlineMode()){
-		
+			File delete = new File("config/config.xml");
+			if (delete.exists()) delete.delete();
+	
 			String table_config = getServerConfig().getPrefix() + "config";
 			ResultSet rs_config = getSqlManager().sqlExecute("SELECT * FROM " + table_config);
-			
+	
 			try {
-				
+	
+				Element cpgconfig = new Element("cpgconfig");
+	
 				while (rs_config.next()) {
-					
+	
 					configEntries.add(rs_config.getString("name"));
 					configEntries.add(rs_config.getString("value"));
 					
+					Element element = new Element(rs_config.getString("name"));
+					element.addContent(rs_config.getString("value"));
+	
+					cpgconfig.addContent(element);
+				
 				}
+	
+				// write file
+				Document doc = new Document(cpgconfig);
+	
+				XMLOutputter out = new XMLOutputter();
+	
+				out.setIndent(true);
+				out.setNewlines(true);
 				
+				// make directory structure for saving pictures
+				new File(getValueFor("fullpath") + getValueFor("userpics") + "10001").mkdirs();
+	
+				try {
+	
+					FileOutputStream file = new FileOutputStream("config/config.xml");
+	
+					out.output(doc, file);
+	
+				} catch (Exception e) {
+	
+					System.out.println("JCpgConfig: Couldn't save config.xml");
+	
+				}
+	
 			} catch (SQLException e) {
-				
+	
 				System.out.println("JCpgConfig: Couldn't extract from sql query result");
+	
+			}
+			
+		}else{ // offline: load config
+			
+			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+			
+			File file = new File("config/config.xml");
+			
+			if(file.exists()){
+			
+				try {
+					
+					Document doc = builder.build("config/config.xml");
+				
+					Element cpgconfig = doc.getRootElement();
+					
+					List content = cpgconfig.getChildren();
+					ListIterator it = content.listIterator();
+					
+					while(it.hasNext()){
+						
+						Element element = (Element)it.next();
+						
+						configEntries.add(element.getName());
+						
+						List elementcontent = element.getContent();
+						ListIterator it1 = elementcontent.listIterator();
+						
+						while (it1.hasNext()){
+							
+							Object el = it1.next();
+							
+							configEntries.add(((Text)el).getText());
+						
+						}
+						
+					}
+					
+				} catch (JDOMException e1) {
+					
+					System.out.println("JCpgUserManager: couldn't load usercfg.xml");
+					
+				}
 				
 			}
 			
-		}	
+		}
 		
 	}
 	/**
@@ -207,9 +294,8 @@ public class JCpgConfig {
 	 * Give a configuration entry and get the value for it back
 	 * 
 	 * @param entry
-	 * 		a configuration entry
-	 * @return
-	 * 		the value for this configuration entry
+	 *            a configuration entry
+	 * @return the value for this configuration entry
 	 */
 	public String getValueFor(String entry){
 		

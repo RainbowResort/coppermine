@@ -43,7 +43,7 @@ public class JCpgVersionchecker {
 	private String versionUrl = null ;
 	private String updateUrl = null ;
 	private int updatefileSize = 0;
-	private double serverVersion = 0.0;
+	private double serverVersion = 0.0, currentversion = 0.0;
 	
 	
 																									
@@ -119,6 +119,11 @@ public class JCpgVersionchecker {
 		this.updatefileSize = updatefileSize;
 		
 	}
+	private void setCurrentVersion(double version){
+		
+		this.currentversion = version;
+		
+	}
 	
 	
 	
@@ -146,6 +151,7 @@ public class JCpgVersionchecker {
 	 * Get the version url
 	 * 
 	 * @return
+	 * 		the version url
 	 */
 	public String getVersionUrl(){
 		
@@ -157,6 +163,7 @@ public class JCpgVersionchecker {
 	 * Get the update url
 	 * 
 	 * @return
+	 * 	  	the update url
 	 */
 	public String getUpdateUrl(){
 		
@@ -174,6 +181,11 @@ public class JCpgVersionchecker {
 		
 		return this.updatefileSize;
 
+	}
+	public double getCurrentVersion(){
+		
+		return this.currentversion;
+		
 	}
 	
 	
@@ -277,13 +289,11 @@ public class JCpgVersionchecker {
 	 */
 	public boolean newVersionAvailable(){
 		
-		Double currentversion = 0.0;
-		
 		// read local version
 		try {
 			
 	        BufferedReader in = new BufferedReader(new FileReader("config/version.dat")); // read version on disk
-	        currentversion = new Double(in.readLine());
+	        setCurrentVersion(new Double(in.readLine()));
 	        in.close();
 	        
 	    } catch (IOException e) {
@@ -293,7 +303,7 @@ public class JCpgVersionchecker {
 	    }
 	    
 	    // compare versions
-	    if(getServerVersion() > currentversion){
+	    if(getServerVersion() > getCurrentVersion()){
 	    
 	    	System.out.println("JCpgVersionChecker: New version available");
 	    	return true;
@@ -338,6 +348,13 @@ public class JCpgVersionchecker {
 			}
 
 		    out.close();
+		    
+		    // update local version
+		    File delete = new File("config/version.dat");
+		    if(delete.exists()) delete.delete();
+		    
+		    //BufferedOutputStream newversion = new BufferedOutputStream(new FileOutputStream("config/version.dat"));
+		    //newversion.write(getServerVersion() + "");
 		    
 		    System.out.println("JCpgVersionChecker: update downloaded succesfully");
 		    

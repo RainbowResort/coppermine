@@ -63,9 +63,7 @@ public class JCpgGallerySaver{
 		setGallery(gallery);
 		
 	}
-	public JCpgGallerySaver(){
-		
-	}
+
 	
 	
 	

@@ -54,7 +54,8 @@ public class JCpgPictureTransferer{
 	private JCpgConfig cpgConfig = null;
 	private JCpgPicture picture = null;
 	private String root = null;
-	private Dimension thumbnailPreferredSize = new Dimension(100, 100);
+
+	
 	
 	public JCpgPictureTransferer(){
 		

@@ -78,6 +78,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	public JCpgAddPictureManager(JCpgUI jCpgUIReference, JCpgConfig cpgConfig, ImageIcon logo, DefaultMutableTreeNode node){
 		
 		super(jCpgUIReference, logo, node);
+		
 		setCpgConfig(cpgConfig);
 		doExtraSwingComponents();
 		
@@ -208,7 +209,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					thumb.makeThumb();
 
 				} catch (Exception e) {
-
+					
 					System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
 
 				}

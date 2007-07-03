@@ -1,3 +1,6 @@
+Fixed a bug where JCpg wasn't always able to copy a local file to the JCpg local album
+The usermanager's offline button is disabled when there is now local Coppermine configuration
+The Coppermine configuration is now also saved to an XML file
 Because of the complete XML transition, I removed all implementations of the Java Serialisable class
 A category can have subcategories and albums
 The main gallery can now also have albums
