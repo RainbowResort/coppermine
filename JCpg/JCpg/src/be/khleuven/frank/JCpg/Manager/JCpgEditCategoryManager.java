@@ -62,6 +62,7 @@ public class JCpgEditCategoryManager extends JCpgEditManager {
 	public JCpgEditCategoryManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node) {
 		
 		super(jCpgUIReference, logo, node);
+		
 		setAlbum();
 		makeEditWindowChanges();
 		

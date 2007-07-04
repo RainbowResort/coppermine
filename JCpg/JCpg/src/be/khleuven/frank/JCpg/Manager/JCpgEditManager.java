@@ -58,6 +58,7 @@ public abstract class JCpgEditManager extends JCpgAddManager implements JCpgAddT
 	public JCpgEditManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node){
 		
 		super(jCpgUIReference, logo, node);
+		
 		makeEditWindowChanges();
 		
 	}

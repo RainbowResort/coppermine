@@ -100,6 +100,7 @@ public class JCpgServerManager extends JDialog{
 	public JCpgServerManager(int width, int height, JCpgUI jCpgInterface, String serverConfig, JCpgUserManager userManager){
 		
 		super(userManager); // on top of userManager
+		
 		jCpgInterface.setEnabled(false);
 		
 		setServerManagerSize(width, height);
@@ -464,8 +465,9 @@ public class JCpgServerManager extends JDialog{
 					prefixField.setText(userconfig.getAttribute("prefix").getValue());
 					databaseField.setText(userconfig.getAttribute("database").getValue());
 					
-				} catch (JDOMException e1) {
+				} catch (JDOMException e) {
 					
+					e.printStackTrace();
 					System.out.println("JCpgServerManager: couldn't load server configuration");
 					
 				}

@@ -229,8 +229,9 @@ public class JCpgVersionchecker {
 		    
 		    return true;
 			
-		} catch (Exception exception) {
+		} catch (Exception e) {
 			
+			e.printStackTrace();
 			System.out.println("JCpgVersionChecker: couldn't retrieve remote version");
 		
 		}
@@ -273,6 +274,7 @@ public class JCpgVersionchecker {
 	        
 	    } catch (IOException e) {
 	    	
+	    	e.printStackTrace();
 	    	System.out.println("JCpgVersionChecker: couldn't read remote version (possible: file does not exist)");
 	    	
 	    }
@@ -298,6 +300,7 @@ public class JCpgVersionchecker {
 	        
 	    } catch (IOException e) {
 	    	
+	    	e.printStackTrace();
 	    	System.out.println("JCpgVersionChecker: couldn't read local version");
 	    	
 	    }
@@ -360,8 +363,9 @@ public class JCpgVersionchecker {
 		    
 		    return true; // success
 			
-		} catch (Exception exception) {
+		} catch (Exception e) {
 			
+			e.printStackTrace();
 			System.out.println("JCpgVersionChecker: couldn't retrieve update");
 		
 		}

@@ -191,6 +191,7 @@ public class JCpgConfig {
 		
 		// if we are online, get the current config
 		if(getOnlineMode()){
+			
 			File delete = new File("config/config.xml");
 			if (delete.exists()) delete.delete();
 	
@@ -232,12 +233,14 @@ public class JCpgConfig {
 	
 				} catch (Exception e) {
 	
+					e.printStackTrace();
 					System.out.println("JCpgConfig: Couldn't save config.xml");
 	
 				}
 	
 			} catch (SQLException e) {
 	
+				e.printStackTrace();
 				System.out.println("JCpgConfig: Couldn't extract from sql query result");
 	
 			}
@@ -278,8 +281,9 @@ public class JCpgConfig {
 						
 					}
 					
-				} catch (JDOMException e1) {
+				} catch (JDOMException e) {
 					
+					e.printStackTrace();
 					System.out.println("JCpgUserManager: couldn't load usercfg.xml");
 					
 				}

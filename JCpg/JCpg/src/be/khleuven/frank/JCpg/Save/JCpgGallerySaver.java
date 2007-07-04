@@ -172,8 +172,9 @@ public class JCpgGallerySaver{
 				
 			}
 			
-		} catch (JDOMException e1) {
+		} catch (JDOMException e) {
 			
+			e.printStackTrace();
 			System.out.println("JCpgGallery: couldn't load gallery.xml");
 			
 		}

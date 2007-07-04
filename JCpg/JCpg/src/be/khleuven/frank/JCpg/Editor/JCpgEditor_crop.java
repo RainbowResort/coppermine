@@ -244,8 +244,9 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
             getJCpgUI().setEnabled(true);
             this.dispose();
             
-        } catch(IOException ioe){
+        } catch(IOException e){
         	
+        	e.printStackTrace();
             System.out.println("JCpgEditor: Couldn't save edited photo");
             
         }

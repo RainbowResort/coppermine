@@ -62,6 +62,7 @@ public class JCpgEditPictureManager extends JCpgEditManager {
 	public JCpgEditPictureManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node) {
 		
 		super(jCpgUIReference, logo, node);
+		
 		setAlbum();
 		makeEditWindowChanges();
 		

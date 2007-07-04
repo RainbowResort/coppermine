@@ -103,6 +103,7 @@ public class JCpgUserManager extends JDialog {
 	public JCpgUserManager(int width, int height, JCpgUI jCpgInterface){
 		
 		super(jCpgInterface); // on top of jCpgInterface
+		
 		jCpgInterface.setEnabled(false);
 		
 		setUserManagerSize(width, height);
@@ -508,8 +509,9 @@ public class JCpgUserManager extends JDialog {
 			return false;
 						
 		} catch (NoSuchAlgorithmException e) {
-						
-				System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
+				
+			e.printStackTrace();
+			System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
 						
 		}
 					
@@ -548,8 +550,9 @@ public class JCpgUserManager extends JDialog {
 				usernameField.setText(userconfig.getAttribute("username").getValue());
 				passwordField.setText(userconfig.getAttribute("password").getValue());
 				
-			} catch (JDOMException e1) {
+			} catch (JDOMException e) {
 				
+				e.printStackTrace();
 				System.out.println("JCpgUserManager: couldn't load usercfg.xml");
 				
 			}
@@ -605,8 +608,9 @@ public class JCpgUserManager extends JDialog {
 					
 					return serverConfig;
 					
-				} catch (JDOMException e1) {
+				} catch (JDOMException e) {
 					
+					e.printStackTrace();
 					System.out.println("JCpgUserManager: couldn't load server configuration");
 					
 				}

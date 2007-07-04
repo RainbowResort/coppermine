@@ -192,6 +192,7 @@ public class JCpgPictureResizer{
 			
 		} catch (IOException e) {
 			
+			e.printStackTrace();
 			System.out.println("JCpgPictureResizer: Couldn't resize picture: " + getPath());
 			
 		}
@@ -246,6 +247,7 @@ public class JCpgPictureResizer{
 			
 		} catch (IOException e) {
 			
+			e.printStackTrace();
 			System.out.println("JCpgPictureResizer: couldn't read/write image to make thumb");
 			
 		}

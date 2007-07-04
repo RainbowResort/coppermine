@@ -55,6 +55,7 @@ public class JCpgUpdater extends JCpgProgressManager {
 	public JCpgUpdater(Window parent, int maximum){
 		
 		super(parent, maximum, "data/updater_logo.jpg", true, false);
+		
 		doAction();
 		
 	}

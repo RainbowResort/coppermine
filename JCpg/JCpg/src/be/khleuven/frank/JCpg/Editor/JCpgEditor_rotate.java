@@ -140,6 +140,7 @@ public class JCpgEditor_rotate extends JCpgEditor{
     	
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = ge.getDefaultScreenDevice();
+        
         return gd.getDefaultConfiguration();
         
     }

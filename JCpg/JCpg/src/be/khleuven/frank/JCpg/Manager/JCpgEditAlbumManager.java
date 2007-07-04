@@ -60,6 +60,7 @@ public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTree
 	public JCpgEditAlbumManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node) {
 		
 		super(jCpgUIReference, logo, node);
+		
 		setAlbum();
 		makeEditWindowChanges();
 		

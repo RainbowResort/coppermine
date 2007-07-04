@@ -23,12 +23,15 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -72,6 +75,9 @@ import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
  * @author    Frank Cleynen
  */
 public class JCpgUI extends JFrame implements TreeSelectionListener{
+	
+	
+	
 	
 	
 	
@@ -121,6 +127,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JScrollPane pictureView;
 	private JScrollPane megaPictureView;
 	private DefaultMutableTreeNode root;
+	private JMenuBar menubar;
+	private JMenu menu;
 	
 	
 	
@@ -142,11 +150,17 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	public JCpgUI(boolean megaExplorerActive){
 		
 		setMegaExplorerActive(megaExplorerActive);
+		
 		initComponents();
 		boundComponents();
 		placeComponents();
+		
+		createMenu();
+		
 		controlMegaExplorerActive();
+		
 		getGallery().addUi(this);
+		
 		new JCpgUserManager(500, 200, this);
 		
 	}
@@ -395,6 +409,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		this.getContentPane().add(splitPane);
 		this.getContentPane().add(megaSplitPane);
 		this.setVisible(true);
+		
+	}
+	private void createMenu(){
+		
+		menubar = new JMenuBar();
+		menu = new JMenu("JCpg");
+		
+		menu.setMnemonic(KeyEvent.VK_A);
+		menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
+		menubar.add(menu);
 		
 	}
 	

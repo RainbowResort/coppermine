@@ -195,6 +195,7 @@ public class JCpgSqlManager{
 			
 		} catch (SQLException e) {
 			
+			e.printStackTrace();
 			System.out.println("SqlManager: couldn't execute sql query: " + query);
 			
 		}

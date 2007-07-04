@@ -675,9 +675,9 @@ public class JCpgPicture extends JCpgGallery{
 		
 		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // id = -1 means this picture is not yet in the database
 		
-		File delete = new File("albums/" + getFilePath() + getFileName());
+		File delete = new File(getUi().getCpgConfig().getValueFor("fullpath") + getFilePath() + getFileName());
 		delete.delete();
-		delete = new File("albums/" + getFilePath() + "thumb_" + getFileName());
+		delete = new File(getUi().getCpgConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
 		delete.delete();
 		
 	}

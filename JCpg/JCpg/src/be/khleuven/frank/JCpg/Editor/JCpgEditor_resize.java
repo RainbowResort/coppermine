@@ -80,6 +80,7 @@ public class JCpgEditor_resize extends JCpgEditor {
 	public JCpgEditor_resize(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize);
+		
 		doExtraSwingComponents();
 		
 	}
@@ -171,12 +172,13 @@ public class JCpgEditor_resize extends JCpgEditor {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File("albums/" + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             getJCpgUI().setEnabled(true);
             this.dispose();
             
-        } catch(IOException ioe){
+        } catch(IOException e){
         	
+        	e.printStackTrace();
             System.out.println("JCpgEditor: Couldn't save edited photo");
             
         }
