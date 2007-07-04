@@ -44,7 +44,10 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  */
 public class JCpgGallerySaver{
 	
-	
+																					
+																					//*************************************
+																					//				VARIABLES             *
+																					//*************************************
 	private JCpgGallery gallery = null;
 	
 	
@@ -66,27 +69,54 @@ public class JCpgGallerySaver{
 
 	
 	
-	
-	
+																					//*************************************
+																					//				SETTERS	              *
+																					//*************************************
+	/**
+	 * 
+	 * Set the gallery
+	 * 
+	 * @param gallery
+	 * 		the gallery
+	 */
 	private void setGallery(JCpgGallery gallery){
 		
 		this.gallery = gallery;
 		
 	}
 	
+	
+	
+	
+	
+	
+	
+																					
+																					//*************************************
+																					//				GETTERS	              *
+																					//*************************************
+	/**
+	 * 
+	 * Get the gallery
+	 * 
+	 * @return
+	 * 		the gallery
+	 */
 	public JCpgGallery getGallery(){
 		
 		return this.gallery;
 		
 	}
 	
-	public void changeGallery(JCpgGallery gallery){
-		
-		setGallery(gallery);
-		
-	}
 	
 	
+	
+	
+
+	
+																					//*************************************
+																					//				MUTATORS & OTHERS     *
+																					//*************************************
 	/**
 	 * 
 	 * Makes a new JCpgGallerySaver object, no arguments

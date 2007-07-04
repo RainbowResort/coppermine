@@ -119,6 +119,13 @@ public class JCpgVersionchecker {
 		this.updatefileSize = updatefileSize;
 		
 	}
+	/**
+	 * 
+	 * Set the local version
+	 * 
+	 * @param version
+	 * 		the local version
+	 */
 	private void setCurrentVersion(double version){
 		
 		this.currentversion = version;
@@ -182,6 +189,13 @@ public class JCpgVersionchecker {
 		return this.updatefileSize;
 
 	}
+	/**
+	 * 
+	 * Get the local version
+	 * 
+	 * @return
+	 * 		the local version
+	 */
 	public double getCurrentVersion(){
 		
 		return this.currentversion;
@@ -248,6 +262,7 @@ public class JCpgVersionchecker {
 	 * 	3) size of this update file in bytes, used by progressbar 
 	 * 
 	 * @return
+	 * 		true if the file was processed correctlyn otherwhise false
 	 */
 	public boolean processVersionFile(){
 		

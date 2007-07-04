@@ -371,7 +371,11 @@ public class JCpgPreviewer extends JDialog{
 		this.dispose();
 		
 	}
-	
+	/**
+	 * 
+	 * Perform right actions when user changes the slider value
+	 * 
+	 */
 	private void timesliderValueChanged(ChangeEvent evt) {
 		
 		timeslice = timeslider.getValue();

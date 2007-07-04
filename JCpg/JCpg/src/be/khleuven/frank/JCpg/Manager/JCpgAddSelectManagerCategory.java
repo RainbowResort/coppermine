@@ -32,11 +32,38 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  */
 public class JCpgAddSelectManagerCategory extends JCpgAddSelectManager {
 	
+	
+	
+															
+															//*************************************
+															//				VARIABELS             *
+															//*************************************
 	private String[] options = null;
 	
 	
 	
 	
+	
+	
+	
+	
+															
+															//*************************************
+															//				CONSTRUCTOR           *
+															//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgAddSelectManagerCategory object
+	 * 
+	 * @param jCpgUIReference
+	 * 		reference to the UI
+	 * @param logo
+	 * 		logo to use
+	 * @param node
+	 * 		selected node
+	 * @param options
+	 * 		list with possible options
+	 */
 	public JCpgAddSelectManagerCategory(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node, String[] options){
 		
 		super(jCpgUIReference, logo, node);
@@ -48,6 +75,19 @@ public class JCpgAddSelectManagerCategory extends JCpgAddSelectManager {
 	}
 	
 	
+	
+	
+															
+															//*************************************
+															//				SETTERS	              *
+															//*************************************
+	/**
+	 * 
+	 * Set the options list
+	 * 
+	 * @param options
+	 * 		the options list
+	 */
 	private void setOptions(String[] options){
 		
 		this.options = options;
@@ -55,12 +95,34 @@ public class JCpgAddSelectManagerCategory extends JCpgAddSelectManager {
 	}
 	
 	
+	
+															
+															//*************************************
+															//				GETTERS	              *
+															//*************************************
+	/**
+	 * 
+	 * Get the options list
+	 * 
+	 * @return
+	 * 		the options list
+	 */
 	public String[] getOptions(){
 		
 		return this.options;
 		
 	}
 	
+	
+															
+															//*************************************
+															//				MUTATORS & OTHERS     *
+															//*************************************
+	/**
+	 * 
+	 * Fill dropdown menu
+	 *
+	 */
 	public void fillOptionList(){
 		
 		String[] options = getOptions();

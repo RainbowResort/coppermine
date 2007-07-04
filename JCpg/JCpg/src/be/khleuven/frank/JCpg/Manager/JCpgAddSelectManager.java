@@ -42,6 +42,10 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
+														
+														//*************************************
+														//				VARIABLES             *
+														//*************************************
 	private JCpgUI ui;
 	private ImageIcon icon;
 	private DefaultMutableTreeNode node;
@@ -58,7 +62,21 @@ public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
 	
-	
+														
+														//*************************************
+														//				CONSTRUCTOR           *
+														//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgAddSelectManager object
+	 * 
+	 * @param jCpgUIReference
+	 * 		reference to the ui
+	 * @param logo
+	 * 		which logo to use
+	 * @param node
+	 * 		selected node
+	 */
 	public JCpgAddSelectManager(JCpgUI jCpgUIReference, ImageIcon logo, DefaultMutableTreeNode node){
 		
 		super(jCpgUIReference);
@@ -76,8 +94,10 @@ public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
 	
-	
-	
+														
+														//*************************************
+														//				SETTERS	              *
+														//*************************************
 	/**
 	* 
 	* Set the JCpgUI reference
@@ -121,6 +141,10 @@ public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
 	
+														
+														//*************************************
+														//				SWING	              *
+														//*************************************
 	/**
 	* 
 	* Init swing components
@@ -188,8 +212,10 @@ public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
 	
-	
-	
+														
+														//*************************************
+														//				GETTERS               *
+														//*************************************
 	/**
 	* 
 	* Get the JCpgUI reference
@@ -234,7 +260,9 @@ public abstract class JCpgAddSelectManager extends JDialog {
 	
 	
 	
-	
+														//*************************************
+														//				EVENTS	              *
+														//*************************************
 	/**
 	* 
 	* Perform right actions when create button is clicked
