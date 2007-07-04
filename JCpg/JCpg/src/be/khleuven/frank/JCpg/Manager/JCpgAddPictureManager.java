@@ -188,8 +188,6 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		JCpgAlbum album = (JCpgAlbum) getNode().getUserObject();	
 
 		File[] selectedFiles = pictureChooser.getSelectedFiles();
-		
-		System.out.println(selectedFiles.length + "ggg");
 
 		if (selectedFiles.length > 0) { // only proceed if user selected file(s)
 
