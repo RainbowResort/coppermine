@@ -17,7 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Sync;
 
-import java.awt.Dimension;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,15 +56,6 @@ public class JCpgPictureTransferer{
 
 	
 	
-	public JCpgPictureTransferer(){
-		
-	}
-	
-	
-	
-	
-																				
-	
 	
 	
 	
@@ -74,10 +64,24 @@ public class JCpgPictureTransferer{
 																					//*************************************
 	/**
 	 * 
+	 * Empty constructor
+	 *
+	 */
+	public JCpgPictureTransferer(){
+		
+	}																			
+	/**
+	 * 
 	 * Makes a new JCpgPictureTransferer object. The current open connection is needed to first get the root and then go on.
 	 * 
-	 * @param cpgServerpath
-	 * 		path to the cpg directory on the user's server.
+	 * @param sqlManager
+	 * 		sql manager
+	 * @param serverConfig
+	 * 		server configuration
+	 * @param config
+	 * 		Coppermine configuration
+	 * @param picture
+	 * 		picture to transfer
 	 */
 	public JCpgPictureTransferer(JCpgSqlManager sqlManager, JCpgServerConfig serverConfig, JCpgConfig config, JCpgPicture picture){
 		
