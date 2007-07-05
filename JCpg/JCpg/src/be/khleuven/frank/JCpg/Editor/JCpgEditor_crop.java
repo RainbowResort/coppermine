@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Editor;
 
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,6 +31,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -46,7 +49,7 @@ import javax.swing.SwingUtilities;
  * @author Frank Cleynen
  *
  */
-public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
+public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	
 	
 	
@@ -63,28 +66,24 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 	private JButton yplus;
 	private JButton yminus;
 	
-	private int rwidth = 300 ;
-	private int rheight = 300 ;
-	private int rx = getPreviewSize ( ) . width / 2 - getPicture ( ) . getpWidth ( ) / 2 + 75 ;
-	private int ry = 59 + 50 ;
+	private int rwidth;
+	private int rheight;
+	private int rx;
+	private int ry;
 	
 	private int LEFT = getPreviewSize().width/2-getPicture().getpWidth()/2;
 	private int UP = 59;
 	private int RIGHT = LEFT + getPicture().getpWidth();
 	private int DOWN = UP + getPicture().getpHeight();
 	
-	private boolean dragging;
+	private Dimension size = this.getSize(); // size of this panel
 	
-	private Point offset = new Point();
-	
-	private Rectangle fillerleft = new Rectangle ( ) ;
-	private Rectangle fillerright = new Rectangle ( ) ;
-	private Rectangle fillerup = new Rectangle ( ) ;
-	private Rectangle fillerdown = new Rectangle ( ) ;
+	private Point mouseposition = new Point();
+	private Point cropposition = new Point();
 	
 	
 	
-	
+	private boolean running = true;
 																			
 	
 	
@@ -108,6 +107,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 	public JCpgEditor_crop(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize);
+		
 		doExtraSwingComponents();
 		
 	}
@@ -124,6 +124,13 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 	 *
 	 */
 	private void doExtraSwingComponents(){
+		
+		getImageButton().addMouseMotionListener(this);
+		
+		rx = getImageButton().getSize().width / 4;
+		ry = getImageButton().getSize().height / 4;
+		rwidth = getPicture().getpWidth() / 4;
+		rheight = getPicture().getpHeight() / 4;
 		
 		xplus = new JButton("xWider");
 		xminus = new JButton("xSmaller");
@@ -163,6 +170,23 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		
 		crop = new Rectangle(rwidth, rheight);
 		
+		// we introduce a thread to continiously draw the black rectangles around the crop rectangle, otherwhise sometimes these will disappear
+		Thread t1 = new Thread(new Runnable() {
+			
+			public void run() {
+				
+				while(running){
+					
+					repaint();
+				
+				}
+				
+			}
+			
+		});
+		
+		t1.start();
+		
 		repaint();
 
 	}
@@ -174,6 +198,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 	public void paint(Graphics g){
 		
         super.paint(g);
+        
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -181,7 +206,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
         g2.setPaint(Color.red);
         
         crop.setSize(rwidth, rheight);
-        crop.setLocation(rx, ry);
+        crop.setLocation(rx + (getPreviewSize().width/2 - getImageButton().getSize().width/2), ry);
         g2.draw(crop);
         
         // unselect rectangles
@@ -233,7 +258,9 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File("albums/" + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
+			thumb.makeThumb();
             
 			// change picture size information
 			getPicture().changeWidth(rwidth);
@@ -327,65 +354,51 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseListener {
 
 
 
-	/**
-	 * 
-	 * Move the square with the mouse
-	 * 
-	 */
-	public void mouseClicked(MouseEvent e) {
+	
+	
+
+	public void mouseDragged(MouseEvent m) {
 		
-		Point p = e.getPoint();
+		System.out.println(ry);
 		
-        if(crop.contains(p)){
-        	
-            offset.x = p.x - crop.x;
-            offset.y = p.y - crop.y;
-            dragging = true;
-            
-        }
-
-	}
-
-
-
-
-	public void mouseEntered(MouseEvent e) {
+		mouseposition = m.getPoint();
+		cropposition = crop.getLocation();
 		
-	}
-
-
-
-
-	public void mouseExited(MouseEvent e) {
+		Line2D.Double l1 = new Line2D.Double(cropposition.x, cropposition.y, cropposition.x + crop.width, cropposition.y);
+		Line2D.Double l2 = new Line2D.Double(cropposition.x, cropposition.y, cropposition.x, cropposition.y  + crop.height);
+		Line2D.Double l3 = new Line2D.Double(cropposition.x, cropposition.y + crop.height, cropposition.x + crop.width, cropposition.y  + crop.height);
+		Line2D.Double l4 = new Line2D.Double(cropposition.x + crop.width, cropposition.y, cropposition.x + crop.width, cropposition.y  + crop.height);
 		
-	}
-
-
-
-
-	public void mousePressed(MouseEvent e) {
+		// if user starts dragging the mouse when on one of the crop rectange borders, the rectangle is resized
+		if(l1.contains(mouseposition) || l2.contains(mouseposition) || l3.contains(mouseposition) || l4.contains(mouseposition)){
+			
+			rwidth++;
+			rheight++;
+			
+		}else{
 		
-	}
-
-
-
-
-	public void mouseReleased(MouseEvent e) {
+			rx = mouseposition.x;
+			ry = mouseposition.y;
+			
+			// bounderies
+			if(rx < 0) rx = 0;
+			if(rx + rwidth > getImageButton().getSize().width) rx = getImageButton().getSize().width;
+			
+			if(ry < 0) ry = 0;
+			if(ry + rheight - 59 > getImageButton().getSize().height) ry = getImageButton().getSize().height;
 		
-		dragging = false;
+		}
+		
+		repaint();
 		
 	}
-	public void mouseDragged(MouseEvent e){
-		
-        if(dragging){
-        	
-            rx = e.getX() - offset.x;
-            ry = e.getY() - offset.y;
-            
-            repaint();
-            
-        }
-        
-    }
 
+
+
+
+	public void mouseMoved(MouseEvent m) {
+	
+		
+	}
+	
 }

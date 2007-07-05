@@ -39,10 +39,14 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  */
 public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer {
 	
+	private JCpgUI ui = null;
+	
 	private GridBagLayout gbl = new GridBagLayout();
 	private GridBagConstraints gblc = new GridBagConstraints();
 	
-	public JCpgPictureCellRenderer() {
+	public JCpgPictureCellRenderer(JCpgUI ui) {
+		
+		setUi(ui);
 		
         setOpaque(false); // transparent
         this.setLayout(gbl); // we will use the grid layout
@@ -55,10 +59,23 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	
 	}
 	
+	
+	private void setUi(JCpgUI ui){
+		
+		this.ui = ui;
+		
+	}
+	
+	public JCpgUI getUi(){
+		
+		return this.ui;
+		
+	}
+	
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     	
     	JCpgPicture picture = (JCpgPicture)value;
-    	JLabel label = new JLabel(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
+    	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
 
         // determine grid position
     	gblc.gridx = index;

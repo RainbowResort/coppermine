@@ -74,6 +74,7 @@ public class JCpgEditor_colors extends JCpgEditor{
 	public JCpgEditor_colors(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize);
+		
 		doExtraSwingComponents();
 		
 	}

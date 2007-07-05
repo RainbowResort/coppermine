@@ -210,7 +210,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureList = new JList(pictureListModel);
 		pictureList.setBorder(new EtchedBorder());
 		pictureListSelectionModel = pictureList.getSelectionModel();
-		pictureList.setCellRenderer(new JCpgPictureCellRenderer());
+		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
 		
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
@@ -567,7 +567,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(selectedPicture != null){
 			
-	    	image.setIcon(new JCpgImageUrlValidator("albums/" + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getValueFor("fullpath") + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
 	    	image.setToolTipText(selectedPicture.getFileName());
 	    	Dimension realSize = new Dimension(selectedPicture.getpWidth(), selectedPicture.getpHeight());
 	    	image.setPreferredSize(realSize);
@@ -918,7 +918,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
 	    	JButton image = new JButton();
 	    	
-	    	image.setIcon(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + picture.getFileName()).createImageIcon());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()).createImageIcon());
 	    	image.setToolTipText(picture.getFileName());
 	    	Dimension realSize = new Dimension(picture.getpWidth(), picture.getpHeight());
 	    	image.setPreferredSize(realSize);
@@ -964,7 +964,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * @param userConfig
 	 * 		a userConfig object
 	 */
-	public void addUserConfig(JCpgUserConfig userConfig){
+	public void changeUserConfig(JCpgUserConfig userConfig){
 		
 		this.userConfig = userConfig;
 		

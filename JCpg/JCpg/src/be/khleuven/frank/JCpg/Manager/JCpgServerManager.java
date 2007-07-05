@@ -51,7 +51,7 @@ public class JCpgServerManager extends JDialog{
 																	//*************************************
 																	//				VARIABLES	          *
 																	//*************************************
-	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410");
+	private JCpgServerConfig defaultServerConfig = new JCpgServerConfig("Default", "127.0.0.1", "root", "", "cpg", "cpg1410_");
 	
 	private Dimension screensize;
 	private JLabel logo;

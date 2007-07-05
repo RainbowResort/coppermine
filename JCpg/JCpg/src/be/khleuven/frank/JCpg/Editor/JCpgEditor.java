@@ -20,6 +20,7 @@ package be.khleuven.frank.JCpg.Editor;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Interfaces.JCpgMyEditorInterface;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -94,15 +95,20 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	 */
 	public JCpgEditor(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
 		
+		super(jCpgUIReference);
+		
 		jCpgUIReference.setEnabled(false);
+		
 		setJCpgUIReference(jCpgUIReference);
 		setPicture(picture);
 		setPreviewPosition(previewPosition);
 		setPreviewSize(previewSize);
+		
 		initComponents();
 		boundComponents();
 		placeComponents();
-		setBufferedPreview(new JCpgImageUrlValidator("albums/" + picture.getFilePath() + picture.getFileName()).createImageIcon());
+		
+		setBufferedPreview(new JCpgImageUrlValidator(getJCpgUI().getCpgConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()).createImageIcon());
 		previewPicture(getBufferedPreview());
 		
 	}
@@ -303,9 +309,6 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	private void initComponents(){
 		
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
-		
-		//image.setEnabled(false); solves disappearance of black rectangles but button will be greyscale :s:s
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -435,7 +438,10 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File("albums/" + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
+			thumb.makeThumb();
+			
             getJCpgUI().setEnabled(true);
             this.dispose();
             

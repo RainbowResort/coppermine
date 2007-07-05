@@ -33,6 +33,7 @@ public class JCpgUserConfig {
 																										//*************************************
 	private String username;
 	private String password;
+	private int id;
 	private JCpgServerConfig serverConfig;
 	
 																										
@@ -95,6 +96,11 @@ public class JCpgUserConfig {
 		this.password = password;
 		
 	}
+	private void setId(int id){
+		
+		this.id = id;
+		
+	}
 	/**
 	 * 
 	 * Set the userconfig server config
@@ -137,6 +143,11 @@ public class JCpgUserConfig {
 		return this.password;
 		
 	}
+	public int getId(){
+		
+		return this.id; 
+		
+	}
 	/**
 	 * 
 	 * Get the userconfig serverconfig
@@ -147,6 +158,13 @@ public class JCpgUserConfig {
 	public JCpgServerConfig getServerConfig(){
 		
 		return this.serverConfig;
+		
+	}
+	
+	
+	public void changeId(int id){
+		
+		this.id = id;
 		
 	}
 

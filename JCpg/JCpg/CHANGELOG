@@ -1,3 +1,5 @@
+JCpg now does a correct calculation of the directory in which the user's photo's are stored: 10000 + user_id
+Did some changes to the crop editor code. The crop selection rectangle is now controlable by the mouse
 Fixed nullpointer exception in the temporary syncing code
 Found a bug in JCpgPictureAdder: when using apple + A (to select all) in a map with pictures, a java.lang.ArrayIndexOutOfBoundsException: -1 exception is generated form with Apple's own UI java code. Selecting the same files manually, will not throw this exception
 Fixed a bug where JCpg wasn't always able to copy a local file to the JCpg local album

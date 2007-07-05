@@ -222,20 +222,34 @@ public class JCpgConfig {
 				out.setIndent(true);
 				out.setNewlines(true);
 				
-				// make directory structure for saving pictures
-				new File(getValueFor("fullpath") + getValueFor("userpics") + "10001").mkdirs();
-	
-				try {
-	
-					FileOutputStream file = new FileOutputStream("config/config.xml");
-	
-					out.output(doc, file);
-	
-				} catch (Exception e) {
-	
-					e.printStackTrace();
-					System.out.println("JCpgConfig: Couldn't save config.xml");
-	
+				SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+				
+				File file = new File("config/usercfg.xml");
+				
+				if(file.exists()){
+				
+					try {
+						
+						Document usercfg = builder.build("config/usercfg.xml");
+					
+						Element userconfig = usercfg.getRootElement();
+						
+						int dirid = 10000 + userconfig.getAttribute("id").getIntValue();
+				
+						// make directory structure for saving pictures
+						new File(getValueFor("fullpath") + getValueFor("userpics") + dirid).mkdirs();
+			
+						FileOutputStream file1 = new FileOutputStream("config/config.xml");
+			
+						out.output(doc, file1);
+						
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+						System.out.println("JCpgUserManager: couldn't load server configuration");
+						
+					}
+					
 				}
 	
 			} catch (SQLException e) {

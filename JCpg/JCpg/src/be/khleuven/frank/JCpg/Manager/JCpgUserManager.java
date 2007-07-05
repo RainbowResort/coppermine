@@ -78,8 +78,7 @@ public class JCpgUserManager extends JDialog {
 	
 	private JCpgUI jCpgInterface;
 	
-	private int userManagerWidth;
-	private int userManagerHeight;
+	private int userManagerWidth, userManagerHeight, userid;
 	
 	
 	
@@ -347,12 +346,12 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private void ConnectActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
+		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
     	JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
     	
 		connectionStatus.setText("Trying to connect to " + (readServerConfig()).getFullServer());
 		
-        if(sqlManager.connect() != -1 && !login()){ // connection goes well => go to JCpgInterface
+        if(sqlManager.connect() != -1 && login()){ // connection goes well => go to JCpgInterface
         	
         	writeUserConfig();
         	
@@ -413,7 +412,9 @@ public class JCpgUserManager extends JDialog {
 		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
 		
-		getJCpgInterface().addUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
+		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
+		getJCpgInterface().getUserConfig().changeId(this.userid);
+		
 		JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object
 		getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
     	
@@ -493,8 +494,9 @@ public class JCpgUserManager extends JDialog {
 					
 			try {
 							
-				if(rs_userid.next() == false){
-								
+				if(rs_userid.next() == true){
+					
+					getJCpgInterface().getUserConfig().changeId(rs_userid.getInt("user_id"));
 					return true;
 								
 				}
@@ -533,6 +535,11 @@ public class JCpgUserManager extends JDialog {
 	    return new BigInteger(1,m.digest()).toString(16);
 	    
 	}
+	/**
+	 * 
+	 * Read the userfg.xml file and extract all storeed userinformation
+	 *
+	 */
 	private void readUserconfig(){
 		
 		SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
@@ -549,6 +556,7 @@ public class JCpgUserManager extends JDialog {
 				
 				usernameField.setText(userconfig.getAttribute("username").getValue());
 				passwordField.setText(userconfig.getAttribute("password").getValue());
+				this.userid = userconfig.getAttribute("id").getIntValue();
 				
 			} catch (JDOMException e) {
 				
@@ -560,12 +568,18 @@ public class JCpgUserManager extends JDialog {
 		}
 		
 	}
+	/**
+	 * 
+	 * Write all user information to usercfg.xml
+	 *
+	 */
 	private void writeUserConfig(){
 		
 		Element userconfig = new Element("userconfig");
 		
 		userconfig.setAttribute("username", usernameField.getText());
 		userconfig.setAttribute("password", passwordField.getText());
+		userconfig.setAttribute("id", this.userid + "");
 		
 		// write file
 		Document doc=new Document(userconfig);
@@ -588,6 +602,13 @@ public class JCpgUserManager extends JDialog {
 		}
 		
 	}
+	/**
+	 * 
+	 * Read all server information from the choosen server config cfg file
+	 * 
+	 * @return
+	 * 		a serverconfig object if a file was read succesfully, else null
+	 */
 	private JCpgServerConfig readServerConfig(){
 		
 		if(!serverList.getSelectedItem().equals("")){

@@ -89,7 +89,10 @@ public class JCpgPreviewer extends JDialog{
 	 */
 	public JCpgPreviewer(JCpgUI jCpgUIReference, JCpgAlbum album){
 		
+		super(jCpgUIReference);
+		
 		jCpgUIReference.setEnabled(false);
+		
 		setJCpgUIReference(jCpgUIReference);
 		setAlbum(album);
 		initComponents();
@@ -215,7 +218,6 @@ public class JCpgPreviewer extends JDialog{
 	private void initComponents(){
 		
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -319,7 +321,7 @@ public class JCpgPreviewer extends JDialog{
 						Thread.sleep(timeslice);
 						
 						currentIndex = (currentIndex+1)%pictures.size(); // stay in the correct range of the album's size
-						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File("albums/"+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
+						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File(getJCpgUI().getCpgConfig().getValueFor("fullpath")+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
 						
 					} catch (Exception e) {
 						

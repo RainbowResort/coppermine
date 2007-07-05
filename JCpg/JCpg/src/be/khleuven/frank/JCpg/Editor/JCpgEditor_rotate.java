@@ -65,6 +65,7 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	public JCpgEditor_rotate(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize);
+		
 		doExtraSwingComponents();
 		
 	}

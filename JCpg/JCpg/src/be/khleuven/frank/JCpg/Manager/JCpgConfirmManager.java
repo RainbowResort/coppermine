@@ -48,7 +48,10 @@ public class JCpgConfirmManager extends JDialog {
 	
 	public JCpgConfirmManager(JCpgUI jCpgUIReference, ImageIcon logo){
 		
+		super(jCpgUIReference);
+		
 		jCpgUIReference.setEnabled(false);
+		
 		setLogo(logo);
 		setJCpgUIReference(jCpgUIReference);
 		initComponents();
@@ -105,7 +108,6 @@ public class JCpgConfirmManager extends JDialog {
 	private void initComponents(){
 	
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		

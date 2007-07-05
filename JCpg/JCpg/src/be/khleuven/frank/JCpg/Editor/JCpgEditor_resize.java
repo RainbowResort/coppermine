@@ -173,6 +173,9 @@ public class JCpgEditor_resize extends JCpgEditor {
 		try {
 			
             ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
+			thumb.makeThumb();
+            
             getJCpgUI().setEnabled(true);
             this.dispose();
             

@@ -200,14 +200,15 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					// make new picture
 					ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
 					File source = new File(selectedFiles[i].getAbsolutePath());
-					File destination = new File(getCpgConfig().getValueFor("fullpath") + "userpics/10001/" + selectedFiles[i].getName());
+					String userdir = 10000 + getJCpgUIReference().getUserConfig().getId() + "/";
+					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
 					long filesize = 0;
 	
 					try {
 	
 						filesize = transferer.copyFile(source, destination); // copy picture locally
-						JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath")+ "userpics/10001/", selectedFiles[i].getName());
+						JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName());
 						thumb.makeThumb();
 	
 					} catch (Exception e) {
@@ -219,7 +220,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	
 					Date date = new Date(); // used to get number of seconds since 1970 for ctime
 	
-					JCpgPicture picture = new JCpgPicture(-1, album.getId(), "userpics/10001/",selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+					JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
 	
 					picture.addUi(super.getJCpgUIReference());
 					picture.generateSqlInsertQuery();
