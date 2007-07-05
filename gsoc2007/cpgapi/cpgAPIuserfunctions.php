@@ -203,6 +203,28 @@ class userfunctions {
     return $res;
   }
 
+  /* Fetches and returns the group data corresponding to a single group.
+   * @ grop_id
+   * @ return GROUP_DATA
+   */
+  function getsinglegroupdata ($group_id) {
+    global $DBS, $DISPLAY;
+
+    $fieldstring = "";
+    for($i=0;$i<count($DISPLAY->groupfields);$i++) {
+       if($i!=0) $fieldstring .= ", ";
+       $fieldstring .= "{$DBS->group[$DISPLAY->groupfields[$i]]} AS {$DISPLAY->groupfields[$i]}";
+    }
+
+    $isql =  "SELECT $fieldstring FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}={$group_id}";
+    $iresult = $DBS->sql_query($isql);
+    if (mysql_num_rows($iresult)) {
+       $res = mysql_fetch_assoc($iresult);
+       mysql_free_result($iresult);
+    }
+    return $res;
+  }
+
   /* Fetches and returns the data corresponding to all users.
    * @ return USER_DATA[]
    */
@@ -257,7 +279,7 @@ class userfunctions {
    * @ return USER_DATA
    */
   function adduser ($addusername, $password, $group_id, $email, $active) {
-    global $DBS, $DISPLAY;
+    global $DBS, $DISPLAY, $CONFIG;
 
     $fieldstring = "";
     for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
@@ -276,7 +298,7 @@ class userfunctions {
     }
 
     // Check for duplicate email addresses
-    if (!$CONFIG['allow_duplicate_emails_addr']) {
+    if ($CONFIG['allow_duplicate_emails_addr'] == "0") {
        $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
        $results = $DBS->sql_query($sql);
        if (mysql_num_rows($results)) {
@@ -324,6 +346,72 @@ class userfunctions {
     $sql =  "DELETE FROM {$DBS->usertable} WHERE {$DBS->field['username']}='{$addusername}'";
     $DBS->sql_update($sql);
     $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}='{$adduserid}'";
+    $DBS->sql_update($sql);
+
+    return $res;
+  }
+
+
+  /* Function to add a new group to the database.
+   * @ groupname
+   * @ admin
+   * @ return GROUP_DATA
+   */
+  function addgroup ($groupname, $admin) {
+    global $DBS, $DISPLAY;
+
+    if($admin=="YES" || $admin=="1") $admin = 1;
+    else $admin = 0;
+
+    $fieldstring = "";
+    for($i=0;$i<count($DISPLAY->groupfields);$i++) {
+       if($i!=0) $fieldstring .= ", ";
+       $fieldstring .= "{$DBS->group[$DISPLAY->groupfields[$i]]} AS {$DISPLAY->groupfields[$i]}";
+    }
+
+    $sql =  "SELECT $fieldstring FROM {$DBS->groupstable} WHERE {$DBS->group['groupname']}='{$groupname}'";
+    $results = $DBS->sql_query($sql);
+    if (mysql_num_rows($results)) {
+       mysql_free_result($results);
+       $GROUP_DATA = array();
+       $GROUP_DATA['error'] = true;
+       $GROUP_DATA['message'] = "Group name already exists";
+       return $GROUP_DATA;
+    }
+
+    $sql =  "INSERT INTO {$DBS->groupstable} ({$DBS->group['groupname']},{$DBS->group['admin']}) VALUES ('{$groupname}', '{$admin}')";
+    $DBS->sql_update($sql);
+
+    $sql = "SELECT * FROM {$DBS->groupstable} WHERE {$DBS->group['groupname']}='" . $groupname . "'";
+    $results = $DBS->sql_query($sql);
+    if (mysql_num_rows($results)) {
+       $group_id = mysql_result($results, 0, $DBS->group['group_id']);
+       mysql_free_result($results);
+    }
+
+    return $this->getsinglegroupdata($group_id);
+  }
+
+  /* Function to remove an existing group from the database.
+   * @ group_id
+   * @ return GROUP_DATA if group exists, false if group does not exist
+   */
+  function removegroup ($group_id) {
+    global $DBS, $DISPLAY;
+
+    $sql = "SELECT * FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='" . $group_id . "'";
+    $results = $DBS->sql_query($sql);
+    if (mysql_num_rows($results)) {
+       $group_id = mysql_result($results, 0, $DBS->group['group_id']);
+       mysql_free_result($results);
+    } else {
+       return false;
+    }
+
+    $res = $this->getsinglegroupdata($group_id);
+    $sql =  "DELETE FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='{$group_id}'";
+    $DBS->sql_update($sql);
+    $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['group_id']}='{$group_id}'";
     $DBS->sql_update($sql);
 
     return $res;

@@ -29,7 +29,7 @@ function xmlhttpPost(strURL, f) {
   self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   self.xmlHttpReq.onreadystatechange = function() {
       if (self.xmlHttpReq.readyState == 4) {
-          f(self.xmlHttpReq.responseText);
+          f(self.xmlHttpReq.responseText.replace(/\n/g, '').replace(/\n/g, ''));
       }
   }
   self.xmlHttpReq.send(null);

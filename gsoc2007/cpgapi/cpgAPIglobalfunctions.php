@@ -23,6 +23,19 @@ class globalfunctions {
     }
     return $CONFIG;
   }
+
+  /* Updates the configuration parameters into the database
+   * @ CONFIG
+   * @ return CONFIG
+   */
+  function setconfig ($CONFIG) {
+    global $DISPLAY, $DBS;
+
+    for($i=0; $i < count($DISPLAY->configfields); $i++) {
+       $sql = "UPDATE {$DBS->configtable} SET value='" . $CONFIG[$DISPLAY->configfields[$i]] . "' WHERE name='" . $DISPLAY->configfields[$i] . "'";
+       $DBS->sql_update($sql);
+    }
+  }
 }
 
 ?>

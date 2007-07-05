@@ -77,7 +77,8 @@ class displayspecs {
        'install_error' => 6,
        'init_error' => 7,
        'user_error' => 8,
-       'usergroup_error' => 9
+       'usergroup_error' => 9,
+       'group_error' => 10
     );
   }
 }
