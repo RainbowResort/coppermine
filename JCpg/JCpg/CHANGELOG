@@ -1,3 +1,4 @@
+Deselect tree selections when a picture is selected from the (mega)list
 JCpg now does a correct calculation of the directory in which the user's photo's are stored: 10000 + user_id
 Did some changes to the crop editor code. The crop selection rectangle is now controlable by the mouse
 Fixed nullpointer exception in the temporary syncing code

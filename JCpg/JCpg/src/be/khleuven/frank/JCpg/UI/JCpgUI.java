@@ -560,6 +560,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void pictureListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		
+		if(getTree().getSelectionModel().getSelectionCount() > 1) getTree().getSelectionModel().clearSelection();
+		
 		if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
 		
 		JButton image = new JButton(); // make button with picture
