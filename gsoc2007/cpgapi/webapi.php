@@ -134,7 +134,7 @@ if($query == $api_uninstall) {
 /*
  * First check the install, and then do anything else.
  */
-$fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error", "Cannot open install file");
+$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error", "Cannot open install file");
 fclose($fh);
 
 /*

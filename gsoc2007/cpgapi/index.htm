@@ -9,6 +9,8 @@
 <SCRIPT SRC="script/cookies.js"></SCRIPT> 
 
 <SCRIPT LANGUAGE="javascript">
+  var config = false;
+
   /*
    * Parse the page URL and get the GET vars in javascript
    * returns an associative array
@@ -92,15 +94,19 @@
 
        var admin = false;
        var userdata = false;
-       if(readCookie("userdata")) {
-         userdata = Xparse(readCookie("userdata"));
-         admin = checkPerms(userdata, "admin");
+       if (readCookie("userdata")) {
+          if (config) {
+             userdata = Xparse(readCookie("userdata"));
+             admin = checkPerms(userdata, "admin");
+          }
        }
 
-       // Registration link
-       if (xmlParserGet(xmlParserGet(xmlParserGet(config, "catalog"), "config"), "allow_user_registration").contents[0].value == "1")
-          cnt = cnt.replace("%registerlink%", "&nbsp;::&nbsp;<A HREF=\"javascript: jumppage('pg=registerdiv', 0)\">Register</A>");
-       else cnt = cnt.replace("%registerlink%", "");
+       if (config) {
+          // Registration link
+          if (xmlParserGet(xmlParserGet(xmlParserGet(config, "catalog"), "config"), "allow_user_registration").contents[0].value == "1")
+             cnt = cnt.replace("%registerlink%", "&nbsp;::&nbsp;<A HREF=\"javascript: jumppage('pg=registerdiv', 0)\">Register</A>");
+          else cnt = cnt.replace("%registerlink%", "");
+       }
 
        // User menu
        if (userdata) {
@@ -171,7 +177,7 @@
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
         if (messagecode == "0") {
-           jumppage("pg=logindiv", 0);
+           jumppage("pg=logindiv", 1);
         }  else {
            alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
         }
@@ -701,15 +707,13 @@ Error 404: This page could not be found
 <SCRIPT LANGUAGE="javascript">
 /* Check installation */
 
-var config;
-
 xmlhttpPost("webapi.php?query=getconfig", function (returnText) {
-  config = Xparse(returnText);
-  var messagecode = xmlParserGet(xmlParserGet(config, "catalog"), "messagecode").contents[0].value;
+  var retval = Xparse(returnText);
+  var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
   if (messagecode == "7") {
      jumppage("pg=installdiv", 0);
   }  else {
-
+     config = retval;
      var params = (window.location.href.indexOf('?')==-1)? "" : window.location.href.slice(window.location.href.indexOf('?') + 1);
      if (params == "") {
         if (readCookie("username")) {
