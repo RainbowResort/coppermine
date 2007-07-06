@@ -1004,6 +1004,28 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		getTree().removeAll(); // will remove all nodes besides the root
 		
+		for(int j=0; j<getGallery().getAlbums().size(); j++) {
+			
+			JCpgAlbum album = getGallery().getAlbums().get(j);
+			
+			DefaultMutableTreeNode treeAlbum = new DefaultMutableTreeNode(album);
+			root.add(treeAlbum);
+			
+			album.changeTreePath(new TreePath(treeAlbum.getPath())); // add treePath
+			
+			for(int k=0; k<album.getPictures().size(); k++) {
+				
+				JCpgPicture picture = album.getPictures().get(k);
+				
+				DefaultMutableTreeNode treePicture = new DefaultMutableTreeNode(picture);
+				treeAlbum.add(treePicture);
+
+				picture.changeTreePath(new TreePath(treePicture.getPath())); // add treePath
+				
+			}
+
+		}
+		
 		for(int i=0; i<getGallery().getCategories().size(); i++) {
 			
 			JCpgCategory category = getGallery().getCategories().get(i);
