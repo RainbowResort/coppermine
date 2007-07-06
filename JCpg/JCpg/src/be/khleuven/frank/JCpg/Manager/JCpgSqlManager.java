@@ -141,6 +141,8 @@ public class JCpgSqlManager{
 	 */
 	public int connect(){
 		
+		if(serverConfig == null) return -1;
+		
 		try {
 			
 			getClass().getResource("mysql-connector-java-5.0.5-bin.jar");

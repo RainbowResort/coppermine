@@ -889,6 +889,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 	    
+	    if(node == null) return;
+	    
 	    Object object = node.getUserObject();
 	    
 	    // do correct typecasting and actions

@@ -293,11 +293,25 @@ public class JCpgUserManager extends JDialog {
 		return this.jCpgInterface;
 		
 	}
+	/**
+	 * 
+	 * Get the username
+	 * 
+	 * @return
+	 * 		the username
+	 */
 	public String getUsername(){
 		
 		return this.usernameField.getText();
 		
 	}
+	/**
+	 * 
+	 * Get the password
+	 * 
+	 * @return
+	 * 		the password
+	 */
 	public String getPassword(){
 		
 		return this.passwordField.getText();
@@ -361,8 +375,6 @@ public class JCpgUserManager extends JDialog {
         	
         	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
         	
-        	//getJCpgInterface().getParent().setName("JCpg - ONLINE"); // let user know we are online
-        	
         	new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
         	getJCpgInterface().buildTree();
         	
@@ -406,8 +418,6 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private void startOfflineActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		writeUserConfig();
-		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
 		
 		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
@@ -422,7 +432,6 @@ public class JCpgUserManager extends JDialog {
 		if(((DefaultMutableTreeNode)getJCpgInterface().getTree().getModel().getRoot()).getChildCount() == 0){
 			
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
-	        //getJCpgInterface().getParent().setName("JCpg - OFFLINE"); // let user know we are offline
 	        
 	        new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
 	        getJCpgInterface().buildTree(); // build the tree with loaded information
@@ -536,7 +545,7 @@ public class JCpgUserManager extends JDialog {
 	}
 	/**
 	 * 
-	 * Read the userfg.xml file and extract all storeed userinformation
+	 * Read the userfg.xml file and extract all stored userinformation
 	 *
 	 */
 	private void readUserconfig(){
