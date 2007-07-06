@@ -21,6 +21,8 @@
  * Class specifying the common functions
  */
 class commonfunctions {
+   var $htmlSubst = array('&' => '&amp;', '"' => '&quot;', '<' => '&lt;', '>' => '&gt;', '%26' => '&amp;', '%22' => '&quot;', '%3C' => '&lt;', '%3E' => '&gt;','%27' => '&#39;', "'" => '&#39;');
+
   /**
    * Get the variable from get or post data
    * @ variablename : the name of the variable requested
@@ -34,6 +36,19 @@ class commonfunctions {
     return "";
   }
 
+  /**
+   * Checks if the variable is in get or post data
+   * @ variablename : the name of the variable requested
+   */
+  function checkvariable($variablename) {
+    global $_POST, $_GET;
+    if(isset($_POST[$variablename])) 
+      return true;
+    if(isset($_GET[$variablename])) 
+      return true;
+    return false;
+  }
+
   function showheader() {
     print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
     print "<catalog>\n";
@@ -43,11 +58,10 @@ class commonfunctions {
     print "</catalog>\n";
   }
 
-  function unsafeexit($code, $error) {
+  function unsafeexit($code) {
     global $DBS, $DISPLAY;
     if($DBS->dbactive) $DBS->sql_disconnect();
-    print "<messagecode>{$DISPLAY->messagecode[$code]}</messagecode>\n";
-    print "<message>{$error}</message>\n";
+    print "<messagecode>{$code}</messagecode>\n";
     $this->showfooter();
     exit(1);
   }

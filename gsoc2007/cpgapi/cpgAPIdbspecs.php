@@ -21,7 +21,7 @@
  * Class specifying everthing about the database structure
  */
 class dbspecs {
-  var $db, $table, $usertable, $groupstable, $configtable, $usergroupstable, $field, $group, $userxgroup;
+  var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
   var $dbactive = false;
 
   function initialize() {
@@ -59,6 +59,7 @@ class dbspecs {
         'regdate' => 'user_regdate', // name of 'registered' field in users table
         'lastvisit' => 'user_lastvisit', // last time user logged in
         'active' => 'user_active', // is user account active?
+        'act_key' => 'user_actkey', // user activation key
         'sessionkey' => 'user_sessionkey' // session key if the user is logged in
     );
 
@@ -90,7 +91,7 @@ class dbspecs {
   function sql_connect() {
     global $DBS, $CF;
     mysql_connect($this->db['host'], $this->db['user'], $this->db['password']);
-    @mysql_select_db($this->db['name']) or $CF->unsafeexit("dbserver", "Server connection error");
+    @mysql_select_db($this->db['name']) or $CF->unsafeexit("server_connection_error");
     $this->dbactive = true;
   }
 

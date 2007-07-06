@@ -4,12 +4,25 @@
 
 <LINK REL="stylesheet" TYPE="text/css" HREF="css/basic.css" />
 
+<SCRIPT SRC="history/dhtmlHistory.js"></SCRIPT> 
 <SCRIPT SRC="script/xparse.js"></SCRIPT> 
 <SCRIPT SRC="script/ajax.js"></SCRIPT> 
 <SCRIPT SRC="script/cookies.js"></SCRIPT> 
 
 <SCRIPT LANGUAGE="javascript">
   var config = false;
+
+  String.prototype.replaceAll = function(strTarget, strSubString)
+  {
+     var strText = this;
+     var intIndexOfMatch = strText.indexOf( strTarget );
+     while (intIndexOfMatch != -1){
+        strText = strText.replace( strTarget, strSubString )
+        intIndexOfMatch = strText.indexOf( strTarget );
+     }
+     return( strText );
+  }
+
 
   /*
    * Parse the page URL and get the GET vars in javascript
@@ -82,15 +95,51 @@
    * @ page
    * @ redirect
    */
-  function jumppage(page, redirect) {
+  function jumppage(page, redirect, addtohistory) {
+
      if(redirect==1) {
         window.location = "index.htm?" + page;
+        return;
      }
 
      var vars = getVars(page);
+
+     /* A logged in user always goes to userdiv page, even on back button */
+     if(vars['pg'] == "logindiv") {
+        if (readCookie("username")) {
+           vars['pg'] = "userdiv";
+        }
+     }
+     if(vars['pg'] == "userdiv") {
+        if (!readCookie("username")) {
+           vars['pg'] = "logindiv";
+        }
+     }
+
+     if (!addtohistory) {
+        dhtmlHistory.add(vars['pg']+"_history", page);
+     }
      
      if(document.getElementById(vars['pg'])) {
-       var cnt = document.getElementById(vars['pg']).innerHTML.replace("%userid%", readCookie("username"));
+       var sitename = "Coppermine Photo Gallery";
+       if (config) 
+          sitename = xmlParserGet(xmlParserGet(xmlParserGet(config, "catalog"), "config"), "gallery_name").contents[0].value
+
+       var cnt = document.getElementById(vars['pg']).innerHTML.replaceAll("%userid%", readCookie("username")).replaceAll("%sitename%", sitename);
+
+       /* Handle bookmarks and page refresh */
+       if (cnt == "") {
+          if (vars['pg'] == "adminconfigdiv") {
+             admin_config(); 
+          }
+          if (vars['pg'] == "adminallusersdiv") {
+             admin_allusers(); 
+          }
+          if (vars['pg'] == "adminallgroupsdiv") {
+             admin_allgroups(); 
+          }
+          return;
+       }
 
        var admin = false;
        var userdata = false;
@@ -141,13 +190,13 @@
      xmlhttpPost("webapi.php?query=login&username="+formelem.username.value+"&password="+formelem.password.value, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            createCookie("username", formelem.username.value, 1);
            createCookie("userdata", returnText, 1);
            createCookie("sessionkey", xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "userdata"), "sessionkey").contents[0].value, 1);
            jumppage("pg=userdiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -159,13 +208,13 @@
      xmlhttpPost("webapi.php?query=login&username="+username+"&password="+password, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            createCookie("username", username, 1);
            createCookie("userdata", returnText, 1);
            createCookie("sessionkey", xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "userdata"), "sessionkey").contents[0].value, 1);
            jumppage("pg=userdiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -176,10 +225,10 @@
      xmlhttpPost("webapi.php?query=install&adminusername="+formelem.username.value+"&adminpassword="+formelem.password.value+"&adminemail="+formelem.email.value+"&prefix="+formelem.prefix.value+"&dbserver="+formelem.dbserver.value+"&dbname="+formelem.dbname.value+"&dbuser="+formelem.dbuser.value+"&dbpass="+formelem.dbpass.value, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            jumppage("pg=logindiv", 1);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -219,12 +268,13 @@
      }
 
      xmlhttpPost("webapi.php?query=register&addusername="+formelem.username.value+"&password="+formelem.password.value+"&email="+formelem.email.value, function (returnText) {
+        alert(returnText);
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
-           logindetailstry(formelem.username.value, formelem.password.value);
+        if (messagecode == "success") {
+           jumppage("pg=logindiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -236,7 +286,7 @@
      xmlhttpPost("webapi.php?query=logout&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            eraseCookie("username");
            eraseCookie("userdata");
            eraseCookie("sessionkey");
@@ -251,17 +301,17 @@
   }
 
 
-  function admin_allusers() {
+  function admin_allusers(jump) {
      xmlhttpPost("webapi.php?query=showgroups&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
-        admin_alluserscontinue(Xparse(returnText));
+        admin_alluserscontinue(Xparse(returnText), jump);
      });
   }
 
-  function admin_alluserscontinue(groupval) {    
+  function admin_alluserscontinue(groupval, jump) {    
      xmlhttpPost("webapi.php?query=showusers&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            var ops = "";
            var xmldoc = xmlParserGet(groupval, "catalog");
            for(var i = 0; i < xmldoc.contents.length; i++) {
@@ -274,9 +324,9 @@
       
            var cnt = "%usermenu%";
            cnt += "<CENTER><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
-           cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
+           cnt += "   <TR><TD>&nbsp;</TD></TR>";
            cnt += "   <TR><TD COLSPAN=8><H3>Users</H3></TD></TR>";
-           cnt += "   <TR><TD WIDTH=100><B>Username</B></TD><TD WIDTH=40><B>ID</B></TD><TD WIDTH=160><B>Email</B></TD><TD WIDTH=100><B>Reg Date</B></TD><TD WIDTH=100><B>Last Visit</B></TD><TD WIDTH=100><B>Groups</B></TD><TD WIDTH=100><B>Remove</B></TD><TD WIDTH=100></TD></TR>";
+           cnt += "   <TR><TD WIDTH=100><B>Username</B></TD><TD WIDTH=40><B>ID</B></TD><TD WIDTH=160><B>Email</B></TD><TD WIDTH=100><B>Reg Date</B></TD><TD WIDTH=100><B>Last Visit</B></TD><TD WIDTH=50><B>Active</B></TD><TD WIDTH=150><B>Groups</B></TD><TD WIDTH=100><B>Remove</B></TD></TR>";
            var xmldoc = xmlParserGet(retval, "catalog");
            var usercount = 0;
            for(var i = 0; i < xmldoc.contents.length; i++) {
@@ -305,6 +355,9 @@
                           if (xmldoc.contents[i].contents[j].name == "lastvisit") {
                              cnt += "<TD>" + xmldoc.contents[i].contents[j].contents[0].value.substring(0, 10) + "</TD>";
                           }
+                          if (xmldoc.contents[i].contents[j].name == "active") {
+                             cnt += "<TD>" + xmldoc.contents[i].contents[j].contents[0].value + "</TD>";
+                          }
                           if (xmldoc.contents[i].contents[j].name == "group") {
                              if(!startgroup) {
                                  cnt+="<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100px>";
@@ -329,7 +382,6 @@
            cnt += "   <TR><TD><B>Username</B></TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>";
            cnt += "   <TR><TD><B>Password</B></TD><TD><INPUT TYPE=text NAME=password SIZE=32></TD></TR>";
            cnt += "   <TR><TD><B>Email</B></TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>";
-           cnt += "   <TR><TD><B>Active</B></TD><TD><SELECT NAME=active><OPTION VALUE=YES>Yes<OPTION VALUE=No>No</SELECT></TD></TR>";
            cnt += "   <TR><TD></TD><TD><INPUT TYPE=Submit VALUE=\"Add User\" SIZE=32></TD></TR>";
            cnt += "</TABLE></FORM></CENTER>";
 
@@ -353,20 +405,19 @@
            cnt += "   <TR><TD></TD><TD><INPUT TYPE=Submit VALUE=\"Add User to Group\" SIZE=32></TD></TR>";
            cnt += "</TABLE></FORM></CENTER>";
 
-
            document.getElementById("adminallusersdiv").innerHTML = cnt;
-           jumppage("pg=adminallusersdiv", 0);
+           if(!jump) jumppage("pg=adminallusersdiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
 
-  function admin_allgroups() {    
+  function admin_allgroups(jump) {    
      xmlhttpPost("webapi.php?query=showgroups&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            var cnt = "%usermenu%";
            cnt += "<CENTER><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
            cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
@@ -416,22 +467,22 @@
            cnt += "</TABLE></FORM></CENTER>";
 
            document.getElementById("adminallgroupsdiv").innerHTML = cnt;
-           jumppage("pg=adminallgroupsdiv", 0);
+           if(!jump) jumppage("pg=adminallgroupsdiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
 
 
   function admin_adduser(formelem) {
-     xmlhttpPost("webapi.php?query=adduser&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+formelem.username.value+"&password="+formelem.password.value+"&email="+formelem.email.value+"&active="+formelem.active.value, function (returnText) {
+     xmlhttpPost("webapi.php?query=adduser&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+formelem.username.value+"&password="+formelem.password.value+"&email="+formelem.email.value, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allusers();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -442,10 +493,10 @@
      xmlhttpPost("webapi.php?query=removeuser&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+username, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allusers();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
@@ -454,10 +505,10 @@
      xmlhttpPost("webapi.php?query=addgroup&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&groupname="+formelem.groupname.value+"&admin="+formelem.admin.value, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allgroups();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -468,10 +519,10 @@
      xmlhttpPost("webapi.php?query=removegroup&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&group_id="+groupid, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allgroups();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
@@ -481,10 +532,10 @@
      xmlhttpPost("webapi.php?query=addusertogroup&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+formelem.username.value+"&group_id="+formelem.groupid.value, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allusers();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -495,20 +546,20 @@
      xmlhttpPost("webapi.php?query=removeuserfromgroup&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+username+"&group_id="+groupid, function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_allusers();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
 
 
-  function admin_config() {    
+  function admin_config(jump) {    
      xmlhttpPost("webapi.php?query=getconfig&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
 	retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            var cnt = "%usermenu%";
            cnt += "<CENTER><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
            cnt += "   <FORM NAME=setconfigform onSubmit=\"return admin_setconfig(this)\">";
@@ -538,27 +589,101 @@
            cnt += "</SELECT></TD></TR>";
            configcount++;
 
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Registration requires valid email address</TD>";
+           cnt += "<TD><SELECT NAME=reg_requires_valid_email>";
+           var val = xmlParserGetValue(xmldoc, "reg_requires_valid_email");
+           cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
+           cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
+           cnt += "</SELECT></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Administrator activates accounts</TD>";
+           cnt += "<TD><SELECT NAME=admin_activation>";
+           var val = xmlParserGetValue(xmldoc, "admin_activation");
+           cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
+           cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
+           cnt += "</SELECT></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Notify administrator if a user is added</TD>";
+           cnt += "<TD><SELECT NAME=reg_notify_admin_email>";
+           var val = xmlParserGetValue(xmldoc, "reg_notify_admin_email");
+           cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
+           cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
+           cnt += "</SELECT></TD></TR>";
+           configcount++;
+
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Name</TD>";
+           var val = xmlParserGetValue(xmldoc, "gallery_name");
+           cnt += "<TD><INPUT NAME=gallery_name SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Description</TD>";
+           var val = xmlParserGetValue(xmldoc, "gallery_description");
+           cnt += "<TD><INPUT NAME=gallery_description SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Admin Email</TD>";
+           var val = xmlParserGetValue(xmldoc, "gallery_admin_email");
+           cnt += "<TD><INPUT NAME=gallery_admin_email SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Language</TD>";
+           cnt += "<TD><SELECT NAME=lang>";
+           var val = xmlParserGetValue(xmldoc, "lang");
+           cnt += "<OPTION VALUE=english " + (val=="english"?"selected":"") + ">English";
+           cnt += "<OPTION VALUE=german " + (val=="german"?"selected":"") + ">German";
+           cnt += "</SELECT></TD></TR>";
+           configcount++;
+
+
            cnt += "   <TR><TD></TD><TD><INPUT TYPE=Submit VALUE=\"Change Config\" SIZE=32></TD></TR>";
            cnt += "</FORM></TABLE></CENTER>";
 
            document.getElementById("adminconfigdiv").innerHTML = cnt;
            config = retval;
-           jumppage("pg=adminconfigdiv", 0);
+           document.title = xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "config"), "gallery_name").contents[0].value;
+           if(!jump) jumppage("pg=adminconfigdiv", 0);
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
   }
 
 
   function admin_setconfig(formelem) {
-     xmlhttpPost("webapi.php?query=setconfig&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&allow_user_registration="+formelem.allow_user_registration.value+"&allow_duplicate_emails_addr="+formelem.allow_duplicate_emails_addr.value, function (returnText) {
+     xmlhttpPost("webapi.php?query=setconfig&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")
+                 +"&allow_user_registration="+formelem.allow_user_registration.value
+                 +"&allow_duplicate_emails_addr="+formelem.allow_duplicate_emails_addr.value
+                 +"&reg_requires_valid_email="+formelem.reg_requires_valid_email.value
+                 +"&admin_activation="+formelem.admin_activation.value
+                 +"&reg_notify_admin_email="+formelem.reg_notify_admin_email.value
+                 +"&gallery_name="+formelem.gallery_name.value
+                 +"&gallery_admin_email="+formelem.gallery_admin_email.value
+                 +"&gallery_description="+formelem.gallery_description.value
+                 +"&lang="+formelem.lang.value
+                 , function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
-        if (messagecode == "0") {
+        if (messagecode == "success") {
            admin_config();
         }  else {
-           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "message").contents[0].value);
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
         }
      });
 
@@ -566,19 +691,81 @@
   }
 
 
+  function user_activate(username, actkey) {
+     xmlhttpPost("webapi.php?query=activate&username="+username
+                 +"&act_key="+actkey
+                 , function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "success") {
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
+        }
+     });
+
+     return false;
+  }
+
+  function activatetry(formelem) {
+     user_activate(formelem.username.value, formelem.act_key.value);
+     return false;
+  }
+
+  function disclaimertry() {
+     window.open("index.htm#pg=disclaimerdiv","popup","top=5,left=30,toolbars=no,maximize=yes,resize=yes,width=452,height=301,location=no,directories=no,scrollbars=yes");
+  }
+
+  /*
+   * Script to handle the browser back button
+   * Using external library: Really Simple History
+   * http://codinginparadise.org/projects/dhtml_history
+   * http://dev.aol.com/ajax-handling-bookmarks-and-back-button
+   */
+
+  function initialize() {
+     dhtmlHistory.initialize();
+     dhtmlHistory.addListener(historyChange);
+
+     if(dhtmlHistory.isFirstLoad()) {
+        var params = (window.location.href.indexOf('#')==-1)? "" : window.location.href.slice(window.location.href.indexOf('#') + 1);
+        if (params == "") {
+           if (readCookie("username")) {
+              jumppage("pg=userdiv", 0);
+           }  else {
+              jumppage("pg=logindiv", 0);
+           }
+        }  else {
+           jumppage(params, 0);
+        }
+     }     
+  }
+
+  function historyChange(newLocation, historyData) {
+     if(!historyData) {
+        if (readCookie("username")) {
+           jumppage("pg=userdiv", 0);
+        }  else {
+           jumppage("pg=logindiv", 0);
+        }
+     }
+     jumppage(historyData, 0, true);
+     return false;
+  }
+
 </SCRIPT>
 </HEAD>
 <BODY>
 <DIV ID=pagediv>
 </DIV>
 
-<DIV ID=logindiv STYLE="visibility:hidden">
+<DIV ID=logindiv CLASS=hiddendiv>
 <CENTER>
 <FORM NAME=loginform onSubmit="return logintry(this)">
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
-<INPUT TYPE=hidden NAME=pg VALUE=logindiv>
+<INPUT TYPE=hidden NAME=pg VALUE=logindiv WIDTH=800px>
 <TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
-<TR><TD>&nbsp;</TD></TR>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
 <TR><TD COLSPAN=2><H3>Login</H3></TD></TR>
 <TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
 <TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
@@ -588,29 +775,57 @@
 </CENTER>
 </DIV>
 
-<DIV ID=registerdiv STYLE="visibility:hidden">
+<DIV ID=registerdiv CLASS=hiddendiv>
 <CENTER>
 <FORM NAME=registerform onSubmit="return registertry(this)">
 <INPUT TYPE=hidden NAME=pg VALUE=registerdiv>
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
 <TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
-<TR><TD>&nbsp;</TD></TR>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
 <TR><TD COLSPAN=2><H3>Register</H3></TD></TR>
 <TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
 <TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
 <TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
+<TR><TD COLSPAN=2><BR>I agree to the <A HREF="javascript: disclaimertry()">terms and conditions</A></TD></TR>
 <TR><TD></TD><TD><INPUT TYPE=submit VALUE=Register SIZE=32></TD></TR>
 </TABLE>
 </FORM>
 </CENTER>
 </DIV>
 
-<DIV ID=installdiv STYLE="visibility:hidden">
+<DIV ID=disclaimerdiv CLASS=hiddendiv>
+<H3>Terms and Conditions</H3>
+<DIV ALIGN=justify>While the administrators of %sitename% will attempt to remove or edit any generally objectionable material as quickly as possible, it is impossible to review every post. Therefore you acknowledge that all posts made to this site express the views and opinions of the author and not the administrators or webmaster (except for posts by these people) and hence will not be held liable.
+<BR><BR>
+You agree not to post any abusive, obscene, vulgar, slanderous, hateful, threatening, sexually-orientated or any other material that may violate any applicable laws. You agree that the webmaster, administrator and moderators of %sitename% have the right to remove or edit any content at any time should they see fit. As a user you agree to any information you have entered above being stored in a database. While this information will not be disclosed to any third party without your consent the webmaster and administrator cannot be held responsible for any hacking attempt that may lead to the data being compromised.
+<BR><BR>
+This site uses cookies to store information on your local computer. These cookies serve only to improve your viewing pleasure. The email address is used only for confirming your registration details and password.
+<BR><BR>
+By clicking 'Register' below you agree to be bound by these conditions.</DIV>
+</DIV>
+
+<DIV ID=activatediv CLASS=hiddendiv>
+<CENTER>
+<FORM NAME=activateform onSubmit="return activatetry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=registerdiv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
+<TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
+<TR><TD COLSPAN=2><H3>Activate</H3></TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Key: </TD><TD><INPUT TYPE=test NAME=act_key SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE=Activate SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+<DIV ID=installdiv CLASS=hiddendiv>
 <CENTER>
 <FORM NAME=installform onSubmit="return installtry(this)">
 <INPUT TYPE=hidden NAME=pg VALUE=registerdiv>
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
-<TR><TD>&nbsp;</TD></TR>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
 <TR><TD COLSPAN=2><H3>First time install</H3></TD></TR>
 <TR><TD><B>Administrator</B></TD></TR>
 <TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
@@ -628,13 +843,13 @@
 </CENTER>
 </DIV>
 
-<DIV ID=forgotpassdiv STYLE="visibility:hidden">
+<DIV ID=forgotpassdiv CLASS=hiddendiv>
 <CENTER>
 <FORM NAME=forgotpassform onSubmit="return forgotpasstry(this)">
 <INPUT TYPE=hidden NAME=pg VALUE=forgotpassdiv>
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
 <TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
-<TR><TD>&nbsp;</TD></TR>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
 <TR><TD COLSPAN=2><H3>Forgot Password</H3></TD></TR>
 <TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
 <TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
@@ -644,7 +859,7 @@
 </CENTER>
 </DIV>
 
-<DIV ID=adminmenudiv STYLE="visibility:hidden">
+<DIV ID=adminmenudiv CLASS=hiddendiv>
 <CENTER>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
 <TR>
@@ -661,7 +876,7 @@
 </CENTER>
 </DIV>
 
-<DIV ID=usermenudiv STYLE="visibility:hidden">
+<DIV ID=usermenudiv CLASS=hiddendiv>
 <CENTER>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
 <TR>
@@ -679,7 +894,7 @@
 %adminmenu%
 </DIV>
 
-<DIV ID=userdiv STYLE="visibility:hidden">
+<DIV ID=userdiv CLASS=hiddendiv>
 %usermenu%
 <CENTER>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
@@ -690,16 +905,16 @@
 </CENTER>
 </DIV>
 
-<DIV ID=adminallusersdiv STYLE="visibility:hidden">
+<DIV ID=adminallusersdiv CLASS=hiddendiv>
 </DIV>
 
-<DIV ID=adminallgroupsdiv STYLE="visibility:hidden">
+<DIV ID=adminallgroupsdiv CLASS=hiddendiv>
 </DIV>
 
-<DIV ID=adminconfigdiv STYLE="visibility:hidden">
+<DIV ID=adminconfigdiv CLASS=hiddendiv>
 </DIV>
 
-<DIV ID=error404 STYLE="visibility:hidden">
+<DIV ID=error404 CLASS=hiddendiv>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
 <TR><TD>
 Error 404: This page could not be found
@@ -709,6 +924,7 @@ Error 404: This page could not be found
 
 
 <SCRIPT LANGUAGE="javascript">
+
 /* Check installation */
 
 xmlhttpPost("webapi.php?query=getconfig", function (returnText) {
@@ -718,16 +934,8 @@ xmlhttpPost("webapi.php?query=getconfig", function (returnText) {
      jumppage("pg=installdiv", 0);
   }  else {
      config = retval;
-     var params = (window.location.href.indexOf('?')==-1)? "" : window.location.href.slice(window.location.href.indexOf('?') + 1);
-     if (params == "") {
-        if (readCookie("username")) {
-           jumppage("pg=userdiv", 0);
-        }  else {
-           jumppage("pg=logindiv", 0);
-     }
-     }  else {
-        jumppage(params, 0);
-     }
+     document.title = xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "config"), "gallery_name").contents[0].value;
+     initialize();
   }
 });
 </SCRIPT>

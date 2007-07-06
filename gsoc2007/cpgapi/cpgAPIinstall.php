@@ -25,7 +25,7 @@ require('include/sql_parse.php');
 class install {
 
   function newinstall($dbserver, $dbuser, $dbpass, $dbname, $prefix, $adminusername, $adminpassword, $adminemail) {
-     global $DFLT, $CF, $DBS, $CONFIG, $MESSAGECODE;
+     global $DFLT, $CF, $DBS, $CONFIG;
 
      $cnf = "<?php\n";
      $cnf.= "// Coppermine configuration file\n";
@@ -39,7 +39,7 @@ class install {
      $cnf.= "?>\n";
  
      $dh = mkdir($DFLT['cfg_d']);
-     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'w') or $CF->unsafeexit("install_error", "Cannot open config file");
+     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'w') or $CF->unsafeexit("config_file_error");
      fwrite($fh, $cnf);
      fclose($fh);
 
@@ -48,10 +48,10 @@ class install {
      $DBS->initialize();
      
      mysql_connect($DBS->db['host'], $DBS->db['user'], $DBS->db['password']);
-     @mysql_select_db($DBS->db['name']) or $CF->unsafeexit("install_error", "Server connection error");
+     @mysql_select_db($DBS->db['name']) or $CF->unsafeexit("server_connection_error");
 
      if (($sch_open = fopen($DFLT['sql_f'], 'r')) === FALSE){
-        $CF->unsafeexit("install_error", "Cannot open SQL config file");
+        $CF->unsafeexit("sql_config_error");
      }  else {
         $sql_query = fread($sch_open, filesize($DFLT['sql_f']));
      }
@@ -75,24 +75,24 @@ class install {
 
      foreach($sql_query as $q) {
         if (! mysql_query($q)) {
-           $CF->unsafeexit("install_error", "Error executing SQL statement");
+           $CF->unsafeexit("sql_statement_error");
         }
      }
 
      mysql_close();
 
-     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'w') or $CF->unsafeexit("install_error", "Cannot open install file");
+     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'w') or $CF->unsafeexit("install_error");
      fwrite($fh, "1");
      fclose($fh);
 
-     print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nCoppermine Installed\n</message>\n";
+     print "<messagecode>success</messagecode>\n";
      $CF->safeexit();
   }
   
   function uninstall() {
-     global $DFLT, $CF, $DBS, $CONFIG, $MESSAGECODE;
+     global $DFLT, $CF, $DBS, $CONFIG;
 
-     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'r') or $CF->unsafeexit("install_error", "Cannot open config file");
+     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'r') or $CF->unsafeexit("config_file_error");
      fclose($fh);
 
      $CONFIG = array();
@@ -100,10 +100,10 @@ class install {
      $DBS->initialize();
      
      mysql_connect($DBS->db['host'], $DBS->db['user'], $DBS->db['password']);
-     @mysql_select_db($DBS->db['name']) or $CF->unsafeexit("install_error", "Server connection error");
+     @mysql_select_db($DBS->db['name']) or $CF->unsafeexit("server_connection_error");
 
      if (($sch_open = fopen($DFLT['sqloff_f'], 'r')) === FALSE){
-        $CF->unsafeexit("install_error", "Cannot open SQL config file");
+        $CF->unsafeexit("sql_config_error");
      }  else {
         $sql_query = fread($sch_open, filesize($DFLT['sql_f']));
      }
@@ -115,7 +115,7 @@ class install {
 
      foreach($sql_query as $q) {
         if (! mysql_query($q)) {
-           $CF->unsafeexit("install_error", "Error executing SQL statement");
+           $CF->unsafeexit("sql_statement_error");
         }
      }
 
@@ -123,7 +123,7 @@ class install {
 
      unlink($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
      unlink($DFLT['cfg_d'] . "/" . $DFLT['ins_f']);
-     print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nCoppermine Uninstalled\n</message>\n";
+     print "<messagecode>success</messagecode>\n";
      $CF->safeexit();
   }
 }

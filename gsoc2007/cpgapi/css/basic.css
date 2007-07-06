@@ -22,3 +22,10 @@ A {
    text-decoration: none;
    color: #0000FF;
 }
+
+.hiddendiv {
+   visibility: hidden;
+   position: absolute;
+   top: 0px;
+   left: -1000px;
+}

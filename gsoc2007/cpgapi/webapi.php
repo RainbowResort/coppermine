@@ -28,6 +28,7 @@ define('IN_COPPERMINE', true);
 $api_login = 'login';
 $api_logout = 'logout';
 $api_register = 'register';
+$api_activate = 'activate';
 
 // Application Basic
 $api_install = 'install';
@@ -57,6 +58,7 @@ $APITYPE = array(
     $api_login => 'unauth',
     $api_logout => 'login',
     $api_register => 'unauth',
+    $api_activate => 'unauth',
     $api_getconfig => 'unauth',
     $api_setconfig => 'admin',
     $api_showusers => 'admin',
@@ -78,6 +80,8 @@ $DFLT = array('cfg_d' => 'include', // The config file dir
     'alb_d' => 'albums', // The album dir
     'upl_d' => 'userpics', // The uploaded pic dir
     'edit_d' => 'edit',
+    'lang_d' => 'lang',
+    'mail_f' => 'mailer.inc.php',
     'sql_f' => 'cpgAPIschema.sql',
     'sqloff_f' => 'cpgAPIoffschema.sql'
 );
@@ -93,13 +97,11 @@ require('cpgAPIglobalfunctions.php');
 $CONFIG = array();
 $DISPLAY = new displayspecs();
 $DISPLAY->initialize();
-$MESSAGECODE = $DISPLAY->messagecode;
 $DBS = new dbspecs();
 $CF = new commonfunctions();
 $CF->showheader();
 $GF = new globalfunctions();
 $query = $CF->getvariable("query");
-
 
 /*
  * Install Application -- open currently for debug only
@@ -134,7 +136,7 @@ if($query == $api_uninstall) {
 /*
  * First check the install, and then do anything else.
  */
-$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error", "Cannot open install file");
+$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error");
 fclose($fh);
 
 /*
@@ -148,11 +150,14 @@ $DBS->sql_connect();
 
 $CONFIG = $GF->getconfig($CONFIG);
 
+require($DFLT['cfg_d'] . "/" . $DFLT['mail_f']);
+require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
+
 /*
  * Query manipulation: authenticate user first
  */
 if ($APITYPE[$query] == "") {
-   print "<messagecode>{$MESSAGECODE['unknown_query']}</messagecode>\n<message>Unknown Query</message>\n";
+   print "<messagecode>unknown_query</messagecode>\n";
    $CF->safeexit();
 }  else if($APITYPE[$query] == 'unauth') {
    /* User does not need any permissions to execute the query */
@@ -172,28 +177,28 @@ if ($query == $api_login) {
    $username = $CF->getvariable("username");
    $password = $CF->getvariable("password");
    $result = $UF->login($username, $password);
-   if ($result) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nLogged In\n</message>\n";
+   if (!$result['error']) {
+      print "<messagecode>success</messagecode>\n";
 
       $USER_DATA = $UF->getpersonaldata($username);
       $sessionkey = $UF->setlastvisit($username);
       $USER_DATA['sessionkey'] = $sessionkey;
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['login_error']}</messagecode><message>Password Incorrect\n</message>\n";
+   else print "<messagecode>{$result['messagecode']}</messagecode>\n";
 }
 
 if ($query == $api_logout) {
    $username = $CF->getvariable("username");
    $UF->logout($username);
-   print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nLogged Out\n</message>\n";
+   print "<messagecode>success</messagecode>\n";
 }
 
 /* 
  * Admin lists all users
  */
 if ($query == $api_showusers) {
-   print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUsers\n</message>\n";
+   print "<messagecode>success</messagecode>\n";
    $USER_DATA = $UF->getalluserdata();
    for($j = 0; $j < count($USER_DATA); $j++) {
       $UF->showdata($USER_DATA[$j]);
@@ -210,14 +215,13 @@ if ($query == $api_register) {
    $password = $CF->getvariable("password");
    $group_id = "2"; // Default group
    $email = $CF->getvariable("email");
-   $active = "YES";
 
-   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $active);
+   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUser Added\n</message>\n";
+      print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['user_error']}</messagecode><message>{$USER_DATA['message']}</message>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
 }
 
 /* Admin tries to add a user to the system
@@ -231,14 +235,13 @@ if ($query == $api_adduser) {
    $password = $CF->getvariable("password");
    $group_id = "2"; // Default group
    $email = $CF->getvariable("email");
-   $active = $CF->getvariable("active"); if($active=="") $active = "YES";
 
-   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $active);
+   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUser Added\n</message>\n";
+      print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['user_error']}</messagecode><message>{$USER_DATA['message']}</message>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
 }
 
 /* Admin tries to remove a user from the system
@@ -248,16 +251,16 @@ if ($query == $api_removeuser) {
    $addusername = $CF->getvariable("addusername");
 
    if($addusername == $username) {
-      print "<messagecode>{$MESSAGECODE['usergroup_error']}</messagecode><message>\nCannot remove yourself\n</message>\n";
+      print "<messagecode>cannot_remove_self</messagecode>\n";
       $CF->safeexit();
    }
 
    $USER_DATA = $UF->removeuser($addusername);
    if ($USER_DATA) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUser Removed\n</message>\n";
+      print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['user_error']}</messagecode><message>Username does not exist\n</message>\n";
+   else print "<messagecode>username_not_exist</messagecode>\n";
 }
 
 /* 
@@ -265,7 +268,7 @@ if ($query == $api_removeuser) {
  */
 if ($query == $api_showgroups) {
    $GROUP_DATA = $UF->getallgroupdata();
-   print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nGroups\n</message>\n";
+   print "<messagecode>success</messagecode>\n";
    for($j = 0; $j < count($GROUP_DATA); $j++) {
       print "<group>\n";
       for($i=0;$i<count($DISPLAY->groupfields);$i++) {
@@ -287,7 +290,7 @@ if ($query == $api_addgroup) {
 
    $GROUP_DATA = $UF->addgroup($groupname, $admin);
    if (!$GROUP_DATA['error']) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nGroup Added\n</message>\n";
+      print "<messagecode>success</messagecode>\n";
       print "<group>\n";
       for($i=0;$i<count($DISPLAY->groupfields);$i++) {
          print "<" . $DISPLAY->groupfields[$i] . ">\n";
@@ -296,7 +299,7 @@ if ($query == $api_addgroup) {
       }
       print "</group>\n";
    }
-   else print "<messagecode>{$MESSAGECODE['group_error']}</messagecode><message>{$GROUP_DATA['message']}</message>\n";
+   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>\n";
 }
 
 /* Admin tries to remove a group from the system
@@ -306,11 +309,11 @@ if ($query == $api_removegroup) {
    $group_id = $CF->getvariable("group_id");
 
    if ($group_id <= 4) {
-      print "<messagecode>{$MESSAGECODE['group_error']}</messagecode><message>Reserved Group. Cannot remove.\n</message>\n";
+      print "<messagecode>reserved_group_remove_error</messagecode>\n";
    }  else {
       $GROUP_DATA = $UF->removegroup($group_id);
       if ($GROUP_DATA) {
-         print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nGroup Removed\n</message>\n";
+         print "<messagecode>success</messagecode>\n";
          print "<group>\n";
          for($i=0;$i<count($DISPLAY->groupfields);$i++) {
             print "<" . $DISPLAY->groupfields[$i] . ">\n";
@@ -319,7 +322,7 @@ if ($query == $api_removegroup) {
          }
          print "</group>\n";
       }
-      else print "<messagecode>{$MESSAGECODE['group_error']}</messagecode><message>Group does not exist\n</message>\n";
+      else print "<messagecode>group_not_exist</messagecode>\n";
    }
 }
 
@@ -333,11 +336,11 @@ if ($query == $api_addusertogroup) {
    $group_id = $CF->getvariable("group_id");
 
    $USER_DATA = $UF->addusertogroup($addusername, $group_id);
-   if ($USER_DATA) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUser Added To Group\n</message>\n";
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['usergroup_error']}</messagecode><message>Username or groupname does not exist\n</message>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
 }
 
 /* 
@@ -350,23 +353,23 @@ if ($query == $api_removeuserfromgroup) {
    $group_id = $CF->getvariable("group_id");
 
    if($addusername == $username) {
-      print "<messagecode>{$MESSAGECODE['usergroup_error']}</messagecode><message>\nCannot remove yourself from a group\n</message>\n";
+      print "<messagecode>cannot_remove_self_from_group</messagecode>\n";
       $CF->safeexit();
    }
 
    $USER_DATA = $UF->removeuserfromgroup($addusername, $group_id);
-   if ($USER_DATA) {
-      print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nUser Removed From Group\n</message>\n";
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$MESSAGECODE['usergroup_error']}</messagecode><message>Username or groupname does not exist\n</message>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
 }
 
 /* 
  * Request for application configuration
  */
 if ($query == $api_getconfig) {
-   print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nConfig\n</message>\n";
+   print "<messagecode>success</messagecode>\n";
    print "<config>\n";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";
@@ -380,13 +383,22 @@ if ($query == $api_getconfig) {
  * Set application configuration
  */
 if ($query == $api_setconfig) {
-   //$CONFIG[''] = $CF->getvariable("");
-   $CONFIG['allow_user_registration'] = $CF->getvariable("allow_user_registration");
-   $CONFIG['allow_duplicate_emails_addr'] = $CF->getvariable("allow_duplicate_emails_addr");
 
+   for($i=0;$i < count($DISPLAY->configfields); $i++) {
+      if ($CF->checkvariable($DISPLAY->configfields[$i])) {
+         // known languages only
+         if ($DISPLAY->configfields[$i]=="lang") {
+            $lang = $CF->getvariable("lang");
+            if ($lang=="english" || $lang=="german")
+               $CONFIG[$DISPLAY->configfields[$i]] =  $CF->getvariable("lang");
+         }  else {
+            $CONFIG[$DISPLAY->configfields[$i]] =  $CF->getvariable($DISPLAY->configfields[$i]);
+         }
+      }
+   }
    $GF->setconfig($CONFIG);
 
-   print "<messagecode>{$MESSAGECODE['success']}</messagecode><message>\nConfig\n</message>\n";
+   print "<messagecode>success</messagecode>\n";
    print "<config>\n";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";

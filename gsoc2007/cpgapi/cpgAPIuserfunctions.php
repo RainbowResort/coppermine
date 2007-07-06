@@ -19,16 +19,27 @@ class userfunctions {
 
     $encpassword = md5($password);
     // Check for user in users table
-    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']} FROM {$DBS->usertable}";
+    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']}, {$DBS->field['active']} FROM {$DBS->usertable}";
     $sql .= " WHERE {$DBS->field['username']} = '$username' AND BINARY {$DBS->field['password']} = '$encpassword'";
     $results = $DBS->sql_query($sql);
 
     if (mysql_num_rows($results)) {
-       $USER_DATA = mysql_fetch_assoc($results);
-       mysql_free_result($results);
-       return $USER_DATA;
+       if (mysql_result($results, 0, $DBS->field['active']) == "YES") {
+          $USER_DATA = mysql_fetch_assoc($results);
+          mysql_free_result($results);
+          return $USER_DATA;
+       }  else {
+          mysql_free_result($results);
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "not_active";
+          return $USER_DATA;
+       }
     }  else {
-       return false;
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "login_error";
+       return $USER_DATA;
     }
   }
 
@@ -133,11 +144,11 @@ class userfunctions {
      @ return true if authorized, otherwise exits immediately
    */
   function authorizeuser($username, $sessionkey, $perm) {
-    global $CF, $MESSAGECODE;
+    global $CF;
 
     $userkey = $this->getsessionkey($username);
     if($userkey=='' || $userkey!=$sessionkey) {
-       print "<messagecode>{$MESSAGECODE['unknown_user']}</messagecode>\n<message>User invalid or session not authenticated</message>\n";
+       print "<messagecode>invalid_session_error</messagecode>";
        $CF->safeexit();
     }
 
@@ -159,15 +170,15 @@ class userfunctions {
             if ($authorized) {
                return true;
             }  else {
-               print "<messagecode>{$MESSAGECODE['no_perms']}</messagecode>\n<message>Not enough permissions to execute this query</message>\n";
+               print "<messagecode>query_permission_error</messagecode>\n";
                $CF->safeexit();
             }
          }  else {
-            print "<messagecode>{$MESSAGECODE['unknown_user']}</messagecode>\n<message>User group data incorrect or corrupted</message>\n";
+            print "<messagecode>user_data_invalid_error</messagecode>\n";
             $CF->safeexit();
          }
       }  else  {
-         print "<messagecode>{$MESSAGECODE['unknown_user']}</messagecode>\n<message>User data incorrect or corrupted</message>\n";
+         print "<messagecode>user_data_invalid_error</messagecode>\n";
          $CF->safeexit();
       }
     }
@@ -278,8 +289,8 @@ class userfunctions {
    * @ active
    * @ return USER_DATA
    */
-  function adduser ($addusername, $password, $group_id, $email, $active) {
-    global $DBS, $DISPLAY, $CONFIG;
+  function adduser ($addusername, $password, $group_id, $email) {
+    global $DBS, $DISPLAY, $CONFIG, $CF, $LANG;
 
     $fieldstring = "";
     for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
@@ -293,7 +304,7 @@ class userfunctions {
        mysql_free_result($results);
        $USER_DATA = array();
        $USER_DATA['error'] = true;
-       $USER_DATA['message'] = "Username already exists";
+       $USER_DATA['messagecode'] = "duplicate_username";
        return $USER_DATA;
     }
 
@@ -305,12 +316,52 @@ class userfunctions {
           mysql_free_result($results);
           $USER_DATA = array();
           $USER_DATA['error'] = true;
-          $USER_DATA['message'] = "Email address already in use";
+          $USER_DATA['messagecode'] = "duplicate_email";
           return $USER_DATA;
        }
     }
 
-    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']}) VALUES ('{$addusername}', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW())";
+    $act_key = $CF->str_makerand(15,25, true, false, true);
+
+    $active = "YES";
+    if ($CONFIG['reg_requires_valid_email']) {
+        if (!$CONFIG['admin_activation']==1) {
+           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+           $template_vars = array(
+               '{SITE_NAME}' => $CONFIG['gallery_name'],
+               '{USER_NAME}' => $username,
+               '{ACT_LINK}' => $act_link
+            );
+            if (!cpg_mail($email, sprintf($LANG['register']['confirm_email_subject'], $CONFIG['gallery_name']), nl2br(strtr($LANG['register_confirm_email'], $template_vars)))) {
+               $USER_DATA = array();
+               $USER_DATA['error'] = true;
+               $USER_DATA['messagecode'] = "failed_sending_email";
+               return $USER_DATA;
+            }
+            $active = "NO";
+        }
+    }
+
+    if ($CONFIG['admin_activation']==1) {
+       $active = "NO";
+    }
+
+    // email notification to admin
+    if ($CONFIG['reg_notify_admin_email']) {
+       if ($CONFIG['admin_activation']==1) {
+          $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+          $template_vars = array(
+             '{SITE_NAME}' => $CONFIG['gallery_name'],
+             '{USER_NAME}' => $user_name,
+             '{ACT_LINK}' => $act_link,
+          );
+          cpg_mail('admin', sprintf($LANG['register']['notify_admin_request_email_subject'], $CONFIG['gallery_name']), nl2br(strtr($LANG['register_approve_email'], $template_vars)));
+       }  else {
+          cpg_mail('admin', sprintf($LANG['register']['notify_admin_email_subject'], $CONFIG['gallery_name']), sprintf($LANG['register']['notify_admin_email_body'], $user_name));
+       }
+    }
+
+    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']}) VALUES ('{$addusername}', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}')";
     $DBS->sql_update($sql);
 
     $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
@@ -375,7 +426,7 @@ class userfunctions {
        mysql_free_result($results);
        $GROUP_DATA = array();
        $GROUP_DATA['error'] = true;
-       $GROUP_DATA['message'] = "Group name already exists";
+       $GROUP_DATA['messagecode'] = "duplicate_groupname";
        return $GROUP_DATA;
     }
 
@@ -431,7 +482,10 @@ class userfunctions {
        $adduserid = mysql_result($results, 0, $DBS->field['user_id']);
        mysql_free_result($results);
     } else {
-       return false;
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "username_not_exist";
+       return $USER_DATA;
     }
 
     $sql = "SELECT * FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='" . $group_id . "'";
@@ -439,7 +493,10 @@ class userfunctions {
     if (mysql_num_rows($results)) {
        mysql_free_result($results);
     } else {
-       return false;
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "group_not_exist";
+       return $USER_DATA;
     }
 
     $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";
@@ -462,7 +519,10 @@ class userfunctions {
        $adduserid = mysql_result($results, 0, $DBS->field['user_id']);
        mysql_free_result($results);
     } else {
-       return false;
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "username_not_exist";
+       return $USER_DATA;
     }
 
     $sql = "SELECT * FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='" . $group_id . "'";
@@ -470,7 +530,10 @@ class userfunctions {
     if (mysql_num_rows($results)) {
        mysql_free_result($results);
     } else {
-       return false;
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "group_not_exist";
+       return $USER_DATA;
     }
 
     $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}='{$adduserid}' AND {$DBS->userxgroup['group_id']}='{$group_id}'";
