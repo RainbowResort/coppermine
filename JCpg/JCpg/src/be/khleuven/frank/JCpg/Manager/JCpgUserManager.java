@@ -348,10 +348,8 @@ public class JCpgUserManager extends JDialog {
 		
 		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
     	JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
-    	
-		connectionStatus.setText("Trying to connect to " + (readServerConfig()).getFullServer());
 		
-        if(sqlManager.connect() != -1 && login()){ // connection goes well => go to JCpgInterface
+        if(sqlManager.connect() != -1 && login() && serverList.getSelectedItem() != null){ // connection goes well => go to JCpgInterface
         	
         	writeUserConfig();
         	
@@ -375,7 +373,7 @@ public class JCpgUserManager extends JDialog {
         	
         }else{
         	
-        	connectionStatus.setText("Unable to connected to " + (readServerConfig()).getFullServer());
+        	connectionStatus.setText("Unable to connected to your online Coppermine Photo Gallery");
         	
         }
 		
@@ -496,6 +494,7 @@ public class JCpgUserManager extends JDialog {
 							
 				if(rs_userid.next() == true){
 					
+					this.userid = rs_userid.getInt("user_id");
 					getJCpgInterface().getUserConfig().changeId(rs_userid.getInt("user_id"));
 					return true;
 								
@@ -611,7 +610,7 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private JCpgServerConfig readServerConfig(){
 		
-		if(!serverList.getSelectedItem().equals("")){
+		if(serverList.getSelectedItem() != null){
 			
 			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
 			
