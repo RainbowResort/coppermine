@@ -282,7 +282,10 @@ function annotate_configure() {
 
         while($group = mysql_fetch_array($result))
         {
-                echo "<input type='checkbox' name='permissions[]' value='$group[group_id]'>$group[group_name]</input><br/>\n";
+                if($group['group_id'] == 4) { $disabled = 'disabled'; } // Banned users group
+                else { $disabled = ''; }
+
+                echo "<input type='checkbox' name='permissions[]' value='$group[group_id]' $disabled>$group[group_name]</input><br/>\n";
         }
         
         if(in_array('any',$allowed_groups)) {$checked = 'checked';}

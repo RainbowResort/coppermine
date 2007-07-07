@@ -46,8 +46,10 @@ while($group = mysql_fetch_array($result))
 {
         if(in_array($group[group_id],$allowed_groups)) {$checked = 'checked';}
         else {$checked = '';}
+        if($group['group_id'] == 4) { $disabled = 'disabled'; } // Banned users group
+        else { $disabled = ''; }
         
-        echo "<input type='checkbox' name='permissions[]' value='$group[group_id]' $checked>$group[group_name]</input><br/>\n";
+        echo "<input type='checkbox' name='permissions[]' value='$group[group_id]' $checked $disabled>$group[group_name]</input><br/>\n";
 }
         if(in_array('any',$allowed_groups)) {$checked = 'checked';}
         else {$checked = '';}
