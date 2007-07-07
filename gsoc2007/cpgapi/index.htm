@@ -117,7 +117,7 @@
      }
 
      if (!addtohistory) {
-        dhtmlHistory.add(vars['pg']+"_history", page);
+        dhtmlHistory.add("pg="+vars['pg'], page);
      }
      
      if(document.getElementById(vars['pg'])) {
@@ -172,6 +172,24 @@
        }
 
        document.getElementById("pagediv").innerHTML = cnt;
+
+       if (vars['pg'] == "activatediv") {
+          var f = document.getElementsByName("activateform");
+          for(var i=0; i < f.length; i++) {
+             f.item(i).username.value = (!vars['username'])?"":vars['username'];
+             f.item(i).act_key.value = (!vars['act_key'])?"":vars['act_key'];
+          }
+       }
+
+       if (vars['pg'] == "generatepassworddiv") {
+          var f = document.getElementsByName("generatepasswordform");
+          for(var i=0; i < f.length; i++) {
+             f.item(i).username.value = (!vars['username'])?"":vars['username'];
+             f.item(i).pass_key.value = (!vars['pass_key'])?"":vars['pass_key'];
+          }
+       }
+
+
      } else {
        document.getElementById("pagediv").innerHTML = document.getElementById("error404").innerHTML; 
      }
@@ -246,8 +264,41 @@
         return false;
      }
 
-     xmlhttpPost("http://www.nitingupta.org", function (returnText) {
-        alert(returnText);
+     xmlhttpPost("webapi.php?query=forgotpassword&addusername="+formelem.username.value
+                 +"&email="+formelem.email.value
+                 , function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "success") {
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
+        }
+     });
+
+     return false;
+  }
+
+  function generatepasswordtry(formelem) {
+     if (formelem.username.value=="") {
+        alert("You must enter a username");
+        return false;
+     }
+     if (formelem.pass_key.value=="") {
+        alert("You must enter a password key");
+        return false;
+     }
+
+     xmlhttpPost("webapi.php?query=generatepassword&addusername="+formelem.username.value
+                 +"&pass_key="+formelem.pass_key.value
+                 , function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
+        if (messagecode == "success") {
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value);
+        }
      });
 
      return false;
@@ -268,7 +319,6 @@
      }
 
      xmlhttpPost("webapi.php?query=register&addusername="+formelem.username.value+"&password="+formelem.password.value+"&email="+formelem.email.value, function (returnText) {
-        alert(returnText);
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGet(xmlParserGet(retval, "catalog"), "messagecode").contents[0].value;
         if (messagecode == "success") {
@@ -692,7 +742,7 @@
 
 
   function user_activate(username, actkey) {
-     xmlhttpPost("webapi.php?query=activate&username="+username
+     xmlhttpPost("webapi.php?query=activate&addusername="+username
                  +"&act_key="+actkey
                  , function (returnText) {
 	var retval = Xparse(returnText);
@@ -742,14 +792,16 @@
   }
 
   function historyChange(newLocation, historyData) {
-     if(!historyData) {
+     if(!historyData && !newLocation) {
         if (readCookie("username")) {
            jumppage("pg=userdiv", 0);
         }  else {
            jumppage("pg=logindiv", 0);
         }
+        return;
      }
-     jumppage(historyData, 0, true);
+     if(historyData!=null) jumppage(historyData, 0, true);
+     else jumppage(newLocation, 0, true);
      return false;
   }
 
@@ -858,6 +910,23 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
 </FORM>
 </CENTER>
 </DIV>
+
+<DIV ID=generatepassworddiv CLASS=hiddendiv>
+<CENTER>
+<FORM NAME=generatepasswordform onSubmit="return generatepasswordtry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=generatepassworddiv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
+<TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
+<TR><TD COLSPAN=2><H3>Forgot Password</H3></TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Password Key: </TD><TD><INPUT TYPE=text NAME=pass_key SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE="Retrieve Password" SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
 
 <DIV ID=adminmenudiv CLASS=hiddendiv>
 <CENTER>

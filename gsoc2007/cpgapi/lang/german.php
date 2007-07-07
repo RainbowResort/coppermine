@@ -17,15 +17,6 @@ $LANG['bad_words'] = array('*fuck*', 'Fu\(*', 'fuk*', 'masturbat*', 'motherfucke
   'Schwengel', 'Titte*', 'bums*', 'Scheiss*', 'Scheiß*');
 
 $LANG['forgot_passwd'] = array(
-  'forgot_passwd' => 'Passwort-Erinnerung',
-  'err_already_logged_in' => 'Du bist schon angemeldet!',
-  'enter_email' => 'Gib Deine eMail-Adresse ein',
-  'submit' => 'los!',
-  'illegal_session' => 'Die Session für die Passwort-Erinnerung ist ungültig oder abgelaufen.',
-  'failed_sending_email' => 'Die eMail mit der Passwort-Erinnerung kann nicht gesendet werden!',
-  'email_sent' => 'Eine eMail mit Deinem Benutzernamen und einem neuen Passwort wurde an %s gesendet.',
-  'verify_email_sent' => 'Eine eMail wurde an %s gesendet. Bitte überprüfe Deine Mailbox, um den Vorgang abzuschliessen.', 
-  'err_unk_user' => 'Der gewählte Benutzer existiert nicht!',
   'account_verify_subject' => '%s - Anforderung neues Passwort',
   'account_verify_body' => 'Du hast ein neues Passwort beantragt - um dieses neue Passwort tatsächlich zu erhalten, klicke 
 auf nachstehenden Link:

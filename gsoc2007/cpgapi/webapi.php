@@ -29,6 +29,9 @@ $api_login = 'login';
 $api_logout = 'logout';
 $api_register = 'register';
 $api_activate = 'activate';
+$api_activate = 'activate';
+$api_forgotpassword = 'forgotpassword';
+$api_generatepassword = 'generatepassword';
 
 // Application Basic
 $api_install = 'install';
@@ -59,6 +62,8 @@ $APITYPE = array(
     $api_logout => 'login',
     $api_register => 'unauth',
     $api_activate => 'unauth',
+    $api_forgotpassword => 'unauth',
+    $api_generatepassword => 'unauth',
     $api_getconfig => 'unauth',
     $api_setconfig => 'admin',
     $api_showusers => 'admin',
@@ -217,6 +222,53 @@ if ($query == $api_register) {
    $email = $CF->getvariable("email");
 
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+      $UF->showdata($USER_DATA);
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+}
+
+/* User tried to activate account
+ * @ username
+ * @ act_key
+ */
+if ($query == $api_activate) {
+   $addusername = $CF->getvariable("addusername");
+   $act_key = $CF->getvariable("act_key");
+
+   $USER_DATA = $UF->activate($addusername, $act_key);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+      $UF->showdata($USER_DATA);
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+}
+
+/* Generate a new password request for the user
+ * @ username
+ * @ email
+ */
+if ($query == $api_forgotpassword) {
+   $addusername = $CF->getvariable("addusername");
+   $email = $CF->getvariable("email");
+
+   $USER_DATA = $UF->forgotpassword($addusername, $email);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+}
+
+/* Generate a new password for the user
+ * @ username
+ * @ pass_key
+ */
+if ($query == $api_generatepassword) {
+   $addusername = $CF->getvariable("addusername");
+   $pass_key = $CF->getvariable("pass_key");
+
+   $USER_DATA = $UF->generatepassword($addusername, $pass_key);
    if (!$USER_DATA['error']) {
       print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);

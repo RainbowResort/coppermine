@@ -349,7 +349,7 @@ class userfunctions {
     // email notification to admin
     if ($CONFIG['reg_notify_admin_email']) {
        if ($CONFIG['admin_activation']==1) {
-          $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+          $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
           $template_vars = array(
              '{SITE_NAME}' => $CONFIG['gallery_name'],
              '{USER_NAME}' => $user_name,
@@ -375,6 +375,105 @@ class userfunctions {
     $DBS->sql_update($sql);
 
     return $this->getpersonaldata($addusername);
+  }
+
+
+  /* Activation function.
+   * @ addusername
+   * @ act_key
+   * @ return USER_DATA on success, false on failure
+   */
+  function activate ($addusername, $act_key) {
+    global $CF, $DBS;
+
+    // Check for user in users table
+    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']} FROM {$DBS->usertable}";
+    $sql .= " WHERE {$DBS->field['username']} = '{$addusername}' AND {$DBS->field['act_key']} = '{$act_key}'";
+    $results = $DBS->sql_query($sql);
+
+    if (mysql_num_rows($results)) {
+       $act_key = $CF->str_makerand(15,25, true, false, true);
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['active']}='YES', {$DBS->field['act_key']}={$act_key} WHERE {$DBS->field['username']}='{$addusername}'";
+       $DBS->sql_update($sql);
+       return $this->getpersonaldata($addusername);
+    }  else {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "activation_error";
+       return $USER_DATA;
+    }
+  }
+
+  /* Forgot Password
+   * @ addusername
+   * @ email
+   * @ return true on success, false on failure
+   */
+  function forgotpassword ($addusername, $email) {
+    global $DBS, $CF;
+
+    // Check for user in users table
+    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']} FROM {$DBS->usertable}";
+    $sql .= " WHERE {$DBS->field['username']} = '{$addusername}' AND {$DBS->field['email']} = '{$email}'";
+    $results = $DBS->sql_query($sql);
+
+    if (mysql_num_rows($results)) {
+       $pass_key = $CF->str_makerand(15,25, true, false, true);
+       $pass_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=generatepassworddiv&username=' . $addusername . '&pass_key=' . $pass_key;
+
+       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['account_verify_subject'], $CONFIG['gallery_name']), sprintf($LANG['forgot_passwd']['account_verify_body'], $pass_link)))  {
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "failed_sending_email";
+          return $USER_DATA;
+       }
+
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['act_key']}='{$pass_key}' WHERE {$DBS->field['username']}='{$addusername}'";
+       $DBS->sql_update($sql);
+       return $this->getpersonaldata($addusername);
+    }  else {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "forgotpassword_error";
+       return $USER_DATA;
+    }
+  }
+
+  /* Function to generate new password
+   * @ addusername
+   * @ pass_key
+   * @ return USER_DATA on success, false on failure
+   */
+  function generatepassword ($addusername, $pass_key) {
+    global $DBS, $CF;
+
+    // Check for user in users table
+    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']}, {$DBS->field['email']} FROM {$DBS->usertable}";
+    $sql .= " WHERE {$DBS->field['username']} = '{$addusername}' AND {$DBS->field['act_key']} = '{$pass_key}'";
+    $results = $DBS->sql_query($sql);
+
+    if (mysql_num_rows($results)) {
+       $password = $CF->str_makerand(8,12, true, false, true);
+       $pass_key = $CF->str_makerand(15,25, true, false, true);
+       $email = mysql_result($results, 0, $DBS->field['email']);
+       $login_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=logindiv';
+
+       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['passwd_reset_subject'], $CONFIG['gallery_name']), sprintf($LANG['forgot_passwd']['passwd_reset_body'], $addusername, $password, $login_link))) {
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "failed_sending_email";
+          return $USER_DATA;
+       }
+
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['password']}= md5('{$password}'), {$DBS->field['act_key']}='{$pass_key}' WHERE {$DBS->field['username']}='{$addusername}'";
+       $DBS->sql_update($sql);
+       return $this->getpersonaldata($addusername);
+    }  else {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "forgotpassword_error";
+       return $USER_DATA;
+    }
   }
 
   /* Function to remove an existing user from the database.

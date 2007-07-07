@@ -15,15 +15,6 @@ $LANG['charset'] = 'iso-8859-1';
 $LANG['bad_words'] = array('*fuck*', 'asshole', 'assramer', 'bitch*', 'c0ck', 'clits', 'Cock', 'cum', 'cunt*', 'dago', 'daygo', 'dego', 'dick*', 'dildo', 'fanculo', 'feces', 'foreskin', 'Fu\(*', 'fuk*', 'honkey', 'hore', 'injun', 'kike', 'lesbo', 'masturbat*', 'motherfucker', 'nazis', 'nigger*', 'nutsack', 'penis', 'phuck', 'poop', 'pussy', 'scrotum', 'shit', 'slut', 'titties', 'titty', 'twaty', 'wank*', 'whore', 'wop*');
 
 $LANG['forgot_passwd'] = array(
-  'forgot_passwd' => 'Password reminder',
-  'err_already_logged_in' => 'You are already logged in !',
-  'enter_email' => 'Enter your email address',
-  'submit' => 'go',
-  'illegal_session' => 'Forgot password session invalid or has expired.',
-  'failed_sending_email' => 'The password reminder email can\'t be sent !',
-  'email_sent' => 'An email with your username and new password was sent to %s',
-  'verify_email_sent' => 'An email has been sent to %s. Please check your email to complete the process.',
-  'err_unk_user' => 'Selected user does not exist!',
   'account_verify_subject' => '%s - New password request',
   'account_verify_body' => 'You have requested a new password. If you would like to proceed with having a new password sent to you, click on the following link:
 
