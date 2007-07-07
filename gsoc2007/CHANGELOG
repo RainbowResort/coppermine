@@ -25,6 +25,7 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+2007-07-07 [A] Added groups to tagging {drhammond}
 2007-06-30 [A] Added tagging with basic permissions {drhammond}
 2007-06-20 [B] Updated permissions when admin restricts users creating albums in categories + fixed some permissions {SaWey}
 2007-06-19 [A] Added added ability of users to edit the albums they own {SaWey}

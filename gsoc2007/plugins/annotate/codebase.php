@@ -40,35 +40,32 @@ function annotate_meta(){
 
 function annotate_file_data($CURRENT_PIC_DATA){
 
-	global $CONFIG;
+	global $CONFIG, $USER_DATA;
+        $allowed = false;
         
-        // Check Permissions
+        // Get Allowed Groups from Comfig Database
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_CONFIG']} WHERE (`name`='tag_allow');");
+        $permission = mysql_fetch_assoc($result);
+        $allowed_groups = explode(',',$permission['value']);
         
-        // Get Permissions from config
-        $permissions = array('admin'=>'0','owner'=>'0','registered'=>'0','any'=>'0',);
-        foreach($permissions as $permission => $value)
+        // See if any of the user's groups match any of the allowed groups
+        foreach($USER_DATA['groups'] as $user_group)
         {
-                $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_CONFIG']} WHERE (`name`='tag_allow_$permission');");
-                $row = cpg_db_fetch_row($result);
-                $permissions[$permission] = $row['value'];
+                if(in_array($user_group,$allowed_groups))
+                {
+                        $allowed = true;
+                }
         }
         
-
+        if(in_array('any',$allowed_groups)) {
+                $allowed = true;
+        }
         
-        // Check versus current status        
-        if($permissions['any']==1)
-                $allow = true;
-        else if($permissions['admin']==1 && GALLERY_ADMIN_MODE)
-                $allow = true;
-        else if($permissions['owner']==1 && (USER_ID == $CURRENT_PIC_DATA['owner_id']))
-                $allow = true;
-        if($permissions['registered'] && (USER_ID != 0)) // Need to fix
-                $allow = true;
-
-        if(!$allow) {
+        if(!$allowed)
+        {
                 return $CURRENT_PIC_DATA;
         }
-	
+        
 	if (is_image($CURRENT_PIC_DATA['filename'])){
 
 		$sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$CURRENT_PIC_DATA['pid']}";
@@ -246,18 +243,10 @@ function annotate_install() {
         {
                 global $thisplugin, $CONFIG;
                 
-                // Adds each of the permission options to the config database with a boolean value
-                $options = array('admin','owner','registered','any');
-                foreach($options as $option)
-                {
-                        if(in_array($option,$_POST['permissions']))
-                        {
-                                $sql = "INSERT INTO {$CONFIG['TABLE_CONFIG']} (name,value) VALUES ('tag_allow_{$option}','1');";
-                        } else {
-                                $sql = "INSERT INTO {$CONFIG['TABLE_CONFIG']} (name,value) VALUES ('tag_allow_{$option}','0');";                                
-                        }
-                        cpg_db_query($sql);
-                }
+                // Creates Comma-Seperated List of Group IDs and puts in Config table
+                $groups = implode(',',$_POST['permissions']);
+                $sql = "INSERT INTO {$CONFIG['TABLE_CONFIG']} (name,value) VALUES ('tag_allow','$groups');";
+                cpg_db_query($sql);
 
                 
                 $sql = "DROP TABLE IF EXISTS `{$CONFIG['TABLE_PREFIX']}notes`";
@@ -277,11 +266,7 @@ function annotate_install() {
 
 function annotate_uninstall() {
         // Clean up config table
-        $options = array('admin','owner','registered','any');
-        foreach($options as $option)
-        {
-                cpg_db_query("DELETE FROM `gsoc_config` WHERE CONVERT(`name` USING utf8) = 'tag_allow_$option' LIMIT 1;");
-        }
+        cpg_db_query("DELETE FROM `gsoc_config` WHERE CONVERT(`name` USING utf8) = 'tag_allow' LIMIT 1;");
         // Clean up notes table
         $sql = "DROP TABLE IF EXISTS `{$CONFIG['TABLE_PREFIX']}notes`";
         cpg_db_query($sql);
@@ -289,16 +274,22 @@ function annotate_uninstall() {
 }
 
 function annotate_configure() {
-        ?>        
-                <h2>Who Can Tag Photos?</h2>
-                <form action="<?php echo $_SERVER[REQUEST_URI] ?>" method="post">
-                <input type="checkbox" name="permissions[]" value="admin">Administrators</input><br/>
-                <input type="checkbox" name="permissions[]" value="owner">Owner</input><br/>
-                <input type="checkbox" name="permissions[]" value="registered">Registered Users</input><br/>
-                <input type="checkbox" name="permissions[]" value="any">All</input><br/>
-                <input type="submit" name="submit" value="submit">
-                </form>
-        <?php
+        global $CONFIG;
+
+        echo "<h2>Who Can Tag Photos?</h2><form action='$_SERVER[REQUEST_URI]' method='post'>";
+
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_USERGROUPS']} WHERE 1 ORDER BY group_id");
+
+        while($group = mysql_fetch_array($result))
+        {
+                echo "<input type='checkbox' name='permissions[]' value='$group[group_id]'>$group[group_name]</input><br/>\n";
+        }
+        
+        if(in_array('any',$allowed_groups)) {$checked = 'checked';}
+        else {$checked = '';}
+        echo "<br/><input type='checkbox' name='permissions[]' value='any' $checked>Anyone</input><br/><br/>";
+
+        echo "<input type='submit' name='submit' value='submit'></form>";
 }
 
 // Based off 
