@@ -265,7 +265,15 @@ public class JCpgSyncer {
 									
 								}
 								
-							} catch (UnknownHostException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+							} catch (UnknownHostException e) { 
+								
+								System.out.println("Sync problem");
+								
+							} catch (IOException e) { 
+								
+								System.out.println("Sync problem");
+								
+							}
 							
 							// END TEMPORARY
 							

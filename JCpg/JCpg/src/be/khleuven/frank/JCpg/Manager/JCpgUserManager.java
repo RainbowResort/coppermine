@@ -378,8 +378,6 @@ public class JCpgUserManager extends JDialog {
         	new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
         	getJCpgInterface().buildTree();
         	
-        	new JCpgSyncer(getJCpgInterface(), sqlManager).extractDatabase(); // look if their maybe more information in the online database to add to the local state
-        	
         	getJCpgInterface().setEnabled(true);
         	this.dispose();
         	
@@ -511,7 +509,6 @@ public class JCpgUserManager extends JDialog {
 							
 			} catch (SQLException e) {
 							
-				e.printStackTrace();
 				return false; // no such user
 							
 			}
@@ -520,7 +517,6 @@ public class JCpgUserManager extends JDialog {
 						
 		} catch (NoSuchAlgorithmException e) {
 				
-			e.printStackTrace();
 			System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
 						
 		}
@@ -568,7 +564,6 @@ public class JCpgUserManager extends JDialog {
 				
 			} catch (JDOMException e) {
 				
-				e.printStackTrace();
 				System.out.println("JCpgUserManager: couldn't load usercfg.xml");
 				
 			}
@@ -605,7 +600,7 @@ public class JCpgUserManager extends JDialog {
 			
 		}catch(Exception e){
 			
-			e.printStackTrace();
+			System.out.println("JCpgUserManager: couldn't save user configuration");
 			
 		}
 		
@@ -639,7 +634,6 @@ public class JCpgUserManager extends JDialog {
 					
 				} catch (JDOMException e) {
 					
-					e.printStackTrace();
 					System.out.println("JCpgUserManager: couldn't load server configuration");
 					
 				}

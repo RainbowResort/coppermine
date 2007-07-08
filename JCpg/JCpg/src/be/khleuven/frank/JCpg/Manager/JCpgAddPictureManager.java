@@ -213,7 +213,6 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	
 					} catch (Exception e) {
 						
-						e.printStackTrace();
 						System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
 	
 					}

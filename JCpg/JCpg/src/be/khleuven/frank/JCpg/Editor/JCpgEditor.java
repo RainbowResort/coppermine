@@ -447,7 +447,6 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
             
         } catch(IOException e){
         	
-        	e.printStackTrace();
             System.out.println("JCpgEditor: Couldn't save edited photo");
             
         }

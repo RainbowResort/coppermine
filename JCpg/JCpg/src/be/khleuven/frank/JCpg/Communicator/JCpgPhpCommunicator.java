@@ -24,6 +24,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 
 /**
@@ -105,32 +112,6 @@ public class JCpgPhpCommunicator {
 																	//*************************************
 	/**
 	 * 
-	 * Go to a URL to get a XML server response
-	 * 
-	 * @param url
-	 * 		the URL to go to
-	 * @return
-	 * 		true if it was visited successfully, else false
-	 */
-	public boolean performPhpRequest(String url){
-		
-		try {
-			
-			URL requestUrl = new URL(url);
-			
-			requestUrl.openConnection();
-			
-		} catch (Exception e) {
-		
-			System.out.println("JCpgPhpCommunicator: Couldn't send request URL");
-			
-		}
-		
-		return true;
-		
-	}
-	/**
-	 * 
 	 * Get the XML server response
 	 * 
 	 * @param url
@@ -138,15 +119,15 @@ public class JCpgPhpCommunicator {
 	 * @return
 	 * 		true if the server response was collected successfully, else false
 	 */
-	public boolean getXmlResult(String url){
+	public boolean performPhpRequest(String url){
 		
 		try {
 			
-			File delete = new File("serverResponse.xml"); // delete file if it already exists
+			File delete = new File("svr.xml"); // delete file if it already exists
 			if(delete.exists()) delete.delete();
 	    	
 			URL responseUrl = new URL(url); // download server xml response
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("serverResponse.xml"));
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
 			URLConnection conn = responseUrl.openConnection();
 			InputStream in = conn.getInputStream();
 			
@@ -161,6 +142,41 @@ public class JCpgPhpCommunicator {
 
 		    out.close();
 		    
+		    SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+			
+			File file = new File("svr.xml");
+			
+			if(file.exists()){
+			
+				try {
+					
+					Document doc = builder.build("svr.xml");
+				
+					Element respons = doc.getRootElement();
+					
+					List content = respons.getChildren();
+					ListIterator it = content.listIterator();
+					
+					while(it.hasNext()){
+						
+						Element element = (Element)it.next();
+						
+						if(element.getName().equals("messagecode")){
+							
+							if(element.getText().equals("success")) return true; // if respons is success return true
+							
+						}
+						
+					}
+					
+				} catch (JDOMException e) {
+					
+					System.out.println("JCpgPhpCommunicator: couldn't get a server response");
+					
+				}
+				
+			}
+		    
 		    return true; // remote response received well
 			
 		} catch (Exception exception) {
@@ -170,6 +186,52 @@ public class JCpgPhpCommunicator {
 		}
 		
 		return false;
+		
+	}
+	/**
+	 * 
+	 * Get the XML server response and return the received xml file
+	 * 
+	 * @param url
+	 * 		URL where the server response can be found
+	 * @return
+	 * 		true if the server response was collected successfully, else false
+	 */
+	public File performPhpRequestAndGetXml(String url){
+		
+		try {
+			
+			File delete = new File("svr.xml"); // delete file if it already exists
+			if(delete.exists()) delete.delete();
+	    	
+			URL responseUrl = new URL(url); // download server xml response
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
+			URLConnection conn = responseUrl.openConnection();
+			InputStream in = conn.getInputStream();
+			
+			byte[] buffer = new byte[1024];
+			int numRead;
+			
+			while ((numRead = in.read(buffer)) != -1) {
+				
+				out.write(buffer, 0, numRead);
+				
+			}
+
+		    out.close();
+		    
+		    // check if svr.xml has been made, then return handle
+		    File file = new File("svr.xml");
+		    
+		    if(file.exists()) return file;
+			
+		} catch (Exception exception) {
+			
+			System.out.println("JCpgPhpCommunicator: couldn't retrieve server response");
+		
+		}
+		
+		return null; // svr.xml was not made
 		
 	}
 	

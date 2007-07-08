@@ -325,7 +325,7 @@ public class JCpgPreviewer extends JDialog{
 						
 					} catch (Exception e) {
 						
-						e.printStackTrace();
+						System.out.println("JCpgPreviewer: couldn't go to sleep");
 						
 					}
 					
@@ -353,7 +353,11 @@ public class JCpgPreviewer extends JDialog{
 			
 			g.drawImage(currentLoadedImage, 500 - currentLoadedImage.getWidth(null)/2, 10, this);
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			
+			System.out.println("JCpgPreviewer: couldn't draw image");
+			
+		}
 		
 	}
 	

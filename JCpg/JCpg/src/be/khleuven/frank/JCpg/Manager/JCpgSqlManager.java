@@ -153,7 +153,6 @@ public class JCpgSqlManager{
 		} catch (Exception e) {
 			
 			System.out.println("SqlManager: couldn't connect to sql server.");
-			e.printStackTrace();
 			
 			return -1;
 			
@@ -197,7 +196,6 @@ public class JCpgSqlManager{
 			
 		} catch (SQLException e) {
 			
-			e.printStackTrace();
 			System.out.println("SqlManager: couldn't execute sql query: " + query);
 			
 		}

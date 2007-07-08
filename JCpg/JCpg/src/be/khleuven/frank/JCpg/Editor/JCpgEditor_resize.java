@@ -181,7 +181,6 @@ public class JCpgEditor_resize extends JCpgEditor {
             
         } catch(IOException e){
         	
-        	e.printStackTrace();
             System.out.println("JCpgEditor: Couldn't save edited photo");
             
         }

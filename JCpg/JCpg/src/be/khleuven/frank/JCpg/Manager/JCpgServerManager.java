@@ -467,7 +467,6 @@ public class JCpgServerManager extends JDialog{
 					
 				} catch (JDOMException e) {
 					
-					e.printStackTrace();
 					System.out.println("JCpgServerManager: couldn't load server configuration");
 					
 				}
@@ -521,7 +520,7 @@ public class JCpgServerManager extends JDialog{
 			
 		}catch(Exception e){
 			
-			e.printStackTrace();
+			System.out.println("JCpgServerManager: couldn't save server configuration");
 			
 		}
 		
