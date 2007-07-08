@@ -1162,7 +1162,7 @@ Error 404: This page could not be found
 xmlhttpPost("webapi.php?query=getconfig", function (returnText) {
   var retval = Xparse(returnText);
   var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
-  if (messagecode == "7") {
+  if (messagecode == "init_error") {
      jumppage("pg=installdiv", 0);
   }  else {
      config = retval;
