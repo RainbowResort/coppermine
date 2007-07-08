@@ -330,7 +330,7 @@ class userfunctions {
            $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
            $template_vars = array(
                '{SITE_NAME}' => $CONFIG['gallery_name'],
-               '{USER_NAME}' => $username,
+               '{USER_NAME}' => $addusername,
                '{ACT_LINK}' => $act_link
             );
             if (!cpg_mail($email, sprintf($LANG['register']['confirm_email_subject'], $CONFIG['gallery_name']), nl2br(strtr($LANG['register_confirm_email'], $template_vars)))) {
@@ -502,6 +502,51 @@ class userfunctions {
        $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['active']}='YES', {$DBS->field['act_key']}={$act_key} WHERE {$DBS->field['username']}='{$addusername}'";
        $DBS->sql_update($sql);
        return $this->getpersonaldata($addusername);
+    }  else {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "activation_error";
+       return $USER_DATA;
+    }
+  }
+
+  /* Send the activation mail again
+   * @ addusername
+   * @ email
+   * @ return true on success, false on failure
+   */
+  function reactivate ($addusername, $email) {
+    global $DBS, $CF, $CONFIG;
+
+    // Check for user in users table
+    $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']}, {$DBS->field['active']}, {$DBS->field['act_key']} FROM {$DBS->usertable}";
+    $sql .= " WHERE {$DBS->field['username']} = '{$addusername}' AND {$DBS->field['email']} = '{$email}'";
+    $results = $DBS->sql_query($sql);
+
+    if (mysql_num_rows($results)) {
+       $active = mysql_result($results, 0, $DBS->field['active']);
+       if ($active == "YES") {
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "already_active_error";
+          return $USER_DATA;
+       }
+
+       $act_key = mysql_result($results, 0, $DBS->field['act_key']);
+       $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+       $template_vars = array(
+           '{SITE_NAME}' => $CONFIG['gallery_name'],
+           '{USER_NAME}' => $addusername,
+           '{ACT_LINK}' => $act_link
+       );
+
+       if (!cpg_mail($email, sprintf($LANG['register']['confirm_email_subject'], $CONFIG['gallery_name']), nl2br(strtr($LANG['register_confirm_email'], $template_vars)))) {
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "failed_sending_email";
+          return $USER_DATA;
+       }
+       return true;
     }  else {
        $USER_DATA = array();
        $USER_DATA['error'] = true;

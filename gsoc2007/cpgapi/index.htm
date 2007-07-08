@@ -274,6 +274,31 @@
      return false;
   }
 
+  function reactivatetry(formelem) {
+     if (formelem.username.value=="") {
+        alert("You must enter a username");
+        return false;
+     }
+     if (formelem.email.value=="") {
+        alert("You must enter an email address");
+        return false;
+     }
+
+     xmlhttpPost("webapi.php?query=reactivate&addusername="+formelem.username.value
+                 +"&email="+formelem.email.value
+                 , function (returnText) {
+	var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           jumppage("pg=logindiv", 0);
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+
+     return false;
+  }
+
   function generatepasswordtry(formelem) {
      if (formelem.username.value=="") {
         alert("You must enter a username");
@@ -904,6 +929,8 @@
 <TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
 <TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=password SIZE=32></TD></TR>
 <TR><TD></TD><TD><INPUT TYPE=submit VALUE=Login SIZE=32></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD COLSPAN=2><A HREF="javascript: jumppage('pg=reactivatediv', 0);">Missed activation mail?</A></TD></TR>
 </TABLE>
 </FORM>
 </CENTER>
@@ -1005,6 +1032,22 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
 <TR><TD>Password: </TD><TD><INPUT TYPE=password NAME=dbpass SIZE=32></TD></TR>
 <TR><TD>Prefix: </TD><TD><INPUT TYPE=text NAME=prefix VALUE="capi_" SIZE=32></TD></TR>
 <TR><TD></TD><TD><INPUT TYPE=submit VALUE=Install SIZE=32></TD></TR>
+</TABLE>
+</FORM>
+</CENTER>
+</DIV>
+
+<DIV ID=reactivatediv CLASS=hiddendiv>
+%homemenu%
+<CENTER>
+<FORM NAME=reactivateform onSubmit="return reactivatetry(this)">
+<INPUT TYPE=hidden NAME=pg VALUE=reactivatediv>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
+<TR><TD WIDTH=200>&nbsp;</TD><TD WIDTH=600>&nbsp;</TD></TR>
+<TR><TD COLSPAN=2><H3>Activation Mail</H3></TD></TR>
+<TR><TD>Username: </TD><TD><INPUT TYPE=text NAME=username SIZE=32></TD></TR>
+<TR><TD>Email: </TD><TD><INPUT TYPE=text NAME=email SIZE=32></TD></TR>
+<TR><TD></TD><TD><INPUT TYPE=submit VALUE="Send Activation Mail" SIZE=32></TD></TR>
 </TABLE>
 </FORM>
 </CENTER>

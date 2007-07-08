@@ -37,6 +37,7 @@ $APITYPE = array(
     'logout' => 'login',
     'register' => 'unauth',
     'activate' => 'unauth',
+    'reactivate' => 'unauth',
     'forgotpassword' => 'unauth',
     'generatepassword' => 'unauth',
     'modifyprofile' => 'login',
@@ -251,6 +252,21 @@ case 'activate':
    if (!$USER_DATA['error']) {
       print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   break;
+
+/* Generate a new activation mail
+ * @ username
+ * @ email
+ */
+case 'reactivate':
+   $addusername = $CF->getvariable("addusername");
+   $email = $CF->getvariable("email");
+
+   $USER_DATA = $UF->reactivate($addusername, $email);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
    break;
