@@ -22,34 +22,6 @@ define('COPPERMINE_API_VERSION_STATUS', 'dev');
 define('IN_COPPERMINE', true);
 
 /*
- * Define possible queries for the API
- */
-// User Related
-$api_login = 'login';
-$api_logout = 'logout';
-$api_register = 'register';
-$api_activate = 'activate';
-$api_activate = 'activate';
-$api_forgotpassword = 'forgotpassword';
-$api_generatepassword = 'generatepassword';
-
-// Application Basic
-$api_install = 'install';
-$api_uninstall = 'uninstall';
-$api_getconfig = 'getconfig';
-$api_setconfig = 'setconfig';
-
-// Admin Related
-$api_showusers = 'showusers';
-$api_adduser = 'adduser';
-$api_removeuser = 'removeuser';
-$api_addgroup = 'addgroup';
-$api_removegroup = 'removegroup';
-$api_showgroups = 'showgroups';
-$api_addusertogroup = 'addusertogroup';
-$api_removeuserfromgroup = 'removeuserfromgroup';
-
-/*
  * Specify the required permission to execute an API command.
  * These permissions may later get overridden by the saved config settings.
  *
@@ -58,22 +30,30 @@ $api_removeuserfromgroup = 'removeuserfromgroup';
  * admin  => only an administrator can execute this command
  */
 $APITYPE = array(
-    $api_login => 'unauth',
-    $api_logout => 'login',
-    $api_register => 'unauth',
-    $api_activate => 'unauth',
-    $api_forgotpassword => 'unauth',
-    $api_generatepassword => 'unauth',
-    $api_getconfig => 'unauth',
-    $api_setconfig => 'admin',
-    $api_showusers => 'admin',
-    $api_adduser => 'admin',
-    $api_removeuser => 'admin',
-    $api_addgroup => 'admin',
-    $api_removegroup => 'admin',
-    $api_showgroups => 'admin',
-    $api_addusertogroup => 'admin',
-    $api_removeuserfromgroup => 'admin'
+    'install' => 'unauth',
+    'uninstall' => 'unauth',
+
+    'login' => 'unauth',
+    'logout' => 'login',
+    'register' => 'unauth',
+    'activate' => 'unauth',
+    'forgotpassword' => 'unauth',
+    'generatepassword' => 'unauth',
+    'modifyprofile' => 'login',
+
+    'getconfig' => 'unauth',
+    'setconfig' => 'admin',
+
+    'showusers' => 'admin',
+    'adduser' => 'admin',
+    'removeuser' => 'admin',
+    'updateuser' => 'admin',
+    'addgroup' => 'admin',
+    'removegroup' => 'admin',
+    'updategroup' => 'admin',
+    'showgroups' => 'admin',
+    'addusertogroup' => 'admin',
+    'removeuserfromgroup' => 'admin'
 );
 
 /*
@@ -119,7 +99,7 @@ $query = $CF->getvariable("query");
  * @ adminpassword
  * @ adminemail
  */
-if($query == $api_install) {
+if($query == 'install') {
   // current query is install. let it proceed
   require('cpgAPIinstall.php');
   $INSTALL = new install();
@@ -130,7 +110,7 @@ if($query == $api_install) {
  * Uninstall Application -- open currently for debug only
  * @ no paramters
  */
-if($query == $api_uninstall) {
+if($query == 'uninstall') {
   // current query is uninstall. let it proceed
   require('cpgAPIinstall.php');  
   $INSTALL = new install();
@@ -174,11 +154,13 @@ if ($APITYPE[$query] == "") {
 }
 
 
+switch($query) {
+
 /* User tries to login and obtain an authentication key 
  * @ username
  * @ password
  */
-if ($query == $api_login) {
+case 'login':
    $username = $CF->getvariable("username");
    $password = $CF->getvariable("password");
    $result = $UF->login($username, $password);
@@ -191,49 +173,77 @@ if ($query == $api_login) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$result['messagecode']}</messagecode>\n";
-}
+   break;
 
-if ($query == $api_logout) {
+/* User tries to logout
+ * @ username
+ */
+case 'logout':
    $username = $CF->getvariable("username");
    $UF->logout($username);
    print "<messagecode>success</messagecode>\n";
-}
+   break;
 
 /* 
  * Admin lists all users
  */
-if ($query == $api_showusers) {
+case 'showusers':
    print "<messagecode>success</messagecode>\n";
    $USER_DATA = $UF->getalluserdata();
    for($j = 0; $j < count($USER_DATA); $j++) {
       $UF->showdata($USER_DATA[$j]);
    }
-}
+   break;
 
 /* User tried to register
  * @ username
  * @ password
  * @ email
+ * @ profile[]
  */
-if ($query == $api_register) {
+case 'register':
    $addusername = $CF->getvariable("addusername");
    $password = $CF->getvariable("password");
    $group_id = "2"; // Default group
    $email = $CF->getvariable("email");
-
-   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email);
+   $profile = array();
+   for($i=1;$i<=6;$i++) {
+      $profile[$i] = $CF->getvariable("profile".$i);
+   }
+   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
       print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
+
+/* User tried to modify profile
+ * @ password
+ * @ email
+ * @ profile
+ */
+case 'modifyprofile':
+   $username = $CF->getvariable("username");
+   $password = $CF->getvariable("password");
+   $email = $CF->getvariable("email");
+   $profile = array();
+   for($i=1;$i<=6;$i++) {
+      $profile[$i] = $CF->getvariable("profile".$i);
+   }
+   $USER_DATA = $UF->modifyprofile($username, $password, $email, $profile);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+      $UF->showdata($USER_DATA);
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   break;
 
 /* User tried to activate account
  * @ username
  * @ act_key
  */
-if ($query == $api_activate) {
+case 'activate':
    $addusername = $CF->getvariable("addusername");
    $act_key = $CF->getvariable("act_key");
 
@@ -243,13 +253,13 @@ if ($query == $api_activate) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* Generate a new password request for the user
  * @ username
  * @ email
  */
-if ($query == $api_forgotpassword) {
+case 'forgotpassword':
    $addusername = $CF->getvariable("addusername");
    $email = $CF->getvariable("email");
 
@@ -258,13 +268,13 @@ if ($query == $api_forgotpassword) {
       print "<messagecode>success</messagecode>\n";
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* Generate a new password for the user
  * @ username
  * @ pass_key
  */
-if ($query == $api_generatepassword) {
+case 'generatepassword':
    $addusername = $CF->getvariable("addusername");
    $pass_key = $CF->getvariable("pass_key");
 
@@ -274,7 +284,7 @@ if ($query == $api_generatepassword) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* Admin tries to add a user to the system
  * @ addusername
@@ -282,24 +292,27 @@ if ($query == $api_generatepassword) {
  * @ email
  * @ active
  */
-if ($query == $api_adduser) {
+case 'adduser':
    $addusername = $CF->getvariable("addusername");
    $password = $CF->getvariable("password");
    $group_id = "2"; // Default group
    $email = $CF->getvariable("email");
-
-   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email);
+   $profile = array();
+   for($i=1;$i<=6;$i++) {
+      $profile[$i] = "";
+   }
+   $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
       print "<messagecode>success</messagecode>\n";
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* Admin tries to remove a user from the system
  * @ addusername
  */
-if ($query == $api_removeuser) {
+case 'removeuser':
    $addusername = $CF->getvariable("addusername");
 
    if($addusername == $username) {
@@ -313,12 +326,32 @@ if ($query == $api_removeuser) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>username_not_exist</messagecode>\n";
-}
+   break;
+
+/* Admin updates a user
+ * @ addusername
+ * @ password
+ * @ email
+ * @ active
+ */
+case 'updateuser':
+   $addusername = $CF->getvariable("addusername");
+   $password = $CF->getvariable("password");
+   $email = $CF->getvariable("email");
+   $active = $CF->getvariable("active");
+
+   $USER_DATA = $UF->updateuser($addusername, $password, $email, $active);
+   if (!$USER_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+      $UF->showdata($USER_DATA);
+   }
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   break;
 
 /* 
  * Admin lists all groups
  */
-if ($query == $api_showgroups) {
+case 'showgroups':
    $GROUP_DATA = $UF->getallgroupdata();
    print "<messagecode>success</messagecode>\n";
    for($j = 0; $j < count($GROUP_DATA); $j++) {
@@ -330,13 +363,13 @@ if ($query == $api_showgroups) {
       }
       print "</group>\n";
    }
-}
+   break;
 
 /* Admin tries to add a group to the system
  * @ groupname
  * @ admin
  */
-if ($query == $api_addgroup) {
+case 'addgroup':
    $groupname = $CF->getvariable("groupname");
    $admin = $CF->getvariable("admin"); if($admin=="") $admin = "NO";
 
@@ -352,12 +385,36 @@ if ($query == $api_addgroup) {
       print "</group>\n";
    }
    else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>\n";
-}
+   break;
+
+/* Admin tries to add a group to the system
+ * @ groupname
+ * @ admin
+ */
+case 'updategroup':
+   $group_id = $CF->getvariable("group_id");
+   $groupname = $CF->getvariable("groupname");
+   $admin = $CF->getvariable("admin");
+   if($admin=="") $admin = "NO";
+
+   $GROUP_DATA = $UF->updategroup($group_id, $groupname, $admin);
+   if (!$GROUP_DATA['error']) {
+      print "<messagecode>success</messagecode>\n";
+      print "<group>\n";
+      for($i=0;$i<count($DISPLAY->groupfields);$i++) {
+         print "<" . $DISPLAY->groupfields[$i] . ">\n";
+         print $GROUP_DATA[$DISPLAY->groupfields[$i]];
+         print "</" . $DISPLAY->groupfields[$i] . ">\n";
+      }
+      print "</group>\n";
+   }
+   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>\n";
+   break;
 
 /* Admin tries to remove a group from the system
  * @ group_id
  */
-if ($query == $api_removegroup) {
+case 'removegroup':
    $group_id = $CF->getvariable("group_id");
 
    if ($group_id <= 4) {
@@ -376,14 +433,14 @@ if ($query == $api_removegroup) {
       }
       else print "<messagecode>group_not_exist</messagecode>\n";
    }
-}
+   break;
 
 /*
  * Admin adds user to another group
  * @ addusername
  * @ group_id
  */
-if ($query == $api_addusertogroup) {
+case 'addusertogroup':
    $addusername = $CF->getvariable("addusername");
    $group_id = $CF->getvariable("group_id");
 
@@ -393,14 +450,14 @@ if ($query == $api_addusertogroup) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* 
  * Admin removes user from group
  * @ addusername
  * @ group_id
  */
-if ($query == $api_removeuserfromgroup) {
+case 'removeuserfromgroup':
    $addusername = $CF->getvariable("addusername");
    $group_id = $CF->getvariable("group_id");
 
@@ -415,12 +472,12 @@ if ($query == $api_removeuserfromgroup) {
       $UF->showdata($USER_DATA);
    }
    else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
-}
+   break;
 
 /* 
  * Request for application configuration
  */
-if ($query == $api_getconfig) {
+case 'getconfig':
    print "<messagecode>success</messagecode>\n";
    print "<config>\n";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
@@ -429,13 +486,12 @@ if ($query == $api_getconfig) {
       print "</" . $DISPLAY->configfields[$i] . ">\n";
    }
    print "</config>\n";
-}
+   break;
 
 /* 
  * Set application configuration
  */
-if ($query == $api_setconfig) {
-
+case 'setconfig':
    for($i=0;$i < count($DISPLAY->configfields); $i++) {
       if ($CF->checkvariable($DISPLAY->configfields[$i])) {
          // known languages only
@@ -458,8 +514,11 @@ if ($query == $api_setconfig) {
       print "</" . $DISPLAY->configfields[$i] . ">\n";
    }
    print "</config>\n";
+   break;
+
+default:
+   print "<messagecode>query_not_implemented</messagecode>\n";   
 }
 
 $CF->safeexit();
-
 ?>

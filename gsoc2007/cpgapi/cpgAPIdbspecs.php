@@ -60,7 +60,13 @@ class dbspecs {
         'lastvisit' => 'user_lastvisit', // last time user logged in
         'active' => 'user_active', // is user account active?
         'act_key' => 'user_actkey', // user activation key
-        'sessionkey' => 'user_sessionkey' // session key if the user is logged in
+        'sessionkey' => 'user_sessionkey', // session key if the user is logged in
+        'profile1' => 'user_profile1',
+        'profile2' => 'user_profile2',
+        'profile3' => 'user_profile3',
+        'profile4' => 'user_profile4',
+        'profile5' => 'user_profile5',
+        'profile6' => 'user_profile6'
     );
 
     // Table userxgroup values

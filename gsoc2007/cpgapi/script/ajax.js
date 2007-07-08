@@ -34,3 +34,81 @@ function xmlhttpPost(strURL, f) {
   }
   self.xmlHttpReq.send(null);
 }
+
+
+/* 
+ * XML function: gets the element corresponding to the tagname from xmldoc
+ * @ xmldoc
+ * @ tagname
+ */
+function xmlParserGet(xmldoc, tagname) {
+   for(var i = 0; i < xmldoc.contents.length; i++) {
+      if(xmldoc.contents[i].type == "element")
+         if(xmldoc.contents[i].name == tagname) return xmldoc.contents[i];
+   }
+   return null;
+}
+
+
+/* 
+ * XML function: gets the content of element corresponding to the tagname from xmldoc
+ * @ xmldoc
+ * @ tagname
+ */
+function xmlParserGetValue(xmldoc, tagname) {
+   for(var i = 0; i < xmldoc.contents.length; i++) {
+      if (xmldoc.contents[i].type == "element") {
+         if (xmldoc.contents[i].name == tagname) {
+            return xmldoc.contents[i].contents[0].value;
+         }
+      }
+   }
+   return null;
+}
+
+/* 
+ * XML function: gets the element corresponding to the tagname from xmldoc
+ * @ xmldoc
+ * @ tagname
+ */
+function xmlParserGetLong(xmldoc, tagname) {
+   if (tagname == "") {
+      return xmldoc;
+   }
+
+   var toSearch = "";
+   var pos = tagname.indexOf('.');
+   if(pos == -1) { toSearch = tagname; pos = toSearch.length; }
+   else toSearch = tagname.substring(0, pos);
+ 
+   for(var i = 0; i < xmldoc.contents.length; i++) {
+      if (xmldoc.contents[i].type == "element")
+         if (xmldoc.contents[i].name == toSearch) 
+            return xmlParserGetLong(xmldoc.contents[i], tagname.substring(pos+1));
+   }
+   return null;
+}
+
+/* 
+ * XML function: gets the element corresponding to the tagname from xmldoc
+ * @ xmldoc
+ * @ tagname
+ */
+function xmlParserGetLongValue(xmldoc, tagname) {
+   if (tagname == "") {
+      if(xmldoc.contents.length == 0) return "";
+      else return xmldoc.contents[0].value;
+   }
+   var toSearch = "";
+   var pos = tagname.indexOf('.');
+   if(pos == -1) { toSearch = tagname; pos = toSearch.length; }
+   else toSearch = tagname.substring(0, pos);
+
+   for(var i = 0; i < xmldoc.contents.length; i++) {
+      if (xmldoc.contents[i].type == "element")
+         if (xmldoc.contents[i].name == toSearch) 
+            return xmlParserGetLongValue(xmldoc.contents[i], tagname.substring(pos+1));
+   }
+   return "";
+}
+

@@ -27,11 +27,12 @@ class displayspecs {
     // Database connection settings
 
     $this->userpersonalfields = array(
-       'username', 'user_id', 'email', 'regdate', 'lastvisit', 'active'
+       'username', 'user_id', 'email', 'regdate', 'lastvisit', 'active',
+       'profile1', 'profile2', 'profile3', 'profile4', 'profile5', 'profile6'
     );
 
     $this->groupfields = array(
-       'groupname', 'group_id', 'admin'
+       'group_id', 'groupname', 'admin'
     );
 
     $this->configfields = array(

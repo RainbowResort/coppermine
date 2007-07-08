@@ -287,9 +287,10 @@ class userfunctions {
    * @ group_id
    * @ email
    * @ active
+   * @ profile[]
    * @ return USER_DATA
    */
-  function adduser ($addusername, $password, $group_id, $email) {
+  function adduser ($addusername, $password, $group_id, $email, $profile) {
     global $DBS, $DISPLAY, $CONFIG, $CF, $LANG;
 
     $fieldstring = "";
@@ -361,7 +362,7 @@ class userfunctions {
        }
     }
 
-    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']}) VALUES ('{$addusername}', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}')";
+    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']},{$DBS->field['profile1']},{$DBS->field['profile2']},{$DBS->field['profile3']},{$DBS->field['profile4']},{$DBS->field['profile5']},{$DBS->field['profile6']}) VALUES ('{$addusername}', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}','{$profile[1]}','{$profile[2]}','{$profile[3]}','{$profile[4]}','{$profile[5]}','{$profile[6]}')";
     $DBS->sql_update($sql);
 
     $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
@@ -373,6 +374,111 @@ class userfunctions {
 
     $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";
     $DBS->sql_update($sql);
+
+    return $this->getpersonaldata($addusername);
+  }
+
+
+  /* Function to modify the profile of a user
+   * @ username
+   * @ password
+   * @ email
+   * @ profile[]
+   * @ return USER_DATA
+   */
+  function modifyprofile ($addusername, $password, $email, $profile) {
+    global $DBS, $DISPLAY, $CONFIG, $CF, $LANG;
+
+    $fieldstring = "";
+    for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
+       if($i!=0) $fieldstring .= ", ";
+       $fieldstring .= "{$DBS->field[$DISPLAY->userpersonalfields[$i]]} AS {$DISPLAY->userpersonalfields[$i]}";
+    }
+
+    $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
+    $results = $DBS->sql_query($sql);
+    if (!mysql_num_rows($results)) {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "username_not_exist";
+       return $USER_DATA;
+    }  else {
+       $oldemail = mysql_result($results, 0, $DBS->field['email']);
+       mysql_free_result($results);
+    }
+
+    // Check for duplicate email addresses
+    if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
+       $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
+       $results = $DBS->sql_query($sql);
+       if (mysql_num_rows($results)) {
+          mysql_free_result($results);
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "duplicate_email";
+          return $USER_DATA;
+       }
+    }
+
+    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['email']}='{$email}', {$DBS->field['profile1']}='{$profile[1]}', {$DBS->field['profile2']}='{$profile[2]}', {$DBS->field['profile3']}='{$profile[3]}', {$DBS->field['profile4']}='{$profile[4]}', {$DBS->field['profile5']}='{$profile[5]}', {$DBS->field['profile6']}='{$profile[6]}' WHERE {$DBS->field['username']}='{$addusername}'";
+    $DBS->sql_update($sql);
+
+    if ($password!="") {
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['password']}=md5('{$password}') WHERE {$DBS->field['username']}='{$addusername}'";
+       $DBS->sql_update($sql);
+    }
+
+    return $this->getpersonaldata($addusername);
+  }
+
+  /* Function to update a user
+   * @ addusername
+   * @ password
+   * @ email
+   * @ active
+   * @ return USER_DATA
+   */
+  function updateuser ($addusername, $password, $email, $active) {
+    global $DBS, $DISPLAY, $CONFIG, $CF, $LANG;
+
+    $fieldstring = "";
+    for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
+       if($i!=0) $fieldstring .= ", ";
+       $fieldstring .= "{$DBS->field[$DISPLAY->userpersonalfields[$i]]} AS {$DISPLAY->userpersonalfields[$i]}";
+    }
+
+    $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
+    $results = $DBS->sql_query($sql);
+    if (!mysql_num_rows($results)) {
+       $USER_DATA = array();
+       $USER_DATA['error'] = true;
+       $USER_DATA['messagecode'] = "username_not_exist";
+       return $USER_DATA;
+    }  else {
+       $oldemail = mysql_result($results, 0, $DBS->field['email']);
+       mysql_free_result($results);
+    }
+
+    // Check for duplicate email addresses
+    if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
+       $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
+       $results = $DBS->sql_query($sql);
+       if (mysql_num_rows($results)) {
+          mysql_free_result($results);
+          $USER_DATA = array();
+          $USER_DATA['error'] = true;
+          $USER_DATA['messagecode'] = "duplicate_email";
+          return $USER_DATA;
+       }
+    }
+
+    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['email']}='{$email}', {$DBS->field['active']}='{$active}' WHERE {$DBS->field['username']}='{$addusername}'";
+    $DBS->sql_update($sql);
+
+    if ($password!="") {
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['password']}=md5('{$password}') WHERE {$DBS->field['username']}='{$addusername}'";
+       $DBS->sql_update($sql);
+    }
 
     return $this->getpersonaldata($addusername);
   }
@@ -538,6 +644,54 @@ class userfunctions {
        $group_id = mysql_result($results, 0, $DBS->group['group_id']);
        mysql_free_result($results);
     }
+
+    return $this->getsinglegroupdata($group_id);
+  }
+
+  /* Function to update a group in the database.
+   * @ group_id
+   * @ groupname
+   * @ admin
+   * @ return GROUP_DATA
+   */
+  function updategroup ($group_id, $groupname, $admin) {
+    global $DBS, $DISPLAY;
+
+    if($admin=="YES" || $admin=="1") $admin = 1;
+    else $admin = 0;
+
+    $fieldstring = "";
+    for($i=0;$i<count($DISPLAY->groupfields);$i++) {
+       if($i!=0) $fieldstring .= ", ";
+       $fieldstring .= "{$DBS->group[$DISPLAY->groupfields[$i]]} AS {$DISPLAY->groupfields[$i]}";
+    }
+
+    $sql =  "SELECT * FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='{$group_id}'";
+    $results = $DBS->sql_query($sql);
+    if (!mysql_num_rows($results)) {
+       $GROUP_DATA = array();
+       $GROUP_DATA['error'] = true;
+       $GROUP_DATA['messagecode'] = "group_not_exist";
+       return $GROUP_DATA;
+    }  else {
+       $oldname = mysql_result($results, 0, $DBS->group['groupname']);
+       mysql_free_result($results);
+    }
+
+    if ($oldname!=$groupname) {
+       $sql =  "SELECT $fieldstring FROM {$DBS->groupstable} WHERE {$DBS->group['groupname']}='{$groupname}'";
+       $results = $DBS->sql_query($sql);
+       if (mysql_num_rows($results)) {
+          mysql_free_result($results);
+          $GROUP_DATA = array();
+          $GROUP_DATA['error'] = true;
+          $GROUP_DATA['messagecode'] = "duplicate_groupname";
+          return $GROUP_DATA;
+       }
+    }
+
+    $sql =  "UPDATE {$DBS->groupstable} SET {$DBS->group['groupname']}='{$groupname}', {$DBS->group['admin']}='{$admin}' WHERE {$DBS->group['group_id']}='{$group_id}'";
+    $DBS->sql_update($sql);
 
     return $this->getsinglegroupdata($group_id);
   }

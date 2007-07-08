@@ -367,6 +367,8 @@ CREATE TABLE IF NOT EXISTS CPG_temp_messages (
 # Dumping data for table `CPG_config`
 #
 
+INSERT INTO CPG_config VALUES ('enable_api', '1');
+INSERT INTO CPG_config VALUES ('allow_get_api', '1');
 INSERT INTO CPG_config VALUES ('albums_per_page', '12');
 INSERT INTO CPG_config VALUES ('album_list_cols', '2');
 INSERT INTO CPG_config VALUES ('display_pic_info', '0');
