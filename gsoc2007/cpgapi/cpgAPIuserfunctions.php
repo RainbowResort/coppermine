@@ -327,7 +327,7 @@ class userfunctions {
     $active = "YES";
     if ($CONFIG['reg_requires_valid_email']) {
         if (!$CONFIG['admin_activation']==1) {
-           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . 'key=' . $act_key;
            $template_vars = array(
                '{SITE_NAME}' => $CONFIG['gallery_name'],
                '{USER_NAME}' => $addusername,
@@ -350,7 +350,7 @@ class userfunctions {
     // email notification to admin
     if ($CONFIG['reg_notify_admin_email']) {
        if ($CONFIG['admin_activation']==1) {
-          $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
+          $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
           $template_vars = array(
              '{SITE_NAME}' => $CONFIG['gallery_name'],
              '{USER_NAME}' => $user_name,
@@ -533,7 +533,7 @@ class userfunctions {
        }
 
        $act_key = mysql_result($results, 0, $DBS->field['act_key']);
-       $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm?pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+       $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . 'key=' . $act_key;
        $template_vars = array(
            '{SITE_NAME}' => $CONFIG['gallery_name'],
            '{USER_NAME}' => $addusername,

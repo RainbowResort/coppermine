@@ -794,6 +794,14 @@
            cnt += "</SELECT></TD></TR>";
            configcount++;
 
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Site URL</TD>";
+           var val = xmlParserGetValue(xmldoc, "site_url");
+           cnt += "<TD><INPUT NAME=site_url SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+
            for(var i=1; i<=6; i++) {
               if(configcount%2 == 1) cnt += "<TR>";
               else cnt += "<TR BGCOLOR=#EEEEEE>";
@@ -827,6 +835,7 @@
                  +"&gallery_name="+formelem.gallery_name.value
                  +"&gallery_admin_email="+formelem.gallery_admin_email.value
                  +"&gallery_description="+formelem.gallery_description.value
+                 +"&site_url="+formelem.site_url.value
                  +"&user_profile1_name="+formelem.user_profile1_name.value
                  +"&user_profile2_name="+formelem.user_profile2_name.value
                  +"&user_profile3_name="+formelem.user_profile3_name.value
