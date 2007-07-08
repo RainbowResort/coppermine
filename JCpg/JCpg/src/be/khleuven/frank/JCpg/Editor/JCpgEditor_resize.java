@@ -19,6 +19,7 @@ package be.khleuven.frank.JCpg.Editor;
 
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -175,6 +176,9 @@ public class JCpgEditor_resize extends JCpgEditor {
             ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
+			
+			// save new changes
+			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
             
             getJCpgUI().setEnabled(true);
             this.dispose();

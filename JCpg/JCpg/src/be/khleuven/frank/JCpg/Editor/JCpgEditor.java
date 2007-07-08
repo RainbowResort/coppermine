@@ -410,7 +410,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
     	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
     	
     	getImageButton().setIcon(imageIcon);
-    	Dimension realSize = new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+    	Dimension realSize = new Dimension(picture.getWidth(), picture.getHeight());
     	image.setPreferredSize(realSize);
     	getPreview().removeAll();
     	getPreview().add(image);

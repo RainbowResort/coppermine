@@ -733,7 +733,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(node != null && node.getLevel() == 2){
+		if(node != null && node.getUserObject().getClass().equals(JCpgAlbum.class)){
 			
 			JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 			
@@ -809,7 +809,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(node != null && node.getLevel() == 3){
+		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
 			new JCpgEditor_crop(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
@@ -825,7 +825,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(node != null && node.getLevel() == 3){
+		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
 			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
@@ -841,7 +841,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(node != null && node.getLevel() == 3){
+		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
 			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(600, 600));
 			
@@ -857,7 +857,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(node != null && node.getLevel() == 3){
+		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
 			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
 			
@@ -910,6 +910,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 	    	pictureListModel.clear();
+	    	pictureListModel.removeAllElements();
 	    	
 	    	for(int i=0; i<album.getPictures().size(); i++){
 	    		

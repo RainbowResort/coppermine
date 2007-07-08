@@ -19,6 +19,7 @@ package be.khleuven.frank.JCpg.Editor;
 
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -71,7 +72,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	private int rx;
 	private int ry;
 	
-	private int LEFT = getPreviewSize().width/2-getPicture().getpWidth()/2;
+	private int LEFT = getPreviewSize().width/2-getPicture().getpWidth()/2; // photo bounderies
 	private int UP = 59;
 	private int RIGHT = LEFT + getPicture().getpWidth();
 	private int DOWN = UP + getPicture().getpHeight();
@@ -83,7 +84,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	
 	
 	
-	private boolean running = true;
+	private boolean running = true; // for paint thread
 																			
 	
 	
@@ -206,7 +207,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         g2.setPaint(Color.red);
         
         crop.setSize(rwidth, rheight);
-        crop.setLocation(rx + (getPreviewSize().width/2 - getImageButton().getSize().width/2), ry);
+        crop.setLocation(rx + (getPreviewSize().width/2 - getImageButton().getSize().width/2), ry + UP);
         g2.draw(crop);
         
         // unselect rectangles
@@ -266,7 +267,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			getPicture().changeWidth(rwidth);
 			getPicture().changeHeight(rheight);
 			
-			// TODO: adjust thumb + refresh in explorer view
+			// save this new information
+			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
             
             getJCpgUI().setEnabled(true);
             this.dispose();
@@ -358,8 +360,6 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 
 	public void mouseDragged(MouseEvent m) {
 		
-		System.out.println(ry);
-		
 		mouseposition = m.getPoint();
 		cropposition = crop.getLocation();
 		
@@ -381,10 +381,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			
 			// bounderies
 			if(rx < 0) rx = 0;
-			if(rx + rwidth > getImageButton().getSize().width) rx = getImageButton().getSize().width;
+			if(rx + rwidth > getImageButton().getSize().width) rx = getImageButton().getSize().width - rwidth;
 			
 			if(ry < 0) ry = 0;
-			if(ry + rheight - 59 > getImageButton().getSize().height) ry = getImageButton().getSize().height;
+			if(ry + rheight > getImageButton().getSize().height) ry = getImageButton().getSize().height - rheight;
 		
 		}
 		

@@ -256,7 +256,7 @@ public class JCpgGallerySaver{
 	 * We will use the JDOM API to generate the xml file
 	 *
 	 */
-	public void toXML(){
+	private void toXML(){
 		
 		Element egallery = new Element("gallery");
 		

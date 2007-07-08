@@ -27,6 +27,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -104,6 +105,18 @@ public class JCpgEditor_rotate extends JCpgEditor{
 			}
 		});
 		
+		rotate90Right.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				rotate90RightActionPerformed(evt);
+			}
+		});
+		
+		rotate90Left.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				rotate90LeftActionPerformed(evt);
+			}
+		});
+		
 	}
 	
 	
@@ -123,14 +136,15 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	    	
 			double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
 	        int w = image.getWidth(), h = image.getHeight();
-	        int neww = (int)Math.floor(w*cos+h*sin), newh = (int)Math.floor(h*cos+w*sin);
 	        GraphicsConfiguration gc = getDefaultConfiguration();
-	        BufferedImage result = gc.createCompatibleImage(neww, newh, Transparency.TRANSLUCENT);
+	        BufferedImage result = gc.createCompatibleImage(1, 1, Transparency.TRANSLUCENT);
 	        Graphics2D g = result.createGraphics();
-	        g.rotate(Math.toRadians(angle), w/2, h/2);
-	        g.translate((neww-w)/2, (newh-h)/2);
+	        g.rotate(Math.toRadians(angle), getPreviewSize().width/2, h/2);
+	        //g.translate((neww-w)/2, (newh-h)/2);
 	        g.drawRenderedImage(image, null);
 	        g.dispose();
+	        
+	        
 	        
 	        previewPicture(result);
 	        
@@ -144,6 +158,40 @@ public class JCpgEditor_rotate extends JCpgEditor{
         
         return gd.getDefaultConfiguration();
         
+    }
+    private void rotate90RightActionPerformed(java.awt.event.ActionEvent evt) {
+    	
+    	BufferedImage image = getBufferedPreview();
+    	
+        int w = image.getWidth(), h = image.getHeight();
+        GraphicsConfiguration gc = getDefaultConfiguration();
+        BufferedImage result = gc.createCompatibleImage(image.getHeight(), image.getWidth(), Transparency.TRANSLUCENT);
+        Graphics2D g = result.createGraphics();
+        g.rotate(Math.toRadians(90), w/2, h/2);
+        g.translate(getPreviewSize().width/2, (h)/2 + 59);
+        g.drawRenderedImage(image, null);
+        g.dispose();
+        
+        previewPicture(result);
+    	
+    }
+    private void rotate90LeftActionPerformed(java.awt.event.ActionEvent evt) {
+    	
+    	BufferedImage image = getBufferedPreview();
+    	
+		double sin = Math.abs(Math.sin(-90)), cos = Math.abs(Math.cos(-90));
+        int w = image.getWidth(), h = image.getHeight();
+        int neww = (int)Math.floor(w*cos+h*sin), newh = (int)Math.floor(h*cos+w*sin);
+        GraphicsConfiguration gc = getDefaultConfiguration();
+        BufferedImage result = gc.createCompatibleImage(image.getHeight(), image.getWidth(), Transparency.TRANSLUCENT);
+        Graphics2D g = result.createGraphics();
+        g.rotate(Math.toRadians(-90), w/2, h/2);
+        g.translate((neww-w)/2, (newh-h)/2);
+        g.drawRenderedImage(image, null);
+        g.dispose();
+        
+        previewPicture(result);
+    	
     }
 
 }
