@@ -295,7 +295,7 @@ function annotate_configure() {
         echo "<input type='submit' name='submit' value='submit'></form>";
 }
 
-// Based off 
+// Based off of Paver's code for "Custom Home Links for User Groups" Plugin
 function annotate_page_start() {
 	global $CONFIG;
         
