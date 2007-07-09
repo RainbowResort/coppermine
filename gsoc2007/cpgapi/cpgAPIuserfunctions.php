@@ -48,7 +48,8 @@ class userfunctions {
    */
   function logout ($username) {
     global $DBS, $CF;
-    $sql = "UPDATE {$DBS->usertable} SET {$DBS->field['sessionkey']}='' WHERE {$DBS->field['username']} = '$username'";
+    $randomkey = $CF->str_makerand(15,25, true, false, true);
+    $sql = "UPDATE {$DBS->usertable} SET {$DBS->field['sessionkey']}='{$randomkey}' WHERE {$DBS->field['username']} = '$username'";
     $DBS->sql_update($sql);
   }
 
@@ -327,7 +328,7 @@ class userfunctions {
     $active = "YES";
     if ($CONFIG['reg_requires_valid_email']) {
         if (!$CONFIG['admin_activation']==1) {
-           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
            $template_vars = array(
                '{SITE_NAME}' => $CONFIG['gallery_name'],
                '{USER_NAME}' => $addusername,
@@ -499,7 +500,7 @@ class userfunctions {
 
     if (mysql_num_rows($results)) {
        $act_key = $CF->str_makerand(15,25, true, false, true);
-       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['active']}='YES', {$DBS->field['act_key']}={$act_key} WHERE {$DBS->field['username']}='{$addusername}'";
+       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['active']}='YES', {$DBS->field['act_key']}='{$act_key}' WHERE {$DBS->field['username']}='{$addusername}'";
        $DBS->sql_update($sql);
        return $this->getpersonaldata($addusername);
     }  else {
@@ -516,7 +517,7 @@ class userfunctions {
    * @ return true on success, false on failure
    */
   function reactivate ($addusername, $email) {
-    global $DBS, $CF, $CONFIG;
+    global $DBS, $CF, $CONFIG, $LANG;
 
     // Check for user in users table
     $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']}, {$DBS->field['active']}, {$DBS->field['act_key']} FROM {$DBS->usertable}";
@@ -533,7 +534,7 @@ class userfunctions {
        }
 
        $act_key = mysql_result($results, 0, $DBS->field['act_key']);
-       $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . 'key=' . $act_key;
+       $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
        $template_vars = array(
            '{SITE_NAME}' => $CONFIG['gallery_name'],
            '{USER_NAME}' => $addusername,
@@ -561,7 +562,7 @@ class userfunctions {
    * @ return true on success, false on failure
    */
   function forgotpassword ($addusername, $email) {
-    global $DBS, $CF;
+    global $DBS, $CF, $LANG, $CONFIG;
 
     // Check for user in users table
     $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']} FROM {$DBS->usertable}";
@@ -572,7 +573,7 @@ class userfunctions {
        $pass_key = $CF->str_makerand(15,25, true, false, true);
        $pass_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=generatepassworddiv&username=' . $addusername . '&pass_key=' . $pass_key;
 
-       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['account_verify_subject'], $CONFIG['gallery_name']), sprintf($LANG['forgot_passwd']['account_verify_body'], $pass_link)))  {
+       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['account_verify_subject'], $CONFIG['gallery_name']), nl2br(sprintf($LANG['forgot_passwd']['account_verify_body'], $pass_link))))  {
           $USER_DATA = array();
           $USER_DATA['error'] = true;
           $USER_DATA['messagecode'] = "failed_sending_email";
@@ -596,7 +597,7 @@ class userfunctions {
    * @ return USER_DATA on success, false on failure
    */
   function generatepassword ($addusername, $pass_key) {
-    global $DBS, $CF;
+    global $DBS, $CF, $LANG, $CONFIG;
 
     // Check for user in users table
     $sql =  "SELECT {$DBS->field['user_id']}, {$DBS->field['username']}, {$DBS->field['email']} FROM {$DBS->usertable}";
@@ -609,7 +610,7 @@ class userfunctions {
        $email = mysql_result($results, 0, $DBS->field['email']);
        $login_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=logindiv';
 
-       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['passwd_reset_subject'], $CONFIG['gallery_name']), sprintf($LANG['forgot_passwd']['passwd_reset_body'], $addusername, $password, $login_link))) {
+       if (!cpg_mail($email, sprintf($LANG['forgot_passwd']['passwd_reset_subject'], $CONFIG['gallery_name']), nl2br(sprintf($LANG['forgot_passwd']['passwd_reset_body'], $addusername, $password, $login_link)))) {
           $USER_DATA = array();
           $USER_DATA['error'] = true;
           $USER_DATA['messagecode'] = "failed_sending_email";

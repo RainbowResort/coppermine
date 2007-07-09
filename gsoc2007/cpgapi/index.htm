@@ -52,7 +52,7 @@
      for(var i = 0; i < xmldoc.contents.length; i++) {
         if (xmldoc.contents[i].type == "element") {
            if (xmldoc.contents[i].name == "group") {
-              if (xmlParserGetValue(xmldoc.contents[i], perm) == "1") {
+              if (xmlParserGetLongValue(xmldoc.contents[i], perm) == "1") {
                  return true;
               }
            }
@@ -425,7 +425,7 @@
            for(var i = 0; i < xmldoc.contents.length; i++) {
               if (xmldoc.contents[i].type == "element") {
                  if (xmldoc.contents[i].name == "group") {
-                     ops += "<OPTION VALUE=" + xmlParserGetValue(xmldoc.contents[i], "group_id")+">"+xmlParserGetValue(xmldoc.contents[i], "groupname");
+                     ops += "<OPTION VALUE=" + xmlParserGetLongValue(xmldoc.contents[i], "group_id")+">"+xmlParserGetLongValue(xmldoc.contents[i], "groupname");
                  }
               }
            }
@@ -470,7 +470,7 @@
                                  cnt+="<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=150px>";
                                  startgroup = true;
                              }
-                             cnt += "<TR><TD WIDTH=20><A HREF=\"javascript: admin_removeuserfromgroup('" + username +"', '" + xmlParserGetValue(xmldoc.contents[i].contents[j], "group_id") + "')\">[ x ]</A>&nbsp;</TD><TD>" + xmlParserGetValue(xmldoc.contents[i].contents[j], "groupname") + "</TD></TR>";
+                             cnt += "<TR><TD WIDTH=20><A HREF=\"javascript: admin_removeuserfromgroup('" + username +"', '" + xmlParserGetLongValue(xmldoc.contents[i].contents[j], "group_id") + "')\">[ x ]</A>&nbsp;</TD><TD>" + xmlParserGetLongValue(xmldoc.contents[i].contents[j], "groupname") + "</TD></TR>";
                           }
                        }
                     }
@@ -498,7 +498,7 @@
            for(var i = 0; i < xmldoc.contents.length; i++) {
               if (xmldoc.contents[i].type == "element") {
                  if (xmldoc.contents[i].name == "userdata") {
-                    username = xmlParserGetValue(xmldoc.contents[i], "username");
+                    username = xmlParserGetLongValue(xmldoc.contents[i], "username");
                     userdrop += "<OPTION VALUE=" + username + ">" + username;
                  }
               }
@@ -716,7 +716,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Allow user registration</TD>";
            cnt += "<TD><SELECT NAME=allow_user_registration>";
-           var val = xmlParserGetValue(xmldoc, "allow_user_registration");
+           var val = xmlParserGetLongValue(xmldoc, "allow_user_registration");
            cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
            cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
@@ -726,7 +726,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Allow duplicate email address</TD>";
            cnt += "<TD><SELECT NAME=allow_duplicate_emails_addr>";
-           var val = xmlParserGetValue(xmldoc, "allow_duplicate_emails_addr");
+           var val = xmlParserGetLongValue(xmldoc, "allow_duplicate_emails_addr");
            cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
            cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
@@ -736,7 +736,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Registration requires valid email address</TD>";
            cnt += "<TD><SELECT NAME=reg_requires_valid_email>";
-           var val = xmlParserGetValue(xmldoc, "reg_requires_valid_email");
+           var val = xmlParserGetLongValue(xmldoc, "reg_requires_valid_email");
            cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
            cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
@@ -746,7 +746,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Administrator activates accounts</TD>";
            cnt += "<TD><SELECT NAME=admin_activation>";
-           var val = xmlParserGetValue(xmldoc, "admin_activation");
+           var val = xmlParserGetLongValue(xmldoc, "admin_activation");
            cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
            cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
@@ -756,7 +756,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Notify administrator if a user is added</TD>";
            cnt += "<TD><SELECT NAME=reg_notify_admin_email>";
-           var val = xmlParserGetValue(xmldoc, "reg_notify_admin_email");
+           var val = xmlParserGetLongValue(xmldoc, "reg_notify_admin_email");
            cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
            cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
@@ -766,21 +766,21 @@
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Gallery Name</TD>";
-           var val = xmlParserGetValue(xmldoc, "gallery_name");
+           var val = xmlParserGetLongValue(xmldoc, "gallery_name");
            cnt += "<TD><INPUT NAME=gallery_name SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
            configcount++;
 
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Gallery Description</TD>";
-           var val = xmlParserGetValue(xmldoc, "gallery_description");
+           var val = xmlParserGetLongValue(xmldoc, "gallery_description");
            cnt += "<TD><INPUT NAME=gallery_description SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
            configcount++;
 
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Gallery Admin Email</TD>";
-           var val = xmlParserGetValue(xmldoc, "gallery_admin_email");
+           var val = xmlParserGetLongValue(xmldoc, "gallery_admin_email");
            cnt += "<TD><INPUT NAME=gallery_admin_email SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
            configcount++;
 
@@ -788,7 +788,7 @@
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Gallery Language</TD>";
            cnt += "<TD><SELECT NAME=lang>";
-           var val = xmlParserGetValue(xmldoc, "lang");
+           var val = xmlParserGetLongValue(xmldoc, "lang");
            cnt += "<OPTION VALUE=english " + (val=="english"?"selected":"") + ">English";
            cnt += "<OPTION VALUE=german " + (val=="german"?"selected":"") + ">German";
            cnt += "</SELECT></TD></TR>";
@@ -797,7 +797,7 @@
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
            cnt += "<TD>Site URL</TD>";
-           var val = xmlParserGetValue(xmldoc, "site_url");
+           var val = xmlParserGetLongValue(xmldoc, "site_url");
            cnt += "<TD><INPUT NAME=site_url SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
            configcount++;
 

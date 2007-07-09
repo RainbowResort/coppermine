@@ -200,7 +200,9 @@ class displayspecs {
 	'comment_promote_registration',
 	'allow_user_account_delete',
 	'display_stats_on_index',
-	'browse_by_date'
+	'browse_by_date',
+        'site_url',
+        'allow_get_api'
     );
 
   }

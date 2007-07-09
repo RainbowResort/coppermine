@@ -24,14 +24,26 @@ class commonfunctions {
    var $htmlSubst = array('&' => '&amp;', '"' => '&quot;', '<' => '&lt;', '>' => '&gt;', '%26' => '&amp;', '%22' => '&quot;', '%3C' => '&lt;', '%3E' => '&gt;','%27' => '&#39;', "'" => '&#39;');
 
   /**
+   * Get the variable from get or post data for install (no check)
+   * @ variablename : the name of the variable requested
+   */
+  function getuncheckedvariable($variablename) {
+    if(isset($_POST[$variablename])) 
+      return addslashes($_POST[$variablename]);
+    if(isset($_GET[$variablename])) 
+      return addslashes($_GET[$variablename]);
+    return "";
+  }
+
+  /**
    * Get the variable from get or post data
    * @ variablename : the name of the variable requested
    */
   function getvariable($variablename) {
-    global $_POST, $_GET;
+    global $CONFIG;
     if(isset($_POST[$variablename])) 
       return addslashes($_POST[$variablename]);
-    if(isset($_GET[$variablename])) 
+    if($CONFIG['allow_get_api'] && isset($_GET[$variablename])) 
       return addslashes($_GET[$variablename]);
     return "";
   }
@@ -41,10 +53,10 @@ class commonfunctions {
    * @ variablename : the name of the variable requested
    */
   function checkvariable($variablename) {
-    global $_POST, $_GET;
+    global $CONFIG;
     if(isset($_POST[$variablename])) 
       return true;
-    if(isset($_GET[$variablename])) 
+    if($CONFIG['allow_get_api'] && isset($_GET[$variablename])) 
       return true;
     return false;
   }

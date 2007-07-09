@@ -87,7 +87,7 @@ $DBS = new dbspecs();
 $CF = new commonfunctions();
 $CF->showheader();
 $GF = new globalfunctions();
-$query = $CF->getvariable("query");
+$query = $CF->getuncheckedvariable("query");
 
 /*
  * Install Application -- open currently for debug only
@@ -104,7 +104,7 @@ if($query == 'install') {
   // current query is install. let it proceed
   require('cpgAPIinstall.php');
   $INSTALL = new install();
-  $INSTALL->newinstall($CF->getvariable("dbserver"), $CF->getvariable("dbuser"), $CF->getvariable("dbpass"), $CF->getvariable("dbname"), $CF->getvariable("prefix"), $CF->getvariable("adminusername"), $CF->getvariable("adminpassword"), $CF->getvariable("adminemail"));
+  $INSTALL->newinstall($CF->getuncheckedvariable("dbserver"), $CF->getuncheckedvariable("dbuser"), $CF->getuncheckedvariable("dbpass"), $CF->getuncheckedvariable("dbname"), $CF->getuncheckedvariable("prefix"), $CF->getuncheckedvariable("adminusername"), $CF->getuncheckedvariable("adminpassword"), $CF->getuncheckedvariable("adminemail"));
 }
 
 /* 
