@@ -90,26 +90,26 @@ class userfunctions {
   function showdata ($USER_DATA) {
     global $DISPLAY;
 
-    print "<userdata>\n";
+    print "<userdata>";
     for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
-       print "<" . $DISPLAY->userpersonalfields[$i] . ">\n";
+       print "<" . $DISPLAY->userpersonalfields[$i] . ">";
        print $USER_DATA[$DISPLAY->userpersonalfields[$i]];
-       print "</" . $DISPLAY->userpersonalfields[$i] . ">\n";
+       print "</" . $DISPLAY->userpersonalfields[$i] . ">";
     }
     if($USER_DATA['sessionkey']!="")
-      print "<sessionkey>" . $USER_DATA['sessionkey'] . "</sessionkey>\n";
+      print "<sessionkey>" . $USER_DATA['sessionkey'] . "</sessionkey>";
 
     $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
     for($j = 0; $j < count($GROUP_DATA); $j++) {
-       print "<group>\n";
+       print "<group>";
        for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-          print "<" . $DISPLAY->groupfields[$i] . ">\n";
+          print "<" . $DISPLAY->groupfields[$i] . ">";
           print $GROUP_DATA[$j][$DISPLAY->groupfields[$i]];
-          print "</" . $DISPLAY->groupfields[$i] . ">\n";
+          print "</" . $DISPLAY->groupfields[$i] . ">";
        }
-       print "</group>\n";
+       print "</group>";
     }
-    print "</userdata>\n";
+    print "</userdata>";
   }
 
   /* Fetches and returns the data corresponding to a single user.
@@ -171,15 +171,15 @@ class userfunctions {
             if ($authorized) {
                return true;
             }  else {
-               print "<messagecode>query_permission_error</messagecode>\n";
+               print "<messagecode>query_permission_error</messagecode>";
                $CF->safeexit();
             }
          }  else {
-            print "<messagecode>user_data_invalid_error</messagecode>\n";
+            print "<messagecode>user_data_invalid_error</messagecode>";
             $CF->safeexit();
          }
       }  else  {
-         print "<messagecode>user_data_invalid_error</messagecode>\n";
+         print "<messagecode>user_data_invalid_error</messagecode>";
          $CF->safeexit();
       }
     }

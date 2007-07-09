@@ -143,7 +143,7 @@ require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
  * Query manipulation: authenticate user first
  */
 if ($APITYPE[$query] == "") {
-   print "<messagecode>unknown_query</messagecode>\n";
+   print "<messagecode>unknown_query</messagecode>";
    $CF->safeexit();
 }  else if($APITYPE[$query] == 'unauth') {
    /* User does not need any permissions to execute the query */
@@ -166,14 +166,14 @@ case 'login':
    $password = $CF->getvariable("password");
    $result = $UF->login($username, $password);
    if (!$result['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
 
       $USER_DATA = $UF->getpersonaldata($username);
       $sessionkey = $UF->setlastvisit($username);
       $USER_DATA['sessionkey'] = $sessionkey;
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$result['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$result['messagecode']}</messagecode>";
    break;
 
 /* User tries to logout
@@ -182,14 +182,14 @@ case 'login':
 case 'logout':
    $username = $CF->getvariable("username");
    $UF->logout($username);
-   print "<messagecode>success</messagecode>\n";
+   print "<messagecode>success</messagecode>";
    break;
 
 /* 
  * Admin lists all users
  */
 case 'showusers':
-   print "<messagecode>success</messagecode>\n";
+   print "<messagecode>success</messagecode>";
    $USER_DATA = $UF->getalluserdata();
    for($j = 0; $j < count($USER_DATA); $j++) {
       $UF->showdata($USER_DATA[$j]);
@@ -213,10 +213,10 @@ case 'register':
    }
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* User tried to modify profile
@@ -234,10 +234,10 @@ case 'modifyprofile':
    }
    $USER_DATA = $UF->modifyprofile($username, $password, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* User tried to activate account
@@ -250,10 +250,10 @@ case 'activate':
 
    $USER_DATA = $UF->activate($addusername, $act_key);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* Generate a new activation mail
@@ -266,9 +266,9 @@ case 'reactivate':
 
    $USER_DATA = $UF->reactivate($addusername, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* Generate a new password request for the user
@@ -281,9 +281,9 @@ case 'forgotpassword':
 
    $USER_DATA = $UF->forgotpassword($addusername, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* Generate a new password for the user
@@ -296,10 +296,10 @@ case 'generatepassword':
 
    $USER_DATA = $UF->generatepassword($addusername, $pass_key);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* Admin tries to add a user to the system
@@ -319,10 +319,10 @@ case 'adduser':
    }
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* Admin tries to remove a user from the system
@@ -332,16 +332,16 @@ case 'removeuser':
    $addusername = $CF->getvariable("addusername");
 
    if($addusername == $username) {
-      print "<messagecode>cannot_remove_self</messagecode>\n";
+      print "<messagecode>cannot_remove_self</messagecode>";
       $CF->safeexit();
    }
 
    $USER_DATA = $UF->removeuser($addusername);
    if ($USER_DATA) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>username_not_exist</messagecode>\n";
+   else print "<messagecode>username_not_exist</messagecode>";
    break;
 
 /* Admin updates a user
@@ -358,10 +358,10 @@ case 'updateuser':
 
    $USER_DATA = $UF->updateuser($addusername, $password, $email, $active);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* 
@@ -369,15 +369,15 @@ case 'updateuser':
  */
 case 'showgroups':
    $GROUP_DATA = $UF->getallgroupdata();
-   print "<messagecode>success</messagecode>\n";
+   print "<messagecode>success</messagecode>";
    for($j = 0; $j < count($GROUP_DATA); $j++) {
-      print "<group>\n";
+      print "<group>";
       for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">\n";
+         print "<" . $DISPLAY->groupfields[$i] . ">";
          print $GROUP_DATA[$j][$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">\n";
+         print "</" . $DISPLAY->groupfields[$i] . ">";
       }
-      print "</group>\n";
+      print "</group>";
    }
    break;
 
@@ -391,16 +391,16 @@ case 'addgroup':
 
    $GROUP_DATA = $UF->addgroup($groupname, $admin);
    if (!$GROUP_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
-      print "<group>\n";
+      print "<messagecode>success</messagecode>";
+      print "<group>";
       for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">\n";
+         print "<" . $DISPLAY->groupfields[$i] . ">";
          print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">\n";
+         print "</" . $DISPLAY->groupfields[$i] . ">";
       }
-      print "</group>\n";
+      print "</group>";
    }
-   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>";
    break;
 
 /* Admin tries to add a group to the system
@@ -415,16 +415,16 @@ case 'updategroup':
 
    $GROUP_DATA = $UF->updategroup($group_id, $groupname, $admin);
    if (!$GROUP_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
-      print "<group>\n";
+      print "<messagecode>success</messagecode>";
+      print "<group>";
       for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">\n";
+         print "<" . $DISPLAY->groupfields[$i] . ">";
          print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">\n";
+         print "</" . $DISPLAY->groupfields[$i] . ">";
       }
-      print "</group>\n";
+      print "</group>";
    }
-   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>";
    break;
 
 /* Admin tries to remove a group from the system
@@ -434,20 +434,20 @@ case 'removegroup':
    $group_id = $CF->getvariable("group_id");
 
    if ($group_id <= 4) {
-      print "<messagecode>reserved_group_remove_error</messagecode>\n";
+      print "<messagecode>reserved_group_remove_error</messagecode>";
    }  else {
       $GROUP_DATA = $UF->removegroup($group_id);
       if ($GROUP_DATA) {
-         print "<messagecode>success</messagecode>\n";
-         print "<group>\n";
+         print "<messagecode>success</messagecode>";
+         print "<group>";
          for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-            print "<" . $DISPLAY->groupfields[$i] . ">\n";
+            print "<" . $DISPLAY->groupfields[$i] . ">";
             print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-            print "</" . $DISPLAY->groupfields[$i] . ">\n";
+            print "</" . $DISPLAY->groupfields[$i] . ">";
          }
-         print "</group>\n";
+         print "</group>";
       }
-      else print "<messagecode>group_not_exist</messagecode>\n";
+      else print "<messagecode>group_not_exist</messagecode>";
    }
    break;
 
@@ -462,10 +462,10 @@ case 'addusertogroup':
 
    $USER_DATA = $UF->addusertogroup($addusername, $group_id);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* 
@@ -478,30 +478,30 @@ case 'removeuserfromgroup':
    $group_id = $CF->getvariable("group_id");
 
    if($addusername == $username) {
-      print "<messagecode>cannot_remove_self_from_group</messagecode>\n";
+      print "<messagecode>cannot_remove_self_from_group</messagecode>";
       $CF->safeexit();
    }
 
    $USER_DATA = $UF->removeuserfromgroup($addusername, $group_id);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>\n";
+      print "<messagecode>success</messagecode>";
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>\n";
+   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
    break;
 
 /* 
  * Request for application configuration
  */
 case 'getconfig':
-   print "<messagecode>success</messagecode>\n";
-   print "<config>\n";
+   print "<messagecode>success</messagecode>";
+   print "<config>";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";
       print $CONFIG[$DISPLAY->configfields[$i]];
-      print "</" . $DISPLAY->configfields[$i] . ">\n";
+      print "</" . $DISPLAY->configfields[$i] . ">";
    }
-   print "</config>\n";
+   print "</config>";
    break;
 
 /* 
@@ -522,18 +522,18 @@ case 'setconfig':
    }
    $GF->setconfig($CONFIG);
 
-   print "<messagecode>success</messagecode>\n";
-   print "<config>\n";
+   print "<messagecode>success</messagecode>";
+   print "<config>";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";
       print $CONFIG[$DISPLAY->configfields[$i]];
-      print "</" . $DISPLAY->configfields[$i] . ">\n";
+      print "</" . $DISPLAY->configfields[$i] . ">";
    }
-   print "</config>\n";
+   print "</config>";
    break;
 
 default:
-   print "<messagecode>query_not_implemented</messagecode>\n";   
+   print "<messagecode>query_not_implemented</messagecode>";   
 }
 
 $CF->safeexit();

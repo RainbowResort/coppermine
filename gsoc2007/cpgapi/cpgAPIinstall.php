@@ -36,7 +36,7 @@ class install {
      $cnf.= "\$CONFIG['dbname'] =            '{$dbname}';    // Your mysql database name\n";
      $cnf.= "// MySQL TABLE NAMES PREFIX\n";
      $cnf.= "\$CONFIG['TABLE_PREFIX'] =      '{$prefix}';\n";
-     $cnf.= "?>\n";
+     $cnf.= "?>";
  
      $dh = mkdir($DFLT['cfg_d']);
      $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'w') or $CF->unsafeexit("config_file_error");
@@ -85,7 +85,7 @@ class install {
      fwrite($fh, "1");
      fclose($fh);
 
-     print "<messagecode>success</messagecode>\n";
+     print "<messagecode>success</messagecode>";
      $CF->safeexit();
   }
   
@@ -123,7 +123,7 @@ class install {
 
      unlink($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
      unlink($DFLT['cfg_d'] . "/" . $DFLT['ins_f']);
-     print "<messagecode>success</messagecode>\n";
+     print "<messagecode>success</messagecode>";
      $CF->safeexit();
   }
 }

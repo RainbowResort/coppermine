@@ -63,17 +63,17 @@ class commonfunctions {
 
   function showheader() {
     print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
-    print "<catalog>\n";
+    print "<catalog>";
   }
 
   function showfooter() {
-    print "</catalog>\n";
+    print "</catalog>";
   }
 
   function unsafeexit($code) {
     global $DBS, $DISPLAY;
     if($DBS->dbactive) $DBS->sql_disconnect();
-    print "<messagecode>{$code}</messagecode>\n";
+    print "<messagecode>{$code}</messagecode>";
     $this->showfooter();
     exit(1);
   }
