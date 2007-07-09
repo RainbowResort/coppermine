@@ -205,7 +205,17 @@ PhotoNote.prototype.ShowNoteText = function()
         this.container.DisableAllNotes();
         this.EnableNote();
 
+        var notes = document.getElementsByTagName('div');
+        for(var i=0;i<notes.length;i++)
+        {
+          if(notes[i].className.match('fn-area-whiteborder') || notes[i].className.match('fn-area-blackborder'))
+            notes[i].style.border = 'none';
+        }
+
         this.gui.ElementRect.style.border='1px solid #D4D82D';
+        this.gui.ElementRect.style.backgroundColor='#000000';
+        this.gui.ElementRect.style.opacity='.5';
+        this.gui.ElementRect.style.filter = 'alpha(opacity=50)';
         this.gui.ElementRect.style.margin='0';
         this.gui.ElementNote.style.display='block';
     }
@@ -227,7 +237,20 @@ PhotoNote.prototype.EnableNote = function ()
 
 PhotoNote.prototype.HideNoteText = function ()
 {
+    var notes = document.getElementsByTagName('div');
+    for(var i=0;i<notes.length;i++)
+    {
+      if(notes[i].className.match('fn-area-whiteborder'))
+        notes[i].style.border = '1px solid #FFF';
+      else if (notes[i].className.match('fn-area-blackborder'))
+        notes[i].style.border = '1px solid #000';
+    }
+
     this.gui.ElementRect.style.border='0px solid #D4D82D';
+    this.gui.ElementRect.style.opacity = '1';    
+    this.gui.ElementRect.style.filter = 'alpha(opacity=100)';    
+    
+    this.gui.ElementRect.style.backgroundColor = ''
     this.gui.ElementRect.style.margin='1px';
     this.gui.ElementNote.style.display='none';
 }
