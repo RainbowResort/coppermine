@@ -486,7 +486,7 @@ public class JCpgUserManager extends JDialog {
 		userconfig.setAttribute("baseurl", baseurlField.getText());
 		userconfig.setAttribute("username", usernameField.getText());
 		userconfig.setAttribute("password", passwordField.getText());
-		userconfig.setAttribute("id", new JCpgPhpCommunicator().getXmlTagText("userdata", "user_id").charAt(1) + "");
+		userconfig.setAttribute("id", new JCpgPhpCommunicator().getXmlTagText("userdata", "user_id"));
 		
 		// write file
 		Document doc=new Document(userconfig);

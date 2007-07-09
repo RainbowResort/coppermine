@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Configuration;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -27,6 +28,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 
@@ -173,13 +175,17 @@ public class JCpgSiteConfig {
 				
 				if(file.exists()){
 					
+					delete = new File("config/config.xml"); // delete old configuration file
+					if (delete.exists()) delete.delete();
+					
 					SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
 					
 					try {
 						
-						Document doc = builder.build("svr.xml");
+						Document input = builder.build("svr.xml");
 					
-						Element cpgconfig = doc.getRootElement();
+						Element cpgconfig = input.getRootElement();
+						Element cpgconfigout = new Element("cpgconfig");
 						
 						List content = cpgconfig.getChildren();
 						ListIterator it = content.listIterator(); // catalog tag
@@ -200,6 +206,31 @@ public class JCpgSiteConfig {
 									getConfigEntries().add(element2.getName());
 									getConfigEntries().add(element2.getText());
 									
+									Element elementout = new Element(element2.getName());
+									elementout.addContent(element2.getText());
+									
+									cpgconfigout.addContent(elementout);
+									
+								}
+								
+								// write file
+								Document doc=new Document(cpgconfigout);
+								
+								XMLOutputter out = new XMLOutputter();
+								
+								out.setIndent(true);
+								out.setNewlines(true);
+								
+								try{
+									
+									FileOutputStream output = new FileOutputStream("config/config.xml");
+									
+									out.output(doc, output);	
+									
+								}catch(Exception e){
+									
+									System.out.println("JCpgSiteConfig: couldn't save site configuration");
+									
 								}
 								
 							}
@@ -213,8 +244,6 @@ public class JCpgSiteConfig {
 					}
 					
 				}
-				
-				
 				
 			}else{ // respons not ok
 				
