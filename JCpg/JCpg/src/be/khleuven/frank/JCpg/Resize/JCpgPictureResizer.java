@@ -230,7 +230,7 @@ public class JCpgPictureResizer{
 			
 			BufferedImage bi = ImageIO.read(in);
 			
-			Image im = bi.getScaledInstance(new Integer(getUi().getCpgConfig().getValueFor("thumb_width")), -1, 0); // use scale and let Java scale height (use scale from Cpg configuration)
+			Image im = bi.getScaledInstance(new Integer(getUi().getCpgConfig().getSiteConfig().getValueFor("thumb_width")), -1, 0); // use scale and let Java scale height (use scale from Cpg configuration)
 			
 			File out = new File (getPath() + "thumb_" + getFilename()); // write file
 			

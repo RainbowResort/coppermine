@@ -23,14 +23,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -43,11 +37,11 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
+import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgServerConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgSiteConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
@@ -64,16 +58,18 @@ public class JCpgUserManager extends JDialog {
 																		//				VARIABLES	          *
 																		//*************************************
 	private Dimension screensize;
+	
 	private JLabel logo;
 	private JLabel connectionStatus;
 	private JLabel username;
 	private JLabel password;
-	private JLabel server;
-	private JComboBox serverList;
+	private JLabel baseurl;
+	
+	private JTextField baseurlField;
 	private JTextField usernameField;
 	private JTextField passwordField;
+	
 	private JButton connect;
-	private JButton selectServer;
 	private JButton startOffline;
 	
 	private JCpgUI jCpgInterface;
@@ -174,19 +170,16 @@ public class JCpgUserManager extends JDialog {
 		
 		logo = new JLabel(new JCpgImageUrlValidator("data/usermanagerlogo.jpg").createImageIcon(), JLabel.CENTER); // 500x50
 		connectionStatus = new JLabel();
-		server = new JLabel("Server: ");
+		
+		baseurl = new JLabel("Base URL: ");
 		username = new JLabel("Username");
 		password = new JLabel("Password");
 		
+		baseurlField = new JTextField();
 		usernameField = new JTextField();
-		
-		serverList = new JComboBox();
-		fillServerList(); // read all cfg files in cwd and add to list
-		
 		passwordField = new JTextField();
 		
 		connect = new JButton("Connect");
-		selectServer = new JButton("Edit");
 		startOffline = new JButton("Offline");
 		
 		// make the offline button inactive if there is no local cpg config xml file
@@ -212,16 +205,15 @@ public class JCpgUserManager extends JDialog {
 		connectionStatus.setBounds(75, 160, 500, 20);
 		
 		logo.setBounds(0, 0, 500, 50);
-		server.setBounds(70, 60, 100, 20);
+		baseurl.setBounds(70, 60, 100, 20);
 		username.setBounds(70, 81, 100, 20);
 		password.setBounds(70, 101, 100, 20);
 		
-		serverList.setBounds(180, 55, 200, 30);
+		baseurlField.setBounds(180, 61, 200, 20);
 		usernameField.setBounds(180, 81, 200, 20);
 		passwordField.setBounds(180, 101, 200, 20);
 		
 		connect.setBounds(70, 131, 100, 30);
-		selectServer.setBounds(390, 51, 100, 30);
 		startOffline.setBounds(180, 131, 100, 30);
 		
 	}
@@ -236,12 +228,11 @@ public class JCpgUserManager extends JDialog {
 		this.getContentPane().add(connectionStatus);
 		this.getContentPane().add(username);
 		this.getContentPane().add(password);
-		this.getContentPane().add(server);
-		this.getContentPane().add(serverList);
+		this.getContentPane().add(baseurl);
+		this.getContentPane().add(baseurlField);
 		this.getContentPane().add(usernameField);
 		this.getContentPane().add(passwordField);
 		this.getContentPane().add(connect);
-		this.getContentPane().add(selectServer);
 		this.getContentPane().add(startOffline);
 		this.setVisible(true);
 		
@@ -337,12 +328,6 @@ public class JCpgUserManager extends JDialog {
 			}
 		});
 		
-		selectServer.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt) {
-				selectServerActionPerformed(evt);
-			}
-		});
-		
 		startOffline.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				startOfflineActionPerformed(evt);
@@ -353,57 +338,63 @@ public class JCpgUserManager extends JDialog {
 	/**
 	 * 
 	 * Perform right actions if the user presses the connect button: 
-	 * 		Try if the connectio succeeds
+	 * 		Try if the connection succeeds
 	 * 		Get current server state
 	 * 		Go to UI
 	 *
 	 */
 	private void ConnectActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
-    	JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
+		connectionStatus.setText(""); // reset connection status msg
 		
-        if(sqlManager.connect() != -1 && login() && serverList.getSelectedItem() != null){ // connection goes well => go to JCpgInterface
-        	
-        	writeUserConfig();
-        	
-        	getJCpgInterface().changeOnlinemode(true); // we go into online mode
-        	
-        	getJCpgInterface().addSqlManager(sqlManager);
-        	
-        	connectionStatus.setText("Connected to " + (readServerConfig()).getFullServer());
-        	
-        	getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
-        	
-        	new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
-        	getJCpgInterface().buildTree();
-        	
-        	getJCpgInterface().setEnabled(true);
-        	this.dispose();
-        	
-        }else{
-        	
-        	connectionStatus.setText("Unable to connected to your online Coppermine Photo Gallery");
-        	
-        }
+		String baseUrl = "", parameters = "";
 		
-	}
-	/**
-	 * 
-	 * Perform right actions if the user presses the edit button: 
-	 * 		If no configuration exists, use the default one
-	 * 		Else edit selected
-	 * 
-	 */
-	private void selectServerActionPerformed(java.awt.event.ActionEvent evt) {
-		
-		if(serverList.getItemCount() == 0){
+		if(!baseurlField.getText().equals("")){ // we must have a base url at least
 			
-			new JCpgServerManager(500, 200, getJCpgInterface(), "", this);
-		
-		}else{
-		
-			new JCpgServerManager(500, 200, getJCpgInterface(), (String)serverList.getSelectedItem(), this);
+			if(!baseurlField.getText().endsWith("/")){
+				
+				baseUrl = baseurlField.getText() + "/"; // it must and with a / or the url will not be correctly built
+				
+			}else{
+				
+				baseUrl = baseurlField.getText();
+				
+			}
+			
+			JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(baseUrl); // make a phpCommunicator object to talk with the API
+			
+			parameters = "login&username=" + usernameField.getText() + "&password=" + passwordField.getText();
+			
+			if(phpCommunicator.performPhpRequest(parameters)){ // login ok
+				
+				getJCpgInterface().changeOnlinemode(true); // we go into online mode
+				
+				writeUserConfig();
+				
+				JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText()); // build user and site config, then put in global JCpg config
+				JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), true);
+				
+				JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
+				
+				getJCpgInterface().changeCpgConfig(cpgConfig); // pass this config to te UI
+				
+				connectionStatus.setText("Login successful");
+				
+				new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
+	        	getJCpgInterface().buildTree();
+	        	
+	        	getJCpgInterface().setEnabled(true);
+	        	this.dispose();
+				
+			}else{ // login failed
+				
+				connectionStatus.setText("Wrong username / password");
+				
+			}
+
+		}else{ // no base url
+			
+			connectionStatus.setText("A base url like http://www.mycopperminesite.com/ is needed.");
 			
 		}
 		
@@ -418,12 +409,13 @@ public class JCpgUserManager extends JDialog {
 		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
 		
-		getJCpgInterface().changeUserConfig(new JCpgUserConfig(usernameField.getText(), passwordField.getText(), readServerConfig()));
-		getJCpgInterface().getUserConfig().changeId(this.userid);
+		JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText()); // build user and site config, then put in global JCpg config
+		JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), false);
 		
-		JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object
-		getJCpgInterface().addCpgConfig(new JCpgConfig(sqlManager, readServerConfig(), getJCpgInterface().getOnlinemode())); // Extract the configuration
-    	
+		JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
+		
+		getJCpgInterface().changeCpgConfig(cpgConfig);
+		
 		// only load saved gallery if the root of the gallery tree has one child or more. This indicates the gallery already has been loaded and the user just clicked the sync button
 		// in offline mode, which will trigger the usermanager to display so the user can connect.
 		// if, at this point, he again clicks the offline button, the gallery will be loaded again and displayed double in the tree. This if-statement resolves that.
@@ -451,96 +443,6 @@ public class JCpgUserManager extends JDialog {
 																		//*************************************
 	/**
 	 * 
-	 * Browse cwd and read all cfg files and put them in the serverList
-	 * Will also be called each time a new server is saved or deleted
-	 *
-	 */
-	protected void fillServerList(){
-		
-		serverList.removeAllItems(); // clear list, then rebuild.
-		
-		File cwd = new File("config/");
-
-		String[] files = cwd.list();
-		
-		File current;
-		for(int i=0; i<files.length; i++){
-			
-			current = new File("config/" + files[i]);
-			
-			if(current.isFile() && files[i].endsWith(".cfg")){
-				
-				String filename = current.getName();
-				
-				filename = filename.substring(0, filename.length()-4);
-				
-				serverList.addItem(filename);
-				
-			}
-			
-		}
-		
-	}
-	/**
-	 * 
-	 * Try logging in with the given username and password
-	 * 
-	 * @return
-	 * 		true if login succeeds, otherwhise false
-	 */
-	private boolean login(){
-		
-		JCpgSqlManager sqlManager = new JCpgSqlManager(readServerConfig()); // make new sqlmanager object for connecting
-		sqlManager.connect(); // this is possible because it has just been checked in the connect button event
-					
-		try {
-						
-			ResultSet rs_userid = sqlManager.sqlExecute("SELECT * FROM " + getJCpgInterface().getUserConfig().getServerConfig().getPrefix() + "users WHERE user_active=TRUE AND user_name='" + usernameField.getText() + "' AND user_password='" + getPwdMd5() + "'");
-					
-			try {
-							
-				if(rs_userid.next() == true){
-					
-					this.userid = rs_userid.getInt("user_id");
-					getJCpgInterface().getUserConfig().changeId(rs_userid.getInt("user_id"));
-					return true;
-								
-				}
-							
-			} catch (SQLException e) {
-							
-				return false; // no such user
-							
-			}
-					
-			return false;
-						
-		} catch (NoSuchAlgorithmException e) {
-				
-			System.out.println("JCpgUserManager: couldn't convert pwd to MD5 equivalent.");
-						
-		}
-					
-		return false;
-
-	}
-	/**
-	 * 
-	 * Get the password for ths connection (MD5)
-	 * 
-	 * @return
-	 * 		the password for ths connection
-	 */
-	public String getPwdMd5() throws NoSuchAlgorithmException{
-		
-	    MessageDigest m=MessageDigest.getInstance("MD5");
-	    m.update(passwordField.getText().getBytes(),0,passwordField.getText().length());
-	    
-	    return new BigInteger(1,m.digest()).toString(16);
-	    
-	}
-	/**
-	 * 
 	 * Read the userfg.xml file and extract all stored userinformation
 	 *
 	 */
@@ -558,6 +460,7 @@ public class JCpgUserManager extends JDialog {
 			
 				Element userconfig = doc.getRootElement();
 				
+				baseurlField.setText(userconfig.getAttribute("baseurl").getValue());
 				usernameField.setText(userconfig.getAttribute("username").getValue());
 				passwordField.setText(userconfig.getAttribute("password").getValue());
 				this.userid = userconfig.getAttribute("id").getIntValue();
@@ -580,9 +483,10 @@ public class JCpgUserManager extends JDialog {
 		
 		Element userconfig = new Element("userconfig");
 		
+		userconfig.setAttribute("baseurl", baseurlField.getText());
 		userconfig.setAttribute("username", usernameField.getText());
 		userconfig.setAttribute("password", passwordField.getText());
-		userconfig.setAttribute("id", this.userid + "");
+		userconfig.setAttribute("id", new JCpgPhpCommunicator().getXmlTagText("userdata", "user_id").charAt(1) + "");
 		
 		// write file
 		Document doc=new Document(userconfig);
@@ -596,7 +500,7 @@ public class JCpgUserManager extends JDialog {
 			
 			FileOutputStream file = new FileOutputStream("config/usercfg.xml");
 			
-			out.output(doc , file);	
+			out.output(doc, file);	
 			
 		}catch(Exception e){
 			
@@ -605,53 +509,5 @@ public class JCpgUserManager extends JDialog {
 		}
 		
 	}
-	/**
-	 * 
-	 * Read all server information from the choosen server config cfg file
-	 * 
-	 * @return
-	 * 		a serverconfig object if a file was read succesfully, else null
-	 */
-	private JCpgServerConfig readServerConfig(){
-		
-		if(serverList.getSelectedItem() != null){
-			
-			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
-			
-			File file = new File("config/" + serverList.getSelectedItem() + ".cfg");
-			
-			if(file.exists()){
-			
-				try {
-					
-					Document doc = builder.build("config/" + serverList.getSelectedItem() + ".cfg");
-				
-					Element userconfig = doc.getRootElement();
-					
-					JCpgServerConfig serverConfig = new JCpgServerConfig(userconfig.getAttribute("configname").getValue(), userconfig.getAttribute("server").getValue(), userconfig.getAttribute("username").getValue(), userconfig.getAttribute("password").getValue(), userconfig.getAttribute("database").getValue(), userconfig.getAttribute("prefix").getValue());
-					
-					return serverConfig;
-					
-				} catch (JDOMException e) {
-					
-					System.out.println("JCpgUserManager: couldn't load server configuration");
-					
-				}
-				
-			}else{
-				
-				connectionStatus.setText("No available server configuration!");
-				
-				return null;
-				
-			}
-			
-			return null;
-			
-		}
-		
-		return null;
-		
-	}
-	
+
 }

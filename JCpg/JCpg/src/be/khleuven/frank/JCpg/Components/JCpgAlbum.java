@@ -532,59 +532,5 @@ public class JCpgAlbum extends JCpgGallery{
 		changeMustSync(true);
 		
 	}
-	/**
-	 * 
-	 * Generate a new INSERT query. Used when syncing when we pass the generated category id.
-	 *
-	 */
-	public void generateSqlInsertQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUi().getUserConfig().getServerConfig().getPrefix() + "albums(title, description, visibility, uploads, comments, votes, pos, category, thumb, keyword, alb_password, alb_password_hint) " +
-							"VALUES('" + getName() + "', '" + getDescription() + "', " + getVisibility() + 
-							", " + getUploads() + ", " + getComments() + ", " + getVotes() + ", " + getPosition() + ", " + getCategory() + ", " + getThumb() +
-							", '" + getKeyword() + "', '" + getAlbPassword() + "', '" + getAlbPasswordHint() + "')";
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a new UPDATE query. Used when changes have been made and the id != -1 which means it's now in the database
-	 * 
-	 */
-	public void generateSqlUpdateQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUi().getUserConfig().getServerConfig().getPrefix() + "albums SET title='" + getName() + "', description='" + getDescription() + "', visibility=" + getVisibility() + 
-							", uploads=" + getUploads() + ", comments=" + getComments() + ", votes=" + getVotes() + ", pos=" + getPosition() + ", category=" + getCategory() + ", thumb=" + getThumb() +
-							", keyword='" + getKeyword() + "', alb_password='" + getAlbPassword() + "', alb_password_hint='" + getAlbPasswordHint() + "'"
-							+ " WHERE aid=" + getId();
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a DELETE query.
-	 * 
-	 */
-	public String generateSqlDeleteQuery(){
-		
-		String sqlquery = "DELETE FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "albums WHERE title = '" + getName() + "'";
-		
-		return sqlquery;
-		
-	}
-	/**
-	 * 
-	 * Generate a fetch id query. Used when we have ma de new album and need the unique id assigned by the database.
-	 *
-	 */
-	public void generateIdFetchQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "SELECT " + getUi().getUserConfig().getServerConfig().getPrefix() + "albums.aid FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "albums WHERE title = '" + getName() + "'";
-		changeSqlQuery(sqlquery);
-		
-	}
 
 }

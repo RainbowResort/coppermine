@@ -675,9 +675,9 @@ public class JCpgPicture extends JCpgGallery{
 		
 		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // id = -1 means this picture is not yet in the database
 		
-		File delete = new File(getUi().getCpgConfig().getValueFor("fullpath") + getFilePath() + getFileName());
+		File delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + getFileName());
 		delete.delete();
-		delete = new File(getUi().getCpgConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
+		delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
 		delete.delete();
 		
 	}
@@ -754,60 +754,6 @@ public class JCpgPicture extends JCpgGallery{
 	public void changeHeight(int pheight){
 		
 		setpHeight(pheight);
-		
-	}
-	/**
-	 * 
-	 * Generate a new INSERT query
-	 *
-	 */
-	public void generateSqlInsertQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUi().getUserConfig().getServerConfig().getPrefix() + "pictures(aid, filepath, filename, filesize, total_filesize, pwidth, pheight, hits, ctime, owner_id, owner_name, pic_rating, votes, title, caption, keywords, approved, galleryicon, url_prefix, position)" +
-			" VALUES(" + getAid() + ", '" + getFilePath() + "', '" + getFileName() + "', " + getFilesize() + ", " + getTotalFileSize() + ", " + getpWidth() + ", " + getpHeight()
-			+ ", " + getHits() + ", " + getcTime() + ", " + getOwnerId() + ", '" + getOwnerName() + "', " + getPicRating() + ", " + getVotes() + ", '" + getName() + "', '"
-			+ getCaption() + "', '" + getKeywords() + "', " + getApproved() + ", " + getGalleryIcon() + ", " + getUrlPrefix() + ", " + getPosition() + ")";
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a new UPDATE query
-	 *
-	 */
-	public void generateSqlUpdateQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUi().getUserConfig().getServerConfig().getPrefix() + "pictures SET aid=" + getAid() + ", filepath='" + getFilePath() + "', filename='" + getFileName() + 
-		"', filesize=" + getFilesize() + ", total_filesize=" + getTotalFileSize() + ", pwidth=" + getpWidth() + ", pheight=" + getpHeight() + ", hits=" + getHits()
-		+ ", ctime=" + getcTime() + ", owner_id=" + getOwnerId() + ", owner_name='" + getOwnerName() + "', pic_rating=" + getPicRating() + ", votes=" + getVotes() + ", title='" + getName() 
-		+ "', caption='" + getCaption() + "', keywords='" + getKeywords() + "', approved=" + getApproved() + ", galleryicon=" + getGalleryIcon() + ", url_prefix=" + getUrlPrefix() + ", position=" + getPosition() 
-		+ " WHERE pid=" + getId();
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a new DELETE query
-	 *
-	 */
-	public String generateSqlDeleteQuery(){
-		
-		String sqlquery = "DELETE FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "pictures WHERE filename = '" + getFileName() + "'";
-		return sqlquery;
-		
-	}
-	/**
-	 * 
-	 * Generate a new fetch id query
-	 *
-	 */
-	public void generateIdFetchQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "SELECT " + getUi().getUserConfig().getServerConfig().getPrefix() + "pictures.pid FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "pictures WHERE filename = '" + getFileName() + "'";
-		changeSqlQuery(sqlquery);
 		
 	}
 	

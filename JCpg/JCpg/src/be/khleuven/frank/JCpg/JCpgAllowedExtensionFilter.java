@@ -19,7 +19,7 @@ package be.khleuven.frank.JCpg;
 
 import java.io.File;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgSiteConfig;
 
 
 /**
@@ -37,7 +37,7 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
 																	//*************************************
 																	//				VARIABLES             *
 																	//*************************************
-	private JCpgConfig cpgConfig;
+	private JCpgSiteConfig cpgConfig;
 	
 	
 	
@@ -60,7 +60,7 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
 	 * @param config
 	 * 		reference to the current configuration
 	 */
-	public JCpgAllowedExtensionFilter(JCpgConfig config){
+	public JCpgAllowedExtensionFilter(JCpgSiteConfig config){
 		
 		setCpgConfig(config);
 		
@@ -82,7 +82,7 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
 	 * @param cpgConfig
 	 * 		the allowed extension configuration
 	 */
-	private void setCpgConfig(JCpgConfig cpgConfig){
+	private void setCpgConfig(JCpgSiteConfig cpgConfig){
 		
 		this.cpgConfig = cpgConfig;
 		
@@ -104,7 +104,7 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
 	 * @return
 	 * 		the allowed extension configuration
 	 */
-	public JCpgConfig getCpgConfig(){
+	public JCpgSiteConfig getCpgConfig(){
 		
 		return this.cpgConfig;
 		

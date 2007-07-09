@@ -17,8 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -27,11 +25,14 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * 

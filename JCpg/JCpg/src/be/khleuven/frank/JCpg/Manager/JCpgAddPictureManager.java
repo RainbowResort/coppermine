@@ -30,7 +30,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import be.khleuven.frank.JCpg.JCpgAllowedExtensionFilter;
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
+import be.khleuven.frank.JCpg.Configuration.JCpgSiteConfig;
 import be.khleuven.frank.JCpg.Interfaces.JCpgAddTreeEntryInterface;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.Sync.JCpgPictureTransferer;
@@ -50,7 +50,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 																									//*************************************
 																									//				VARIABELS             *
 																									//*************************************
-	private JCpgConfig cpgConfig;
+	private JCpgSiteConfig cpgConfig;
 	
 	private JFileChooser pictureChooser;
 	
@@ -75,7 +75,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	 * @param node
 	 * 		the currently selected node
 	 */
-	public JCpgAddPictureManager(JCpgUI jCpgUIReference, JCpgConfig cpgConfig, ImageIcon logo, DefaultMutableTreeNode node){
+	public JCpgAddPictureManager(JCpgUI jCpgUIReference, JCpgSiteConfig cpgConfig, ImageIcon logo, DefaultMutableTreeNode node){
 		
 		super(jCpgUIReference, logo, node);
 		
@@ -97,7 +97,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	 * @param cpgConfig
 	 * 		the current configuration
 	 */
-	private void setCpgConfig(JCpgConfig cpgConfig){
+	private void setCpgConfig(JCpgSiteConfig cpgConfig){
 		
 		this.cpgConfig = cpgConfig;
 		
@@ -117,7 +117,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	 * @return
 	 * 		the current configuration
 	 */
-	public JCpgConfig getCpgConfig(){
+	public JCpgSiteConfig getCpgConfig(){
 		
 		return this.cpgConfig;
 		
@@ -200,7 +200,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					// make new picture
 					ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
 					File source = new File(selectedFiles[i].getAbsolutePath());
-					String userdir = 10000 + getJCpgUIReference().getUserConfig().getId() + "/";
+					String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
 					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
 					long filesize = 0;

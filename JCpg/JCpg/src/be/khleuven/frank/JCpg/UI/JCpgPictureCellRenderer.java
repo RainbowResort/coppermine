@@ -75,7 +75,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     	
     	JCpgPicture picture = (JCpgPicture)value;
-    	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
+    	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
 
         // determine grid position
     	gblc.gridx = index;

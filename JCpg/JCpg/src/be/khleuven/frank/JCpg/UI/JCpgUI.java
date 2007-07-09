@@ -52,7 +52,6 @@ import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
 import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
@@ -63,11 +62,9 @@ import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
 import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 
 
 /**
@@ -85,10 +82,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//*************************************
 																	//				VARIABLES             *
 																	//*************************************
-	private JCpgUserConfig userConfig;
-	private JCpgSqlManager sqlManager;
 	private JCpgConfig cpgConfig;
-	private JCpgUI globalUi = this;
+	private JCpgUI globalUi = this; // for threads :s:s
 	
 	private static JCpgGallery gallery = new JCpgGallery("My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
@@ -432,30 +427,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//*************************************
 	/**
 	 * 
-	 * Get the UserConfig object
-	 * 
-	 * @return
-	 * 		the UserConfig object
-	 */
-	public JCpgUserConfig getUserConfig(){
-		
-		return this.userConfig;
-		
-	}
-	/**
-	 * 
-	 * Get a SqlManager reference for executing queries
-	 * 
-	 * @return
-	 * 		SqlManager reference for executing queries
-	 */
-	public JCpgSqlManager getSqlManager(){
-		
-		return this.sqlManager;
-		
-	}
-	/**
-	 * 
 	 * Get the current config
 	 * 
 	 * @return
@@ -569,7 +540,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(selectedPicture != null){
 			
-	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getValueFor("fullpath") + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
 	    	image.setToolTipText(selectedPicture.getFileName());
 	    	Dimension realSize = new Dimension(selectedPicture.getpWidth(), selectedPicture.getpHeight());
 	    	image.setPreferredSize(realSize);
@@ -612,7 +583,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
-			new JCpgAddPictureManager(this, getCpgConfig(), new JCpgImageUrlValidator("data/createpicture_logo.jpg").createImageIcon(), node);
+			new JCpgAddPictureManager(this, getCpgConfig().getSiteConfig(), new JCpgImageUrlValidator("data/createpicture_logo.jpg").createImageIcon(), node);
 		
 		}
 		
@@ -789,7 +760,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			t1.start();
 		*/
 		
-		new JCpgSyncer(globalUi, getSqlManager()).sync();
+		//new JCpgSyncer(globalUi, getSqlManager()).sync();
 		
 		this.setEnabled(true);
 		
@@ -923,7 +894,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
 	    	JButton image = new JButton();
 	    	
-	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()).createImageIcon());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()).createImageIcon());
 	    	image.setToolTipText(picture.getFileName());
 	    	Dimension realSize = new Dimension(picture.getpWidth(), picture.getpHeight());
 	    	image.setPreferredSize(realSize);
@@ -952,50 +923,14 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//*************************************
 	/**
 	 * 
-	 * Add a userConfig file to the interface. The serverConfig contains all the necesarry information for making the connection to the database and the correct Cpg tables
+	 * Add a cpgConfig to the interface.
 	 * 
 	 * @param userConfig
 	 * 		a userConfig object
 	 */
-	protected void addServerConfig(JCpgUserConfig userConfig){
+	public void changeCpgConfig(JCpgConfig cpgConfig){
 		
-		this.userConfig = userConfig;
-		
-	}
-	/**
-	 * 
-	 * Add a userConfig file to the interface. The userconfig contains all the necesarry information for making the connection to the database and the correct Cpg tables
-	 * 
-	 * @param userConfig
-	 * 		a userConfig object
-	 */
-	public void changeUserConfig(JCpgUserConfig userConfig){
-		
-		this.userConfig = userConfig;
-		
-	}
-	/**
-	 * 
-	 * Set a SqlManager reference for executing queries
-	 * 
-	 * @param sqlManager
-	 * 		a SqlManager reference for executing queries
-	 */
-	public void addSqlManager(JCpgSqlManager sqlManager){
-		
-		this.sqlManager = sqlManager;
-		
-	}
-	/**
-	 * 
-	 * Change the current configuration
-	 * 
-	 * @param config
-	 * 		the new configuration
-	 */
-	public void addCpgConfig(JCpgConfig config){
-		
-		this.cpgConfig = config;
+		this.cpgConfig = cpgConfig;
 		
 	}
 	/**

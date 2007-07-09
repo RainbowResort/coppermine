@@ -18,9 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Configuration;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -30,25 +27,23 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
 
-import be.khleuven.frank.JCpg.Manager.JCpgSqlManager;
+import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 
 /**
  * This class contains all the information found in the Cpg _config table.
  * 
  * @author    Frank Cleynen
  */
-public class JCpgConfig {
+public class JCpgSiteConfig {
 	
 	
 	
 																					//*************************************
 																					//				VARIABLES	          *
 																					//*************************************
-	private JCpgSqlManager sqlmanager;
-	private JCpgServerConfig serverConfig;
 	private ArrayList<String> configEntries = new ArrayList<String>();
+	private String baseUrl = "";
 	private boolean mode;
 	
 	
@@ -70,10 +65,9 @@ public class JCpgConfig {
 	 * @param online
 	 * 		are we online or offline
 	 */
-	public JCpgConfig(JCpgSqlManager sqlmanager, JCpgServerConfig serverConfig, boolean online){
+	public JCpgSiteConfig(String baseUrl, boolean online){
 		
-		setSqlManager(sqlmanager);
-		setServerConfig(serverConfig);
+		setBaseUrl(baseUrl);
 		setOnlineMode(online);
 		
 		getCpgConfiguration();
@@ -91,26 +85,14 @@ public class JCpgConfig {
 																					//*************************************
 	/**
 	 * 
-	 * Set the sql manager
+	 * Set the base url
 	 * 
-	 * @param sqlmanager
-	 * 		the sql manager
+	 * @param baseUrl
+	 * 		the base url
 	 */
-	private void setSqlManager(JCpgSqlManager sqlmanager){
+	private void setBaseUrl(String baseUrl){
 		
-		this.sqlmanager = sqlmanager;
-		
-	}
-	/**
-	 * 
-	 * Set the current server config
-	 * 
-	 * @param serverConfig
-	 * 		the current server config
-	 */
-	private void setServerConfig(JCpgServerConfig serverConfig){
-		
-		this.serverConfig = serverConfig;
+		this.baseUrl = baseUrl;
 		
 	}
 	/**
@@ -136,26 +118,14 @@ public class JCpgConfig {
 																					//*************************************
 	/**
 	 * 
-	 * Get the sql manager
+	 * Get the base url
 	 * 
 	 * @return
-	 * 		the sql manager
+	 * 		the base url
 	 */
-	public JCpgSqlManager getSqlManager(){
+	public String getBaseUrl(){
 		
-		return this.sqlmanager;
-		
-	}
-	/**
-	 * 
-	 * Get the current server config
-	 * 
-	 * @return
-	 * 		the current server config
-	 */
-	public JCpgServerConfig getServerConfig(){
-		
-		return this.serverConfig;
+		return this.baseUrl;
 		
 	}
 	/**
@@ -192,70 +162,67 @@ public class JCpgConfig {
 		// if we are online, get the current config
 		if(getOnlineMode()){
 			
-			File delete = new File("config/config.xml");
+			File delete = new File("svr.xml"); // delete previous server respons
 			if (delete.exists()) delete.delete();
 	
-			String table_config = getServerConfig().getPrefix() + "config";
-			ResultSet rs_config = getSqlManager().sqlExecute("SELECT * FROM " + table_config);
-	
-			try {
-	
-				Element cpgconfig = new Element("cpgconfig");
-	
-				while (rs_config.next()) {
-	
-					configEntries.add(rs_config.getString("name"));
-					configEntries.add(rs_config.getString("value"));
-					
-					Element element = new Element(rs_config.getString("name"));
-					element.addContent(rs_config.getString("value"));
-	
-					cpgconfig.addContent(element);
+			JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getBaseUrl()); // get the Cpg config
+			
+			if(phpCommunicator.performPhpRequest("getconfig")){ // respons ok
 				
-				}
-	
-				// write file
-				Document doc = new Document(cpgconfig);
-	
-				XMLOutputter out = new XMLOutputter();
-	
-				out.setIndent(true);
-				out.setNewlines(true);
-				
-				SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
-				
-				File file = new File("config/usercfg.xml");
+				File file = new File("svr.xml");
 				
 				if(file.exists()){
-				
+					
+					SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+					
 					try {
 						
-						Document usercfg = builder.build("config/usercfg.xml");
+						Document doc = builder.build("svr.xml");
 					
-						Element userconfig = usercfg.getRootElement();
+						Element cpgconfig = doc.getRootElement();
 						
-						int dirid = 10000 + userconfig.getAttribute("id").getIntValue();
-				
-						// make directory structure for saving pictures
-						new File(getValueFor("fullpath") + getValueFor("userpics") + dirid).mkdirs();
-			
-						FileOutputStream file1 = new FileOutputStream("config/config.xml");
-			
-						out.output(doc, file1);
+						List content = cpgconfig.getChildren();
+						ListIterator it = content.listIterator(); // catalog tag
 						
-					} catch (Exception e) {
+						while(it.hasNext()){
+							
+							Element element = (Element)it.next();
+							
+							if(element.getName().equals("config")){
+								
+								List content2 = element.getChildren();
+								ListIterator it2 = content2.listIterator();
+								
+								while(it2.hasNext()){
+									
+									Element element2 = (Element)it2.next();
+									
+									getConfigEntries().add(element2.getName());
+									getConfigEntries().add(element2.getText());
+									
+								}
+								
+							}
+							
+						}
 						
-						System.out.println("JCpgUserManager: couldn't load server configuration");
+					} catch (JDOMException e) {
+						
+						System.out.println("JCpgUserManager: couldn't load usercfg.xml");
 						
 					}
 					
 				}
-	
-			} catch (SQLException e) {
-	
-				System.out.println("JCpgConfig: Couldn't extract from sql query result");
-	
+				
+				
+				
+			}else{ // respons not ok
+				
+				System.out.println("JCpgSiteConfig: unable to retrieve the Coppermine configuration");
+				
 			}
+			
+			
 			
 		}else{ // offline: load config
 			

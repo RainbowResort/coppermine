@@ -31,10 +31,8 @@ public class JCpgUserConfig {
 																										//*************************************
 																										//				VARIABLES	          *
 																										//*************************************
-	private String username;
-	private String password;
+	private String username, password, baseUrl;
 	private int id;
-	private JCpgServerConfig serverConfig;
 	
 																										
 	
@@ -51,14 +49,15 @@ public class JCpgUserConfig {
 	 * 		username of Coppermine site
 	 * @param password
 	 * 		password of Coppermine site
-	 * @param serverConfig
-	 * 		reference to choosen server configuration
+	 * @param baseUrl
+	 * 		Coppermine base url
 	 */
-	public JCpgUserConfig(String username, String password, JCpgServerConfig serverConfig){
+	public JCpgUserConfig(String username, String password, int id, String baseUrl){
 		
 		setUsername(username);
 		setPassword(password);
-		setServerConfig(serverConfig);
+		setId(id);
+		setBaseUrl(baseUrl);
 		
 	}
 																										
@@ -96,6 +95,13 @@ public class JCpgUserConfig {
 		this.password = password;
 		
 	}
+	/**
+	 * 
+	 * Set the user id
+	 * 
+	 * @param id
+	 * 		the user id
+	 */
 	private void setId(int id){
 		
 		this.id = id;
@@ -103,14 +109,14 @@ public class JCpgUserConfig {
 	}
 	/**
 	 * 
-	 * Set the userconfig server config
+	 * Set the base url
 	 * 
 	 * @param serverConfig
-	 * 		the userconfig server config
+	 * 		the base url
 	 */
-	private void setServerConfig(JCpgServerConfig serverConfig){
+	private void setBaseUrl(String baseUrl){
 		
-		this.serverConfig = serverConfig;
+		this.baseUrl = baseUrl;
 		
 	}
 	
@@ -150,22 +156,41 @@ public class JCpgUserConfig {
 	}
 	/**
 	 * 
-	 * Get the userconfig serverconfig
+	 * Get the base url
 	 * 
 	 * @return
-	 * 		the userconfig serverconfig
+	 * 		the base url
 	 */
-	public JCpgServerConfig getServerConfig(){
+	public String getBaseUrl(){
 		
-		return this.serverConfig;
+		return this.baseUrl;
 		
 	}
-	
-	
+	/**
+	 * 
+	 * Change the current user id
+	 * 
+	 * @param id
+	 * 		the new user id
+	 */
 	public void changeId(int id){
 		
 		this.id = id;
 		
 	}
+	
+	
+	
+	
+	// TEMP: TO AVOID ERRORS
+	public Object getServerConfig(){
+		
+		return null;
+		
+	}
+	
+	
+	
+	
 
 }

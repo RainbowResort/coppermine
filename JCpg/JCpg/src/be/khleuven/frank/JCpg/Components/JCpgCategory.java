@@ -443,54 +443,5 @@ public class JCpgCategory extends JCpgGallery{
 		setId(id);
 		
 	}
-	/**
-	 * 
-	 * Generate a new INSERT query. Used when syncing when we pass the generated category id.
-	 *
-	 */
-	public void generateSqlInsertQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "INSERT INTO " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories(owner_id, name, description, pos, parent, thumb) VALUES(" + getOwnerId() + ", '" + getName() + "', '" + getDescription() + 
-		"', " + getPosition() + ", " + getParent() + ", " + getThumb() + ")";
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a new UPDATE query
-	 *
-	 */
-	public void generateSqlUpdateQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "UPDATE " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories owner_id=" + getOwnerId() + ", name='" + getName() + "', description='" + getDescription() + 
-		"', pos=" + getPosition() + ", parent=" + getParent() + ", thumb=" + getThumb() + " WHERE cid=" + getId();
-		changeSqlQuery(sqlquery);
-		
-	}
-	/**
-	 * 
-	 * Generate a new DELETE query
-	 *
-	 */
-	public String generateSqlDeleteQuery(){
-		
-		String sqlquery = "DELETE FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
-		return sqlquery;
-		
-	}
-	/**
-	 * 
-	 * Generate a new fetch id query
-	 *
-	 */
-	public void generateIdFetchQuery(){
-		
-		changeMustSync(true);
-		String sqlquery = "SELECT " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories.cid FROM " + getUi().getUserConfig().getServerConfig().getPrefix() + "categories WHERE name = '" + getName() + "'";
-		changeSqlQuery(sqlquery);
-		
-	}
 	
 }

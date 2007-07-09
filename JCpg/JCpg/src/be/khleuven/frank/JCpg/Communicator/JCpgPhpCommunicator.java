@@ -17,7 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Communicator;
 
-import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +43,7 @@ public class JCpgPhpCommunicator {
 																	//*************************************
 																	//				VARIABLES	          *
 																	//*************************************
-	private JCpgUserConfig config = null;
+	private String baseUrl = "";
 	
 	
 	
@@ -56,12 +55,21 @@ public class JCpgPhpCommunicator {
 	 * 
 	 * Makes a new JCpgPhpCommunicator object
 	 * 
-	 * @param config
-	 * 		reference to the current configuration
+	 * @param String baseUrl
+	 * 		base Coppermine url (e.g. http://www.mycopperminesite.com/
 	 */
-	public JCpgPhpCommunicator(JCpgUserConfig config){
+	public JCpgPhpCommunicator(String baseUrl){
 		
-		setUserConfig(config);
+		setBaseUrl(baseUrl);
+		
+	}
+	/**
+	 * 
+	 * Empty constructor to use the getTagText function where we just want to read to just downloaded svr.xml file
+	 *
+	 */
+	public JCpgPhpCommunicator(){
+		
 		
 	}
 	
@@ -73,14 +81,14 @@ public class JCpgPhpCommunicator {
 																	//*************************************
 	/**
 	 * 
-	 * Sets the current configuration
+	 * Sets the base url
 	 * 
-	 * @param config
-	 * 		the current configuration
+	 * @param baseUrl
+	 * 		the base url
 	 */
-	private void setUserConfig(JCpgUserConfig config){
+	private void setBaseUrl(String baseUrl){
 		
-		this.config = config;
+		this.baseUrl = baseUrl;
 		
 	}
 	
@@ -93,14 +101,14 @@ public class JCpgPhpCommunicator {
 																	//*************************************
 	/**
 	 * 
-	 * Get the current configuration
+	 * Get the base url
 	 * 
 	 * @return
-	 * 		the current configuration
+	 * 		the base url
 	 */
-	public JCpgUserConfig getConfig(){
+	public String getBaseUrl(){
 		
-		return this.config;
+		return this.baseUrl;
 		
 	}
 	
@@ -114,17 +122,20 @@ public class JCpgPhpCommunicator {
 	 * 
 	 * Get the XML server response
 	 * 
-	 * @param url
-	 * 		URL where the server response can be found
+	 * @param parameters
+	 * 		parameters that need to be added to the base url
 	 * @return
 	 * 		true if the server response was collected successfully, else false
 	 */
-	public boolean performPhpRequest(String url){
+	
+	public boolean performPhpRequest(String parameters){
 		
 		try {
 			
 			File delete = new File("svr.xml"); // delete file if it already exists
 			if(delete.exists()) delete.delete();
+			
+			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters;
 	    	
 			URL responseUrl = new URL(url); // download server xml response
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
@@ -169,6 +180,8 @@ public class JCpgPhpCommunicator {
 						
 					}
 					
+					return false;
+					
 				} catch (JDOMException e) {
 					
 					System.out.println("JCpgPhpCommunicator: couldn't get a server response");
@@ -192,17 +205,19 @@ public class JCpgPhpCommunicator {
 	 * 
 	 * Get the XML server response and return the received xml file
 	 * 
-	 * @param url
-	 * 		URL where the server response can be found
+	 * @param parameters
+	 * 		parameters that need to be added to the base url
 	 * @return
 	 * 		true if the server response was collected successfully, else false
 	 */
-	public File performPhpRequestAndGetXml(String url){
+	public File performPhpRequestAndGetXml(String parameters){
 		
 		try {
 			
 			File delete = new File("svr.xml"); // delete file if it already exists
 			if(delete.exists()) delete.delete();
+			
+			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters;
 	    	
 			URL responseUrl = new URL(url); // download server xml response
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
@@ -227,13 +242,67 @@ public class JCpgPhpCommunicator {
 			
 		} catch (Exception exception) {
 			
-			System.out.println("JCpgPhpCommunicator: couldn't retrieve server response");
+			System.out.println("JCpgPhpCommunicator: couldn't process server respons xml file");
 		
 		}
 		
 		return null; // svr.xml was not made
 		
 	}
+	public String getXmlTagText(String parent, String tag){
+		
+	    SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+		
+		File file = new File("svr.xml");
+		
+		if(file.exists()){
+		
+			try {
+				
+				Document doc = builder.build("svr.xml");
+			
+				Element respons = doc.getRootElement();
+				
+				List content = respons.getChildren();
+				ListIterator it = content.listIterator();
+				
+				while(it.hasNext()){
+					
+					Element element = (Element)it.next();
+					
+					if(element.getName().equals(parent)){
+						
+						List content2 = element.getChildren();
+						ListIterator it2 = content2.listIterator();
+						
+						while(it2.hasNext()){
+							
+							Element element2 = (Element)it2.next();
+							
+							if(element2.getName().equals(tag)){
+								
+								return element2.getText();
+								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				return ""; // tag not found, return empty string
+				
+			} catch (JDOMException e) {
+				
+				System.out.println("JCpgPhpCommunicator: couldn't process server respons xml file");
+				
+			}
+			
+		}
+		
+		return "";
+		
+	}
 	
-
 }

@@ -321,7 +321,7 @@ public class JCpgPreviewer extends JDialog{
 						Thread.sleep(timeslice);
 						
 						currentIndex = (currentIndex+1)%pictures.size(); // stay in the correct range of the album's size
-						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File(getJCpgUI().getCpgConfig().getValueFor("fullpath")+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
+						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath")+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
 						
 					} catch (Exception e) {
 						

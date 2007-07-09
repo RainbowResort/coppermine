@@ -17,10 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
-import be.khleuven.frank.JCpg.Components.JCpgPicture;
-import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
-import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
-import be.khleuven.frank.JCpg.UI.JCpgUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -31,15 +27,20 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
+
+import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
+import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 /**
@@ -259,8 +260,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
-            JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
+            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
             
 			// change picture size information
