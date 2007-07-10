@@ -1,3 +1,4 @@
+Sessionkey is now also stored in the user configuration
 Did complete API transition. JCpg now only used the Cpg API
 Changed some php communicator code to use Nitin's webapi in the near future
 Fixed some Nullpointer exceptions in the temp login code

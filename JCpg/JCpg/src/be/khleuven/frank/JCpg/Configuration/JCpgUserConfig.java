@@ -31,7 +31,7 @@ public class JCpgUserConfig {
 																										//*************************************
 																										//				VARIABLES	          *
 																										//*************************************
-	private String username, password, baseUrl;
+	private String username, password, baseUrl, sessionkey;
 	private int id;
 	
 																										
@@ -51,13 +51,16 @@ public class JCpgUserConfig {
 	 * 		password of Coppermine site
 	 * @param baseUrl
 	 * 		Coppermine base url
+	 * @param sessionkey
+	 * 		this session's key
 	 */
-	public JCpgUserConfig(String username, String password, int id, String baseUrl){
+	public JCpgUserConfig(String username, String password, int id, String baseUrl, String sessionkey){
 		
 		setUsername(username);
 		setPassword(password);
 		setId(id);
 		setBaseUrl(baseUrl);
+		setSessionkey(sessionkey);
 		
 	}
 																										
@@ -119,6 +122,23 @@ public class JCpgUserConfig {
 		this.baseUrl = baseUrl;
 		
 	}
+	/**
+	 * 
+	 * Set the sessionkey
+	 * 
+	 * @param sessionkey
+	 * 		the sessionkey
+	 */
+	private void setSessionkey(String sessionkey){
+		
+		this.sessionkey = sessionkey;
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 																										
@@ -149,6 +169,13 @@ public class JCpgUserConfig {
 		return this.password;
 		
 	}
+	/**
+	 * 
+	 * Get the user id
+	 * 
+	 * @return
+	 * 		the user id
+	 */
 	public int getId(){
 		
 		return this.id; 
@@ -166,6 +193,25 @@ public class JCpgUserConfig {
 		return this.baseUrl;
 		
 	}
+	/**
+	 * 
+	 * Get the sessionkey
+	 * 
+	 * @return
+	 * 		the sessionkey
+	 */
+	public String getSessionkey(){
+		
+		return this.sessionkey;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 * Change the current user id

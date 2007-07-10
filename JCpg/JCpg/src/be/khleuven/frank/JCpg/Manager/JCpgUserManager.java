@@ -75,6 +75,7 @@ public class JCpgUserManager extends JDialog {
 	private JCpgUI jCpgInterface;
 	
 	private int userManagerWidth, userManagerHeight, userid;
+	private String sessionkey = "";
 	
 	
 	
@@ -148,6 +149,32 @@ public class JCpgUserManager extends JDialog {
 		this.jCpgInterface = jCpgInterface;
 		
 	}
+	/**
+	 * 
+	 * Set the user id
+	 * 
+	 * @param id
+	 * 		the user id
+	 */
+	private void setId(int id){
+		
+		this.userid = id;
+		
+	}
+	/**
+	 * 
+	 * Set the sessionkey
+	 * 
+	 * @param sessionkey
+	 * 		the sessionkey
+	 */
+	private void setSessionkey(String sessionkey){
+		
+		this.sessionkey = sessionkey;
+		
+	}
+
+	
 	
 	
 	
@@ -308,6 +335,33 @@ public class JCpgUserManager extends JDialog {
 		return this.passwordField.getText();
 		
 	}
+	/**
+	 * 
+	 * Get the user id
+	 * 
+	 * @return
+	 * 		the user id
+	 */
+	public int getId(){
+		
+		return this.userid;
+		
+	}
+	/**
+	 * 
+	 * Get the sessionkey
+	 * 
+	 * @return
+	 * 		the sessionkey
+	 */
+	public String getSessionkey(){
+		
+		return this.sessionkey;
+		
+	}
+	
+	
+	
 	
 	
 	
@@ -371,7 +425,7 @@ public class JCpgUserManager extends JDialog {
 				
 				writeUserConfig();
 				
-				JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText()); // build user and site config, then put in global JCpg config
+				JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText(), phpCommunicator.getXmlTagText("userdata", "sessionkey")); // build user and site config, then put in global JCpg config
 				JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), true);
 				
 				JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
@@ -409,7 +463,7 @@ public class JCpgUserManager extends JDialog {
 		
 		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
 		
-		JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText()); // build user and site config, then put in global JCpg config
+		JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), getId(), baseurlField.getText(), getSessionkey()); // build user and site config, then put in global JCpg config
 		JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), false);
 		
 		JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
@@ -463,7 +517,8 @@ public class JCpgUserManager extends JDialog {
 				baseurlField.setText(userconfig.getAttribute("baseurl").getValue());
 				usernameField.setText(userconfig.getAttribute("username").getValue());
 				passwordField.setText(userconfig.getAttribute("password").getValue());
-				this.userid = userconfig.getAttribute("id").getIntValue();
+				setId(userconfig.getAttribute("id").getIntValue());
+				setSessionkey(userconfig.getAttribute("sessionkey").getValue());
 				
 			} catch (JDOMException e) {
 				
@@ -487,6 +542,7 @@ public class JCpgUserManager extends JDialog {
 		userconfig.setAttribute("username", usernameField.getText());
 		userconfig.setAttribute("password", passwordField.getText());
 		userconfig.setAttribute("id", new JCpgPhpCommunicator().getXmlTagText("userdata", "user_id"));
+		userconfig.setAttribute("sessionkey", new JCpgPhpCommunicator().getXmlTagText("userdata", "sessionkey"));
 		
 		// write file
 		Document doc=new Document(userconfig);
