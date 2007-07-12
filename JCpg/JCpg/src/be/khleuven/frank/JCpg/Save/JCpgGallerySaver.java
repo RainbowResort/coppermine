@@ -169,7 +169,6 @@ public class JCpgGallerySaver{
 						
 						JCpgAlbum album = new JCpgAlbum(element1.getAttribute("aid").getIntValue(), element1.getAttribute("title").getValue(), element1.getAttribute("description").getValue(), element1.getAttribute("visibility").getIntValue(), element1.getAttribute("uploads").getBooleanValue(), element1.getAttribute("comments").getBooleanValue(), element1.getAttribute("votes").getBooleanValue(), element1.getAttribute("position").getIntValue(), element1.getAttribute("category").getIntValue(), element1.getAttribute("thumb").getIntValue(), element1.getAttribute("keywords").getValue(), element1.getAttribute("password").getValue(), element1.getAttribute("passwordhint").getValue());
 						album.addUi(getGallery().getUi()); // for syncer
-						album.changeSqlQuery(element1.getAttribute("query").getValue());
 						getGallery().addAlbum(album);
 						
 						List content3 = element1.getChildren();
@@ -183,7 +182,6 @@ public class JCpgGallerySaver{
 								
 								JCpgPicture picture = new JCpgPicture(element3.getAttribute("pid").getIntValue(), element3.getAttribute("aid").getIntValue(), element3.getAttribute("filepath").getValue(), element3.getAttribute("filename").getValue(), element3.getAttribute("filesize").getIntValue(), element3.getAttribute("totalfilesize").getIntValue(), element3.getAttribute("width").getIntValue(), element3.getAttribute("height").getIntValue(), element3.getAttribute("hits").getIntValue(), element3.getAttribute("ctime").getIntValue(), element3.getAttribute("ownerid").getIntValue(), element3.getAttribute("ownername").getValue(), element3.getAttribute("rating").getIntValue(), element3.getAttribute("votes").getIntValue(), element3.getAttribute("title").getValue(), element3.getAttribute("caption").getValue(), element3.getAttribute("keywords").getValue(), element3.getAttribute("approved").getBooleanValue(), element3.getAttribute("galleryicon").getIntValue(), element3.getAttribute("urlprefix").getIntValue(), element3.getAttribute("position").getIntValue());
 								picture.addUi(getGallery().getUi()); // for syncer
-								picture.changeSqlQuery(element3.getAttribute("query").getValue());
 								album.addPicture(picture);
 								
 							}
@@ -194,7 +192,6 @@ public class JCpgGallerySaver{
 						
 						JCpgCategory category = new JCpgCategory(element1.getAttribute("cid").getIntValue(), element1.getAttribute("ownerid").getIntValue(), element1.getAttribute("name").getValue(), element1.getAttribute("description").getValue(), element1.getAttribute("position").getIntValue(), element1.getAttribute("parent").getIntValue(), element1.getAttribute("thumb").getIntValue());
 						category.addUi(getGallery().getUi()); // for syncer
-						category.changeSqlQuery(element1.getAttribute("query").getValue());
 						getGallery().addCategory(category);
 					
 						List content2 = element1.getChildren();
@@ -208,7 +205,6 @@ public class JCpgGallerySaver{
 							
 								JCpgAlbum album = new JCpgAlbum(element2.getAttribute("aid").getIntValue(), element2.getAttribute("title").getValue(), element2.getAttribute("description").getValue(), element2.getAttribute("visibility").getIntValue(), element2.getAttribute("uploads").getBooleanValue(), element2.getAttribute("comments").getBooleanValue(), element2.getAttribute("votes").getBooleanValue(), element2.getAttribute("position").getIntValue(), element2.getAttribute("category").getIntValue(), element2.getAttribute("thumb").getIntValue(), element2.getAttribute("keywords").getValue(), element2.getAttribute("password").getValue(), element2.getAttribute("passwordhint").getValue());
 								album.addUi(getGallery().getUi()); // for syncer
-								album.changeSqlQuery(element2.getAttribute("query").getValue());
 								category.addAlbum(album);
 								
 								List content3 = element2.getChildren();
@@ -222,7 +218,6 @@ public class JCpgGallerySaver{
 										
 										JCpgPicture picture = new JCpgPicture(element3.getAttribute("pid").getIntValue(), element3.getAttribute("aid").getIntValue(), element3.getAttribute("filepath").getValue(), element3.getAttribute("filename").getValue(), element3.getAttribute("filesize").getIntValue(), element3.getAttribute("totalfilesize").getIntValue(), element3.getAttribute("width").getIntValue(), element3.getAttribute("height").getIntValue(), element3.getAttribute("hits").getIntValue(), element3.getAttribute("ctime").getIntValue(), element3.getAttribute("ownerid").getIntValue(), element3.getAttribute("ownername").getValue(), element3.getAttribute("rating").getIntValue(), element3.getAttribute("votes").getIntValue(), element3.getAttribute("title").getValue(), element3.getAttribute("caption").getValue(), element3.getAttribute("keywords").getValue(), element3.getAttribute("approved").getBooleanValue(), element3.getAttribute("galleryicon").getIntValue(), element3.getAttribute("urlprefix").getIntValue(), element3.getAttribute("position").getIntValue());
 										picture.addUi(getGallery().getUi()); // for syncer
-										picture.changeSqlQuery(element3.getAttribute("query").getValue());
 										album.addPicture(picture);
 										
 									}
@@ -280,7 +275,6 @@ public class JCpgGallerySaver{
 			eAlbum.setAttribute("keywords", album.getKeyword());
 			eAlbum.setAttribute("password", album.getAlbPassword());
 			eAlbum.setAttribute("passwordhint", album.getAlbPasswordHint());
-			eAlbum.setAttribute("query", album.getSqlQuery());
 			
 			egallery.addContent(eAlbum);
 			
@@ -312,7 +306,6 @@ public class JCpgGallerySaver{
 				ePicture.setAttribute("galleryicon", picture.getGalleryIcon() + "");
 				ePicture.setAttribute("urlprefix", picture.getUrlPrefix() + "");
 				ePicture.setAttribute("position", picture.getPosition() + "");
-				ePicture.setAttribute("query", picture.getSqlQuery());
 				
 				eAlbum.addContent(ePicture);
 				
@@ -335,7 +328,6 @@ public class JCpgGallerySaver{
 			ecategory.setAttribute("position", category.getPosition() + "");
 			ecategory.setAttribute("parent", category.getParent() + "");
 			ecategory.setAttribute("thumb", category.getThumb() + "");
-			ecategory.setAttribute("query", category.getSqlQuery());
 			
 			egallery.addContent(ecategory);
 			
@@ -358,7 +350,6 @@ public class JCpgGallerySaver{
 				eAlbum.setAttribute("keywords", album.getKeyword());
 				eAlbum.setAttribute("password", album.getAlbPassword());
 				eAlbum.setAttribute("passwordhint", album.getAlbPasswordHint());
-				eAlbum.setAttribute("query", album.getSqlQuery());
 				
 				ecategory.addContent(eAlbum);
 				
@@ -390,7 +381,6 @@ public class JCpgGallerySaver{
 					ePicture.setAttribute("galleryicon", picture.getGalleryIcon() + "");
 					ePicture.setAttribute("urlprefix", picture.getUrlPrefix() + "");
 					ePicture.setAttribute("position", picture.getPosition() + "");
-					ePicture.setAttribute("query", picture.getSqlQuery());
 					
 					eAlbum.addContent(ePicture);
 					

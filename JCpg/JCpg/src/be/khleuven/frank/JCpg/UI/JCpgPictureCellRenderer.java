@@ -44,6 +44,14 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 	private GridBagLayout gbl = new GridBagLayout();
 	private GridBagConstraints gblc = new GridBagConstraints();
 	
+	
+	/**
+	 * 
+	 * Makes a new JCpgPictureCellRenderer object
+	 * 
+	 * @param ui
+	 * 		reference to the UI
+	 */
 	public JCpgPictureCellRenderer(JCpgUI ui) {
 		
 		setUi(ui);
@@ -54,34 +62,50 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         
         gblc.fill = GridBagConstraints.HORIZONTAL;
         gblc.insets = new Insets(10,10,10,10);
-        //gblc.weighty = 1;
-        //gblc.weightx = 1;
+        gblc.weighty = 1;
+        gblc.weightx = 1;
     	
 	}
 	
-	
+	/**
+	 * 
+	 * Set the UI
+	 * 
+	 * @param ui
+	 * 		the UI
+	 */
 	private void setUi(JCpgUI ui){
 		
 		this.ui = ui;
 		
 	}
 	
+	/**
+	 * 
+	 * Get the UI
+	 * 
+	 * @return
+	 * 		the UI
+	 */
 	public JCpgUI getUi(){
 		
 		return this.ui;
 		
 	}
 	
+	/**
+	 * 
+	 * Determines how each cell will be displayed
+	 * 
+	 */
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     	
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
 
         // determine grid position
-    	gblc.gridx = index;
-        //gblc.gridx = index % 10;
-        //gblc.gridy = getDeler(index, 10);
-    	gblc.gridy = 1;
+        gblc.gridx = index % 10;
+        gblc.gridy = getDeler(index, 10);
     	
     	this.add(label, gblc);
         

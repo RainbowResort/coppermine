@@ -503,7 +503,6 @@ public class JCpgAlbum extends JCpgGallery{
 		}
 		
 		getPictures().clear();
-    	if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery());
 		
 	}
 	
@@ -529,7 +528,6 @@ public class JCpgAlbum extends JCpgGallery{
 	public void changeCategory(int category){
 		
 		setCategory(category);
-		changeMustSync(true);
 		
 	}
 

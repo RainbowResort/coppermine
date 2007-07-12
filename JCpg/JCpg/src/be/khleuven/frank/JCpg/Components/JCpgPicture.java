@@ -673,8 +673,6 @@ public class JCpgPicture extends JCpgGallery{
 	 */
 	public void delete(JCpgUI jCpgUIReference){
 		
-		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // id = -1 means this picture is not yet in the database
-		
 		File delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + getFileName());
 		delete.delete();
 		delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
@@ -691,7 +689,6 @@ public class JCpgPicture extends JCpgGallery{
 	public void changeTitle(String title){
 		
 		changeName(title);
-		changeMustSync(true);
 		
 	}
 	/**
@@ -704,7 +701,6 @@ public class JCpgPicture extends JCpgGallery{
 	public void changeCaption(String caption){
 		
 		changeDescription(caption);
-		changeMustSync(true);
 		
 	}
 	/**
@@ -729,7 +725,6 @@ public class JCpgPicture extends JCpgGallery{
 	public void changeAlbumId(int aid){
 		
 		setAid(aid);
-		changeMustSync(true);
 		
 	}
 	/**

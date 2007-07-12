@@ -43,10 +43,6 @@ public class JCpgGallery{
 	private int id = 0; // just to make it complete
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
-	private ArrayList<String> deleteQueries = new ArrayList<String>(); // used to store deletion queries. Needed because the object itself will be deleted so we can't get the query from the object anymore
-	
-	private boolean mustSync = false; // used to indicate if there's anything new about this object. If yes, a SQL query is generated and needs to be executed.
-	private String sqlquery = ""; // when mustSync becomes true, this variable will be filled with the right query and must be executed during the next sync
 
 	private TreePath treePath; // holds the path in the tree to the object so if we select a picture in the pictureList we can also make it selected in the tree
 	
@@ -260,43 +256,6 @@ public class JCpgGallery{
 		return null; // nothing found
 		
 	}
-	/**
-	 * 
-	 * Get the mustSync flag
-	 * 
-	 * @return
-	 * 		the mustSync flag
-	 */
-	public boolean getMustSync(){
-		
-		return this.mustSync;
-		
-	}
-	/**
-	 * 
-	 * Get the current filled in sql query
-	 * 
-	 * @return
-	 * 		the current filled in sql query
-	 */
-	public String getSqlQuery(){
-		
-		return this.sqlquery;
-		
-	}
-	/**
-	 * 
-	 * Get a list with all the delete queries. We need to collect them in this never deleted arraylist because we can't store them in the objects themselves because they are already deleted
-	 * and are not anymore linked with the gallery.
-	 * 
-	 * @return
-	 * 		a list with all the delete queries
-	 */
-	public ArrayList<String> getDeleteQueries(){
-	
-		return this.deleteQueries;
-		
-	}
 	public TreePath getTreePath(){
 		
 		return this.treePath;
@@ -413,15 +372,15 @@ public class JCpgGallery{
 		for(int i=0; i<getCategories().size(); i++){
     		
 			JCpgCategory category = getCategories().get(i);
-			if (category.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(category.generateSqlDeleteQuery());
+			
     		for(int j=0; j<category.getAlbums().size(); j++){
     			
     			JCpgAlbum album = category.getAlbums().get(j);
-    			if (album.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(album.generateSqlDeleteQuery());
+    			
     			for(int k=0; k<album.getPictures().size(); k++){
     				
     				JCpgPicture picture = album.getPictures().get(k);
-    				if (picture.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(picture.generateSqlDeleteQuery());
+    				
     				picture.delete(jCpgUIReference);
     				picture = null;
     				
@@ -451,18 +410,6 @@ public class JCpgGallery{
 	}
 	/**
 	 * 
-	 * Change the mustSync flag
-	 * 
-	 * @param mustSync
-	 * 		the new mustSync flag
-	 */
-	public void changeMustSync(boolean mustSync){
-		
-		this.mustSync = mustSync;
-		
-	}
-	/**
-	 * 
 	 * Change the treepath
 	 * 
 	 * @param treePath
@@ -471,18 +418,6 @@ public class JCpgGallery{
 	public void changeTreePath(TreePath treePath){
 		
 		this.treePath = treePath;
-		
-	}
-	/**
-	 * 
-	 * Change the sql query
-	 * 
-	 * @param sqlquery
-	 * 		the new sql query
-	 */
-	public void changeSqlQuery(String sqlquery){
-		
-		this.sqlquery = sqlquery;
 		
 	}
 	/**
@@ -509,25 +444,6 @@ public class JCpgGallery{
 	public String generateSqlDeleteQuery(){
 		
 		return "";
-		
-	}
-	/**
-	 * 
-	 * Sometimes we need to regenerate the sql query because after it was first generated, small changes were done to the object. For example, when running the syncer, an newly inserted category
-	 * will fetch its assigned unique id and pass it through to his albums. We then need to regenerate the album's sql queries.
-	 *
-	 */
-	public void regenerateSqlQuery(){
-		
-		if(getSqlQuery().startsWith("INSERT")){
-			
-			generateSqlInsertQuery();
-			
-		}else if(getSqlQuery().startsWith("INSERT")){
-			
-			generateSqlUpdateQuery();
-			
-		}
 		
 	}
 	

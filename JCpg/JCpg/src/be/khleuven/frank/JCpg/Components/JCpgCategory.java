@@ -383,12 +383,10 @@ public class JCpgCategory extends JCpgGallery{
 		for(int i=0; i<getCategories().size(); i++){
 			
 			JCpgCategory category = getCategories().get(i);
-			if (category.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(category.generateSqlDeleteQuery());
 		
 			for(int j=0; j<category.getAlbums().size(); j++){
 	    		
 				JCpgAlbum album = category.getAlbums().get(j);
-				if (album.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(album.generateSqlDeleteQuery());
 	
 	    		for(int k=0; k<album.getPictures().size(); k++){
 	    				
@@ -404,7 +402,6 @@ public class JCpgCategory extends JCpgGallery{
 	    	}
 			
 			category.getAlbums().clear();
-			if (category.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(category.generateSqlDeleteQuery()); // delete subcategory itself
 			
 		}
 		
@@ -412,7 +409,6 @@ public class JCpgCategory extends JCpgGallery{
 		for(int i=0; i<getAlbums().size(); i++){
     		
 			JCpgAlbum album = getAlbums().get(i);
-			if (album.getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(album.generateSqlDeleteQuery());
 
     		for(int j=0; j<album.getPictures().size(); j++){
     				
@@ -428,7 +424,6 @@ public class JCpgCategory extends JCpgGallery{
     	}
 		
 		getAlbums().clear();
-		if (getId() != -1) jCpgUIReference.getGallery().getDeleteQueries().add(generateSqlDeleteQuery()); // delete subcategory itself
 		
 	}
 	/**

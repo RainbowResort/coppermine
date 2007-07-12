@@ -249,6 +249,17 @@ public class JCpgPhpCommunicator {
 		return null; // svr.xml was not made
 		
 	}
+	/**
+	 * 
+	 * Get the value from a certain tag
+	 * 
+	 * @param parent
+	 * 		the parent tag
+	 * @param tag
+	 * 		the tag to search
+	 * @return
+	 * 		return the value if the tag is found, else an empty string is returned
+	 */
 	public String getXmlTagText(String parent, String tag){
 		
 	    SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
