@@ -141,6 +141,7 @@ echo <<< EOT
       document.searchcpg.search.focus();
       -->
       </script>
+</form>
 EOT;
 
 pagefooter();
