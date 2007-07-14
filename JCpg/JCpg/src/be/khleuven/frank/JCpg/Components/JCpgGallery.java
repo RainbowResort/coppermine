@@ -420,31 +420,5 @@ public class JCpgGallery{
 		this.treePath = treePath;
 		
 	}
-	/**
-	 * 
-	 * Generate a new INSERT query
-	 *
-	 */
-	public void generateSqlInsertQuery(){
-		
-	}
-	/**
-	 * 
-	 * Generate a new UPDATE query
-	 *
-	 */
-	public void generateSqlUpdateQuery(){
-		
-	}
-	/**
-	 * 
-	 * Generate a new DELETE query
-	 *
-	 */
-	public String generateSqlDeleteQuery(){
-		
-		return "";
-		
-	}
 	
 }

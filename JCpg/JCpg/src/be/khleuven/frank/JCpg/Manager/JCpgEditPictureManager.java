@@ -133,16 +133,6 @@ public class JCpgEditPictureManager extends JCpgEditManager {
 			picture.changeTitle(getTitleField().getText());
 			picture.changeCaption(getDescriptionField().getText());
 			
-			if(picture.getId() == -1){ // album not yet in database, produce an INSERT query
-				
-				picture.generateSqlInsertQuery();
-				
-			}else{ // album already in database, just UPDATE it
-				
-				picture.generateSqlUpdateQuery();
-				
-			}
-			
 			getGallerySaver().saveGallery(); // save current gallery state
 
 			this.dispose();

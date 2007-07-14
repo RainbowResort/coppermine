@@ -129,16 +129,6 @@ public class JCpgEditCategoryManager extends JCpgEditManager {
 			category.changeName(getTitleField().getText());
 			category.changeDescription(getDescriptionField().getText());
 			
-			if(category.getId() == -1){ // album not yet in database, produce an INSERT query
-				
-				category.generateSqlInsertQuery();
-				
-			}else{ // album already in database, just UPDATE it
-				
-				category.generateSqlUpdateQuery();
-				
-			}
-			
 			getGallerySaver().saveGallery(); // save current gallery state
 
 			this.dispose();

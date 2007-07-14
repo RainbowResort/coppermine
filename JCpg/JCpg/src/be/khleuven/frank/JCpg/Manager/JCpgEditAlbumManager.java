@@ -108,16 +108,6 @@ public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTree
 			album.changeName(getTitleField().getText());
 			album.changeDescription(getDescriptionField().getText());
 			
-			if(album.getId() == -1){ // album not yet in database, produce an INSERT query
-			
-				album.generateSqlInsertQuery();
-			
-			}else{ // album already in database, just UPDATE it
-			
-				album.generateSqlUpdateQuery();
-			
-			}
-			
 			getGallerySaver().saveGallery(); // save current gallery state
 		
 			this.dispose();

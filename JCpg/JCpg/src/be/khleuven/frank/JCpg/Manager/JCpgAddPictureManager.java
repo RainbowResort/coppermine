@@ -222,7 +222,6 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
 	
 					picture.addUi(super.getJCpgUIReference());
-					picture.generateSqlInsertQuery();
 	
 					album.addPicture(picture);
 					DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);

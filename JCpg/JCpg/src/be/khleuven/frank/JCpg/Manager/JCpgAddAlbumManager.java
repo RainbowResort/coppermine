@@ -112,7 +112,6 @@ public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEn
 		JCpgAlbum album = new JCpgAlbum(-1, getTitleField().getText(), getDescriptionField().getText(), 0, true, true, true, 0, parent.getId(), 0, getDescriptionField().getText(), "", "");
 		
 		album.addUi(super.getJCpgUIReference());
-		album.generateSqlInsertQuery();
 		
 		parent.addAlbum(album);
 		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(album);

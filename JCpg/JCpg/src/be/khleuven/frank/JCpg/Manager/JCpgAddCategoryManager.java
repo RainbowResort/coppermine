@@ -112,7 +112,6 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		JCpgCategory category = new JCpgCategory(-1, -1, getTitleField().getText(), getDescriptionField().getText(), -1, 0, 0);
 		
 		category.addUi(super.getJCpgUIReference());
-		category.generateSqlInsertQuery();
 		
 		parent.addCategory(category);
 		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(category);
