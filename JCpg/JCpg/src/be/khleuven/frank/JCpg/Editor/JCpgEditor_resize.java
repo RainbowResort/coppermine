@@ -80,9 +80,9 @@ public class JCpgEditor_resize extends JCpgEditor {
 	 * @param previewSize
 	 * 		size of preview JPanel
 	 */
-	public JCpgEditor_resize(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
+	public JCpgEditor_resize(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
-		super(jCpgUIReference, picture, previewPosition, previewSize);
+		super(jCpgUIReference, picture, previewPosition, previewSize, listIndex);
 		
 		doExtraSwingComponents();
 		
@@ -181,6 +181,9 @@ public class JCpgEditor_resize extends JCpgEditor {
 			
 			// save new changes
 			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
+			
+			getJCpgUI().getPictureList().remove(getListIndex());
+			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
             
             getJCpgUI().setEnabled(true);
             this.dispose();

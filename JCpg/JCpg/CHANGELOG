@@ -1,3 +1,4 @@
+Improved the refreshing after a picture was edited.
 Removed some temporary sync code like the generation of SQL statements
 Sessionkey is now also stored in the user configuration
 Did complete API transition. JCpg now only used the Cpg API

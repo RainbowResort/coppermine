@@ -75,6 +75,9 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	
 	private JCpgTransform transformer = new JCpgTransform();
 	
+	private int listIndex;
+	
+	
 																						
 	
 	
@@ -94,7 +97,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	 * @param previewSize
 	 * 		size of the preview JPanel
 	 */
-	public JCpgEditor(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize){
+	public JCpgEditor(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
 		super(jCpgUIReference);
 		
@@ -104,6 +107,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		setPicture(picture);
 		setPreviewPosition(previewPosition);
 		setPreviewSize(previewSize);
+		setListIndex(listIndex);
 		
 		initComponents();
 		boundComponents();
@@ -184,6 +188,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
 		
 	}
+	private void setListIndex(int listIndex){
+		
+		this.listIndex = listIndex;
+		
+	}
+	
+	
 
 	
 	
@@ -290,6 +301,14 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		return this.image;
 		
 	}
+	public int getListIndex(){
+		
+		return this.listIndex;
+		
+	}
+	
+	
+	
 	
 	
 	
@@ -442,6 +461,9 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
             ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
+			
+			getJCpgUI().getPictureList().remove(getListIndex());
+			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
 			
             getJCpgUI().setEnabled(true);
             this.dispose();

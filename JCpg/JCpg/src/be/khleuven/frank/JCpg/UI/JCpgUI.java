@@ -485,6 +485,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.pictureList;
 		
 	}
+	public DefaultListModel getPictureListModel(){
+		
+		return this.pictureListModel;
+		
+	}
 	/**
 	 * 
 	 * Get the current online mode
@@ -782,7 +787,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
-			new JCpgEditor_crop(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
+			new JCpgEditor_crop(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -798,7 +803,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
-			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
+			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -814,7 +819,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
-			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(600, 600));
+			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(600, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -830,7 +835,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
 		
-			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600));
+			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
