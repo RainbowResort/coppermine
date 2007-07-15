@@ -17,13 +17,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.UI;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
+
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 
 
 /**

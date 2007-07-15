@@ -37,7 +37,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
@@ -127,8 +126,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private DefaultMutableTreeNode root;
 	
 	private JMenuBar menubar;
-	private JMenu menu;
-	private JMenuItem menuConfig;
+	private JMenu menu, config, users, groups;
+	private JMenuItem menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
 	
 	
 	
@@ -285,14 +284,40 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		menubar = new JMenuBar();
 		
 		menu = new JMenu("Manage");
-		menu.setMnemonic(KeyEvent.VK_A);
 		menu.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery site");
 		menubar.add(menu);
 		
-		menuConfig = new JMenuItem("View current config", KeyEvent.VK_T);
-		menuConfig.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		menuConfig.getAccessibleContext().setAccessibleDescription("View your current Coppermine Photo Gallery configuration");
-		menu.add(menuConfig);
+		config = new JMenu("Configuration");
+		config.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery configuration");
+		menu.add(config);
+		
+		menuShowConfig = new JMenuItem("Show configuration");
+		config.add(menuShowConfig);
+		
+		menuSetConfig = new JMenuItem("Change configuration");
+		config.add(menuSetConfig);
+		
+		menu.addSeparator();
+		
+		users = new JMenu("Users");
+		users.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery users");
+		menu.add(users);
+		
+		menuShowUser = new JMenuItem("Show users");
+		users.add(menuShowUser);
+		
+		menuAddUser = new JMenuItem("Add user");
+		users.add(menuAddUser);
+		
+		menuUpdateUser = new JMenuItem("Update user");
+		users.add(menuUpdateUser);
+		
+		menu.addSeparator();
+		
+		groups = new JMenu("Groups");
+		groups.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery groups");
+		menu.add(groups);
+		
 		
 		this.setJMenuBar(menubar);
 		
@@ -363,7 +388,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			}
 		});
 		
-		menuConfig.addActionListener(new ActionListener(){
+		menuShowConfig.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuShowConfigActionPerformed(evt);
 			}
