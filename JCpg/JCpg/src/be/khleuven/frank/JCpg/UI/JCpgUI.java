@@ -269,7 +269,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		tree.setBackground(new Color(230, 237, 248));
-		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)tree.getCellRenderer();
 		treeView = new JScrollPane(tree);
 		treeView.setMinimumSize(new Dimension(200, 400));
 		treeView.setBackground(new Color(230, 237, 248));
@@ -499,7 +498,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	public JCpgGallery getGallery(){
 		
-		return this.gallery;
+		return JCpgUI.gallery;
 		
 	}
 	/**

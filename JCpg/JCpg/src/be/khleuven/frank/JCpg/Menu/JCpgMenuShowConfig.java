@@ -106,6 +106,7 @@ public class JCpgMenuShowConfig  extends JDialog {
 	 */
 	private void placeComponents(){
 		
+		this.getContentPane().add(config);
 		this.getContentPane().add(scrollPane);
 		this.getContentPane().add(close);
 		this.setVisible(true);
@@ -131,7 +132,8 @@ public class JCpgMenuShowConfig  extends JDialog {
 		
 		for(int i=0; i<getUI().getCpgConfig().getSiteConfig().getConfigEntries().size(); i++){
 			
-			entry = entry + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(i) + "\t" + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(i++) + "\n";
+			if(i+2 < getUI().getCpgConfig().getSiteConfig().getConfigEntries().size())
+				entry = entry + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(i) + "\t" + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(++i) + "\n";
 			
 		}
 		
