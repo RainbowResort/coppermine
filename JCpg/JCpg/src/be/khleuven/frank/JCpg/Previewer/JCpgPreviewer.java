@@ -95,6 +95,7 @@ public class JCpgPreviewer extends JDialog{
 		
 		setJCpgUIReference(jCpgUIReference);
 		setAlbum(album);
+		
 		initComponents();
 		boundComponents();
 		placeComponents();
@@ -372,6 +373,8 @@ public class JCpgPreviewer extends JDialog{
 	 * 
 	 */
 	private void closeActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		running = false; // stop the threads
 		
 		getJCpgUI().setEnabled(true);
 		this.dispose();

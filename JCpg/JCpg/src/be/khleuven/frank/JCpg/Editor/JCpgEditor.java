@@ -188,6 +188,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
 		
 	}
+	/**
+	 * 
+	 * Set the list index (the index of this picture in the picture list)
+	 * 
+	 * @param listIndex
+	 * 		the list index
+	 */
 	private void setListIndex(int listIndex){
 		
 		this.listIndex = listIndex;
@@ -301,6 +308,13 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		return this.image;
 		
 	}
+	/**
+	 * 
+	 * Get the list index
+	 * 
+	 * @return
+	 * 		the list index
+	 */
 	public int getListIndex(){
 		
 		return this.listIndex;
@@ -462,7 +476,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
 			
-			getJCpgUI().getPictureList().remove(getListIndex());
+			getJCpgUI().getPictureList().remove(getListIndex()); // do correct refresh
 			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
 			
             getJCpgUI().setEnabled(true);

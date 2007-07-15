@@ -1,3 +1,5 @@
+Started the development of a menu from where all the API functions can be accessed
+Fixed a minor bug in the previewer where the threads were not shut down when closing the previewer
 Improved the refreshing after a picture was edited.
 Removed some temporary sync code like the generation of SQL statements
 Sessionkey is now also stored in the user configuration

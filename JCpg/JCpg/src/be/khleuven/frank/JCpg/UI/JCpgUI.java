@@ -32,10 +32,12 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
@@ -63,6 +65,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 
@@ -122,8 +125,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JScrollPane pictureView;
 	private JScrollPane megaPictureView;
 	private DefaultMutableTreeNode root;
+	
 	private JMenuBar menubar;
 	private JMenu menu;
+	private JMenuItem menuConfig;
 	
 	
 	
@@ -198,6 +203,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		super.setName("JCpg");
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		
 		buttonPreferredSize = new Dimension(30, 30);
 		thumbnailPreferredSize = new Dimension(100, 100);
 		
@@ -275,6 +281,22 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, explorer);
 		megaSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, megaTreeView, megaPictureView);
 		
+		// menu
+		menubar = new JMenuBar();
+		
+		menu = new JMenu("Manage");
+		menu.setMnemonic(KeyEvent.VK_A);
+		menu.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery site");
+		menubar.add(menu);
+		
+		menuConfig = new JMenuItem("View current config", KeyEvent.VK_T);
+		menuConfig.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuConfig.getAccessibleContext().setAccessibleDescription("View your current Coppermine Photo Gallery configuration");
+		menu.add(menuConfig);
+		
+		this.setJMenuBar(menubar);
+		
+		
 		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 pictureListValueChanged(evt);
@@ -338,6 +360,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		closeMegaExplorer.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				closeMegaExplorerActionPerformed(evt);
+			}
+		});
+		
+		menuConfig.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				menuShowConfigActionPerformed(evt);
 			}
 		});
 		
@@ -485,6 +513,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.pictureList;
 		
 	}
+	/**
+	 * 
+	 * Get the picture list model
+	 * 
+	 * @return
+	 * 		the picture list model
+	 */
 	public DefaultListModel getPictureListModel(){
 		
 		return this.pictureListModel;
@@ -841,14 +876,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 	}
 	/**
-	 * 
-	 * 
+	 *  
 	 * Action when user clicks 'close' mega explorer view 
 	 * 
 	 */
 	private void closeMegaExplorerActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		changeMegaExplorerActive(true); // go to mega explorer view
+		
+	}
+	/**
+	 * 
+	 * Show the current Cpg config
+	 * 
+	 */
+	private void menuShowConfigActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuShowConfig(this);
 		
 	}
 	/**
