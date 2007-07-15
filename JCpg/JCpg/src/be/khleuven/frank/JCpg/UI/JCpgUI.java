@@ -65,6 +65,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuShowUser;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 
@@ -153,8 +154,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		initComponents();
 		boundComponents();
 		placeComponents();
-		
-		createMenu();
 		
 		controlMegaExplorerActive();
 		
@@ -321,12 +320,15 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		this.setJMenuBar(menubar);
 		
 		
+		// EVENTS
+		
 		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 pictureListValueChanged(evt);
             }
         });
 		
+		// control buttons
 		control_new.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				control_newActionPerformed(evt);
@@ -357,6 +359,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			}
 		});
 		
+		// edit buttons
 		edit_crop.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				edit_cropActionPerformed(evt);
@@ -387,9 +390,34 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			}
 		});
 		
+		// menu
 		menuShowConfig.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuShowConfigActionPerformed(evt);
+			}
+		});
+		
+		menuSetConfig.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				
+			}
+		});
+		
+		menuShowUser.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				menuShowUserActionPerformed(evt);
+			}
+		});
+		
+		menuAddUser.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				
+			}
+		});
+		
+		menuUpdateUser.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				
 			}
 		});
 		
@@ -456,16 +484,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		this.getContentPane().add(splitPane);
 		this.getContentPane().add(megaSplitPane);
 		this.setVisible(true);
-		
-	}
-	private void createMenu(){
-		
-		menubar = new JMenuBar();
-		menu = new JMenu("JCpg");
-		
-		menu.setMnemonic(KeyEvent.VK_A);
-		menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
-		menubar.add(menu);
 		
 	}
 	
@@ -917,6 +935,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private void menuShowConfigActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		new JCpgMenuShowConfig(this);
+		
+	}
+	/**
+	 * 
+	 * Show the current user data
+	 * 
+	 */
+	private void menuShowUserActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuShowUser(this);
 		
 	}
 	/**
