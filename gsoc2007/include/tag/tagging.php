@@ -39,6 +39,13 @@ function annotate_file_data($CURRENT_PIC_DATA){
         {
           $allowed_groups[] = $row['group_id'];
         }
+        $result = cpg_db_query("SELECT `group_id` FROM {$CONFIG['TABLE_USERGROUPS']} WHERE (`can_view_tags` = 1)");
+        while($row = mysql_fetch_array($result))
+        {
+          $allowed_view_groups[] = $row['group_id'];
+        }
+        
+        
         
         // See if any of the user's groups match any of the allowed groups
         foreach($USER_DATA['groups'] as $user_group)
@@ -46,13 +53,20 @@ function annotate_file_data($CURRENT_PIC_DATA){
                 if(in_array($user_group,$allowed_groups))
                 {
                         $allowed = true;
-                }
+                }  
         }
         
-        if(in_array('any',$allowed_groups)) {
-                $allowed = true;
+        if(!$allowed) {
+          foreach($USER_DATA['groups'] as $user_group)
+          {
+                  if(in_array($user_group,$allowed_view_groups))
+                  {
+                          $allowed = 'view_only';
+                  }  
+          }
+          
         }
-        
+                
         if(!$allowed)
         {
                 return $CURRENT_PIC_DATA;
@@ -75,7 +89,9 @@ function annotate_file_data($CURRENT_PIC_DATA){
 		
 		$html = '<div class="Photo fn-container" id="PhotoContainer">' . $html . '</div>';
 
-		if (USER_ID){
+    
+
+		if (USER_ID && $allowed != 'view_only'){
 			
 		$html .= <<< EOT
 		
