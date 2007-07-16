@@ -1376,6 +1376,7 @@ if (defined('GROUPMGR_PHP')) $lang_groupmgr_php = array(
   'rating' => 'Rating',
   'ecards' => 'Ecards',
   'comments' => 'Comments',
+  'tags' => 'Tags',
   'allowed' => 'Allowed',
   'approval' => 'Approval',
   'boxes_number' => 'No. of boxes',
