@@ -31,6 +31,7 @@ if (isset($_GET['album'])) {
   $CLEAN['album'] = 0;
 }
 
+
 //check if user is allowed to edit this album
 $check_approved = false;
 if(USER_ADMIN_MODE){
@@ -40,6 +41,7 @@ if(USER_ADMIN_MODE){
 	
 	$result = cpg_db_query("SELECT DISTINCT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE owner = '" . $USER_DATA['user_id'] . "' AND aid='$album_id'");
 	$allowed_albums = cpg_db_fetch_rowset($result);
+	
 	if($allowed_albums!=''){
 		$check_approve = true;
 	}
@@ -57,11 +59,11 @@ if(USER_ADMIN_MODE){
 		if($allowed_albums[0]['category']==(FIRST_USER_CAT + USER_ID)){
 			$check_approve = true;
 		}
+		
 	}
-
 }
 
-if (!(GALLERY_ADMIN_MODE || $check_approved)) {
+if (!(GALLERY_ADMIN_MODE || $check_approve)) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 

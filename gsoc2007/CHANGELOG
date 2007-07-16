@@ -25,6 +25,10 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+2007-07-16 [B] Fixed error when changing album properties {SaWey}
+2007-07-16 [B] Fixed users not seeing their albums when uploading pics {SaWey}
+2007-07-16 [B] Fixed users not being able to edit their albums (typo in code){SaWey}
+2007-07-16 [B] Fixed use of variables in delete.php {SaWey}
 2007-07-07 [C] Disabled banned users from the config options for tagging {drhammond}
 2007-07-07 [A] Added groups to tagging {drhammond}
 2007-06-30 [A] Added tagging with basic permissions {drhammond}

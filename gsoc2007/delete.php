@@ -257,7 +257,7 @@ switch ($what) {
 			//first get allowed categories
 			global $USER_DATA;
 			$group_id = $USER_DATA['group_id'];
-			$result = cpg_db_query("SELECT DISTINCT cid FROM cpg150_categorymap WHERE group_id = $group_id");
+			$result = cpg_db_query("SELECT DISTINCT cid FROM $CONFIG[TABLE_CATMAP] WHERE group_id = $group_id");
 			$rowset = cpg_db_fetch_rowset($result);
 			
 			//add allowed categories to the restriction		
