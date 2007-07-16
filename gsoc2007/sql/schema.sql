@@ -176,6 +176,7 @@ CREATE TABLE CPG_usergroups (
   group_quota int(11) NOT NULL default '0',
   has_admin_access tinyint(4) NOT NULL default '0',
   can_rate_pictures tinyint(4) NOT NULL default '0',
+  can_tag_pictures tinyint(4) NOT NULL default '0',  
   can_send_ecards tinyint(4) NOT NULL default '0',
   can_post_comments tinyint(4) NOT NULL default '0',
   can_upload_pictures tinyint(4) NOT NULL default '0',

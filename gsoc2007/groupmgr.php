@@ -49,17 +49,17 @@ function display_group_list()
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_USERGROUPS']} WHERE 1 ORDER BY group_id");
     if (!mysql_num_rows($result)) {
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_USERGROUPS']}
-        VALUES (1, 'Administrators', 0, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 5, 3)");
+        VALUES (1, 'Administrators', 0, 1,1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 5, 3)");
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_USERGROUPS']}
-        VALUES (2, 'Registered', 1024, 0, 1, 1, 1, 1, 1, 1, 0, 3, 0, 5, 3)");
+        VALUES (2, 'Registered', 1024, 0, 1, 1, 1, 1, 1, 1, 1, 0, 3, 0, 5, 3)");
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_USERGROUPS']}
-        VALUES (3, 'Anonymous', 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 5, 3)");
+        VALUES (3, 'Anonymous', 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 5, 3)");
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_USERGROUPS']}
-        VALUES (4, 'Banned', 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 5, 3)");
+        VALUES (4, 'Banned', 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 5, 3)");
         cpg_die(CRITICAL_ERROR, $lang_groupmgr_php['error_group_empty'], __FILE__, __LINE__);
     }
 
-    $field_list = array('can_rate_pictures', 'can_send_ecards', 'can_post_comments', 'can_upload_pictures', 'pub_upl_need_approval', 'can_create_albums', 'priv_upl_need_approval');
+    $field_list = array('can_rate_pictures', 'can_tag_pictures', 'can_send_ecards', 'can_post_comments', 'can_upload_pictures', 'pub_upl_need_approval', 'can_create_albums', 'priv_upl_need_approval');
     $custom_group_counter = 0;
 
     while ($group = mysql_fetch_array($result)) {
@@ -130,6 +130,9 @@ EOT;
             elseif ($field_name=='can_post_comments') {
                 echo $tr_start.$td_start.$lang_groupmgr_php['comments'].$td_end;
             }
+            elseif ($field_name=='can_tag_pictures') {
+                echo $tr_start.$td_start.$lang_groupmgr_php['tags'].$td_end;
+            }            
             elseif ($field_name=='can_upload_pictures') {
                 echo $table_start.$tr_start.$td_start.$lang_groupmgr_php['allowed'].$td_end;
             }
@@ -244,7 +247,7 @@ function process_post_data()
 {
     global $CONFIG;
 
-    $field_list = array('group_name', 'group_quota', 'can_rate_pictures', 'can_send_ecards', 'can_post_comments', 'can_upload_pictures', 'pub_upl_need_approval', 'can_create_albums', 'priv_upl_need_approval', 'upload_form_config', 'custom_user_upload', 'num_file_upload', 'num_URI_upload');
+    $field_list = array('group_name', 'group_quota', 'can_rate_pictures', 'can_tag_pictures', 'can_send_ecards', 'can_post_comments', 'can_upload_pictures', 'pub_upl_need_approval', 'can_create_albums', 'priv_upl_need_approval', 'upload_form_config', 'custom_user_upload', 'num_file_upload', 'num_URI_upload');
 
     $group_id_array = get_post_var('group_id');
     foreach ($group_id_array as $key => $group_id) {
