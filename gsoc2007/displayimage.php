@@ -23,7 +23,7 @@ define('INDEX_PHP', true);
 //define('SMILIES_PHP', true);
 
 require('include/init.inc.php');
-require('include/tag/tag.php');
+require('include/tag/tagging.php');
 
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     $redirect = $redirect . "login.php";
@@ -420,6 +420,4 @@ if (isset($CLEAN['fullsize'])) {
     pagefooter();
     ob_end_flush();
 }
-    annotate_file_data($CURRENT_PIC_DATA);
-
 ?>

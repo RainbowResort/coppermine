@@ -13,30 +13,19 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-if (defined('DISPLAYIMAGE_PHP')) {
-	$thisplugin->add_filter('page_meta','annotate_meta');
-	$thisplugin->add_filter('file_data','annotate_file_data');
-}
-
-$thisplugin->add_action('plugin_install','annotate_install');
-$thisplugin->add_action('plugin_configure','annotate_configure');
-$thisplugin->add_action('plugin_uninstall','annotate_uninstall');
-$thisplugin->add_action('plugin_cleanup','annotate_cleanup');
+//if (defined('DISPLAYIMAGE_PHP')) {
+//	$thisplugin->add_filter('page_meta','annotate_meta');
+//	$thisplugin->add_filter('file_data','annotate_file_data');
+//}
+//
+//$thisplugin->add_action('plugin_install','annotate_install');
+//$thisplugin->add_action('plugin_configure','annotate_configure');
+//$thisplugin->add_action('plugin_uninstall','annotate_uninstall');
+//$thisplugin->add_action('plugin_cleanup','annotate_cleanup');
 
 // Add Configuration Button for Admins
 
-$thisplugin->add_action('page_start','annotate_page_start');
-
-
-function annotate_meta(){
-
-	$meta  = "\n" . '<script src="plugins/annotate/lib/httpreq.js" type="text/javascript"></script>';
-	$meta .= "\n" . '<script src="plugins/annotate/lib/photonotes.js" type="text/javascript"></script>';
-	$meta .= "\n" . '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
-	$meta .= "\n";
-
-	return $meta;
-}
+//$thisplugin->add_action('page_start','annotate_page_start');
 
 function annotate_file_data($CURRENT_PIC_DATA){
 

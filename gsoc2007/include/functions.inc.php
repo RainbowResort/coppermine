@@ -710,6 +710,7 @@ function load_template()
         }
 
         $template_header = substr($template, 0, $gallery_pos);
+        $template_header = str_replace('{META}','{META}'."<script src='plugins/annotate/lib/httpreq.js' type='text/javascript'></script><script src='plugins/annotate/lib/photonotes.js' type='text/javascript'></script><link rel='stylesheet' href='plugins/annotate/lib/photonotes.css' type='text/css' />",$template_header);        
         $template_header = str_replace('{META}','{META}'.CPGPluginAPI::filter('page_meta',''),$template_header);
 
         // Filter gallery header and footer
