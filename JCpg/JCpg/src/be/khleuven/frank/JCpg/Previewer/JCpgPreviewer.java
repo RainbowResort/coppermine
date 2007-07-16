@@ -72,6 +72,7 @@ public class JCpgPreviewer extends JDialog{
 	private int currentIndex = 0; // current index for picture array
 	private boolean running = true; // as long as this is true, the preview threads will continue running
 	private int timeslice = 1000; // time between 2 images
+	private boolean indexHasChanged = false;
 	
 	
 	
@@ -294,21 +295,6 @@ public class JCpgPreviewer extends JDialog{
 		
 		final ArrayList<JCpgPicture> pictures = getAlbum().getPictures();
 
-		// first thread: show the currently loaded picture
-		Thread t1 = new Thread(new Runnable() {
-			
-			public void run() {
-				
-				while(running){
-					
-					repaint();
-				
-				}
-				
-			}
-			
-		});
-
 		// second thread: do the waiting and recalculate the currentIndex variable and load that picture
 		// TODO: overhead still remains: always loading the pictures will take a lot of RAM
 		Thread t2 = new Thread(new Runnable() {
@@ -321,8 +307,10 @@ public class JCpgPreviewer extends JDialog{
 						
 						Thread.sleep(timeslice);
 						
-						currentIndex = (currentIndex+1)%pictures.size(); // stay in the correct range of the album's size
+						currentIndex = (currentIndex+1) % pictures.size(); // stay in the correct range of the album's size
 						currentLoadedImage = getTransformer().toImage(ImageIO.read(new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath")+pictures.get(currentIndex).getFilePath() + pictures.get(currentIndex).getFileName())));
+						
+						repaint();
 						
 					} catch (Exception e) {
 						
@@ -337,7 +325,6 @@ public class JCpgPreviewer extends JDialog{
 		});
 
 		// start the threads
-		t1.start();
 		t2.start();
 
 	}
@@ -353,6 +340,8 @@ public class JCpgPreviewer extends JDialog{
 		try {
 			
 			g.drawImage(currentLoadedImage, 500 - currentLoadedImage.getWidth(null)/2, 10, this);
+			
+			g.dispose();
 			
 		} catch (Exception e) {
 			

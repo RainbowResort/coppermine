@@ -17,10 +17,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -41,7 +49,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * Editor: resize
  * @author    Frank Cleynen
  */
-public class JCpgEditor_resize extends JCpgEditor {
+public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener {
 	
 	
 	
@@ -56,6 +64,10 @@ public class JCpgEditor_resize extends JCpgEditor {
 	private JTextField newWidthField;
 	private JTextField newHeightField;
 	private JButton preview;
+	
+	private Rectangle rleft, rup, rright, rdown;
+
+	private boolean selectedLeft = false, selectedRight = false, selectedUp = false, selectedDown = false;
 	
 																			
 	
@@ -104,6 +116,8 @@ public class JCpgEditor_resize extends JCpgEditor {
 	 *
 	 */
 	private void doExtraSwingComponents(){
+		
+		getImageButton().addMouseMotionListener(this);
 		
 		newWidthLabel = new JLabel("New width (>0): ");
 		newWidthLabel.setBounds(250, 665, 120, 20);
@@ -197,6 +211,130 @@ public class JCpgEditor_resize extends JCpgEditor {
         SwingUtilities.updateComponentTreeUI(getJCpgUI().getTree()); // workaround for Java bug 4173369
 
 		return null;
+		
+	}
+
+	
+	
+	
+	
+	public void paint(Graphics g){
+		
+        super.paint(g);
+        
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        rleft = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58, 1, getPicture().getpHeight()); // left
+        rup = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58, getPicture().getpWidth(), 1); // up
+        rdown = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58 + getPicture().getpHeight(), getPicture().getpWidth(), 1); // down
+        rright = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth(), 58, 1, getPicture().getpHeight()); // right
+        
+        // draw in correct color: red = not selected, white = selected
+        if(selectedLeft){
+        	
+        	g2.setPaint(Color.white);
+        	g2.draw(rleft);
+        	
+        }else{
+        	
+        	g2.setPaint(Color.red);
+        	g2.draw(rleft);
+        	
+        }
+        
+        if(selectedUp){
+        	
+        	g2.setPaint(Color.white);
+        	g2.draw(rup);
+        	
+        }else{
+        	
+        	g2.setPaint(Color.red);
+        	g2.draw(rup);
+        	
+        }
+        
+        if(selectedDown){
+        	
+        	g2.setPaint(Color.white);
+        	g2.draw(rdown);
+        	
+        }else{
+        	
+        	g2.setPaint(Color.red);
+        	g2.draw(rdown);
+        	
+        }
+        
+        if(selectedRight){
+        	
+        	g2.setPaint(Color.white);
+        	g2.draw(rright);
+        	
+        }else{
+        	
+        	g2.setPaint(Color.red);
+        	g2.draw(rright);
+        	
+        }
+        
+        g2.dispose();
+        
+    }
+
+
+
+
+
+
+
+	public void mouseDragged(MouseEvent m) {
+
+		
+	}
+
+
+
+
+
+
+
+
+	public void mouseMoved(MouseEvent m) {
+		
+		Point p = m.getPoint();
+		
+		Point e = new Point();
+		e.x = (int) (getPreviewSize().width/2 - getPicture().getpWidth()/2 + p.getX());
+		e.y = (int) (p.getY() + 58);
+		
+		// check if mouse is over one of the lines
+		// down
+		if(rdown.contains(e))
+			selectedDown = true;
+		else
+			selectedDown = false;
+		
+		// up
+		if(rup.contains(e))
+			selectedUp = true;
+		else
+			selectedUp = false;
+		
+		// left
+		if(rleft.contains(e))
+			selectedLeft = true;
+		else
+			selectedLeft = false;
+		
+		// right
+		if(rright.contains(e))
+			selectedRight = true;
+		else
+			selectedRight = false;
+		
+		repaint();
 		
 	}
 

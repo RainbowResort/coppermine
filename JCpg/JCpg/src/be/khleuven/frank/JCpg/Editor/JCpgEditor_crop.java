@@ -78,8 +78,6 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	private int RIGHT = LEFT + getPicture().getpWidth();
 	private int DOWN = UP + getPicture().getpHeight();
 	
-	private Dimension size = this.getSize(); // size of this panel
-	
 	private Point mouseposition = new Point();
 	private Point cropposition = new Point();
 	
@@ -187,9 +185,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			
 		});
 		
-		t1.start();
-		
-		repaint();
+		//t1.start();
 
 	}
 	/**
@@ -211,15 +207,17 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         crop.setLocation(rx + (getPreviewSize().width/2 - getImageButton().getSize().width/2), ry + UP);
         g2.draw(crop);
         
-        // unselect rectangles
+        // invert selection rectangles
         Point position = crop.getLocation();
         
         g2.setPaint(Color.black);
         
-        g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
-        g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
-        g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
-        g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
+        //g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
+        //g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
+        //g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
+        //g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
+        
+        g2.dispose();
         
     }
 	
@@ -274,6 +272,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			getJCpgUI().getPictureList().remove(getListIndex());
 			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
             
+			running = false; // stop repaint thread
+			
             getJCpgUI().setEnabled(true);
             this.dispose();
             

@@ -70,8 +70,11 @@ import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 
 
 /**
+ * 
  * Complete JCpg UI
+ * 
  * @author    Frank Cleynen
+ * 
  */
 public class JCpgUI extends JFrame implements TreeSelectionListener{
 	
@@ -88,6 +91,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	
 	private JCpgConfig cpgConfig;
 	private JCpgUI globalUi = this; // for threads :s:s
+	
+	private JCpgPicture currentPicture; // the currently selected picture
 	
 	private static JCpgGallery gallery = new JCpgGallery("My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
@@ -633,16 +638,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
 		
 		JButton image = new JButton(); // make button with picture
-		JCpgPicture selectedPicture = (JCpgPicture)pictureList.getSelectedValue();
+		currentPicture = (JCpgPicture)pictureList.getSelectedValue();
 		
-		if(selectedPicture != null){
+		if(currentPicture != null){
 			
-	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + selectedPicture.getFilePath() + selectedPicture.getFileName()).createImageIcon());
-	    	image.setToolTipText(selectedPicture.getFileName());
-	    	Dimension realSize = new Dimension(selectedPicture.getpWidth(), selectedPicture.getpHeight());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + currentPicture.getFilePath() + currentPicture.getFileName()).createImageIcon());
+	    	image.setToolTipText(currentPicture.getFileName());
+	    	Dimension realSize = new Dimension(currentPicture.getpWidth(), currentPicture.getpHeight());
 	    	image.setPreferredSize(realSize);
 	    	
-	    	getTree().addSelectionPath(selectedPicture.getTreePath());
+	    	getTree().addSelectionPath(currentPicture.getTreePath());
 	    	
 	    	explorer.removeAll(); // add picture to explorer pane
 	    	explorer.add(image);
@@ -875,11 +880,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void edit_cropActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		if(currentPicture != null){
 		
-		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
-		
-			new JCpgEditor_crop(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditor_crop(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -891,11 +894,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void edit_resizeActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		if(currentPicture != null){
 		
-		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
-		
-			new JCpgEditor_resize(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditor_resize(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -907,11 +908,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void edit_colorcorrectionActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		if(currentPicture != null){
 		
-		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
-		
-			new JCpgEditor_colors(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(600, 600), getPictureList().getSelectedIndex());
+			new JCpgEditor_colors(this, currentPicture, new Dimension(1, 51), new Dimension(600, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -923,11 +922,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void edit_rotateActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		if(currentPicture != null){
 		
-		if(node != null && node.getUserObject().getClass().equals(JCpgPicture.class)){
-		
-			new JCpgEditor_rotate(this, (JCpgPicture)node.getUserObject(), new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditor_rotate(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -1017,12 +1014,14 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	
 	    }else if(object.getClass().equals(JCpgPicture.class)){ // leaf is picture
 	    	
-	    	JCpgPicture picture = (JCpgPicture)node.getUserObject();
+	    	if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
+	    	
+	    	currentPicture = (JCpgPicture)node.getUserObject();
 	    	JButton image = new JButton();
 	    	
-	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()).createImageIcon());
-	    	image.setToolTipText(picture.getFileName());
-	    	Dimension realSize = new Dimension(picture.getpWidth(), picture.getpHeight());
+	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + currentPicture.getFilePath() + currentPicture.getFileName()).createImageIcon());
+	    	image.setToolTipText(currentPicture.getFileName());
+	    	Dimension realSize = new Dimension(currentPicture.getpWidth(), currentPicture.getpHeight());
 	    	image.setPreferredSize(realSize);
 	    	
 	    	explorer.removeAll();
