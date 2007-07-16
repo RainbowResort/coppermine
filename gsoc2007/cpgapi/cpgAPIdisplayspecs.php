@@ -21,7 +21,7 @@
  * Class specifying everthing about the display structure
  */
 class displayspecs {
-  var $userpersonalfields, $groupfields, $configfields;
+  var $userpersonalfields, $groupfields, $configfields, $categoryfields;
 
   function initialize() {
     // Database connection settings
@@ -33,6 +33,16 @@ class displayspecs {
 
     $this->groupfields = array(
        'group_id', 'groupname', 'admin'
+    );
+    
+    $this->categoryfields = array(
+    	'cid', 'ownerid', 'name', 'description', 'parent' , 'pos', 'thumb'
+    );
+
+    $this->albumfields = array(
+    	'aid', 'title', 'description', 'visibility', 'uploads' , 'comments',
+    	'votes', 'pos', 'category', 'thumb', 'keyword',
+    	'moderator_group', 'alb_hits' 
     );
 
     $this->configfields = array(
@@ -201,10 +211,9 @@ class displayspecs {
 	'allow_user_account_delete',
 	'display_stats_on_index',
 	'browse_by_date',
-        'site_url',
-        'allow_get_api'
+    'site_url',
+    'allow_get_api'
     );
-
   }
 }
 ?>

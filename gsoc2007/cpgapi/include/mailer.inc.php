@@ -683,6 +683,7 @@ class PHPMailer
             $this->SetError("Could not load language file");
             return false;
         }
+        global $PHPMAILER_LANG;
         $this->language = $PHPMAILER_LANG;
     
         return true;

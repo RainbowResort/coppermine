@@ -22,6 +22,7 @@
  */
 class dbspecs {
   var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
+  var $categorytable, $catfield, $albumtable, $albumfield;
   var $dbactive = false;
 
   function initialize() {
@@ -41,7 +42,9 @@ class dbspecs {
         'users' => 'users',
         'userxgroup' => 'userxgroup',
         'groups' => 'usergroups',
-        'config' => 'config'
+        'config' => 'config',
+        'categories' => 'categories',
+        'albums' => 'albums'
     );
 	
     // Derived full table names
@@ -49,6 +52,8 @@ class dbspecs {
     $this->userxgrouptable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['userxgroup'];
     $this->groupstable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['groups'];
     $this->configtable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['config'];
+    $this->categorytable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['categories'];
+    $this->albumtable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['albums'];
 
     // Table field names
     $this->field = array(
@@ -92,6 +97,34 @@ class dbspecs {
         'num_file_upload' => 'num_file_upload',
         'num_URI_upload' => 'num_URI_upload'
     );
+    
+    $this->catfield = array(
+    	'cid' => 'cid',
+    	'ownerid' => 'owner_id',
+    	'name' => 'name',
+    	'description' => 'description',
+    	'parent' => 'parent',
+    	'pos' => 'pos',
+    	'thumb' => 'thumb'
+    );
+    
+    $this->albumfield = array(
+    	'aid' => 'aid',
+    	'title' => 'title',
+    	'description' => 'description',
+    	'visibility' => 'visibility',
+    	'uploads' => 'uploads',
+    	'comments' => 'comments',
+    	'votes' => 'votes',
+    	'pos' => 'pos',
+    	'category' => 'category',
+    	'thumb' => 'thumb',
+    	'keyword' => 'keyword',
+    	'alb_password' => 'alb_password',
+    	'alb_password_hint' => 'alb_password_hint',
+    	'moderator_group' => 'moderator_group',
+    	'alb_hits' => 'alb_hits'
+    );
   }
 
   function sql_connect() {
@@ -112,6 +145,10 @@ class dbspecs {
 
   function sql_update($sqlquery) {
     mysql_query($sqlquery);
+  }
+
+  function sql_insert_id() {
+  	return mysql_insert_id();
   }
 
 }

@@ -30,31 +30,43 @@ define('IN_COPPERMINE', true);
  * admin  => only an administrator can execute this command
  */
 $APITYPE = array(
-    'install' => 'unauth',
-    'uninstall' => 'unauth',
+    'install' 			=> array('unauth'),
+    'uninstall'			=> array('unauth'),
 
-    'login' => 'unauth',
-    'logout' => 'login',
-    'register' => 'unauth',
-    'activate' => 'unauth',
-    'reactivate' => 'unauth',
-    'forgotpassword' => 'unauth',
-    'generatepassword' => 'unauth',
-    'modifyprofile' => 'login',
+    'login' 			=> array('unauth'),
+    'logout' 			=> array('login'),
+    'register' 			=> array('unauth'),
+    'activate' 			=> array('unauth'),
+    'reactivate'		=> array('unauth'),
+    'forgotpassword'	=> array('unauth'),
+    'generatepassword'	=> array('unauth'),
+    'modifyprofile' 	=> array('login'),
 
-    'getconfig' => 'unauth',
-    'setconfig' => 'admin',
+    'getconfig' 		=> array('unauth'),
+    'setconfig' 		=> array('admin'),
 
-    'showusers' => 'admin',
-    'adduser' => 'admin',
-    'removeuser' => 'admin',
-    'updateuser' => 'admin',
-    'addgroup' => 'admin',
-    'removegroup' => 'admin',
-    'updategroup' => 'admin',
-    'showgroups' => 'admin',
-    'addusertogroup' => 'admin',
-    'removeuserfromgroup' => 'admin'
+    'showusers' 		=> array('admin'),
+    'adduser' 			=> array('admin'),
+    'removeuser' 		=> array('admin'),
+    'updateuser'	 	=> array('admin'),
+    'addgroup' 			=> array('admin'),
+    'removegroup' 		=> array('admin'),
+    'updategroup' 		=> array('admin'),
+    'showgroups' 		=> array('admin'),
+    'addusertogroup'	=> array('admin'),
+    'removeuserfromgroup' => array('admin'),
+    
+    'createcategory'	=> array('login', 'categoryowner'),
+    'viewcategory'		=> array('categoryview'),
+    'modifycategory'	=> array('login', 'categoryowner'),
+    'createalbum'		=> array('login', 'categoryowner'),
+    'viewalbum'			=> array('albumview'),
+    'modifyalbum'		=> array('login', 'albumowner')
+);
+
+$GROUPPERMS = array(
+	'login'	=> 'login',
+	'admin' => 'admin'
 );
 
 /*
@@ -101,10 +113,19 @@ $query = $CF->getuncheckedvariable("query");
  * @ adminemail
  */
 if($query == 'install') {
-  // current query is install. let it proceed
-  require('cpgAPIinstall.php');
-  $INSTALL = new install();
-  $INSTALL->newinstall($CF->getuncheckedvariable("dbserver"), $CF->getuncheckedvariable("dbuser"), $CF->getuncheckedvariable("dbpass"), $CF->getuncheckedvariable("dbname"), $CF->getuncheckedvariable("prefix"), $CF->getuncheckedvariable("adminusername"), $CF->getuncheckedvariable("adminpassword"), $CF->getuncheckedvariable("adminemail"));
+  // check if already installed
+  $installed = true;
+  $fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $installed = false;
+
+  if ($installed) {
+     fclose($fh);
+   	 $CF->unsafeexit("install_error");
+  }  else {
+     // current query is install. let it proceed
+     require('cpgAPIinstall.php');
+     $INSTALL = new install();
+     $INSTALL->newinstall($CF->getuncheckedvariable("dbserver"), $CF->getuncheckedvariable("dbuser"), $CF->getuncheckedvariable("dbpass"), $CF->getuncheckedvariable("dbname"), $CF->getuncheckedvariable("prefix"), $CF->getuncheckedvariable("adminusername"), $CF->getuncheckedvariable("adminpassword"), $CF->getuncheckedvariable("adminemail"));
+  }
 }
 
 /* 
@@ -132,6 +153,8 @@ require($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
 $DBS->initialize();
 require('cpgAPIuserfunctions.php');
 $UF = new userfunctions();
+require('cpgAPIalbumfunctions.php');
+$AF = new albumfunctions();
 $DBS->sql_connect();
 
 $CONFIG = $GF->getconfig($CONFIG);
@@ -142,16 +165,54 @@ require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
 /*
  * Query manipulation: authenticate user first
  */
-if ($APITYPE[$query] == "") {
+$CURRENT_USER = false;
+
+if (!$APITYPE[$query]) {
    print "<messagecode>unknown_query</messagecode>";
    $CF->safeexit();
-}  else if($APITYPE[$query] == 'unauth') {
-   /* User does not need any permissions to execute the query */
 }  else {
-   /* Verify if the session key is correct or not */
-   $username = $CF->getvariable("username");
-   $sessionkey = $CF->getvariable("sessionkey");
-   $UF->authorizeuser($username, $sessionkey, $APITYPE[$query]);
+   for($i=0; $i < count($APITYPE[$query]); $i++) {
+	   if ($APITYPE[$query][$i] == 'unauth') {
+   		  /* User does not need any permissions to execute the query */
+   		  break;
+	   }  else if (isset($GROUPPERMS[$APITYPE[$query][$i]])){
+   		  /* Verify if the session key is correct or not */
+   		  $username = $CF->getvariable("username");
+   		  $sessionkey = $CF->getvariable("sessionkey");
+   		  $CURRENT_USER = $UF->authorizeuser($username, $sessionkey, $APITYPE[$query][$i]);
+	   }  else {
+	   	  switch($APITYPE[$query][$i]) {
+	   	  	 case 'categoryowner':
+	   	  	 	$categoryid = $CF->getvariable("categoryid");
+	   	  	 	if (!$AF->authorizeusercat($CURRENT_USER, $categoryid, "owner")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  	 	}
+	   	  	 	break;
+	   	  	 case 'categoryview' :
+	   	  	 	$categoryid = $CF->getvariable("categoryid");
+	   	  	 	if (!$AF->authorizeusercat($CURRENT_USER, $categoryid, "view")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  	 	}
+	   	  	 	break;
+	   	  	 case 'albumowner'   :
+	   	  	 	$albumid = $CF->getvariable("albumid");
+	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "owner")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  	 	}
+	   	  	 	break;
+	   	  	 case 'albumview'    :
+	   	  	 	$albumid = $CF->getvariable("albumid");
+	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "view")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  		}
+	   	  	 	break;
+	   	  }
+	   }
+   }
 }
 
 
@@ -530,6 +591,15 @@ case 'setconfig':
       print "</" . $DISPLAY->configfields[$i] . ">";
    }
    print "</config>";
+   break;
+
+case 'createcategory':
+   $username = $CF->getvariable("username");
+   $categoryid = $CF->getvariable("categoryid");
+   $addcategoryname = $CF->getvariable("addcategoryname");
+   $addcategorydesc = $CF->getvariable("addcategorydesc");
+   $AF->createCategory($username, $addcategoryname, $addcategorydesc, $categoryid);
+   print "<messagecode>success</messagecode>";
    break;
 
 default:

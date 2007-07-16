@@ -153,11 +153,10 @@ class userfunctions {
        $CF->safeexit();
     }
 
-   if ($perm!="login") {
-      /* Check if there is a current user and if she has appropriate permissions */
-      $USER_DATA = $this->getpersonaldata($username);
-
-      if ($USER_DATA) {
+    /* Check if there is a current user and if she has appropriate permissions */
+    $USER_DATA = $this->getpersonaldata($username);
+    if ($USER_DATA) {
+      if ($perm!="login") {
          $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
          if ($GROUP_DATA) {
             $authorized = false;
@@ -169,7 +168,7 @@ class userfunctions {
             }
 
             if ($authorized) {
-               return true;
+               return $USER_DATA;
             }  else {
                print "<messagecode>query_permission_error</messagecode>";
                $CF->safeexit();
@@ -178,12 +177,42 @@ class userfunctions {
             print "<messagecode>user_data_invalid_error</messagecode>";
             $CF->safeexit();
          }
-      }  else  {
-         print "<messagecode>user_data_invalid_error</messagecode>";
-         $CF->safeexit();
       }
+    } else  {
+      print "<messagecode>user_data_invalid_error</messagecode>";
+      $CF->safeexit();
     }
-    return true;
+    return $USER_DATA;
+  }
+
+  /* Checks if the user is an admin
+   * @ username
+     @ return true if admin, false otherwise
+   */
+  function isAdmin($username) {
+    global $CF;
+
+    /* Check if there is a current user and if she has appropriate permissions */
+    $USER_DATA = $this->getpersonaldata($username);
+
+    if ($USER_DATA) {
+       $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
+       if ($GROUP_DATA) {
+          $authorized = false;
+          for($i = 0; $i < count($GROUP_DATA); $i++) {
+             if($GROUP_DATA[$i]["admin"]) {
+                $authorized = true;
+                break;
+             }
+          }
+
+          if ($authorized) {
+             return true;
+          }  else {
+             return false;
+          }
+       }
+    }
   }
 
   /* Fetches and returns the group data corresponding to a single user.
@@ -292,7 +321,7 @@ class userfunctions {
    * @ return USER_DATA
    */
   function adduser ($addusername, $password, $group_id, $email, $profile) {
-    global $DBS, $DISPLAY, $CONFIG, $CF, $LANG;
+    global $DBS, $DISPLAY, $CONFIG, $CF, $LANG, $AF;
 
     $fieldstring = "";
     for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
@@ -354,12 +383,12 @@ class userfunctions {
           $act_link = rtrim($CONFIG['site_url'], '/') . '/index.htm#pg=activatediv&username=' . $addusername . '&act_key=' . $act_key;
           $template_vars = array(
              '{SITE_NAME}' => $CONFIG['gallery_name'],
-             '{USER_NAME}' => $user_name,
+             '{USER_NAME}' => $addusername,
              '{ACT_LINK}' => $act_link,
           );
           cpg_mail('admin', sprintf($LANG['register']['notify_admin_request_email_subject'], $CONFIG['gallery_name']), nl2br(strtr($LANG['register_approve_email'], $template_vars)));
        }  else {
-          cpg_mail('admin', sprintf($LANG['register']['notify_admin_email_subject'], $CONFIG['gallery_name']), sprintf($LANG['register']['notify_admin_email_body'], $user_name));
+          cpg_mail('admin', sprintf($LANG['register']['notify_admin_email_subject'], $CONFIG['gallery_name']), sprintf($LANG['register']['notify_admin_email_body'], $addusername));
        }
     }
 
@@ -371,6 +400,12 @@ class userfunctions {
     if (mysql_num_rows($results)) {
        $adduserid = mysql_result($results, 0, $DBS->field['user_id']);
        mysql_free_result($results);
+    }
+
+    // Create a personal album if corresponding option is enabled
+    if ($CONFIG['personal_album_on_registration'] == 1) {
+		$catid = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
+		$albumid = $AF->createAlbum($catid, $addusername);
     }
 
     $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";

@@ -708,9 +708,61 @@
            cnt += "<CENTER><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
            cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
            cnt += "   <TR><TD COLSPAN=2><H3>Configuration</H3></TD></TR>";
-           cnt += "   <TR><TD WIDTH=300><B>Setting</B></TD><TD WIDTH=500><B>Value</B></TD>";
            var xmldoc = xmlParserGet(xmlParserGet(retval, "catalog"), "config");
            var configcount = 0;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD COLSPAN=2><B>General Settings</B></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Name</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "gallery_name");
+           cnt += "<TD><INPUT NAME=gallery_name SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Description</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "gallery_description");
+           cnt += "<TD><INPUT NAME=gallery_description SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Admin Email</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "gallery_admin_email");
+           cnt += "<TD><INPUT NAME=gallery_admin_email SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Site URL</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "site_url");
+           cnt += "<TD><INPUT NAME=site_url SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD COLSPAN=2><B>Language & Charset Settings</B></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>Gallery Language</TD>";
+           cnt += "<TD><SELECT NAME=lang>";
+           var val = xmlParserGetLongValue(xmldoc, "lang");
+           cnt += "<OPTION VALUE=english " + (val=="english"?"selected":"") + ">English";
+           cnt += "<OPTION VALUE=german " + (val=="german"?"selected":"") + ">German";
+           cnt += "</SELECT></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD COLSPAN=2><B>Registration</B></TD></TR>";
+           configcount++;
 
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
@@ -762,45 +814,20 @@
            cnt += "</SELECT></TD></TR>";
            configcount++;
 
-
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
-           cnt += "<TD>Gallery Name</TD>";
-           var val = xmlParserGetLongValue(xmldoc, "gallery_name");
-           cnt += "<TD><INPUT NAME=gallery_name SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
-           configcount++;
-
-           if(configcount%2 == 1) cnt += "<TR>";
-           else cnt += "<TR BGCOLOR=#EEEEEE>";
-           cnt += "<TD>Gallery Description</TD>";
-           var val = xmlParserGetLongValue(xmldoc, "gallery_description");
-           cnt += "<TD><INPUT NAME=gallery_description SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
-           configcount++;
-
-           if(configcount%2 == 1) cnt += "<TR>";
-           else cnt += "<TR BGCOLOR=#EEEEEE>";
-           cnt += "<TD>Gallery Admin Email</TD>";
-           var val = xmlParserGetLongValue(xmldoc, "gallery_admin_email");
-           cnt += "<TD><INPUT NAME=gallery_admin_email SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
-           configcount++;
-
-           if(configcount%2 == 1) cnt += "<TR>";
-           else cnt += "<TR BGCOLOR=#EEEEEE>";
-           cnt += "<TD>Gallery Language</TD>";
-           cnt += "<TD><SELECT NAME=lang>";
-           var val = xmlParserGetLongValue(xmldoc, "lang");
-           cnt += "<OPTION VALUE=english " + (val=="english"?"selected":"") + ">English";
-           cnt += "<OPTION VALUE=german " + (val=="german"?"selected":"") + ">German";
+           cnt += "<TD>Create personal album on registration</TD>";
+           cnt += "<TD><SELECT NAME=personal_album_on_registration>";
+           var val = xmlParserGetLongValue(xmldoc, "personal_album_on_registration");
+           cnt += "<OPTION VALUE=1 " + (val=="1"?"selected":"") + ">Yes";
+           cnt += "<OPTION VALUE=0 " + (val=="0"?"selected":"") + ">No";
            cnt += "</SELECT></TD></TR>";
            configcount++;
 
            if(configcount%2 == 1) cnt += "<TR>";
            else cnt += "<TR BGCOLOR=#EEEEEE>";
-           cnt += "<TD>Site URL</TD>";
-           var val = xmlParserGetLongValue(xmldoc, "site_url");
-           cnt += "<TD><INPUT NAME=site_url SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           cnt += "<TD COLSPAN=2><B>Custom Fields for User Profile</B></TD></TR>";
            configcount++;
-
 
            for(var i=1; i<=6; i++) {
               if(configcount%2 == 1) cnt += "<TR>";
@@ -810,6 +837,32 @@
               cnt += "<TD><INPUT NAME=user_profile"+i+"_name SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
               configcount++;
            }
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD COLSPAN=2><B>Email Settings</B></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>SMTP Host</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "smtp_host");
+           cnt += "<TD><INPUT NAME=smtp_host SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>SMTP Username</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "smtp_username");
+           cnt += "<TD><INPUT NAME=smtp_username SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
+
+           if(configcount%2 == 1) cnt += "<TR>";
+           else cnt += "<TR BGCOLOR=#EEEEEE>";
+           cnt += "<TD>SMTP Password</TD>";
+           var val = xmlParserGetLongValue(xmldoc, "smtp_password");
+           cnt += "<TD><INPUT NAME=smtp_password SIZE=32 VALUE=\"" + val + "\"></TD></TR>";
+           configcount++;
 
            cnt += "   <TR><TD></TD><TD><INPUT TYPE=Submit VALUE=\"Change Config\" SIZE=32></TD></TR>";
            cnt += "</TABLE></CENTER></FORM>";
@@ -835,6 +888,7 @@
                  +"&gallery_name="+formelem.gallery_name.value
                  +"&gallery_admin_email="+formelem.gallery_admin_email.value
                  +"&gallery_description="+formelem.gallery_description.value
+                 +"&personal_album_on_registration="+formelem.personal_album_on_registration.value
                  +"&site_url="+formelem.site_url.value
                  +"&user_profile1_name="+formelem.user_profile1_name.value
                  +"&user_profile2_name="+formelem.user_profile2_name.value
@@ -843,6 +897,9 @@
                  +"&user_profile5_name="+formelem.user_profile5_name.value
                  +"&user_profile6_name="+formelem.user_profile6_name.value
                  +"&lang="+formelem.lang.value
+                 +"&smtp_host="+formelem.smtp_host.value
+                 +"&smtp_username="+formelem.smtp_username.value
+                 +"&smtp_password="+formelem.smtp_password.value
                  , function (returnText) {
 	var retval = Xparse(returnText);
         var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
