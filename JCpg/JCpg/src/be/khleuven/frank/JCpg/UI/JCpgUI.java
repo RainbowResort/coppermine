@@ -23,7 +23,6 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
@@ -43,7 +42,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -64,6 +62,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuInstallApi;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowUser;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
@@ -85,6 +84,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//*************************************
 																	//				VARIABLES             *
 																	//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgConfig cpgConfig;
 	private JCpgUI globalUi = this; // for threads :s:s
 	
@@ -127,8 +128,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private DefaultMutableTreeNode root;
 	
 	private JMenuBar menubar;
-	private JMenu menu, config, users, groups;
-	private JMenuItem menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
+	private JMenu menu, api, config, users, groups;
+	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
+	
+	
+	
 	
 	
 	
@@ -282,11 +286,17 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		menubar = new JMenuBar();
 		
 		menu = new JMenu("Manage");
-		menu.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery site");
 		menubar.add(menu);
 		
+		api = new JMenu("API");
+		menu.add(api);
+		
+		menuInstallApi = new JMenuItem("Install the API");
+		api.add(menuInstallApi);
+		
+		menu.addSeparator();
+		
 		config = new JMenu("Configuration");
-		config.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery configuration");
 		menu.add(config);
 		
 		menuShowConfig = new JMenuItem("Show configuration");
@@ -298,10 +308,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		menu.addSeparator();
 		
 		users = new JMenu("Users");
-		users.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery users");
 		menu.add(users);
 		
-		menuShowUser = new JMenuItem("Show users");
+		menuShowUser = new JMenuItem("Show my user information");
 		users.add(menuShowUser);
 		
 		menuAddUser = new JMenuItem("Add user");
@@ -391,6 +400,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		});
 		
 		// menu
+		menuInstallApi.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				menuInstallApiActionPerformed(evt);
+			}
+		});
+		
 		menuShowConfig.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuShowConfigActionPerformed(evt);
@@ -925,6 +940,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private void closeMegaExplorerActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		changeMegaExplorerActive(true); // go to mega explorer view
+		
+	}
+	/**
+	 * 
+	 * Show the current Cpg config
+	 * 
+	 */
+	private void menuInstallApiActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuInstallApi(this);
 		
 	}
 	/**

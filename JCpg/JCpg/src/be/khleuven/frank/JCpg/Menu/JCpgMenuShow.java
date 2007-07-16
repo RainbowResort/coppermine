@@ -28,10 +28,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
@@ -171,6 +173,7 @@ public abstract class JCpgMenuShow extends JDialog {
 				closeActionPerformed(evt);
 			}
 		});
+		
 		savetofile.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				saveToFileActionPerformed(evt);
@@ -189,7 +192,7 @@ public abstract class JCpgMenuShow extends JDialog {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		
-		textArea.setBounds(10, 10, 980, 600);
+		textArea.setBounds(10, 50, 980, 600);
 		
 		close.setBounds(450, 660, 100, 30);
 		savetofile.setBounds(330, 660, 100, 30);

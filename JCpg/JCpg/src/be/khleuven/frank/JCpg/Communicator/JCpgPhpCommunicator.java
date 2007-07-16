@@ -130,6 +130,8 @@ public class JCpgPhpCommunicator {
 	
 	public boolean performPhpRequest(String parameters){
 		
+		System.out.println("DEBUG: " + parameters);
+		
 		try {
 			
 			File delete = new File("svr.xml"); // delete file if it already exists
@@ -211,6 +213,8 @@ public class JCpgPhpCommunicator {
 	 * 		true if the server response was collected successfully, else false
 	 */
 	public File performPhpRequestAndGetXml(String parameters){
+		
+		System.out.println("DEBUG: " + parameters);
 		
 		try {
 			

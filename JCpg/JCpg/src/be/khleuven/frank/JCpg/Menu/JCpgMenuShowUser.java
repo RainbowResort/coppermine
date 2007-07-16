@@ -17,6 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Menu;
 
+import javax.swing.JLabel;
+
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
@@ -36,6 +39,10 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 													//*************************************
 													//				VARIABLES	          *
 													//*************************************
+	private static final long serialVersionUID = 1L;
+	
+	private JLabel logo;
+	
 	private String userString = "";
 	
 	
@@ -54,6 +61,10 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 	public JCpgMenuShowUser(JCpgUI ui){
 		
 		super(ui);
+		
+		logo = new JLabel(new JCpgImageUrlValidator("data/menu_youruserconfig.jpg").createImageIcon(), JLabel.CENTER); // 1000x50
+		logo.setBounds(0, 0, 1000, 50);
+		this.getContentPane().add(logo);
 		
 		fillTextArea();
 		
@@ -77,20 +88,23 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 		
 		String parameters = "showusers&username=" + getUI().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUI().getCpgConfig().getUserConfig().getSessionkey();
 		
-		if(phpCommunicator.performPhpRequest(parameters)){ // show user ok
+		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters)){ // show user ok
 			
-			userString = userString + "Username:" + "\t" + phpCommunicator.getXmlTagText("userdata", "username") + "\n";
-			userString = userString + "User IDs:" + "\t" + phpCommunicator.getXmlTagText("userdata", "user_id") + "\n";
-			userString = userString + "E-mail:" + "\t" + phpCommunicator.getXmlTagText("userdata", "email") + "\n";
-			userString = userString + "Registration date:" + "\t" + phpCommunicator.getXmlTagText("userdata", "regdate") + "\n";
-			userString = userString + "Last visit:" + "\t" + phpCommunicator.getXmlTagText("userdata", "lastvisit") + "\n";
-			userString = userString + "Active:" + "\t" + phpCommunicator.getXmlTagText("userdata", "active") + "\n";
-			userString = userString + "Group name:" + "\t" + phpCommunicator.getXmlTagText("userdata", "groupname") + "\n";
+			userString = userString + "Username:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "username") + "\n";
+			userString = userString + "User IDs:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "user_id") + "\n";
+			userString = userString + "E-mail:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "email") + "\n";
+			userString = userString + "Registration date:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "regdate") + "\n";
+			userString = userString + "Last visit:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "lastvisit") + "\n";
+			userString = userString + "Active:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "active") + "\n";
+			userString = userString + "Group name:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "groupname") + "\n";
 			
 			getTextArea().setText(userString);
 
 		}else{
-		
+			
+			userString = "Couldn't fetch your user information. Maybe you are not online.";
+			getTextArea().setText(userString);
+			
 			System.out.println("JCpgMenuShowUser: couldn't fetch user data");
 			
 		}

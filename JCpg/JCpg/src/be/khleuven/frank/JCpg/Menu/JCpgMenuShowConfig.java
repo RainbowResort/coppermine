@@ -17,6 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Menu;
 
+import javax.swing.JLabel;
+
+import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
@@ -34,6 +37,8 @@ public class JCpgMenuShowConfig extends JCpgMenuShow {
 													//*************************************
 													//				VARIABLES	          *
 													//*************************************
+	private JLabel logo;
+	
 	private String configurationString = "";
 	
 	
@@ -52,6 +57,10 @@ public class JCpgMenuShowConfig extends JCpgMenuShow {
 	public JCpgMenuShowConfig(JCpgUI ui){
 		
 		super(ui);
+		
+		logo = new JLabel(new JCpgImageUrlValidator("data/menu_yoursiteconfig.jpg").createImageIcon(), JLabel.CENTER); // 1000x50
+		logo.setBounds(0, 0, 1000, 50);
+		this.getContentPane().add(logo);
 		
 		fillTextArea();
 		
@@ -75,7 +84,7 @@ public class JCpgMenuShowConfig extends JCpgMenuShow {
 		for(int i=0; i<getUI().getCpgConfig().getSiteConfig().getConfigEntries().size(); i++){
 			
 			if(i+2 < getUI().getCpgConfig().getSiteConfig().getConfigEntries().size())
-				configurationString = configurationString + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(i) + "\t" + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(++i) + "\n";
+				configurationString = configurationString + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(i) + "\t\t" + getUI().getCpgConfig().getSiteConfig().getConfigEntries().get(++i) + "\n";
 			
 		}
 		
