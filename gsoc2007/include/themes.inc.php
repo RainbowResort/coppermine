@@ -2804,7 +2804,7 @@ function theme_html_picture()
     $CURRENT_PIC_DATA['footer'] = '';
 
     $CURRENT_PIC_DATA = CPGPluginAPI::filter('file_data',$CURRENT_PIC_DATA);
-    $CURRENT_PIC_DATA = annotate_file_data($CURRENT_PIC_DATA);
+    if (defined('DISPLAYIMAGE_PHP')) { $CURRENT_PIC_DATA = annotate_file_data($CURRENT_PIC_DATA);}
 
 
     $params = array('{CELL_HEIGHT}' => '100',
