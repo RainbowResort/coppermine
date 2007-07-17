@@ -43,29 +43,33 @@ $APITYPE = array(
     'modifyprofile' 	=> array('login'),
 
     'getconfig' 		=> array('unauth'),
-    'setconfig' 		=> array('admin'),
+    'setconfig' 		=> array('login', 'admin'),
 
-    'showusers' 		=> array('admin'),
-    'adduser' 			=> array('admin'),
-    'removeuser' 		=> array('admin'),
-    'updateuser'	 	=> array('admin'),
-    'addgroup' 			=> array('admin'),
-    'removegroup' 		=> array('admin'),
-    'updategroup' 		=> array('admin'),
-    'showgroups' 		=> array('admin'),
-    'addusertogroup'	=> array('admin'),
-    'removeuserfromgroup' => array('admin'),
+    'showusers' 		=> array('login', 'admin'),
+    'adduser' 			=> array('login', 'admin'),
+    'removeuser' 		=> array('login', 'admin'),
+    'updateuser'	 	=> array('login', 'admin'),
+    'addgroup' 			=> array('login', 'admin'),
+    'removegroup' 		=> array('login', 'admin'),
+    'updategroup' 		=> array('login', 'admin'),
+    'showgroups' 		=> array('login', 'admin'),
+    'addusertogroup'	=> array('login', 'admin'),
+    'removeuserfromgroup' => array('login', 'admin'),
     
+    'showcategories'	=> array('softlogin'),
+    'showmycategories'	=> array('login'),
+    'showallcategories'	=> array('login', 'admin'),
     'createcategory'	=> array('login', 'categoryowner'),
-    'viewcategory'		=> array('categoryview'),
+    'viewcategory'		=> array('softlogin', 'categoryview'),
     'modifycategory'	=> array('login', 'categoryowner'),
+    'removecategory'	=> array('login', 'categoryowner'),
     'createalbum'		=> array('login', 'categoryowner'),
-    'viewalbum'			=> array('albumview'),
-    'modifyalbum'		=> array('login', 'albumowner')
+    'viewalbum'			=> array('softlogin', 'albumview'),
+    'modifyalbum'		=> array('login', 'albumowner'),
+    'removealbum'		=> array('login', 'albumowner')
 );
 
 $GROUPPERMS = array(
-	'login'	=> 'login',
 	'admin' => 'admin'
 );
 
@@ -165,7 +169,9 @@ require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
 /*
  * Query manipulation: authenticate user first
  */
-$CURRENT_USER = false;
+$CURRENT_USER = array(
+	'username' => false
+	);
 
 if (!$APITYPE[$query]) {
    print "<messagecode>unknown_query</messagecode>";
@@ -175,11 +181,23 @@ if (!$APITYPE[$query]) {
 	   if ($APITYPE[$query][$i] == 'unauth') {
    		  /* User does not need any permissions to execute the query */
    		  break;
-	   }  else if (isset($GROUPPERMS[$APITYPE[$query][$i]])){
-   		  /* Verify if the session key is correct or not */
+	   }  else if($APITYPE[$query][$i] == 'login') {
    		  $username = $CF->getvariable("username");
    		  $sessionkey = $CF->getvariable("sessionkey");
-   		  $CURRENT_USER = $UF->authorizeuser($username, $sessionkey, $APITYPE[$query][$i]);
+   		  $CURRENT_USER = $UF->authenticateuser($username, $sessionkey);
+   		  if (!$CURRENT_USER) {
+   		  	 print "<messagecode>invalid_session_error</messagecode>";
+             $CF->safeexit();
+   		  }
+	   }  else if($APITYPE[$query][$i] == 'softlogin') {
+   		  $CURRENT_USER = $UF->authenticateuser($username, $sessionkey);
+   		  if (!$CURRENT_USER) {
+             $CURRENT_USER = array(
+	         	 'username' => false
+	         );
+   		  }
+	   }  else if (isset($GROUPPERMS[$APITYPE[$query][$i]])){
+   		  $UF->checkgrouppermission($username, $APITYPE[$query][$i]);
 	   }  else {
 	   	  switch($APITYPE[$query][$i]) {
 	   	  	 case 'categoryowner':
@@ -594,12 +612,50 @@ case 'setconfig':
    break;
 
 case 'createcategory':
-   $username = $CF->getvariable("username");
    $categoryid = $CF->getvariable("categoryid");
-   $addcategoryname = $CF->getvariable("addcategoryname");
-   $addcategorydesc = $CF->getvariable("addcategorydesc");
-   $AF->createCategory($username, $addcategoryname, $addcategorydesc, $categoryid);
+   $addcategoryname = $CF->getvariable("categoryname");
+   $addcategorydesc = $CF->getvariable("categorydesc");
    print "<messagecode>success</messagecode>";
+   $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid));
+   break;
+
+case 'modifycategory':
+   $categoryid = $CF->getvariable("categoryid");
+   $categoryname = $CF->getvariable("categoryname");
+   $categorydesc = $CF->getvariable("categorydesc");
+   $categorypos = $CF->getvariable("categorypos");
+   $categorythumb = $CF->getvariable("categorythumb");
+   print "<messagecode>success</messagecode>";
+   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categorypos, $categorythumb));
+   break;
+
+case 'viewcategory':
+   $categoryid = $CF->getvariable("categoryid");
+   print "<messagecode>success</messagecode>";
+   $AF->showCategoryData($AF->getCategoryData($categoryid));
+   break;
+
+case 'removecategory':
+   $categoryid = $CF->getvariable("categoryid");
+   $AF->removeCategory($categoryid);
+   print "<messagecode>success</messagecode>";
+   break;
+
+case 'showcategories':
+   $AF->showCategories($CURRENT_USER);
+   break;
+   
+case 'showmycategories':
+   $AF->showUserCategories($CURRENT_USER);
+   break;
+
+case 'showallcategories':
+   $AF->showAllCategories();
+   break;
+
+case 'removealbum':
+   $albumid = $CF->getvariable("albumid");
+   $AF->removeAlbum($albumid);
    break;
 
 default:

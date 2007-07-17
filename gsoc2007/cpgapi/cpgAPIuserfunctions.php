@@ -138,51 +138,55 @@ class userfunctions {
     }
   }
 
+  /* Authenticate user login */
+  function authenticateuser($username, $sessionkey) {
+    global $CF;
+
+    $userkey = $this->getsessionkey($username);
+    if($userkey=='' || $userkey!=$sessionkey) {
+       return false;
+    }
+
+    $USER_DATA = $this->getpersonaldata($username);
+    return $USER_DATA;
+  }
+  
+
   /* Authorizes the user. Checks for a valid session key and permissions for the operations being performed
    * @ username
      @ sessionkey
      @ perm
      @ return true if authorized, otherwise exits immediately
    */
-  function authorizeuser($username, $sessionkey, $perm) {
+  function checkgrouppermission($username, $perm) {
     global $CF;
-
-    $userkey = $this->getsessionkey($username);
-    if($userkey=='' || $userkey!=$sessionkey) {
-       print "<messagecode>invalid_session_error</messagecode>";
-       $CF->safeexit();
-    }
 
     /* Check if there is a current user and if she has appropriate permissions */
     $USER_DATA = $this->getpersonaldata($username);
     if ($USER_DATA) {
-      if ($perm!="login") {
-         $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
-         if ($GROUP_DATA) {
-            $authorized = false;
-            for($i = 0; $i < count($GROUP_DATA); $i++) {
-               if($GROUP_DATA[$i][$perm]) {
-                  $authorized = true;
-                  break;
-               }
-            }
-
-            if ($authorized) {
-               return $USER_DATA;
-            }  else {
-               print "<messagecode>query_permission_error</messagecode>";
-               $CF->safeexit();
-            }
-         }  else {
-            print "<messagecode>user_data_invalid_error</messagecode>";
-            $CF->safeexit();
-         }
-      }
-    } else  {
-      print "<messagecode>user_data_invalid_error</messagecode>";
-      $CF->safeexit();
+       $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
+       if ($GROUP_DATA) {
+          $authorized = false;
+          for($i = 0; $i < count($GROUP_DATA); $i++) {
+             if($GROUP_DATA[$i][$perm]) {
+                $authorized = true;
+                break;
+             }
+          }
+          if ($authorized) {
+             return $USER_DATA;
+          }  else {
+             print "<messagecode>query_permission_error</messagecode>";
+             $CF->safeexit();
+          }
+       }  else {
+          print "<messagecode>user_data_invalid_error</messagecode>";
+          $CF->safeexit();
+       }
+    }  else  {
+       print "<messagecode>user_data_invalid_error</messagecode>";
+       $CF->safeexit();
     }
-    return $USER_DATA;
   }
 
   /* Checks if the user is an admin
