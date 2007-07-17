@@ -71,7 +71,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	
 	private BufferedImage previewBuffered;
 	
-	private JButton image = new JButton();
+	private JLabel image = new JLabel();
 	
 	private JCpgTransform transformer = new JCpgTransform();
 	
@@ -298,12 +298,12 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	}
 	/**
 	 * 
-	 * Get a reference to the JButton which holds the preview image
+	 * Get a reference to the JLabel which holds the preview image
 	 * 
 	 * @return
-	 * 		a reference to the JButton which holds the preview image
+	 * 		a reference to the JLabel which holds the preview image
 	 */
-	public JButton getImageButton(){
+	public JLabel getImageLabel(){
 		
 		return this.image;
 		
@@ -443,7 +443,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
     	Image imageFromBuffered = transformer.toImage(picture);
     	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
     	
-    	getImageButton().setIcon(imageIcon);
+    	getImageLabel().setIcon(imageIcon);
     	Dimension realSize = new Dimension(picture.getWidth(), picture.getHeight());
     	image.setPreferredSize(realSize);
     	getPreview().removeAll();

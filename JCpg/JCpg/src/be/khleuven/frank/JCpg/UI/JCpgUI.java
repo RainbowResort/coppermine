@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -637,7 +638,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
 		
-		JButton image = new JButton(); // make button with picture
+		JLabel image = new JLabel(); // make label with picture
 		currentPicture = (JCpgPicture)pictureList.getSelectedValue();
 		
 		if(currentPicture != null){
@@ -1017,7 +1018,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
 	    	
 	    	currentPicture = (JCpgPicture)node.getUserObject();
-	    	JButton image = new JButton();
+	    	JLabel image = new JLabel();
 	    	
 	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + currentPicture.getFilePath() + currentPicture.getFileName()).createImageIcon());
 	    	image.setToolTipText(currentPicture.getFileName());

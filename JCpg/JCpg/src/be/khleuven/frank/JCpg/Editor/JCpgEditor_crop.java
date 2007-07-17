@@ -125,10 +125,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	 */
 	private void doExtraSwingComponents(){
 		
-		getImageButton().addMouseMotionListener(this);
+		getImageLabel().addMouseMotionListener(this);
 		
-		rx = getImageButton().getSize().width / 4;
-		ry = getImageButton().getSize().height / 4;
+		rx = getImageLabel().getSize().width / 4;
+		ry = getImageLabel().getSize().height / 4;
 		rwidth = getPicture().getpWidth() / 4;
 		rheight = getPicture().getpHeight() / 4;
 		
@@ -204,7 +204,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         g2.setPaint(Color.red);
         
         crop.setSize(rwidth, rheight);
-        crop.setLocation(rx + (getPreviewSize().width/2 - getImageButton().getSize().width/2), ry + UP);
+        crop.setLocation(rx + (getPreviewSize().width/2 - getImageLabel().getSize().width/2), ry + UP);
         g2.draw(crop);
         
         // invert selection rectangles
@@ -212,10 +212,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         
         g2.setPaint(Color.black);
         
-        //g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
-        //g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
-        //g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
-        //g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
+        g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
+        g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
+        g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
+        g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
         
         g2.dispose();
         
@@ -385,10 +385,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			
 			// bounderies
 			if(rx < 0) rx = 0;
-			if(rx + rwidth > getImageButton().getSize().width) rx = getImageButton().getSize().width - rwidth;
+			if(rx + rwidth > getImageLabel().getSize().width) rx = getImageLabel().getSize().width - rwidth;
 			
 			if(ry < 0) ry = 0;
-			if(ry + rheight > getImageButton().getSize().height) ry = getImageButton().getSize().height - rheight;
+			if(ry + rheight > getImageLabel().getSize().height) ry = getImageLabel().getSize().height - rheight;
 		
 		}
 		

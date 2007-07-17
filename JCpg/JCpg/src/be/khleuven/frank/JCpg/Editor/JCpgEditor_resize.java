@@ -68,6 +68,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	private Rectangle rleft, rup, rright, rdown;
 
 	private boolean selectedLeft = false, selectedRight = false, selectedUp = false, selectedDown = false;
+	private int upY = 58, downY = 57 + getPicture().getpHeight(), leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2, rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1;
 	
 																			
 	
@@ -117,7 +118,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 */
 	private void doExtraSwingComponents(){
 		
-		getImageButton().addMouseMotionListener(this);
+		getImageLabel().addMouseMotionListener(this);
 		
 		newWidthLabel = new JLabel("New width (>0): ");
 		newWidthLabel.setBounds(250, 665, 120, 20);
@@ -225,10 +226,10 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        rleft = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58, 1, getPicture().getpHeight()); // left
-        rup = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58, getPicture().getpWidth(), 1); // up
-        rdown = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 58 + getPicture().getpHeight(), getPicture().getpWidth(), 1); // down
-        rright = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth(), 58, 1, getPicture().getpHeight()); // right
+        rleft = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, upY, 1, getPicture().getpHeight() - upY + 58); // left
+        rup = new Rectangle(rightX - getPicture().getpWidth(), upY, getPicture().getpWidth(), 1); // up
+        rdown = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 57 + getPicture().getpHeight(), getPicture().getpWidth(), 1); // down, -1 because else we are just out of the picture
+        rright = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1, upY, 1, getPicture().getpHeight() - upY + 58); // right, -1 because else we are just out of the picture
         
         // draw in correct color: red = not selected, white = selected
         if(selectedLeft){
@@ -290,8 +291,63 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 
 
 	public void mouseDragged(MouseEvent m) {
-
 		
+		// drag up line
+		if(selectedUp){
+			
+			upY = 58 + m.getY();
+			
+			if(upY < 58)
+				upY = 58;
+			if(upY > 57 + getPicture().getpHeight())
+				upY = 57 + getPicture().getpHeight();
+			
+			repaint();
+			
+		}
+		
+		// drag down line
+		if(selectedDown){
+			
+			downY = 57 + getPicture().getpHeight() - (getPicture().getpHeight() - m.getY());
+			
+			if(downY < 58)
+				downY = 58;
+			if(downY > 57 + getPicture().getpHeight())
+				downY = 57 + getPicture().getpHeight();
+			
+			repaint();
+			
+		}
+		
+		// drag left line
+		if(selectedLeft){
+			
+			leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + m.getX();
+			
+			if(leftX < getPreviewSize().width/2 - getPicture().getpWidth()/2)
+				leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2;
+			if(leftX > getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth())
+				leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth();
+			
+			repaint();
+			
+		}
+		
+		// drag right line
+		if(selectedRight){
+			
+			rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1 - (getPicture().getpWidth() - m.getX());
+			
+			if(rightX < getPreviewSize().width/2 - getPicture().getpWidth()/2)
+				rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2;
+			if(rightX > getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth())
+				rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth();
+			
+			repaint();
+			
+		}
+	
 	}
 
 
