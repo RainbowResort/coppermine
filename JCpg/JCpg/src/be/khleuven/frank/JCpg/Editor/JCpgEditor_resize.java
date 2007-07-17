@@ -59,11 +59,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 																			//*************************************
 	private JCpgPictureResizer resizer = new JCpgPictureResizer();
 	
-	private JLabel newWidthLabel;
-	private JLabel newHeightLabel;
-	private JTextField newWidthField;
-	private JTextField newHeightField;
-	private JButton preview;
+	private JLabel msg;
 	
 	private Rectangle rleft, rup, rright, rdown;
 
@@ -120,32 +116,10 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		
 		getImageLabel().addMouseMotionListener(this);
 		
-		newWidthLabel = new JLabel("New width (>0): ");
-		newWidthLabel.setBounds(250, 665, 120, 20);
-		newHeightLabel = new JLabel("New height (>0): ");
-		newHeightLabel.setBounds(490, 665, 120, 20);
+		msg = new JLabel("Drag the upper or right red line to resize");
+		msg.setBounds(230, 665, 300, 20);
 		
-		newWidthField = new JTextField();
-		newWidthField.setBounds(380, 665, 100, 20);
-		newWidthField.setText(getBufferedPreview().getWidth() + "");
-		newHeightField = new JTextField();
-		newHeightField.setBounds(620, 665, 100, 20);
-		newHeightField.setText(getBufferedPreview().getHeight() + "");
-		
-		preview = new JButton("Preview");
-		preview.setBounds(750, 660, 100, 30);
-		
-		this.getContentPane().add(newWidthLabel);
-		this.getContentPane().add(newHeightLabel);
-		this.getContentPane().add(newWidthField);
-		this.getContentPane().add(newHeightField);
-		this.getContentPane().add(preview);
-		
-		preview.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt) {
-				previewActionPerformed(evt);
-			}
-		});
+		this.getContentPane().add(msg);
 		
 	}
 	
@@ -161,18 +135,14 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 * Do the resize effect
 	 * 
 	 */
-	private void previewActionPerformed(java.awt.event.ActionEvent evt) {
+	private void preview() {
+			
+		Image image = getTransformer().toImage(getBufferedPreview());
+		Dimension newDimension = new Dimension(rightX - leftX, downY - upY);
+			
+		image = resizer.resize(image, newDimension);
 		
-		if((new Integer(newWidthField.getText())) > 0 && (new Integer(newHeightField.getText())) > 0){ // width and height must be bigger than 0
-			
-			Image image = getTransformer().toImage(getBufferedPreview());
-			Dimension newDimension = new Dimension(new Integer(newWidthField.getText()), new Integer(newHeightField.getText()));
-			
-			image = resizer.resize(image, newDimension);
-			
-			previewPicture(getTransformer().toBufferedImage(image));
-		
-		}
+		getImageLabel().setIcon(new ImageIcon(image));
     	
 	}
 	
@@ -185,20 +155,25 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	public ImageIcon performEdit() {
 		
 		// change picture size information
-		getPicture().changeWidth(new Integer(newWidthField.getText()));
-		getPicture().changeHeight(new Integer(newHeightField.getText()));
+		getPicture().changeWidth(rightX - leftX);
+		getPicture().changeHeight(downY - upY);
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview(), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+			Image image = getTransformer().toImage(getBufferedPreview());
+			Dimension newDimension = new Dimension(rightX - leftX, downY - upY);
+				
+			image = resizer.resize(image, newDimension);
+			
+            ImageIO.write(getTransformer().toBufferedImage(image), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
 			
 			// save new changes
 			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
 			
-			getJCpgUI().getPictureList().remove(getListIndex());
-			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
+			//getJCpgUI().getPictureList().remove(getListIndex());
+			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
             
             getJCpgUI().setEnabled(true);
             this.dispose();
@@ -226,23 +201,17 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        rleft = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, upY, 1, getPicture().getpHeight() - upY + 58); // left
-        rup = new Rectangle(rightX - getPicture().getpWidth(), upY, getPicture().getpWidth(), 1); // up
-        rdown = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2, 57 + getPicture().getpHeight(), getPicture().getpWidth(), 1); // down, -1 because else we are just out of the picture
-        rright = new Rectangle(getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1, upY, 1, getPicture().getpHeight() - upY + 58); // right, -1 because else we are just out of the picture
+        rright = new Rectangle(rightX, upY - (upY - 58)/2, 1, downY - upY); // right, -1 because else we are just out of the picture
+        rleft = new Rectangle(leftX, upY - (upY - 58)/2, 1, downY - upY); // left
+        rup = new Rectangle(leftX, upY - (upY - 58)/2, rightX - leftX, 1); // up
+        rdown = new Rectangle(leftX, downY - (upY - 58)/2, rightX - leftX, 1); // down, -1 because else we are just out of the picture
         
-        // draw in correct color: red = not selected, white = selected
-        if(selectedLeft){
-        	
-        	g2.setPaint(Color.white);
-        	g2.draw(rleft);
-        	
-        }else{
-        	
-        	g2.setPaint(Color.red);
-        	g2.draw(rleft);
-        	
-        }
+        // draw in correct color: red = not selected, white = selected  	
+        g2.setPaint(Color.red);
+        g2.draw(rleft);
+        
+        g2.setPaint(Color.red);
+        g2.draw(rdown);
         
         if(selectedUp){
         	
@@ -253,18 +222,6 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         	
         	g2.setPaint(Color.red);
         	g2.draw(rup);
-        	
-        }
-        
-        if(selectedDown){
-        	
-        	g2.setPaint(Color.white);
-        	g2.draw(rdown);
-        	
-        }else{
-        	
-        	g2.setPaint(Color.red);
-        	g2.draw(rdown);
         	
         }
         
@@ -299,36 +256,8 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 			
 			if(upY < 58)
 				upY = 58;
-			if(upY > 57 + getPicture().getpHeight())
-				upY = 57 + getPicture().getpHeight();
-			
-			repaint();
-			
-		}
-		
-		// drag down line
-		if(selectedDown){
-			
-			downY = 57 + getPicture().getpHeight() - (getPicture().getpHeight() - m.getY());
-			
-			if(downY < 58)
-				downY = 58;
-			if(downY > 57 + getPicture().getpHeight())
-				downY = 57 + getPicture().getpHeight();
-			
-			repaint();
-			
-		}
-		
-		// drag left line
-		if(selectedLeft){
-			
-			leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + m.getX();
-			
-			if(leftX < getPreviewSize().width/2 - getPicture().getpWidth()/2)
-				leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2;
-			if(leftX > getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth())
-				leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth();
+			if(upY > downY - 10)
+				upY = downY -10;
 			
 			repaint();
 			
@@ -339,14 +268,16 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 			
 			rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1 - (getPicture().getpWidth() - m.getX());
 			
-			if(rightX < getPreviewSize().width/2 - getPicture().getpWidth()/2)
-				rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2;
-			if(rightX > getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth())
-				rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth();
-			
+			if(rightX < leftX + 10)
+				rightX = leftX + 10;
+			if(rightX > getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1)
+				rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1;
+				
 			repaint();
 			
 		}
+		
+		preview();
 	
 	}
 
@@ -366,23 +297,11 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		e.y = (int) (p.getY() + 58);
 		
 		// check if mouse is over one of the lines
-		// down
-		if(rdown.contains(e))
-			selectedDown = true;
-		else
-			selectedDown = false;
-		
 		// up
 		if(rup.contains(e))
 			selectedUp = true;
 		else
 			selectedUp = false;
-		
-		// left
-		if(rleft.contains(e))
-			selectedLeft = true;
-		else
-			selectedLeft = false;
 		
 		// right
 		if(rright.contains(e))

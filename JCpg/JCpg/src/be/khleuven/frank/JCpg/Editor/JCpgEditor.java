@@ -476,8 +476,8 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
 			
-			getJCpgUI().getPictureList().remove(getListIndex()); // do correct refresh
-			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
+			//getJCpgUI().getPictureList().remove(getListIndex()); // do correct refresh
+			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
 			
             getJCpgUI().setEnabled(true);
             this.dispose();

@@ -803,6 +803,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		}
 		
     }
+	/**
+	 * 
+	 * Action when user clicks on 'preview' button. 
+	 * 
+	 */
 	private void control_previewActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
@@ -827,45 +832,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void syncActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		this.setEnabled(false);
-		
 		if(getOnlinemode()){ // if true, we are online
-			/*
-			Thread t1 = new Thread(new Runnable() {
-				
-				public void run() {
-					
-					JCpgSplashscreen splash = new JCpgSplashscreen(359, 76, "data/syncing.jpg");
-					
-					while(isSyncing) {};
-					
-					splash.setVisible(false);
-					splash.dispose();
-					globalUi.setEnabled(true);
-					
-				}
-				
-			});
 			
-			Thread t2 = new Thread(new Runnable() {
-				
-				public void run() {
-					
-					isSyncing = true; 
-					new JCpgSyncer(globalUi, getSqlManager()).sync();
-					isSyncing = false;
-					
-				}
-				
-			});
+			this.setEnabled(false);
 			
-			t2.start();
-			t1.start();
-		*/
-		
-		//new JCpgSyncer(globalUi, getSqlManager()).sync();
-		
-		this.setEnabled(true);
+			//new JCpgSyncer(globalUi, getSqlManager()).sync();
+			
+			this.setEnabled(true);
 		
 		}else{ // offline, let user go online
 			

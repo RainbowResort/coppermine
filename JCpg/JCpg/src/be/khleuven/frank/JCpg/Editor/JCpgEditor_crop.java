@@ -269,8 +269,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			// save this new information
 			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
 			
-			getJCpgUI().getPictureList().remove(getListIndex());
-			getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
+			//getJCpgUI().getPictureList().remove(getListIndex());
+			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
             
 			running = false; // stop repaint thread
 			

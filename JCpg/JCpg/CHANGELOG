@@ -1,3 +1,4 @@
+Resizer now uses handlers which can be dragged by the mouse to resize the picture
 Using JLabels to hold images instead of JButtons. This dramaticly improves drawing speeds in the UI and editors
 Fixed bug in Previewer where on some platforms (Windows and Linux) the picture would flicker all the time
 Improved memory usage of thge previewer and the picture editors
