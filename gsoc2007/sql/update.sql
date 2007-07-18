@@ -645,7 +645,7 @@ INSERT INTO CPG_config VALUES ('wm_rotation', '0');
 INSERT INTO CPG_config VALUES ('wm_text_font', 'arial.ttf');
 
 ALTER TABLE `CPG_usergroups` ADD `can_tag_pictures` TINYINT(4) DEFAULT '0' NOT NULL;
-ALTER TABLE `CPG_usergroups` ADD `can_view_tags` TINYINT(4) DEFAULT '0' NOT NULL;
+ALTER TABLE `CPG_usergroups` ADD `can_view_tags` TINYINT(4) DEFAULT '1' NOT NULL;
 ALTER TABLE `CPG_albums` ADD `owner` INT(11) DEFAULT '1' NOT NULL;
 
 #
