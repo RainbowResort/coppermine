@@ -252,7 +252,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		// drag up line
 		if(selectedUp){
 			
-			upY = 58 + m.getY();
+			upY = 58 + m.getY() * 2;
 			
 			if(upY < 58)
 				upY = 58;

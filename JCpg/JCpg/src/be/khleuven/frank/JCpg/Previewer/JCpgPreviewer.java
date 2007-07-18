@@ -62,7 +62,6 @@ public class JCpgPreviewer extends JDialog{
 	private Dimension screensize;
 	
 	private JButton close;
-	private JPanel preview;
 	private JSlider timeslider;
 	
 	private BufferedImage previewBuffered;
@@ -73,7 +72,6 @@ public class JCpgPreviewer extends JDialog{
 	private int currentIndex = 0; // current index for picture array
 	private boolean running = true; // as long as this is true, the preview threads will continue running
 	private int timeslice = 1000; // time between 2 images
-	private boolean indexHasChanged = false;
 	
 	
 	
@@ -169,18 +167,6 @@ public class JCpgPreviewer extends JDialog{
 	}
 	/**
 	 * 
-	 * Get the preview JPanel
-	 * 
-	 * @return
-	 * 		the preview JPanel
-	 */
-	public JPanel getPreview(){
-		
-		return this.preview;
-		
-	}
-	/**
-	 * 
 	 * Get a BufferedImage from the previewed image
 	 * 
 	 * @return
@@ -224,11 +210,6 @@ public class JCpgPreviewer extends JDialog{
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		preview = new JPanel();
-		preview.setBorder(new EtchedBorder());
-		preview.setLayout(new FlowLayout());
-		preview.setOpaque(false);
-		
 		close = new JButton("Close");
 		
 		timeslider = new JSlider(500, 5000);
@@ -254,16 +235,13 @@ public class JCpgPreviewer extends JDialog{
 	 */
 	private void boundComponents(){
 		
-		this.setBounds((int)(screensize.getWidth()/2)-500, (int)(screensize.getHeight()/2)-350, 1000, 700);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setBounds(0, 50, screensize.width, screensize.height - 50);
 		this.setUndecorated(true);
-		this.setBackground(new Color(0, 138, 196));
+		this.setBackground(new Color(0, 0, 0));
 		
-		preview.setBounds(0, 0, 1000, 700);
+		close.setBounds(screensize.width/2 - 50, screensize.height - 150, 100, 30);
 		
-		close.setBounds(450, 660, 100, 30);
-		
-		timeslider.setBounds(570, 660, 300, 20);
+		timeslider.setBounds(screensize.width/2 + 50 + 10, screensize.height - 150, 300, 20);
 	
 	}
 	/**
@@ -273,7 +251,6 @@ public class JCpgPreviewer extends JDialog{
 	 */
 	private void placeComponents(){
 		
-		this.getContentPane().add(preview);
 		this.getContentPane().add(close);
 		this.getContentPane().add(timeslider);
 		this.setVisible(true);
@@ -340,7 +317,7 @@ public class JCpgPreviewer extends JDialog{
 		
 		try {
 			
-			g.drawImage(currentLoadedImage, 500 - currentLoadedImage.getWidth(null)/2, 10, this);
+			g.drawImage(currentLoadedImage, screensize.width/2 - currentLoadedImage.getWidth(null)/2, 10, this);
 			
 			g.dispose();
 			

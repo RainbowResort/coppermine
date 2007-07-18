@@ -203,35 +203,41 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
 					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
+					
 					long filesize = 0;
-	
-					try {
-	
-						filesize = transferer.copyFile(source, destination); // copy picture locally
-						JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName());
-						thumb.makeThumb();
-	
-					} catch (Exception e) {
+					
+					// only copy if the picture is not too big in resolution and in bytes
+					if(image.getIconWidth() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && image.getIconHeight() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && source.length() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_size")) * 1000){
+					
+						try {
+		
+							filesize = transferer.copyFile(source, destination); // copy picture locally
+							JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName());
+							thumb.makeThumb();
+		
+						} catch (Exception e) {
+							
+							System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
+		
+						}
+		
+						Date date = new Date(); // used to get number of seconds since 1970 for ctime
+		
+						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+		
+						picture.addUi(super.getJCpgUIReference());
+		
+						album.addPicture(picture);
+						DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
+						getNode().add(newNode);
+		
+						getGallerySaver().saveGallery(); // save current gallery state
+		
+						SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for java bug 4173369
 						
-						System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
-	
 					}
-	
-					Date date = new Date(); // used to get number of seconds since 1970 for ctime
-	
-					JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
-	
-					picture.addUi(super.getJCpgUIReference());
-	
-					album.addPicture(picture);
-					DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
-					getNode().add(newNode);
-	
-					getGallerySaver().saveGallery(); // save current gallery state
-	
+					
 					progress.changeProgressbarValue(i);
-	
-					SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for java bug 4173369
 					
 				}
 
