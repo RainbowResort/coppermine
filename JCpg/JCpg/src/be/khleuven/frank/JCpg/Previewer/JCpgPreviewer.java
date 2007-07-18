@@ -46,6 +46,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
  * This class will make it possible to preview the pictures in an album.
+ * 
  * @author    Frank Cleynen
  */
 public class JCpgPreviewer extends JDialog{
