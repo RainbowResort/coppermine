@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS CPG_sessions (
 #
 
 CREATE TABLE IF NOT EXISTS `CPG_categorymap` (
-  cid int(11) NOT NULL COMMENT 'Id of the category',
-  group_id int(11) NOT NULL COMMENT 'Id of the group',
+  cid int(11) NOT NULL default '0' COMMENT 'Id of the category',
+  group_id int(11) NOT NULL default '0' COMMENT 'Id of the group',
   PRIMARY KEY  (cid,group_id)
-) ENGINE=MyISAM COMMENT='Holds the categories where groups can create albums';
+) TYPE=MyISAM COMMENT='Holds the categories where groups can create albums';
 # --------------------------------------------------------
 
 
@@ -176,8 +176,8 @@ CREATE TABLE CPG_usergroups (
   group_quota int(11) NOT NULL default '0',
   has_admin_access tinyint(4) NOT NULL default '0',
   can_rate_pictures tinyint(4) NOT NULL default '0',
-  can_tag_pictures tinyint(4) NOT NULL default '0',  
-  can_view_tags tinyint(4) NOT NULL default '0',  
+  can_tag_pictures tinyint(4) NOT NULL default '0',
+  can_view_tags tinyint(4) NOT NULL default '0',
   can_send_ecards tinyint(4) NOT NULL default '0',
   can_post_comments tinyint(4) NOT NULL default '0',
   can_upload_pictures tinyint(4) NOT NULL default '0',
