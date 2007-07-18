@@ -643,3 +643,18 @@ INSERT INTO CPG_config VALUES ('wm_left', '10');
 INSERT INTO CPG_config VALUES ('wm_color', '000000');
 INSERT INTO CPG_config VALUES ('wm_rotation', '0');
 INSERT INTO CPG_config VALUES ('wm_text_font', 'arial.ttf');
+
+ALTER TABLE `CPG_usergroups` ADD `can_tag_pictures` TINYINT(4) DEFAULT '0' NOT NULL;
+ALTER TABLE `CPG_usergroups` ADD `can_view_tags` TINYINT(4) DEFAULT '0' NOT NULL;
+ALTER TABLE `CPG_albums` ADD `owner` INT(11) DEFAULT '1' NOT NULL;
+
+#
+# Table structure for table `CPG_categorymap`
+#
+
+CREATE TABLE IF NOT EXISTS `CPG_categorymap` (
+  cid int(11) NOT NULL default '0' COMMENT 'Id of the category',
+  group_id int(11) NOT NULL default '0' COMMENT 'Id of the group',
+  PRIMARY KEY  (cid,group_id)
+) TYPE=MyISAM COMMENT='Holds the categories where groups can create albums';
+# --------------------------------------------------------
