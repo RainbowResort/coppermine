@@ -204,6 +204,22 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
 					
+					String newFilename = selectedFiles[i].getName().substring(0, selectedFiles[i].getName().length()-4);
+					String extension = selectedFiles[i].getName().substring(selectedFiles[i].getName().length()-3, selectedFiles[i].getName().length());
+					int nr = 0;
+					
+					if(destination.exists()){
+						
+						while(destination.exists()){
+							
+							nr++;
+							newFilename = newFilename + nr;
+							destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + newFilename + "." + extension);
+							
+						}
+						
+					}
+					
 					long filesize = 0;
 					
 					// only copy if the picture is not too big in resolution and in bytes
@@ -212,7 +228,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 						try {
 		
 							filesize = transferer.copyFile(source, destination); // copy picture locally
-							JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName());
+							JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension);				
 							thumb.makeThumb();
 		
 						} catch (Exception e) {
@@ -223,7 +239,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 						Date date = new Date(); // used to get number of seconds since 1970 for ctime
 		
-						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, selectedFiles[i].getName(), (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension, (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
 		
 						picture.addUi(super.getJCpgUIReference());
 		

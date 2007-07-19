@@ -1,3 +1,7 @@
+The picture adder now generates unique filenames when pictures are added which have the same name as previous added pictures
+The UI picturelist is now only updated when the user selects an other album then the currenty selected one
+Fixed a bug were deleted pictures were also always deleted from the UI picturelist also when that picture's album was not the selected one at the time of deletion
+Fixed bug where all UI picturelist elements were deleted when one or more picture were deleted
 Picture adder now only adds pictures that are not to big in resolution / size(bytes)
 Found bug in previwer on Windows and possibly on Linux: black background is not set
 Improved previewer: bigger and black background

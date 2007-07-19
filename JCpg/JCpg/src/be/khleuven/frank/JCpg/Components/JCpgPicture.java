@@ -670,13 +670,21 @@ public class JCpgPicture extends JCpgGallery{
 	 * 
 	 * Delete picture file
 	 * 
+	 * @param jCpgUIReference
+	 * 		the ui reference
+	 * @param album
+	 * 		the album this picture is in
+	 * 
 	 */
-	public void delete(JCpgUI jCpgUIReference){
+	public void delete(JCpgUI jCpgUIReference, JCpgAlbum album){
 		
 		File delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + getFileName());
 		delete.delete();
 		delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
 		delete.delete();
+		
+		if(jCpgUIReference.getCurrentAlbum().equals(album)) // only delete from the picturelist if the currently showing album is this picture's album
+			jCpgUIReference.getPictureListModel().removeElement(this); // delete from picture list
 		
 	}
 	/**

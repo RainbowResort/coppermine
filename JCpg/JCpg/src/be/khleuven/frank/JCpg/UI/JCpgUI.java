@@ -95,6 +95,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JCpgUI globalUi = this; // for threads :s:s
 	
 	private JCpgPicture currentPicture; // the currently selected picture
+	private JCpgAlbum currentAlbum; // the currently selected album
 	
 	private static JCpgGallery gallery = new JCpgGallery("My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
 
@@ -613,6 +614,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.megaExplorerActive;
 		
 	}
+	public JCpgAlbum getCurrentAlbum(){
+		
+		return this.currentAlbum;
+		
+	}
 	
 	
 	
@@ -724,12 +730,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			    	JCpgGallery galleryParent = (JCpgGallery)categoryParentNode.getUserObject();
 			    	
 			    	getGallery().deleteCategory(category);
-			    	category.delete(this); // delete category and all underlying components. Generate DELETE query if needed
+			    	category.delete(this); // delete category and all underlying components.
 			    	node.removeFromParent();
 			    	
 			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-			    	pictureListModel.clear();
-			    	pictureList.removeAll();
+
 			    	explorer.removeAll();
 			    	
 			    }else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
@@ -739,12 +744,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
 			    	
 			    	albumParent.deleteAlbum(album);
-			    	album.delete(this); // delete album and all underlying components. Generate DELETE query if needed
+			    	album.delete(this); // delete album and all underlying components.
 			    	node.removeFromParent();
 			    	
 			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-			    	pictureListModel.clear();
-			    	pictureList.removeAll();
+
 			    	explorer.removeAll();
 			    	
 			    }else if(object.getClass().equals(JCpgPicture.class)){ // leaf is picture
@@ -754,12 +758,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			    	JCpgAlbum pictureParent = (JCpgAlbum)pictureParentNode.getUserObject();
 			    	
 			    	pictureParent.deletePicture(picture);
-			    	picture.delete(this); // delete pictureobject + files. Generate DELETE query if needed
+			    	picture.delete(this, pictureParent); // delete pictureobject + files
 			    	node.removeFromParent();
 			   
 			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-			    	pictureListModel.clear();
-			    	pictureList.removeAll();
+			    	
 			    	explorer.removeAll();
 			    	
 			    }
@@ -982,24 +985,32 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	explorer.removeAll(); // clear explorer
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 	    	
-		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album	
-	    	
-	    	explorer.removeAll(); // clear explorer
-	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
+		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 	    	
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
-	    	pictureListModel.clear();
-	    	pictureListModel.removeAllElements();
 	    	
-	    	for(int i=0; i<album.getPictures().size(); i++){
+	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
 	    		
-	    		pictureListModel.addElement(album.getPictures().get(i));
-	    	
+	    		explorer.removeAll(); // clear explorer
+		    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
+		    	
+		    	currentAlbum = album;
+		    	
+		    	pictureListModel.clear();
+		    	pictureListModel.removeAllElements();
+		    	
+		    	for(int i=0; i<album.getPictures().size(); i++){
+		    		
+		    		pictureListModel.addElement(album.getPictures().get(i));
+		    	
+		    	}
+	    		
 	    	}
 	    	
 	    }else if(object.getClass().equals(JCpgPicture.class)){ // leaf is picture
 	    	
-	    	if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
+	    	if(getMegaExplorerActive())
+	    		changeMegaExplorerActive(false); // exit mega explorer view if needed
 	    	
 	    	currentPicture = (JCpgPicture)node.getUserObject();
 	    	JLabel image = new JLabel();
