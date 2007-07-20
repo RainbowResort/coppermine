@@ -353,6 +353,8 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		preview.setLayout(new FlowLayout());
 		preview.setOpaque(false);
 		
+		image.setBorder(new EtchedBorder());
+		
 		apply = new JButton("Apply");
 		close = new JButton("Close");
 		

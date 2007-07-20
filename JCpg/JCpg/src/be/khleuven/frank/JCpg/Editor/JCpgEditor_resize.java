@@ -27,6 +27,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
@@ -35,6 +37,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -60,10 +63,11 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	private JCpgPictureResizer resizer = new JCpgPictureResizer();
 	
 	private JLabel msg;
+	private JCheckBox constrainProportions;
 	
 	private Rectangle rleft, rup, rright, rdown;
 
-	private boolean selectedLeft = false, selectedRight = false, selectedUp = false, selectedDown = false;
+	private boolean selectedLeft = false, selectedRight = false, selectedUp = false, selectedDown = false, constrainProportionsSelected = true;
 	private int upY = 58, downY = 57 + getPicture().getpHeight(), leftX = getPreviewSize().width/2 - getPicture().getpWidth()/2, rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1;
 	
 																			
@@ -119,7 +123,18 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		msg = new JLabel("Drag the upper or right red line to resize");
 		msg.setBounds(230, 665, 300, 20);
 		
+		constrainProportions = new JCheckBox("Constrain proportions", true);
+		constrainProportions.setBounds(550, 665, 200, 20);
+		constrainProportions.addItemListener(null);
+		
+		constrainProportions.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent arg0) {
+				constrainProportionsStateChanged(arg0);
+			}
+		});
+		
 		this.getContentPane().add(msg);
+		this.getContentPane().add(constrainProportions);
 		
 	}
 	
@@ -254,6 +269,14 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 			
 			upY = 58 + m.getY() * 2;
 			
+			// if we must constrain proportions, also correctly change the width
+			if(constrainProportionsSelected){ 
+				
+				float proportion = (downY - upY) / getPicture().getpHeight();
+				rightX = (int)(getPreviewSize().width/2 - getPicture().getpWidth()/2 + (getPicture().getpWidth() * proportion) - 1);
+				
+			}
+			
 			if(upY < 58)
 				upY = 58;
 			if(upY > downY - 10)
@@ -267,6 +290,15 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		if(selectedRight){
 			
 			rightX = getPreviewSize().width/2 - getPicture().getpWidth()/2 + getPicture().getpWidth() - 1 - (getPicture().getpWidth() - m.getX());
+			
+			// if we must constrain proportions, also correctly change the height
+			if(constrainProportionsSelected){ 
+				
+				float proportion = (rightX - leftX) / getPicture().getpWidth();
+				downY = (int)(57 + (getPicture().getpHeight() * proportion));
+				upY = (int)((57 + (getPicture().getpHeight() - getPicture().getpHeight() * proportion))/2);
+				
+			}
 			
 			if(rightX < leftX + 10)
 				rightX = leftX + 10;
@@ -311,6 +343,18 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		
 		repaint();
 		
+	}
+	
+	
+	
+	private void constrainProportionsStateChanged(ItemEvent arg0) {
+		
+		if(arg0.getStateChange() == ItemEvent.DESELECTED)
+			constrainProportionsSelected = false;
+		
+		if(arg0.getStateChange() == ItemEvent.SELECTED)
+			constrainProportionsSelected = true;
+    	
 	}
 
 }

@@ -25,6 +25,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
@@ -140,7 +142,7 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	        GraphicsConfiguration gc = getDefaultConfiguration();
 	        BufferedImage result = gc.createCompatibleImage(1, 1, Transparency.TRANSLUCENT);
 	        Graphics2D g = result.createGraphics();
-	        g.rotate(Math.toRadians(angle), getPreviewSize().width/2, h/2);
+	        g.rotate(Math.toRadians(angle), getPreviewSize().width/2, h/2+58);
 	        //g.translate((neww-w)/2, (newh-h)/2);
 	        g.drawRenderedImage(image, null);
 	        g.dispose();
@@ -162,18 +164,10 @@ public class JCpgEditor_rotate extends JCpgEditor{
     }
     private void rotate90RightActionPerformed(java.awt.event.ActionEvent evt) {
     	
-    	BufferedImage image = getBufferedPreview();
-    	
-        int w = image.getWidth(), h = image.getHeight();
-        GraphicsConfiguration gc = getDefaultConfiguration();
-        BufferedImage result = gc.createCompatibleImage(image.getHeight(), image.getWidth(), Transparency.TRANSLUCENT);
-        Graphics2D g = result.createGraphics();
-        g.rotate(Math.toRadians(90), w/2, h/2);
-        g.translate(getPreviewSize().width/2, (h)/2 + 59);
-        g.drawRenderedImage(image, null);
-        g.dispose();
+    	AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(90, Math.abs(Math.sin(90))*getBufferedPreview().getHeight(), Math.abs(Math.cos(90))*getBufferedPreview().getWidth()), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    	BufferedImage tempImage = op.filter(getBufferedPreview(), null);
         
-        previewPicture(result);
+        previewPicture(tempImage);
     	
     }
     private void rotate90LeftActionPerformed(java.awt.event.ActionEvent evt) {

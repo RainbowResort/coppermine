@@ -976,11 +976,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    Object object = node.getUserObject();
 	    
 	    // do correct typecasting and actions
-	    if (node == null){
-	    	
-	    	return;
-	    	
-	    }else if(object.getClass().equals(JCpgCategory.class)){ // leaf is category	
+	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category	
 	    
 	    	explorer.removeAll(); // clear explorer
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
@@ -990,20 +986,26 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 	    	
 	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
-	    		
-	    		explorer.removeAll(); // clear explorer
-		    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 		    	
 		    	currentAlbum = album;
-		    	
-		    	pictureListModel.clear();
+
 		    	pictureListModel.removeAllElements();
+		    	
+		    	pictureListModel = new DefaultListModel();
+		    	pictureList = new JList(pictureListModel);
+				pictureList.setBorder(new EtchedBorder());
+				pictureListSelectionModel = pictureList.getSelectionModel();
+				pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
 		    		pictureListModel.addElement(album.getPictures().get(i));
 		    	
 		    	}
+		    	
+		    	getPictureList().setModel(pictureListModel);
+		    	changeMegaExplorerActive();
+		    	changeMegaExplorerActive();
 	    		
 	    	}
 	    	
@@ -1020,6 +1022,35 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	Dimension realSize = new Dimension(currentPicture.getpWidth(), currentPicture.getpHeight());
 	    	image.setPreferredSize(realSize);
 	    	
+	    	// show this picture's album in the picture list
+	    	DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+	    	JCpgAlbum album = (JCpgAlbum)parent.getUserObject();
+
+	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
+		    	
+	    		currentAlbum = album;
+	    		
+	    		pictureListModel.removeAllElements();
+		    	
+		    	pictureListModel = new DefaultListModel();
+		    	pictureList = new JList(pictureListModel);
+				pictureList.setBorder(new EtchedBorder());
+				pictureListSelectionModel = pictureList.getSelectionModel();
+				pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
+		    	
+		    	for(int i=0; i<album.getPictures().size(); i++){
+		    		
+		    		pictureListModel.addElement(album.getPictures().get(i));
+		    	
+		    	}
+		    	
+		    	getPictureList().setModel(pictureListModel);
+		    	changeMegaExplorerActive();
+		    	changeMegaExplorerActive();
+		    	
+	    	}
+	    	
+	    	// update
 	    	explorer.removeAll();
 	    	explorer.add(image);
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
@@ -1202,8 +1233,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(getMegaExplorerActive()){
 			
-			megaPictureView.getViewport().add(pictureList);
-			megaTreeView.getViewport().add(tree);
+			megaPictureView.getViewport().add(getPictureList());
+			megaTreeView.getViewport().add(getTree());
 			
 			pictureView.setVisible(false);
 			splitPane.setVisible(false);
@@ -1220,8 +1251,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			
 		}else{
 
-			pictureView.getViewport().add(pictureList);
-			treeView.getViewport().add(tree);
+			pictureView.getViewport().add(getPictureList());
+			treeView.getViewport().add(getTree());
 			
 			pictureView.setVisible(true);
 			splitPane.setVisible(true);
@@ -1249,6 +1280,21 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	public void changeMegaExplorerActive(boolean megaExplorerActive){
 
 		setMegaExplorerActive(megaExplorerActive);
+		controlMegaExplorerActive();
+		
+	}
+	public void changeMegaExplorerActive(){
+		
+		if(getMegaExplorerActive()){
+			
+			changeMegaExplorerActive(false);
+			
+		}else{
+			
+			changeMegaExplorerActive(true);
+			
+		}
+		
 		controlMegaExplorerActive();
 		
 	}
