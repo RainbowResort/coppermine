@@ -352,10 +352,13 @@ INSERT INTO CPG_config VALUES ('allow_user_move_album', '0');
 INSERT INTO CPG_config VALUES ('allow_user_edit_after_cat_close', '1');
 
 # Watermark configuration
+# Watermark configuration
 INSERT INTO CPG_config VALUES ('wm_text', 'Coppermine Watermarker');
 INSERT INTO CPG_config VALUES ('wm_text_size', '13');
 INSERT INTO CPG_config VALUES ('wm_top', '10');
 INSERT INTO CPG_config VALUES ('wm_left', '10');
 INSERT INTO CPG_config VALUES ('wm_color', '000000');
 INSERT INTO CPG_config VALUES ('wm_rotation', '0');
-INSERT INTO CPG_config VALUES ('wm_text_font', 'arial.ttf');
+INSERT INTO CPG_config VALUES ('wm_font', 'LiberationSans-Regular.ttf');
+INSERT INTO CPG_config VALUES ('wm_what', 'text');
+INSERT INTO CPG_config VALUES ('wm_image_url', '');

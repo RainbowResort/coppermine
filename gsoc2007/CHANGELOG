@@ -25,6 +25,9 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+2007-07-23 [C] Changed a lot of the code in the watermaker {SaWey}
+2007-07-23 [A] Added image watermark capability {SaWey}
+2007-07-23 [B] Fixed a lot of bugs from the working part of the watermarker {SaWey}
 2007-07-16 [B] Fixed error when changing album properties {SaWey}
 2007-07-16 [B] Fixed users not seeing their albums when uploading pics {SaWey}
 2007-07-16 [B] Fixed users not being able to edit their albums (typo in code){SaWey}

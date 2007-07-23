@@ -21,7 +21,7 @@
 * Coppermine Photo Gallery 1.5.0 watermarker.php
 *
 * This file is the is used for configuring the watermark function,
-* also see documentation for this file's {@relativelink ../_watermarker.php.php Free Standing Code}
+* also see documentation for this file {@relativelink ../_watermarker.php.php Free Standing Code}
 *
 * @copyright 2002-2006 Gregory DEMAR, Coppermine Dev Team
 * @license http://opensource.org/licenses/gpl-license.php GNU General Public License V2
@@ -54,7 +54,10 @@ switch($_GET['action']){
 		$left = $CONFIG['wm_left'];
 		$color = $CONFIG['wm_color'];
 		$rotation = $CONFIG['wm_rotation'];
-		$flashvars = "      <param name=\"flashvars\" value=\"p_text=$text&p_size=$size&p_left=$left&p_top=$top&p_rotation=$rotation&p_color=$color\" />";
+		$what = $CONFIG['wm_what'];
+		$image_url = $CONFIG['wm_image_url'];
+		$font = $CONFIG['wm_font'];
+		$flashvars = "      <param name=\"flashvars\" value=\"p_text=$text&p_size=$size&p_left=$left&p_top=$top&p_rotation=$rotation&p_color=$color&p_font=$font&p_what=$what&p_image_url=$image_url\" />";
 		
 		//print flash-app via javascirpt
 		echo "<script language=\"javascript\" type=\"text/javascript\" src=\"./watermarker/watermarker.js\"></script>";
@@ -67,6 +70,16 @@ switch($_GET['action']){
 		//show preview image
 		//check which image-editor to use
 		global $CONFIG;
+		isset($_GET['what']) ? $what = $_GET['what'] : $what = $CONFIG['wm_what'];
+		isset($_GET['image_url']) ? $image_url = $_GET['image_url'] : $image_url = $CONFIG['wm_image_url'];
+		isset($_GET['size']) ? $fontSize = $_GET['size'] - 1 : $fontSize = $CONFIG['wm_text_size'];
+		isset($_GET['top']) ? $top = $_GET['top'] : $top = $CONFIG['wm_top'];
+		isset($_GET['left']) ? $left = $_GET['left'] : $left = $CONFIG['wm_left'];
+		isset($_GET['text']) ? $text = $_GET['text'] : $text = $CONFIG['wm_text'];
+		isset($_GET['rotation']) ? $font_rotation = $_GET['rotation'] : $font_rotation = $CONFIG['wm_rotation'];
+		isset($_GET['color']) ? $c = $_GET['color'] : $c = $CONFIG['wm_color'];
+		isset($_GET['font']) ? $font = $_GET['font'] : $font = $CONFIG['wm_font'];
+		$font_rotation = 360 - $font_rotation ;
 		switch($CONFIG['thumb_method']){
 			case "im":
 
@@ -75,26 +88,59 @@ switch($_GET['action']){
 				
 				break;
 			case "gd2":
-				isset($_GET['size']) ? $fontSize = $_GET['size'] : $fontSize = $CONFIG['wm_text_size'];
-				isset($_GET['top']) ? $top = $_GET['top'] : $top = $CONFIG['wm_top'];
-				isset($_GET['left']) ? $left = $_GET['left'] : $left = $CONFIG['wm_left'];
-				isset($_GET['text']) ? $text = $_GET['text'] : $text = $CONFIG['wm_text'];
-				isset($_GET['rotation']) ? $font_rotation = $_GET['rotation'] : $font_rotation = $CONFIG['wm_rotation'];
-				isset($_GET['color']) ? $c = $_GET['color'] : $c = $CONFIG['wm_color'];
-				$font_rotation = 360 - $font_rotation ;
-				$image = imagecreatefromjpeg("img.jpg");
-				$font = './arial.ttf';
-				$front_color = imagecolorallocate($image, hexdec(substr($c,0,2)), hexdec(substr($c,2,2)), hexdec(substr($c,4,2)));
-				//creates a bottom layer for readability
-				//$bottom_color = imagecolorallocate($image, 0x66, 0x66, 0x66);
-				//imagettftext($image, $fontSize, $font_rotation, $left, $top, $bottom_color, $font, $text);
+				//image or text watermark
+				if($what == "text"){
+					//watermarl with image
+					$image = imagecreatefromjpeg("img.jpg");
+					$font = $font . '.ttf';
+					$front_color = imagecolorallocate($image, hexdec(substr($c,0,2)), hexdec(substr($c,2,2)), hexdec(substr($c,4,2)));
+					//creates a bottom layer for readability
+					//$bottom_color = imagecolorallocate($image, 0x66, 0x66, 0x66);
+					//imagettftext($image, $fontSize, $font_rotation, $left, $top, $bottom_color, $font, $text);
+	
+					//creates the front layer
+					imagettftext($image, $fontSize, $font_rotation, $left, $top, $front_color, $font, $text);
+					header("Content-Type: image/PNG");
+					imagejpeg($image);
+					imagedestroy($image);
+					break;
+				}else{
+					//watermark with image
+					$watermark = imagecreatefromjpeg($image_url);
+					$rot = $font_rotation;
+					$dest_x = $left;
+					$dest_y = $top;
+					$watermark_width = imagesx($watermark);
+					$watermark_height = imagesy($watermark);
+					//check rotation (only possible to use 0, 90, 180 & 270)
+					if($rot > 225 && $rot < 315){
+						$watermark = imagerotate($watermark, 270, 0);
+						$dest_x -= $watermark_height;
+					}else if(($rot >= 180 && $rot < 225)||($rot > 495 && $rot < 540)){
+						$watermark = imagerotate($watermark, 180, 0);
+						$dest_x -= $watermark_width;
+						$dest_y -= $watermark_height;
+					}else if($rot > 405 && $rot < 495){
+						$watermark = imagerotate($watermark, 90, 0);
+						$dest_y -= $watermark_width;
+					}
 
-				//creates the front layer
-				imagettftext($image, $fontSize, $font_rotation, $left, $top, $front_color, $font, $text);
-				header("Content-Type: image/PNG");
-				imagejpeg($image);
-				imagedestroy($image);
-				break;
+					$watermark_width = imagesx($watermark);
+					$watermark_height = imagesy($watermark);
+					
+					$image = imagecreatefromjpeg("img.jpg");
+					
+					imagecopymerge($image, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height, 100);
+					header("Content-Type: image/PNG");
+					imagejpeg($image);
+					imagedestroy($image);
+					
+					
+					
+					
+					
+					
+				}
 		}
 		break;
 	case "save":
@@ -106,6 +152,12 @@ switch($_GET['action']){
 		$wm['text'] = $_GET['text'] ;
 		$wm['rotation'] = $_GET['rotation'] ;
 		$wm['color'] = $_GET['color'];
+		$wm['font'] = $_GET['font'];
+		$wm['what'] = $_GET['what'];
+		if($_GET['image_url'] != "" && $_GET['image_url'] != "undefined"){
+			$wm['image_url'] = $_GET['image_url'];
+		}
+		
 		global $CONFIG;
 		global $lang_watermarker_php;
 		pageheader($lang_watermarker_php['title']);
@@ -125,7 +177,7 @@ switch($_GET['action']){
 		$dh = opendir($path);
 		$vars="fonts=";
 		while (($file = readdir($dh)) !== false) {
-			if($file != "." && $file != ".." && substr($file, strlen($file) - 4) == '.ttf') {
+			if($file != "." && $file != ".." && (substr($file, strlen($file) - 4) == '.ttf'  || substr($file, strlen($file) - 4) == '.TTF')) {
 				$vars .= substr($file, 0, strlen($file) - 4) . "/";
 			}
 		}
