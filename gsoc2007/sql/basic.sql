@@ -154,6 +154,7 @@ INSERT INTO CPG_config VALUES ('display_thumbnail_rating', '0');
 INSERT INTO CPG_config VALUES ('thumbnail_to_fullsize', '0');
 INSERT INTO CPG_config VALUES ('global_registration_pw','');
 INSERT INTO CPG_config VALUES ('silly_safe_mode', '0');
+INSERT INTO CPG_config VALUES ('owner_can_tag', '1');
 ###### watermark ########
 INSERT INTO CPG_config (name, value) values ('enable_watermark', '0');
 INSERT INTO CPG_config (name, value) values ('where_put_watermark', 'southeast');

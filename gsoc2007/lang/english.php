@@ -766,6 +766,7 @@ if (defined('ADMIN_PHP')) $lang_admin_data = array(
   array('Count hits in slideshow', 'slideshow_hits', 1, 'f=configuration.htm&amp;as=admin_image_slideshow_hits&amp;ae=admin_image_slideshow_hits_end'),
   array('Allow Flash in Ecards (not recommended)', 'ecard_flash', 1, 'f=configuration.htm&amp;as=admin_image_ecard_flash_start&amp;ae=admin_image_ecard_flash_end'), // cpg1.5.x
   array('Insert a transparent overlay to minimize image theft', 'transparent_overlay', 1, 'f=configuration.htm&amp;as=admin_image_transparent_overlay_start&amp;ae=admin_image_transparent_overlay_end'), // cpg1.5.x
+  array('Allow Owner to Tag Photos','owner_can_tag',1,'f=configuration.htm&amp;as=admin_owner_can_tag_start&amp;ae=admin_owner_can_tag_end'),
 
   'Comment settings',
   array('Filter bad words in comments', 'filter_bad_words', 1, 'f=configuration.htm&amp;as=admin_image_comment_bad_words&amp;ae=admin_image_comment_bad_words_end'),

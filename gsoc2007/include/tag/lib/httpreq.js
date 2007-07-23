@@ -14,7 +14,7 @@ function annotate_request(data, note){
     }
 
 	httpRequest.onreadystatechange = function() { callback(httpRequest, note); };
-    httpRequest.open('POST', 'index.php?file=annotate/reqserver', true);
+    httpRequest.open('POST', 'include/tag/reqserver.php', true);
     httpRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
     httpRequest.send(data);
 

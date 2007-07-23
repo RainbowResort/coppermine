@@ -52,8 +52,13 @@ function annotate_file_data($CURRENT_PIC_DATA){
         {
                 if(in_array($user_group,$allowed_groups))
                 {
-                        $allowed = true;
+                        $allowed = 'all';
                 }  
+        }
+        
+        if($CONFIG['owner_can_tag'] && $CURRENT_PIC_DATA['owner_id']==$USER_DATA['user_id'])
+        {
+          $allowed = 'all';
         }
         
         if(!$allowed) {
@@ -71,7 +76,7 @@ function annotate_file_data($CURRENT_PIC_DATA){
         {
                 return $CURRENT_PIC_DATA;
         }
-        
+                
 	if (is_image($CURRENT_PIC_DATA['filename'])){
 
 		$sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$CURRENT_PIC_DATA['pid']}";
@@ -91,7 +96,7 @@ function annotate_file_data($CURRENT_PIC_DATA){
 
     
 
-		if (USER_ID && $allowed != 'view_only'){
+		if ($allowed != 'view_only'){
 			
 		$html .= <<< EOT
 		
