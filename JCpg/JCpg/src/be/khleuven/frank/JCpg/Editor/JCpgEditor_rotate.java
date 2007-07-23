@@ -45,6 +45,11 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  */
 public class JCpgEditor_rotate extends JCpgEditor{
 
+	
+															
+															//*************************************
+															//				VARIABLES             *
+															//*************************************
 	private JButton rotate90Right;
 	private JButton rotate90Left;
 	private JLabel customLabel;
@@ -53,6 +58,11 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	
 	
 	
+	
+															
+															//*************************************
+															//				CONSTRUCTOR           *
+															//*************************************
 	/**
 	 * 
 	 * Makes a new JCpgEditor_rotate object
@@ -75,6 +85,11 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	}
 	
 	
+	
+															
+															//*************************************
+															//				SWING	              *
+															//*************************************
 	/**
 	 * 
 	 * Do extra swing stuff specifically for the add picture window: we need a browe button so the user can choose a picture
@@ -125,6 +140,10 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	
 	
 	
+															
+															//*************************************
+															//				MUTATORS & OTHERS     *
+															//*************************************
 	/**
 	 * 
 	 * Do the rotate effect

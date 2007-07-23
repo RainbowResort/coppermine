@@ -20,12 +20,14 @@ package be.khleuven.frank.JCpg.UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -90,6 +92,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//				VARIABLES             *
 																	//*************************************
 	private static final long serialVersionUID = 1L;
+	
+	MediaTracker tracker; // mediatracker to track image load status
 	
 	private JCpgConfig cpgConfig;
 	private JCpgUI globalUi = this; // for threads :s:s
@@ -211,6 +215,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		this.setLayout(null);
 		super.setName("JCpg");
+		
+		tracker = new MediaTracker(this);
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -999,7 +1005,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
-		    		pictureListModel.addElement(album.getPictures().get(i));
+		    		try {
+		    		
+		    			String path = getCpgConfig().getSiteConfig().getValueFor("fullpath") + album.getPictures().get(i).getFilePath() + "thumb_" + album.getPictures().get(i).getFileName();
+		    		
+		    			tracker.addImage(new ImageIcon(path).getImage(), 0);
+		    		
+						tracker.waitForAll();
+						
+						pictureListModel.addElement(album.getPictures().get(i));
+						
+					} catch (InterruptedException e1) {
+						
+						System.out.println("JCpgUI: couldn't track image");
+						
+					}
+		    		
+		    		
 		    	
 		    	}
 		    	

@@ -1,17 +1,18 @@
+Added mediatracker to properly handy the loading of an image
 Fixed bug found by Aditya: The top panel retains the old images when I click on other album and ends up showing images from both the albums.
 Fixed bug found by Aditya: When I expand the album tree on the LHS and click on directly on the image name then the full size image gets displayed correctly on RHS but the other panel which opens at the top is blank. This panel should display all the images from the selected image's album.
 The picture adder now generates unique filenames when pictures are added which have the same name as previous added pictures
 The UI picturelist is now only updated when the user selects an other album then the currenty selected one
-Fixed a bug were deleted pictures were also always deleted from the UI picturelist also when that picture's album was not the selected one at the time of deletion
+Fixed a bug were deleted pictures were also always deleted from the UI picturelist when that picture's album was not the selected one at the time of deletion
 Fixed bug where all UI picturelist elements were deleted when one or more picture were deleted
 Picture adder now only adds pictures that are not to big in resolution / size(bytes)
-Found bug in previwer on Windows and possibly on Linux: black background is not set
+Found bug in previewer on Windows and possibly on Linux: black background is not set
 Improved previewer: bigger and black background
 Fixed minor bug in resizer where the upper handler wouldn't follow the mousemovements correctly
 Resizer now uses handlers which can be dragged by the mouse to resize the picture
 Using JLabels to hold images instead of JButtons. This dramaticly improves drawing speeds in the UI and editors
 Fixed bug in Previewer where on some platforms (Windows and Linux) the picture would flicker all the time
-Improved memory usage of thge previewer and the picture editors
+Improved memory usage of the previewer and the picture editors
 When editing, the currently showing picture is used, not the picture selected in the tree
 When selecting a picture in the tree, JCpg is also exiting mega explorer view
 Started the development of a menu from where all the API functions can be accessed
