@@ -20,6 +20,8 @@ package be.khleuven.frank.JCpg.UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -228,6 +230,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureList.setBorder(new EtchedBorder());
 		pictureListSelectionModel = pictureList.getSelectionModel();
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
+		pictureList.setLayout(new FlowLayout());
+		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
 		
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
@@ -620,6 +624,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.megaExplorerActive;
 		
 	}
+	/**
+	 * 
+	 * Get the current album
+	 * 
+	 * @return
+	 * 		the current album
+	 */
 	public JCpgAlbum getCurrentAlbum(){
 		
 		return this.currentAlbum;
@@ -905,9 +916,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * 
 	 */
 	private void edit_rotateActionPerformed(java.awt.event.ActionEvent evt) {
-		
+		System.out.println("here");
 		if(currentPicture != null){
-		
+			
 			new JCpgEditor_rotate(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
@@ -974,7 +985,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * 
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
-		
+		System.out.println(currentPicture);
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 	    
 	    if(node == null) return;
@@ -984,24 +995,15 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    // do correct typecasting and actions
 	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category	
 	    
-	    	explorer.removeAll(); // clear explorer
-	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
-	    	
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 	    	
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 	    	
 	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
-		    	
+	    		
 		    	currentAlbum = album;
 
-		    	pictureListModel.removeAllElements();
-		    	
-		    	pictureListModel = new DefaultListModel();
-		    	pictureList = new JList(pictureListModel);
-				pictureList.setBorder(new EtchedBorder());
-				pictureListSelectionModel = pictureList.getSelectionModel();
-				pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
+		    	resetPictureList();
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
@@ -1052,13 +1054,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		    	
 	    		currentAlbum = album;
 	    		
-	    		pictureListModel.removeAllElements();
-		    	
-		    	pictureListModel = new DefaultListModel();
-		    	pictureList = new JList(pictureListModel);
-				pictureList.setBorder(new EtchedBorder());
-				pictureListSelectionModel = pictureList.getSelectionModel();
-				pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
+	    		resetPictureList();
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
@@ -1269,8 +1265,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			edit_resize.setVisible(false);
 			edit_colorcorrection.setVisible(false);
 			
-			//pictureList.setVisibleRowCount(3);
-			
 		}else{
 
 			pictureView.getViewport().add(getPictureList());
@@ -1286,8 +1280,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			edit_crop.setVisible(true);
 			edit_resize.setVisible(true);
 			edit_colorcorrection.setVisible(true);
-			
-			//pictureList.setVisibleRowCount(1);
 			
 		}
 		
@@ -1318,6 +1310,30 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		}
 		
 		controlMegaExplorerActive();
+		
+	}
+	/**
+	 * 
+	 * Completely refreshes the picture list to avoid double showing of pictures
+	 *
+	 */
+	public void resetPictureList(){
+		
+		pictureListModel.removeAllElements();
+    	
+    	pictureListModel = new DefaultListModel();
+    	pictureList = new JList(pictureListModel);
+		pictureList.setBorder(new EtchedBorder());
+		pictureListSelectionModel = pictureList.getSelectionModel();
+		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
+		pictureList.setLayout(new FlowLayout());
+		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
+		
+		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                pictureListValueChanged(evt);
+            }
+        });
 		
 	}
 	

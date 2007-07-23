@@ -1,3 +1,7 @@
+Fixed a bug where selecting a picture in the picture list did not properly triggered a selection
+The 'contrain proportions' has been temporary disabled
+Resize handlers are made bigger and are better responsing the mouse movements
+Added 'constrain proportions' option in the resizer. There are still some problems with the handler
 Added mediatracker to properly handy the loading of an image
 Fixed bug found by Aditya: The top panel retains the old images when I click on other album and ends up showing images from both the albums.
 Fixed bug found by Aditya: When I expand the album tree on the LHS and click on directly on the image name then the full size image gets displayed correctly on RHS but the other panel which opens at the top is blank. This panel should display all the images from the selected image's album.

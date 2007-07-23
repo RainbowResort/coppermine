@@ -102,14 +102,14 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
-
+    	label.setSize(picture.getpWidth(), picture.getpHeight());
         // determine grid position
         gblc.gridx = index % 10;
         gblc.gridy = getDeler(index, 10);
-    	
+    	System.out.println("index: " + index + " x: " + index % 10 + " y: " + getDeler(index, 10));
     	this.add(label, gblc);
         
-        return this;
+        return label;
         
     }
     
