@@ -1084,7 +1084,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    }
 	    
 	    SwingUtilities.updateComponentTreeUI(getPictureList()); // workaround for Java bug 4173369
-	    SwingUtilities.updateComponentTreeUI(getPictureList()); // workaround for Java bug 4173369
 	    
 	}
 	

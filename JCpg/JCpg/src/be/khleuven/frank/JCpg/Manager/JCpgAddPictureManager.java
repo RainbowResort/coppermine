@@ -206,7 +206,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					// make new picture
 					ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
 					File source = new File(selectedFiles[i].getAbsolutePath());
-					String userdir = 1000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
+					String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
 					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
 					

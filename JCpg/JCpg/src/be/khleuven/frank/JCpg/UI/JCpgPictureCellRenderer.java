@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
@@ -103,16 +104,28 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
     	label.setSize(picture.getpWidth(), picture.getpHeight());
-        // determine grid position
+        
+    	// determine grid position
         gblc.gridx = index % 10;
         gblc.gridy = getDeler(index, 10);
-    	System.out.println("index: " + index + " x: " + index % 10 + " y: " + getDeler(index, 10));
+    	
+        System.out.println("index: " + index + " x: " + index % 10 + " y: " + getDeler(index, 10));
     	this.add(label, gblc);
-        
+    	
         return this;
         
     }
-    
+    /**
+     * 
+     * Used to determine the Y value in the picture list for a particular cell
+     * 
+     * @param source
+     * 		index of the list item
+     * @param cutoff
+     * 		number of cells in one row
+     * @return
+     * 		the y value for this cell based on the index and cutoff
+     */
     private int getDeler(int source, int cutoff){
     	
     	int count = 0;
