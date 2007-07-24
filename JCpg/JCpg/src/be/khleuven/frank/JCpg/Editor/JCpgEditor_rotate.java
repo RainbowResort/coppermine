@@ -167,7 +167,6 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	        g.dispose();
 	        
 	        
-	        
 	        previewPicture(result);
 	        
 	   }     

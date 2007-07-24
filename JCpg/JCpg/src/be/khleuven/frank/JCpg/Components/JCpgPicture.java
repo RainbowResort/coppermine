@@ -759,5 +759,14 @@ public class JCpgPicture extends JCpgGallery{
 		setpHeight(pheight);
 		
 	}
+	public void generateParameters(){
+		
+		if(getId() == -1){ // picture not yet in db -> insert parameters
+			
+		}else{
+//			 update
+		}
+		
+	}
 	
 }
