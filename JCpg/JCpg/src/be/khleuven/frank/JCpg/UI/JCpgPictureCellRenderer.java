@@ -60,7 +60,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         this.setLayout(gbl); // we will use the grid layout
         this.removeAll();
         
-        gblc.fill = GridBagConstraints.HORIZONTAL;
+        gblc.fill = GridBagConstraints.BOTH;
         gblc.insets = new Insets(10,10,10,10);
         gblc.weighty = 1;
         gblc.weightx = 1;
@@ -109,7 +109,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	System.out.println("index: " + index + " x: " + index % 10 + " y: " + getDeler(index, 10));
     	this.add(label, gblc);
         
-        return label;
+        return this;
         
     }
     

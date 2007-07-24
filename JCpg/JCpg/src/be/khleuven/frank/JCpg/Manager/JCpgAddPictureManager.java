@@ -184,8 +184,14 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	* 
 	*/
 	public void createActionPerformed(java.awt.event.ActionEvent evt) {
-				
-		JCpgAlbum album = (JCpgAlbum) getNode().getUserObject();	
+		
+		// check if albums dir exists for this user and create it if needed
+		File useralbumdir = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + 1000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/");
+		if(!useralbumdir.exists())
+			useralbumdir.mkdirs();
+		
+		// add pictures to album and transfer them locally
+		JCpgAlbum album = (JCpgAlbum)getNode().getUserObject();	
 
 		File[] selectedFiles = pictureChooser.getSelectedFiles();
 
@@ -200,7 +206,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					// make new picture
 					ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
 					File source = new File(selectedFiles[i].getAbsolutePath());
-					String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
+					String userdir = 1000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
 					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
 					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
 					

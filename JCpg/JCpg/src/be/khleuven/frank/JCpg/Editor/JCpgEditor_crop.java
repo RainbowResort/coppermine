@@ -73,8 +73,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	private int rx;
 	private int ry;
 	
-	private int LEFT = getPreviewSize().width/2-getPicture().getpWidth()/2; // photo bounderies
-	private int UP = 59;
+	private int LEFT = getImageLabel().getLocation().x; // photo bounderies
+	private int UP = getImageLabel().getLocation().y + 50;
 	private int RIGHT = LEFT + getPicture().getpWidth();
 	private int DOWN = UP + getPicture().getpHeight();
 	
@@ -170,6 +170,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		
 		crop = new Rectangle(rwidth, rheight);
 		
+		
 		// we introduce a thread to continiously draw the black rectangles around the crop rectangle, otherwhise sometimes these will disappear
 		Thread t1 = new Thread(new Runnable() {
 			
@@ -212,10 +213,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         
         g2.setPaint(Color.black);
         
-        g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
-        g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
-        g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
-        g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
+        //g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
+        //g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
+        //g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
+        //g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
         
         g2.dispose();
         
@@ -273,6 +274,9 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
             
 			running = false; // stop repaint thread
+			
+			getJCpgUI().changeMegaExplorerActive();
+			getJCpgUI().changeMegaExplorerActive();
 			
             getJCpgUI().setEnabled(true);
             this.dispose();

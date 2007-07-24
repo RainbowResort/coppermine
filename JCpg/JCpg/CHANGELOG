@@ -1,3 +1,7 @@
+Improved the user of the gridbag layout in the picturelist where before there where some refreshing problems showing a lot of parts of pictures
+Fixed bug found by Aditya: When I execute the jar file for the very first time, is it supposed to create the albums/userpics/ folder on its own? If yes, then it is not creating it
+Fixed bug when deleting an album directly made in the gallery where there was a wrong typecasting of the parent node
+Disabled to thread which repaints the black area in the crop editor. This keeps giving problems on Windows and Linux and there's is just no other way to draw this black area
 Fixed a bug where selecting a picture in the picture list did not properly triggered a selection
 The 'contrain proportions' has been temporary disabled
 Resize handlers are made bigger and are better responsing the mouse movements

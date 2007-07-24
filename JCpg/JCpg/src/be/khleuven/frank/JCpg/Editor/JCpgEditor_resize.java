@@ -166,7 +166,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 * Perform the right actions when the user presses the 'Apply' button. Save the current buffered image to the right file.
 	 * Custom for resize: save new image size
 	 * 
-	 */	
+	 */
 	public ImageIcon performEdit() {
 		
 		// change picture size information
@@ -219,7 +219,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         rright = new Rectangle(rightX, upY - (upY - 58)/2, 5, downY - upY); // right, -1 because else we are just out of the picture
         rleft = new Rectangle(leftXbase, upY - (upY - 58)/2, 5, downY - upY); // left
         rup = new Rectangle(leftX, upY - (upY - 58)/2, rightX - leftX, 5); // up
-        rdown = new Rectangle(leftXbase, downY - (upY - 58)/2, rightX - leftX, 5); // down, -1 because else we are just out of the picture
+        rdown = new Rectangle(leftXbase, downY - (upY - 58)/2, rightX - leftX + 5, 5); // down, -1 because else we are just out of the picture
         
         // draw in correct color: red = not selected, white = selected  	
         g2.setPaint(Color.red);
@@ -267,7 +267,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		// drag up line
 		if(selectedUp){
 			
-			upY = getImageLabel().getLocation().y + 50 + m.getY();
+			upY = m.getY();
 			
 			// if we must constrain proportions, also correctly change the width
 			if(constrainProportionsSelected){ 

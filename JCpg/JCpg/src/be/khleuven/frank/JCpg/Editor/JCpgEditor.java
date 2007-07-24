@@ -481,6 +481,9 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 			//getJCpgUI().getPictureList().remove(getListIndex()); // do correct refresh
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
 			
+			getJCpgUI().changeMegaExplorerActive();
+			getJCpgUI().changeMegaExplorerActive();
+			
             getJCpgUI().setEnabled(true);
             this.dispose();
             

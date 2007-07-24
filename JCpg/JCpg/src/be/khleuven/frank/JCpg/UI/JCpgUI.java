@@ -758,7 +758,15 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			    	
 			    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 			    	DefaultMutableTreeNode albumParentNode = (DefaultMutableTreeNode)node.getParent();
-			    	JCpgCategory albumParent = (JCpgCategory)albumParentNode.getUserObject();
+			    	
+			    	Object parentObject = albumParentNode.getUserObject();
+			    	
+			    	JCpgGallery albumParent = null;
+			    	
+			    	if(parentObject.getClass().equals(JCpgCategory.class))
+			    		albumParent = (JCpgCategory)albumParentNode.getUserObject();
+			    	if(parentObject.getClass().equals(JCpgGallery.class))
+			    		albumParent = (JCpgGallery)albumParentNode.getUserObject();
 			    	
 			    	albumParent.deleteAlbum(album);
 			    	album.delete(this); // delete album and all underlying components.
@@ -985,7 +993,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * 
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
-		System.out.println(currentPicture);
+		
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 	    
 	    if(node == null) return;
@@ -1074,7 +1082,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 	    	
 	    }
-
+	    
+	    SwingUtilities.updateComponentTreeUI(getPictureList()); // workaround for Java bug 4173369
+	    SwingUtilities.updateComponentTreeUI(getPictureList()); // workaround for Java bug 4173369
+	    
 	}
 	
 	
