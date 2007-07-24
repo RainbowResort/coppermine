@@ -111,9 +111,19 @@ if ($search_string && isset($_GET['params'])) {
                         starttable('100%', $lang_meta_album_names['album_search'],2);
                         while($alb = mysql_fetch_array($result,MYSQL_ASSOC))
                         {
+                                $thumb_query = "SELECT filename, url_prefix, pwidth, pheight FROM `{$CONFIG['TABLE_PICTURES']}` WHERE (`aid` = '{$alb['aid']}') ORDER BY `pid` DESC";
+                                $thumb_result = cpg_db_query($thumb_query);
+                                $thumb = mysql_fetch_array($thumb_result);
+                                $thumb_url = get_pic_url($thumb, 'thumb');
+                                $thumb_size = compute_img_size($thumb['pwidth'], $thumb['pheight'], $CONFIG['alb_list_thumb_size'], true, 'cat_thumb');
                                 ?>
                                 <tr>
-                                <td width="40%"><a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> <?php echo $alb['title']; ?> </a></td>
+                                <td width="40%">
+                                
+                                <a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> 
+                                  <img src="<?php echo $thumb_url?>"  class="image" <?php echo $image_size['geom'] ?> border="0" alt="<?php echo $picture['filename'] ?>">
+                                  <?php echo $alb['title']; ?> 
+                                </a></td>
                                         <td><?php if ($alb['description'] == "") { echo '&nbsp;'; }else { echo $alb['description']; } ?></td>
                                         </tr>
                                         <?php
