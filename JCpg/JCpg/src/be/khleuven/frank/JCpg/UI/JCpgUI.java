@@ -23,6 +23,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.MediaTracker;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -144,8 +145,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JMenuBar menubar;
 	private JMenu menu, api, config, users, groups;
 	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
-	
-	
+
 	
 	
 	
@@ -228,9 +228,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureListModel = new DefaultListModel();
 		pictureList = new JList(pictureListModel);
 		pictureList.setBorder(new EtchedBorder());
-		pictureListSelectionModel = pictureList.getSelectionModel();
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
-		pictureList.setLayout(new FlowLayout());
+		pictureListSelectionModel = pictureList.getSelectionModel();
 		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
 		
 		pictureView = new JScrollPane(pictureList);
@@ -1336,7 +1335,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureList.setBorder(new EtchedBorder());
 		pictureListSelectionModel = pictureList.getSelectionModel();
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
-		pictureList.setLayout(new FlowLayout());
 		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
 		
 		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {

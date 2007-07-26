@@ -25,8 +25,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -36,16 +34,16 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Resize.JCpgPictureResizer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
+
+import com.jme.scene.shape.Sphere;
 
 
 /**
@@ -65,7 +63,8 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	private JLabel msg;
 	private JCheckBox constrainProportions;
 	
-	private Rectangle rleft, rup, rright, rdown;
+	private Rectangle rleft, rup, rright, rdown; // lines
+	private Rectangle sleft, sup, sright, sdown; // selection blocks
 
 	private boolean selectedRight = false, selectedUp = false, constrainProportionsSelected = false;
 	private int upYbase = getImageLabel().getLocation().y + 50, downYbase = getImageLabel().getLocation().y + 50 + getPicture().getpHeight() - 5, leftXbase = getImageLabel().getLocation().x, rightXbase = getImageLabel().getLocation().x + getPicture().getpWidth() - 5;
@@ -176,7 +175,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		try {
 			
 			Image image = getTransformer().toImage(getBufferedPreview());
-			Dimension newDimension = new Dimension(rightX - leftX, downY - upY);
+			Dimension newDimension = new Dimension(rightX - leftX, (downY - upY) / 2);
 				
 			image = resizer.resize(image, newDimension);
 			
@@ -221,6 +220,11 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         rup = new Rectangle(leftX, upY - (upY - 58)/2, rightX - leftX, 5); // up
         rdown = new Rectangle(leftXbase, downY - (upY - 58)/2, rightX - leftX + 5, 5); // down, -1 because else we are just out of the picture
         
+        sright = new Rectangle(rightX - 2, 50 + getImageLabel().getLocation().y + getPicture().getpHeight()/2 - 3, 10, 10);
+        sleft = new Rectangle(leftX - 2, 50 + getImageLabel().getLocation().y + getPicture().getpHeight()/2 - 3, 10, 10);
+        sup = new Rectangle((rightX - leftX) / 2 + leftXbase, upY - (upY - 58)/2 - 2, 10, 10);
+        sdown = new Rectangle((rightX - leftX) / 2 + leftXbase, downY - (upY - 58)/2 - 2, 10, 10);
+        
         // draw in correct color: red = not selected, white = selected  	
         g2.setPaint(Color.red);
         g2.fill(rleft);
@@ -228,29 +232,40 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         g2.setPaint(Color.red);
         g2.fill(rdown);
         
+        g2.setPaint(Color.red);
+        g2.fill(rup);
+
+        g2.setPaint(Color.red);
+        g2.fill(rright);
+        
+        // draw selection blocks
         if(selectedUp){
         	
         	g2.setPaint(Color.white);
-        	g2.fill(rup);
+        	g2.fill(sup);
         	
         }else{
         	
         	g2.setPaint(Color.red);
-        	g2.fill(rup);
+        	g2.fill(sup);
         	
         }
         
         if(selectedRight){
         	
         	g2.setPaint(Color.white);
-        	g2.fill(rright);
+        	g2.fill(sright);
         	
         }else{
         	
         	g2.setPaint(Color.red);
-        	g2.fill(rright);
+        	g2.fill(sright);
         	
         }
+
+        g2.setPaint(Color.red);
+        g2.fill(sleft);
+        g2.fill(sdown);
         
         g2.dispose();
         
@@ -267,7 +282,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		// drag up line
 		if(selectedUp){
 			
-			upY = m.getY();
+			upY = m.getY() * 2;
 			
 			// if we must constrain proportions, also correctly change the width
 			if(constrainProportionsSelected){ 
@@ -326,13 +341,13 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		
 		// check if mouse is over one of the lines
 		// up
-		if(rup.contains(p))
+		if(sup.contains(p))
 			selectedUp = true;
 		else
 			selectedUp = false;
 		
 		// right
-		if(rright.contains(p))
+		if(sright.contains(p))
 			selectedRight = true;
 		else
 			selectedRight = false;

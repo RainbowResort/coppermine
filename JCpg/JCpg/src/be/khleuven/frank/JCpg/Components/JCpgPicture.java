@@ -44,12 +44,12 @@ public class JCpgPicture extends JCpgGallery{
 	private int ownerid;
 	private int picrating;
 	private int votes;
-	private int ctime;
+	private long ctime;
 	private int galleryicon;
 	private int urlprefix;
 	private int position;
-	private int filesize;
-	private int totalfilesize;
+	private long filesize;
+	private long totalfilesize;
 
 	private int hits;
 	private String filename = null ;
@@ -116,7 +116,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @param position
 	 * 		picture position
 	 */
-	public JCpgPicture(int id, int aid, String filepath, String filename, int filesize, int totalfilesize, int pwidth, int pheight, int hits, int ctime, int ownerid, String ownername,
+	public JCpgPicture(int id, int aid, String filepath, String filename, long filesize, long totalfilesize, int pwidth, int pheight, int hits, int ctime, int ownerid, String ownername,
 			int picrating, int votes, String title, String caption, String keywords, boolean approved, int galleryicon, int urlprefix, int position){
 		
 		super(title, caption);
@@ -204,7 +204,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @param filesize
 	 * 		the picture filesize
 	 */
-	private void setFilesize(int filesize){
+	private void setFilesize(long filesize){
 		
 		this.filesize = filesize;
 		
@@ -216,7 +216,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @param totalfilesize
 	 * 		the picture total filesize
 	 */
-	private void setTotalFileSize(int totalfilesize){
+	private void setTotalFileSize(long totalfilesize){
 		
 		this.totalfilesize = totalfilesize;
 		
@@ -452,7 +452,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @return
 	 * 		the picture filesize
 	 */
-	public int getFilesize(){
+	public long getFilesize(){
 		
 		return this.filesize;
 		
@@ -464,7 +464,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @return
 	 * 		the picture total filesize
 	 */
-	public int getTotalFileSize(){
+	public long getTotalFileSize(){
 		
 		return this.totalfilesize;
 		
@@ -524,7 +524,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @return
 	 * 		the picture creation time
 	 */
-	public int getcTime(){
+	public long getcTime(){
 		
 		return this.ctime;
 		
