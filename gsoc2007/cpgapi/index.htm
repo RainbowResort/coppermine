@@ -76,15 +76,10 @@
 
      var vars = getVars(page);
 
-     /* A logged in user always goes to userdiv page, even on back button */
+     /* A logged in user always goes to homediv page, even on back button */
      if(vars['pg'] == "logindiv") {
         if (readCookie("username")) {
-           vars['pg'] = "userdiv";
-        }
-     }
-     if(vars['pg'] == "userdiv") {
-        if (!readCookie("username")) {
-           vars['pg'] = "logindiv";
+           vars['pg'] = "homediv";
         }
      }
 
@@ -111,6 +106,15 @@
           }
           if (vars['pg'] == "adminallgroupsdiv") {
              admin_allgroups(); 
+          }
+          if (vars['pg'] == "homediv") {
+         	 homepage();
+          }
+          if (vars['pg'] == "usercatdiv") {
+         	 user_showcat();
+          }
+          if (vars['pg'] == "admincatdiv") {
+         	 admin_showcat();
           }
           return;
        }
@@ -201,13 +205,13 @@
      }
 
      xmlhttpPost("webapi.php?query=login&username="+formelem.username.value+"&password="+formelem.password.value, function (returnText) {
-	var retval = Xparse(returnText);
+	    var retval = Xparse(returnText);
         var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
         if (messagecode == "success") {
            createCookie("username", formelem.username.value, 1);
            createCookie("userdata", returnText, 1);
            createCookie("sessionkey", xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "userdata"), "sessionkey").contents[0].value, 1);
-           jumppage("pg=userdiv", 0);
+           homepage();
         }  else {
            alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
         }
@@ -225,7 +229,7 @@
            createCookie("username", username, 1);
            createCookie("userdata", returnText, 1);
            createCookie("sessionkey", xmlParserGet(xmlParserGet(xmlParserGet(retval, "catalog"), "userdata"), "sessionkey").contents[0].value, 1);
-           jumppage("pg=userdiv", 0);
+		   homepage();
         }  else {
            alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
         }
@@ -392,22 +396,389 @@
 
   function logout() {
      xmlhttpPost("webapi.php?query=logout&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
-	var retval = Xparse(returnText);
+ 	 var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        eraseCookie("username");
+        eraseCookie("userdata");
+        eraseCookie("sessionkey");
+        document.getElementById("usercatdiv").innerHTML = "";
+        homepage();
+     });
+  }
+
+  function optioncatrecursive(xmldoc, s, sel, root) {
+     var cnt = "";
+     if (root) {
+        cnt += "<OPTION VALUE=0 ";
+        if(sel && sel == 0) cnt += "SELECTED";
+        cnt += ">Root";
+     }
+     for (var i = 0; i < xmldoc.contents.length; i++) {
+          if (xmldoc.contents[i].type == "element") {
+             if (xmldoc.contents[i].name == "categorydata") {
+                var cid = xmlParserGetLongValue(xmldoc.contents[i], "cid");
+                var nm = xmlParserGetLongValue(xmldoc.contents[i], "name");
+                cnt += "<OPTION VALUE=\"" + cid + "\" ";
+                if(sel && sel == cid) cnt += "SELECTED";
+                cnt += ">" + s + nm;
+                cnt += optioncatrecursive(xmldoc.contents[i], s+"--", sel);
+             }
+          }
+     }
+     return cnt;
+  }
+
+  function showcatrecursive(xmldoc, s, ed, parent) {
+     var cnt = "";
+     cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=" + (800-s) + ">";
+     for (var i = 0; i < xmldoc.contents.length; i++) {
+          if (xmldoc.contents[i].type == "element") {
+             if (xmldoc.contents[i].name == "categorydata") {
+                cnt += "<TR><TD COLSPAN=2>";
+                var cid = xmlParserGetLongValue(xmldoc.contents[i], "cid");
+                var nm = xmlParserGetLongValue(xmldoc.contents[i], "name");
+                cnt += "<B>" + ((nm=="")? "(no name)" : nm) + "</B> &nbsp; ";
+                if (ed) {
+                   cnt += "<A HREF=\"javascript: user_showeditcat(" + cid + ")\"><IMG SRC=\"images/edit.gif\" BORDER=0></A>";
+                   if (xmlParserGetLongValue(xmldoc.contents[i], "parent") != "0") {
+                 	  cnt += "&nbsp;&nbsp;<A HREF=\"javascript: user_deletecat(" + cid + ")\"><IMG SRC=\"images/delete.gif\" BORDER=0></A>";
+                   }                
+                }
+                cnt += "<BR>" + xmlParserGetLongValue(xmldoc.contents[i], "description");
+                cnt += "</TD></TR>";
+                cnt += "<TR><TD WIDTH=40>&nbsp;</TD><TD WIDTH=" + (760-s) + ">";
+                cnt += showcatrecursive(xmldoc.contents[i], s+40, ed, xmlParserGetLongValue(xmldoc.contents[i], "cid"));
+                cnt += "</TD></TR>";
+             }
+          }
+     }
+     cnt += "</TABLE>";
+     return cnt;
+  }
+
+  function showadmincatrecursive(xmldoc, s, ed, parent) {
+     var cnt = "";
+     cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=" + (800-s) + ">";
+     for (var i = 0; i < xmldoc.contents.length; i++) {
+          if (xmldoc.contents[i].type == "element") {
+             if (xmldoc.contents[i].name == "categorydata") {
+                cnt += "<TR><TD COLSPAN=2>";
+                var cid = xmlParserGetLongValue(xmldoc.contents[i], "cid");
+                var nm = xmlParserGetLongValue(xmldoc.contents[i], "name");
+                var ps = xmlParserGetLongValue(xmldoc.contents[i], "pos");
+                cnt += "<B>" + ((nm=="")? "(no name)" : nm) + "</B> &nbsp; ";
+                if (ed) {
+                   cnt += "<A HREF=\"javascript: admin_showeditcat(" + cid + ")\"><IMG SRC=\"images/edit.gif\" BORDER=0></A>";
+               	   cnt += "&nbsp;&nbsp;<A HREF=\"javascript: admin_deletecat(" + cid + ")\"><IMG SRC=\"images/delete.gif\" BORDER=0></A>";
+                }
+                cnt += "<BR>" + xmlParserGetLongValue(xmldoc.contents[i], "description");
+                cnt += "</TD></TR>";
+                cnt += "<TR><TD WIDTH=40>&nbsp;</TD><TD WIDTH=" + (760-s) + ">";
+                cnt += showadmincatrecursive(xmldoc.contents[i], s+40, ed, xmlParserGetLongValue(xmldoc.contents[i], "cid"));
+                cnt += "</TD></TR>";
+             }
+          }
+     }
+     cnt += "</TABLE>";
+     return cnt;
+  }
+
+  function homepage(jump) {
+     var ex = "";
+     if (readCookie("username")) {
+        ex = "&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey");
+     }
+     xmlhttpPost("webapi.php?query=showcategories"+ex, function (returnText) {
+   	    var retval = Xparse(returnText);
+        var xmldoc = xmlParserGet(retval, "catalog");
+   	    var cnt = "";
+   	    if(!readCookie("username")) {
+   	       cnt += "%homemenu%";
+   	    }  else {
+   	       cnt += "%usermenu%";
+   	    }
+        cnt += "<CENTER>";
+        cnt += "<FORM>";
+        cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+        cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
+        cnt += "   <TR><TD COLSPAN=2><H3>Galleries</H3></TD></TR>";
+        cnt += "<TR>";
+        cnt += "  <TD>";
+   	    cnt += showcatrecursive(xmldoc, 0, false, "0");        
+        cnt += "  </TD>";
+		cnt += "</TR>";
+		cnt += "</TABLE></FORM>";
+		cnt += "</CENTER>";
+        document.getElementById("homediv").innerHTML = cnt;
+        if(!jump) jumppage("pg=homediv", 0);
+     });
+  }
+
+  function user_showcat(jump) {
+     xmlhttpPost("webapi.php?query=showmycategories&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+   	    var retval = Xparse(returnText);
+        var xmldoc = xmlParserGet(retval, "catalog");
+   	    var cnt = "";
+   	    if(!readCookie("username")) {
+   	       cnt += "%homemenu%";
+   	    }  else {
+   	       cnt += "%usermenu%";
+   	    }
+        cnt += "<CENTER>";
+        cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+        cnt+=  "<TR><TD>&nbsp;</TD></TR>";
+        cnt += "<TR><TD COLSPAN=2><H3>Galleries</H3></TD></TR>";
+        cnt += "<TR>";
+        cnt += "  <TD>";
+   	    cnt += showcatrecursive(xmldoc, 0, true, "0");
+        cnt += "  </TD>";
+		cnt += "</TR>";
+        cnt += "<TR><TD COLSPAN=2><H3>Add a new gallery</H3></TD></TR>";
+		cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return user_addcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+		cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "") + "</SELECT></TD></TR>";
+		cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text></TD></TR>";
+		cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc></TEXTAREA></TD></TR>";
+		cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Add\"></TD></TR>";
+		cnt += "</TABLE></FORM></TD></TR>";
+		cnt += "</TABLE>";
+		cnt += "</CENTER>";
+        document.getElementById("usercatdiv").innerHTML = cnt;
+        if(!jump) jumppage("pg=usercatdiv", 0);
+     });
+  }
+
+  function user_showeditcat(catid, jump) {
+     xmlhttpPost("webapi.php?query=showmycategories&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+   	    var retval = Xparse(returnText);
+        var xmldoc = xmlParserGet(retval, "catalog");
+   	    var cnt = "";
+   	    if(!readCookie("username")) {
+   	       cnt += "%homemenu%";
+   	    }  else {
+   	       cnt += "%usermenu%";
+   	    }
+        cnt += "<CENTER>";
+        cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+        cnt+=  "<TR><TD>&nbsp;</TD></TR>";
+        cnt += "<TR><TD COLSPAN=2><H3>Galleries</H3></TD></TR>";
+        cnt += "<TR>";
+        cnt += "  <TD>";
+   	    cnt += showcatrecursive(xmldoc, 0, true, "0");
+        cnt += "  </TD>";
+		cnt += "</TR>";
+        xmlhttpPost("webapi.php?query=viewcategory&categoryid="+catid+"&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+     	    var retval = Xparse(returnText);
+            var xmldocin = xmlParserGet(retval, "catalog");
+		    cnt += "<TR><TD COLSPAN=2><H3>Edit gallery</H3></TD></TR>";
+		    cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return user_editcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+		    if (xmlParserGetLongValue(xmldocin, "categorydata.parent") != 0) {
+				cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "", xmlParserGetLongValue(xmldocin, "categorydata.parent")) + "</SELECT></TD></TR>";
+			} else {
+			    cnt += "<INPUT TYPE=hidden NAME=catparent VALUE=0>";
+			}
+            cnt += "<INPUT NAME=catid TYPE=hidden VALUE=\"" + xmlParserGetLongValue(xmldocin, "categorydata.cid") + "\">";
+		   	cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text VALUE=\"" + xmlParserGetLongValue(xmldocin, "categorydata.name") + "\"></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc>" + xmlParserGetLongValue(xmldocin, "categorydata.description") + "</TEXTAREA></TD></TR>";
+			cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Edit\"></TD></TR>";
+			cnt += "</TABLE></FORM></TD></TR>";
+            cnt+=  "<TR><TD>&nbsp;</TD></TR>";
+			cnt += "<TR><TD COLSPAN=2><H3>Add a new gallery</H3></TD></TR>";
+ 		    cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return user_addcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+ 			cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "") + "</SELECT></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc></TEXTAREA></TD></TR>";
+			cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Add\"></TD></TR>";
+			cnt += "</TABLE></FORM></TD></TR>";
+			cnt += "</TABLE></FORM>";
+			cnt += "</CENTER>";
+	        document.getElementById("usercatdiv").innerHTML = cnt;
+	        if(!jump) jumppage("pg=usercatdiv", 0);
+	    });
+     });
+  }
+
+  function user_addcategory(formelem) {
+     xmlhttpPost("webapi.php?query=createcategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryname="+formelem.catname.value+"&categorydesc="+formelem.catdesc.value+"&categoryid="+formelem.catparent.value+"&admincat=0", function (returnText) {
+        var retval = Xparse(returnText);
         var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
         if (messagecode == "success") {
-           eraseCookie("username");
-           eraseCookie("userdata");
-           eraseCookie("sessionkey");
-           jumppage("pg=logindiv", 0);
+           user_showcat();
         }  else {
-           eraseCookie("username");
-           eraseCookie("userdata");
-           eraseCookie("sessionkey");
-           jumppage("pg=logindiv", 0);
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+
+     return false;
+  }
+
+  function user_editcategory(formelem) {
+     xmlhttpPost("webapi.php?query=modifycategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+formelem.catid.value+"&categoryname="+formelem.catname.value+"&categorydesc="+formelem.catdesc.value+"&categoryparent="+formelem.catparent.value, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           user_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+
+     return false;
+  }
+
+  function user_deletecat(catid) {
+     xmlhttpPost("webapi.php?query=removecategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+catid, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           user_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
         }
      });
   }
 
+  function user_movecat(catid, catpos) {
+     xmlhttpPost("webapi.php?query=movecategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+catid+"&categorypos="+catpos, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           user_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+  }
+
+  function admin_movecat(catid, catpos) {
+     xmlhttpPost("webapi.php?query=movecategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+catid+"&categorypos="+catpos, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           admin_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+  }
+
+  function admin_showcat(jump) {
+     xmlhttpPost("webapi.php?query=showadmincategories&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+   	    var retval = Xparse(returnText);
+        var xmldoc = xmlParserGet(retval, "catalog");
+   	    var cnt = "";
+   	    if(!readCookie("username")) {
+   	       cnt += "%homemenu%";
+   	    }  else {
+   	       cnt += "%usermenu%";
+   	    }
+        cnt += "<CENTER>";
+        cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+        cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
+        cnt += "   <TR><TD COLSPAN=2><H3>Galleries</H3></TD></TR>";
+        cnt += "<TR>";
+        cnt += "  <TD>";
+   	    cnt += showadmincatrecursive(xmldoc, 0, true, "0");        
+        cnt += "  </TD>";
+		cnt += "</TR>";
+        cnt += "<TR><TD COLSPAN=2><H3>Add a new gallery</H3></TD></TR>";
+		cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return admin_addcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+		cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "", null, true) + "</SELECT></TD></TR>";
+		cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text></TD></TR>";
+		cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc></TEXTAREA></TD></TR>";
+		cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Add\"></TD></TR>";
+		cnt += "</TABLE></FORM></TD></TR>";		
+		cnt += "</TABLE>";
+		cnt += "</CENTER>";
+        document.getElementById("admincatdiv").innerHTML = cnt;
+        if(!jump) jumppage("pg=admincatdiv", 0);
+     });
+  }
+
+  function admin_showeditcat(catid, jump) {
+     xmlhttpPost("webapi.php?query=showadmincategories&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+   	    var retval = Xparse(returnText);
+        var xmldoc = xmlParserGet(retval, "catalog");
+   	    var cnt = "";
+   	    if(!readCookie("username")) {
+   	       cnt += "%homemenu%";
+   	    }  else {
+   	       cnt += "%usermenu%";
+   	    }
+        cnt += "<CENTER>";
+        cnt += "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+        cnt+=  "   <TR><TD>&nbsp;</TD></TR>";
+        cnt += "   <TR><TD COLSPAN=2><H3>Galleries</H3></TD></TR>";
+        cnt += "<TR>";
+        cnt += "  <TD>";
+   	    cnt += showadmincatrecursive(xmldoc, 0, true, "0");        
+        cnt += "  </TD>";
+		cnt += "</TR>";
+        xmlhttpPost("webapi.php?query=viewcategory&categoryid="+catid+"&username=" + readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
+     	    var retval = Xparse(returnText);
+            var xmldocin = xmlParserGet(retval, "catalog");
+		    cnt += "<TR><TD COLSPAN=2><H3>Edit gallery</H3></TD></TR>";
+		    cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return admin_editcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+			cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "", xmlParserGetLongValue(xmldocin, "categorydata.parent"), true) + "</SELECT></TD></TR>";
+            cnt += "<INPUT NAME=catid TYPE=hidden VALUE=\"" + xmlParserGetLongValue(xmldocin, "categorydata.cid") + "\">";
+		   	cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text VALUE=\"" + xmlParserGetLongValue(xmldocin, "categorydata.name") + "\"></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc>" + xmlParserGetLongValue(xmldocin, "categorydata.description") + "</TEXTAREA></TD></TR>";
+			cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Edit\"></TD></TR>";
+			cnt += "</TABLE></FORM></TD></TR>";
+            cnt+=  "<TR><TD>&nbsp;</TD></TR>";
+			cnt += "<TR><TD COLSPAN=2><H3>Add a new gallery</H3></TD></TR>";
+ 		    cnt += "<TR><TD COLSPAN=2><FORM onSubmit=\"return admin_addcategory(this)\"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>";
+ 			cnt += "<TR><TD WIDTH=100>Parent</TD><TD><SELECT NAME=catparent>" + optioncatrecursive(xmldoc, "", null, true) + "</SELECT></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Name</TD><TD><INPUT SIZE=20 NAME=catname TYPE=text></TD></TR>";
+			cnt += "<TR><TD WIDTH=100>Description</TD><TD><TEXTAREA ROW=5 COLS=50 NAME=catdesc></TEXTAREA></TD></TR>";
+			cnt += "<TR><TD WIDTH=100></TD><TD><INPUT TYPE=Submit VALUE=\"Add\"></TD></TR>";
+			cnt += "</TABLE></FORM></TD></TR>";
+			cnt += "</TABLE>";
+			cnt += "</CENTER>";
+	        document.getElementById("usercatdiv").innerHTML = cnt;
+	        if(!jump) jumppage("pg=usercatdiv", 0);
+	    });
+     });
+  }
+
+  function admin_addcategory(formelem) {
+     xmlhttpPost("webapi.php?query=createcategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryname="+formelem.catname.value+"&categorydesc="+formelem.catdesc.value+"&categoryid="+formelem.catparent.value+"&admincat=1", function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           admin_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+
+     return false;
+  }
+
+  function admin_editcategory(formelem) {
+     xmlhttpPost("webapi.php?query=modifycategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+formelem.catid.value+"&categoryname="+formelem.catname.value+"&categorydesc="+formelem.catdesc.value+"&categoryparent="+formelem.catparent.value, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           admin_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+
+     return false;
+  }
+
+  function admin_deletecat(catid) {
+     xmlhttpPost("webapi.php?query=removecategory&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&categoryid="+catid, function (returnText) {
+        var retval = Xparse(returnText);
+        var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
+        if (messagecode == "success") {
+           admin_showcat();
+        }  else {
+           alert(xmlParserGetLongValue(retval, "catalog.messagecode"));
+        }
+     });
+  }
 
   function admin_allusers(jump) {
      xmlhttpPost("webapi.php?query=showgroups&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey"), function (returnText) {
@@ -589,10 +960,9 @@
      });
   }
 
-
   function admin_adduser(formelem) {
      xmlhttpPost("webapi.php?query=adduser&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+formelem.username.value+"&password="+formelem.password.value+"&email="+formelem.email.value, function (returnText) {
-	var retval = Xparse(returnText);
+        var retval = Xparse(returnText);
         var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
         if (messagecode == "success") {
            admin_allusers();
@@ -606,7 +976,7 @@
 
   function admin_updateuser(formelem, username) {
      xmlhttpPost("webapi.php?query=updateuser&username="+readCookie("username")+"&sessionkey="+readCookie("sessionkey")+"&addusername="+username+"&password="+formelem.elements[username+"_password"].value+"&email="+formelem.elements[username+"_email"].value+"&active="+formelem.elements[username+"_active"].value, function (returnText) {
-	var retval = Xparse(returnText);
+	    var retval = Xparse(returnText);
         var messagecode = xmlParserGetLongValue(retval, "catalog.messagecode");
         if (messagecode == "success") {
            admin_allusers();
@@ -953,11 +1323,7 @@
      if(dhtmlHistory.isFirstLoad()) {
         var params = (window.location.href.indexOf('#')==-1)? "" : window.location.href.slice(window.location.href.indexOf('#') + 1);
         if (params == "") {
-           if (readCookie("username")) {
-              jumppage("pg=userdiv", 0);
-           }  else {
-              jumppage("pg=logindiv", 0);
-           }
+		   homepage();
         }  else {
            jumppage(params, 0);
         }
@@ -965,12 +1331,8 @@
   }
 
   function historyChange(newLocation, historyData) {
-     if(!historyData && !newLocation) {
-        if (readCookie("username")) {
-           jumppage("pg=userdiv", 0);
-        }  else {
-           jumppage("pg=logindiv", 0);
-        }
+     if (!historyData && !newLocation) {
+        homepage();
         return;
      }
      if(historyData!=null) jumppage(historyData, 0, true);
@@ -1160,7 +1522,7 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
   <TD WIDTH=100><A HREF="javascript: admin_allusers();">Users</A></TD>
   <TD WIDTH=100><A HREF="javascript: admin_allgroups();">Groups</A></TD>
   <TD WIDTH=100><A HREF="javascript: admin_config();">Config</A></TD>
-  <TD WIDTH=100>&nbsp;</TD>
+  <TD WIDTH=100><A HREF="javascript: admin_showcat();">Galleries</A></TD>
   <TD WIDTH=100>&nbsp;</TD>
   <TD WIDTH=100>&nbsp;</TD>
   <TD WIDTH=100>&nbsp;</TD>
@@ -1172,7 +1534,7 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
 <DIV ID=homepagemenudiv CLASS=hiddendiv>
 <CENTER>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
-<TR><TD><A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
+<TR><TD><A HREF="javascript: jumppage('pg=homediv', 0)">Home</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=logindiv', 0)">Login</A>&nbsp;::&nbsp;<A HREF="javascript: jumppage('pg=forgotpassdiv', 0)">Forgot Password</A>%registerlink%</TD></TR>
 </TABLE>
 </CENTER>
 </DIV>
@@ -1181,9 +1543,9 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
 <CENTER>
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=800px>
 <TR>
+  <TD WIDTH=100><A HREF="javascript: jumppage('pg=homediv', 0);">Home</A></TD>
   <TD WIDTH=100><A HREF="javascript: jumppage('pg=userprofilediv', 0);">My Profile</A></TD>
-  <TD WIDTH=100>&nbsp;</TD>
-  <TD WIDTH=100>&nbsp;</TD>
+  <TD WIDTH=100><A HREF="javascript: user_showcat();">My Galleries</A></TD>
   <TD WIDTH=100>&nbsp;</TD>
   <TD WIDTH=100>&nbsp;</TD>
   <TD WIDTH=100>&nbsp;</TD>
@@ -1205,6 +1567,12 @@ By clicking 'Register' below you agree to be bound by these conditions.</DIV>
 </TABLE>
 </CENTER>
 </DIV>
+
+<DIV ID=homediv CLASS=hiddendiv></DIV>
+
+<DIV ID=usercatdiv CLASS=hiddendiv></DIV>
+
+<DIV ID=admincatdiv CLASS=hiddendiv></DIV>
 
 <DIV ID=adminallusersdiv CLASS=hiddendiv></DIV>
 

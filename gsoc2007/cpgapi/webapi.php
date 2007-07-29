@@ -58,14 +58,16 @@ $APITYPE = array(
     
     'showcategories'	=> array('softlogin'),
     'showmycategories'	=> array('login'),
-    'showallcategories'	=> array('login', 'admin'),
+    'showadmincategories'	=> array('login', 'admin'),
     'createcategory'	=> array('login', 'categoryowner'),
     'viewcategory'		=> array('softlogin', 'categoryview'),
     'modifycategory'	=> array('login', 'categoryowner'),
+    'movecategory'		=> array('login', 'categoryowner'),
     'removecategory'	=> array('login', 'categoryowner'),
     'createalbum'		=> array('login', 'categoryowner'),
     'viewalbum'			=> array('softlogin', 'albumview'),
     'modifyalbum'		=> array('login', 'albumowner'),
+    'movealbum'			=> array('login', 'albumowner'),
     'removealbum'		=> array('login', 'albumowner')
 );
 
@@ -190,6 +192,8 @@ if (!$APITYPE[$query]) {
              $CF->safeexit();
    		  }
 	   }  else if($APITYPE[$query][$i] == 'softlogin') {
+   		  $username = $CF->getvariable("username");
+   		  $sessionkey = $CF->getvariable("sessionkey");
    		  $CURRENT_USER = $UF->authenticateuser($username, $sessionkey);
    		  if (!$CURRENT_USER) {
              $CURRENT_USER = array(
@@ -612,27 +616,40 @@ case 'setconfig':
    break;
 
 case 'createcategory':
-   $categoryid = $CF->getvariable("categoryid");
+   $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addcategoryname = $CF->getvariable("categoryname");
    $addcategorydesc = $CF->getvariable("categorydesc");
+   $isadmincategory = $CF->getvariable("admincat");
    print "<messagecode>success</messagecode>";
-   $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid));
+   $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid, $isadmincategory));
    break;
 
 case 'modifycategory':
    $categoryid = $CF->getvariable("categoryid");
    $categoryname = $CF->getvariable("categoryname");
    $categorydesc = $CF->getvariable("categorydesc");
-   $categorypos = $CF->getvariable("categorypos");
+   $categoryparent = $CF->getvariable("categoryparent");
    $categorythumb = $CF->getvariable("categorythumb");
+   if ($categoryparent == $categoryid) {
+   	  $categoryparent = 0;
+   }
    print "<messagecode>success</messagecode>";
-   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categorypos, $categorythumb));
+   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
    break;
 
 case 'viewcategory':
    $categoryid = $CF->getvariable("categoryid");
    print "<messagecode>success</messagecode>";
    $AF->showCategoryData($AF->getCategoryData($categoryid));
+   break;
+
+case 'movecategory':
+   $categoryid = $CF->getvariable("categoryid"); // Parent category
+   $categorypos = $CF->getvariable("categorypos");
+   if ($AF->moveCategory($categoryid, $categorypos))
+      print "<messagecode>success</messagecode>";
+   else
+      print "<messagecode>could_not_move</messagecode>";   
    break;
 
 case 'removecategory':
@@ -649,8 +666,8 @@ case 'showmycategories':
    $AF->showUserCategories($CURRENT_USER);
    break;
 
-case 'showallcategories':
-   $AF->showAllCategories();
+case 'showadmincategories':
+   $AF->showAdminCategories();
    break;
 
 case 'removealbum':

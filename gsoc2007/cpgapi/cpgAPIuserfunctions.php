@@ -408,8 +408,8 @@ class userfunctions {
 
     // Create a personal album if corresponding option is enabled
     if ($CONFIG['personal_album_on_registration'] == 1) {
-		$catid = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
-		$albumid = $AF->createAlbum($catid, $addusername);
+		$CAT_DATA = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
+		$albumid = $AF->createAlbum($CAT_DATA['cid'], $addusername, "");
     }
 
     $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";
