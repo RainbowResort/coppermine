@@ -766,7 +766,6 @@ if (defined('ADMIN_PHP')) $lang_admin_data = array(
   array('Count hits in slideshow', 'slideshow_hits', 1, 'f=configuration.htm&amp;as=admin_image_slideshow_hits&amp;ae=admin_image_slideshow_hits_end'),
   array('Allow Flash in Ecards (not recommended)', 'ecard_flash', 1, 'f=configuration.htm&amp;as=admin_image_ecard_flash_start&amp;ae=admin_image_ecard_flash_end'), // cpg1.5.x
   array('Insert a transparent overlay to minimize image theft', 'transparent_overlay', 1, 'f=configuration.htm&amp;as=admin_image_transparent_overlay_start&amp;ae=admin_image_transparent_overlay_end'), // cpg1.5.x
-  array('Allow Owner to Tag Photos','owner_can_tag',1,'f=configuration.htm&amp;as=admin_owner_can_tag_start&amp;ae=admin_owner_can_tag_end'),
 
   'Comment settings',
   array('Filter bad words in comments', 'filter_bad_words', 1, 'f=configuration.htm&amp;as=admin_image_comment_bad_words&amp;ae=admin_image_comment_bad_words_end'),
@@ -861,6 +860,7 @@ if (defined('ADMIN_PHP')) $lang_admin_data = array(
   array('Allow users to delete their own user account', 'allow_user_account_delete', 1, 'f=configuration.htm&amp;as=admin_user_allow_account_delete&amp;ae=admin_user_allow_account_delete_end'), // cpg1.5.x
 
   array('Allow users to retain control over their pics in public galleries', 'users_can_edit_pics', 1, 'f=configuration.htm&amp;as=admin_user_editpics_public_start&amp;ae=admin_user_editpics_public_end'),
+  array('Allow Owner to Tag Images they upload','owner_can_tag',1,'f=configuration.htm&amp;as=admin_owner_can_tag_start&amp;ae=admin_owner_can_tag_end'),
   
   array('Allow users to move their albums from/to allowed categories', 'allow_user_move_album', 1, 'f=configuration.htm&amp;as=admin_user_move_album_start&amp;ae=admin_user_move_album_end'),// cpg1.5.x
   array('Allow users to edit their albums when it is in a locked category', 'allow_user_edit_after_cat_close', 1, 'f=configuration.htm&amp;as=admin_user_edit_after_cat_close_start&amp;ae=admin_user_edit_after_cat_close_end'),// cpg1.5.x
