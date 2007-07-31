@@ -118,15 +118,26 @@ if ($search_string && isset($_GET['params'])) {
                                 $thumb_size = compute_img_size($thumb['pwidth'], $thumb['pheight'], $CONFIG['alb_list_thumb_size'], true, 'cat_thumb');
                                 ?>
                                 <tr>
-                                <td width="40%">
-                                
-                                <a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> 
-                                  <img src="<?php echo $thumb_url?>"  class="image" <?php echo $image_size['geom'] ?> border="0" alt="<?php echo $picture['filename'] ?>">
-                                  <?php echo $alb['title']; ?> 
-                                </a></td>
-                                        <td><?php if ($alb['description'] == "") { echo '&nbsp;'; }else { echo $alb['description']; } ?></td>
-                                        </tr>
-                                        <?php
+                                  <td colspan="3" height="1" valign="top" class="tableh2">
+                                    <span class="alblink"><a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?>"><?php echo $alb['title'] ?></a></span>
+                                  </td>  
+                                </tr>
+                                <tr>
+                                        <td colspan="3">
+                                                <img src="images/spacer.gif" width="1" height="1" border="0" alt="" /><br />
+                                        </td>
+                                </tr>                                
+                                <tr>
+                                  <td>
+                                    <a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> 
+                                        <img src="<?php echo $thumb_url?>"  class="image" <?php echo $image_size['geom'] ?> border="0" alt="<?php echo $picture['filename'] ?>">
+                                    </a>
+                                  </td>
+                                  <td width=100% valign=top>
+                                    <?php if ($alb['description'] == "") { echo '&nbsp;'; }else { echo $alb['description']; } ?>
+                                  </td>
+                                </tr>
+                                <?php
                         }
                         endtable();
                         echo '<br/>';                        
@@ -140,12 +151,37 @@ if ($search_string && isset($_GET['params'])) {
                         starttable('100%', $lang_meta_album_names['category_search'],2);
                         while($cat = mysql_fetch_array($result,MYSQL_ASSOC))
                         {
+                                $album_q = "SELECT * FROM `{$CONFIG['TABLE_ALBUMS']}` WHERE (`category` = '{$cat['cid']}') ORDER BY `aid` DESC LIMIT 1";
+                                $album_r = cpg_db_query($album_q);
+                                $album = mysql_fetch_array($album_r);
+                                
+                                $thumb_query = "SELECT filename, url_prefix, pwidth, pheight FROM `{$CONFIG['TABLE_PICTURES']}` WHERE (`aid` = '{$album['aid']}') ORDER BY `pid` DESC";
+                                $thumb_result = cpg_db_query($thumb_query);
+                                $thumb = mysql_fetch_array($thumb_result);
+                                $thumb_url = get_pic_url($thumb, 'thumb');
+                                $thumb_size = compute_img_size($thumb['pwidth'], $thumb['pheight'], $CONFIG['alb_list_thumb_size'], true, 'cat_thumb');
+
                                 ?>
-                                        <tr>
-                                                <td width="40%"> <a href="<?php printf("index.php?cat=%u", $cat['cid']); ?> "><?php echo $cat['name']; ?> </a></td>
-                                                <td> <?php if ($cat['description'] == "") { echo '&nbsp;'; }else { echo $cat['description']; } ?></td>
-                                        </tr>
+                                <tr>
+                                  <td colspan="3" height="1" valign="top" class="tableh2">
+                                    <span class="alblink"><a href="<?php printf("index.php?cat=%u", $cat['cid']); ?>"><?php echo $cat['name'] ?></a></span>
+                                  </td>  
+                                </tr>
+                                <tr>
+                                        <td colspan="3">
+                                                <img src="images/spacer.gif" width="1" height="1" border="0" alt="" /><br />
+                                        </td>
+                                </tr>                                
+                                <tr>
+                                  <td>
+                                    <a href="<?php printf("thumbnails.php?album=%u", $alb['aid']); ?> "> 
+                                        <img src="<?php echo $thumb_url?>"  class="image" <?php echo $image_size['geom'] ?> border="0" alt="<?php echo $picture['filename'] ?>"><br/>
+                                        <?php if ($album['title'] == "") { echo '&nbsp;'; } else { printf("<a href='thumbnails.php?album=%u'>{$album['title']}</a>", $alb['aid']); } ?>
+                                    </a>
+                                  </td>
+                                </tr>
                                 <?php
+
                         }
                         endtable();
                         echo '<br/>';
