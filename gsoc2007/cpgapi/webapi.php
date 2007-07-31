@@ -68,7 +68,9 @@ $APITYPE = array(
     'viewalbum'			=> array('softlogin', 'albumview'),
     'modifyalbum'		=> array('login', 'albumowner'),
     'movealbum'			=> array('login', 'albumowner'),
-    'removealbum'		=> array('login', 'albumowner')
+    'removealbum'		=> array('login', 'albumowner'),
+    
+    'addpicture'		=> array('login', 'albumowner')
 );
 
 $GROUPPERMS = array(
@@ -640,7 +642,7 @@ case 'modifycategory':
 case 'viewcategory':
    $categoryid = $CF->getvariable("categoryid");
    print "<messagecode>success</messagecode>";
-   $AF->showCategoryData($AF->getCategoryData($categoryid));
+   $AF->showCategoryData($AF->getCategoryData($categoryid), $CURRENT_USER);
    break;
 
 case 'movecategory':
@@ -667,12 +669,47 @@ case 'showmycategories':
    break;
 
 case 'showadmincategories':
-   $AF->showAdminCategories();
+   $AF->showAdminCategories($CURRENT_USER);
+   break;
+
+case 'createalbum':
+   $categoryid = $CF->getvariable("categoryid"); // Parent category
+   $addalbumname = $CF->getvariable("albumname");
+   $addalbumdesc = $CF->getvariable("albumdesc");
+   $isadmincategory = $CF->getvariable("admincat");
+   print "<messagecode>success</messagecode>";
+   $AF->showAlbumData($AF->createAlbum($CURRENT_USER, $addalbumname, $addalbumdesc, $categoryid));
+   break;
+
+case 'viewalbum':
+   $albumid = $CF->getvariable("albumid");
+   print "<messagecode>success</messagecode>";
+   $AF->showAlbumData($AF->getAlbumData($albumid));
    break;
 
 case 'removealbum':
    $albumid = $CF->getvariable("albumid");
    $AF->removeAlbum($albumid);
+   break;
+
+case 'addpicture':
+   $albumid = $CF->getvariable("albumid");
+   $pictitle = $CF->getvariable("pictitle");
+   $piccaption = $CF->getvariable("piccaption");
+   $pickeywords = $CF->getvariable("pickeywords");
+   
+   if (isset($_FILES['file'])) {
+      if ($_FILES['file']['error'] == UPLOAD_ERR_OK) {
+         $filename = $_FILES['file']['name']; // file name 
+         move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir.'/'.$filename);
+         $AF->addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $_FILES['file']['size']);
+      }  elseif ($_FILES['file']['error'] == UPLOAD_ERR_INI_SIZE) {
+         print "<messagecode>max_upload_size_exceed</messagecode>"; 
+      }  else { 
+         print "<messagecode>upload_error</messagecode>"; 
+      }
+   }
+   
    break;
 
 default:

@@ -22,7 +22,7 @@
  */
 class dbspecs {
   var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
-  var $categorytable, $catfield, $albumtable, $albumfield;
+  var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield;
   var $dbactive = false;
 
   function initialize() {
@@ -44,7 +44,8 @@ class dbspecs {
         'groups' => 'usergroups',
         'config' => 'config',
         'categories' => 'categories',
-        'albums' => 'albums'
+        'albums' => 'albums',
+        'pictures' => 'pictures'
     );
 	
     // Derived full table names
@@ -54,6 +55,7 @@ class dbspecs {
     $this->configtable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['config'];
     $this->categorytable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['categories'];
     $this->albumtable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['albums'];
+    $this->picturetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['pictures'];
 
     // Table field names
     $this->field = array(
@@ -124,6 +126,38 @@ class dbspecs {
     	'alb_password_hint' => 'alb_password_hint',
     	'moderator_group' => 'moderator_group',
     	'alb_hits' => 'alb_hits'
+    );
+    
+    $this->picturefield = array(
+    	'pid' => 'pid',
+    	'aid' => 'aid',
+    	'filepath' => 'filepath',
+    	'filename' => 'filename',
+    	'filesize' => 'filesize',
+    	'total_filesize' => 'total_filesize',
+    	'pwidth' => 'pwidth',
+    	'pheight' => 'pheight',
+    	'hits' => 'hits',
+    	'mtime' => 'mtime',
+    	'ctime' => 'ctime',
+    	'owner_id' => 'owner_id',
+    	'owner_name' => 'owner_name',
+    	'pic_rating' => 'pic_rating',
+    	'votes' => 'votes',
+    	'title' => 'title',
+    	'caption' => 'caption',
+    	'keywords' => 'keywords',
+    	'approved' => 'approved',
+    	'galleryicon' => 'galleryicon',
+    	'user1' => 'user1',
+    	'user2' => 'user2',
+    	'user3' => 'user3',
+    	'user4' => 'user4',
+    	'url_prefix' => 'url_prefix',
+    	'pic_raw_ip' => 'pic_raw_ip',
+    	'pic_hdr_ip' => 'pic_hdr_ip',
+    	'lasthit_ip' => 'lasthit_ip',
+    	'position' => 'position'
     );
   }
 
