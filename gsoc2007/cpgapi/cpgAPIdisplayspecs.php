@@ -21,7 +21,7 @@
  * Class specifying everthing about the display structure
  */
 class displayspecs {
-  var $userpersonalfields, $groupfields, $configfields, $categoryfields;
+  var $userpersonalfields, $groupfields, $configfields, $categoryfields, $picturefields;
 
   function initialize() {
     // Database connection settings
@@ -43,6 +43,14 @@ class displayspecs {
     	'aid', 'title', 'description', 'visibility', 'uploads' , 'comments',
     	'votes', 'pos', 'category', 'thumb', 'keyword',
     	'moderator_group', 'alb_hits' 
+    );
+    
+    $this->picturefields = array(
+    	'pid', 'aid', 'filesize',
+    	'pwidth', 'pheight', 'hits', 'mtime', 'ctime', 'ownerid',
+    	'ownername', 'pic_rating', 'votes', 'title', 'caption',
+    	'keywords', 'approved', 'galleryicon', 'user1', 'user2', 'user3', 'user4',
+    	'pos'
     );
 
     $this->configfields = array(

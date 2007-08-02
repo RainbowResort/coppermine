@@ -79,7 +79,7 @@ class albumfunctions {
 
            // Check for ownership
 	   	   // do i own the category?
-		   if (authorizeusercat($CURRENT_USER, $catid, "owner"))
+		   if ($this->authorizeusercat($CURRENT_USER, $catid, "owner"))
 		      return true;
 		   // am i in the moderator group?
 		   $iresult = "SELECT * FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}=" . $CURRENT_USER['user_id'] . " AND {$DBS->userxgroup['group_id']}=" . $mg;
@@ -321,9 +321,6 @@ class albumfunctions {
 		$DBS->sql_update("DELETE FROM {$DBS->albumtable} WHERE {$DBS->albumfield['aid']}=" . $albumid);
     }
     
-    function addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $filesize) {
-    	
-    }
 }
 
 ?>

@@ -22,7 +22,7 @@
  */
 class dbspecs {
   var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
-  var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield;
+  var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield, $filetypetable, $filetypefield;
   var $dbactive = false;
 
   function initialize() {
@@ -45,7 +45,8 @@ class dbspecs {
         'config' => 'config',
         'categories' => 'categories',
         'albums' => 'albums',
-        'pictures' => 'pictures'
+        'pictures' => 'pictures',
+        'filetypes' => 'filetypes'
     );
 	
     // Derived full table names
@@ -56,6 +57,7 @@ class dbspecs {
     $this->categorytable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['categories'];
     $this->albumtable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['albums'];
     $this->picturetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['pictures'];
+    $this->filetypetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['filetypes'];
 
     // Table field names
     $this->field = array(
@@ -140,8 +142,8 @@ class dbspecs {
     	'hits' => 'hits',
     	'mtime' => 'mtime',
     	'ctime' => 'ctime',
-    	'owner_id' => 'owner_id',
-    	'owner_name' => 'owner_name',
+    	'ownerid' => 'owner_id',
+    	'ownername' => 'owner_name',
     	'pic_rating' => 'pic_rating',
     	'votes' => 'votes',
     	'title' => 'title',
@@ -157,7 +159,14 @@ class dbspecs {
     	'pic_raw_ip' => 'pic_raw_ip',
     	'pic_hdr_ip' => 'pic_hdr_ip',
     	'lasthit_ip' => 'lasthit_ip',
-    	'position' => 'position'
+    	'pos' => 'position'
+    );
+    
+    $this->filetypefield = array(
+    	'extension' => 'extension',
+    	'mime' => 'mime',
+    	'content' => 'content',
+    	'player' => 'player'
     );
   }
 

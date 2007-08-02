@@ -70,7 +70,10 @@ $APITYPE = array(
     'movealbum'			=> array('login', 'albumowner'),
     'removealbum'		=> array('login', 'albumowner'),
     
-    'addpicture'		=> array('login', 'albumowner')
+    'addpicture'		=> array('login', 'albumowner'),
+    'getpicture'		=> array('softlogin', 'pictureview'),
+    'getpicturedata'	=> array('softlogin', 'pictureview'),
+    'removepicture'		=> array('login', 'pictureowner')
 );
 
 $GROUPPERMS = array(
@@ -105,7 +108,9 @@ $DISPLAY = new displayspecs();
 $DISPLAY->initialize();
 $DBS = new dbspecs();
 $CF = new commonfunctions();
-$CF->showheader();
+if ($query != "getpicture") {
+   $CF->showheader();
+}
 $GF = new globalfunctions();
 $query = $CF->getuncheckedvariable("query");
 
@@ -134,7 +139,7 @@ if($query == 'install') {
      $INSTALL = new install();
      $INSTALL->newinstall($CF->getuncheckedvariable("dbserver"), $CF->getuncheckedvariable("dbuser"), $CF->getuncheckedvariable("dbpass"), $CF->getuncheckedvariable("dbname"), $CF->getuncheckedvariable("prefix"), $CF->getuncheckedvariable("adminusername"), $CF->getuncheckedvariable("adminpassword"), $CF->getuncheckedvariable("adminemail"));
   }
-}
+} 
 
 /* 
  * Uninstall Application -- open currently for debug only
@@ -163,12 +168,34 @@ require('cpgAPIuserfunctions.php');
 $UF = new userfunctions();
 require('cpgAPIalbumfunctions.php');
 $AF = new albumfunctions();
+require('cpgAPIpicturefunctions.php');
+$PF = new picturefunctions();
 $DBS->sql_connect();
 
 $CONFIG = $GF->getconfig($CONFIG);
 
 require($DFLT['cfg_d'] . "/" . $DFLT['mail_f']);
 require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
+
+
+/*
+ * Check the existance of upload folders. If they do not exist, create them
+ */
+if (!is_dir($CONFIG['fullpath'])) {
+	 mkdir($CONFIG['fullpath'], octdec($CONFIG['default_dir_mode']));
+     if (!is_dir($CONFIG['fullpath'])) {
+        $CF->unsafeexit('upload_dir_error');
+     }
+     @chmod($CONFIG['fullpath'], octdec($CONFIG['default_dir_mode'])); //silence the output in case chmod is disabled
+}
+if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
+	 mkdir($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode']));
+     if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
+        print "<messagecode>upload_dir_error</messagecode>";
+        $CF->safeexit();
+     }
+     @chmod($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode'])); //silence the output in case chmod is disabled
+}
 
 /*
  * Query manipulation: authenticate user first
@@ -230,6 +257,20 @@ if (!$APITYPE[$query]) {
 	   	  	 case 'albumview'    :
 	   	  	 	$albumid = $CF->getvariable("albumid");
 	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "view")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  		}
+	   	  	 	break;
+	   	  	 case 'pictureowner'    :
+	   	  	 	$picid = $CF->getvariable("pictureid");
+	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "owner")) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  		}
+	   	  	 	break;
+	   	  	 case 'pictureview'    :
+	   	  	 	$picid = $CF->getvariable("pictureid");
+	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "view")) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  		}
@@ -661,14 +702,17 @@ case 'removecategory':
    break;
 
 case 'showcategories':
+   print "<messagecode>success</messagecode>";
    $AF->showCategories($CURRENT_USER);
    break;
    
 case 'showmycategories':
+   print "<messagecode>success</messagecode>";
    $AF->showUserCategories($CURRENT_USER);
    break;
 
 case 'showadmincategories':
+   print "<messagecode>success</messagecode>";
    $AF->showAdminCategories($CURRENT_USER);
    break;
 
@@ -676,7 +720,6 @@ case 'createalbum':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addalbumname = $CF->getvariable("albumname");
    $addalbumdesc = $CF->getvariable("albumdesc");
-   $isadmincategory = $CF->getvariable("admincat");
    print "<messagecode>success</messagecode>";
    $AF->showAlbumData($AF->createAlbum($CURRENT_USER, $addalbumname, $addalbumdesc, $categoryid));
    break;
@@ -690,6 +733,7 @@ case 'viewalbum':
 case 'removealbum':
    $albumid = $CF->getvariable("albumid");
    $AF->removeAlbum($albumid);
+   print "<messagecode>success</messagecode>";
    break;
 
 case 'addpicture':
@@ -697,19 +741,102 @@ case 'addpicture':
    $pictitle = $CF->getvariable("pictitle");
    $piccaption = $CF->getvariable("piccaption");
    $pickeywords = $CF->getvariable("pickeywords");
+   $user1 = $CF->getvariable("user1");
+   $user2 = $CF->getvariable("user2");
+   $user3 = $CF->getvariable("user3");
+   $user4 = $CF->getvariable("user4");   
    
    if (isset($_FILES['file'])) {
       if ($_FILES['file']['error'] == UPLOAD_ERR_OK) {
          $filename = $_FILES['file']['name']; // file name 
-         move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir.'/'.$filename);
-         $AF->addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $_FILES['file']['size']);
+         $pos = strrpos($filename, ".");
+   	     if ($pos) { 
+   	  	    $extension = substr($filename, $pos+1);
+            if ($PF->checkExtension($extension)) {
+               $picid = $PF->addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $extension, $_FILES['file']['size'], $CURRENT_USER['username'], $CURRENT_USER['user_id'], $user1, $user2, $user3, $user4);
+               if ($picid) {
+                  print "<messagecode>success</messagecode>";
+                  $PF->showPictureData($PF->getPictureData($picid));            	   
+   	  	 	      $filepath = $PF->getPicturePath($picid);
+                  // Upload the file
+            	  move_uploaded_file($_FILES['file']['tmp_name'], $filepath);
+         	      @chmod($filepath, octdec($CONFIG['default_file_mode']));
+               }  else {
+         	      $PF->removePicture($picid);
+                  print "<messagecode>upload_error</messagecode>"; 
+               }
+   	  	    }  else {
+      	       print "<messagecode>unknown_extension</messagecode>";       		   	  	 	
+   	  	    } 
+   	     }  else {
+         	print "<messagecode>unknown_extension</messagecode>";    	     	
+   	     }
       }  elseif ($_FILES['file']['error'] == UPLOAD_ERR_INI_SIZE) {
          print "<messagecode>max_upload_size_exceed</messagecode>"; 
       }  else { 
          print "<messagecode>upload_error</messagecode>"; 
       }
+   }  else if ($CF->checkvariable("filename")) {
+   	  $filename = $CF->getvariable("filename");
+      $filecontents = $CF->getvariable("filecontents");
+   	  $pos = strrpos($filename, ".");
+   	  if ($pos) { 
+   	  	 $extension = substr($filename, $pos+1);
+   	  	 if ($PF->checkExtension($extension)) {
+      	    $picid = $PF->addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $extension, strlen($filecontents), $CURRENT_USER['username'], $CURRENT_USER['user_id'], $user1, $user2, $user3, $user4);
+      	    if ($picid) {
+   	  	 	   $filepath = $PF->getPicturePath($picid);
+        	   // Upload the file
+               print "<messagecode>success</messagecode>";         	       
+               $PF->showPictureData($PF->getPictureData($picid));            	   
+      	       if ($fh = @fopen($filepath, "w")) {
+				   fwrite($fh, $filecontents);      	       	
+         	       fclose($fh);
+         	       @chmod($filepath, octdec($CONFIG['default_file_mode']));
+         	    }  else {
+         	       $PF->removePicture($picid);
+         	       print "<messagecode>upload_error</messagecode>";       		
+      	       }
+      	    }  else {
+               print "<messagecode>upload_error</messagecode>";       		      	 	
+      	    }   	  	 	
+   	  	 }  else {
+      	    print "<messagecode>unknown_extension</messagecode>";       		   	  	 	
+   	  	 } 
+      }  else {
+      	 print "<messagecode>unknown_extension</messagecode>";       		
+      }
+   }  else {
+      print "<messagecode>upload_error</messagecode>";       		   	
    }
    
+   break;
+
+case 'getpicture':
+   $pictureid = $CF->getvariable("pictureid");
+   $PICTURE_DATA = $PF->showPicture($pictureid);
+   if (!$PICTURE_DATA['error']) { }
+   else {
+      $CF->showheader();   	
+      print "<messagecode>{$PICTURE_DATA['messagecode']}</messagecode>";
+   }
+   break;
+
+case 'getpicturedata':
+   $pictureid = $CF->getvariable("pictureid");
+   $PICTURE_DATA = $PF->getPictureData($pictureid);
+   print $PICTURE_DATA['pid'];
+   if (!$PICTURE_DATA['error']) {
+      print "<messagecode>success</messagecode>";
+      $PF->showPictureData($PICTURE_DATA);
+   }
+   else print "<messagecode>{$PICTURE_DATA['messagecode']}</messagecode>";
+   break;
+
+case 'removepicture':
+   $pictureid = $CF->getvariable("pictureid");
+   $PF->removePicture($pictureid);
+   print "<messagecode>success</messagecode>";
    break;
 
 default:
