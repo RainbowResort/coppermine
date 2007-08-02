@@ -42,7 +42,7 @@ class displayspecs {
     $this->albumfields = array(
     	'aid', 'title', 'description', 'visibility', 'uploads' , 'comments',
     	'votes', 'pos', 'category', 'thumb', 'keyword',
-    	'moderator_group', 'alb_hits' 
+    	'moderator_group', 'alb_password_hint', 'alb_hits' 
     );
     
     $this->picturefields = array(

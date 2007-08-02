@@ -64,6 +64,7 @@ $APITYPE = array(
     'modifycategory'	=> array('login', 'categoryowner'),
     'movecategory'		=> array('login', 'categoryowner'),
     'removecategory'	=> array('login', 'categoryowner'),
+    
     'createalbum'		=> array('login', 'categoryowner'),
     'viewalbum'			=> array('softlogin', 'albumview'),
     'modifyalbum'		=> array('login', 'albumowner'),
@@ -73,6 +74,8 @@ $APITYPE = array(
     'addpicture'		=> array('login', 'albumowner'),
     'getpicture'		=> array('softlogin', 'pictureview'),
     'getpicturedata'	=> array('softlogin', 'pictureview'),
+    'modifypicture'		=> array('login', 'pictureowner'),
+    'movepicture'		=> array('login', 'pictureowner'),
     'removepicture'		=> array('login', 'pictureowner')
 );
 
@@ -249,28 +252,32 @@ if (!$APITYPE[$query]) {
 	   	  	 	break;
 	   	  	 case 'albumowner'   :
 	   	  	 	$albumid = $CF->getvariable("albumid");
-	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "owner")) {
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "owner", $albumpassword)) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  	 	}
 	   	  	 	break;
 	   	  	 case 'albumview'    :
 	   	  	 	$albumid = $CF->getvariable("albumid");
-	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "view")) {
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "view", $albumpassword)) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'pictureowner'    :
 	   	  	 	$picid = $CF->getvariable("pictureid");
-	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "owner")) {
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "owner", $albumpassword)) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'pictureview'    :
 	   	  	 	$picid = $CF->getvariable("pictureid");
-	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "view")) {
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "view", $albumpassword)) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  		}
@@ -669,10 +676,20 @@ case 'createcategory':
 
 case 'modifycategory':
    $categoryid = $CF->getvariable("categoryid");
-   $categoryname = $CF->getvariable("categoryname");
-   $categorydesc = $CF->getvariable("categorydesc");
-   $categoryparent = $CF->getvariable("categoryparent");
-   $categorythumb = $CF->getvariable("categorythumb");
+   
+   if ($CF->checkvariable("categoryname"))
+   	  $categoryname = $CF->getvariable("categoryname");
+   else $categoryname = false;
+   if ($CF->checkvariable("categorydesc"))
+      $categorydesc = $CF->getvariable("categorydesc");
+   else $categorydesc = false;
+   if ($CF->checkvariable("categoryparent"))
+      $categoryparent = $CF->getvariable("categoryparent");
+   else $categoryparent = false;
+   if ($CF->checkvariable("categorythumb"))
+      $categorythumb = $CF->getvariable("categorythumb");
+   else $categorythumb = false;
+   
    if ($categoryparent == $categoryid) {
    	  $categoryparent = 0;
    }
@@ -720,8 +737,35 @@ case 'createalbum':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addalbumname = $CF->getvariable("albumname");
    $addalbumdesc = $CF->getvariable("albumdesc");
+   $addalbumkeywords = $CF->getvariable("albumkeywords");
    print "<messagecode>success</messagecode>";
-   $AF->showAlbumData($AF->createAlbum($CURRENT_USER, $addalbumname, $addalbumdesc, $categoryid));
+   $AF->showSingleAlbumData($AF->createAlbum($addalbumname, $addalbumdesc, $addalbumkeywords, $categoryid));
+   break;
+
+case 'modifyalbum':
+   $albumid = $CF->getvariable("albumid");
+   
+   if ($CF->checkvariable("albumname"))
+   	  $albumname = $CF->getvariable("albumname");
+   else $albumname = false;
+   if ($CF->checkvariable("albumdesc"))
+      $albumdesc = $CF->getvariable("albumdesc");
+   else $albumdesc = false;
+   if ($CF->checkvariable("albumthumb"))
+      $albumthumb = $CF->getvariable("albumthumb");
+   else $albumthumb = false;
+   if ($CF->checkvariable("albumkeywords"))
+      $albumkeywords = $CF->getvariable("albumkeywords");
+   else $albumkeywords = false;
+   if ($CF->checkvariable("albumpassword"))
+      $albumpassword = $CF->getvariable("albumpassword");
+   else $albumpassword = false;
+   if ($CF->checkvariable("albumpasswordhint"))
+      $albumpasswordhint = $CF->getvariable("albumpasswordhint");
+   else $albumpasswordhint = false;
+   
+   print "<messagecode>success</messagecode>";
+   $AF->showSingleAlbumData($AF->modifyAlbum($albumid, $albumname, $albumdesc, $albumthumb, $albumpassword, $albumpasswordhint));
    break;
 
 case 'viewalbum':
@@ -730,6 +774,15 @@ case 'viewalbum':
    $AF->showAlbumData($AF->getAlbumData($albumid));
    break;
 
+case 'movealbum':
+   $albumid = $CF->getvariable("albumid");
+   $albumpos = $CF->getvariable("albumpos");
+   if ($AF->moveAlbum($albumid, $albumpos))
+      print "<messagecode>success</messagecode>";
+   else
+      print "<messagecode>could_not_move</messagecode>";   
+   break;
+   
 case 'removealbum':
    $albumid = $CF->getvariable("albumid");
    $AF->removeAlbum($albumid);
@@ -831,6 +884,44 @@ case 'getpicturedata':
       $PF->showPictureData($PICTURE_DATA);
    }
    else print "<messagecode>{$PICTURE_DATA['messagecode']}</messagecode>";
+   break;
+
+case 'movepicture':
+   $pictureid = $CF->getvariable("pictureid");
+   $picturepos = $CF->getvariable("picturepos");
+   if ($PF->movePicture($pictureid, $picturepos))
+      print "<messagecode>success</messagecode>";
+   else
+      print "<messagecode>could_not_move</messagecode>";   
+   break;
+
+case 'modifypicture':
+   $pictureid = $CF->getvariable("pictureid");
+   
+   if ($CF->checkvariable("pictitle"))
+   	  $pictitle = $CF->getvariable("pictitle");
+   else $pictitle = false;
+   if ($CF->checkvariable("piccaption"))
+      $piccaption = $CF->getvariable("piccaption");
+   else $piccaption = false;
+   if ($CF->checkvariable("pickeywords"))
+      $pickeywords = $CF->getvariable("pickeywords");
+   else $pickeywords = false;
+   if ($CF->checkvariable("user1"))
+      $user1 = $CF->getvariable("user1");
+   else $user1 = false;
+   if ($CF->checkvariable("user2"))
+      $user2 = $CF->getvariable("user2");
+   else $user2 = false;
+   if ($CF->checkvariable("user3"))
+      $user3 = $CF->getvariable("user3");
+   else $user3 = false;
+   if ($CF->checkvariable("user4"))
+      $user4 = $CF->getvariable("user4");
+   else $user4 = false;
+   
+   print "<messagecode>success</messagecode>";
+   $AF->showPictureData($AF->modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4));
    break;
 
 case 'removepicture':

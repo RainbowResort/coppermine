@@ -9,7 +9,7 @@
  */
 class picturefunctions {
     
-    function authorizeuserpicture($CURRENT_USER, $picid, $perm) {
+    function authorizeuserpicture($CURRENT_USER, $picid, $perm, $albumpassword) {
 		global $CF, $DBS, $UF, $AF;
 
 		$results = $DBS->sql_query("SELECT * FROM {$DBS->picturetable} WHERE {$DBS->picturefield['pid']}={$picid}");
@@ -19,7 +19,7 @@ class picturefunctions {
 		   return false;
 		}		
 		
-		return $AF->authorizeuseralbum($CURRENT_USER, $albumid, $perm);
+		return $AF->authorizeuseralbum($CURRENT_USER, $albumid, $perm, $albumpassword);
 	}	
     
     
@@ -120,7 +120,55 @@ class picturefunctions {
       }
       print "</picturedata>";
     }
- 
+
+	function movePicture($pictureid, $picturepos) {
+		global $DBS;
+		
+		$results = $DBS->sql_query("SELECT * FROM {$DBS->picturetable} WHERE {$DBS->picturefield['pid']}=" . $pictureid);
+		if (mysql_numrows($results)) {
+			$albumid = mysql_result($results, 0, $DBS->picturefield['aid']);
+			$oldpos = mysql_result($results, 0, $DBS->picturefield['pos']);
+			if ($oldpos < $picturepos) {
+				$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['pos']}={$DBS->picturefield['pos']}-1 WHERE {$DBS->picturefield['aid']}=" . $albumid . " AND {$DBS->picturefield['pos']} <= " . $picturepos);
+			} else if ($oldpos > $picturepos){
+				$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['pos']}={$DBS->picturefield['pos']}+1 WHERE {$DBS->picturefield['aid']}=" . $albumid . " AND {$DBS->picturefield['pos']} >= " . $picturepos);
+			}
+			$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['pos']}=" . $picturepos . " WHERE {$DBS->picturefield['pid']}=" . $pictureid);
+			return true;
+		}
+
+		return false;
+	}	
+
+	function modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4) {
+		global $DBS;
+
+	    $sets = "";
+	    if ($pictitle === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['title']}='{$pictitle}'";
+
+	    if ($piccaption === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['caption']}='{$piccaption}'";
+
+	    if ($pickeywords === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['keywords']}='{$pickeywords}'";
+
+	    if ($user1 === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['user1']}='{$user1}'";
+
+	    if ($user2 === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['user2']}='{$user2}'";
+
+	    if ($user3 === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['user3']}='{$user3}'";
+
+	    if ($user4 === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->picturefield['user4']}='{$user4}'";
+
+		if ($sets != "") $DBS->sql_update("UPDATE {$DBS->picturetable} SET " . $sets . " WHERE {$DBS->picturefield['pid']}={$pictureid}");
+		return $this->getPictureData($pictureid);
+	}
+
     function removePicture ($pictureid) {
     	global $DBS;
     	

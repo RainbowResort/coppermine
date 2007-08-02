@@ -48,7 +48,7 @@ class albumfunctions {
 		}
 	}	
 
-	function authorizeuseralbum($CURRENT_USER, $albumid, $perm) {
+	function authorizeuseralbum($CURRENT_USER, $albumid, $perm, $albumpassword) {
 		global $CF, $DBS, $UF;
 
 		$results = $DBS->sql_query("SELECT * FROM {$DBS->albumtable} WHERE {$DBS->albumfield['aid']}={$albumid}");
@@ -56,6 +56,7 @@ class albumfunctions {
 		   $catid = mysql_result($results, 0, $DBS->albumfield['category']);
            $vg = mysql_result($results, 0, $DBS->albumfield['visibility']);
            $mg = mysql_result($results, 0, $DBS->albumfield['moderator_group']);
+           $password = mysql_result($results, 0, $DBS->albumfield['alb_password']);
 		}  else {
 		   return false;
 		}		
@@ -64,18 +65,16 @@ class albumfunctions {
 		   if ($perm == "owner") {
 		   	  return false;
 		   }  else {
-		   	  if ($vg == 0)
-		   	     return true;
+		   	  if ($password) {
+		   	  	 if (md5($albumpassword) != $password) return false;
+              }
+	   	      if ($vg == 0)
+	   	         return true;
 		   	  return false;
 		   }
 		}  else {
 		   if ($UF->isAdmin($CURRENT_USER['username']))
 		      return true;
-
-           if ($perm == "view") {
-           	  if ($vg == 0)
-		   	     return true;
-           }
 
            // Check for ownership
 	   	   // do i own the category?
@@ -85,6 +84,15 @@ class albumfunctions {
 		   $iresult = "SELECT * FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}=" . $CURRENT_USER['user_id'] . " AND {$DBS->userxgroup['group_id']}=" . $mg;
 		   if (mysql_numrows($iresult))
 		      return true;
+		      
+           if ($perm == "view") {
+		   	  if ($password) {
+		   	  	 if (md5($albumpassword) != $password) return false;
+              }
+	   	      if ($vg == 0)
+	   	         return true;
+           }
+
 		   return false;
 		}
 	}	
@@ -128,7 +136,20 @@ class albumfunctions {
 	function modifyCategory($catid, $catname, $catdesc, $catparent, $catthumb) {
 		global $DBS;
 
-		$DBS->sql_update("UPDATE {$DBS->categorytable} SET {$DBS->catfield['name']}='{$catname}', {$DBS->catfield['description']}='{$catdesc}', {$DBS->catfield['parent']}={$catparent}, {$DBS->catfield['thumb']}='{$catthumb}' WHERE {$DBS->catfield['cid']}={$catid}");
+	    $sets = "";
+	    if ($catname === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['name']}='{$catname}'";
+
+	    if ($catdesc === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['description']}='{$catdesc}'";
+
+	    if ($catparent === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['parent']}='{$catparent}'";
+
+	    if ($catthumb === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['thumb']}='{$catthumb}'";
+
+		if ($sets != "") $DBS->sql_update("UPDATE {$DBS->categorytable} SET " . $sets . " WHERE {$DBS->catfield['cid']}={$catid}");
 		return $this->getCategoryData($catid);
 	}
 
@@ -210,7 +231,27 @@ class albumfunctions {
     }
 
     function showAlbumData ($ALBUM_DATA) {
-      global $DISPLAY;
+      global $DISPLAY, $PF, $DBS;
+
+	  $DBS->sql_update("UPDATE {$DBS->albumtable} SET {$DBS->albumfield['alb_hits']}={$DBS->albumfield['alb_hits']}+1 WHERE {$DBS->albumfield['aid']}=" . $ALBUM_DATA['aid']);
+
+      print "<albumdata>";
+      for($i=0;$i<count($DISPLAY->albumfields);$i++) {
+         print "<" . $DISPLAY->albumfields[$i] . ">";
+         print $ALBUM_DATA[$DISPLAY->albumfields[$i]];
+         print "</" . $DISPLAY->albumfields[$i] . ">";
+      }
+
+      $results = $DBS->sql_query("SELECT {$DBS->picturefield['pid']} FROM {$DBS->picturetable} WHERE {$DBS->picturefield['aid']}=" . $ALBUM_DATA['aid'] . " ORDER BY {$DBS->picturefield['pos']}");
+	  for($i=0; $i < mysql_numrows($results); $i++) {
+     	 $PF->showPictureData($PF->getPictureData(mysql_result($results, $i, $DBS->picturefield['pid'])));
+	  }
+
+      print "</albumdata>";
+    }
+    
+    function showSingleAlbumData ($ALBUM_DATA) {
+      global $DISPLAY, $PF, $DBS;
 
       print "<albumdata>";
       for($i=0;$i<count($DISPLAY->albumfields);$i++) {
@@ -238,7 +279,7 @@ class albumfunctions {
 	  for($i=0; $i < mysql_numrows($results); $i++) {
          $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
 	     if($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
-	     	$this->showAlbumData($this->getAlbumData($albumid));
+	     	$this->showSingleAlbumData($this->getAlbumData($albumid));
 	  }
 
       $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->catfield['pos']}");
@@ -284,7 +325,7 @@ class albumfunctions {
 	  }
 	}
 
-	function createAlbum($CURRENT_USER, $albumname, $albumdesc, $catid) {
+	function createAlbum($albumname, $albumdesc, $albumkeywords, $catid) {
 		global $DBS;
         $albumpos = 0;
       	$results = $DBS->sql_query("SELECT COUNT(*) AS CX, MAX({$DBS->albumfield['pos']}) AS MX FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $catid);
@@ -292,7 +333,7 @@ class albumfunctions {
        		$albumpos = mysql_result($results, 0, "MX") + 1;	
        	}
 
-		$DBS->sql_update("INSERT INTO {$DBS->albumtable} ({$DBS->albumfield['title']},{$DBS->albumfield['description']},{$DBS->albumfield['category']},{$DBS->albumfield['pos']}) VALUES ('{$albumname}', '{$albumdesc}', '{$catid}', '{$albumpos}')");
+		$DBS->sql_update("INSERT INTO {$DBS->albumtable} ({$DBS->albumfield['title']},{$DBS->albumfield['description']},{$DBS->albumfield['category']},{$DBS->albumfield['keyword']},{$DBS->albumfield['pos']}) VALUES ('{$albumname}', '{$albumdesc}', '{$catid}', '{$albumkeywords}', '{$albumpos}')");
 		return $this->getAlbumData($DBS->sql_insert_id());
 	}
 	
@@ -314,6 +355,32 @@ class albumfunctions {
 
 		return false;
 	}	
+
+	function modifyAlbum($albumid, $albumname, $albumdesc, $albumthumb, $albumpassword, $albumpasswordhint) {
+		global $DBS;
+
+	    $sets = "";
+	    if ($albumname === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->albumfield['title']}='{$albumname}'";
+
+	    if ($albumdesc === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->albumfield['description']}='{$albumdesc}'";
+
+	    if ($albumthumb === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->albumfield['thumb']}='{$albumthumb}'";
+
+	    if ($albumpassword === false) { }
+	    else {
+	       $albumpassword = md5($albumpassword);
+	       $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->albumfield['alb_password']}='{$albumpassword}'";	
+	    }
+
+	    if ($albumpasswordhint === false) { }
+	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->albumfield['alb_password_hint']}='{$albumpasswordhint}'";
+
+		if ($sets != "") $DBS->sql_update("UPDATE {$DBS->albumtable} SET " . $sets . " WHERE {$DBS->albumfield['aid']}={$albumid}");
+		return $this->getAlbumData($albumid);
+	}
 
     function removeAlbum($albumid) {
 		global $DBS, $DISPLAY;
