@@ -23,6 +23,7 @@
 class dbspecs {
   var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
   var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield, $filetypetable, $filetypefield;
+  var $commentstable, $commentsfield, $hitstatstable, $hitstatsfield;
   var $dbactive = false;
 
   function initialize() {
@@ -46,7 +47,9 @@ class dbspecs {
         'categories' => 'categories',
         'albums' => 'albums',
         'pictures' => 'pictures',
-        'filetypes' => 'filetypes'
+        'filetypes' => 'filetypes',
+        'comments' => 'comments',
+        'hitstats' => 'hit_stats'
     );
 	
     // Derived full table names
@@ -58,7 +61,9 @@ class dbspecs {
     $this->albumtable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['albums'];
     $this->picturetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['pictures'];
     $this->filetypetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['filetypes'];
-
+	$this->commentstable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['comments'];
+	$this->hitstatstable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['hitstats']; 
+	
     // Table field names
     $this->field = array(
         'username' => 'user_name', // name of 'username' field in users table
@@ -168,6 +173,31 @@ class dbspecs {
     	'content' => 'content',
     	'player' => 'player'
     );
+    
+    $this->commentsfield = array(
+    	'pid' => 'pid',
+		'msgid' => 'msg_id',
+		'msgauthor' => 'msg_author',
+		'msgbody' => 'msg_body',
+		'msgdate' => 'msg_date',
+		'msg_raw_ip' => 'msg_raw_ip',
+		'msg_hdr_ip' => 'msg_hdr_ip',
+		'author_md5_id' => 'author_md5_id',
+		'author_id' => 'author_id',
+		'approval' => 'approval'
+    );
+    
+    $this->hitstatsfield = array(
+    	'sid' => 'sid',
+		'pid' => 'pid',
+		'ip' => 'ip',
+		'search_phrase' => 'search_phrase',
+		'sdate' => 'sdate',
+		'referer' => 'refered',
+		'browser' => 'browser',
+		'os' => 'os'
+    );    
+    
   }
 
   function sql_connect() {

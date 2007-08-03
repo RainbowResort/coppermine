@@ -76,7 +76,13 @@ $APITYPE = array(
     'getpicturedata'	=> array('softlogin', 'pictureview'),
     'modifypicture'		=> array('login', 'pictureowner'),
     'movepicture'		=> array('login', 'pictureowner'),
-    'removepicture'		=> array('login', 'pictureowner')
+    'removepicture'		=> array('login', 'pictureowner'),
+    
+	'createcomment'		=> array('softlogin', 'pictureview'),
+	'approvecomment'	=> array('login', 'pictureowner'),
+	'modifycomment'		=> array('login', 'commentowner'),
+	'viewcomment'		=> array('login', 'commentview'),
+	'removecomment'		=> array('login', 'pictureowner')
 );
 
 $GROUPPERMS = array(
@@ -278,6 +284,22 @@ if (!$APITYPE[$query]) {
 	   	  	 	$picid = $CF->getvariable("pictureid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "view", $albumpassword)) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  		}
+	   	  	 	break;
+	   	  	 case 'commentowner'    :
+	   	  	 	$msgid = $CF->getvariable("msgid");
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$PF->authorizeusercomment($CURRENT_USER, $msgid, "owner", $albumpassword)) {
+	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
+                   $CF->safeexit();
+	   	  		}
+	   	  	 	break;
+	   	  	 case 'commentview'    :
+	   	  	 	$msgid = $CF->getvariable("msgid");
+	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
+	   	  	 	if (!$PF->authorizeusercomment($CURRENT_USER, $msgid, "view", $albumpassword)) {
 	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
                    $CF->safeexit();
 	   	  		}
@@ -669,7 +691,9 @@ case 'createcategory':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addcategoryname = $CF->getvariable("categoryname");
    $addcategorydesc = $CF->getvariable("categorydesc");
-   $isadmincategory = $CF->getvariable("admincat");
+   if ($UF->isAdmin($CURRENT_USER['username']) && $categoryid == "0") {
+   	  $isadmincategory = 1;
+   }
    print "<messagecode>success</messagecode>";
    $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid, $isadmincategory));
    break;
@@ -878,7 +902,6 @@ case 'getpicture':
 case 'getpicturedata':
    $pictureid = $CF->getvariable("pictureid");
    $PICTURE_DATA = $PF->getPictureData($pictureid);
-   print $PICTURE_DATA['pid'];
    if (!$PICTURE_DATA['error']) {
       print "<messagecode>success</messagecode>";
       $PF->showPictureData($PICTURE_DATA);

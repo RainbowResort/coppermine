@@ -21,7 +21,29 @@ class picturefunctions {
 		
 		return $AF->authorizeuseralbum($CURRENT_USER, $albumid, $perm, $albumpassword);
 	}	
-    
+
+    function authorizeusercomment($CURRENT_USER, $msgid, $perm, $albumpassword) {
+		global $CF, $DBS, $UF, $AF, $CONFIG;
+
+		$results = $DBS->sql_query("SELECT * FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['msgid']}={$msgid}");
+		if (mysql_numrows($results)) {
+           if (mysql_result($results, 0, $DBS->commentsfield['author_id']) == $CURRENT_USER['user_id'])
+              return true;
+           if (mysql_result($results, 0, $DBS->commentsfield['author_md5_id']) == md5($CURRENT_USER['user_id']))
+              return true;
+
+		   if ($perm == "view") {
+			  if ($this->authorizeuserpicture($CURRENT_USER, mysql_result($results, 0, $DBS->commentsfield['pid']), "owner", $albumpassword))
+			     return true;
+			  if ($CONFIG['display_comment_approval_only'] && mysql_result($results, 0, $DBS->commentsfield['approval']) == "NO")
+			     return false;
+			  
+			  return true;
+		   }
+		}
+		
+		return false;
+    }
     
     function addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $extension, $filesize, $ownername, $ownerid, $user1, $user2, $user3, $user4) {
     	global $DBS, $CF, $CONFIG;
@@ -110,7 +132,7 @@ class picturefunctions {
     }
     
     function showPictureData ($PICTURE_DATA) {
-      global $DISPLAY;
+      global $DISPLAY, $CONFIG, $DBS;
 
       print "<picturedata>";
       for($i=0;$i<count($DISPLAY->picturefields);$i++) {
@@ -118,6 +140,12 @@ class picturefunctions {
          print $PICTURE_DATA[$DISPLAY->picturefields[$i]];
          print "</" . $DISPLAY->picturefields[$i] . ">";
       }
+      
+      if ($CONFIG['display_comment_count']) {
+      	$results = $DBS->sql_query("SELECT COUNT(*) AS CX MX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $PICTURE_DATA['pid']);
+       	print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
+      }
+      
       print "</picturedata>";
     }
 
