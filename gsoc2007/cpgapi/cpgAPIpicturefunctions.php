@@ -24,9 +24,10 @@ class picturefunctions {
 
     function authorizeusercomment($CURRENT_USER, $msgid, $perm, $albumpassword) {
 		global $CF, $DBS, $UF, $AF, $CONFIG;
-
 		$results = $DBS->sql_query("SELECT * FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['msgid']}={$msgid}");
 		if (mysql_numrows($results)) {
+		   if ($UF->isAdmin($CURRENT_USER['username']))
+			  return true;
            if (mysql_result($results, 0, $DBS->commentsfield['author_id']) == $CURRENT_USER['user_id'])
               return true;
            if (mysql_result($results, 0, $DBS->commentsfield['author_md5_id']) == md5($CURRENT_USER['user_id']))
@@ -59,7 +60,7 @@ class picturefunctions {
     	
     	$randomname = $CF->str_makerand(7, 10, true, false, true);   	
     	$filepath = $CONFIG['fullpath'] . $CONFIG['userpics'] . $randomname . "." . $extension;
-    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $filepath . "', {$DBS->picturefield['pic_raw_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['pic_hdr_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
+    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $filepath . "', {$DBS->picturefield['pic_raw_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['pic_hdr_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['mtime']}='" . date("Y-m-d H:i:s") . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
     	return $picid;
     }
     
@@ -146,6 +147,12 @@ class picturefunctions {
        	print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
       }
       
+      $results = $DBS->sql_query("SELECT {$DBS->commentsfield['msgid']} FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $PICTURE_DATA['pid']);
+	  for($i=0; $i < mysql_numrows($results); $i++) {
+     	 $this->showCommentData($this->getCommentData(mysql_result($results, $i, $DBS->commentsfield['msgid'])));
+	  }
+      
+      
       print "</picturedata>";
     }
 
@@ -201,7 +208,65 @@ class picturefunctions {
     	global $DBS;
     	
         $DBS->sql_update("DELETE FROM {$DBS->picturetable} WHERE {$DBS->picturefield['pid']}=" . $pictureid);
-    }   
+        
+        $results = $DBS->sql_query("SELECT {$DBS->commentsfield['msgid']} FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $pictureid);
+	    for($i=0; $i < mysql_numrows($results); $i++) {
+	  	   $this->removeComment(mysql_result($results, $i, $DBS->commentsfield['msgid']));
+	    }
+        mysql_free_result($results);
+        
+    }
+    
+    function createComment($pictureid, $msgbody, $authorname, $authorid) {
+    	global $DBS, $CF, $CONFIG;
+    	
+    	$DBS->sql_update("INSERT INTO {$DBS->commentstable} ({$DBS->commentsfield['pid']},{$DBS->commentsfield['msgauthor']},{$DBS->commentsfield['msgbody']},{$DBS->commentsfield['msgdate']},{$DBS->commentsfield['msg_raw_ip']},{$DBS->commentsfield['msg_hdr_ip']},{$DBS->commentsfield['author_id']},{$DBS->commentsfield['author_md5_id']}) VALUES ('{$pictureid}','{$authorname}','{$msgbody}','" . date("Y-m-d H:i:s") . "','" . $_SERVER['REMOTE_ADDR'] . "','" . $_SERVER['REMOTE_ADDR'] . "','{$authorid}','" . md5($authorid) . "')");
+    	return $DBS->sql_insert_id();
+    }
+
+	function getCommentData($msgid) {
+		global $DISPLAY, $DBS;
+
+    	$fieldstring = "";
+    	for($i=0;$i<count($DISPLAY->commentsfields);$i++) {
+       		if($i!=0) $fieldstring .= ", ";
+       		$fieldstring .= "{$DBS->commentsfield[$DISPLAY->commentsfields[$i]]} AS {$DISPLAY->commentsfields[$i]}";
+    	}
+    	
+    	$sql =  "SELECT $fieldstring FROM {$DBS->commentstable}";
+    	$sql .= " WHERE {$DBS->commentsfield['msgid']} = '$msgid'";
+    	$results = $DBS->sql_query($sql);
+
+    	if (mysql_num_rows($results)) {
+       		$COMMENT_DATA = mysql_fetch_assoc($results);
+       		mysql_free_result($results);
+       		return $COMMENT_DATA;
+    	}  else {
+           $COMMENT_DATA = array();
+           $COMMENT_DATA['error'] = true;
+           $COMMENT_DATA['messagecode'] = "comment_not_found";
+           return $COMMENT_DATA;   	      	
+    	}
+	}
+
+    function showCommentData ($COMMENT_DATA) {
+      global $DISPLAY, $CONFIG, $DBS;
+
+      print "<commentdata>";
+      for($i=0;$i<count($DISPLAY->commentsfields);$i++) {
+         print "<" . $DISPLAY->commentsfields[$i] . ">";
+         print $COMMENT_DATA[$DISPLAY->commentsfields[$i]];
+         print "</" . $DISPLAY->commentsfields[$i] . ">";
+      }
+      print "</commentdata>";
+    }
+
+    function removeComment ($msgid) {
+    	global $DBS;
+    	
+        $DBS->sql_update("DELETE FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['msgid']}=" . $msgid);
+    }
+       
 }
 
 ?>

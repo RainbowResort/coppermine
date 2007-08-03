@@ -21,7 +21,7 @@
  * Class specifying everthing about the display structure
  */
 class displayspecs {
-  var $userpersonalfields, $groupfields, $configfields, $categoryfields, $picturefields;
+  var $userpersonalfields, $groupfields, $configfields, $categoryfields, $picturefields, $commentsfields;
 
   function initialize() {
     // Database connection settings
@@ -52,6 +52,20 @@ class displayspecs {
     	'keywords', 'approved', 'galleryicon', 'user1', 'user2', 'user3', 'user4',
     	'pos'
     );
+    
+    $this->commentsfields = array(
+    	'pid',
+		'msgid',
+		'msgauthor',
+		'msgbody',
+		'msgdate',
+		'msg_raw_ip',
+		'msg_hdr_ip',
+		'author_md5_id',
+		'author_id',
+		'approval'
+    );
+    
 
     $this->configfields = array(
 	'albums_per_page',

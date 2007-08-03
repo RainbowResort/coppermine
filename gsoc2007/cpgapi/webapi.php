@@ -953,6 +953,63 @@ case 'removepicture':
    print "<messagecode>success</messagecode>";
    break;
 
+case 'createcomment':
+   $pictureid = $CF->getvariable("pictureid");
+   if (!$CURRENT_USER['username']) {
+      $authorname = $CONFIG['comments_anon_pfx'] . $CF->getvariable("authorname");
+      $authorid = "0";
+   }  else {
+   	  $authorname = $CURRENT_USER['username'];
+   	  $authorid = $CURRENT_USER['user_id'];
+   }
+   $msgbody = $CF->getvariable("msgbody");
+   print "<messagecode>success</messagecode>";
+   $PF->createComment($pictureid, $msgbody, $authorname, $authorid);
+   $PF->showPictureData($PF->getPictureData($pictureid));
+   break;
+
+case 'approvecomment':
+   break;
+
+case 'viewcomment':
+   $msgid = $CF->getvariable("msgid");
+   $COMMENT_DATA = $PF->getCommentData($msgid);
+   if (!$COMMENT_DATA['error']) {
+      print "<messagecode>success</messagecode>";
+      $PF->showCommentData($COMMENT_DATA);
+   }
+   else print "<messagecode>{$COMMENT_DATA['messagecode']}</messagecode>";
+   break;
+
+case 'modifycomment':
+   $categoryid = $CF->getvariable("categoryid");
+   
+   if ($CF->checkvariable("categoryname"))
+   	  $categoryname = $CF->getvariable("categoryname");
+   else $categoryname = false;
+   if ($CF->checkvariable("categorydesc"))
+      $categorydesc = $CF->getvariable("categorydesc");
+   else $categorydesc = false;
+   if ($CF->checkvariable("categoryparent"))
+      $categoryparent = $CF->getvariable("categoryparent");
+   else $categoryparent = false;
+   if ($CF->checkvariable("categorythumb"))
+      $categorythumb = $CF->getvariable("categorythumb");
+   else $categorythumb = false;
+   
+   if ($categoryparent == $categoryid) {
+   	  $categoryparent = 0;
+   }
+   print "<messagecode>success</messagecode>";
+   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
+   break;
+
+case 'removecomment':
+   $msgid = $CF->getvariable("msgid");
+   $PF->removeComment($msgid);
+   print "<messagecode>success</messagecode>";
+   break;
+
 default:
    print "<messagecode>query_not_implemented</messagecode>";   
 }

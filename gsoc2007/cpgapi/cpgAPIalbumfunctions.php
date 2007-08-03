@@ -383,9 +383,15 @@ class albumfunctions {
 	}
 
     function removeAlbum($albumid) {
-		global $DBS, $DISPLAY;
+		global $DBS, $DISPLAY, $PF;
 
 		$DBS->sql_update("DELETE FROM {$DBS->albumtable} WHERE {$DBS->albumfield['aid']}=" . $albumid);
+
+  	    $results = $DBS->sql_query("SELECT {$DBS->picturefield['pid']} FROM {$DBS->picturetable} WHERE {$DBS->picturefield['aid']}=" . $albumid);
+	    for($i=0; $i < mysql_numrows($results); $i++) {
+	  	   $PF->removePicture(mysql_result($results, $i, $DBS->picturefield['pid']));
+	    }
+        mysql_free_result($results);
     }
     
 }
