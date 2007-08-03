@@ -406,9 +406,9 @@ class userfunctions {
        mysql_free_result($results);
     }
 
+	$CAT_DATA = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
     // Create a personal album if corresponding option is enabled
     if ($CONFIG['personal_album_on_registration'] == 1) {
-		$CAT_DATA = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
 		$albumid = $AF->createAlbum($addusername, "", "", $CAT_DATA['cid']);
     }
 
