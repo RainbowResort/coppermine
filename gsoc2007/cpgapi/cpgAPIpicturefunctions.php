@@ -109,8 +109,6 @@ class picturefunctions {
     function showPicture($pictureid) {
   	   global $DBS;
   	   
-  	   $DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['hits']}={$DBS->picturefield['hits']}+1, {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "' WHERE {$DBS->picturefield['pid']}=" . $pictureid);
-  	   
   	   $picturepath = $this->getPicturePath($pictureid);
        if ($picturepath) {
    	      if ($fh = @fopen($picturepath, "r")) {
@@ -130,6 +128,15 @@ class picturefunctions {
           return $PICTURE_DATA;
    	   }
        return true;
+    }
+    
+    function registerPictureHit($pictureid, $search_phrase) {
+  	   global $DBS;
+  	   
+  	   $DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['hits']}={$DBS->picturefield['hits']}+1, {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "' WHERE {$DBS->picturefield['pid']}=" . $pictureid);
+  	   
+  	   $browser = get_browser(null, true);
+  	   $DBS->sql_update("INSERT INTO {$DBS->hitstatstable} ({$DBS->hitstatsfield['pid']}, {$DBS->hitstatsfield['ip']}, {$DBS->hitstatsfield['search_phrase']}, {$DBS->hitstatsfield['sdate']}, {$DBS->hitstatsfield['referer']}, {$DBS->hitstatsfield['browser']}, {$DBS->hitstatsfield['os']}) VALUES ('{$pictureid}', '" . $_SERVER['REMOTE_ADDR'] . "', '" . $search_phrase . "', '" . date("Y-m-d H:i:s") . "', '" . $_SERVER['HTTP_REFERER']  . "', '" . $_SERVER['HTTP_USER_AGENT'] . "', '" . $browser['platform'] . "')");
     }
     
     function showPictureData ($PICTURE_DATA) {

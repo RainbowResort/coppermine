@@ -23,6 +23,10 @@
 class commonfunctions {
    var $htmlSubst = array('&' => '&amp;', '"' => '&quot;', '<' => '&lt;', '>' => '&gt;', '%26' => '&amp;', '%22' => '&quot;', '%3C' => '&lt;', '%3E' => '&gt;','%27' => '&#39;', "'" => '&#39;');
 
+  function printMessage($msg) {
+  	 print "<messagecode>" . $msg . "</messagecode>";
+  }
+
   /**
    * Get the variable from get or post data for install (no check)
    * @ variablename : the name of the variable requested
@@ -71,16 +75,19 @@ class commonfunctions {
   }
 
   function unsafeexit($code) {
-    global $DBS, $DISPLAY;
+    global $DBS, $IS_HEADER;
     if($DBS->dbactive) $DBS->sql_disconnect();
-    print "<messagecode>{$code}</messagecode>";
+    if(!$IS_HEADER) $this->showheader();
+    $this->printMessage($code);
     $this->showfooter();
     exit(1);
   }
 
-  function safeexit() {
-    global $DBS;
+  function safeexit($code) {
+    global $DBS, $IS_HEADER;
     if($DBS->dbactive) $DBS->sql_disconnect();
+    if(!$IS_HEADER) $this->showheader();
+    if($code) $this->printMessage($code); 
     $this->showfooter();
     exit(0);
   }

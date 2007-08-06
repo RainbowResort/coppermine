@@ -82,7 +82,9 @@ $APITYPE = array(
 	'approvecomment'	=> array('login', 'pictureowner'),
 	'modifycomment'		=> array('login', 'commentowner'),
 	'viewcomment'		=> array('login', 'commentview'),
-	'removecomment'		=> array('login', 'pictureowner')
+	'removecomment'		=> array('login', 'pictureowner'),
+	
+	'phpinfo'			=> array('login', 'admin')
 );
 
 $GROUPPERMS = array(
@@ -117,9 +119,16 @@ $DISPLAY = new displayspecs();
 $DISPLAY->initialize();
 $DBS = new dbspecs();
 $CF = new commonfunctions();
-if ($query != "getpicture") {
+
+/*
+ * Print the header
+ */
+$IS_HEADER = false;
+if ($query != "getpicture" && $query != "phpinfo") {
+   $IS_HEADER = true;
    $CF->showheader();
 }
+
 $GF = new globalfunctions();
 $query = $CF->getuncheckedvariable("query");
 
@@ -200,8 +209,7 @@ if (!is_dir($CONFIG['fullpath'])) {
 if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
 	 mkdir($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode']));
      if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
-        print "<messagecode>upload_dir_error</messagecode>";
-        $CF->safeexit();
+        $CF->unsafeexit('upload_dir_error');
      }
      @chmod($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode'])); //silence the output in case chmod is disabled
 }
@@ -214,8 +222,7 @@ $CURRENT_USER = array(
 	);
 
 if (!$APITYPE[$query]) {
-   print "<messagecode>unknown_query</messagecode>";
-   $CF->safeexit();
+   $CF->unsafeexit('unknown_query');
 }  else {
    for($i=0; $i < count($APITYPE[$query]); $i++) {
 	   if ($APITYPE[$query][$i] == 'unauth') {
@@ -226,8 +233,7 @@ if (!$APITYPE[$query]) {
    		  $sessionkey = $CF->getvariable("sessionkey");
    		  $CURRENT_USER = $UF->authenticateuser($username, $sessionkey);
    		  if (!$CURRENT_USER) {
-   		  	 print "<messagecode>invalid_session_error</messagecode>";
-             $CF->safeexit();
+             $CF->unsafeexit("invalid_session_error");
    		  }
 	   }  else if($APITYPE[$query][$i] == 'softlogin') {
    		  $username = $CF->getvariable("username");
@@ -245,63 +251,55 @@ if (!$APITYPE[$query]) {
 	   	  	 case 'categoryowner':
 	   	  	 	$categoryid = $CF->getvariable("categoryid");
 	   	  	 	if (!$AF->authorizeusercat($CURRENT_USER, $categoryid, "owner")) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  	 	}
 	   	  	 	break;
 	   	  	 case 'categoryview' :
 	   	  	 	$categoryid = $CF->getvariable("categoryid");
 	   	  	 	if (!$AF->authorizeusercat($CURRENT_USER, $categoryid, "view")) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  	 	}
 	   	  	 	break;
 	   	  	 case 'albumowner'   :
 	   	  	 	$albumid = $CF->getvariable("albumid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "owner", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  	 	}
 	   	  	 	break;
 	   	  	 case 'albumview'    :
 	   	  	 	$albumid = $CF->getvariable("albumid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$AF->authorizeuseralbum($CURRENT_USER, $albumid, "view", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'pictureowner'    :
 	   	  	 	$picid = $CF->getvariable("pictureid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "owner", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'pictureview'    :
 	   	  	 	$picid = $CF->getvariable("pictureid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$PF->authorizeuserpicture($CURRENT_USER, $picid, "view", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'commentowner'    :
 	   	  	 	$msgid = $CF->getvariable("msgid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$PF->authorizeusercomment($CURRENT_USER, $msgid, "owner", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  		}
 	   	  	 	break;
 	   	  	 case 'commentview'    :
 	   	  	 	$msgid = $CF->getvariable("msgid");
 	   	  	 	$albumpassword = $CF->getvariable("albumpassword");
 	   	  	 	if (!$PF->authorizeusercomment($CURRENT_USER, $msgid, "view", $albumpassword)) {
-	   	  	 	   print "<messagecode>query_permission_error</messagecode>";
-                   $CF->safeexit();
+                   $CF->unsafeexit("query_permission_error");
 	   	  		}
 	   	  	 	break;
 	   	  }
@@ -312,50 +310,57 @@ if (!$APITYPE[$query]) {
 
 switch($query) {
 
-/* User tries to login and obtain an authentication key 
- * @ username
- * @ password
+/* Command: login
+ * Checks the username and password of a user. Returns a session key along with user data on success. 
+ * @ username	The username of the user logging in
+ * @ password	The corresponding password
  */
 case 'login':
    $username = $CF->getvariable("username");
    $password = $CF->getvariable("password");
    $result = $UF->login($username, $password);
    if (!$result['error']) {
-      print "<messagecode>success</messagecode>";
+   	  $CF->printMessage("success");
+      $CF->printMessage("success");
 
       $USER_DATA = $UF->getpersonaldata($username);
       $sessionkey = $UF->setlastvisit($username);
       $USER_DATA['sessionkey'] = $sessionkey;
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$result['messagecode']}</messagecode>";
+   else $CF->printMessage($result['messagecode']);
    break;
 
-/* User tries to logout
- * @ username
+/* Command: logout
+ * Checks the session key and unsets the session key if authenticated.
+ * @ username	The username of the user logging out
+ * @ sessionkey	The current session key for this user	
  */
 case 'logout':
    $username = $CF->getvariable("username");
    $UF->logout($username);
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    break;
 
-/* 
- * Admin lists all users
+/* Command: showusers
+ * Admin specific command to list all users in the system
+ * @ username	The username of the admin
+ * @ sessionkey	The key of the current admin session
  */
 case 'showusers':
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $USER_DATA = $UF->getalluserdata();
    for($j = 0; $j < count($USER_DATA); $j++) {
       $UF->showdata($USER_DATA[$j]);
    }
    break;
 
-/* User tried to register
- * @ username
- * @ password
- * @ email
- * @ profile[]
+/* Command: register
+ * Allows a user to register
+ * @ username	The requested username
+ * @ password	The password for the new account
+ * @ email		Email address of the new user
+ * @ profile[]	The six profile admin-defined parameters, optional for register
  */
 case 'register':
    $addusername = $CF->getvariable("addusername");
@@ -368,16 +373,19 @@ case 'register':
    }
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* User tried to modify profile
- * @ password
- * @ email
- * @ profile
+/* Command: modifyprofile
+ * Allows a user to modify her profile
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ password	A new password if changing password, blank otherwise
+ * @ email		The new email address
+ * @ profile[]	The six profile admin-defined parameters
  */
 case 'modifyprofile':
    $username = $CF->getvariable("username");
@@ -389,15 +397,16 @@ case 'modifyprofile':
    }
    $USER_DATA = $UF->modifyprofile($username, $password, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* User tried to activate account
- * @ username
- * @ act_key
+/* Command: activate
+ * Allows a user to activate her account
+ * @ username	The username for the account being activated
+ * @ act_key	The activation key that was emailed to the user
  */
 case 'activate':
    $addusername = $CF->getvariable("addusername");
@@ -405,15 +414,17 @@ case 'activate':
 
    $USER_DATA = $UF->activate($addusername, $act_key);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* Generate a new activation mail
- * @ username
- * @ email
+/* Command: reactivate
+ * Resends the activation email to a user at the email address provided during
+ * registration. Asks for email address as a security check.
+ * @ username	The username of the account to be activated
+ * @ email		The email address provided during registration
  */
 case 'reactivate':
    $addusername = $CF->getvariable("addusername");
@@ -421,14 +432,16 @@ case 'reactivate':
 
    $USER_DATA = $UF->reactivate($addusername, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* Generate a new password request for the user
- * @ username
- * @ email
+/* Command: forgotpassword
+ * Sends an email to the user to confirm if she requested a new password. The
+ * email contains a password key required for generating new password.
+ * @ username	The username for the account with forgotten password
+ * @ email		The email address associated with the account
  */
 case 'forgotpassword':
    $addusername = $CF->getvariable("addusername");
@@ -436,14 +449,16 @@ case 'forgotpassword':
 
    $USER_DATA = $UF->forgotpassword($addusername, $email);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* Generate a new password for the user
- * @ username
- * @ pass_key
+/* Command: generatepassword
+ * Generates a new password for the user. Requires her to use the password key
+ * contained in the email sent by forgotpassword.
+ * @ username	The username of the account with forgotten password
+ * @ pass_key	The password key included in the forgot password email
  */
 case 'generatepassword':
    $addusername = $CF->getvariable("addusername");
@@ -451,17 +466,21 @@ case 'generatepassword':
 
    $USER_DATA = $UF->generatepassword($addusername, $pass_key);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* Admin tries to add a user to the system
- * @ addusername
- * @ password
- * @ email
- * @ active
+/* Command: adduser
+ * Admin specific command that allows an admin to add a user to the system. The user is by default
+ * added to the group of "Registered" users.
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ addusername	Username for the new user 
+ * @ password		Password for the new user
+ * @ email			Email address of the new user
+ * @ active			Activation condition of the new account created
  */
 case 'adduser':
    $addusername = $CF->getvariable("addusername");
@@ -474,36 +493,42 @@ case 'adduser':
    }
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* Admin tries to remove a user from the system
- * @ addusername
+/* Command: removeuser
+ * Admin specific command allowing her to remove a user from the system
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ addusername	The username of the user being removed
  */
 case 'removeuser':
    $addusername = $CF->getvariable("addusername");
 
    if($addusername == $username) {
-      print "<messagecode>cannot_remove_self</messagecode>";
-      $CF->safeexit();
+      $CF->safeexit("cannot_remove_self");
    }
 
    $USER_DATA = $UF->removeuser($addusername);
    if ($USER_DATA) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>username_not_exist</messagecode>";
+   else $CF->printMessage("username_not_exist");
    break;
 
-/* Admin updates a user
- * @ addusername
- * @ password
- * @ email
- * @ active
+/* Command: updateuser
+ * Admin specific command allowing her to update the basic information for any user
+ * Admin specific command allowing her to remove a user from the system
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ addusername	The username of the account being updated
+ * @ password		A new password for this account, if the password is being changed. Blank otherwise.	
+ * @ email			The email address for this account
+ * @ active			The activation condition of this account
  */
 case 'updateuser':
    $addusername = $CF->getvariable("addusername");
@@ -513,32 +538,29 @@ case 'updateuser':
 
    $USER_DATA = $UF->updateuser($addusername, $password, $email, $active);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* 
- * Admin lists all groups
+/* Command: showgroups
+ * Admin specific command to list all groups in the system
+ * @ username	The username of the admin
+ * @ sessionkey	The key of the current admin session
  */
-case 'showgroups':
+ case 'showgroups':
    $GROUP_DATA = $UF->getallgroupdata();
-   print "<messagecode>success</messagecode>";
-   for($j = 0; $j < count($GROUP_DATA); $j++) {
-      print "<group>";
-      for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">";
-         print $GROUP_DATA[$j][$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">";
-      }
-      print "</group>";
-   }
+   $CF->printMessage("success");
+   $UF->showmultigroupdata($GROUP_DATA);
    break;
 
-/* Admin tries to add a group to the system
- * @ groupname
- * @ admin
+/* Command: addgroup
+ * Admin specific command to add a group in the system
+ * @ username	The username of the admin
+ * @ sessionkey	The key of the current admin session
+ * @ groupname	The name of the new group
+ * @ admin		Boolean value of the "admin" property of the group
  */
 case 'addgroup':
    $groupname = $CF->getvariable("groupname");
@@ -546,21 +568,18 @@ case 'addgroup':
 
    $GROUP_DATA = $UF->addgroup($groupname, $admin);
    if (!$GROUP_DATA['error']) {
-      print "<messagecode>success</messagecode>";
-      print "<group>";
-      for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">";
-         print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">";
-      }
-      print "</group>";
+      $CF->printMessage("success");
+      $UF->showgroupdata($GROUP_DATA);
    }
-   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($GROUP_DATA['messagecode']);
    break;
 
-/* Admin tries to add a group to the system
- * @ groupname
- * @ admin
+/* Command: updategroup
+ * Admin specific command to update an existing group
+ * @ username	The username of the admin
+ * @ sessionkey	The key of the current admin session
+ * @ groupname	The name of the group to be updated
+ * @ admin		Boolean value of the "admin" property of the group
  */
 case 'updategroup':
    $group_id = $CF->getvariable("group_id");
@@ -570,46 +589,40 @@ case 'updategroup':
 
    $GROUP_DATA = $UF->updategroup($group_id, $groupname, $admin);
    if (!$GROUP_DATA['error']) {
-      print "<messagecode>success</messagecode>";
-      print "<group>";
-      for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-         print "<" . $DISPLAY->groupfields[$i] . ">";
-         print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-         print "</" . $DISPLAY->groupfields[$i] . ">";
-      }
-      print "</group>";
+      $CF->printMessage("success");
+      $UF->showgroupdata($GROUP_DATA);
    }
-   else print "<messagecode>{$GROUP_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($GROUP_DATA['messagecode']);
    break;
 
-/* Admin tries to remove a group from the system
- * @ group_id
+/* Command: removegroup
+ * Admin specific command to remove an existing group from the system. Destroys
+ * the related entries in userxgroup.
+ * @ username	The username of the admin
+ * @ sessionkey	The key of the current admin session
+ * @ group_id	The integral value of the id of the group to be removed
  */
 case 'removegroup':
    $group_id = $CF->getvariable("group_id");
 
    if ($group_id <= 4) {
-      print "<messagecode>reserved_group_remove_error</messagecode>";
+      $CF->printMessage("reserved_group_remove_error");
    }  else {
       $GROUP_DATA = $UF->removegroup($group_id);
       if ($GROUP_DATA) {
-         print "<messagecode>success</messagecode>";
-         print "<group>";
-         for($i=0;$i<count($DISPLAY->groupfields);$i++) {
-            print "<" . $DISPLAY->groupfields[$i] . ">";
-            print $GROUP_DATA[$DISPLAY->groupfields[$i]];
-            print "</" . $DISPLAY->groupfields[$i] . ">";
-         }
-         print "</group>";
+         $CF->printMessage("success");
+         $UF->showgroupdata($GROUP_DATA);
       }
-      else print "<messagecode>group_not_exist</messagecode>";
+      else $CF->printMessage("group_not_exist");
    }
    break;
 
-/*
- * Admin adds user to another group
- * @ addusername
- * @ group_id
+/* Command: addusertogroup
+ * Admin specific command to add an existing user to an existing group
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ addusername	The id of the user who has to be added to the group
+ * @ group_id		The id of the group to which the user has to be added
  */
 case 'addusertogroup':
    $addusername = $CF->getvariable("addusername");
@@ -617,39 +630,42 @@ case 'addusertogroup':
 
    $USER_DATA = $UF->addusertogroup($addusername, $group_id);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* 
- * Admin removes user from group
- * @ addusername
- * @ group_id
+/* Command: removeuserfromgroup
+ * Admin specific command to remove an existing user from an existing group
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ addusername	The id of the user who has to be removed from the group
+ * @ group_id		The id of the group from which the user has to be removed
  */
 case 'removeuserfromgroup':
    $addusername = $CF->getvariable("addusername");
    $group_id = $CF->getvariable("group_id");
 
    if($addusername == $username) {
-      print "<messagecode>cannot_remove_self_from_group</messagecode>";
-      $CF->safeexit();
+      $CF->safeexit("cannot_remove_self_from_group");
    }
 
    $USER_DATA = $UF->removeuserfromgroup($addusername, $group_id);
    if (!$USER_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
-   else print "<messagecode>{$USER_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($USER_DATA['messagecode']);
    break;
 
-/* 
- * Request for application configuration
+/* Command: getconfig
+ * Returns all parameters for application configuration. To see a list of parameters, see
+ * the $config variable in the cpgAPIdisplayspecs file.
+ * @ no parameters
  */
 case 'getconfig':
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    print "<config>";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";
@@ -659,8 +675,12 @@ case 'getconfig':
    print "</config>";
    break;
 
-/* 
- * Set application configuration
+/* Command: setconfig
+ * Admin specific command to set the parameters for application configuration. Only the parameters
+ * visible using the getconfig command can be set using this command.
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ * @ parametername	The name of the parameter to be set
  */
 case 'setconfig':
    for($i=0;$i < count($DISPLAY->configfields); $i++) {
@@ -677,7 +697,7 @@ case 'setconfig':
    }
    $GF->setconfig($CONFIG);
 
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    print "<config>";
    for($i=0; $i<count($DISPLAY->configfields); $i++) {
       print "<" . $DISPLAY->configfields[$i] . ">";
@@ -687,6 +707,16 @@ case 'setconfig':
    print "</config>";
    break;
 
+/* Command: createcategory
+ * Command to create a new category (analogously gallery). Can be invoked by both users and admin.
+ * However, users must give a non-zero value for the parent category, and the new category
+ * is visible only to them. 
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the parent category
+ * @ categoryname	The name of the new category
+ * @ categorydesc	The description of the new category
+ */
 case 'createcategory':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addcategoryname = $CF->getvariable("categoryname");
@@ -694,10 +724,22 @@ case 'createcategory':
    if ($UF->isAdmin($CURRENT_USER['username']) && $categoryid == "0") {
    	  $isadmincategory = 1;
    }
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid, $isadmincategory));
    break;
 
+/* Command: modifycategory
+ * Command to modify an existing category. Can be invoked by both users and admin.
+ * However, users can update only the categories they own or their group is responsible for.
+ * Admin can modify all categories.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the category to be modified
+ * @ categoryname	(optional) A new name for the category
+ * @ categorydesc	(optional) A new description for the category
+ * @ categoryparent	(optional) Id for a new parent category for this category
+ * @ categorythumb	(optional) Id of the picture which is the thumbnail for this category
+ */
 case 'modifycategory':
    $categoryid = $CF->getvariable("categoryid");
    
@@ -717,55 +759,120 @@ case 'modifycategory':
    if ($categoryparent == $categoryid) {
    	  $categoryparent = 0;
    }
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
    break;
 
+/* Command: viewcategory
+ * Command to get the recursive view of an existing category (analogously gallery).
+ * Can be invoked by both users and admin.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the required category
+ */
 case 'viewcategory':
    $categoryid = $CF->getvariable("categoryid");
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showCategoryData($AF->getCategoryData($categoryid), $CURRENT_USER);
    break;
 
+/* Command: movecategory
+ * Command to change the position of an existing category. Can be invoked by both users and admin.
+ * However, users can move only the categories they own or their group is responsible for.
+ * Admin can move all categories.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the category to be moved
+ * @ categorypos	The new position of the category
+ */
 case 'movecategory':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $categorypos = $CF->getvariable("categorypos");
    if ($AF->moveCategory($categoryid, $categorypos))
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
    else
-      print "<messagecode>could_not_move</messagecode>";   
+      $CF->printMessage("could_not_move");   
    break;
 
+/* Command: removecategory
+ * Command to remove an existing category from the system. Can be invoked by both users and admin.
+ * However, users can remove only the categories they own or their group is responsible for.
+ * Admin can remove all categories.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the category to be moved
+ */
 case 'removecategory':
    $categoryid = $CF->getvariable("categoryid");
    $AF->removeCategory($categoryid);
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    break;
 
+/* Command: showcategories
+ * Command to get the recursive view of all categories visible to a user.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ */
 case 'showcategories':
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showCategories($CURRENT_USER);
    break;
    
+/* Command: showmycategories
+ * Command to get the recursive view of all categories owned by the current user.
+ * For administrators, this command does NOT return admin-owned categories.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ */
 case 'showmycategories':
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showUserCategories($CURRENT_USER);
    break;
 
+/* Command: showadmincategories
+ * Admin specific command to show the recursive view of all admin-owned categories,
+ * i.e. the categories visible to all users.
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ */
 case 'showadmincategories':
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showAdminCategories($CURRENT_USER);
    break;
 
+/* Command: createalbum
+ * Command to create a new album. Can be invoked by both users and admin. Users can create
+ * albums in only those categories which they own, or for which their groups are responsible.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ categoryid		The id of the parent category
+ * @ albumname		The name of the new album
+ * @ albumdesc		The description of the new album
+ * @ albumkeywords	The keywords describing of the new album
+ */
 case 'createalbum':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addalbumname = $CF->getvariable("albumname");
    $addalbumdesc = $CF->getvariable("albumdesc");
    $addalbumkeywords = $CF->getvariable("albumkeywords");
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showSingleAlbumData($AF->createAlbum($addalbumname, $addalbumdesc, $addalbumkeywords, $categoryid));
    break;
 
+/* Command: modifyalbum
+ * Command to modify an existing album. Can be invoked by both users and admin.
+ * However, users can update only the albums they own or their group is responsible for.
+ * Admin can modify all albums.
+ * @ username			The username of the current user
+ * @ sessionkey			The sessionkey for the current session of this user
+ * @ albumid			The id of the album to be modified
+ * @ albumname			(optional) A new name for the album
+ * @ albumdesc			(optional) A new description for the album
+ * @ albumkeywords		(optional) Keywords describing the album
+ * @ albumthumb			(optional) Id of the picture which is the thumbnail for this album
+ * @ albumpassword		(optional) Password required for a non-owner to access the album
+ * @ albumpasswordhint	(optional) Hint given to a user to guess the password for the album
+ */
 case 'modifyalbum':
    $albumid = $CF->getvariable("albumid");
    
@@ -788,29 +895,54 @@ case 'modifyalbum':
       $albumpasswordhint = $CF->getvariable("albumpasswordhint");
    else $albumpasswordhint = false;
    
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showSingleAlbumData($AF->modifyAlbum($albumid, $albumname, $albumdesc, $albumthumb, $albumpassword, $albumpasswordhint));
    break;
 
+/* Command: viewalbum
+ * Command to get the view of an existing album along with details on the contained pictures.
+ * Can be invoked by both users and admin.
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ albumid	The id of the required album
+ */
 case 'viewalbum':
    $albumid = $CF->getvariable("albumid");
-   print "<messagecode>success</messagecode>";
+   $AF->registerAlbumHit($albumid);
+   $CF->printMessage("success");
    $AF->showAlbumData($AF->getAlbumData($albumid));
    break;
 
+/* Command: movealbum
+ * Command to change the position of an existing album. Can be invoked by both users and admin.
+ * However, users can move only the albums they own or their group is responsible for.
+ * Admin can move all albums.
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ albumid	The id of the album to be moved
+ * @ albumpos	The new position of the album
+ */
 case 'movealbum':
    $albumid = $CF->getvariable("albumid");
    $albumpos = $CF->getvariable("albumpos");
    if ($AF->moveAlbum($albumid, $albumpos))
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
    else
-      print "<messagecode>could_not_move</messagecode>";   
+      $CF->printMessage("could_not_move");   
    break;
    
+/* Command: removealbum
+ * Command to remove an existing album from the system. Can be invoked by both users and admin.
+ * However, users can remove only the albums they own or their group is responsible for.
+ * Admin can remove all albums.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ albumid		The id of the album to be moved
+ */
 case 'removealbum':
    $albumid = $CF->getvariable("albumid");
    $AF->removeAlbum($albumid);
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    break;
 
 case 'addpicture':
@@ -832,7 +964,7 @@ case 'addpicture':
             if ($PF->checkExtension($extension)) {
                $picid = $PF->addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $extension, $_FILES['file']['size'], $CURRENT_USER['username'], $CURRENT_USER['user_id'], $user1, $user2, $user3, $user4);
                if ($picid) {
-                  print "<messagecode>success</messagecode>";
+                  $CF->printMessage("success");
                   $PF->showPictureData($PF->getPictureData($picid));            	   
    	  	 	      $filepath = $PF->getPicturePath($picid);
                   // Upload the file
@@ -840,18 +972,18 @@ case 'addpicture':
          	      @chmod($filepath, octdec($CONFIG['default_file_mode']));
                }  else {
          	      $PF->removePicture($picid);
-                  print "<messagecode>upload_error</messagecode>"; 
+                  $CF->printMessage("upload_error"); 
                }
    	  	    }  else {
-      	       print "<messagecode>unknown_extension</messagecode>";       		   	  	 	
+      	       $CF->printMessage("unknown_extension");       		   	  	 	
    	  	    } 
    	     }  else {
-         	print "<messagecode>unknown_extension</messagecode>";    	     	
+         	$CF->printMessage("unknown_extension");    	     	
    	     }
       }  elseif ($_FILES['file']['error'] == UPLOAD_ERR_INI_SIZE) {
-         print "<messagecode>max_upload_size_exceed</messagecode>"; 
+         $CF->printMessage("max_upload_size_exceed"); 
       }  else { 
-         print "<messagecode>upload_error</messagecode>"; 
+         $CF->printMessage("upload_error"); 
       }
    }  else if ($CF->checkvariable("filename")) {
    	  $filename = $CF->getvariable("filename");
@@ -864,7 +996,7 @@ case 'addpicture':
       	    if ($picid) {
    	  	 	   $filepath = $PF->getPicturePath($picid);
         	   // Upload the file
-               print "<messagecode>success</messagecode>";         	       
+               $CF->printMessage("success");         	       
                $PF->showPictureData($PF->getPictureData($picid));            	   
       	       if ($fh = @fopen($filepath, "w")) {
 				   fwrite($fh, $filecontents);      	       	
@@ -872,30 +1004,32 @@ case 'addpicture':
          	       @chmod($filepath, octdec($CONFIG['default_file_mode']));
          	    }  else {
          	       $PF->removePicture($picid);
-         	       print "<messagecode>upload_error</messagecode>";       		
+         	       $CF->printMessage("upload_error");       		
       	       }
       	    }  else {
-               print "<messagecode>upload_error</messagecode>";       		      	 	
+               $CF->printMessage("upload_error");       		      	 	
       	    }   	  	 	
    	  	 }  else {
-      	    print "<messagecode>unknown_extension</messagecode>";       		   	  	 	
+      	    $CF->printMessage("unknown_extension");       		   	  	 	
    	  	 } 
       }  else {
-      	 print "<messagecode>unknown_extension</messagecode>";       		
+      	 $CF->printMessage("unknown_extension");       		
       }
    }  else {
-      print "<messagecode>upload_error</messagecode>";       		   	
+      $CF->printMessage("upload_error");       		   	
    }
    
    break;
 
 case 'getpicture':
    $pictureid = $CF->getvariable("pictureid");
+   $search_phrase = $CF->getvariable("searchphrase");
+   $PF->registerPictureHit($pictureid, $search_phrase);
    $PICTURE_DATA = $PF->showPicture($pictureid);
    if (!$PICTURE_DATA['error']) { }
    else {
       $CF->showheader();   	
-      print "<messagecode>{$PICTURE_DATA['messagecode']}</messagecode>";
+      $CF->printMessage($PICTURE_DATA['messagecode']);
    }
    break;
 
@@ -903,19 +1037,19 @@ case 'getpicturedata':
    $pictureid = $CF->getvariable("pictureid");
    $PICTURE_DATA = $PF->getPictureData($pictureid);
    if (!$PICTURE_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $PF->showPictureData($PICTURE_DATA);
    }
-   else print "<messagecode>{$PICTURE_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($PICTURE_DATA['messagecode']);
    break;
 
 case 'movepicture':
    $pictureid = $CF->getvariable("pictureid");
    $picturepos = $CF->getvariable("picturepos");
    if ($PF->movePicture($pictureid, $picturepos))
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
    else
-      print "<messagecode>could_not_move</messagecode>";   
+      $CF->printMessage("could_not_move");   
    break;
 
 case 'modifypicture':
@@ -943,14 +1077,14 @@ case 'modifypicture':
       $user4 = $CF->getvariable("user4");
    else $user4 = false;
    
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $AF->showPictureData($AF->modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4));
    break;
 
 case 'removepicture':
    $pictureid = $CF->getvariable("pictureid");
    $PF->removePicture($pictureid);
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    break;
 
 case 'createcomment':
@@ -963,7 +1097,7 @@ case 'createcomment':
    	  $authorid = $CURRENT_USER['user_id'];
    }
    $msgbody = $CF->getvariable("msgbody");
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    $PF->createComment($pictureid, $msgbody, $authorname, $authorid);
    $PF->showPictureData($PF->getPictureData($pictureid));
    break;
@@ -975,43 +1109,41 @@ case 'viewcomment':
    $msgid = $CF->getvariable("msgid");
    $COMMENT_DATA = $PF->getCommentData($msgid);
    if (!$COMMENT_DATA['error']) {
-      print "<messagecode>success</messagecode>";
+      $CF->printMessage("success");
       $PF->showCommentData($COMMENT_DATA);
    }
-   else print "<messagecode>{$COMMENT_DATA['messagecode']}</messagecode>";
+   else $CF->printMessage($COMMENT_DATA['messagecode']);
    break;
 
 case 'modifycomment':
-   $categoryid = $CF->getvariable("categoryid");
-   
-   if ($CF->checkvariable("categoryname"))
-   	  $categoryname = $CF->getvariable("categoryname");
-   else $categoryname = false;
-   if ($CF->checkvariable("categorydesc"))
-      $categorydesc = $CF->getvariable("categorydesc");
-   else $categorydesc = false;
-   if ($CF->checkvariable("categoryparent"))
-      $categoryparent = $CF->getvariable("categoryparent");
-   else $categoryparent = false;
-   if ($CF->checkvariable("categorythumb"))
-      $categorythumb = $CF->getvariable("categorythumb");
-   else $categorythumb = false;
-   
-   if ($categoryparent == $categoryid) {
-   	  $categoryparent = 0;
-   }
-   print "<messagecode>success</messagecode>";
-   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
+   $msgid = $CF->getvariable("msgid");
+   $CF->printMessage("success");
    break;
 
+/* Command: removecomment
+ * Command to remove an existing comment from the system. Can be invoked by both users and admin.
+ * However, users can remove comments that they have written, or from the pictures they own or their group is responsible for.
+ * Admin can remove all comments.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ msgid		The id of the comment to be moved
+ */
 case 'removecomment':
    $msgid = $CF->getvariable("msgid");
    $PF->removeComment($msgid);
-   print "<messagecode>success</messagecode>";
+   $CF->printMessage("success");
    break;
 
+/* Command: phpinfo
+ * Admin specific command to print phpinfo. Does not print headers.
+ * @ username		The username of the admin
+ * @ sessionkey		The key of the current admin session
+ */
+case 'phpinfo':
+   phpinfo();
+
 default:
-   print "<messagecode>query_not_implemented</messagecode>";   
+   $CF->printMessage("query_not_implemented");   
 }
 
 $CF->safeexit();

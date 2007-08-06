@@ -233,8 +233,6 @@ class albumfunctions {
     function showAlbumData ($ALBUM_DATA) {
       global $DISPLAY, $PF, $DBS;
 
-	  $DBS->sql_update("UPDATE {$DBS->albumtable} SET {$DBS->albumfield['alb_hits']}={$DBS->albumfield['alb_hits']}+1 WHERE {$DBS->albumfield['aid']}=" . $ALBUM_DATA['aid']);
-
       print "<albumdata>";
       for($i=0;$i<count($DISPLAY->albumfields);$i++) {
          print "<" . $DISPLAY->albumfields[$i] . ">";
@@ -249,6 +247,13 @@ class albumfunctions {
 
       print "</albumdata>";
     }
+    
+    function registerAlbumHit($albumid) {
+      global $DBS;
+
+	  $DBS->sql_update("UPDATE {$DBS->albumtable} SET {$DBS->albumfield['alb_hits']}={$DBS->albumfield['alb_hits']}+1 WHERE {$DBS->albumfield['aid']}=" . $albumid);    	
+    }
+    
     
     function showSingleAlbumData ($ALBUM_DATA) {
       global $DISPLAY, $PF, $DBS;

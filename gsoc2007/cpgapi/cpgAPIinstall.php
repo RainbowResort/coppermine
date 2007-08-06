@@ -85,8 +85,7 @@ class install {
      fwrite($fh, "1");
      fclose($fh);
 
-     print "<messagecode>success</messagecode>";
-     $CF->safeexit();
+     $CF->safeexit("success");
   }
   
   function uninstall() {
@@ -123,7 +122,6 @@ class install {
 
      unlink($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
      unlink($DFLT['cfg_d'] . "/" . $DFLT['ins_f']);
-     print "<messagecode>success</messagecode>";
-     $CF->safeexit();
+     $CF->safeexit("success");
   }
 }

@@ -193,7 +193,7 @@ class dbspecs {
 		'ip' => 'ip',
 		'search_phrase' => 'search_phrase',
 		'sdate' => 'sdate',
-		'referer' => 'refered',
+		'referer' => 'referer',
 		'browser' => 'browser',
 		'os' => 'os'
     );    
