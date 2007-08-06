@@ -74,6 +74,7 @@ import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowUser;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
+import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
 
 
 /**
@@ -864,7 +865,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			
 			this.setEnabled(false);
 			
-			//new JCpgSyncer(globalUi, getSqlManager()).sync();
+			new JCpgSyncer(this).sync();
 			
 			this.setEnabled(true);
 		
@@ -923,10 +924,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * 
 	 */
 	private void edit_rotateActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("here");
+		
 		if(currentPicture != null){
 			
-			new JCpgEditor_rotate(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditor_rotate(this, currentPicture, new Dimension(1,51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		

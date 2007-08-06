@@ -153,21 +153,12 @@ public class JCpgEditor_rotate extends JCpgEditor{
 		
 		if(!customRotation.getText().equals("")){ // do if user has put in actual custom angel
 			
-			BufferedImage image = getBufferedPreview();
 			int angle = new Integer(customRotation.getText());
-	    	
-			double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
-	        int w = image.getWidth(), h = image.getHeight();
-	        GraphicsConfiguration gc = getDefaultConfiguration();
-	        BufferedImage result = gc.createCompatibleImage(1, 1, Transparency.TRANSLUCENT);
-	        Graphics2D g = result.createGraphics();
-	        g.rotate(Math.toRadians(angle), getPreviewSize().width/2, h/2+58);
-	        //g.translate((neww-w)/2, (newh-h)/2);
-	        g.drawRenderedImage(image, null);
-	        g.dispose();
+			
+			AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(Math.toRadians(angle), getBufferedPreview().getWidth() / 2, getBufferedPreview().getHeight() / 2), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+	    	BufferedImage tempImage = op.filter(getBufferedPreview(), null);
 	        
-	        
-	        previewPicture(result);
+	        previewPicture(tempImage);
 	        
 	   }     
 		
@@ -182,7 +173,7 @@ public class JCpgEditor_rotate extends JCpgEditor{
     }
     private void rotate90RightActionPerformed(java.awt.event.ActionEvent evt) {
     	
-    	AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(90, Math.abs(Math.sin(90))*getBufferedPreview().getHeight(), Math.abs(Math.cos(90))*getBufferedPreview().getWidth()), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    	AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(Math.toRadians(90), getBufferedPreview().getWidth() / 2, getBufferedPreview().getHeight() / 2), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
     	BufferedImage tempImage = op.filter(getBufferedPreview(), null);
         
         previewPicture(tempImage);
@@ -190,20 +181,10 @@ public class JCpgEditor_rotate extends JCpgEditor{
     }
     private void rotate90LeftActionPerformed(java.awt.event.ActionEvent evt) {
     	
-    	BufferedImage image = getBufferedPreview();
-    	
-		double sin = Math.abs(Math.sin(-90)), cos = Math.abs(Math.cos(-90));
-        int w = image.getWidth(), h = image.getHeight();
-        int neww = (int)Math.floor(w*cos+h*sin), newh = (int)Math.floor(h*cos+w*sin);
-        GraphicsConfiguration gc = getDefaultConfiguration();
-        BufferedImage result = gc.createCompatibleImage(image.getHeight(), image.getWidth(), Transparency.TRANSLUCENT);
-        Graphics2D g = result.createGraphics();
-        g.rotate(Math.toRadians(-90), w/2, h/2);
-        g.translate((neww-w)/2, (newh-h)/2);
-        g.drawRenderedImage(image, null);
-        g.dispose();
+    	AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(Math.toRadians(-90), getBufferedPreview().getWidth() / 2, getBufferedPreview().getHeight() / 2), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    	BufferedImage tempImage = op.filter(getBufferedPreview(), null);
         
-        previewPicture(result);
+        previewPicture(tempImage);
     	
     }
 

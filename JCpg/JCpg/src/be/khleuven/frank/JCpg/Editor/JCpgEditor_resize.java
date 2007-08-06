@@ -64,7 +64,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	private JCheckBox constrainProportions;
 	
 	private Rectangle rleft, rup, rright, rdown; // lines
-	private Rectangle sleft, sup, sright, sdown; // selection blocks
+	private Rectangle sup, sright; // selection blocks
 
 	private boolean selectedRight = false, selectedUp = false, constrainProportionsSelected = false;
 	private int upYbase = getImageLabel().getLocation().y + 50, downYbase = getImageLabel().getLocation().y + 50 + getPicture().getpHeight() - 5, leftXbase = getImageLabel().getLocation().x, rightXbase = getImageLabel().getLocation().x + getPicture().getpWidth() - 5;
@@ -221,9 +221,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         rdown = new Rectangle(leftXbase, downY - (upY - 58)/2, rightX - leftX + 5, 5); // down, -1 because else we are just out of the picture
         
         sright = new Rectangle(rightX - 2, 50 + getImageLabel().getLocation().y + getPicture().getpHeight()/2 - 3, 10, 10);
-        sleft = new Rectangle(leftX - 2, 50 + getImageLabel().getLocation().y + getPicture().getpHeight()/2 - 3, 10, 10);
         sup = new Rectangle((rightX - leftX) / 2 + leftXbase, upY - (upY - 58)/2 - 2, 10, 10);
-        sdown = new Rectangle((rightX - leftX) / 2 + leftXbase, downY - (upY - 58)/2 - 2, 10, 10);
         
         // draw in correct color: red = not selected, white = selected  	
         g2.setPaint(Color.red);
@@ -262,10 +260,6 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
         	g2.fill(sright);
         	
         }
-
-        g2.setPaint(Color.red);
-        g2.fill(sleft);
-        g2.fill(sdown);
         
         g2.dispose();
         

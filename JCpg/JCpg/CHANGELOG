@@ -1,3 +1,6 @@
+Rotation improved
+Fixed bug found by Aditya: The black transparent background on image while cropping is back and constantly flickers on both Windows and Linux.
+Fixed bug found by Aditya: The bottom and left selectors on red box in resize editor doesn't work. Remove them if they are no of any use or add functionality for it.
 Fixed bug found by Aditya: Just noticed that ctime attribute in pictures tag in gallery.xml has negative value. I guess you should cast it to long int instead of normal integer. Also filesize should be casted to long int as this value can also go out of range.
 Improved the user of the gridbag layout in the picturelist where before there where some refreshing problems showing a lot of parts of pictures
 Fixed bug found by Aditya: When I execute the jar file for the very first time, is it supposed to create the albums/userpics/ folder on its own? If yes, then it is not creating it

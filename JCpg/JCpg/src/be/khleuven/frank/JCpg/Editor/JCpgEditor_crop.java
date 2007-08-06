@@ -17,7 +17,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -25,17 +24,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
@@ -64,27 +59,14 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 																			//				VARIABLES             *
 																			//*************************************
 	private Rectangle crop = null; // this is the rectangle used to point to the area that has to be cropped
+
 	
-	private int rwidth;
-	private int rheight;
-	private int rx;
-	private int ry;
-	
-	private int LEFT = getImageLabel().getLocation().x; // photo bounderies
-	private int UP = getImageLabel().getLocation().y + 50;
-	private int RIGHT = LEFT + getPicture().getpWidth();
-	private int DOWN = UP + getPicture().getpHeight();
-	
+	private Rectangle rleft, rup, rright, rdown; // selection blocks
 	private Rectangle sleft, sup, sright, sdown; // selection blocks
 	
 	private boolean selectedRight = false, selectedUp = false, selectedLeft = false, selectedDown = false, selectedCrop = false;;
 	
 	private Point mouseposition = new Point();
-	private Point cropposition = new Point();
-	
-	
-	
-	private boolean running = true; // for paint thread
 																			
 	
 	
@@ -128,30 +110,11 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		
 		this.addMouseMotionListener(this);
 		
-		rx = getImageLabel().getLocation().x + getImageLabel().getSize().width / 4;
-		ry = 50 + getImageLabel().getLocation().y + getImageLabel().getSize().height / 4;
-		rwidth = getPicture().getpWidth() / 4;
-		rheight = getPicture().getpHeight() / 4;
-		
-		crop = new Rectangle(rwidth, rheight);
-		
-		
-		// we introduce a thread to continiously draw the black rectangles around the crop rectangle, otherwhise sometimes these will disappear
-		Thread t1 = new Thread(new Runnable() {
-			
-			public void run() {
-				
-				while(running){
-					
-					repaint();
-				
-				}
-				
-			}
-			
-		});
-		
-		//t1.start();
+		// rectangle start values
+        rup = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getSize().width / 4, getImageLabel().getLocation().y + getImageLabel().getSize().height / 4 + 50, getImageLabel().getSize().width / 4, 1); // up
+        rdown = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getSize().width / 4, getImageLabel().getLocation().y + getImageLabel().getSize().height / 2 + 50, getImageLabel().getSize().width / 4, 1); // down
+        rright = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getSize().width / 2, getImageLabel().getLocation().y + getImageLabel().getSize().height / 4 + 50, 1, rdown.y - rup.y); // right
+        rleft = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getSize().width / 4, getImageLabel().getLocation().y + getImageLabel().getSize().height / 4 + 50, 1, rdown.y - rup.y); // left
 
 	}
 	/**
@@ -165,19 +128,26 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // select lines
+        rright = new Rectangle(rright.x, rup.y, 1, rdown.y - rup.y); // right
+        rleft = new Rectangle(rleft.x, rup.y, 1, rdown.y - rup.y); // left
+        rup = new Rectangle(rleft.x, rup.y, rright.x - rleft.x, 1); // up
+        rdown = new Rectangle(rleft.x, rdown.y, rright.x - rleft.x, 1); // down
 
         // select rectangle
         g2.setPaint(Color.red);
         
-        crop.setSize(rwidth, rheight);
-        crop.setLocation(rx, ry);
-        g2.draw(crop);
+        g2.fill(rright);
+        g2.fill(rleft);
+        g2.fill(rup);
+        g2.fill(rdown);
         
         // selection blocks
-        sright = new Rectangle(crop.x + crop.width - 5, crop.y  + (crop.height / 2) - 5, 10, 10);
-        sleft = new Rectangle(crop.x - 5, crop.y  + (crop.height / 2) - 5, 10, 10);
-        sup = new Rectangle(crop.x + crop.width / 2 - 5, crop.y - 5, 10, 10);
-        sdown = new Rectangle(crop.x + crop.width / 2 - 5, crop.y + crop.height - 5, 10, 10);
+        sright = new Rectangle(rright.x - 5, rright.y + rright.height / 2 - 5, 10, 10);
+        sup = new Rectangle(rup.x + rup.width / 2 - 5, rup.y - 5, 10, 10);
+        sleft = new Rectangle(rleft.x - 5, rleft.y + rleft.height / 2 - 5, 10, 10);
+        sdown = new Rectangle(rdown.x + rdown.width / 2 - 5, rdown.y - 5, 10, 10);
         
         if(selectedRight){
         	
@@ -227,19 +197,6 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
         	
         }
         
-        // invert selection rectangles
-        Point position = crop.getLocation();
-        
-        float alpha = 0.75f;
-        int type = AlphaComposite.SRC_OVER; 
-        AlphaComposite composite = AlphaComposite.getInstance(type, alpha);
-        
-        g2.setPaint(new Color(0, 0, 0, alpha));
-        g2.fillRect(LEFT, UP, position.x - LEFT, getPicture().getpHeight()); // left
-        g2.fillRect(LEFT, UP, getPicture().getpWidth(), position.y - UP); // up
-        g2.fillRect(position.x + rwidth + 1, UP, getPreview().getWidth() - position.x - LEFT - rwidth, getPicture().getpHeight()); // right
-        g2.fillRect(LEFT, position.y + rheight + 1, getPicture().getpWidth(), getPicture().getpHeight() + UP - position.y - rheight - 1); // under
-        
         g2.dispose();
         
     }
@@ -281,21 +238,19 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview().getSubimage(rx, ry, rwidth, rheight), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(getBufferedPreview().getSubimage(rleft.x - getImageLabel().getLocation().x, rleft.y - 58, rup.width, rleft.height), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
             
 			// change picture size information
-			getPicture().changeWidth(rwidth);
-			getPicture().changeHeight(rheight);
+			getPicture().changeWidth(rup.width);
+			getPicture().changeHeight(rleft.height);
 			
 			// save this new information
 			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
 			
 			//getJCpgUI().getPictureList().remove(getListIndex());
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
-            
-			running = false; // stop repaint thread
 			
 			getJCpgUI().changeMegaExplorerActive();
 			getJCpgUI().changeMegaExplorerActive();
@@ -324,29 +279,48 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	public void mouseDragged(MouseEvent m) {
 		
 		mouseposition = m.getPoint();
-		cropposition = crop.getLocation();
 		
 		// mouse inside rectangle -> move it
-		if(selectedCrop && !selectedRight && !selectedUp){
+		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft){
 			
-			rx = mouseposition.x - (crop.width / 2);
-			ry = mouseposition.y - 50 - getImageLabel().getLocation().y + (crop.height / 2);
+			rleft.x = mouseposition.x;
+			rup.y = mouseposition.y;
 		
+		}
+		
+		if(selectedLeft){
+			
+			rleft.x = mouseposition.x;
+			
+		}
+		if(selectedDown){
+			
+			rdown.y = mouseposition.y;
+			
+		}
+		if(selectedRight){
+	
+			rright.x = mouseposition.x;
+	
+		}
+		if(selectedUp){
+	
+			rup.y = mouseposition.y;
+	
 		}
 		
 		// bounderies
-		if(rx < getImageLabel().getLocation().x) rx = getImageLabel().getLocation().x;
-		if(rx + rwidth > getImageLabel().getLocation().x + getImageLabel().getSize().width) rx = getImageLabel().getLocation().x + getImageLabel().getSize().width - crop.width;
+		if(rleft.x < getImageLabel().getLocation().x) rleft.x = getImageLabel().getLocation().x;
+		if(rleft.x > rright.x - 10) rleft.x = rright.x - 10;
 			
-		if(ry < 50 + getImageLabel().getLocation().y) ry = 50 + getImageLabel().getLocation().y;
-		if(ry + rheight > 50 + getImageLabel().getLocation().y + getImageLabel().getSize().height) ry = 50 + getImageLabel().getLocation().y + getImageLabel().getSize().height - crop.height;
+		if(rup.y < getImageLabel().getLocation().y + 58) rup.y = getImageLabel().getLocation().y + 50;
+		if(rup.y > rdown.y - 10) rup.y = rdown.y - 10;
 		
-		// resize rectangle
-		if(selectedUp){
-			
-			rheight++;
-			
-		}
+		if(rright.x > getImageLabel().getLocation().x + getImageLabel().getSize().width) rright.x = getImageLabel().getLocation().x + getImageLabel().getSize().width;
+		if(rright.x < rleft.x + 10) rright.x = rleft.x + 10;
+		
+		if(rdown.y > getImageLabel().getLocation().y + getImageLabel().getSize().height + 50) rdown.y = getImageLabel().getLocation().y + getImageLabel().getSize().height + 50;
+		if(rdown.y < rup.y + 10) rdown.y = rup.y + 10;
 		
 		repaint();
 		
@@ -360,11 +334,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		Point p = m.getPoint();
 		
 		// check if mouse is in crop rectangle
-		if(crop.contains(p))
+		if(p.x > rleft.x && p.x > rright.x && p.y > rup.y && p.y < rdown.y)
 			selectedCrop = true;
 		else
 			selectedCrop = false;
-		
 		
 		// check if mouse is over one of the lines
 		// up

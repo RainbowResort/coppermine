@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -30,6 +31,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+
+import be.khleuven.frank.JCpg.Components.JCpgCategory;
 
 
 /**
@@ -44,6 +47,7 @@ public class JCpgPhpCommunicator {
 																	//				VARIABLES	          *
 																	//*************************************
 	private String baseUrl = "";
+	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	
 	
 	
@@ -317,6 +321,64 @@ public class JCpgPhpCommunicator {
 		}
 		
 		return "";
+		
+	}
+	/**
+	 * 
+	 * Get the value from a certain tag
+	 *
+	 * @return
+	 * 		return a list of categorie objects
+	 */
+	public ArrayList<JCpgCategory> getCategories(Element root){
+		
+	    SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+		
+		File file = new File("svr.xml");
+		
+		if(file.exists()){
+		
+			List content = root.getChildren();
+			ListIterator it = content.listIterator();
+			
+			while(it.hasNext()){
+				
+				Element element = (Element)it.next();
+				
+				if(element.getName().equals("categorydata")){
+					
+					List content2 = element.getChildren();
+					ListIterator it2 = content2.listIterator();
+						
+						/*
+						int cid = new Integer(((Element)it2.next()).getText());
+						int ownerid = new Integer(((Element)it2.next()).getText());
+						String name = ((Element)it2.next()).getText();
+						String description = ((Element)it2.next()).getText();
+						int parent = new Integer(((Element)it2.next()).getText());
+						int pos = new Integer(((Element)it2.next()).getText());
+						int thumb = new Integer(((Element)it2.next()).getText());
+						
+						JCpgCategory category = new JCpgCategory(cid, ownerid, name, description, parent, pos, thumb);
+						
+						categories.add(category);
+						
+						System.out.println(element.getName());
+						
+						getCategories(element);
+						*/
+					
+					System.out.println(((Element)it2.next()).getName());
+						
+				}
+				
+			}
+			
+			return categories; // tag not found, return empty string
+			
+		}
+		
+		return categories;
 		
 	}
 	

@@ -109,7 +109,6 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         gblc.gridx = index % 10;
         gblc.gridy = getDeler(index, 10);
     	
-        System.out.println("index: " + index + " x: " + index % 10 + " y: " + getDeler(index, 10));
     	this.add(label, gblc);
     	
         return this;
