@@ -800,7 +800,7 @@ case 'movecategory':
  * Admin can remove all categories.
  * @ username		The username of the current user
  * @ sessionkey		The sessionkey for the current session of this user
- * @ categoryid		The id of the category to be moved
+ * @ categoryid		The id of the category to be removed
  */
 case 'removecategory':
    $categoryid = $CF->getvariable("categoryid");
@@ -902,9 +902,10 @@ case 'modifyalbum':
 /* Command: viewalbum
  * Command to get the view of an existing album along with details on the contained pictures.
  * Can be invoked by both users and admin.
- * @ username	The username of the current user
- * @ sessionkey	The sessionkey for the current session of this user
- * @ albumid	The id of the required album
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ albumid		The id of the required album
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
  */
 case 'viewalbum':
    $albumid = $CF->getvariable("albumid");
@@ -937,7 +938,7 @@ case 'movealbum':
  * Admin can remove all albums.
  * @ username		The username of the current user
  * @ sessionkey		The sessionkey for the current session of this user
- * @ albumid		The id of the album to be moved
+ * @ albumid		The id of the album to be removed
  */
 case 'removealbum':
    $albumid = $CF->getvariable("albumid");
@@ -945,6 +946,24 @@ case 'removealbum':
    $CF->printMessage("success");
    break;
 
+/* Command: addpicture
+ * Command to add a new picture to an existing album. Can be invoked by both users and admin.
+ * However, users can only add pictures to albums they own or their group is responsible for.
+ * Admin can add pictures anywhere.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ albumsid		The id of the parent album
+ * @ pictitle		A title for the picture
+ * @ piccaption		A caption for the picture
+ * @ pickeywords	Keywords describing the picture
+ * @ user1			Value corresponding to system defined user field 1
+ * @ user2			Value corresponding to system defined user field 2
+ * @ user3			Value corresponding to system defined user field 3
+ * @ user4			Value corresponding to system defined user field 4
+ * @ filename		(optional) The name of the file being uploaded
+ * @ filecontents	(optional) The binary data for the file being uploaded
+ * @ _FILE[file]	(optional) The file upload parameter to be passed if using HTML forms
+ */
 case 'addpicture':
    $albumid = $CF->getvariable("albumid");
    $pictitle = $CF->getvariable("pictitle");
@@ -1021,6 +1040,16 @@ case 'addpicture':
    
    break;
 
+/* Command: getpicture
+ * Command to fetch a picture. Can be invoked by both users and admin.
+ * However, users can only fetch the pictures they have authorization to see.
+ * Admin can access all pictures.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture to be fetched
+ * @ searchphrase	The value to be put into the hit statistic for this picture, if fetched as the result of a search
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'getpicture':
    $pictureid = $CF->getvariable("pictureid");
    $search_phrase = $CF->getvariable("searchphrase");
@@ -1033,6 +1062,16 @@ case 'getpicture':
    }
    break;
 
+/* Command: getpicturedata
+ * Command to get the metadata associated with a picture. Also returns the comments of
+ * this picture. Can be invoked by both users and admin.
+ * However, users can only get the data for pictures they have authorization to see.
+ * Admin can access all pictures.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose metadata is required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'getpicturedata':
    $pictureid = $CF->getvariable("pictureid");
    $PICTURE_DATA = $PF->getPictureData($pictureid);
@@ -1043,6 +1082,15 @@ case 'getpicturedata':
    else $CF->printMessage($PICTURE_DATA['messagecode']);
    break;
 
+/* Command: movepicture
+ * Command to change the position of an existing picture. Can be invoked by both users and admin.
+ * However, users can move only the pictures they own or their group is responsible for.
+ * Admin can move all pictures.
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ pictureid	The id of the picture to be moved
+ * @ picturepos	The new position of the picture
+ */
 case 'movepicture':
    $pictureid = $CF->getvariable("pictureid");
    $picturepos = $CF->getvariable("picturepos");
@@ -1052,6 +1100,21 @@ case 'movepicture':
       $CF->printMessage("could_not_move");   
    break;
 
+/* Command: modifypicture
+ * Command to modify the metadata associated with a picture. Can be invoked by both users and admin.
+ * However, users can only modify the data for pictures they own or their group is responsible for.
+ * Admin can access all pictures.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose metadata is required
+ * @ pictitle		(optional) A new title for the picture
+ * @ piccaption		(optional) A new caption for the picture
+ * @ pickeywords	(optional) Keywords describing the picture
+ * @ user1			(optional) Value corresponding to system defined user field 1
+ * @ user2			(optional) Value corresponding to system defined user field 2
+ * @ user3			(optional) Value corresponding to system defined user field 3
+ * @ user4			(optional) Value corresponding to system defined user field 4
+ */
 case 'modifypicture':
    $pictureid = $CF->getvariable("pictureid");
    
@@ -1081,12 +1144,30 @@ case 'modifypicture':
    $AF->showPictureData($AF->modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4));
    break;
 
+/* Command: removepicture
+ * Command to remove an picture from an album in the system. Can be invoked by both users and admin.
+ * However, users can remove only the pictures they own or their group is responsible for.
+ * Admin can remove all albums.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture to be removed
+ */
 case 'removepicture':
    $pictureid = $CF->getvariable("pictureid");
    $PF->removePicture($pictureid);
    $CF->printMessage("success");
    break;
 
+/* Command: createcomment
+ * Command to create a new comment. Can be invoked by both users and admin. Users can create
+ * comments on any picture that they can see.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture commented
+ * @ authorname		(optional) Name of the comment author
+ * @ msgbody		The body of the comment
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'createcomment':
    $pictureid = $CF->getvariable("pictureid");
    if (!$CURRENT_USER['username']) {
@@ -1105,6 +1186,13 @@ case 'createcomment':
 case 'approvecomment':
    break;
 
+/* Command: viewcomment
+ * Command to view an existing comment. Can be invoked by both users and admin. Users can view
+ * comments on any picture that they can see.
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ msgid		The id of the comment to be viewed
+ */
 case 'viewcomment':
    $msgid = $CF->getvariable("msgid");
    $COMMENT_DATA = $PF->getCommentData($msgid);
@@ -1126,7 +1214,8 @@ case 'modifycomment':
  * Admin can remove all comments.
  * @ username		The username of the current user
  * @ sessionkey		The sessionkey for the current session of this user
- * @ msgid		The id of the comment to be moved
+ * @ msgid			The id of the comment to be moved
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
  */
 case 'removecomment':
    $msgid = $CF->getvariable("msgid");
