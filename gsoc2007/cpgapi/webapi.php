@@ -87,6 +87,34 @@ $APITYPE = array(
 	'phpinfo'			=> array('login', 'admin')
 );
 
+$ALLVARS = array(
+	'username'		=> array('string', 'NewUser'),
+	'password'		=> array('string', ''),
+	'addusername'	=> array('string', 'ExistingUser'),
+	'profile1'		=> array('string', ''),
+	'profile2'		=> array('string', ''),
+	'profile3'		=> array('string', ''),
+	'profile4'		=> array('string', ''),
+	'profile5'		=> array('string', ''),
+	'profile6'		=> array('string', ''),
+	'email'			=> array('string', ''),
+	'sessionkey'	=> array('string', ''),
+	'act_key'		=> array('string', ''),
+	'pass_key'		=> array('string', ''),
+	'active'		=> array('booleanString', 'NO'),
+	'group_id'		=> array('integer', 0),
+	'groupname'		=> array('string', 'New Group'),
+	'admin'			=> array('booleanString', 'NO'),
+	
+	'categoryid'	=> array('integer', 0),
+	'categoryname'	=> array('string', 'New Category'),
+	'categorydesc'	=> array('string', 'Description of the new category'),
+	
+	'albumid'		=> array('integer', 0),
+	'albumname'		=> array('string', 'New Album'),
+	'albumdesc'		=> array('string', 'Description of the new album')
+);
+
 $GROUPPERMS = array(
 	'admin' => 'admin'
 );

@@ -140,19 +140,28 @@ class picturefunctions {
     }
     
     function showPictureData ($PICTURE_DATA) {
-      global $DISPLAY, $CONFIG, $DBS;
+      global $DISPLAY, $CONFIG, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<picturedata>";
+      print "<picturedata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->picturefields);$i++) {
-         print "<" . $DISPLAY->picturefields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->picturefields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";         
          print $PICTURE_DATA[$DISPLAY->picturefields[$i]];
-         print "</" . $DISPLAY->picturefields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->picturefields[$i] . ">";
+         else print "\"";
       }
       
       if ($CONFIG['display_comment_count']) {
       	$results = $DBS->sql_query("SELECT COUNT(*) AS CX MX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $PICTURE_DATA['pid']);
-       	print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
+       	if($ot!="attr") print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
+       	else print " comment_count=\"" . mysql_result($results, 0, "CX") . "\"";
       }
+      if($ot=="attr") print ">";
       
       $results = $DBS->sql_query("SELECT {$DBS->commentsfield['msgid']} FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $PICTURE_DATA['pid']);
 	  for($i=0; $i < mysql_numrows($results); $i++) {
@@ -257,14 +266,22 @@ class picturefunctions {
 	}
 
     function showCommentData ($COMMENT_DATA) {
-      global $DISPLAY, $CONFIG, $DBS;
+      global $DISPLAY, $CONFIG, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<commentdata>";
+      print "<commentdata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->commentsfields);$i++) {
-         print "<" . $DISPLAY->commentsfields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->commentsfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
          print $COMMENT_DATA[$DISPLAY->commentsfields[$i]];
-         print "</" . $DISPLAY->commentsfields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->commentsfields[$i] . ">";
+         else print "\"";
       }
+      if($ot=="attr") print ">";
       print "</commentdata>";
     }
 

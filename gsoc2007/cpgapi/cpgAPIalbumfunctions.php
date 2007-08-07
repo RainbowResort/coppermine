@@ -219,26 +219,42 @@ class albumfunctions {
      * @ CAT_DATA
      */
     function showSingleCategoryData ($CAT_DATA) {
-      global $DISPLAY;
+      global $DISPLAY, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<categorydata>";
+      print "<categorydata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->categoryfields);$i++) {
-         print "<" . $DISPLAY->categoryfields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->categoryfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
          print $CAT_DATA[$DISPLAY->categoryfields[$i]];
-         print "</" . $DISPLAY->categoryfields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->categoryfields[$i] . ">";
+         else print "\"";
       }
+      if($ot=="attr") print ">";
       print "</categorydata>";
     }
 
     function showAlbumData ($ALBUM_DATA) {
-      global $DISPLAY, $PF, $DBS;
+      global $DISPLAY, $PF, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<albumdata>";
+      print "<albumdata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->albumfields);$i++) {
-         print "<" . $DISPLAY->albumfields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->albumfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
          print $ALBUM_DATA[$DISPLAY->albumfields[$i]];
-         print "</" . $DISPLAY->albumfields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->albumfields[$i] . ">";
+         else print "\"";
       }
+      if($ot=="attr") print ">";
 
       $results = $DBS->sql_query("SELECT {$DBS->picturefield['pid']} FROM {$DBS->picturetable} WHERE {$DBS->picturefield['aid']}=" . $ALBUM_DATA['aid'] . " ORDER BY {$DBS->picturefield['pos']}");
 	  for($i=0; $i < mysql_numrows($results); $i++) {
@@ -256,14 +272,23 @@ class albumfunctions {
     
     
     function showSingleAlbumData ($ALBUM_DATA) {
-      global $DISPLAY, $PF, $DBS;
+      global $DISPLAY, $PF, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<albumdata>";
+      print "<albumdata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->albumfields);$i++) {
-         print "<" . $DISPLAY->albumfields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->albumfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
          print $ALBUM_DATA[$DISPLAY->albumfields[$i]];
-         print "</" . $DISPLAY->albumfields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->albumfields[$i] . ">";
+         else print "\"";
       }
+      if($ot=="attr") print ">";
+      
       print "</albumdata>";
     }
     
@@ -271,15 +296,23 @@ class albumfunctions {
      * @ CAT_DATA
      */
     function showCategoryData ($CAT_DATA, $CURRENT_USER) {
-      global $DISPLAY, $DBS;
+      global $DISPLAY, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
 
-      print "<categorydata>";
+      print "<categorydata";
+      if($ot!="attr") print ">";
       for($i=0;$i<count($DISPLAY->categoryfields);$i++) {
-         print "<" . $DISPLAY->categoryfields[$i] . ">";
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->categoryfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
          print $CAT_DATA[$DISPLAY->categoryfields[$i]];
-         print "</" . $DISPLAY->categoryfields[$i] . ">";
+         if($ot!="attr") print "</" . $DISPLAY->categoryfields[$i] . ">";
+         else print "\"";
       }
-
+      if($ot=="attr") print ">";
+      
       $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->albumfield['pos']}");
 	  for($i=0; $i < mysql_numrows($results); $i++) {
          $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
