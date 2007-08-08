@@ -1,3 +1,7 @@
+Fixed a bug in the resizer where it was possible for the lower line to go to far, under the picture
+Fixed a bug when going through the tree and find a node. Before, the parent node itself was never checked for the given criteria
+Using recursion, it now is possible for each category to have infinite subcategories and albums
+Crop and resize code are now made more simple
 Rotation improved
 Fixed bug found by Aditya: The black transparent background on image while cropping is back and constantly flickers on both Windows and Linux.
 Fixed bug found by Aditya: The bottom and left selectors on red box in resize editor doesn't work. Remove them if they are no of any use or add functionality for it.

@@ -238,7 +238,30 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		
 		try {
 			
-            ImageIO.write(getBufferedPreview().getSubimage(rleft.x - getImageLabel().getLocation().x, rleft.y - 58, rup.width, rleft.height), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+			// correct coordinates if just out of label
+			int leftx = 0;
+			if(rleft.x <= getImageLabel().getLocation().x){
+				
+				leftx = getImageLabel().getLocation().x;
+				
+			}else{
+				
+				leftx = rleft.x;
+				
+			}
+			
+			int lefty = 0;
+			if(rleft.y <= 58){
+				
+				lefty = 58;
+				
+			}else{
+				
+				lefty = rleft.y;
+				
+			}
+			
+            ImageIO.write(getBufferedPreview().getSubimage(leftx - getImageLabel().getLocation().x, lefty - 58, rup.width, rleft.height), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
             
@@ -283,8 +306,10 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		// mouse inside rectangle -> move it
 		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft){
 			
-			rleft.x = mouseposition.x;
-			rup.y = mouseposition.y;
+			rleft.x = mouseposition.x - rup.width / 2;
+			rup.y = mouseposition.y - rleft.height / 2;
+			rright.x = mouseposition.x + rup.width / 2;
+			rdown.y = mouseposition.y + rleft.height / 2;
 		
 		}
 		
@@ -334,7 +359,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		Point p = m.getPoint();
 		
 		// check if mouse is in crop rectangle
-		if(p.x > rleft.x && p.x > rright.x && p.y > rup.y && p.y < rdown.y)
+		if(p.x > rleft.x && p.x < rright.x && p.y > rup.y && p.y < rdown.y)
 			selectedCrop = true;
 		else
 			selectedCrop = false;

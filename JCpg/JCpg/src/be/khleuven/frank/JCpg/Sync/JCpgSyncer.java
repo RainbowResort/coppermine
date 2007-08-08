@@ -23,10 +23,14 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -35,6 +39,7 @@ import org.jdom.input.SAXBuilder;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgCategory;
+import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
@@ -157,43 +162,162 @@ public class JCpgSyncer {
 		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
 		
 		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-		String parameters = "showcategories&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 		
 		if(phpCommunicator.performPhpRequest(parameters)){ // result ok
 			
-			String catname = phpCommunicator.getXmlTagText("categorydata", "name");
+			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
 			
-			if(getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), "category", catname) == null){
-				
-				SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
-				
-				File file = new File("svr.xml");
-				
+			File file = new File("svr.xml");
+			
+			if(file.exists()){
+			
 				try {
 					
 					Document doc = builder.build("svr.xml");
 					
 					Element root = doc.getRootElement();
 					
-					ArrayList<JCpgCategory> categories = phpCommunicator.getCategories(root);
+					List content = root.getChildren();
+					ListIterator it = content.listIterator();
 					
-					System.out.println(categories.size());
+					while(it.hasNext()){
+						
+						Element element = (Element)it.next();
+						
+						if(element.getName().equals("categorydata")){
+							
+							if(element.getAttributeValue("name").equals("User galleries")){
+								
+								extractCategories(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject());
+								
+							}
+							
+						}
+						
+					}
 					
 				} catch (JDOMException e) {
 					
-					
+					System.out.println("JCpgSyncer: Couldn't extract categories from xml root tag");
 					
 				}
 				
-				;
+			}	
 				
+		}
+
+		SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
+		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+
+	}
+	/**
+	 * 
+	 * Recursively go through all the category tags and extract all their albums and pictures
+	 * 
+	 * @param xmlelement
+	 * 		parent xml tag
+	 * @param parent
+	 * 		parent object
+	 */
+	private void extractCategories(Element xmlelement, JCpgGallery parent){
+		
+		List content = xmlelement.getChildren();
+		ListIterator it = content.listIterator();
+		
+		while(it.hasNext()){
+			
+			Element element = (Element)it.next();
+			
+			if(element.getName().equals("categorydata")){
+				
+				try {
+					
+					if(parent.getCategory(element.getAttribute("name").getValue()) == null){ // category not found in current tree so it's not saved offline -> load it in
+						
+						JCpgCategory category = new JCpgCategory(element.getAttribute("cid").getIntValue(), element.getAttribute("ownerid").getIntValue(), element.getAttribute("name").getValue(), element.getAttribute("description").getValue(), element.getAttribute("parent").getIntValue(), element.getAttribute("pos").getIntValue(), element.getAttribute("thumb").getIntValue());
+						parent.addCategory(category);
+						
+						DefaultMutableTreeNode parentnode = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), "gallery", parent.getName());
+						DefaultMutableTreeNode treecategory = new DefaultMutableTreeNode(category);
+						parentnode.add(treecategory);
+						
+						// extract albums
+						List albums = element.getChildren();
+						ListIterator albumsit = albums.listIterator();
+						
+						while(albumsit.hasNext()){
+							
+							Element albumelement = (Element)albumsit.next();
+							
+							if(albumelement.getName().equals("albumdata")){
+								
+								try {
+									
+									JCpgAlbum album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("position").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), albumelement.getAttribute("alb_password").getValue(), albumelement.getAttribute("alb_password_hint").getValue());
+									category.addAlbum(album);
+									
+									DefaultMutableTreeNode treealbum = new DefaultMutableTreeNode(album);
+									treecategory.add(treealbum);
+									
+									// extract pictures
+									List pictures = albumelement.getChildren();
+									ListIterator picturesit = pictures.listIterator();
+									
+									while(picturesit.hasNext()){
+										
+										Element pictureelement = (Element)picturesit.next();
+										
+										if(pictureelement.getName().equals("picturedata")){
+											
+											try {
+												
+												JCpgPicture picture = new JCpgPicture(pictureelement.getAttribute("pid").getIntValue(), album.getId(), pictureelement.getAttribute("filepath").getValue(), pictureelement.getAttribute("filename").getValue(), pictureelement.getAttribute("filesize").getLongValue(), pictureelement.getAttribute("totalfilesize").getLongValue(), pictureelement.getAttribute("pwidth").getIntValue(), pictureelement.getAttribute("pheight").getIntValue(), pictureelement.getAttribute("hits").getIntValue(),
+																							pictureelement.getAttribute("ctime").getIntValue(), pictureelement.getAttribute("ownerid").getIntValue(), pictureelement.getAttribute("ownername").getValue(), pictureelement.getAttribute("picrating").getIntValue(), pictureelement.getAttribute("votes").getIntValue(), pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("caption").getValue(), pictureelement.getAttribute("keywords").getValue(), pictureelement.getAttribute("approved").getBooleanValue(), pictureelement.getAttribute("galleryicon").getIntValue(),
+																							pictureelement.getAttribute("urlprefix").getIntValue(), pictureelement.getAttribute("position").getIntValue());
+												album.addPicture(picture);
+												
+												DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
+												treealbum.add(treepicture);
+												
+											} catch (DataConversionException e) {
+												
+												System.out.println("JCpgSyncer: couldn't convert xml attributes - picture");
+												
+											}
+											
+										}
+										
+									}
+									
+								} catch (DataConversionException e) {
+									
+									System.out.println("JCpgSyncer: couldn't convert xml attributes - album");
+									
+								}
+								
+							}
+							
+						}
+						
+						extractCategories(element, category); // go through the tree xml tag structure using recursion
+					
+					}else{ // category already exists in the tree, take a look in this category to find new, unsaved stuff
+					
+						extractCategories(element, parent.getCategory(element.getAttribute("name").getValue()));
+					
+					}	
+						
+				} catch (DataConversionException e) {
+					
+					System.out.println("JCpgSyncer: couldn't convert xml attributes - category");
+					
+				}
 				
 			}
 			
 		}
-
-		//new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
-
+		
 	}
 
 }

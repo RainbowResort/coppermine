@@ -349,26 +349,11 @@ public class JCpgPhpCommunicator {
 					
 					List content2 = element.getChildren();
 					ListIterator it2 = content2.listIterator();
-						
-						/*
-						int cid = new Integer(((Element)it2.next()).getText());
-						int ownerid = new Integer(((Element)it2.next()).getText());
-						String name = ((Element)it2.next()).getText();
-						String description = ((Element)it2.next()).getText();
-						int parent = new Integer(((Element)it2.next()).getText());
-						int pos = new Integer(((Element)it2.next()).getText());
-						int thumb = new Integer(((Element)it2.next()).getText());
-						
-						JCpgCategory category = new JCpgCategory(cid, ownerid, name, description, parent, pos, thumb);
-						
-						categories.add(category);
-						
-						System.out.println(element.getName());
-						
-						getCategories(element);
-						*/
 					
-					System.out.println(((Element)it2.next()).getName());
+					while(it2.hasNext()){
+						System.out.println(((Element)it2.next()).getAttributeValue("name"));
+					}
+					
 						
 				}
 				

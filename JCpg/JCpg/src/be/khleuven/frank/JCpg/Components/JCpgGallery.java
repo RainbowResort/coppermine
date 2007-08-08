@@ -256,6 +256,13 @@ public class JCpgGallery{
 		return null; // nothing found
 		
 	}
+	/**
+	 * 
+	 * Get the path of this element in the tree
+	 * 
+	 * @return
+	 * 		the path of this element in the tree
+	 */
 	public TreePath getTreePath(){
 		
 		return this.treePath;

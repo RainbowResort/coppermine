@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -44,11 +45,19 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  */
 public class JCpgGallerySaver{
 	
+	
+	
+	
+	
 																					
 																					//*************************************
 																					//				VARIABLES             *
 																					//*************************************
 	private JCpgGallery gallery = null;
+	
+	
+	
+	
 	
 	
 	
@@ -69,6 +78,9 @@ public class JCpgGallerySaver{
 
 	
 	
+	
+	
+	
 																					//*************************************
 																					//				SETTERS	              *
 																					//*************************************
@@ -84,6 +96,9 @@ public class JCpgGallerySaver{
 		this.gallery = gallery;
 		
 	}
+	
+	
+	
 	
 	
 	
@@ -112,6 +127,10 @@ public class JCpgGallerySaver{
 	
 	
 	
+	
+	
+	
+	
 
 	
 																					//*************************************
@@ -129,14 +148,6 @@ public class JCpgGallerySaver{
 		toXML();
 		
 	}
-	
-	
-	
-	
-										
-																					//*************************************
-																					//				MUTATORS & OTHERS     *
-																					//*************************************
 	/**
 	 * 
 	 * Load the last saved gallery
@@ -190,43 +201,9 @@ public class JCpgGallerySaver{
 						
 					}else if(element1.getName().equals("category")){
 						
-						JCpgCategory category = new JCpgCategory(element1.getAttribute("cid").getIntValue(), element1.getAttribute("ownerid").getIntValue(), element1.getAttribute("name").getValue(), element1.getAttribute("description").getValue(), element1.getAttribute("position").getIntValue(), element1.getAttribute("parent").getIntValue(), element1.getAttribute("thumb").getIntValue());
-						category.addUi(getGallery().getUi()); // for syncer
-						getGallery().addCategory(category);
-					
-						List content2 = element1.getChildren();
-						ListIterator it2 = content2.listIterator();
 						
-						while(it2.hasNext()){
-							
-							Element element2 = (Element)it2.next();
-							
-							if(element2.getName().equals("album")){
-							
-								JCpgAlbum album = new JCpgAlbum(element2.getAttribute("aid").getIntValue(), element2.getAttribute("title").getValue(), element2.getAttribute("description").getValue(), element2.getAttribute("visibility").getIntValue(), element2.getAttribute("uploads").getBooleanValue(), element2.getAttribute("comments").getBooleanValue(), element2.getAttribute("votes").getBooleanValue(), element2.getAttribute("position").getIntValue(), element2.getAttribute("category").getIntValue(), element2.getAttribute("thumb").getIntValue(), element2.getAttribute("keywords").getValue(), element2.getAttribute("password").getValue(), element2.getAttribute("passwordhint").getValue());
-								album.addUi(getGallery().getUi()); // for syncer
-								category.addAlbum(album);
-								
-								List content3 = element2.getChildren();
-								ListIterator it3 = content3.listIterator();
-								
-								while(it3.hasNext()){
-									
-									Element element3 = (Element)it3.next();
-									
-									if(element3.getName().equals("picture")){
-										
-										JCpgPicture picture = new JCpgPicture(element3.getAttribute("pid").getIntValue(), element3.getAttribute("aid").getIntValue(), element3.getAttribute("filepath").getValue(), element3.getAttribute("filename").getValue(), element3.getAttribute("filesize").getIntValue(), element3.getAttribute("totalfilesize").getIntValue(), element3.getAttribute("width").getIntValue(), element3.getAttribute("height").getIntValue(), element3.getAttribute("hits").getIntValue(), element3.getAttribute("ctime").getIntValue(), element3.getAttribute("ownerid").getIntValue(), element3.getAttribute("ownername").getValue(), element3.getAttribute("rating").getIntValue(), element3.getAttribute("votes").getIntValue(), element3.getAttribute("title").getValue(), element3.getAttribute("caption").getValue(), element3.getAttribute("keywords").getValue(), element3.getAttribute("approved").getBooleanValue(), element3.getAttribute("galleryicon").getIntValue(), element3.getAttribute("urlprefix").getIntValue(), element3.getAttribute("position").getIntValue());
-										picture.addUi(getGallery().getUi()); // for syncer
-										album.addPicture(picture);
-										
-									}
-									
-								}
-							
-							}
-							
-						}
+						loadCategories(element1, getGallery());
+						
 						
 					}
 					
@@ -243,6 +220,61 @@ public class JCpgGallerySaver{
 		}
 		
 		return null;
+		
+	}
+	private void loadCategories(Element xmlelement, JCpgGallery parent){
+		
+		try {
+			
+			JCpgCategory category = new JCpgCategory(xmlelement.getAttribute("cid").getIntValue(), xmlelement.getAttribute("ownerid").getIntValue(), xmlelement.getAttribute("name").getValue(), xmlelement.getAttribute("description").getValue(), xmlelement.getAttribute("position").getIntValue(), xmlelement.getAttribute("parent").getIntValue(), xmlelement.getAttribute("thumb").getIntValue());
+		
+			category.addUi(getGallery().getUi()); // for syncer
+			parent.addCategory(category);
+		
+			List content2 = xmlelement.getChildren();
+			ListIterator it2 = content2.listIterator();
+			
+			while(it2.hasNext()){
+				
+				Element element2 = (Element)it2.next();
+				
+				if(element2.getName().equals("album")){
+				
+					JCpgAlbum album = new JCpgAlbum(element2.getAttribute("aid").getIntValue(), element2.getAttribute("title").getValue(), element2.getAttribute("description").getValue(), element2.getAttribute("visibility").getIntValue(), element2.getAttribute("uploads").getBooleanValue(), element2.getAttribute("comments").getBooleanValue(), element2.getAttribute("votes").getBooleanValue(), element2.getAttribute("position").getIntValue(), element2.getAttribute("category").getIntValue(), element2.getAttribute("thumb").getIntValue(), element2.getAttribute("keywords").getValue(), element2.getAttribute("password").getValue(), element2.getAttribute("passwordhint").getValue());
+					album.addUi(getGallery().getUi()); // for syncer
+					category.addAlbum(album);
+					
+					List content3 = element2.getChildren();
+					ListIterator it3 = content3.listIterator();
+					
+					while(it3.hasNext()){
+						
+						Element element3 = (Element)it3.next();
+						
+						if(element3.getName().equals("picture")){
+							
+							JCpgPicture picture = new JCpgPicture(element3.getAttribute("pid").getIntValue(), element3.getAttribute("aid").getIntValue(), element3.getAttribute("filepath").getValue(), element3.getAttribute("filename").getValue(), element3.getAttribute("filesize").getIntValue(), element3.getAttribute("totalfilesize").getIntValue(), element3.getAttribute("width").getIntValue(), element3.getAttribute("height").getIntValue(), element3.getAttribute("hits").getIntValue(), element3.getAttribute("ctime").getIntValue(), element3.getAttribute("ownerid").getIntValue(), element3.getAttribute("ownername").getValue(), element3.getAttribute("rating").getIntValue(), element3.getAttribute("votes").getIntValue(), element3.getAttribute("title").getValue(), element3.getAttribute("caption").getValue(), element3.getAttribute("keywords").getValue(), element3.getAttribute("approved").getBooleanValue(), element3.getAttribute("galleryicon").getIntValue(), element3.getAttribute("urlprefix").getIntValue(), element3.getAttribute("position").getIntValue());
+							picture.addUi(getGallery().getUi()); // for syncer
+							album.addPicture(picture);
+							
+						}
+						
+					}
+				
+				}else if(element2.getName().equals("category")){
+					
+					loadCategories(element2, category);
+					
+				}
+				
+			}
+			
+		} catch (DataConversionException e) {
+			
+			System.out.println("JCpgGallery: couldn't load categories in gallery.xml");
+			
+		}
+		
 		
 	}
 	/**
@@ -313,11 +345,37 @@ public class JCpgGallerySaver{
 			
 		}
 		
+		// process categories
+		processCategories(egallery, getGallery());
+		
+		
+		// write file
+		Document doc=new Document(egallery);
+		
+		XMLOutputter out = new XMLOutputter();
+		
+		out.setIndent(true);
+		out.setNewlines(true);
+		
+		try{
+			
+			FileOutputStream file = new FileOutputStream("config/gallery.xml");
+			
+			out.output(doc , file);	
+			
+		}catch(Exception e){
+			
+			System.out.println("JCpgGallerySaver: couldn't save to xml");
+			
+		}
+
+	}
+	private void processCategories(Element xmlelement, JCpgGallery parent){
 		
 		// categories in main gallery
-		for(int i=0; i<getGallery().getCategories().size(); i++){
+		for(int i=0; i<parent.getCategories().size(); i++){
 			
-			JCpgCategory category = getGallery().getCategories().get(i);
+			JCpgCategory category = parent.getCategories().get(i);
 			
 			Element ecategory = new Element("category");
 			
@@ -329,7 +387,7 @@ public class JCpgGallerySaver{
 			ecategory.setAttribute("parent", category.getParent() + "");
 			ecategory.setAttribute("thumb", category.getThumb() + "");
 			
-			egallery.addContent(ecategory);
+			xmlelement.addContent(ecategory);
 			
 			for(int j=0; j<category.getAlbums().size(); j++){
 				
@@ -388,28 +446,10 @@ public class JCpgGallerySaver{
 				
 			}
 			
-		}
-		
-		// write file
-		Document doc=new Document(egallery);
-		
-		XMLOutputter out = new XMLOutputter();
-		
-		out.setIndent(true);
-		out.setNewlines(true);
-		
-		try{
-			
-			FileOutputStream file = new FileOutputStream("config/gallery.xml");
-			
-			out.output(doc , file);	
-			
-		}catch(Exception e){
-			
-			System.out.println("JCpgGallerySaver: couldn't save to xml");
+			processCategories(ecategory, category);
 			
 		}
-
+		
 	}
 
 }

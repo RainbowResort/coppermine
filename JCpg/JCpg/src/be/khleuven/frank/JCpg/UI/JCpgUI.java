@@ -105,7 +105,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JCpgPicture currentPicture; // the currently selected picture
 	private JCpgAlbum currentAlbum; // the currently selected album
 	
-	private static JCpgGallery gallery = new JCpgGallery("My Coppermine Gallery", "Default gallery"); // default static gallery to store all catgories and albums
+	private static JCpgGallery gallery = new JCpgGallery("User galleries", "This category contains albums that belong to Coppermine users."); // default static gallery to store all catgories and albums
 
 	private Dimension screensize;
 	private Dimension framesize;
@@ -1144,12 +1144,17 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 
 		}
 		
-		for(int i=0; i<getGallery().getCategories().size(); i++) {
+		loadCategories(getGallery(), root);
+		
+	}
+	private void loadCategories(JCpgGallery parent, DefaultMutableTreeNode treenode){
+		
+		for(int i=0; i<parent.getCategories().size(); i++) {
 			
-			JCpgCategory category = getGallery().getCategories().get(i);
+			JCpgCategory category = parent.getCategories().get(i);
 
 			DefaultMutableTreeNode treeCategory = new DefaultMutableTreeNode(category);
-			root.add(treeCategory);
+			treenode.add(treeCategory);
 				
 			category.changeTreePath(new TreePath(treeCategory.getPath())); // add treePath
 		
@@ -1175,6 +1180,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 
 			}
 			
+			loadCategories(category, treeCategory); // recursion
+			
 		}
 		
 	}
@@ -1185,7 +1192,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 * @param node
 	 * 		startnode
 	 * @param type
-	 * 		type to search for either 'category, album or picture' always LOWERCASE, used to filter out duplicates between different types eg album called MyColl and category called MyColl
+	 * 		type to search for either 'gallery, category, album or picture' always LOWERCASE, used to filter out duplicates between different types eg album called MyColl and category called MyColl
 	 * @param name
 	 * 		name of object so we can compare
 	 */
@@ -1193,6 +1200,50 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
     
 		DefaultMutableTreeNode result = null;
 		
+		// check parent node itself
+		if(node.getUserObject().getClass().equals(JCpgGallery.class) && type.equals("gallery")){ // parent node is category
+        	
+        	JCpgGallery gallery = (JCpgGallery)node.getUserObject();
+        	
+        	if(gallery.getName().equals(name)){ // match found
+        		
+        		return node;
+        		
+        	}
+        
+    	}else if(node.getUserObject().getClass().equals(JCpgCategory.class) && type.equals("category")){ // parent node is category
+        	
+        	JCpgCategory category = (JCpgCategory)node.getUserObject();
+        	
+        	if(category.getName().equals(name)){ // match found
+        		
+        		return node;
+        		
+        	}
+        
+    	}else if(node.getUserObject().getClass().equals(JCpgAlbum.class) && type.equals("album")){ // parent node is album
+        	
+        	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
+        	
+        	if(album.getName().equals(name)){ // match found
+        		
+        		return node;
+        		
+        	}
+        	
+    	}else if(node.getUserObject().getClass().equals(JCpgPicture.class) && type.equals("picture")){ // parent node is picture
+        	
+        	JCpgPicture picture = (JCpgPicture)node.getUserObject();
+        	
+        	if(picture.getFileName().equals(name)){ // match found
+        		
+        		return node;
+        		
+        	}
+        	
+    	}
+		
+    	// check parent node's children
         if (node.getChildCount() >= 0) {
         	
             for (Enumeration e=node.children(); e.hasMoreElements(); ) {
