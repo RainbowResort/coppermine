@@ -1,4 +1,6 @@
 <?php
+//still need to fix the uploader in flash, it won't connect to a relative url
+
 if($_SERVER['HTTP_USER_AGENT'] == "Shockwave Flash" && $_SERVER['REMOTE_ADDR'] == "127.0.0.1"){
 	switch($_GET['action']){
 		case "image" :

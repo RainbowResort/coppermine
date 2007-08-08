@@ -33,6 +33,8 @@ class imageObject{
          var $filename;
          // output quality, 0 - 100
          var $quality;
+		 //preview 
+		 var $preview;
 
          //constructor
          function imageObject($directory,$filename,$previous=null)
@@ -163,6 +165,44 @@ class imageObject{
              return $this;
 
          }
+		 
+		 function watermarkText($text, $font, $color, $size, $left, $top, $rotation, $transparency=100){
+			//[draw] => 'text 138,273 "Coppermine Watermmarker"'
+			$output = array();
+			global $CONFIG;
+            $imgFile = escapeshellarg("$this->directory$this->filename");
+			
+			
+			//temp solution of my pc not working correctly
+			foreach (glob("watermarker/tempimg/*.jpg") as $filename) {
+			   unlink($filename);
+			}
+			$rand = rand(10, 99999);
+			$this->preview = "<img src='watermarker/tempimg/".$rand.".jpg'/>";
+			
+			$imgOut = 'watermarker/tempimg/'.$rand.'.jpg';
+			$font = "./watermarker/fonts/" . $font . ".ttf";
+			$size = $size +5;
+			$top -= 7;
+			
+			//IM uses the shear rotation by A Paeth, this needs to be converted to regular dimensions<br />
+			//now setting rotation to 0 beacause it doesn't work yet
+			$rotation = 0; // - $rotation;
+			
+			if (eregi("win",getenv('OS'))) {
+				 $imgFile = str_replace("'","\"" ,$imgFile );
+				 $cmd = "\"".str_replace("\\","/", $CONFIG['impath'])."convert\" ".str_replace("\\","/" ,$imgFile )." -fill #$color -pointsize $size -font $font -draw \"rotate $rotation text $left,$top '$text'\" ".str_replace("\\","/" ,$imgOut );
+				 //echo $cmd;
+				 exec ("\"$cmd\"", $output, $retval);
+			} else {
+				$cmd = "{$CONFIG['impath']}convert -fill #$color -pointsize $size -font $font -draw \"rotate $rotation text $left,$top '$text'\" $imgFile $imgOut";
+				exec ($cmd, $output, $retval);
+			}
+		 }
+		 
+		 function watermarkImage($image, $left, $top, $rot, $transparency=100){
+		 	
+		 }
 
 
    }

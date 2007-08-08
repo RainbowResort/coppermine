@@ -68,80 +68,50 @@ switch($_GET['action']){
 		break;
 	case "preview":
 		//show preview image
-		//check which image-editor to use
 		global $CONFIG;
 		isset($_GET['what']) ? $what = $_GET['what'] : $what = $CONFIG['wm_what'];
 		isset($_GET['image_url']) ? $image_url = $_GET['image_url'] : $image_url = $CONFIG['wm_image_url'];
-		isset($_GET['size']) ? $fontSize = $_GET['size'] - 1 : $fontSize = $CONFIG['wm_text_size'];
+		isset($_GET['size']) ? $size = $_GET['size'] - 1 : $size = $CONFIG['wm_text_size'];
 		isset($_GET['top']) ? $top = $_GET['top'] : $top = $CONFIG['wm_top'];
 		isset($_GET['left']) ? $left = $_GET['left'] : $left = $CONFIG['wm_left'];
 		isset($_GET['text']) ? $text = $_GET['text'] : $text = $CONFIG['wm_text'];
-		isset($_GET['rotation']) ? $font_rotation = $_GET['rotation'] : $font_rotation = $CONFIG['wm_rotation'];
+		isset($_GET['rotation']) ? $rotation = $_GET['rotation'] : $rotation = $CONFIG['wm_rotation'];
 		isset($_GET['color']) ? $c = $_GET['color'] : $c = $CONFIG['wm_color'];
 		isset($_GET['font']) ? $font = $_GET['font'] : $font = $CONFIG['wm_font'];
-		$font_rotation = 360 - $font_rotation ;
+		$rotation = 360 - $rotation ;
+		
+		//check which image-editor to use
 		switch($CONFIG['thumb_method']){
 			case "im":
-
+				require("include/imageObjectIM.class.php");
 				break;
 			case "gd1":
-				
+				require("include/imageObjectGD.class.php");
 				break;
 			case "gd2":
-				//image or text watermark
-				if($what == "text"){
-					//watermarl with image
-					$image = imagecreatefromjpeg("img.jpg");
-					$font = $font . '.ttf';
-					$front_color = imagecolorallocate($image, hexdec(substr($c,0,2)), hexdec(substr($c,2,2)), hexdec(substr($c,4,2)));
-					//creates a bottom layer for readability
-					//$bottom_color = imagecolorallocate($image, 0x66, 0x66, 0x66);
-					//imagettftext($image, $fontSize, $font_rotation, $left, $top, $bottom_color, $font, $text);
-	
-					//creates the front layer
-					imagettftext($image, $fontSize, $font_rotation, $left, $top, $front_color, $font, $text);
-					header("Content-Type: image/PNG");
-					imagejpeg($image);
-					imagedestroy($image);
-					break;
-				}else{
-					//watermark with image
-					$watermark = imagecreatefromjpeg($image_url);
-					$rot = $font_rotation;
-					$dest_x = $left;
-					$dest_y = $top;
-					$watermark_width = imagesx($watermark);
-					$watermark_height = imagesy($watermark);
-					//check rotation (only possible to use 0, 90, 180 & 270)
-					if($rot > 225 && $rot < 315){
-						$watermark = imagerotate($watermark, 270, 0);
-						$dest_x -= $watermark_height;
-					}else if(($rot >= 180 && $rot < 225)||($rot > 495 && $rot < 540)){
-						$watermark = imagerotate($watermark, 180, 0);
-						$dest_x -= $watermark_width;
-						$dest_y -= $watermark_height;
-					}else if($rot > 405 && $rot < 495){
-						$watermark = imagerotate($watermark, 90, 0);
-						$dest_y -= $watermark_width;
-					}
-
-					$watermark_width = imagesx($watermark);
-					$watermark_height = imagesy($watermark);
-					
-					$image = imagecreatefromjpeg("img.jpg");
-					
-					imagecopymerge($image, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height, 100);
-					header("Content-Type: image/PNG");
-					imagejpeg($image);
-					imagedestroy($image);
-					
-					
-					
-					
-					
-					
-				}
+				require("include/imageObjectGD.class.php");
+				break;	
 		}
+		
+		//create the preview
+		$preview = new imageObject("", "img.jpg");
+		if($what == "text"){
+			//watermark with text
+			$preview->watermarkText($text, $font, $c, $size, $left, $top, $rotation);
+			echo($preview->preview);
+		}else{
+			//watermark with image
+			//get the actual watermark image if it was converted for use with the configurator
+			if(file_exists("watermarker/images/" . substr($image_url,0, (strlen($image_url)-4) ))){
+				$image_url = "watermarker/images/" . substr($image_url,0, (strlen($image_url)-4) );
+			}else{
+				$image_url = "watermarker/images/" . $image_url;
+			}
+			echo("<img src='".$image_url."'/>");
+			$preview->watermarkImage($image_url, $left, $top, $rotation, $transparency=100);
+			echo($preview->preview);
+		}
+		
 		break;
 	case "save":
 		//save configuration to db
@@ -175,29 +145,23 @@ switch($_GET['action']){
 		//get fonts from fonts dir
 		$path = "./watermarker/fonts";
 		$dh = opendir($path);
-		$vars="fonts=";
+		$vars="&fonts=";
 		while (($file = readdir($dh)) !== false) {
 			if($file != "." && $file != ".." && (substr($file, strlen($file) - 4) == '.ttf'  || substr($file, strlen($file) - 4) == '.TTF')) {
 				$vars .= substr($file, 0, strlen($file) - 4) . "/";
 			}
 		}
 		closedir($dh);
-		echo $vars;
+		print($vars);
 		break;
-	case "upload_image":
-		//if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
-		move_uploaded_file($_FILES['Filedata']['tmp_name'], "C:\\wamp\\www\\CPG\\CPG 1.5 Live\\watermarker\\images\\".$_FILES['Filedata']['name']); 
-		chmod("./watermarker/images/".$_FILES['Filedata']['name'], 0777); 
+	case "get_lang":
+		print("&lang_upload=" . $lang_watermarker_php['upload'] . "&lang_preview=" . $lang_watermarker_php['preview'] . "&lang_save=" . $lang_watermarker_php['save'] . "&lang_text=" . $lang_watermarker_php['text'] . "&lang_image=" . $lang_watermarker_php['image'] . "&lang_upload_image=" . $lang_watermarker_php['upload_image'] . "&lang_upload_font=" . $lang_watermarker_php['upload_font'] . "&lang_loaded=loaded");
 		break;
-		
 	default :
 		break;
 
 
 }
-
-
-
 
 
 

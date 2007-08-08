@@ -35,6 +35,8 @@ class imageObject{
          var $quality;
          // truecolor available, boolean
          var $truecolor;
+		 //preview image
+		 var $preview;
 
          //constructor
          function imageObject($directory,$filename,$previous=null)
@@ -162,6 +164,78 @@ class imageObject{
              return $this->createUnique($dst_img);
 
          }
+		 
+		 function watermarkText($text, $font, $color, $size, $left, $top, $rotation, $transparency=100){
+
+			$font = $font . '.ttf';
+			$front_color = imagecolorallocate($this->imgRes, hexdec(substr($color,0,2)), hexdec(substr($color,2,2)), hexdec(substr($color,4,2)));
+			
+			//creates a bottom layer for readability
+			//$bottom_color = imagecolorallocate($image, 0x66, 0x66, 0x66);
+			//imagettftext($image, $fontSize, $font_rotation, $left - 1, $top - 1, $bottom_color, $font, $text);
+
+			//creates the front layer
+			imagettftext($this->imgRes, $size, $rotation, $left, $top, $front_color, $font, $text);
+			//header("Content-Type: image/PNG");
+			//imagejpeg($this->imgRes);
+			
+			//temp solution of my pc not working correctly
+			foreach (glob("watermarker/tempimg/*.jpg") as $filename) {
+			   unlink($filename);
+			}
+			$rand = rand(10, 99999);
+			imagejpeg($this->imgRes, 'watermarker/tempimg/'.$rand.'.jpg');
+			$this->preview = "<img src='watermarker/tempimg/".$rand.".jpg'/>";
+		 }
+		 
+		 function watermarkImage($image, $left, $top, $rot, $transparency=100){
+		 	//check file type
+			$ext = end(explode('.',$image));
+			$watermark = "";
+			switch ($ext){
+				case "jpg":
+					$watermark = imagecreatefromjpeg($image);
+					break;
+				case "png":
+					$watermark = imagecreatefrompng($image);
+					break;
+				case "gif":
+					$watermark = imagecreatefromgif($image);
+					break;
+			}
+			$dest_x = $left;
+			$dest_y = $top;
+			$watermark_width = imagesx($watermark);
+			$watermark_height = imagesy($watermark);
+			//check rotation (only possible to use 0, 90, 180 & 270)
+			if($rot > 225 && $rot < 315){
+				$watermark = imagerotate($watermark, 270, 0);
+				$dest_x -= $watermark_height;
+			}else if(($rot >= 180 && $rot < 225)||($rot > 495 && $rot < 540)){
+				$watermark = imagerotate($watermark, 180, 0);
+				$dest_x -= $watermark_width;
+				$dest_y -= $watermark_height;
+			}else if($rot > 405 && $rot < 495){
+				$watermark = imagerotate($watermark, 90, 0);
+				$dest_y -= $watermark_width;
+			}
+
+			$watermark_width = imagesx($watermark);
+			$watermark_height = imagesy($watermark);
+			
+			imagecopymerge($this->imgRes, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height, 100);
+			
+			//header("Content-Type: image/PNG");
+			//imagejpeg($this->imgRes);
+			
+			//temp solution of my pc not working correctly
+			foreach (glob("watermarker/tempimg/*.jpg") as $filename) {
+			   unlink($filename);
+			}
+			$rand = rand(10, 99999);
+			imagejpeg($this->imgRes, 'watermarker/tempimg/'.$rand.'.jpg');
+			$this->preview = "<img src='watermarker/tempimg/".$rand.".jpg'/>";
+		 }
 
 
          function saveImage(){
