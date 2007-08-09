@@ -1,3 +1,4 @@
+Synchronisation of categories from server to client is now possible
 Fixed a bug in the resizer where it was possible for the lower line to go to far, under the picture
 Fixed a bug when going through the tree and find a node. Before, the parent node itself was never checked for the given criteria
 Using recursion, it now is possible for each category to have infinite subcategories and albums

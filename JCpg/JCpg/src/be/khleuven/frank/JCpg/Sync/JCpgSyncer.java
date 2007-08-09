@@ -158,6 +158,7 @@ public class JCpgSyncer {
 	 */
 	public void sync() {
 		
+		// SERVER -> CLIENT
 		// Categories
 		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
 		
@@ -209,6 +210,15 @@ public class JCpgSyncer {
 
 		SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
 		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+		
+		
+		
+		
+		
+		// CLIENT -> SERVER
+		
+		
+		
 
 	}
 	/**
