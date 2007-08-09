@@ -248,7 +248,18 @@ public class JCpgSyncer {
 						JCpgCategory category = new JCpgCategory(element.getAttribute("cid").getIntValue(), element.getAttribute("ownerid").getIntValue(), element.getAttribute("name").getValue(), element.getAttribute("description").getValue(), element.getAttribute("parent").getIntValue(), element.getAttribute("pos").getIntValue(), element.getAttribute("thumb").getIntValue());
 						parent.addCategory(category);
 						
-						DefaultMutableTreeNode parentnode = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), "gallery", parent.getName());
+						String parenttype = "";
+						if(parent.getClass().equals(JCpgGallery.class)){
+							
+							parenttype = "gallery";
+							
+						}else if(parent.getClass().equals(JCpgCategory.class)){
+							
+							parenttype = "category";
+							
+						}
+						
+						DefaultMutableTreeNode parentnode = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), parenttype, parent.getName());
 						DefaultMutableTreeNode treecategory = new DefaultMutableTreeNode(category);
 						parentnode.add(treecategory);
 						
@@ -313,7 +324,7 @@ public class JCpgSyncer {
 						extractCategories(element, category); // go through the tree xml tag structure using recursion
 					
 					}else{ // category already exists in the tree, take a look in this category to find new, unsaved stuff
-					
+						
 						extractCategories(element, parent.getCategory(element.getAttribute("name").getValue()));
 					
 					}	
