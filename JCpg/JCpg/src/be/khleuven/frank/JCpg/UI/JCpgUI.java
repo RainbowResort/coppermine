@@ -20,10 +20,7 @@ package be.khleuven.frank.JCpg.UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.MediaTracker;
-import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -231,7 +228,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureList.setBorder(new EtchedBorder());
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
 		pictureListSelectionModel = pictureList.getSelectionModel();
-		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
 		
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
@@ -1358,6 +1354,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		controlMegaExplorerActive();
 		
 	}
+	/**
+	 * 
+	 * Switch the mega explorer view depending on the current state
+	 *
+	 */
 	public void changeMegaExplorerActive(){
 		
 		if(getMegaExplorerActive()){

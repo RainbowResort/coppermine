@@ -38,9 +38,10 @@ public class JCpgGallery{
 														//				VARIABLES             *
 														//*************************************
 	private JCpgUI ui = null;
+	
 	private String name = null ;
 	private String description = null ;
-	private int id = 0; // just to make it complete
+	private int id = 1; // just to make it complete
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 
