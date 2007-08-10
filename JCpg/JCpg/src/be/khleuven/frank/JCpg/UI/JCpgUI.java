@@ -238,10 +238,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureView = new JScrollPane(pictureList);
 		megaPictureView = new JScrollPane();
 		megaPictureView.setBackground(new Color(230, 230, 230));
-		explorerscroll = new JScrollPane(explorer);
 		
 		explorer = new JPanel();
 		explorer.setBackground(new Color(230, 230, 230));
+		explorerscroll = new JScrollPane(explorer);
 		tools = new JPanel();
 		tools.setBackground(new Color(168, 168, 168));
 		albumcontrol = new JPanel();
@@ -299,7 +299,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		megaTreeView.setMinimumSize(new Dimension(200, 501));
 		megaTreeView.setBackground(new Color(230, 237, 248));
 		
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, explorer);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, explorerscroll);
 		megaSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, megaTreeView, megaPictureView);
 		
 		// menu
@@ -501,7 +501,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private void placeComponents(){
 		
 		this.getContentPane().add(pictureView);
-		this.getContentPane().add(explorerscroll);
+		//this.getContentPane().add(explorerscroll);
 		tools.add(edit_rotate);
 		tools.add(edit_crop);
 		tools.add(edit_resize);
@@ -634,6 +634,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	public JCpgAlbum getCurrentAlbum(){
 		
 		return this.currentAlbum;
+		
+	}
+	public ArrayList<String> getDeleteParameters(){
+		
+		return this.deleteparameters;
 		
 	}
 	
@@ -1393,7 +1398,31 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	public void addDeleteParameter(String parameter){
 		
-		this.deleteparameters.add(parameter);
+		getDeleteParameters().add(parameter);
+		
+	}
+	/**
+	 * 
+	 * Checks if a certain delete parameter already exists so it's not added twice
+	 * 
+	 * @param parameter
+	 * 		the parameter string to search for
+	 * @return
+	 * 		true if it was already generated, else false
+	 */
+	public boolean hasDeleteParameter(String parameter){
+		
+		for(int i=0; i<getDeleteParameters().size(); i++){
+			
+			if(getDeleteParameters().get(i).equals(parameter)){
+				
+				return true;
+				
+			}
+			
+		}
+		
+		return false;
 		
 	}
 	

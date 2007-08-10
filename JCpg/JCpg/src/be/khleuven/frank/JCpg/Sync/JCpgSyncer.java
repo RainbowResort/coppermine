@@ -18,17 +18,11 @@
 package be.khleuven.frank.JCpg.Sync;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import org.jdom.DataConversionException;
 import org.jdom.Document;
@@ -155,11 +149,27 @@ public class JCpgSyncer {
 	 */
 	public void sync() {
 		
-		// SERVER -> CLIENT
-		// Categories
 		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
 		
-		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+		// DELETE
+		for(int i=0; i<getUi().getDeleteParameters().size(); i++){
+			
+			if(phpCommunicator.performPhpRequest(getUi().getDeleteParameters().get(i))){ // result ok
+				
+				System.out.println("JCpgSyncer: delete parameter " + i + " succesfully executed");
+				
+			}else{
+				
+				System.out.println("JCpgSyncer: delete parameter " + i + " failed to execute");
+				
+			}
+			
+		}
+		
+		// SERVER -> CLIENT
+		// Categories
+		
+		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); isn't showing anything at the moment
 		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 		
 		if(phpCommunicator.performPhpRequest(parameters)){ // result ok
@@ -187,7 +197,7 @@ public class JCpgSyncer {
 							
 							if(element.getAttributeValue("name").equals("User galleries")){
 								
-								extractCategories(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject());
+								downloadComponents(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject());
 								
 							}
 							
@@ -213,7 +223,7 @@ public class JCpgSyncer {
 		
 		
 		// CLIENT -> SERVER
-		createCategories(getUi().getGallery(), phpCommunicator);
+		uploadComponents(getUi().getGallery(), phpCommunicator);
 		
 		
 
@@ -227,7 +237,7 @@ public class JCpgSyncer {
 	 * @param parent
 	 * 		parent object
 	 */
-	private void extractCategories(Element xmlelement, JCpgGallery parent){
+	private void downloadComponents(Element xmlelement, JCpgGallery parent){
 		
 		List content = xmlelement.getChildren();
 		ListIterator it = content.listIterator();
@@ -240,9 +250,10 @@ public class JCpgSyncer {
 				
 				try {
 					
-					if(parent.getCategory(element.getAttribute("name").getValue()) == null){ // category not found in current tree so it's not saved offline -> load it in
+					if(parent.getCategory(element.getAttribute("name").getValue(), element.getAttribute("cid").getIntValue()) == null){ // category not found in current tree so it's not saved offline -> load it in
 						
 						JCpgCategory category = new JCpgCategory(element.getAttribute("cid").getIntValue(), element.getAttribute("ownerid").getIntValue(), element.getAttribute("name").getValue(), element.getAttribute("description").getValue(), element.getAttribute("parent").getIntValue(), element.getAttribute("pos").getIntValue(), element.getAttribute("thumb").getIntValue());
+						category.addUi(getUi());
 						parent.addCategory(category);
 						
 						String parenttype = "";
@@ -273,6 +284,7 @@ public class JCpgSyncer {
 								try {
 									
 									JCpgAlbum album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("position").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), albumelement.getAttribute("alb_password").getValue(), albumelement.getAttribute("alb_password_hint").getValue());
+									album.addUi(getUi());
 									category.addAlbum(album);
 									
 									DefaultMutableTreeNode treealbum = new DefaultMutableTreeNode(album);
@@ -293,6 +305,7 @@ public class JCpgSyncer {
 												JCpgPicture picture = new JCpgPicture(pictureelement.getAttribute("pid").getIntValue(), album.getId(), pictureelement.getAttribute("filepath").getValue(), pictureelement.getAttribute("filename").getValue(), pictureelement.getAttribute("filesize").getLongValue(), pictureelement.getAttribute("totalfilesize").getLongValue(), pictureelement.getAttribute("pwidth").getIntValue(), pictureelement.getAttribute("pheight").getIntValue(), pictureelement.getAttribute("hits").getIntValue(),
 																							pictureelement.getAttribute("ctime").getIntValue(), pictureelement.getAttribute("ownerid").getIntValue(), pictureelement.getAttribute("ownername").getValue(), pictureelement.getAttribute("picrating").getIntValue(), pictureelement.getAttribute("votes").getIntValue(), pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("caption").getValue(), pictureelement.getAttribute("keywords").getValue(), pictureelement.getAttribute("approved").getBooleanValue(), pictureelement.getAttribute("galleryicon").getIntValue(),
 																							pictureelement.getAttribute("urlprefix").getIntValue(), pictureelement.getAttribute("position").getIntValue());
+												picture.addUi(getUi());
 												album.addPicture(picture);
 												
 												DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
@@ -318,11 +331,11 @@ public class JCpgSyncer {
 							
 						}
 						
-						extractCategories(element, category); // go through the tree xml tag structure using recursion
+						downloadComponents(element, category); // go through the tree xml tag structure using recursion
 					
 					}else{ // category already exists in the tree, take a look in this category to find new, unsaved stuff
 						
-						extractCategories(element, parent.getCategory(element.getAttribute("name").getValue()));
+						downloadComponents(element, parent.getCategory(element.getAttribute("name").getValue(), element.getAttribute("cid").getIntValue()));
 					
 					}	
 						
@@ -346,7 +359,7 @@ public class JCpgSyncer {
 	 * @param phpCommunicator
 	 * 		phpCommunicator to talk with the server
 	 */
-	private void createCategories(JCpgGallery parent, JCpgPhpCommunicator phpCommunicator){
+	private void uploadComponents(JCpgGallery parent, JCpgPhpCommunicator phpCommunicator){
 		
 		String parameters = "";
 		
@@ -356,28 +369,69 @@ public class JCpgSyncer {
 			for(int i=0; i<parent.getAlbums().size(); i++){
 				
 				JCpgAlbum album = parent.getAlbums().get(i);
-				parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 				
-				if(phpCommunicator.performPhpRequest(parameters))
-					System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
-				else
-					System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+				if(album.getId() == -1){
+					
+					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+					
+					if(phpCommunicator.performPhpRequest(parameters))
+						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
+					else
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+					
+					// fetch id for this newly uploaded album
+					album.changeId(fetchUploadId("albumdata", phpCommunicator));
 				
-				// fetch id for this newly uploaded album
-				//parameters = 
+				}else{ // album is already on server, check if it's modified and generate the modify parameters
+					
+					if(album.isModified()){
+						
+						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						
+						if(phpCommunicator.performPhpRequest(parameters))
+							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
+						else
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
+						
+						album.switchIsModified(); // set back to not modified
+						
+					}
+					
+				}
 				
 				for(int j=0; j<album.getPictures().size(); j++){
 					
 					JCpgPicture picture = album.getPictures().get(j);
-					parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+					picture.changeAlbumId(album.getId());
 					
-					if(phpCommunicator.performPhpRequest(parameters))
-						System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
-					else
-						System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
+					if(picture.getId() == -1){
+						
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						
+						if(phpCommunicator.performPhpRequest(parameters))
+							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
+						else
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
+						
+						// fetch id for this newly uploaded picture
+						picture.changeId(fetchUploadId("picturedata", phpCommunicator));
 					
-					// fetch id for this newly uploaded picture
-					//parameters = 
+					}else{ // picture is already on server, check if it's modified and generate the modify parameters
+						
+						if(picture.isModified()){
+							
+							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+							
+							if(phpCommunicator.performPhpRequest(parameters))
+								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
+							else
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");
+							
+							picture.switchIsModified(); // set back to not modified
+							
+						}
+						
+					}
 					
 				}
 				
@@ -389,52 +443,153 @@ public class JCpgSyncer {
 		for(int i=0; i<parent.getCategories().size(); i++){ // categories
 			
 			JCpgCategory category = parent.getCategories().get(i);
-			
-			if(category.getId() == -1){ // not yet on server
+				
+			if(category.getId() == -1){
 				
 				parameters = "createcategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-				
+					
 				if(phpCommunicator.performPhpRequest(parameters))
 					System.out.println("JCpgSyncer: " + category.getName() + " was succesfully uploaded");
 				else
 					System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully upload");
-				
+					
 				// fetch id for this newly uploaded category
-				//parameters = 
+				category.changeId(fetchUploadId("categorydata", phpCommunicator));
 				
-				for(int j=0; j<category.getAlbums().size(); j++){ // albums
+			}else{ // category is already on server, check if it's modified and generate the modify parameters
+				
+				if(category.isModified()){
 					
-					JCpgAlbum album = category.getAlbums().get(j);
-					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-					
+					parameters = "modifycategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+
 					if(phpCommunicator.performPhpRequest(parameters))
-						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
+						System.out.println("JCpgSyncer: " + category.getName() + " was succesfully modified");
 					else
-						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+						System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully modified");
 					
-					// fetch id for this newly uploaded album
-					//parameters = 
-					
-					for(int k=0; k<album.getPictures().size(); k++){
-						
-						JCpgPicture picture = album.getPictures().get(k);
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-						
-						if(phpCommunicator.performPhpRequest(parameters))
-							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
-						else
-							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
-						
-						// fetch id for this newly uploaded picture
-						//parameters = 
-						
-					}
+					category.switchIsModified(); // set back to not modified
 					
 				}
 				
 			}
+				
+			for(int j=0; j<category.getAlbums().size(); j++){ // albums
+					
+				JCpgAlbum album = category.getAlbums().get(j);
+				album.changeCategory(category.getId());
+				
+				if(album.getId() == -1){
+					
+					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						
+					if(phpCommunicator.performPhpRequest(parameters))
+						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
+					else
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+						
+					// fetch id for this newly uploaded album
+					album.changeId(fetchUploadId("albumdata", phpCommunicator));
+					
+				}else{ // album is already on server, check if it's modified and generate the modify parameters
+					
+					if(album.isModified()){
+						
+						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						
+						if(phpCommunicator.performPhpRequest(parameters))
+							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
+						else
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
+						
+						album.switchIsModified(); // set back to not modified
+						
+					}
+					
+				}
+					
+				for(int k=0; k<album.getPictures().size(); k++){
+						
+					JCpgPicture picture = album.getPictures().get(k);
+					picture.changeAlbumId(album.getId());
+					
+					if(picture.getId() == -1){
+						
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+							
+						if(phpCommunicator.performPhpRequest(parameters))
+							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
+						else
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
+							
+						// fetch id for this newly uploaded picture
+						picture.changeId(fetchUploadId("picturedata", phpCommunicator));
+					
+					}else{ // picture is already on server, check if it's modified and generate the modify parameters
+						
+						if(picture.isModified()){
+							
+							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+							
+							if(phpCommunicator.performPhpRequest(parameters))
+								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
+							else
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");
+							
+							picture.switchIsModified(); // set back to not modified
+							
+						}
+						
+					}
+						
+				}
+					
+			}
 			
-			createCategories(category, phpCommunicator); // go through tree structure
+			uploadComponents(category, phpCommunicator); // go through tree structure
+			
+		}
+		
+	}
+	/**
+	 * 
+	 * Get the id of the just uploaded component
+	 * 
+	 * @param type
+	 * 		type of the component just uploaded: categorydata, albumdata or picturedata
+	 * @param phpCommunicator
+	 * 		phpcommunicator to talk with server
+	 * @return
+	 * 		the id if one is found, else -1
+	 */
+	private int fetchUploadId(String type, JCpgPhpCommunicator phpCommunicator){
+		
+		String tag = "";
+		
+		if(type.equals("categorydata")){
+			
+			tag = "cid";
+			
+		}else if(type.equals("albumdata")){
+			
+			tag = "aid";
+			
+		}else if(type.equals("picturedata")){
+			
+			tag = "pid";
+			
+		}
+		
+		String result = phpCommunicator.getXmlTagText(type, tag);
+		
+		System.out.println("Fetched ID: " + result);
+		
+		if(!result.equals("")){ // id was found, return it
+		
+			return new Integer(phpCommunicator.getXmlTagText(type, tag));
+		
+		}else{ // not id found, return -1
+			
+			return -1;
 			
 		}
 		

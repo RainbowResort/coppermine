@@ -116,6 +116,8 @@ public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTree
 		}
 		
 		getGallerySaver().saveGallery(); // save current gallery state
+		
+		album.changeIsModified(true); // tell syncer this component was modified
 	
 	}
 

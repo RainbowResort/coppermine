@@ -138,6 +138,8 @@ public class JCpgEditCategoryManager extends JCpgEditManager {
 		
 		getGallerySaver().saveGallery(); // save current gallery state
 		
+		category.changeIsModified(true); // tell syncer this component was modified
+		
 	}
 
 }

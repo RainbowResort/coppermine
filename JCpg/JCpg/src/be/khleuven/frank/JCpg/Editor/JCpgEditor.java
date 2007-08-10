@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Editor;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -34,6 +35,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 
@@ -67,6 +69,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	private JLabel logo;
 	private JButton apply;
 	private JButton close;
+	private JScrollPane previewscroll;
 	private JPanel preview;
 	
 	private BufferedImage previewBuffered;
@@ -274,6 +277,18 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	}
 	/**
 	 * 
+	 * Get the preview scrollpane
+	 * 
+	 * @return
+	 * 		the preview scrollpane
+	 */
+	public JScrollPane getPreviewscroll(){
+		
+		return this.previewscroll;
+		
+	}
+	/**
+	 * 
 	 * Get a BufferedImage from the previewed image
 	 * 
 	 * @return
@@ -353,6 +368,8 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		preview.setLayout(new FlowLayout());
 		preview.setOpaque(false);
 		
+		previewscroll = new JScrollPane(preview);
+		
 		image.setBorder(new EtchedBorder());
 		
 		apply = new JButton("Apply");
@@ -384,7 +401,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 		
 		logo.setBounds(0, 0, 1000, 50);
 		
-		preview.setBounds(getPreviewPosition().width, getPreviewPosition().height, getPreviewSize().width, getPreviewSize().height);
+		previewscroll.setBounds(getPreviewPosition().width, getPreviewPosition().height, getPreviewSize().width, getPreviewSize().height);
 		
 		apply.setBounds(10, 660, 100, 30);
 		close.setBounds(120, 660, 100, 30);
@@ -398,7 +415,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	private void placeComponents(){
 		
 		this.getContentPane().add(logo);
-		this.getContentPane().add(preview);
+		this.getContentPane().add(previewscroll);
 		this.getContentPane().add(apply);
 		this.getContentPane().add(close);
 		this.setVisible(true);

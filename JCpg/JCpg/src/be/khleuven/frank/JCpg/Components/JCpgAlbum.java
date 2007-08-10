@@ -542,7 +542,12 @@ public class JCpgAlbum extends JCpgGallery{
 		if(getId() != -1){ // only generate delete parameters if this album is in the server's database
 			
 			String parameters = "removealbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + this.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-			getUi().addDeleteParameter(parameters);
+			
+			if(!getUi().hasDeleteParameter(parameters)){
+				
+				getUi().addDeleteParameter(parameters);
+				
+			}
 			
 		}
 		

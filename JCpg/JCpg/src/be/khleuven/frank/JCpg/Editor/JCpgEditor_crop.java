@@ -108,7 +108,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	 */
 	private void doExtraSwingComponents(){
 		
-		this.addMouseMotionListener(this);
+		getPreviewscroll().addMouseMotionListener(this);
 		
 		// rectangle start values
         rup = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getSize().width / 4, getImageLabel().getLocation().y + getImageLabel().getSize().height / 4 + 50, getImageLabel().getSize().width / 4, 1); // up
@@ -307,9 +307,9 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft){
 			
 			rleft.x = mouseposition.x - rup.width / 2;
-			rup.y = mouseposition.y - rleft.height / 2;
+			rup.y = mouseposition.y + 50 - rleft.height / 2;
 			rright.x = mouseposition.x + rup.width / 2;
-			rdown.y = mouseposition.y + rleft.height / 2;
+			rdown.y = mouseposition.y + 50 + rleft.height / 2;
 		
 		}
 		
@@ -320,7 +320,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		}
 		if(selectedDown){
 			
-			rdown.y = mouseposition.y;
+			rdown.y = mouseposition.y + 50;
 			
 		}
 		if(selectedRight){
@@ -330,7 +330,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		}
 		if(selectedUp){
 	
-			rup.y = mouseposition.y;
+			rup.y = mouseposition.y + 50;
 	
 		}
 		
@@ -357,6 +357,8 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	public void mouseMoved(MouseEvent m) {
 	
 		Point p = m.getPoint();
+		
+		p.y = p.y + 50;
 		
 		// check if mouse is in crop rectangle
 		if(p.x > rleft.x && p.x < rright.x && p.y > rup.y && p.y < rdown.y)

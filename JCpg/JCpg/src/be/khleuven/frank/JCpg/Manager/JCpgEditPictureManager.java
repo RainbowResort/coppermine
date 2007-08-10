@@ -142,6 +142,8 @@ public class JCpgEditPictureManager extends JCpgEditManager {
 		
 		getGallerySaver().saveGallery(); // save current gallery state
 		
+		picture.changeIsModified(true); // tell syncer this component was modified
+		
 	}
 
 }

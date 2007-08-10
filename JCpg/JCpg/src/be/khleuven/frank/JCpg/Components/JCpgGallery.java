@@ -42,6 +42,7 @@ public class JCpgGallery{
 	private String name = null ;
 	private String description = null ;
 	private int id = 1; // just to make it complete
+	private boolean isModified = false; // says if the component is modified or not. If it is, modify parameters must be generated at sync time
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
 
@@ -237,16 +238,26 @@ public class JCpgGallery{
 	 * 
 	 * @param name
 	 * 		name of the category you search
+	 * @param id
+	 * 		if this is not -1, checking will happen using the id, not the name
 	 * @return
 	 * 		the category if it has been found, else null
 	 */
-	public JCpgCategory getCategory(String name){
+	public JCpgCategory getCategory(String name, int id){
 		
 		for(int i=0; i<getCategories().size(); i++){
 			
 			JCpgCategory category = getCategories().get(i);
 			
-			if(category.getName().equals(name)){
+			if(id != -1){
+				
+				if(category.getId() == id){
+					
+					return category; // category found
+					
+				}
+				
+			}else if(category.getName().equals(name)){
 				
 				return category; // category found
 				
@@ -267,6 +278,18 @@ public class JCpgGallery{
 	public TreePath getTreePath(){
 		
 		return this.treePath;
+		
+	}
+	/**
+	 * 
+	 * Check if this component was modified
+	 * 
+	 * @return
+	 * 		true if it was modified, else false
+	 */
+	public boolean isModified(){
+		
+		return this.isModified;
 		
 	}
 	
@@ -417,6 +440,36 @@ public class JCpgGallery{
 	private void generateDeleteParamaters(){
 		
 		// this gallery can not be deleted
+		
+	}
+	/**
+	 * 
+	 * Changes the isModified flag to the desired value
+	 * 
+	 * @param isModified
+	 * 		the desired isModified flag
+	 */
+	public void changeIsModified(boolean isModified){
+		
+		this.isModified = isModified;
+		
+	}
+	/**
+	 * 
+	 * Switch the isModified flag
+	 *
+	 */
+	public void switchIsModified(){
+		
+		if(isModified()){
+			
+			this.isModified = false;
+			
+		}else{
+			
+			this.isModified = true;
+			
+		}
 		
 	}
 	

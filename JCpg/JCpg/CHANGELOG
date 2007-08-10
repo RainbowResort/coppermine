@@ -1,3 +1,6 @@
+Added scrollbars to the editors so large pictures can be edited as well
+Added scrollbars to the explorer so large pictures can fit in as well
+Enhanced the synchronisation: JCpg now knows when to generate insert and modify queries
 Fixed load gallery bug where the ctime was loaded as an integer instead of a long value
 Fixed major bug in the displaying of the pictures in the RHS. The cachproblem is gone and the gridbag layout manager is now working and used properly
 Synchronization of categories from client to server is now possible, I'm now waiting for some functionallity of the API to fetch the id of a newly uploaded component so this feature will fully work

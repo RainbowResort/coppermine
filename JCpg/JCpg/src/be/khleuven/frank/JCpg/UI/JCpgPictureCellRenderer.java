@@ -104,7 +104,6 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
-    	label.setSize(new Integer(getUi().getCpgConfig().getSiteConfig().getValueFor("thumb_width")), picture.getpHeight());
     	label.setBorder(new EtchedBorder());
         
     	// determine grid position

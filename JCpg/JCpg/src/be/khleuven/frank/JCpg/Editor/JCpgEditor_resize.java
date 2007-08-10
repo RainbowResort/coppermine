@@ -111,7 +111,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 */
 	private void doExtraSwingComponents(){
 		
-		this.addMouseMotionListener(this);
+		getPreviewscroll().addMouseMotionListener(this);
 		
 		// default rectangle positions
 		rright = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getWidth() - 5, getImageLabel().getLocation().y + 50, 5, getImageLabel().getHeight()); // right
@@ -264,7 +264,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		// drag up line
 		if(selectedUp){
 			
-			rup.y = m.getY();
+			rup.y = m.getY() + 50;
 			rdown.y = (getImageLabel().getLocation().y + getImageLabel().getSize().height + 50) - ((rup.y - 58));
 
 			repaint();
@@ -310,6 +310,8 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	public void mouseMoved(MouseEvent m) {
 		
 		Point p = m.getPoint();
+		
+		p.y = p.y + 50;
 		
 		// check if mouse is over one of the lines
 		// up
