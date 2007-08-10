@@ -370,7 +370,7 @@ public class JCpgGallery{
 	/**
 	 * 
 	 * Deletes a gallery. Of course the main gallery can't be deleted, but all the other stuff can. Everything in the tree will be deleted. The JCpgUIReference is needed to get the reference
-	 * to the main gallery and add sql delete queries of all tree elements.
+	 * to the main gallery.
 	 * 
 	 * @param jCpgUIReference
 	 * 		reference to ui
@@ -380,32 +380,13 @@ public class JCpgGallery{
 		for(int i=0; i<getCategories().size(); i++){
     		
 			JCpgCategory category = getCategories().get(i);
-			
-    		for(int j=0; j<category.getAlbums().size(); j++){
-    			
-    			JCpgAlbum album = category.getAlbums().get(j);
-    			
-    			for(int k=0; k<album.getPictures().size(); k++){
-    				
-    				JCpgPicture picture = album.getPictures().get(k);
-    				
-    				picture.delete(jCpgUIReference);
-    				picture = null;
-    				
-    			}
-    			
-    			album = null;
-    		}
-    		
-    		category.getAlbums().clear();
-    		category = null;
+			category.delete(getUi());
     		
     	}
 		
 		getCategories().clear();
 		
 	}
-
 	/**
 	 * 
 	 * toString override
@@ -426,6 +407,16 @@ public class JCpgGallery{
 	public void changeTreePath(TreePath treePath){
 		
 		this.treePath = treePath;
+		
+	}
+	/**
+	 * 
+	 * Generate delete parameters and add them to the arraylist in the ui
+	 *
+	 */
+	private void generateDeleteParamaters(){
+		
+		// this gallery can not be deleted
 		
 	}
 	

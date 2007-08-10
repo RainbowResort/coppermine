@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.UI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
+import javax.swing.border.EtchedBorder;
 
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
@@ -59,13 +60,12 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 		
         setOpaque(false); // transparent
         this.setLayout(gbl); // we will use the grid layout
-        this.removeAll();
         
         gblc.fill = GridBagConstraints.BOTH;
         gblc.insets = new Insets(10,10,10,10);
-        gblc.weighty = 1;
-        gblc.weightx = 1;
-    	
+    	gblc.ipadx = 10;
+    	gblc.ipady = 10;
+        
 	}
 	
 	/**
@@ -101,9 +101,12 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 	 */
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
     	
+    	this.removeAll();
+    	
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
-    	label.setSize(picture.getpWidth(), picture.getpHeight());
+    	label.setSize(new Integer(getUi().getCpgConfig().getSiteConfig().getValueFor("thumb_width")), picture.getpHeight());
+    	label.setBorder(new EtchedBorder());
         
     	// determine grid position
         gblc.gridx = index % 10;

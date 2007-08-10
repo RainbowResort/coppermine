@@ -158,6 +158,13 @@ public class JCpgPictureResizer{
 		return this.filename;
 		
 	}
+	/**
+	 * 
+	 * Get the reference to the ui
+	 * 
+	 * @return
+	 * 		the reference to the ui
+	 */
 	public JCpgUI getUi(){
 		
 		return this.ui;

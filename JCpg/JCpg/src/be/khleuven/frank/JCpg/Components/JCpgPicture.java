@@ -116,7 +116,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @param position
 	 * 		picture position
 	 */
-	public JCpgPicture(int id, int aid, String filepath, String filename, long filesize, long totalfilesize, int pwidth, int pheight, int hits, int ctime, int ownerid, String ownername,
+	public JCpgPicture(int id, int aid, String filepath, String filename, long filesize, long totalfilesize, int pwidth, int pheight, int hits, long ctime, int ownerid, String ownername,
 			int picrating, int votes, String title, String caption, String keywords, boolean approved, int galleryicon, int urlprefix, int position){
 		
 		super(title, caption);
@@ -264,7 +264,7 @@ public class JCpgPicture extends JCpgGallery{
 	 * @param ctime
 	 * 		the picture creation time
 	 */
-	private void setcTime(int ctime){
+	private void setcTime(long ctime){
 		
 		this.ctime = ctime;
 		
@@ -683,6 +683,8 @@ public class JCpgPicture extends JCpgGallery{
 		delete = new File(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getFilePath() + "thumb_" + getFileName());
 		delete.delete();
 		
+		generateDeleteParamaters();
+		
 		if(jCpgUIReference.getCurrentAlbum().equals(album)) // only delete from the picturelist if the currently showing album is this picture's album
 			jCpgUIReference.getPictureListModel().removeElement(this); // delete from picture list
 		
@@ -759,12 +761,18 @@ public class JCpgPicture extends JCpgGallery{
 		setpHeight(pheight);
 		
 	}
-	public void generateParameters(){
+	/**
+	 * 
+	 * Generate delete parameters and add them to the arraylist in the ui
+	 *
+	 */
+	private void generateDeleteParamaters(){
 		
-		if(getId() == -1){ // picture not yet in db -> insert parameters
+		if(getId() != -1){ // only generate delete parameters if this album is in the server's database
 			
-		}else{
-//			 update
+			String parameters = "removecategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + this.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+			getUi().addDeleteParameter(parameters);
+			
 		}
 		
 	}

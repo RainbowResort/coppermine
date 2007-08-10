@@ -502,6 +502,8 @@ public class JCpgAlbum extends JCpgGallery{
     		
 		}
 		
+		generateDeleteParamaters();
+		
 		getPictures().clear();
 		
 	}
@@ -530,12 +532,18 @@ public class JCpgAlbum extends JCpgGallery{
 		setCategory(category);
 		
 	}
-	public void generateParameters(){
+	/**
+	 * 
+	 * Generate delete parameters and add them to the arraylist in the ui
+	 *
+	 */
+	private void generateDeleteParamaters(){
 		
-		if(getId() == -1){ // picture not yet in db -> insert parameters
+		if(getId() != -1){ // only generate delete parameters if this album is in the server's database
 			
-		}else{
-			// update
+			String parameters = "removealbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + this.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+			getUi().addDeleteParameter(parameters);
+			
 		}
 		
 	}

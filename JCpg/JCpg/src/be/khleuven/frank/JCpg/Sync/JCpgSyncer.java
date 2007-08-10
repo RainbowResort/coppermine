@@ -356,7 +356,7 @@ public class JCpgSyncer {
 			for(int i=0; i<parent.getAlbums().size(); i++){
 				
 				JCpgAlbum album = parent.getAlbums().get(i);
-				parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+				parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 				
 				if(phpCommunicator.performPhpRequest(parameters))
 					System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
@@ -369,7 +369,7 @@ public class JCpgSyncer {
 				for(int j=0; j<album.getPictures().size(); j++){
 					
 					JCpgPicture picture = album.getPictures().get(j);
-					parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+					parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
 					if(phpCommunicator.performPhpRequest(parameters))
 						System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
@@ -392,7 +392,7 @@ public class JCpgSyncer {
 			
 			if(category.getId() == -1){ // not yet on server
 				
-				parameters = "createcategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&categoryname=" + category.getName() + "&categorydesc" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+				parameters = "createcategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 				
 				if(phpCommunicator.performPhpRequest(parameters))
 					System.out.println("JCpgSyncer: " + category.getName() + " was succesfully uploaded");
@@ -405,7 +405,7 @@ public class JCpgSyncer {
 				for(int j=0; j<category.getAlbums().size(); j++){ // albums
 					
 					JCpgAlbum album = category.getAlbums().get(j);
-					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
 					if(phpCommunicator.performPhpRequest(parameters))
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
@@ -418,7 +418,7 @@ public class JCpgSyncer {
 					for(int k=0; k<album.getPictures().size(); k++){
 						
 						JCpgPicture picture = album.getPictures().get(k);
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
 						if(phpCommunicator.performPhpRequest(parameters))
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");

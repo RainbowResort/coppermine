@@ -20,10 +20,12 @@ package be.khleuven.frank.JCpg.UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
@@ -94,7 +96,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 																	//*************************************
 	private static final long serialVersionUID = 1L;
 	
-	MediaTracker tracker; // mediatracker to track image load status
+	private MediaTracker tracker; // mediatracker to track image load status
 	
 	private JCpgConfig cpgConfig;
 	private JCpgUI globalUi = this; // for threads :s:s
@@ -143,6 +145,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JMenuBar menubar;
 	private JMenu menu, api, config, users, groups;
 	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
+	
+	private ArrayList<String> deleteparameters = new ArrayList<String>(); // used to store all the delete parameters from deleted components
 
 	
 	
@@ -226,6 +230,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureListModel = new DefaultListModel();
 		pictureList = new JList(pictureListModel);
 		pictureList.setBorder(new EtchedBorder());
+		pictureList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		pictureList.setVisibleRowCount(-1);
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
 		pictureListSelectionModel = pictureList.getSelectionModel();
 		
@@ -344,7 +350,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		
 		// EVENTS
-		
 		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 pictureListValueChanged(evt);
@@ -465,7 +470,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		pictureView.setBounds(0, 0, framesize.width, 100);
 		
 		explorer.setBorder(new EtchedBorder());
-		explorer.setLayout(new FlowLayout()); // give the thumbs a preferred size. The flowlayout manager will take care of the rest.
 		tools.setBounds(200, framesize.height - 145, framesize.width - 200, 50);
 		tools.setBorder(new EtchedBorder());
 		tools.setLayout(new FlowLayout());
@@ -792,6 +796,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 				
 			}
 			
+			for(int i=0; i<deleteparameters.size(); i++){
+				
+				System.out.println(deleteparameters.get(i));
+				
+			}
+			
 		//}
 		
     }
@@ -997,7 +1007,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    Object object = node.getUserObject();
 	    
 	    // do correct typecasting and actions
-	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category	
+	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category
+	    	
+	    	// album view
 	    
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 	    	
@@ -1006,8 +1018,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
 	    		
 		    	currentAlbum = album;
-
-		    	resetPictureList();
+		    	
+		    	getPictureListModel().removeAllElements();
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
@@ -1027,8 +1039,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 						
 					}
 		    		
-		    		
-		    	
 		    	}
 		    	
 		    	getPictureList().setModel(pictureListModel);
@@ -1058,7 +1068,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		    	
 	    		currentAlbum = album;
 	    		
-	    		resetPictureList();
+	    		getPictureListModel().removeAllElements();
 		    	
 		    	for(int i=0; i<album.getPictures().size(); i++){
 		    		
@@ -1376,25 +1386,14 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	}
 	/**
 	 * 
-	 * Completely refreshes the picture list to avoid double showing of pictures
-	 *
+	 * Add a new delete parameter to the delete parameter list
+	 * 
+	 * @param parameter
+	 * 		a new delete parameter
 	 */
-	public void resetPictureList(){
+	public void addDeleteParameter(String parameter){
 		
-		pictureListModel.removeAllElements();
-    	
-    	pictureListModel = new DefaultListModel();
-    	pictureList = new JList(pictureListModel);
-		pictureList.setBorder(new EtchedBorder());
-		pictureListSelectionModel = pictureList.getSelectionModel();
-		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
-		pictureList.setVisibleRowCount((pictureListModel.getSize() / 10) + 1);
-		
-		pictureListSelectionModel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                pictureListValueChanged(evt);
-            }
-        });
+		this.deleteparameters.add(parameter);
 		
 	}
 	

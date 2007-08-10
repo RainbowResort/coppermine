@@ -387,21 +387,12 @@ public class JCpgCategory extends JCpgGallery{
 			for(int j=0; j<category.getAlbums().size(); j++){
 	    		
 				JCpgAlbum album = category.getAlbums().get(j);
-	
-	    		for(int k=0; k<album.getPictures().size(); k++){
-	    				
-	    			JCpgPicture picture = album.getPictures().get(k);
-	    			picture.delete(jCpgUIReference);
-	    			picture = null;
-	    				
-	    		}
-	    		
-	    		album.getPictures().clear();
-	    		album = null;
+				album.delete(getUi());
 	    		
 	    	}
 			
 			category.getAlbums().clear();
+			category.delete(getUi());
 			
 		}
 		
@@ -409,21 +400,13 @@ public class JCpgCategory extends JCpgGallery{
 		for(int i=0; i<getAlbums().size(); i++){
     		
 			JCpgAlbum album = getAlbums().get(i);
-
-    		for(int j=0; j<album.getPictures().size(); j++){
-    				
-    			JCpgPicture picture = album.getPictures().get(j);
-    			picture.delete(jCpgUIReference);
-    			picture = null;
-    				
-    		}
-    		
-    		album.getPictures().clear();
-    		album = null;
+			album.delete(getUi());
     		
     	}
 		
 		getAlbums().clear();
+		
+		generateDeleteParamaters();
 		
 	}
 	/**
@@ -438,12 +421,18 @@ public class JCpgCategory extends JCpgGallery{
 		setId(id);
 		
 	}
-	public void generateParameters(){
+	/**
+	 * 
+	 * Generate delete parameters and add them to the arraylist in the ui
+	 *
+	 */
+	private void generateDeleteParamaters(){
 		
-		if(getId() == -1){ // picture not yet in db -> insert parameters
+		if(getId() != -1){ // only generate delete parameters if this album is in the server's database
 			
-		}else{
-//			 update
+			String parameters = "removecategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + this.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+			getUi().addDeleteParameter(parameters);
+			
 		}
 		
 	}

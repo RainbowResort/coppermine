@@ -222,6 +222,15 @@ public class JCpgGallerySaver{
 		return null;
 		
 	}
+	/**
+	 * 
+	 * Used to recursively load categories and its content
+	 * 
+	 * @param xmlelement
+	 * 		parent xml tag
+	 * @param parent
+	 * 		parent gallery / category object
+	 */
 	private void loadCategories(Element xmlelement, JCpgGallery parent){
 		
 		try {

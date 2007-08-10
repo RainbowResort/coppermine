@@ -59,6 +59,9 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 	
 	
 	
+	
+	
+	
 																									//*************************************
 																									//				CONSTRUCTORS          *
 																									//*************************************
@@ -245,7 +248,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 		
 						Date date = new Date(); // used to get number of seconds since 1970 for ctime
 		
-						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension, (int) filesize,(int) filesize, image.getIconWidth(), image.getIconHeight(), 0, (int) date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension, filesize, filesize, image.getIconWidth(), image.getIconHeight(), 0, date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
 		
 						picture.addUi(super.getJCpgUIReference());
 		
