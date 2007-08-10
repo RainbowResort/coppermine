@@ -1,3 +1,4 @@
+Fixed load gallery bug where the ctime was loaded as an integer instead of a long value
 Fixed major bug in the displaying of the pictures in the RHS. The cachproblem is gone and the gridbag layout manager is now working and used properly
 Synchronization of categories from client to server is now possible, I'm now waiting for some functionallity of the API to fetch the id of a newly uploaded component so this feature will fully work
 Fixed bug in synchronization of categories from server to client where sometimes the type of the parent node wasn't correct when searching for a certain node in the tree
