@@ -39,7 +39,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * @author Frank Cleynen
  *
  */
-public class JCpgEditor_colors extends JCpgEditor{
+public class JCpgEditorColors extends JCpgEditor{
 	
 	
 	
@@ -73,7 +73,7 @@ public class JCpgEditor_colors extends JCpgEditor{
 	 * @param previewSize
 	 * 		size of preview JPanel
 	 */
-	public JCpgEditor_colors(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
+	public JCpgEditorColors(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize, listIndex);
 		

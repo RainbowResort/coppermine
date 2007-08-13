@@ -1,3 +1,8 @@
+Found bug where only one album in a category is shown in albumview when the category actually has more albums
+Further extented the album view: the albums are now clickable and activate that particular album
+Fixed bug in resizer where it was possible the up handler went back up when keep going down with the mouse resulting in very strange behaviour
+Fixed bug in resizer where the right handle wasn't positioned to the total right of the picture at resizer launch
+Made syncing better: modifications on the server side are now also passed through to the client correctly
 Fixed bug where it wasn't possible to load the pictures of the selected album in the picturelist when there was only one album in the tree
 Introduced albumview: if a category is selected, the first picture of every album is shown
 Added scrollbars to the editors so large pictures can be edited as well

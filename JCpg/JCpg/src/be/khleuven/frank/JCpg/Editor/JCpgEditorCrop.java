@@ -47,7 +47,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * @author Frank Cleynen
  *
  */
-public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
+public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 	
 	
 	
@@ -64,7 +64,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	private Rectangle rleft, rup, rright, rdown; // selection blocks
 	private Rectangle sleft, sup, sright, sdown; // selection blocks
 	
-	private boolean selectedRight = false, selectedUp = false, selectedLeft = false, selectedDown = false, selectedCrop = false;;
+	private boolean selectedRight = false, selectedUp = false, selectedLeft = false, selectedDown = false, selectedCrop = false, touchingBounderies = false;;
 	
 	private Point mouseposition = new Point();
 																			
@@ -87,7 +87,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 	 * @param previewSize
 	 * 		size of preview JPanel
 	 */
-	public JCpgEditor_crop(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
+	public JCpgEditorCrop(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize, listIndex);
 		
@@ -304,7 +304,7 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		mouseposition = m.getPoint();
 		
 		// mouse inside rectangle -> move it
-		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft){
+		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft && !touchingBounderies){
 			
 			rleft.x = mouseposition.x - rup.width / 2;
 			rup.y = mouseposition.y + 50 - rleft.height / 2;
@@ -335,17 +335,32 @@ public class JCpgEditor_crop extends JCpgEditor implements MouseMotionListener {
 		}
 		
 		// bounderies
-		if(rleft.x < getImageLabel().getLocation().x) rleft.x = getImageLabel().getLocation().x;
-		if(rleft.x > rright.x - 10) rleft.x = rright.x - 10;
-			
-		if(rup.y < getImageLabel().getLocation().y + 58) rup.y = getImageLabel().getLocation().y + 50;
-		if(rup.y > rdown.y - 10) rup.y = rdown.y - 10;
-		
-		if(rright.x > getImageLabel().getLocation().x + getImageLabel().getSize().width) rright.x = getImageLabel().getLocation().x + getImageLabel().getSize().width;
-		if(rright.x < rleft.x + 10) rright.x = rleft.x + 10;
-		
-		if(rdown.y > getImageLabel().getLocation().y + getImageLabel().getSize().height + 50) rdown.y = getImageLabel().getLocation().y + getImageLabel().getSize().height + 50;
-		if(rdown.y < rup.y + 10) rdown.y = rup.y + 10;
+		if(rleft.x < getImageLabel().getLocation().x){
+			rleft.x = getImageLabel().getLocation().x;
+			touchingBounderies = true;
+		}else if(rleft.x > rright.x - 10){
+			rleft.x = rright.x - 10;
+			touchingBounderies = true;
+		}else if(rup.y < getImageLabel().getLocation().y + 50){
+			rup.y = getImageLabel().getLocation().y + 50 + 1;
+			touchingBounderies = true;
+		}else if(rup.y > rdown.y - 10){
+			rup.y = rdown.y - 10;
+			touchingBounderies = true;
+		}else if(rright.x > getImageLabel().getLocation().x + getImageLabel().getSize().width){
+			rright.x = getImageLabel().getLocation().x + getImageLabel().getSize().width;
+			touchingBounderies = true;
+		}else if(rright.x < rleft.x + 10){
+			rright.x = rleft.x + 10;
+			touchingBounderies = true;
+		}else if(rdown.y > getImageLabel().getLocation().y + getImageLabel().getSize().height + 50){
+			rdown.y = getImageLabel().getLocation().y + getImageLabel().getSize().height + 50;
+			touchingBounderies = true;
+		}else if(rdown.y < rup.y + 10){
+			rdown.y = rup.y + 10;
+			touchingBounderies = true;
+		}else
+			touchingBounderies = false;
 		
 		repaint();
 		

@@ -56,10 +56,10 @@ import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_colors;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_crop;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_resize;
-import be.khleuven.frank.JCpg.Editor.JCpgEditor_rotate;
+import be.khleuven.frank.JCpg.Editor.JCpgEditorColors;
+import be.khleuven.frank.JCpg.Editor.JCpgEditorCrop;
+import be.khleuven.frank.JCpg.Editor.JCpgEditorResize;
+import be.khleuven.frank.JCpg.Editor.JCpgEditorRotate;
 import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerCategory;
 import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
@@ -147,6 +147,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
 	
 	private ArrayList<String> deleteparameters = new ArrayList<String>(); // used to store all the delete parameters from deleted components
+	private ArrayList<JCpgAlbum> albumViewAlbums = new ArrayList<JCpgAlbum>(); // holds the current albums when in albumview
 
 	
 	
@@ -664,6 +665,18 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.deleteparameters;
 		
 	}
+	/**
+	 * 
+	 * Get the albums currently viewable when in album view
+	 * 
+	 * @return
+	 * 		the albums currently viewable when in album view
+	 */
+	public ArrayList<JCpgAlbum> getAlbumViewAlbums(){
+		
+		return this.albumViewAlbums;
+		
+	}
 	
 	
 	
@@ -712,6 +725,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 		    	SwingUtilities.updateComponentTreeUI(getTree()); // workaround for Java bug 4173369
 		    
+			}
+			
+		}else if(node.getUserObject().getClass().equals((JCpgCategory.class))){
+			
+			if(pictureList.getSelectedIndex() >= 0){ // apparently, when nothing is selected, the returned index = -1 which would cause an array out of bound exception
+			
+				JCpgAlbum album = getAlbumViewAlbums().get(pictureList.getSelectedIndex());
+				
+				getTree().setSelectionPath(album.getTreePath());
+				
 			}
 			
 		}
@@ -925,7 +948,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(currentPicture != null){
 		
-			new JCpgEditor_crop(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditorCrop(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -939,7 +962,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(currentPicture != null){
 		
-			new JCpgEditor_resize(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditorResize(this, currentPicture, new Dimension(1, 51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -953,7 +976,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(currentPicture != null){
 		
-			new JCpgEditor_colors(this, currentPicture, new Dimension(1, 51), new Dimension(600, 600), getPictureList().getSelectedIndex());
+			new JCpgEditorColors(this, currentPicture, new Dimension(1, 51), new Dimension(600, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -967,7 +990,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		if(currentPicture != null){
 			
-			new JCpgEditor_rotate(this, currentPicture, new Dimension(1,51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
+			new JCpgEditorRotate(this, currentPicture, new Dimension(1,51), new Dimension(1000, 600), getPictureList().getSelectedIndex());
 			
 		}
 		
@@ -1044,6 +1067,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category
 	    	
 	    	setCurrentAlbum(null); // reset current album
+	    	getAlbumViewAlbums().clear(); // remove all previous albums
 	    	
 	    	JCpgCategory category = (JCpgCategory)node.getUserObject();
 	    	
@@ -1062,7 +1086,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 					tracker.waitForAll();
 					
 					pictureListModel.addElement(album.getPictures().get(0));
-	    		
+					
+					getAlbumViewAlbums().add(album);
+					
 	    		} catch (InterruptedException e1) {
 					
 					System.out.println("JCpgUI: couldn't track first image of album");
@@ -1102,8 +1128,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		    	}
 		    	
 		    	getPictureList().setModel(pictureListModel);
-		    	changeMegaExplorerActive();
-		    	changeMegaExplorerActive();
 	    		
 	    	}
 	    	

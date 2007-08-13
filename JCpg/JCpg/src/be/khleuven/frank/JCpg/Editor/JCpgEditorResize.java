@@ -48,7 +48,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * Editor: resize
  * @author    Frank Cleynen
  */
-public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener {
+public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener {
 	
 	
 	
@@ -86,7 +86,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 * @param previewSize
 	 * 		size of preview JPanel
 	 */
-	public JCpgEditor_resize(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
+	public JCpgEditorResize(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize, listIndex);
 		
@@ -114,16 +114,13 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		getPreviewscroll().addMouseMotionListener(this);
 		
 		// default rectangle positions
-		rright = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getWidth() - 5, getImageLabel().getLocation().y + 50, 5, getImageLabel().getHeight()); // right
+		rright = new Rectangle(getImageLabel().getLocation().x + getImageLabel().getWidth(), getImageLabel().getLocation().y + 50, 5, getImageLabel().getHeight()); // right
         rleft = new Rectangle(getImageLabel().getLocation().x, getImageLabel().getLocation().y + 50, 5, getImageLabel().getHeight()); // left
         rup = new Rectangle(getImageLabel().getLocation().x, getImageLabel().getLocation().y + 50, getImageLabel().getWidth(), 5); // up
         rdown = new Rectangle(getImageLabel().getLocation().x - 5, getImageLabel().getLocation().y + getImageLabel().getHeight() + 50, getImageLabel().getWidth() + 10, 5); // down
 		
 		msg = new JLabel("Drag the upper or right red line to resize");
 		msg.setBounds(230, 665, 300, 20);
-		
-		//this.getContentPane().add(msg);
-		//this.getContentPane().add(constrainProportions);
 		
 	}
 	
@@ -140,9 +137,7 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 	 * 
 	 */
 	private void preview() {
-		
-		System.out.println("p: " + getPicture().getpHeight());
-		System.out.println("r: " + rup.y);
+
 		Image image = getTransformer().toImage(getBufferedPreview());
 		Dimension newDimension = new Dimension(rright.x - rleft.x, rdown.y - rup.y);
 			
@@ -283,8 +278,6 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		// bounderies
 		if(rup.y < getImageLabel().getLocation().y + 50)
 			rup.y = getImageLabel().getLocation().y + 50;
-		if(rup.y > rdown.y - 10)
-			rup.y = rdown.y - 10;
 		
 		if(rright.x < rleft.x + 10)
 			rright.x = rleft.x + 10;
@@ -293,8 +286,13 @@ public class JCpgEditor_resize extends JCpgEditor implements MouseMotionListener
 		
 		if(rdown.y > getImageLabel().getLocation().y + getImageLabel().getHeight() + 50)
 			rdown.y = getImageLabel().getLocation().y + getImageLabel().getHeight() + 50;
-		if(rdown.y < rup.y + 10)
-			rdown.y = rup.y + 10;
+		
+		if(rdown.y < getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 + 10)
+			rdown.y = getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 + 10;
+		if(rup.y > getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 - 10)
+			rup.y = getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 - 10;
+		
+		System.out.println(rup.y);
 		
 		preview();
 	

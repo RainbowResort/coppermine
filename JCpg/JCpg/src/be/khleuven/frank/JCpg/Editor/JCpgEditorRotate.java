@@ -43,7 +43,7 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  * @author Frank Cleynen
  *
  */
-public class JCpgEditor_rotate extends JCpgEditor{
+public class JCpgEditorRotate extends JCpgEditor{
 
 	
 															
@@ -76,7 +76,7 @@ public class JCpgEditor_rotate extends JCpgEditor{
 	 * @param previewSize
 	 * 		size of preview JPanel
 	 */
-	public JCpgEditor_rotate(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
+	public JCpgEditorRotate(JCpgUI jCpgUIReference, JCpgPicture picture, Dimension previewPosition, Dimension previewSize, int listIndex){
 		
 		super(jCpgUIReference, picture, previewPosition, previewSize, listIndex);
 		

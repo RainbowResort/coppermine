@@ -214,9 +214,6 @@ public class JCpgSyncer {
 			}	
 				
 		}
-
-		SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
-		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
 		
 		
 		
@@ -226,11 +223,21 @@ public class JCpgSyncer {
 		uploadComponents(getUi().getGallery(), phpCommunicator);
 		
 		
+		// save new information
+		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+		
+		// refresh JTree
+		SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
+		
 
 	}
 	/**
 	 * 
 	 * Recursively go through all the category tags and extract all their albums and pictures
+	 * 
+	 * First we ask for an xml file with all the current categories. We then check if a category is already in on the harddisk by comparing the id's. We do not compare the names because
+	 * the name could be changed on the server while this component still has the old name offline. If a component with this id is not found, make one. Otherwhise, use the already present
+	 * component and immediatelly change it name and other attributes to the ones found in the xml file so these attributes are also updated.
 	 * 
 	 * @param xmlelement
 	 * 		parent xml tag
@@ -335,7 +342,11 @@ public class JCpgSyncer {
 					
 					}else{ // category already exists in the tree, take a look in this category to find new, unsaved stuff
 						
-						downloadComponents(element, parent.getCategory(element.getAttribute("name").getValue(), element.getAttribute("cid").getIntValue()));
+						JCpgCategory category = parent.getCategory(element.getAttribute("name").getValue(), element.getAttribute("cid").getIntValue());
+						category.changeName(element.getAttribute("name").getValue());
+						category.changeDescription(element.getAttribute("description").getValue());
+						
+						downloadComponents(element, category);
 					
 					}	
 						
@@ -352,7 +363,7 @@ public class JCpgSyncer {
 	}
 	/**
 	 * 
-	 * Upload all not yet present information on the server to the server
+	 * Upload all not yet present information on the server to the server. Every component that has a -1 id, isn't yet uploaded
 	 * 
 	 * @param parent
 	 * 		the parent gallery/category to procees the categories from
@@ -377,7 +388,7 @@ public class JCpgSyncer {
 					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
 					else
-						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload");
 					
 					// fetch id for this newly uploaded album
 					album.changeId(fetchUploadId("albumdata", phpCommunicator));
@@ -391,7 +402,7 @@ public class JCpgSyncer {
 						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
 						else
-							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modified");
 						
 						album.switchIsModified(); // set back to not modified
 						
@@ -411,7 +422,7 @@ public class JCpgSyncer {
 						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
 						else
-							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload");
 						
 						// fetch id for this newly uploaded picture
 						picture.changeId(fetchUploadId("picturedata", phpCommunicator));
@@ -425,7 +436,7 @@ public class JCpgSyncer {
 							if(phpCommunicator.performPhpRequest(parameters) == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
 							else
-								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modified");
 							
 							picture.switchIsModified(); // set back to not modified
 							
@@ -451,7 +462,7 @@ public class JCpgSyncer {
 				if(phpCommunicator.performPhpRequest(parameters) == 0)
 					System.out.println("JCpgSyncer: " + category.getName() + " was succesfully uploaded");
 				else
-					System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully upload");
+					System.out.println("JCpgSyncer: " + category.getName() + " failed to upload");
 					
 				// fetch id for this newly uploaded category
 				category.changeId(fetchUploadId("categorydata", phpCommunicator));
@@ -465,7 +476,7 @@ public class JCpgSyncer {
 					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + category.getName() + " was succesfully modified");
 					else
-						System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully modified");
+						System.out.println("JCpgSyncer: " + category.getName() + " failed to modified");
 					
 					category.switchIsModified(); // set back to not modified
 					
@@ -485,7 +496,7 @@ public class JCpgSyncer {
 					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
 					else
-						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload");
 						
 					// fetch id for this newly uploaded album
 					album.changeId(fetchUploadId("albumdata", phpCommunicator));
@@ -499,7 +510,7 @@ public class JCpgSyncer {
 						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
 						else
-							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modified");
 						
 						album.switchIsModified(); // set back to not modified
 						
@@ -519,7 +530,7 @@ public class JCpgSyncer {
 						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
 						else
-							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload");
 							
 						// fetch id for this newly uploaded picture
 						picture.changeId(fetchUploadId("picturedata", phpCommunicator));
@@ -533,7 +544,7 @@ public class JCpgSyncer {
 							if(phpCommunicator.performPhpRequest(parameters) == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
 							else
-								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modified");
 							
 							picture.switchIsModified(); // set back to not modified
 							
