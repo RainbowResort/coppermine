@@ -501,7 +501,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private void placeComponents(){
 		
 		this.getContentPane().add(pictureView);
-		//this.getContentPane().add(explorerscroll);
 		tools.add(edit_rotate);
 		tools.add(edit_crop);
 		tools.add(edit_resize);
@@ -521,6 +520,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	}
 	
 	
+																	
+																	//*************************************
+																	//				SETTERS	              *
+																	//*************************************
+	/**
+	 * 
+	 * Set the current album
+	 * 
+	 * @param album
+	 * 		the current album
+	 * 
+	 */
+	private void setCurrentAlbum(JCpgAlbum album){
+		
+		this.currentAlbum = album;
+		
+	}
 																	
 	
 	
@@ -636,6 +652,13 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return this.currentAlbum;
 		
 	}
+	/**
+	 * 
+	 * Get the delete parameters arraylist
+	 * 
+	 * @return
+	 * 		the delete parameters arraylist
+	 */
 	public ArrayList<String> getDeleteParameters(){
 		
 		return this.deleteparameters;
@@ -663,28 +686,34 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	 */
 	private void pictureListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		
-		if(getTree().getSelectionModel().getSelectionCount() > 1) getTree().getSelectionModel().clearSelection();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 		
-		if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
+		if(!node.getUserObject().getClass().equals((JCpgCategory.class))){ // only go to this picture if we are in pictureview. If we are in albumview, we must go to that particular album
 		
-		JLabel image = new JLabel(); // make label with picture
-		currentPicture = (JCpgPicture)pictureList.getSelectedValue();
-		
-		if(currentPicture != null){
+			if(getTree().getSelectionModel().getSelectionCount() > 1) getTree().getSelectionModel().clearSelection();
 			
-	    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + currentPicture.getFilePath() + currentPicture.getFileName()).createImageIcon());
-	    	image.setToolTipText(currentPicture.getFileName());
-	    	Dimension realSize = new Dimension(currentPicture.getpWidth(), currentPicture.getpHeight());
-	    	image.setPreferredSize(realSize);
-	    	
-	    	getTree().addSelectionPath(currentPicture.getTreePath());
-	    	
-	    	explorer.removeAll(); // add picture to explorer pane
-	    	explorer.add(image);
-	    	
-	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
-	    	SwingUtilities.updateComponentTreeUI(getTree()); // workaround for Java bug 4173369
-	    
+			if(getMegaExplorerActive()) changeMegaExplorerActive(false); // exit mega explorer view if needed
+			
+			JLabel image = new JLabel(); // make label with picture
+			currentPicture = (JCpgPicture)pictureList.getSelectedValue();
+			
+			if(currentPicture != null){
+				
+		    	image.setIcon(new JCpgImageUrlValidator(getCpgConfig().getSiteConfig().getValueFor("fullpath") + currentPicture.getFilePath() + currentPicture.getFileName()).createImageIcon());
+		    	image.setToolTipText(currentPicture.getFileName());
+		    	Dimension realSize = new Dimension(currentPicture.getpWidth(), currentPicture.getpHeight());
+		    	image.setPreferredSize(realSize);
+		    	
+		    	getTree().addSelectionPath(currentPicture.getTreePath());
+		    	
+		    	explorer.removeAll(); // add picture to explorer pane
+		    	explorer.add(image);
+		    	
+		    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
+		    	SwingUtilities.updateComponentTreeUI(getTree()); // workaround for Java bug 4173369
+		    
+			}
+			
 		}
     	
 	}
@@ -1014,15 +1043,41 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    // do correct typecasting and actions
 	    if(object.getClass().equals(JCpgCategory.class)){ // leaf is category
 	    	
-	    	// album view
+	    	setCurrentAlbum(null); // reset current album
+	    	
+	    	JCpgCategory category = (JCpgCategory)node.getUserObject();
+	    	
+	    	for(int i=0; i<category.getAlbums().size(); i++){
+	    		
+	    		try {
+	    			
+		    		JCpgAlbum album = category.getAlbums().get(i);
+		    		
+		    		getPictureListModel().removeAllElements();
+		    		
+		    		String path = getCpgConfig().getSiteConfig().getValueFor("fullpath") + album.getPictures().get(0).getFilePath() + "thumb_" + album.getPictures().get(0).getFileName(); // first picture of the album
+		    		
+	    			tracker.addImage(new ImageIcon(path).getImage(), 0);
+	    		
+					tracker.waitForAll();
+					
+					pictureListModel.addElement(album.getPictures().get(0));
+	    		
+	    		} catch (InterruptedException e1) {
+					
+					System.out.println("JCpgUI: couldn't track first image of album");
+	    			
+				}
+	    		
+	    	}
 	    
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 	    	
 	    	JCpgAlbum album = (JCpgAlbum)node.getUserObject();
 	    	
-	    	if(!album.equals(getCurrentAlbum())){ // only do explorer update if this album is not already loaded
+	    	if(!album.equals(getCurrentAlbum()) || getCurrentAlbum() == null){ // only do explorer update if this album is not already loaded
 	    		
-		    	currentAlbum = album;
+		    	setCurrentAlbum(album);
 		    	
 		    	getPictureListModel().removeAllElements();
 		    	

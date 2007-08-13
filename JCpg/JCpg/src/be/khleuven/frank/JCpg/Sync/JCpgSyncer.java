@@ -154,7 +154,7 @@ public class JCpgSyncer {
 		// DELETE
 		for(int i=0; i<getUi().getDeleteParameters().size(); i++){
 			
-			if(phpCommunicator.performPhpRequest(getUi().getDeleteParameters().get(i))){ // result ok
+			if(phpCommunicator.performPhpRequest(getUi().getDeleteParameters().get(i)) == 0){ // result ok
 				
 				System.out.println("JCpgSyncer: delete parameter " + i + " succesfully executed");
 				
@@ -172,7 +172,7 @@ public class JCpgSyncer {
 		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); isn't showing anything at the moment
 		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 		
-		if(phpCommunicator.performPhpRequest(parameters)){ // result ok
+		if(phpCommunicator.performPhpRequest(parameters) == 0){ // result ok
 			
 			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
 			
@@ -374,7 +374,7 @@ public class JCpgSyncer {
 					
 					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
-					if(phpCommunicator.performPhpRequest(parameters))
+					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
 					else
 						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
@@ -388,7 +388,7 @@ public class JCpgSyncer {
 						
 						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters))
+						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
 						else
 							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
@@ -408,7 +408,7 @@ public class JCpgSyncer {
 						
 						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters))
+						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
 						else
 							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
@@ -422,7 +422,7 @@ public class JCpgSyncer {
 							
 							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-							if(phpCommunicator.performPhpRequest(parameters))
+							if(phpCommunicator.performPhpRequest(parameters) == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
 							else
 								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");
@@ -448,7 +448,7 @@ public class JCpgSyncer {
 				
 				parameters = "createcategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
-				if(phpCommunicator.performPhpRequest(parameters))
+				if(phpCommunicator.performPhpRequest(parameters) == 0)
 					System.out.println("JCpgSyncer: " + category.getName() + " was succesfully uploaded");
 				else
 					System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully upload");
@@ -462,7 +462,7 @@ public class JCpgSyncer {
 					
 					parameters = "modifycategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 
-					if(phpCommunicator.performPhpRequest(parameters))
+					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + category.getName() + " was succesfully modified");
 					else
 						System.out.println("JCpgSyncer: " + category.getName() + " failed to succesfully modified");
@@ -482,7 +482,7 @@ public class JCpgSyncer {
 					
 					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-					if(phpCommunicator.performPhpRequest(parameters))
+					if(phpCommunicator.performPhpRequest(parameters) == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
 					else
 						System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully upload");
@@ -496,7 +496,7 @@ public class JCpgSyncer {
 						
 						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters))
+						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
 						else
 							System.out.println("JCpgSyncer: " + album.getName() + " failed to succesfully modified");
@@ -516,7 +516,7 @@ public class JCpgSyncer {
 						
 						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-						if(phpCommunicator.performPhpRequest(parameters))
+						if(phpCommunicator.performPhpRequest(parameters) == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
 						else
 							System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully upload");
@@ -530,7 +530,7 @@ public class JCpgSyncer {
 							
 							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-							if(phpCommunicator.performPhpRequest(parameters))
+							if(phpCommunicator.performPhpRequest(parameters) == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
 							else
 								System.out.println("JCpgSyncer: " + picture.getName() + " failed to succesfully modified");

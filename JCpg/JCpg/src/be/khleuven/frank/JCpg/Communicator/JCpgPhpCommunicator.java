@@ -132,7 +132,7 @@ public class JCpgPhpCommunicator {
 	 * 		true if the server response was collected successfully, else false
 	 */
 	
-	public boolean performPhpRequest(String parameters){
+	public int performPhpRequest(String parameters){
 		
 		System.out.println("DEBUG: " + parameters);
 		
@@ -180,13 +180,25 @@ public class JCpgPhpCommunicator {
 						
 						if(element.getName().equals("messagecode")){
 							
-							if(element.getText().equals("success")) return true; // if respons is success return true
+							if(element.getText().equals("success")){
+								
+								return 0; // if respons is success return 0
+							
+							}else if(element.getText().equals("invalid_session")){
+								
+								return 1;
+								
+							}else if(element.getText().equals("query_permission_error")){
+								
+								return 2;
+								
+							}
 							
 						}
 						
 					}
 					
-					return false;
+					return -1; // unknown answer
 					
 				} catch (JDOMException e) {
 					
@@ -196,7 +208,7 @@ public class JCpgPhpCommunicator {
 				
 			}
 		    
-		    return true; // remote response received well
+		    return -1;  // unknown answer
 			
 		} catch (Exception exception) {
 			
@@ -204,7 +216,7 @@ public class JCpgPhpCommunicator {
 		
 		}
 		
-		return false;
+		return -1; // unknown answer
 		
 	}
 	/**

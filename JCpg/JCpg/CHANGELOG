@@ -1,3 +1,5 @@
+Fixed bug where it wasn't possible to load the pictures of the selected album in the picturelist when there was only one album in the tree
+Introduced albumview: if a category is selected, the first picture of every album is shown
 Added scrollbars to the editors so large pictures can be edited as well
 Added scrollbars to the explorer so large pictures can fit in as well
 Enhanced the synchronisation: JCpg now knows when to generate insert and modify queries
@@ -6,7 +8,7 @@ Fixed major bug in the displaying of the pictures in the RHS. The cachproblem is
 Synchronization of categories from client to server is now possible, I'm now waiting for some functionallity of the API to fetch the id of a newly uploaded component so this feature will fully work
 Fixed bug in synchronization of categories from server to client where sometimes the type of the parent node wasn't correct when searching for a certain node in the tree
 Synchronization of categories from server to client is now possible
-Fixed a bug in the resizer where it was possible for the lower line to go to far, under the picture
+Fixed a bug in the resizer where it was possible for the lower line to go too far, under the picture
 Fixed a bug when going through the tree and find a node. Before, the parent node itself was never checked for the given criteria
 Using recursion, it now is possible for each category to have infinite subcategories and albums
 Crop and resize code are now made more simple

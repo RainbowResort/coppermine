@@ -419,7 +419,7 @@ public class JCpgUserManager extends JDialog {
 			
 			parameters = "login&username=" + usernameField.getText() + "&password=" + passwordField.getText();
 			
-			if(phpCommunicator.performPhpRequest(parameters)){ // login ok
+			if(phpCommunicator.performPhpRequest(parameters) == 0){ // login ok
 				
 				getJCpgInterface().changeOnlinemode(true); // we go into online mode
 				

@@ -311,7 +311,7 @@ public class JCpgMenuSetConfig extends JDialog {
 						        + "&user_profile5_name=" + getUI().getCpgConfig().getSiteConfig().getValueFor("user_profile5_name")
 						        + "&user_profile6_name=" + getUI().getCpgConfig().getSiteConfig().getValueFor("user_profile6_name");
 		
-		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters)){ // change config ok
+		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters) == 0){ // change config ok
 			
 			msg.setText("Configuration changed succesfully.");
 			

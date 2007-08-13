@@ -88,7 +88,7 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 		
 		String parameters = "showusers&username=" + getUI().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUI().getCpgConfig().getUserConfig().getSessionkey();
 		
-		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters)){ // show user ok
+		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters) == 0){ // show user ok
 			
 			userString = userString + "Username:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "username") + "\n";
 			userString = userString + "User IDs:" + "\t\t" + phpCommunicator.getXmlTagText("userdata", "user_id") + "\n";

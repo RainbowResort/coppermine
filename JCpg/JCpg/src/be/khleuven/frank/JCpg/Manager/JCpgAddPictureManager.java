@@ -200,7 +200,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 
 		if (selectedFiles.length > 0) { // only proceed if user selected file(s)
 
-			JCpgProgressManager progress = new JCpgProgressManager(this,selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
+			JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
 
 			for (int i = 0; i < selectedFiles.length; i++) {
 				

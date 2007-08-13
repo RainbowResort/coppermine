@@ -244,7 +244,7 @@ public class JCpgMenuInstallApi extends JDialog {
 				
 				String parameters = "install&dbserver=" + dbserverField.getText() + "&dbuser=" + dbuserField.getText() + "&dbpass=" + dbpassField.getText() + "&dbname=" + dbnameField.getText() + "&prefix=" + prefixField.getText() + "adminusername=" + adminusernameField.getText() + "&adminpassword=" + adminpasswordField.getText() + "&adminemail=" + adminemailField.getText();
 				
-				if(phpCommunicator.performPhpRequest(parameters)){ // install ok
+				if(phpCommunicator.performPhpRequest(parameters) == 0){ // install ok
 				
 					msg.setText("Installation succesful!!");
 					

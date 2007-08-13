@@ -169,7 +169,7 @@ public class JCpgSiteConfig {
 	
 			JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getBaseUrl()); // get the Cpg config
 			
-			if(phpCommunicator.performPhpRequest("getconfig")){ // respons ok
+			if(phpCommunicator.performPhpRequest("getconfig") == 0){ // respons ok
 				
 				File file = new File("svr.xml");
 				
