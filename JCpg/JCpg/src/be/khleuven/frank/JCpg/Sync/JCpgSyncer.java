@@ -196,7 +196,7 @@ public class JCpgSyncer {
 						if(element.getName().equals("categorydata")){
 							
 							if(element.getAttributeValue("name").equals("User galleries")){
-								
+							
 								downloadComponents(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject());
 								
 							}
@@ -385,8 +385,12 @@ public class JCpgSyncer {
 					
 					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
-					if(phpCommunicator.performPhpRequest(parameters) == 0)
+					int result = phpCommunicator.performPhpRequest(parameters);
+					
+					if(result == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
+					else if(result == 1)
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload: INVALID SESSION");
 					else
 						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload");
 					
@@ -399,10 +403,14 @@ public class JCpgSyncer {
 						
 						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters) == 0)
+						int result = phpCommunicator.performPhpRequest(parameters);
+						
+						if(result == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
+						else if(result == 1)
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modify: INVALID SESSION");
 						else
-							System.out.println("JCpgSyncer: " + album.getName() + " failed to modified");
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modify");
 						
 						album.switchIsModified(); // set back to not modified
 						
@@ -417,10 +425,14 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters) == 0)
+						int result = phpCommunicator.performPhpRequest(parameters);
+						
+						if(result == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
+						else if(result == 1)
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload: INVALID SESSION");
 						else
 							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload");
 						
@@ -431,12 +443,16 @@ public class JCpgSyncer {
 						
 						if(picture.isModified()){
 							
-							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-							if(phpCommunicator.performPhpRequest(parameters) == 0)
+							int result = phpCommunicator.performPhpRequest(parameters);
+							
+							if(result == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
+							else if(result == 1)
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modify: INVALID SESSION");
 							else
-								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modified");
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modify");
 							
 							picture.switchIsModified(); // set back to not modified
 							
@@ -459,8 +475,12 @@ public class JCpgSyncer {
 				
 				parameters = "createcategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + parent.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 					
-				if(phpCommunicator.performPhpRequest(parameters) == 0)
+				int result = phpCommunicator.performPhpRequest(parameters);
+				
+				if(result == 0)
 					System.out.println("JCpgSyncer: " + category.getName() + " was succesfully uploaded");
+				else if(result == 1)
+					System.out.println("JCpgSyncer: " + category.getName() + " failed to upload: INVALID SESSION");
 				else
 					System.out.println("JCpgSyncer: " + category.getName() + " failed to upload");
 					
@@ -473,10 +493,14 @@ public class JCpgSyncer {
 					
 					parameters = "modifycategory&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&categoryname=" + category.getName() + "&categorydesc=" + category.getDescription() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 
-					if(phpCommunicator.performPhpRequest(parameters) == 0)
+					int result = phpCommunicator.performPhpRequest(parameters);
+					
+					if(result == 0)
 						System.out.println("JCpgSyncer: " + category.getName() + " was succesfully modified");
+					else if(result == 1)
+						System.out.println("JCpgSyncer: " + category.getName() + " failed to modify: INVALID SESSION");
 					else
-						System.out.println("JCpgSyncer: " + category.getName() + " failed to modified");
+						System.out.println("JCpgSyncer: " + category.getName() + " failed to modify");
 					
 					category.switchIsModified(); // set back to not modified
 					
@@ -493,8 +517,12 @@ public class JCpgSyncer {
 					
 					parameters = "createalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&categoryid=" + category.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-					if(phpCommunicator.performPhpRequest(parameters) == 0)
+					int result = phpCommunicator.performPhpRequest(parameters);
+					
+					if(result == 0)
 						System.out.println("JCpgSyncer: " + album.getName() + " was succesfully uploaded");
+					else if(result == 1)
+						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload: INVALID SESSION");
 					else
 						System.out.println("JCpgSyncer: " + album.getName() + " failed to upload");
 						
@@ -507,10 +535,14 @@ public class JCpgSyncer {
 						
 						parameters = "modifyalbum&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&albumname=" + album.getName() + "&albumdesc=" + album.getDescription() + "&albumkeywords=" + album.getKeyword() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
-						if(phpCommunicator.performPhpRequest(parameters) == 0)
+						int result = phpCommunicator.performPhpRequest(parameters);
+						
+						if(result == 0)
 							System.out.println("JCpgSyncer: " + album.getName() + " was succesfully modified");
+						else if(result == 1)
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modify: INVALID SESSION");
 						else
-							System.out.println("JCpgSyncer: " + album.getName() + " failed to modified");
+							System.out.println("JCpgSyncer: " + album.getName() + " failed to modify");
 						
 						album.switchIsModified(); // set back to not modified
 						
@@ -525,10 +557,14 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumsid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-						if(phpCommunicator.performPhpRequest(parameters) == 0)
+						int result = phpCommunicator.performPhpRequest(parameters);
+						
+						if(result == 0)
 							System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully uploaded");
+						else if(result == 1)
+							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload: INVALID SESSION");
 						else
 							System.out.println("JCpgSyncer: " + picture.getName() + " failed to upload");
 							
@@ -539,12 +575,16 @@ public class JCpgSyncer {
 						
 						if(picture.isModified()){
 							
-							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&@ pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+							parameters = "modifypicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
-							if(phpCommunicator.performPhpRequest(parameters) == 0)
+							int result = phpCommunicator.performPhpRequest(parameters);
+							
+							if(result == 0)
 								System.out.println("JCpgSyncer: " + picture.getName() + " was succesfully modified");
+							else if(result == 1)
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modify: INVALID SESSION");
 							else
-								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modified");
+								System.out.println("JCpgSyncer: " + picture.getName() + " failed to modify");
 							
 							picture.switchIsModified(); // set back to not modified
 							

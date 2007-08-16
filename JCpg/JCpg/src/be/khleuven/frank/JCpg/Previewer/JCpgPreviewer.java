@@ -302,7 +302,7 @@ public class JCpgPreviewer extends JDialog{
 			
 		});
 
-		// start the threads
+		// start the thread
 		t2.start();
 
 	}
