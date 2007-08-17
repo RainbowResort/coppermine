@@ -25,6 +25,9 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+2007-08-18 [B] Fixed another minor problem with uploading {SaWey}
+2007-08-15 [B] Fixed problems when creating a lot of new categories {SaWey}
+2007-08-14 [B] Fixed some uploading problems {SaWey}
 2007-07-23 [C] Changed a lot of the code in the watermaker {SaWey}
 2007-07-23 [A] Added image watermark capability {SaWey}
 2007-07-23 [B] Fixed a lot of bugs from the working part of the watermarker {SaWey}

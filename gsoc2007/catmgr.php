@@ -106,7 +106,7 @@ function cat_list_box($cid, &$parent, $on_change_refresh = true)
 
     } else {
 
-                   $lb = '<select name="parent" id="build_source" class="listbox">';
+            $lb = '<select name="parent" id="build_source" class="listbox">';
 
             $lb .= '                        <option value="0"' . ($parent['cid'] == 0 ? ' selected': '') . '>' . $lang_catmgr_php['no_category'] . "</option>\n";
             foreach($CAT_LIST as $category) if ($category['cid'] != 1 && $category['cid'] != $cid) {
@@ -378,7 +378,7 @@ switch ($op) {
 			}
 		}
         break;
-
+		
     case 'createcat':
         if (!isset($_POST['parent']) || !isset($_POST['name']) || !isset($_POST['description'])) cpg_die(CRITICAL_ERROR, sprintf($lang_catmgr_php['miss_param'], 'createcat'), __FILE__, __LINE__);
 
@@ -398,6 +398,8 @@ switch ($op) {
 		//insert in categorymap
 		if (isset($_POST['user_groups']) && !empty($_POST['user_groups'])) {
 			foreach ($_POST['user_groups'] as $key) {
+				$arr = cpg_db_fetch_row(cpg_db_query("SELECT LAST_INSERT_ID()"));
+				$cid = $arr[0];
 				cpg_db_query("INSERT INTO {$CONFIG['TABLE_CATMAP']} (cid, group_id) VALUES('$cid', '$key')");
 			}
 		}
