@@ -18,9 +18,11 @@
 package be.khleuven.frank.JCpg.Sync;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -165,6 +167,11 @@ public class JCpgSyncer {
 			}
 			
 		}
+		
+		getUi().getDeleteParameters().clear(); // clear delete parameters
+		
+		File delete = new File("config/delete.dat"); // clear saved delete parameters
+		if(delete.exists()) delete.delete();
 		
 		// SERVER -> CLIENT
 		// Categories
@@ -425,7 +432,7 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&filecontents=" + getBytesFromFile(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()) + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
 						int result = phpCommunicator.performPhpRequest(parameters);
 						
@@ -557,7 +564,7 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&filecontents=" + getBytesFromFile(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()) + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
 						int result = phpCommunicator.performPhpRequest(parameters);
 						
@@ -643,6 +650,26 @@ public class JCpgSyncer {
 			return -1;
 			
 		}
+		
+	}
+	private byte[] getBytesFromFile(String path){
+		
+		File file = new File(path);
+
+		byte[] b = new byte[(int) file.length()];
+		
+		try {
+			
+			FileInputStream fileInputStream = new FileInputStream(file);
+			fileInputStream.read(b);
+			
+		} catch (Exception e) {
+			
+			System.out.println("JCpgSyncer: couldn't convert " + path + " into array of bytes");
+			
+		}
+		
+		return b;
 		
 	}
 

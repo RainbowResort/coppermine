@@ -21,7 +21,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import javax.swing.JButton;
@@ -112,6 +115,7 @@ public class JCpgUserManager extends JDialog {
 		addActionListeners();
 		
 		readUserconfig();
+		loadDeleteParameters();
 		
 	}
 	
@@ -563,6 +567,42 @@ public class JCpgUserManager extends JDialog {
 			System.out.println("JCpgUserManager: couldn't save user configuration");
 			
 		}
+		
+	}
+	/**
+	 * 
+	 * Load the currently saved delete parameters
+	 *
+	 */
+	private void loadDeleteParameters(){
+		
+		File file = new File("config/delete.dat");
+	    FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    DataInputStream dis = null;
+
+	    try {
+	    	
+	      fis = new FileInputStream(file);
+	      bis = new BufferedInputStream(fis);
+	      dis = new DataInputStream(bis);
+
+	      while (dis.available() != 0) {
+	    	  
+	    	getJCpgInterface().addDeleteParameter(dis.readLine());
+	        
+	      }
+
+	      // dispose all the resources after using them.
+	      fis.close();
+	      bis.close();
+	      dis.close();
+
+	    } catch (Exception e) {
+	    	
+	      System.out.println("JCpgUserManager: couldn't load delete parameters");
+	      
+	    }
 		
 	}
 

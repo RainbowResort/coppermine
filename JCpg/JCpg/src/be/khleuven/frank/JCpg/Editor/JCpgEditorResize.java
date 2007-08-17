@@ -292,8 +292,6 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 		if(rup.y > getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 - 10)
 			rup.y = getImageLabel().getLocation().y + getImageLabel().getHeight() / 2 + 50 - 10;
 		
-		System.out.println(rup.y);
-		
 		preview();
 	
 	}

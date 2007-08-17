@@ -25,6 +25,9 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -853,15 +856,43 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 				
 			}
 			
-			for(int i=0; i<deleteparameters.size(); i++){
-				
-				System.out.println(deleteparameters.get(i));
-				
-			}
+			// save delete parameters for later loading
+			saveDeleteParameters();
 			
 		//}
 		
     }
+	/**
+	 * 
+	 * Save all delete parameters to a file so they can be loaded later on
+	 *
+	 */
+	private void saveDeleteParameters(){
+	
+		File delete = new File("config/delete.dat");
+		if(delete.exists()) delete.delete();
+		
+		try{
+			
+			FileWriter fstream = new FileWriter("config/delete.dat");
+			BufferedWriter out = new BufferedWriter(fstream);
+			
+			// write delete parameters to a file for later loading
+			for(int i=0; i<deleteparameters.size(); i++){
+
+				out.write(deleteparameters.get(i) + "\n");
+	
+			}
+			
+			out.close();
+		
+		}catch (Exception e){//Catch exception if any
+		      
+			System.err.println("Error: " + e.getMessage());
+			    
+		}	
+			
+	}	
 	/**
 	 * 
 	 * Action when user clicks on 'edit' button. 
@@ -1077,17 +1108,21 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    			
 		    		JCpgAlbum album = category.getAlbums().get(i);
 		    		
-		    		getPictureListModel().removeAllElements();
+		    		if(album.getPictures().size() > 0){
 		    		
-		    		String path = getCpgConfig().getSiteConfig().getValueFor("fullpath") + album.getPictures().get(0).getFilePath() + "thumb_" + album.getPictures().get(0).getFileName(); // first picture of the album
+			    		getPictureListModel().removeAllElements();
+			    		
+			    		String path = getCpgConfig().getSiteConfig().getValueFor("fullpath") + album.getPictures().get(0).getFilePath() + "thumb_" + album.getPictures().get(0).getFileName(); // first picture of the album
+			    		
+		    			tracker.addImage(new ImageIcon(path).getImage(), 0);
 		    		
-	    			tracker.addImage(new ImageIcon(path).getImage(), 0);
-	    		
-					tracker.waitForAll();
-					
-					pictureListModel.addElement(album.getPictures().get(0));
-					
-					getAlbumViewAlbums().add(album);
+						tracker.waitForAll();
+						
+						pictureListModel.addElement(album.getPictures().get(0));
+						
+						getAlbumViewAlbums().add(album);
+						
+		    		}
 					
 	    		} catch (InterruptedException e1) {
 					
