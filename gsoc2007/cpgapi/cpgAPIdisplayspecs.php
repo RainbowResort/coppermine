@@ -21,7 +21,7 @@
  * Class specifying everthing about the display structure
  */
 class displayspecs {
-  var $userpersonalfields, $groupfields, $configfields, $categoryfields, $picturefields, $commentsfields;
+  var $userpersonalfields, $groupfields, $configfields, $categoryfields, $picturefields, $commentsfields, $hitstatsfields, $votestatsfields;
 
   function initialize() {
     // Database connection settings
@@ -64,6 +64,29 @@ class displayspecs {
 		'author_md5_id',
 		'author_id',
 		'approval'
+    );
+
+    $this->hitstatsfields = array(
+    	'sid',
+		'pid',
+		'search_phrase',
+		'ip',
+		'sdate',
+		'referer',
+		'browser',
+		'os'
+    );
+
+    $this->votestatsfields = array(
+    	'sid',
+		'pid',
+		'rating',
+		'ip',
+		'sdate',
+		'referer',
+		'browser',
+		'os',
+		'uid'
     );
     
 

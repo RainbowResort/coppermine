@@ -23,7 +23,7 @@
 class dbspecs {
   var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
   var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield, $filetypetable, $filetypefield;
-  var $commentstable, $commentsfield, $hitstatstable, $hitstatsfield;
+  var $commentstable, $commentsfield, $hitstatstable, $hitstatsfield, $votestable, $votesfield, $votestatstable, $votestatsfield;
   var $dbactive = false;
 
   function initialize() {
@@ -49,7 +49,9 @@ class dbspecs {
         'pictures' => 'pictures',
         'filetypes' => 'filetypes',
         'comments' => 'comments',
-        'hitstats' => 'hit_stats'
+        'hitstats' => 'hit_stats',
+        'votes' => 'votes',
+        'votestats' => 'vote_stats'
     );
 	
     // Derived full table names
@@ -63,6 +65,8 @@ class dbspecs {
     $this->filetypetable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['filetypes'];
 	$this->commentstable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['comments'];
 	$this->hitstatstable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['hitstats']; 
+	$this->votestable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['votes']; 
+	$this->votestatstable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['votestats']; 
 	
     // Table field names
     $this->field = array(
@@ -196,6 +200,24 @@ class dbspecs {
 		'referer' => 'referer',
 		'browser' => 'browser',
 		'os' => 'os'
+    );    
+
+    $this->votesfield = array(
+    	'pid' => 'pic_id',
+		'user_md5_id' => 'user_md5_id',
+		'vote_time' => 'vote_time'
+    );    
+
+    $this->votestatsfield = array(
+    	'sid' => 'sid',
+		'pid' => 'pid',
+		'ip' => 'ip',
+		'rating' => 'rating',
+		'sdate' => 'sdate',
+		'referer' => 'referer',
+		'browser' => 'browser',
+		'os' => 'os',
+    	'uid' => 'uid'
     );    
     
   }

@@ -78,11 +78,21 @@ $APITYPE = array(
     'movepicture'		=> array('login', 'pictureowner'),
     'removepicture'		=> array('login', 'pictureowner'),
     
+    'getcomments'		=> array('softlogin', 'pictureview'),
+    'getallcomments'	=> array('login', 'pictureowner'),
 	'createcomment'		=> array('softlogin', 'pictureview'),
 	'approvecomment'	=> array('login', 'pictureowner'),
 	'modifycomment'		=> array('login', 'commentowner'),
 	'viewcomment'		=> array('login', 'commentview'),
 	'removecomment'		=> array('login', 'pictureowner'),
+	
+	'createvote'		=> array('login', 'pictureview'),
+	'getvotes'			=> array('login', 'pictureowner'),
+	'getvotecount'		=> array('login', 'pictureview'),
+	'removevote'		=> array('login', 'admin'),
+	
+	'gethits'			=> array('login', 'pictureowner'),
+	'gethitcount'		=> array('softlogin', 'pictureview'),
 	
 	'phpinfo'			=> array('login', 'admin')
 );
@@ -1083,12 +1093,12 @@ case 'getpicture':
    $search_phrase = $CF->getvariable("searchphrase");
    $PF->registerPictureHit($pictureid, $search_phrase);
    $PICTURE_DATA = $PF->showPicture($pictureid);
-   if (!$PICTURE_DATA['error']) { }
-   else {
+   if (!$PICTURE_DATA['error']) {
+   	   exit(0);
+   }  else {
       $CF->showheader();   	
       $CF->printMessage($PICTURE_DATA['messagecode']);
    }
-   break;
 
 /* Command: getpicturedata
  * Command to get the metadata associated with a picture. Also returns the comments of
@@ -1169,7 +1179,7 @@ case 'modifypicture':
    else $user4 = false;
    
    $CF->printMessage("success");
-   $AF->showPictureData($AF->modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4));
+   $PF->showPictureData($PF->modifyPictureData($pictureid,  $pictitle, $piccaption, $pickeywords, $user1, $user2, $user3, $user4));
    break;
 
 /* Command: removepicture
@@ -1211,7 +1221,20 @@ case 'createcomment':
    $PF->showPictureData($PF->getPictureData($pictureid));
    break;
 
+/* Command: approvecomment
+ * Command to approve an existing comment. Can be invoked by both picture owner and admin. 
+ * @ username	The username of the current user
+ * @ sessionkey	The sessionkey for the current session of this user
+ * @ msgid		The id of the comment to be approved
+ */
 case 'approvecomment':
+   $msgid = $CF->getvariable("msgid");
+   $COMMENT_DATA = $PF->approveComment($msgid);
+   if (!$COMMENT_DATA['error']) {
+      $CF->printMessage("success");
+      $PF->showCommentData($COMMENT_DATA);
+   }
+   else $CF->printMessage($COMMENT_DATA['messagecode']);
    break;
 
 /* Command: viewcomment
@@ -1231,9 +1254,37 @@ case 'viewcomment':
    else $CF->printMessage($COMMENT_DATA['messagecode']);
    break;
 
+case 'getcomments':
+   $pictureid = $CF->getvariable("pictureid");
+   $CF->printMessage("success");
+   $PF->showComments($pictureid);
+   break;
+
+case 'getallcomments':
+   $pictureid = $CF->getvariable("pictureid");
+   $CF->printMessage("success");
+   $PF->showAllComments($pictureid);
+   break;
+
+/* Command: modifycomment
+ * Command to modify a comment. Can be invoked by only the user who originally wrote the comment, or admin.
+ * 
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ msgid			The id of the comment to be modified
+ * @ msgbody		(optional) A new body of the comment
+ */
 case 'modifycomment':
    $msgid = $CF->getvariable("msgid");
-   $CF->printMessage("success");
+   if ($CONFIG['comment_user_edit']) {
+      if ($CF->checkvariable("msgbody"))
+         $msgbody = $CF->getvariable("msgbody");
+      else $msgbody = false;
+      $CF->printMessage("success");
+      $PF->showCommentData($PF->modifyComment($msgid,  $msgbody));      
+   }  else {
+   	  $CF->printMessage('cannot_edit_comment');
+   }
    break;
 
 /* Command: removecomment
@@ -1242,7 +1293,7 @@ case 'modifycomment':
  * Admin can remove all comments.
  * @ username		The username of the current user
  * @ sessionkey		The sessionkey for the current session of this user
- * @ msgid			The id of the comment to be moved
+ * @ msgid			The id of the comment to be removed
  * @ albumpassword	(optional) Password required for a non-owner to access the album
  */
 case 'removecomment':
@@ -1251,6 +1302,36 @@ case 'removecomment':
    $CF->printMessage("success");
    break;
 
+/* Command: createvote
+ * Command to create a new vote. Can be invoked by both users and admin. Users can create
+ * vote on any picture that they can see.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture voted
+ * @ rating			Rating of the vote
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
+case 'createvote':
+   $pictureid = $CF->getvariable("pictureid");
+   $rating = $CF->getvariable("rating");
+   $CF->printMessage("success");
+   $PF->createVote($CURRENT_USER, $pictureid, $rating);
+   $PF->showPictureData($PF->getPictureData($pictureid));
+   break;
+
+/* Command: removevote
+ * Command to remove an existing vote from the system. Can be invoked only by the admin.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ sid			The id of the vote to be removed
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
+case 'removevote':
+   $msgid = $CF->getvariable("sid");
+   $PF->removeVote($sid);
+   $CF->printMessage("success");
+   break;
+   
 /* Command: phpinfo
  * Admin specific command to print phpinfo. Does not print headers.
  * @ username		The username of the admin
