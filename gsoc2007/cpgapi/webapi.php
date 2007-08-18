@@ -77,6 +77,8 @@ $APITYPE = array(
     'modifypicture'		=> array('login', 'pictureowner'),
     'movepicture'		=> array('login', 'pictureowner'),
     'removepicture'		=> array('login', 'pictureowner'),
+    'createthumb'		=> array('login', 'pictureowner'),
+    'getthumb'			=> array('softlogin', 'pictureview'),
     
     'getcomments'		=> array('softlogin', 'pictureview'),
     'getallcomments'	=> array('login', 'pictureowner'),
@@ -155,18 +157,22 @@ require('cpgAPIdbspecs.php');
 require('cpgAPIdisplayspecs.php');
 require('cpgAPIcommonfunctions.php');
 require('cpgAPIglobalfunctions.php');
+require('cpgAPIgdfunctions.php');
 
 $CONFIG = array();
 $DISPLAY = new displayspecs();
 $DISPLAY->initialize();
 $DBS = new dbspecs();
 $CF = new commonfunctions();
+$GD = new gdfunctions();
+$GD->initialize();
+
 
 /*
  * Print the header
  */
 $IS_HEADER = false;
-if ($query != "getpicture" && $query != "phpinfo") {
+if ($query != "getpicture" && $query != "getthumb" && $query != "phpinfo") {
    $IS_HEADER = true;
    $CF->showheader();
 }
@@ -1116,7 +1122,8 @@ case 'getpicture':
    if (!$PICTURE_DATA['error']) {
    	   exit(0);
    }  else {
-      $CF->showheader();   	
+      $CF->showheader();
+      $IS_HEADER = true;
       $CF->printMessage($PICTURE_DATA['messagecode']);
    }
 
@@ -1214,6 +1221,46 @@ case 'removepicture':
    $pictureid = $CF->getvariable("pictureid");
    $PF->removePicture($pictureid);
    $CF->printMessage("success");
+   break;
+
+case 'createthumb':
+   if(!$GD->GD_SUPPORTED) {
+      $CF->safeexit('gd_not_supported');   	
+   }
+   if(!$GD->GD_ENABLED) {
+      $CF->safeexit('gd_not_enabled');   	
+   }
+   $pictureid = $CF->getvariable("pictureid");
+   
+   $picturepath = $PF->getPicturePath($pictureid);
+   if ($picturepath) {
+      if ($GD->createthumb($picturepath, $picturepath . ".thumb", $CONFIG['thumb_width'], $CONFIG['thumb_height'])) {
+         $CF->printMessage("success");
+      }  else {
+      	 $CF->printMessage("could_not_create_thumb");
+      }  	  
+   }
+   break;
+
+/* Command: getthumb
+ * Command to fetch a thumbnail. Can be invoked by both users and admin.
+ * However, users can only fetch the thumbnails they have authorization to see.
+ * Admin can access all thumbnails.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose thumbnail is to be fetched
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
+case 'getthumb':
+   $pictureid = $CF->getvariable("pictureid");
+   $PICTURE_DATA = $PF->showThumbNail($pictureid);
+   if (!$PICTURE_DATA['error']) {
+   	   exit(0);
+   }  else {
+      $CF->showheader();   	
+      $IS_HEADER = true;
+      $CF->printMessage($PICTURE_DATA['messagecode']);
+   }
    break;
 
 /* Command: createcomment

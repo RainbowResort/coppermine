@@ -130,6 +130,30 @@ class picturefunctions {
        return true;
     }
     
+    function showThumbNail($pictureid) {
+  	   global $DBS;
+  	   
+  	   $picturepath = $this->getPicturePath($pictureid) . ".thumb";
+       if ($picturepath) {
+   	      if ($fh = @fopen($picturepath, "r")) {
+   	      	 $theData = fread($fh, filesize($picturepath));
+   	  	     fclose($fh);
+   	         echo $theData;
+   	      }  else {
+             $PICTURE_DATA = array();
+             $PICTURE_DATA['error'] = true;
+             $PICTURE_DATA['messagecode'] = "read_error";
+             return $PICTURE_DATA;   	      	
+   	      }
+   	   }  else {
+          $PICTURE_DATA = array();
+          $PICTURE_DATA['error'] = true;
+          $PICTURE_DATA['messagecode'] = "read_error";
+          return $PICTURE_DATA;
+   	   }
+       return true;
+    }
+    
     function registerPictureHit($pictureid, $search_phrase) {
   	   global $DBS;
   	   
