@@ -87,12 +87,10 @@ $APITYPE = array(
 	'removecomment'		=> array('login', 'pictureowner'),
 	
 	'createvote'		=> array('login', 'pictureview'),
-	'getvotes'			=> array('login', 'pictureowner'),
-	'getvotecount'		=> array('login', 'pictureview'),
-	'removevote'		=> array('login', 'admin'),
+	'getvotes'			=> array('login', 'admin', 'pictureview'),
+	'removevote'		=> array('login', 'admin', 'pictureview'),
 	
 	'gethits'			=> array('login', 'pictureowner'),
-	'gethitcount'		=> array('softlogin', 'pictureview'),
 	
 	'phpinfo'			=> array('login', 'admin')
 );
@@ -112,17 +110,23 @@ $ALLVARS = array(
 	'act_key'		=> array('string', ''),
 	'pass_key'		=> array('string', ''),
 	'active'		=> array('booleanString', 'NO'),
-	'group_id'		=> array('integer', 0),
+	'group_id'		=> array('naturalWith0', 0),
 	'groupname'		=> array('string', 'New Group'),
 	'admin'			=> array('booleanString', 'NO'),
 	
-	'categoryid'	=> array('integer', 0),
+	'categoryid'	=> array('naturalWith0', 0),
 	'categoryname'	=> array('string', 'New Category'),
 	'categorydesc'	=> array('string', 'Description of the new category'),
 	
-	'albumid'		=> array('integer', 0),
+	'albumid'		=> array('naturalWith0', 0),
 	'albumname'		=> array('string', 'New Album'),
-	'albumdesc'		=> array('string', 'Description of the new album')
+	'albumdesc'		=> array('string', 'Description of the new album'),
+
+	'pictureid'		=> array('naturalWith0', 0),
+	'sid'			=> array('naturalWith0', 0),
+	'msgid'			=> array('naturalWith0', 0),
+	'msgbody'		=> array('string', '')
+
 );
 
 $GROUPPERMS = array(
@@ -427,12 +431,21 @@ case 'register':
  */
 case 'modifyprofile':
    $username = $CF->getvariable("username");
-   $password = $CF->getvariable("password");
-   $email = $CF->getvariable("email");
+
+   if ($CF->checkvariable("password"))
+   	  $password = $CF->getvariable("password");
+   else $password = false;
+   if ($CF->checkvariable("email"))
+      $email = $CF->getvariable("email");
+   else $email = false;
+
    $profile = array();
    for($i=1;$i<=6;$i++) {
-      $profile[$i] = $CF->getvariable("profile".$i);
+      if ($CF->checkvariable("profile".$i))
+         $profile[$i] = $CF->getvariable("profile".$i);
+      else $profile[$i] = false;
    }
+
    $USER_DATA = $UF->modifyprofile($username, $password, $email, $profile);
    if (!$USER_DATA['error']) {
       $CF->printMessage("success");
@@ -570,9 +583,16 @@ case 'removeuser':
  */
 case 'updateuser':
    $addusername = $CF->getvariable("addusername");
-   $password = $CF->getvariable("password");
-   $email = $CF->getvariable("email");
-   $active = $CF->getvariable("active");
+
+   if ($CF->checkvariable("password"))
+   	  $password = $CF->getvariable("password");
+   else $password = false;
+   if ($CF->checkvariable("email"))
+      $email = $CF->getvariable("email");
+   else $email = false;
+   if ($CF->checkvariable("active"))
+      $active = $CF->getvariable("active");
+   else $active = false;
 
    $USER_DATA = $UF->updateuser($addusername, $password, $email, $active);
    if (!$USER_DATA['error']) {
@@ -1319,6 +1339,12 @@ case 'createvote':
    $PF->showPictureData($PF->getPictureData($pictureid));
    break;
 
+case 'getvotes':
+   $pictureid = $CF->getvariable("pictureid");
+   $CF->printMessage("success");
+   $PF->showVotes($pictureid);
+   break;
+
 /* Command: removevote
  * Command to remove an existing vote from the system. Can be invoked only by the admin.
  * @ username		The username of the current user
@@ -1330,6 +1356,12 @@ case 'removevote':
    $msgid = $CF->getvariable("sid");
    $PF->removeVote($sid);
    $CF->printMessage("success");
+   break;
+
+case 'gethits':
+   $pictureid = $CF->getvariable("pictureid");
+   $CF->printMessage("success");
+   $PF->showHits($pictureid);
    break;
    
 /* Command: phpinfo

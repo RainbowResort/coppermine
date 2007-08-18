@@ -452,7 +452,7 @@ class userfunctions {
        $fieldstring .= "{$DBS->field[$DISPLAY->userpersonalfields[$i]]} AS {$DISPLAY->userpersonalfields[$i]}";
     }
 
-    $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
+    $sql = "SELECT {$fieldstring} FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
     $results = $DBS->sql_query($sql);
     if (!mysql_num_rows($results)) {
        $USER_DATA = array();
@@ -464,26 +464,32 @@ class userfunctions {
        mysql_free_result($results);
     }
 
-    // Check for duplicate email addresses
-    if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
-       $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
-       $results = $DBS->sql_query($sql);
-       if (mysql_num_rows($results)) {
-          mysql_free_result($results);
-          $USER_DATA = array();
-          $USER_DATA['error'] = true;
-          $USER_DATA['messagecode'] = "duplicate_email";
-          return $USER_DATA;
+    if ($email) {
+       // Check for duplicate email addresses
+       if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
+          $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
+          $results = $DBS->sql_query($sql);
+          if (mysql_num_rows($results)) {
+             mysql_free_result($results);
+             $USER_DATA = array();
+             $USER_DATA['error'] = true;
+             $USER_DATA['messagecode'] = "duplicate_email";
+             return $USER_DATA;
+          }
        }
     }
 
-    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['email']}='{$email}', {$DBS->field['profile1']}='{$profile[1]}', {$DBS->field['profile2']}='{$profile[2]}', {$DBS->field['profile3']}='{$profile[3]}', {$DBS->field['profile4']}='{$profile[4]}', {$DBS->field['profile5']}='{$profile[5]}', {$DBS->field['profile6']}='{$profile[6]}' WHERE {$DBS->field['username']}='{$addusername}'";
-    $DBS->sql_update($sql);
-
-    if ($password!="") {
-       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['password']}=md5('{$password}') WHERE {$DBS->field['username']}='{$addusername}'";
-       $DBS->sql_update($sql);
-    }
+    $sets = "";
+    if ($password === false) { }
+    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['password']}=md5('{$password}')";
+    if ($email === false) { }
+    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['email']}='{$email}'";
+	for($i=1; $i <= 6; $i++) {
+    	if ($profile[$i] === false) { }
+    	else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['profile'.$i]}='{$profile[$i]}'";
+	}
+		
+	if ($sets != "") $DBS->sql_update("UPDATE {$DBS->usertable} SET " . $sets . " WHERE {$DBS->field['username']}='{$addusername}");
 
     return $this->getpersonaldata($addusername);
   }
@@ -516,26 +522,30 @@ class userfunctions {
        mysql_free_result($results);
     }
 
-    // Check for duplicate email addresses
-    if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
-       $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
-       $results = $DBS->sql_query($sql);
-       if (mysql_num_rows($results)) {
-          mysql_free_result($results);
-          $USER_DATA = array();
-          $USER_DATA['error'] = true;
-          $USER_DATA['messagecode'] = "duplicate_email";
-          return $USER_DATA;
+    if ($email) {
+       // Check for duplicate email addresses
+       if ($CONFIG['allow_duplicate_emails_addr'] == "0" && $oldemail!=$email) {
+          $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['email']}='" . $email . "'";
+          $results = $DBS->sql_query($sql);
+          if (mysql_num_rows($results)) {
+             mysql_free_result($results);
+             $USER_DATA = array();
+             $USER_DATA['error'] = true;
+             $USER_DATA['messagecode'] = "duplicate_email";
+             return $USER_DATA;
+          }
        }
     }
 
-    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['email']}='{$email}', {$DBS->field['active']}='{$active}' WHERE {$DBS->field['username']}='{$addusername}'";
-    $DBS->sql_update($sql);
+    $sets = "";
+    if ($password === false) { }
+    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['password']}=md5('{$password}')";
+    if ($email === false) { }
+    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['email']}='{$email}'";
+    if ($active === false) { }
+    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['active']}='{$active}'";
 
-    if ($password!="") {
-       $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['password']}=md5('{$password}') WHERE {$DBS->field['username']}='{$addusername}'";
-       $DBS->sql_update($sql);
-    }
+	if ($sets != "") $DBS->sql_update("UPDATE {$DBS->usertable} SET " . $sets . " WHERE {$DBS->field['username']}='{$addusername}");
 
     return $this->getpersonaldata($addusername);
   }

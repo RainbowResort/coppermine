@@ -27,16 +27,55 @@ class commonfunctions {
   	 print "<messagecode>" . $msg . "</messagecode>";
   }
 
+  function typeCheck($variablename, $val) {
+  	global $ALLVARS;
+  	if (!isset($ALLVARS[$variablename])) {  	
+  	   return $val;
+  	}
+  	switch($ALLVARS[$variablename][0]) {
+  		case 'integer':
+			if (!is_numeric($val) || !(strpos($val, '.')===false)) {
+  			   $val = $ALLVARS[$variablename][1];
+			}   		
+  		case 'natural':
+			if (!is_numeric($val) || !(strpos($val, '.')===false) || $val < 1) {
+  			   $val = $ALLVARS[$variablename][1];
+			}   		
+  		case 'naturalWith0':
+			if (!is_numeric($val) || !(strpos($val, '.')===false) || $val < 0) {
+  			   $val = $ALLVARS[$variablename][1];
+			}   		
+  		case 'float':
+			if (!is_numeric($val)) {
+  			   $val = $ALLVARS[$variablename][1];
+			}   		
+  		case 'string':
+  			break;
+  		
+  		case 'booleanString':
+  			if ($val!="YES" && $val!="NO") {
+  				$val = $ALLVARS[$variablename][1]; 
+  			}
+  		
+  		default:
+  		   		
+  	}
+  	return $val;
+  }
+
   /**
    * Get the variable from get or post data for install (no check)
    * @ variablename : the name of the variable requested
    */
   function getuncheckedvariable($variablename) {
+  	global $ALLVARS;
+  	$val = "";
     if(isset($_POST[$variablename])) 
-      return addslashes($_POST[$variablename]);
+      $val = addslashes($_POST[$variablename]);
     if(isset($_GET[$variablename])) 
-      return addslashes($_GET[$variablename]);
-    return "";
+      $val = addslashes($_GET[$variablename]);
+    $val = $this->typeCheck($variablename, $val);
+    return $val;
   }
 
   /**
@@ -44,12 +83,14 @@ class commonfunctions {
    * @ variablename : the name of the variable requested
    */
   function getvariable($variablename) {
-    global $CONFIG;
+    global $CONFIG, $ALLVARS;
+    $val = "";
     if(isset($_POST[$variablename])) 
-      return addslashes($_POST[$variablename]);
+      $val = addslashes($_POST[$variablename]);
     if($CONFIG['allow_get_api'] && isset($_GET[$variablename])) 
-      return addslashes($_GET[$variablename]);
-    return "";
+      $val = addslashes($_GET[$variablename]);
+    $val = $this->typeCheck($variablename, $val);
+    return $val;
   }
 
   /**

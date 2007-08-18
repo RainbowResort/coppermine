@@ -155,8 +155,22 @@ class picturefunctions {
          if($ot!="attr") print "</" . $DISPLAY->picturefields[$i] . ">";
          else print "\"";
       }
+
+      $results = $DBS->sql_query("SELECT COUNT(*) AS CX, AVG({$DBS->votestatsfield['rating']}) AS AV FROM {$DBS->votestatstable} WHERE {$DBS->votestatsfield['pid']}=" . $PICTURE_DATA['pid']);
+      if($ot!="attr") print "<votes>" . mysql_result($results, 0, "CX") . "</votes>";
+      else print " votes=\"" . mysql_result($results, 0, "CX") . "\"";
+      if (mysql_result($results, 0, "CX") >= $CONFIG['min_votes_for_rating']) {
+      	 if($ot!="attr") print "<rating>" . mysql_result($results, 0, "AV") . "</rating>";
+      	 else print " rating=\"" . mysql_result($results, 0, "AV") . "\"";
+      }
       
-      $this->showComments($PICTURE_DATA['pid']);      
+      $this->showComments($PICTURE_DATA['pid']);
+      if ($CONFIG['hit_details']) {
+      	 $this->showHits($PICTURE_DATA['pid']);
+      }   
+      if ($CONFIG['vote_details']) {
+      	 $this->showVotes($PICTURE_DATA['pid']);
+      }
       print "</picturedata>";
     }
 
@@ -296,7 +310,7 @@ class picturefunctions {
       $ot = $CF->getvariable("setoutputtype");
       
       if ($CONFIG['display_comment_count']) {
-      	$results = $DBS->sql_query("SELECT COUNT(*) AS CX MX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $pictureid);
+      	$results = $DBS->sql_query("SELECT COUNT(*) AS CX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $pictureid);
        	if($ot!="attr") print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
        	else print " comment_count=\"" . mysql_result($results, 0, "CX") . "\"";
       }
@@ -317,7 +331,7 @@ class picturefunctions {
       $ot = $CF->getvariable("setoutputtype");
       
       if ($CONFIG['display_comment_count']) {
-      	$results = $DBS->sql_query("SELECT COUNT(*) AS CX MX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $pictureid);
+      	$results = $DBS->sql_query("SELECT COUNT(*) AS CX FROM {$DBS->commentstable} WHERE {$DBS->commentsfield['pid']}=" . $pictureid);
        	if($ot!="attr") print "<comment_count>" . mysql_result($results, 0, "CX") . "</comment_count>";
        	else print " comment_count=\"" . mysql_result($results, 0, "CX") . "\"";
       }
