@@ -480,7 +480,7 @@ class userfunctions {
     }
 
     $sets = "";
-    if ($password === false) { }
+    if ($password === false || $password=="") { }
     else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['password']}=md5('{$password}')";
     if ($email === false) { }
     else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['email']}='{$email}'";
@@ -538,7 +538,7 @@ class userfunctions {
     }
 
     $sets = "";
-    if ($password === false) { }
+    if ($password === false || $password=="") { }
     else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['password']}=md5('{$password}')";
     if ($email === false) { }
     else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->field['email']}='{$email}'";
