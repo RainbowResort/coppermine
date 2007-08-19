@@ -18,11 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Editor;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -92,7 +90,7 @@ public class JCpgEditorRotate extends JCpgEditor{
 															//*************************************
 	/**
 	 * 
-	 * Do extra swing stuff specifically for the add picture window: we need a browe button so the user can choose a picture
+	 * Do extra swing stuff
 	 *
 	 */
 	private void doExtraSwingComponents(){

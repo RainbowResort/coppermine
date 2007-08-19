@@ -1,3 +1,4 @@
+Fixed bug where a 'removecategory' was generated when deleting a picture
 When uploading pictures, binary picture data is now sent along in the parameter string
 Delete parameters are now stored in a file so the can be loaded later on when not executed before closing JCpg
 Fixed nullpointer when trying to go into albumview when an album does not have pictures

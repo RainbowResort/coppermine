@@ -263,6 +263,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 					}
 					
 					progress.changeProgressbarValue(i);
+					progress.repaint();
 					
 				}
 

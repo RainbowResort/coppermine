@@ -58,9 +58,6 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 																			//*************************************
 																			//				VARIABLES             *
 																			//*************************************
-	private Rectangle crop = null; // this is the rectangle used to point to the area that has to be cropped
-
-	
 	private Rectangle rleft, rup, rright, rdown; // selection blocks
 	private Rectangle sleft, sup, sright, sdown; // selection blocks
 	
@@ -275,7 +272,7 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 			//getJCpgUI().getPictureList().remove(getListIndex());
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());
 			
-			getJCpgUI().changeMegaExplorerActive();
+			getJCpgUI().changeMegaExplorerActive(); // refresh ui
 			getJCpgUI().changeMegaExplorerActive();
 			
             getJCpgUI().setEnabled(true);
@@ -306,10 +303,14 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 		// mouse inside rectangle -> move it
 		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft && !touchingBounderies){
 			
+			checkBounderies();
+			
 			rleft.x = mouseposition.x - rup.width / 2;
 			rup.y = mouseposition.y + 50 - rleft.height / 2;
 			rright.x = mouseposition.x + rup.width / 2;
 			rdown.y = mouseposition.y + 50 + rleft.height / 2;
+			
+			checkBounderies();
 		
 		}
 		
@@ -334,7 +335,15 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 	
 		}
 		
-		// bounderies
+		checkBounderies();
+		
+		repaint();
+		
+	}
+	
+	private void checkBounderies(){
+		
+//		 bounderies
 		if(rleft.x < getImageLabel().getLocation().x){
 			rleft.x = getImageLabel().getLocation().x;
 			touchingBounderies = true;
@@ -361,8 +370,6 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 			touchingBounderies = true;
 		}else
 			touchingBounderies = false;
-		
-		repaint();
 		
 	}
 

@@ -188,7 +188,7 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
 	 */
 	private void setBufferedPreview(ImageIcon picture){
 		
-		this.previewBuffered = transformer.toBufferedImage(picture.getImage());
+		this.previewBuffered = JCpgTransform.toBufferedImage(picture.getImage());
 		
 	}
 	/**
@@ -459,15 +459,17 @@ public abstract class JCpgEditor extends JDialog implements JCpgMyEditorInterfac
     	
     	Image imageFromBuffered = transformer.toImage(picture);
     	
-    	setBufferedPreview(new ImageIcon(imageFromBuffered)); // update buffered image
-    	
     	ImageIcon imageIcon = new ImageIcon(imageFromBuffered);
+    	
+    	setBufferedPreview(imageIcon); // update buffered image
     	
     	Dimension realSize = new Dimension(picture.getWidth(), picture.getHeight());
     	getImageLabel().setPreferredSize(realSize);
     	getImageLabel().setIcon(imageIcon);
+    	
     	getPreview().removeAll();
     	getPreview().add(getImageLabel());
+    	
     	SwingUtilities.updateComponentTreeUI(preview); // workaround for Java bug 4173369
     	
     }

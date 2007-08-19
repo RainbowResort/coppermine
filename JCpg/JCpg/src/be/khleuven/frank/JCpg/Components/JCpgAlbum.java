@@ -497,7 +497,7 @@ public class JCpgAlbum extends JCpgGallery{
 		for(int i=0; i<getPictures().size(); i++){
     		
 			JCpgPicture picture = getPictures().get(i);
-			picture.delete(jCpgUIReference);
+			picture.delete(getUi(), this);
 			picture = null;
     		
 		}

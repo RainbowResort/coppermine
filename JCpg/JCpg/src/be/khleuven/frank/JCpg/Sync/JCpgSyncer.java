@@ -204,7 +204,7 @@ public class JCpgSyncer {
 							
 							if(element.getAttributeValue("name").equals("User galleries")){
 							
-								downloadComponents(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject());
+								downloadComponents(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject(), phpCommunicator);
 								
 							}
 							
@@ -251,7 +251,7 @@ public class JCpgSyncer {
 	 * @param parent
 	 * 		parent object
 	 */
-	private void downloadComponents(Element xmlelement, JCpgGallery parent){
+	private void downloadComponents(Element xmlelement, JCpgGallery parent, JCpgPhpCommunicator phpCommunicator){
 		
 		List content = xmlelement.getChildren();
 		ListIterator it = content.listIterator();
@@ -325,6 +325,18 @@ public class JCpgSyncer {
 												DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
 												treealbum.add(treepicture);
 												
+												// get picture data
+												String parameters = "getpicturedata&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+												
+												int result = phpCommunicator.performPhpRequest(parameters);
+												
+												if(result == 0)
+													System.out.println("JCpgSyncer: " + picture.getName() + " data was succesfully downloaded");
+												else if(result == 1)
+													System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data: INVALID SESSION");
+												else
+													System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data");
+												
 											} catch (DataConversionException e) {
 												
 												System.out.println("JCpgSyncer: couldn't convert xml attributes - picture");
@@ -345,7 +357,7 @@ public class JCpgSyncer {
 							
 						}
 						
-						downloadComponents(element, category); // go through the tree xml tag structure using recursion
+						downloadComponents(element, category, phpCommunicator); // go through the tree xml tag structure using recursion
 					
 					}else{ // category already exists in the tree, take a look in this category to find new, unsaved stuff
 						
@@ -353,7 +365,7 @@ public class JCpgSyncer {
 						category.changeName(element.getAttribute("name").getValue());
 						category.changeDescription(element.getAttribute("description").getValue());
 						
-						downloadComponents(element, category);
+						downloadComponents(element, category, phpCommunicator);
 					
 					}	
 						
@@ -652,11 +664,12 @@ public class JCpgSyncer {
 		}
 		
 	}
-	private byte[] getBytesFromFile(String path){
+	private byte getBytesFromFile(String path){
 		
 		File file = new File(path);
 
 		byte[] b = new byte[(int) file.length()];
+		byte result = 0;
 		
 		try {
 			
@@ -669,7 +682,14 @@ public class JCpgSyncer {
 			
 		}
 		
-		return b;
+		for(int i=0; i<b.length; i++){
+			
+			result = (byte) (result + b[i]);
+			System.out.println(result);
+			
+		}
+		
+		return result;
 		
 	}
 
