@@ -1,3 +1,4 @@
+Added new menu: add user
 Did complete code structure and comments check
 Fixed bug in allowed Extensions Filter where, if the config was not allowing 'ALL' extensions, JCpg wasn't using the ones found in the config
 Fixed bug where a 'removecategory' was generated when deleting a picture

@@ -69,6 +69,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuAddUser;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuInstallApi;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuSetConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
@@ -431,7 +432,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		menuAddUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
-				
+				menuAddUserActionPerformed(evt);
 			}
 		});
 		
@@ -1073,6 +1074,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private void menuShowUserActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		new JCpgMenuShowUser(this);
+		
+	}
+	/**
+	 * 
+	 * Add new user
+	 * 
+	 */
+	private void menuAddUserActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuAddUser(this);
 		
 	}
 	/**
