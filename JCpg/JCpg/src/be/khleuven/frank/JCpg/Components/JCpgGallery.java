@@ -55,8 +55,7 @@ public class JCpgGallery{
 														//*************************************
 	/**
 	 * 
-	 * Makes a new JCpgGallery object. This object contains all the albums in de list view. We use this object to order the albums.
-	 * We can just use the index of the album in the arraylist.
+	 * Makes a new JCpgGallery object. This object contains all the categories and albums in de list view. We use this object to order these components.
 	 * Normally only one main gallery is active in JCgp but at a later time, when galleries may be part of Cpg, more could be
 	 * active at the same time.
 	 * 
