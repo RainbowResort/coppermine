@@ -38,6 +38,8 @@ import be.khleuven.frank.JCpg.Interfaces.JCpgProgressManagerInterface;
  */
 public class JCpgProgressManager extends JDialog implements JCpgProgressManagerInterface{
 	
+	private static final long serialVersionUID = 1L;
+	
 	private Window parent;
 	
 	private JProgressBar progress;

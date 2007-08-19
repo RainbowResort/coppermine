@@ -33,13 +33,24 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 public class JCpgMenuShowConfig extends JCpgMenuShow {
 	
 	
+	
+	
+	
+	
 													
 													//*************************************
 													//				VARIABLES	          *
 													//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JLabel logo;
 	
 	private String configurationString = "";
+	
+	
+	
+	
+	
 	
 	
 	

@@ -151,8 +151,6 @@ public class JCpgAllowedExtensionFilter extends javax.swing.filechooser.FileFilt
 	        
         }else{
         	
-        	allowedExtensions = "bmp/jpg/gif/png";
-        	
         	String[] split = allowedExtensions.split("/");
         	
         	for(int i=0; i<split.length; i++){

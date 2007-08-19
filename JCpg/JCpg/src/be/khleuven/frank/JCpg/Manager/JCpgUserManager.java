@@ -60,6 +60,8 @@ public class JCpgUserManager extends JDialog {
 																		//*************************************
 																		//				VARIABLES	          *
 																		//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private Dimension screensize;
 	
 	private JLabel logo;

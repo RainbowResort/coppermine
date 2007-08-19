@@ -38,6 +38,9 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTreeEntryInterface {
 
 	
+	private static final long serialVersionUID = 1L;
+	
+	
 	
 																			//*************************************
 																			//				CONSTRUCTORS	      *

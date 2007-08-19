@@ -37,10 +37,15 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
  */
 public class JCpgSplashscreen extends JFrame{
 	
+	
+	
+	
 														
 															//*************************************
 															//				VARIABLES             *
 															//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JWindow splash;
 	private Dimension screensize;
 	private JLabel logo;
@@ -126,6 +131,9 @@ public class JCpgSplashscreen extends JFrame{
 	
 	
 	
+	
+	
+	
 															
 																//*************************************
 																//				SETTERS		          *
@@ -150,6 +158,8 @@ public class JCpgSplashscreen extends JFrame{
 	
 	
 															
+	
+	
 	
 	
 	
@@ -182,6 +192,19 @@ public class JCpgSplashscreen extends JFrame{
 	}
 	
 	
+	
+	
+	
+	
+	
+																//*************************************
+																//				MUTATORS & OTHERS	  *
+																//*************************************
+	/**
+	 * 
+	 * Close the splashscreen
+	 *
+	 */
 	public void closeSplash(){
 		
 		splash.dispose();

@@ -40,12 +40,29 @@ import be.khleuven.frank.JCpg.Components.JCpgPicture;
  */
 public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer {
 	
+	
+	
+																//*************************************
+																//				VARIABLES	          *
+																//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgUI ui = null;
 	
 	private GridBagLayout gbl = new GridBagLayout();
 	private GridBagConstraints gblc = new GridBagConstraints();
 	
 	
+	
+																
+	
+	
+	
+	
+	
+																//*************************************
+																//				CONSTRUCTOR	          *
+																//*************************************
 	/**
 	 * 
 	 * Makes a new JCpgPictureCellRenderer object
@@ -67,6 +84,15 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         
 	}
 	
+	
+	
+	
+	
+	
+																
+																//*************************************
+																//				SETTERS		          *
+																//*************************************
 	/**
 	 * 
 	 * Set the UI
@@ -80,6 +106,16 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 		
 	}
 	
+	
+	
+	
+	
+	
+	
+																
+																//*************************************
+																//				GETTERS		          *
+																//*************************************
 	/**
 	 * 
 	 * Get the UI
@@ -93,6 +129,15 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
 		
 	}
 	
+	
+																
+	
+	
+	
+	
+																//*************************************
+																//				MUTATORS & OTHERS	  *
+																//*************************************
 	/**
 	 * 
 	 * Determines how each cell will be displayed
@@ -108,7 +153,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         
     	// determine grid position
         gblc.gridx = index % 10;
-        gblc.gridy = getDeler(index, 10);
+        gblc.gridy = getRow(index, 10);
     	
     	this.add(label, gblc);
     	
@@ -117,7 +162,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     }
     /**
      * 
-     * Used to determine the Y value in the picture list for a particular cell
+     * Used to determine the Y value (=row) in the picture list for a particular cell
      * 
      * @param source
      * 		index of the list item
@@ -126,7 +171,7 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
      * @return
      * 		the y value for this cell based on the index and cutoff
      */
-    private int getDeler(int source, int cutoff){
+    private int getRow(int source, int cutoff){
     	
     	int count = 0;
     	

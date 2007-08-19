@@ -38,6 +38,8 @@ public class JCpgAddSelectManagerGallery extends JCpgAddSelectManager {
 															//*************************************
 															//				VARIABELS             *
 															//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private String[] options = null;
 	
 	

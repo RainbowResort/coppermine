@@ -19,7 +19,6 @@ package be.khleuven.frank.JCpg.Previewer;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,10 +31,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -56,6 +52,8 @@ public class JCpgPreviewer extends JDialog{
 																					//*************************************
 																					//				VARIABLES	          *
 																					//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgUI jCpgUIReference;
 	private JCpgAlbum album;
 	
@@ -275,7 +273,7 @@ public class JCpgPreviewer extends JDialog{
 
 		// second thread: do the waiting and recalculate the currentIndex variable and load that picture
 		// TODO: overhead still remains: always loading the pictures will take a lot of RAM
-		Thread t2 = new Thread(new Runnable() {
+		Thread t1 = new Thread(new Runnable() {
 			
 			public void run() {
 				
@@ -303,7 +301,7 @@ public class JCpgPreviewer extends JDialog{
 		});
 
 		// start the thread
-		t2.start();
+		t1.start();
 
 	}
 	/**

@@ -18,9 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package be.khleuven.frank.JCpg.Editor;
 
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -48,6 +45,8 @@ public class JCpgEditorRotate extends JCpgEditor{
 															//*************************************
 															//				VARIABLES             *
 															//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JButton rotate90Right;
 	private JButton rotate90Left;
 	private JLabel customLabel;
@@ -161,14 +160,6 @@ public class JCpgEditorRotate extends JCpgEditor{
 	   }     
 		
 	}
-    private static GraphicsConfiguration getDefaultConfiguration() {
-    	
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        
-        return gd.getDefaultConfiguration();
-        
-    }
     private void rotate90RightActionPerformed(java.awt.event.ActionEvent evt) {
     	
     	AffineTransformOp op = new AffineTransformOp(AffineTransform.getRotateInstance(Math.toRadians(90), getBufferedPreview().getWidth() / 2, getBufferedPreview().getHeight() / 2), AffineTransformOp.TYPE_NEAREST_NEIGHBOR);

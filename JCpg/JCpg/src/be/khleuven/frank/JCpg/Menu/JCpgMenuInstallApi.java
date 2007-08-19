@@ -32,8 +32,20 @@ import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
+/**
+ * 
+ * Shows a screen from which the user can install the Coppermine API
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgMenuInstallApi extends JDialog {
 	
+	
+	
+														//*************************************
+														//				VARIABLES             *
+														//*************************************
 	private static final long serialVersionUID = 1L;
 	
 	private JCpgUI ui;
@@ -49,6 +61,23 @@ public class JCpgMenuInstallApi extends JDialog {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+														//*************************************
+														//				CONSTRUCTOR           *
+														//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgMenuInstallApi object
+	 * 
+	 * @param ui
+	 * 		UI reference
+	 */
 	public JCpgMenuInstallApi(JCpgUI ui){
 		
 		super(ui);
@@ -64,6 +93,16 @@ public class JCpgMenuInstallApi extends JDialog {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+														
+														//*************************************
+														//				SETTERS	              *
+														//*************************************
 	/**
 	 * 
 	 * Set the UI
@@ -79,6 +118,11 @@ public class JCpgMenuInstallApi extends JDialog {
 	
 	
 	
+	
+														
+														//*************************************
+														//				GETTERS	              *
+														//*************************************
 	/**
 	 * 
 	 * Get the UI
@@ -94,6 +138,11 @@ public class JCpgMenuInstallApi extends JDialog {
 	
 	
 	
+	
+														
+														//*************************************
+														//				SWING	              *
+														//*************************************
 	/**
 	 * 
 	 * Init swing components
@@ -217,6 +266,10 @@ public class JCpgMenuInstallApi extends JDialog {
 	
 	
 	
+	
+													//*************************************
+													//				EVENTS                *
+													//*************************************
 	/**
 	 * 
 	 * Perform right actions when user clicks the close button

@@ -34,15 +34,27 @@ public class JCpgTransform {
 	
 	
 	
-	
-	
+																
+																//*************************************
+																//				CONSTRUCTOR			  *
+																//*************************************
+	/**
+	 * 
+	 * Empty constructor
+	 *
+	 */
 	public JCpgTransform(){
 		
 	}
-
-
 	
 	
+	
+
+
+																
+																//*************************************
+																//				MUTATORS & OTHERS	  *
+																//*************************************
 	/**
 	 * 
 	 * Returns a Buffered Image object of a given Image object. A Buffered Image object is needed to do some effects.

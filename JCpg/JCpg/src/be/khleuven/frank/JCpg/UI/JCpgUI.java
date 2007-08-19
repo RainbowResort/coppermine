@@ -20,7 +20,6 @@ package be.khleuven.frank.JCpg.UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -102,7 +101,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private MediaTracker tracker; // mediatracker to track image load status
 	
 	private JCpgConfig cpgConfig;
-	private JCpgUI globalUi = this; // for threads :s:s
 	
 	private JCpgPicture currentPicture; // the currently selected picture
 	private JCpgAlbum currentAlbum; // the currently selected album
@@ -116,7 +114,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	
 	private boolean onlinemode = false; // false if we work offline, true if we work online
 	private boolean megaExplorerActive = false; // when in mega explorer mode, only the tree and one big list with many rows of photo's is visible. If a photo is selected, we switch to one row of photo's at the top with the explorer below
-	private boolean isSyncing; // used to synchronise syncing threads
 	
 	private JSplitPane splitPane;
 	private JSplitPane megaSplitPane;
@@ -188,22 +185,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	}
 	
 	
-	
-	
-	
-	/**
-	 * 
-	 * Set the megaExplorerActive flag
-	 * 
-	 * @param megaExplorerActive
-	 * 		true if we want a mega explorer view (tree with one big list of photo's)
-	 * 		false if we want tree with one row of photo's and explorer below (used when photo is selected)
-	 */
-	private void setMegaExplorerActive(boolean megaExplorerActive){
-		
-		this.megaExplorerActive = megaExplorerActive;
-		
-	}
+
 	
 	
 	
@@ -541,6 +523,23 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		this.currentAlbum = album;
 		
 	}
+	/**
+	 * 
+	 * Set the megaExplorerActive flag
+	 * 
+	 * @param megaExplorerActive
+	 * 		true if we want a mega explorer view (tree with one big list of photo's)
+	 * 		false if we want tree with one row of photo's and explorer below (used when photo is selected)
+	 */
+	private void setMegaExplorerActive(boolean megaExplorerActive){
+		
+		this.megaExplorerActive = megaExplorerActive;
+		
+	}
+	
+	
+	
+	
 																	
 	
 	

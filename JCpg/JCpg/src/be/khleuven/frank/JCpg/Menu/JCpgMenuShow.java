@@ -28,12 +28,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
-import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
@@ -54,6 +52,8 @@ public abstract class JCpgMenuShow extends JDialog {
 													//*************************************
 													//				VARIABLES	          *
 													//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgUI ui;
 	private Dimension screensize;
 	

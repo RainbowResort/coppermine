@@ -42,7 +42,9 @@ public class JCpgFilechooserImagePreview extends JPanel implements PropertyChang
 																							//*************************************
 																							//				VARIABLES	          *
 																							//*************************************
-    private int width, height;
+	private static final long serialVersionUID = 1L;
+	
+	private int width, height;
     private ImageIcon icon;
     private Image image;
     private static final int ACCSIZE = 155;
@@ -112,7 +114,7 @@ public class JCpgFilechooserImagePreview extends JPanel implements PropertyChang
     
     /**
      * 
-     * Scale the image
+     * Scale the image for previewing
      *
      */
     private void scaleImage() {

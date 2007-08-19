@@ -211,7 +211,9 @@ public class JCpgUserConfig {
 	
 	
 	
-	
+																										//*************************************
+																										//				MUTATORS			  								 *
+																										//*************************************
 	/**
 	 * 
 	 * Change the current user id
@@ -224,19 +226,5 @@ public class JCpgUserConfig {
 		this.id = id;
 		
 	}
-	
-	
-	
-	
-	// TEMP: TO AVOID ERRORS
-	public Object getServerConfig(){
-		
-		return null;
-		
-	}
-	
-	
-	
-	
 
 }

@@ -38,6 +38,8 @@ public class JCpgEditPictureManager extends JCpgEditManager {
 																								//*************************************
 																								//				VARIABLES	          *
 																								//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgPicture picture;
 
 	

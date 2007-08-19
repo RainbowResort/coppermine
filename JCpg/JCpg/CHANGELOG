@@ -1,3 +1,5 @@
+Did complete code structure and comments check
+Fixed bug in allowed Extensions Filter where, if the config was not allowing 'ALL' extensions, JCpg wasn't using the ones found in the config
 Fixed bug where a 'removecategory' was generated when deleting a picture
 When uploading pictures, binary picture data is now sent along in the parameter string
 Delete parameters are now stored in a file so the can be loaded later on when not executed before closing JCpg

@@ -90,6 +90,7 @@ public class JCpgVersionchecker {
 	 * Set the version url
 	 * 
 	 * @param versionUrl
+	 * 		the url to the online version
 	 */
 	private void setVersionUrl(String versionUrl){
 		
@@ -101,6 +102,7 @@ public class JCpgVersionchecker {
 	 * Set the update url
 	 * 
 	 * @param updateUrl
+	 * 		the url to the update
 	 */
 	private void setUpdateUrl(String updateUrl){
 		

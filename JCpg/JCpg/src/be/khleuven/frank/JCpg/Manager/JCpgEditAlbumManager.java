@@ -36,6 +36,8 @@ public class JCpgEditAlbumManager extends JCpgEditManager implements JCpgAddTree
 																					//*************************************
 																					//				VARIABLES	          *
 																					//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgAlbum album;
 
 	

@@ -37,8 +37,22 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 
+
+/**
+ * 
+ * Shows a screen from which the user can change his site's configuration
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgMenuSetConfig extends JDialog {
 	
+	
+											
+											//*************************************
+											//				VARIABLES             *
+											//*************************************
+	private static final long serialVersionUID = 1L;
 	
 	private JCpgUI ui;
 	private Dimension screensize;
@@ -54,6 +68,24 @@ public class JCpgMenuSetConfig extends JDialog {
 	private JComboBox allow_user_registrationCombo, allow_duplicate_emails_addrCombo, reg_requires_valid_emailCombo, admin_activationCombo, reg_notify_admin_emailCombo;
 	
 	
+	
+	
+	
+	
+	
+	
+	
+											
+											//*************************************
+											//				CONSTRUCTOR   		  *
+											//*************************************
+	/**
+	 * 
+	 * Makes a new JCpgMenuSetConfig object
+	 * 
+	 * @param ui
+	 * 		UI reference
+	 */
 	public JCpgMenuSetConfig(JCpgUI ui){
 		
 		super(ui);
@@ -273,7 +305,9 @@ public class JCpgMenuSetConfig extends JDialog {
 	
 	
 	
-	
+											//*************************************
+											//				EVENTS		          *
+											//*************************************
 	/**
 	 * 
 	 * Perform right actions when user clicks the close button

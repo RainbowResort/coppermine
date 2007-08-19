@@ -58,6 +58,8 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 																			//*************************************
 																			//				VARIABLES             *
 																			//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private Rectangle rleft, rup, rright, rdown; // selection blocks
 	private Rectangle sleft, sup, sright, sdown; // selection blocks
 	
@@ -146,6 +148,7 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
         sleft = new Rectangle(rleft.x - 5, rleft.y + rleft.height / 2 - 5, 10, 10);
         sdown = new Rectangle(rdown.x + rdown.width / 2 - 5, rdown.y - 5, 10, 10);
         
+        // paint all in right colors
         if(selectedRight){
         	
         	g2.setPaint(Color.white);
@@ -303,7 +306,7 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 		// mouse inside rectangle -> move it
 		if(selectedCrop && !selectedRight && !selectedUp && !selectedDown && !selectedLeft && !touchingBounderies){
 			
-			checkBounderies();
+			checkBounderies(); // this prevents the recangle from going out of the picture via the right and down side of the picture
 			
 			rleft.x = mouseposition.x - rup.width / 2;
 			rup.y = mouseposition.y + 50 - rleft.height / 2;
@@ -340,10 +343,14 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 		repaint();
 		
 	}
-	
+	/**
+	 * 
+	 * Prevent the lines from going outside of the picture and crossing each other
+	 *
+	 */
 	private void checkBounderies(){
 		
-//		 bounderies
+		// bounderies
 		if(rleft.x < getImageLabel().getLocation().x){
 			rleft.x = getImageLabel().getLocation().x;
 			touchingBounderies = true;
@@ -388,7 +395,7 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 		else
 			selectedCrop = false;
 		
-		// check if mouse is over one of the lines
+		// check if mouse is over one of the selection blocks
 		// up
 		if(sup.contains(p))
 			selectedUp = true;

@@ -37,6 +37,8 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
  */
 public class JCpgAddAlbumManager extends JCpgAddManager implements JCpgAddTreeEntryInterface {
 	
+	private static final long serialVersionUID = 1L;
+	
 	
 																	
 																			//*************************************

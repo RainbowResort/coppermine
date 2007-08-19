@@ -379,6 +379,15 @@ public class JCpgGallerySaver{
 		}
 
 	}
+	/**
+	 * 
+	 * Go through each category and load its contents
+	 * 
+	 * @param xmlelement
+	 * 		the xml tag to go through
+	 * @param parent
+	 * 		the parent JCpg component
+	 */
 	private void processCategories(Element xmlelement, JCpgGallery parent){
 		
 		// categories in main gallery

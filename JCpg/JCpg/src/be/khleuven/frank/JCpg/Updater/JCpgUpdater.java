@@ -34,6 +34,8 @@ public class JCpgUpdater extends JCpgProgressManager {
 																									//*************************************
 																									//				VARIABLES             *
 																									//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	JCpgVersionchecker vc = new JCpgVersionchecker("http://ardella.madoka.be/jcpg/updater/version.dat");
 	
 	

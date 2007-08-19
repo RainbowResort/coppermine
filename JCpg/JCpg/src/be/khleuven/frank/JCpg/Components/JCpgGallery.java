@@ -41,7 +41,7 @@ public class JCpgGallery{
 	
 	private String name = null ;
 	private String description = null ;
-	private int id = 1; // just to make it complete
+	private int id = 1; // the id of "User Galleries" in Cpg is 1
 	private boolean isModified = false; // says if the component is modified or not. If it is, modify parameters must be generated at sync time
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();

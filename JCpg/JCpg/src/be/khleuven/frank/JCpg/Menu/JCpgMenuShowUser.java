@@ -35,6 +35,9 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 public class JCpgMenuShowUser extends JCpgMenuShow {
 	
 	
+	
+	
+	
 													
 													//*************************************
 													//				VARIABLES	          *
@@ -44,6 +47,10 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 	private JLabel logo;
 	
 	private String userString = "";
+	
+	
+	
+	
 	
 	
 	

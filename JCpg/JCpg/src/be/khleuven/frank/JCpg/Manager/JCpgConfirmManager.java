@@ -32,6 +32,8 @@ import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 public class JCpgConfirmManager extends JDialog {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgUI jCpgUIReference;
 	
 	private JLabel logo;

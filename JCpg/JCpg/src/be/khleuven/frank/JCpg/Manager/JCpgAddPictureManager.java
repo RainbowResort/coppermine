@@ -50,6 +50,8 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 																									//*************************************
 																									//				VARIABELS             *
 																									//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgSiteConfig cpgConfig;
 	
 	private JFileChooser pictureChooser;

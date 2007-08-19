@@ -46,6 +46,8 @@ public class JCpgEditorColors extends JCpgEditor{
 																		//*************************************
 																		//				VARIABLES             *
 																		//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JLabel changeColorLabel;
 	private JLabel brightnessLabel;
 	private JSlider changeColorSlider;

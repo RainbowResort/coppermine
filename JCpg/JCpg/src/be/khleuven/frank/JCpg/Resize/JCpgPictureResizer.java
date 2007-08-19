@@ -47,7 +47,6 @@ public class JCpgPictureResizer{
 																	//*************************************
 	private String path;
 	private String filename;
-	private JCpgTransform transformer;
 	private JCpgUI ui;
 	
 	
@@ -117,6 +116,13 @@ public class JCpgPictureResizer{
 		this.filename = filename;
 		
 	}
+	/**
+	 * 
+	 * Set the UI reference
+	 * 
+	 * @param ui
+	 * 		the UI reference
+	 */
 	private void setUi(JCpgUI ui){
 		
 		this.ui = ui;

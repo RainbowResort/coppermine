@@ -69,7 +69,7 @@ public class JCpgPhpCommunicator {
 	}
 	/**
 	 * 
-	 * Empty constructor to use the getTagText function where we just want to read to just downloaded svr.xml file
+	 * Empty constructor to use the getTagText function where we just want to read the just downloaded svr.xml file
 	 *
 	 */
 	public JCpgPhpCommunicator(){
@@ -226,7 +226,7 @@ public class JCpgPhpCommunicator {
 	 * @param parameters
 	 * 		parameters that need to be added to the base url
 	 * @return
-	 * 		true if the server response was collected successfully, else false
+	 * 		true if the server respons was collected successfully, else false
 	 */
 	public File performPhpRequestAndGetXml(String parameters){
 		
@@ -344,8 +344,6 @@ public class JCpgPhpCommunicator {
 	 */
 	public ArrayList<JCpgCategory> getCategories(Element root){
 		
-	    SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
-		
 		File file = new File("svr.xml");
 		
 		if(file.exists()){
@@ -363,9 +361,10 @@ public class JCpgPhpCommunicator {
 					ListIterator it2 = content2.listIterator();
 					
 					while(it2.hasNext()){
+						
 						System.out.println(((Element)it2.next()).getAttributeValue("name"));
+						
 					}
-					
 						
 				}
 				

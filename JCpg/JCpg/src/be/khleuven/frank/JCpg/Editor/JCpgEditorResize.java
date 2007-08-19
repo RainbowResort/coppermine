@@ -25,8 +25,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
@@ -34,7 +32,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -56,6 +53,8 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 																			//*************************************
 																			//				VARIABLES             *
 																			//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgPictureResizer resizer = new JCpgPictureResizer();
 	
 	private JLabel msg;
@@ -63,7 +62,7 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 	private Rectangle rleft, rup, rright, rdown; // lines
 	private Rectangle sup, sright; // selection blocks
 
-	private boolean selectedRight = false, selectedUp = false, constrainProportionsSelected = false;
+	private boolean selectedRight = false, selectedUp = false;
 	
 	
 	
@@ -166,7 +165,7 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 				
 			image = resizer.resize(image, newDimension);
 			
-            ImageIO.write(getTransformer().toBufferedImage(image), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
+            ImageIO.write(JCpgTransform.toBufferedImage(image), getPicture().getFileName().substring(getPicture().getFileName().length()-3, getPicture().getFileName().length()), new File(getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath() + getPicture().getFileName()));
             JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUI(), getJCpgUI().getCpgConfig().getSiteConfig().getValueFor("fullpath") + getPicture().getFilePath(), getPicture().getFileName()); // thumb
 			thumb.makeThumb();
 			
@@ -202,13 +201,13 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        
-        
+        // handles
         rright = new Rectangle(rright.x, rup.y, 5, rdown.y - rup.y); // right
         rleft = new Rectangle(rleft.x, rup.y, 5, rdown.y - rup.y); // left
         rup = new Rectangle(rleft.x, rup.y, rright.x - rleft.x, 5); // up
         rdown = new Rectangle(rleft.x, rdown.y, rright.x - rleft.x + 5, 5); // down
         
+        // selection blocks
         sright = new Rectangle(rright.x - 2, rright.y + rright.height / 2, 10, 10);
         sup = new Rectangle(rup.x + rup.width / 2, rup.y - 2, 10, 10);
         
@@ -309,7 +308,7 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 		
 		p.y = p.y + 50;
 		
-		// check if mouse is over one of the lines
+		// check if mouse is over one of the selection blocks
 		// up
 		if(sup.contains(p))
 			selectedUp = true;

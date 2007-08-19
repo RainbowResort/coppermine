@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -172,6 +171,9 @@ public class JCpgSyncer {
 		
 		File delete = new File("config/delete.dat"); // clear saved delete parameters
 		if(delete.exists()) delete.delete();
+		
+		
+		
 		
 		// SERVER -> CLIENT
 		// Categories
@@ -664,6 +666,15 @@ public class JCpgSyncer {
 		}
 		
 	}
+	/**
+	 * 
+	 * Transform a file into bytes so it can be send to the API
+	 * 
+	 * @param path
+	 * 		path of the file
+	 * @return
+	 * 		row of bytes representing this file
+	 */
 	private byte getBytesFromFile(String path){
 		
 		File file = new File(path);

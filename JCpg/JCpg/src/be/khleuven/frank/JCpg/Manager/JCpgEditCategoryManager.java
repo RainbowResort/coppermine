@@ -38,6 +38,8 @@ public class JCpgEditCategoryManager extends JCpgEditManager {
 																					//*************************************
 																					//				VARIABLES	          *
 																					//*************************************
+	private static final long serialVersionUID = 1L;
+	
 	private JCpgCategory category;
 
 	
