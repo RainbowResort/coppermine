@@ -537,7 +537,6 @@ case 'generatepassword':
  * @ addusername	Username for the new user 
  * @ password		Password for the new user
  * @ email			Email address of the new user
- * @ active			Activation condition of the new account created
  */
 case 'adduser':
    $addusername = $CF->getvariable("addusername");
@@ -1338,12 +1337,28 @@ case 'viewcomment':
    else $CF->printMessage($COMMENT_DATA['messagecode']);
    break;
 
+/* Command: getcomments
+ * Command to get all info about the approved comments of an existing picture.
+   Can be invoked by anyone.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose votes are required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'getcomments':
    $pictureid = $CF->getvariable("pictureid");
    $CF->printMessage("success");
    $PF->showComments($pictureid);
    break;
 
+/* Command: getallcomments
+ * Command to get all info about all of the comments of an existing picture.
+   Can be invoked only by picture owner, album owner or admin.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose votes are required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'getallcomments':
    $pictureid = $CF->getvariable("pictureid");
    $CF->printMessage("success");
