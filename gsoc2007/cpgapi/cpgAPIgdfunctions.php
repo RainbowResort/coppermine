@@ -30,10 +30,10 @@ class gdfunctions {
 	  global $CF;
 	  $system=explode('.',$name);
 	  if (preg_match('/jpg|jpeg/',$system[1])){
-		 $src_img=imagecreatefromjpeg($name);
+		 @$src_img=imagecreatefromjpeg($name);
 	  }
 	  if (preg_match('/png/',$system[1])){
-		 $src_img=imagecreatefrompng($name);
+		 @$src_img=imagecreatefrompng($name);
 	  }
 	  if(!$src_img) {
 	  	 return false;

@@ -1,0 +1,549 @@
+<HTLML>
+<HEAD>
+  <TITLE>Coppermine API</TITLE>
+  <STYLE>
+  BODY {
+     font-family: arial, verdana;
+     font-size: 10pt;
+  }
+  UL {
+    list-style-type: square; MARGIN-BOTTOM: 8px; MARGIN-TOP: 8px;
+  }
+  </STYLE>
+</HEAD>
+<BODY>
+<H1>The Coppermine Photo Gallery API</H1>
+The following are the commands that the CPG API supports. The API is a standalone application, and is currently not fully compatible with CPG 1.5.x.
+
+<H3>Command: login</H3>
+Checks the username and password of a user. Returns a session key along with user data on success. 
+<UL>
+<LI> username	The username of the user logging in
+<LI> password	The corresponding password
+</UL><BR>
+
+<H3>Command: logout</H3>
+Checks the session key and unsets the session key if authenticated.
+<UL>
+<LI> username	The username of the user logging out
+<LI> sessionkey	The current session key for this user	
+</UL><BR>
+
+
+<H3>Command: showusers</H3>
+Admin specific command to list all users in the system
+<UL>
+<LI> username	The username of the admin
+<LI> sessionkey	The key of the current admin session
+</UL><BR>
+
+<H3>Command: register</H3>
+Allows a user to register
+<UL>
+<LI> username	The requested username
+<LI> password	The password for the new account
+<LI> email		Email address of the new user
+<LI> profile[]	The six profile admin-defined parameters, optional for register
+</UL><BR>
+
+<H3>Command: modifyprofile</H3>
+Allows a user to modify her profile
+<UL>
+<LI> username	The username of the current user
+<LI> sessionkey	The sessionkey for the current session of this user
+<LI> password	A new password if changing password, blank otherwise
+<LI> email		The new email address
+<LI> profile[]	The six profile admin-defined parameters
+</UL><BR>
+
+<H3>Command: activate</H3>
+Allows a user to activate her account
+<UL>
+<LI> username	The username for the account being activated
+<LI> act_key	The activation key that was emailed to the user
+</UL><BR>
+
+<H3>Command: reactivate</H3>
+Resends the activation email to a user at the email address provided during
+registration. Asks for email address as a security check.
+<UL>
+<LI> username	The username of the account to be activated
+<LI> email		The email address provided during registration
+</UL><BR>
+
+<H3>Command: forgotpassword</H3>
+Sends an email to the user to confirm if she requested a new password. The
+email contains a password key required for generating new password.
+<UL>
+<LI> username	The username for the account with forgotten password
+<LI> email		The email address associated with the account
+</UL><BR>
+
+<H3>Command: generatepassword</H3>
+Generates a new password for the user. Requires her to use the password key
+contained in the email sent by forgotpassword.
+<UL>
+<LI> username	The username of the account with forgotten password
+<LI> pass_key	The password key included in the forgot password email
+</UL><BR>
+
+<H3>Command: adduser</H3>
+Admin specific command that allows an admin to add a user to the system. The user is by default
+added to the group of "Registered" users.
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> addusername	Username for the new user 
+<LI> password		Password for the new user
+<LI> email			Email address of the new user
+</UL><BR>
+
+<H3>Command: removeuser</H3>
+Admin specific command allowing her to remove a user from the system
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> addusername	The username of the user being removed
+</UL><BR>
+
+<H3>Command: updateuser</H3>
+Admin specific command allowing her to update the basic information for any user
+Admin specific command allowing her to remove a user from the system
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> addusername	The username of the account being updated
+<LI> password		A new password for this account, if the password is being changed. Blank otherwise.	
+<LI> email			The email address for this account
+<LI> active			The activation condition of this account
+</UL><BR>
+
+<H3>Command: showgroups</H3>
+Admin specific command to list all groups in the system
+<UL>
+<LI> username	The username of the admin
+<LI> sessionkey	The key of the current admin session
+</UL><BR>
+
+<H3>Command: addgroup</H3>
+Admin specific command to add a group in the system
+<UL>
+<LI> username	The username of the admin
+<LI> sessionkey	The key of the current admin session
+<LI> groupname	The name of the new group
+<LI> admin		Boolean value of the "admin" property of the group
+</UL><BR>
+
+<H3>Command: updategroup</H3>
+Admin specific command to update an existing group
+<UL>
+<LI> username	The username of the admin
+<LI> sessionkey	The key of the current admin session
+<LI> groupname	The name of the group to be updated
+<LI> admin		Boolean value of the "admin" property of the group
+</UL><BR>
+
+<H3>Command: removegroup</H3>
+Admin specific command to remove an existing group from the system. Destroys
+the related entries in userxgroup.
+<UL>
+<LI> username	The username of the admin
+<LI> sessionkey	The key of the current admin session
+<LI> group_id	The integral value of the id of the group to be removed
+</UL><BR>
+
+<H3>Command: addusertogroup</H3>
+Admin specific command to add an existing user to an existing group
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> addusername	The id of the user who has to be added to the group
+<LI> group_id		The id of the group to which the user has to be added
+</UL><BR>
+
+<H3>Command: removeuserfromgroup</H3>
+Admin specific command to remove an existing user from an existing group
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> addusername	The id of the user who has to be removed from the group
+<LI> group_id		The id of the group from which the user has to be removed
+</UL><BR>
+
+<H3>Command: getconfig</H3>
+Returns all parameters for application configuration. To see a list of parameters, see
+the $config variable in the cpgAPIdisplayspecs file.
+<UL>
+<LI> no parameters
+</UL><BR>
+
+<H3>Command: setconfig</H3>
+Admin specific command to set the parameters for application configuration. Only the parameters
+visible using the getconfig command can be set using this command.
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+<LI> parametername	The name of the parameter to be set
+</UL><BR>
+
+<H3>Command: createcategory</H3>
+Command to create a new category (analogously gallery). Can be invoked by both users and admin.
+However, users must give a non-zero value for the parent category, and the new category
+is visible only to them. 
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the parent category
+<LI> categoryname	The name of the new category
+<LI> categorydesc	The description of the new category
+</UL><BR>
+
+<H3>Command: modifycategory</H3>
+Command to modify an existing category. Can be invoked by both users and admin.
+However, users can update only the categories they own or their group is responsible for.
+Admin can modify all categories.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the category to be modified
+<LI> categoryname	(optional) A new name for the category
+<LI> categorydesc	(optional) A new description for the category
+<LI> categoryparent	(optional) Id for a new parent category for this category
+<LI> categorythumb	(optional) Id of the picture which is the thumbnail for this category
+</UL><BR>
+
+<H3>Command: viewcategory</H3>
+Command to get the recursive view of an existing category (analogously gallery).
+Can be invoked by both users and admin.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the required category
+</UL><BR>
+
+<H3>Command: movecategory</H3>
+Command to change the position of an existing category. Can be invoked by both users and admin.
+However, users can move only the categories they own or their group is responsible for.
+Admin can move all categories.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the category to be moved
+<LI> categorypos	The new position of the category
+</UL><BR>
+
+<H3>Command: removecategory</H3>
+Command to remove an existing category from the system. Can be invoked by both users and admin.
+However, users can remove only the categories they own or their group is responsible for.
+Admin can remove all categories.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the category to be removed
+</UL><BR>
+
+<H3>Command: showcategories</H3>
+Command to get the recursive view of all categories visible to a user.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+</UL><BR>
+   
+<H3>Command: showmycategories</H3>
+Command to get the recursive view of all categories owned by the current user.
+For administrators, this command does NOT return admin-owned categories.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+</UL><BR>
+
+<H3>Command: showadmincategories</H3>
+Admin specific command to show the recursive view of all admin-owned categories,
+i.e. the categories visible to all users.
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+</UL><BR>
+
+<H3>Command: createalbum</H3>
+Command to create a new album. Can be invoked by both users and admin. Users can create
+albums in only those categories which they own, or for which their groups are responsible.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> categoryid		The id of the parent category
+<LI> albumname		The name of the new album
+<LI> albumdesc		The description of the new album
+<LI> albumkeywords	The keywords describing of the new album
+</UL><BR>
+
+<H3>Command: modifyalbum</H3>
+Command to modify an existing album. Can be invoked by both users and admin.
+However, users can update only the albums they own or their group is responsible for.
+Admin can modify all albums.
+<UL>
+<LI> username			The username of the current user
+<LI> sessionkey			The sessionkey for the current session of this user
+<LI> albumid			The id of the album to be modified
+<LI> albumname			(optional) A new name for the album
+<LI> albumdesc			(optional) A new description for the album
+<LI> albumkeywords		(optional) Keywords describing the album
+<LI> albumthumb			(optional) Id of the picture which is the thumbnail for this album
+<LI> albumpassword		(optional) Password required for a non-owner to access the album
+<LI> albumpasswordhint	(optional) Hint given to a user to guess the password for the album
+</UL><BR>
+
+<H3>Command: viewalbum</H3>
+Command to get the view of an existing album along with details on the contained pictures.
+Can be invoked by both users and admin.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> albumid		The id of the required album
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: movealbum</H3>
+Command to change the position of an existing album. Can be invoked by both users and admin.
+However, users can move only the albums they own or their group is responsible for.
+Admin can move all albums.
+<UL>
+<LI> username	The username of the current user
+<LI> sessionkey	The sessionkey for the current session of this user
+<LI> albumid	The id of the album to be moved
+<LI> albumpos	The new position of the album
+</UL><BR>
+   
+<H3>Command: removealbum</H3>
+Command to remove an existing album from the system. Can be invoked by both users and admin.
+However, users can remove only the albums they own or their group is responsible for.
+Admin can remove all albums.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> albumid		The id of the album to be removed
+</UL><BR>
+
+<H3>Command: addpicture</H3>
+Command to add a new picture to an existing album. Can be invoked by both users and admin.
+However, users can only add pictures to albums they own or their group is responsible for.
+Admin can add pictures anywhere.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> albumsid		The id of the parent album
+<LI> pictitle		A title for the picture
+<LI> piccaption		A caption for the picture
+<LI> pickeywords	Keywords describing the picture
+<LI> user1			Value corresponding to system defined user field 1
+<LI> user2			Value corresponding to system defined user field 2
+<LI> user3			Value corresponding to system defined user field 3
+<LI> user4			Value corresponding to system defined user field 4
+<LI> filename		(optional) The name of the file being uploaded
+<LI> filecontents	(optional) The binary data for the file being uploaded
+<LI> _FILE[file]	(optional) The file upload parameter to be passed if using HTML forms
+</UL><BR>
+
+<H3>Command: getpicture</H3>
+Command to fetch a picture. Can be invoked by both users and admin.
+However, users can only fetch the pictures they have authorization to see.
+Admin can access all pictures.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture to be fetched
+<LI> searchphrase	The value to be put into the hit statistic for this picture, if fetched as the result of a search
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: getpicturedata</H3>
+Command to get the metadata associated with a picture. Also returns the comments of
+this picture. Can be invoked by both users and admin.
+However, users can only get the data for pictures they have authorization to see.
+Admin can access all pictures.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose metadata is required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: movepicture</H3>
+Command to change the position of an existing picture. Can be invoked by both users and admin.
+However, users can move only the pictures they own or their group is responsible for.
+Admin can move all pictures.
+<UL>
+<LI> username	The username of the current user
+<LI> sessionkey	The sessionkey for the current session of this user
+<LI> pictureid	The id of the picture to be moved
+<LI> picturepos	The new position of the picture
+</UL><BR>
+
+<H3>Command: modifypicture</H3>
+Command to modify the metadata associated with a picture. Can be invoked by both users and admin.
+However, users can only modify the data for pictures they own or their group is responsible for.
+Admin can access all pictures.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose metadata is required
+<LI> pictitle		(optional) A new title for the picture
+<LI> piccaption		(optional) A new caption for the picture
+<LI> pickeywords	(optional) Keywords describing the picture
+<LI> user1			(optional) Value corresponding to system defined user field 1
+<LI> user2			(optional) Value corresponding to system defined user field 2
+<LI> user3			(optional) Value corresponding to system defined user field 3
+<LI> user4			(optional) Value corresponding to system defined user field 4
+</UL><BR>
+
+<H3>Command: removepicture</H3>
+Command to remove an picture from an album in the system. Can be invoked by both users and admin.
+However, users can remove only the pictures they own or their group is responsible for.
+Admin can remove all albums.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture to be removed
+</UL><BR>
+
+<H3>Command: createthumb</H3>
+Command to create the thumbnail for a picture. Requires GD. Can be invoked by both users and admin.
+However, users can only create thumbnails for pictures they own or their group is responsible for.
+Admin can access all pictures.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose metadata is required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: getthumb</H3>
+Command to fetch a thumbnail. Can be invoked by both users and admin.
+However, users can only fetch the thumbnails they have authorization to see.
+Admin can access all thumbnails.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose thumbnail is to be fetched
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: createcomment</H3>
+Command to create a new comment. Can be invoked by both users and admin. Users can create
+comments on any picture that they can see.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture commented
+<LI> authorname		(optional) Name of the comment author
+<LI> msgbody		The body of the comment
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: approvecomment</H3>
+Command to approve an existing comment. Can be invoked by both picture owner and admin. 
+<UL>
+<LI> username	The username of the current user
+<LI> sessionkey	The sessionkey for the current session of this user
+<LI> msgid		The id of the comment to be approved
+</UL><BR>
+
+<H3>Command: viewcomment</H3>
+Command to view an existing comment. Can be invoked by both users and admin. Users can view
+comments on any picture that they can see.
+<UL>
+<LI> username	The username of the current user
+<LI> sessionkey	The sessionkey for the current session of this user
+<LI> msgid		The id of the comment to be viewed
+</UL><BR>
+
+<H3>Command: getcomments</H3>
+Command to get all info about the approved comments of an existing picture.
+   Can be invoked by anyone.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose votes are required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: getallcomments</H3>
+Command to get all info about all of the comments of an existing picture.
+   Can be invoked only by picture owner, album owner or admin.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose votes are required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: modifycomment</H3>
+Command to modify a comment. Can be invoked by only the user who originally wrote the comment, or admin.
+
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> msgid			The id of the comment to be modified
+<LI> msgbody		(optional) A new body of the comment
+</UL><BR>
+
+<H3>Command: removecomment</H3>
+Command to remove an existing comment from the system. Can be invoked by both users and admin.
+However, users can remove comments that they have written, or from the pictures they own or their group is responsible for.
+Admin can remove all comments.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> msgid			The id of the comment to be removed
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: createvote</H3>
+Command to create a new vote. Can be invoked by both users and admin. Users can create
+vote on any picture that they can see.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture voted
+<LI> rating			Rating of the vote
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: getvotes</H3>
+Command to get all info about the votes of an existing picture. Can be invoked only by admin.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose votes are required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: removevote</H3>
+Command to remove an existing vote from the system. Can be invoked only by the admin.
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> sid			The id of the vote to be removed
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: gethits</H3>
+Command to get all info about the hits of an existing picture. Can be invoked by both users and admin.
+However, users can get details only for the pictures they own or their group is responsible for.
+Admin can access all hits. 
+<UL>
+<LI> username		The username of the current user
+<LI> sessionkey		The sessionkey for the current session of this user
+<LI> pictureid		The id of the picture whose hits are required
+<LI> albumpassword	(optional) Password required for a non-owner to access the album
+</UL><BR>
+
+<H3>Command: phpinfo</H3>
+Admin specific command to print phpinfo. Does not print headers.
+<UL>
+<LI> username		The username of the admin
+<LI> sessionkey		The key of the current admin session
+</UL><BR>
+
+</BODY>
+</HTML>

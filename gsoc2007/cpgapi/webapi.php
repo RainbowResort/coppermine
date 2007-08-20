@@ -269,7 +269,7 @@ $CURRENT_USER = array(
 	'username' => false
 	);
 
-if (!$APITYPE[$query]) {
+if (!isset($APITYPE[$query])) {
    $CF->unsafeexit('unknown_query');
 }  else {
    for($i=0; $i < count($APITYPE[$query]); $i++) {
