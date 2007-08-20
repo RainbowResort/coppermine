@@ -81,8 +81,12 @@ class albumfunctions {
 
            // Check for ownership
 	   	   // do i own the category?
+		   if ($catid == (FIRST_USER_CAT + $CURRENT_USER['user_id']))
+		      return true;
+		   
 		   if ($this->authorizeusercat($CURRENT_USER, $catid, "owner"))
 		      return true;
+		      
 		   // am i in the moderator group?
 		   $iresult = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['user_id']}=" . $CURRENT_USER['user_id'];
 		   if (mysql_result($iresult, 0, $DBS->field['user_group']) == $mg) 

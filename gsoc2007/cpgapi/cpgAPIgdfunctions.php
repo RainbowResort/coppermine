@@ -29,10 +29,10 @@ class gdfunctions {
    function createthumb($name,$filename,$new_w,$new_h){
 	  global $CF;
 	  $system=explode('.',$name);
-	  if (preg_match('/jpg|jpeg/',$system[1])){
+	  if (preg_match('/jpg|jpeg|JPG|JPEG/',$system[(count($system)-1)])){
 		 @$src_img=imagecreatefromjpeg($name);
 	  }
-	  if (preg_match('/png/',$system[1])){
+	  if (preg_match('/png|PNG/',$system[(count($system)-1)])){
 		 @$src_img=imagecreatefrompng($name);
 	  }
 	  if(!$src_img) {

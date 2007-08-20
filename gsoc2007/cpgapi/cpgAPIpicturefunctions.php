@@ -74,13 +74,13 @@ class picturefunctions {
        		$picpos = mysql_result($results, 0, "MX") + 1;	
        	}
     	    	
-    	$DBS->sql_update("INSERT INTO {$DBS->picturetable} ({$DBS->picturefield['aid']},{$DBS->picturefield['filename']},{$DBS->picturefield['filesize']},{$DBS->picturefield['ownername']},{$DBS->picturefield['ownerid']},{$DBS->picturefield['title']},{$DBS->picturefield['caption']},{$DBS->picturefield['keywords']},{$DBS->picturefield['user1']},{$DBS->picturefield['user2']},{$DBS->picturefield['user3']},{$DBS->picturefield['user4']},{$DBS->picturefield['pos']}) VALUES ('{$albumid}','{$filename}','{$filesize}','{$ownername}','{$ownerid}','{$pictitle}','{$piccaption}','{$pickeywords}','{$user1}','{$user2}','{$user3}','{$user4}','{$picpos}')");
+    	$randomname = $CF->str_makerand(7, 10, true, false, true);   	
+    	$DBS->sql_update("INSERT INTO {$DBS->picturetable} ({$DBS->picturefield['aid']},{$DBS->picturefield['filename']},{$DBS->picturefield['filesize']},{$DBS->picturefield['ownername']},{$DBS->picturefield['ownerid']},{$DBS->picturefield['title']},{$DBS->picturefield['caption']},{$DBS->picturefield['keywords']},{$DBS->picturefield['user1']},{$DBS->picturefield['user2']},{$DBS->picturefield['user3']},{$DBS->picturefield['user4']},{$DBS->picturefield['pos']}) VALUES ('{$albumid}','" . $randomname . "." . $extension . "','{$filesize}','{$ownername}','{$ownerid}','{$pictitle}','{$piccaption}','{$pickeywords}','{$user1}','{$user2}','{$user3}','{$user4}','{$picpos}')");
     	$picid =  $DBS->sql_insert_id();
     	
-    	$randomname = $CF->str_makerand(7, 10, true, false, true);   	
     	$filepath = $CONFIG['fullpath'] . $CONFIG['userpics'] . $randomname . "." . $extension;
 
-    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $filepath . "', {$DBS->picturefield['pic_raw_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['pic_hdr_ip']}='" . $this->getHdrIP() . "', {$DBS->picturefield['lasthit_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['mtime']}='" . date("Y-m-d H:i:s") . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
+    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $CONFIG['userpics'] . "', {$DBS->picturefield['pic_raw_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['pic_hdr_ip']}='" . $this->getHdrIP() . "', {$DBS->picturefield['lasthit_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['mtime']}='" . date("Y-m-d H:i:s") . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
     	return $picid;
     }
     
@@ -97,6 +97,15 @@ class picturefunctions {
     	$results = $DBS->sql_query("SELECT {$DBS->picturefield['filepath']} FROM {$DBS->picturetable} WHERE {$DBS->picturefield['pid']}=" . $pictureid);
     	if  (mysql_numrows($results)) {
     		return mysql_result($results, 0, $DBS->picturefield['filepath']);
+    	}
+    	return false;
+    }
+
+    function getPictureName($pictureid) {
+    	global $DBS;
+    	$results = $DBS->sql_query("SELECT {$DBS->picturefield['filename']} FROM {$DBS->picturetable} WHERE {$DBS->picturefield['pid']}=" . $pictureid);
+    	if  (mysql_numrows($results)) {
+    		return mysql_result($results, 0, $DBS->picturefield['filename']);
     	}
     	return false;
     }
@@ -127,9 +136,9 @@ class picturefunctions {
 	}
     
     function showPicture($pictureid) {
-  	   global $DBS;
+  	   global $DBS, $CONFIG;
   	   
-  	   $picturepath = $this->getPicturePath($pictureid);
+  	   $picturepath = $CONFIG['fullpath'] . $this->getPicturePath($pictureid) . $this->getPictureName($pictureid);
        if ($picturepath) {
    	      if ($fh = @fopen($picturepath, "r")) {
    	      	 $theData = fread($fh, filesize($picturepath));
@@ -151,9 +160,9 @@ class picturefunctions {
     }
     
     function showThumbNail($pictureid) {
-  	   global $DBS;
+  	   global $DBS, $CONFIG;
   	   
-  	   $picturepath = $this->getPicturePath($pictureid) . ".thumb";
+  	   $picturepath = $CONFIG['fullpath'] . $this->getPicturePath($pictureid) . $CONFIG['thumb_pfx'] . $this->getPictureName($pictureid);
        if ($picturepath) {
    	      if ($fh = @fopen($picturepath, "r")) {
    	      	 $theData = fread($fh, filesize($picturepath));

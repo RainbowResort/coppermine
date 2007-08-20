@@ -1167,6 +1167,7 @@ case 'getpicture':
       $IS_HEADER = true;
       $CF->printMessage($PICTURE_DATA['messagecode']);
    }
+   break;
 
 /* Command: getpicturedata
  * Command to get the metadata associated with a picture. Also returns the comments of
@@ -1282,9 +1283,11 @@ case 'createthumb':
    }
    $pictureid = $CF->getvariable("pictureid");
    
-   $picturepath = $PF->getPicturePath($pictureid);
+   $picturepath = $CONFIG['fullpath'] . $PF->getPicturePath($pictureid) . $PF->getPictureName($pictureid);
+   $newpath = $CONFIG['fullpath'] . $PF->getPicturePath($pictureid) . $CONFIG['thumb_pfx'] . $PF->getPictureName($pictureid);
+   
    if ($picturepath) {
-      if ($GD->createthumb($picturepath, $picturepath . ".thumb", $CONFIG['thumb_width'], $CONFIG['thumb_height'])) {
+      if ($GD->createthumb($picturepath, $newpath, $CONFIG['thumb_width'], $CONFIG['thumb_height'])) {
          $CF->printMessage("success");
       }  else {
       	 $CF->printMessage("could_not_create_thumb");
