@@ -789,7 +789,7 @@ case 'createcategory':
       if ($categoryid == "0") {
    	     $isadmincategory = 1;
    	  }  else {
-   	     $results = $DBS->sql_query("SELECT * FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=" . $categoryid);
+   	     $results = $DBS->sql_query("SELECT * FROM {$DBS->categorytable} WHERE {$DBS->catfield['cid']}=" . $categoryid);
    	     $ownerid = mysql_result($results, 0, $DBS->catfield['ownerid']);
    	     if ($ownerid == 0) {
    	        $isadmincategory = 1;
