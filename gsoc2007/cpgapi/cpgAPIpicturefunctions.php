@@ -45,6 +45,25 @@ class picturefunctions {
 		
 		return false;
     }
+
+    function getRawIP() {
+    	// Record User's IP address
+        return stripslashes($_SERVER['REMOTE_ADDR']);
+    }
+    
+    function getHdrIP() {
+   	   $raw_ip = stripslashes($_SERVER['REMOTE_ADDR']);
+       if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+          $hdr_ip = stripslashes($_SERVER['HTTP_CLIENT_IP']);
+       }  else {
+          if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+             $hdr_ip = stripslashes($_SERVER['HTTP_X_FORWARDED_FOR']);
+          }  else {
+             $hdr_ip = $raw_ip;
+          }
+       }
+    }
+    	
     
     function addPicture($albumid, $pictitle, $piccaption, $pickeywords, $filename, $extension, $filesize, $ownername, $ownerid, $user1, $user2, $user3, $user4) {
     	global $DBS, $CF, $CONFIG;
@@ -60,7 +79,8 @@ class picturefunctions {
     	
     	$randomname = $CF->str_makerand(7, 10, true, false, true);   	
     	$filepath = $CONFIG['fullpath'] . $CONFIG['userpics'] . $randomname . "." . $extension;
-    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $filepath . "', {$DBS->picturefield['pic_raw_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['pic_hdr_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "', {$DBS->picturefield['mtime']}='" . date("Y-m-d H:i:s") . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
+
+    	$DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['filepath']}='" . $filepath . "', {$DBS->picturefield['pic_raw_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['pic_hdr_ip']}='" . $this->getHdrIP() . "', {$DBS->picturefield['lasthit_ip']}='" . $this->getRawIP() . "', {$DBS->picturefield['mtime']}='" . date("Y-m-d H:i:s") . "' WHERE {$DBS->picturefield['pid']}=" . $picid);
     	return $picid;
     }
     
@@ -157,10 +177,10 @@ class picturefunctions {
     function registerPictureHit($pictureid, $search_phrase) {
   	   global $DBS;
   	   
-  	   $DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['hits']}={$DBS->picturefield['hits']}+1, {$DBS->picturefield['lasthit_ip']}='" . $_SERVER['REMOTE_ADDR'] . "' WHERE {$DBS->picturefield['pid']}=" . $pictureid);
+  	   $DBS->sql_update("UPDATE {$DBS->picturetable} SET {$DBS->picturefield['hits']}={$DBS->picturefield['hits']}+1, {$DBS->picturefield['lasthit_ip']}='" . $this->getRawIP() . "' WHERE {$DBS->picturefield['pid']}=" . $pictureid);
   	   
   	   $browser = get_browser(null, true);
-  	   $DBS->sql_update("INSERT INTO {$DBS->hitstatstable} ({$DBS->hitstatsfield['pid']}, {$DBS->hitstatsfield['ip']}, {$DBS->hitstatsfield['search_phrase']}, {$DBS->hitstatsfield['sdate']}, {$DBS->hitstatsfield['referer']}, {$DBS->hitstatsfield['browser']}, {$DBS->hitstatsfield['os']}) VALUES ('{$pictureid}', '" . $_SERVER['REMOTE_ADDR'] . "', '" . $search_phrase . "', '" . time() . "', '" . $_SERVER['HTTP_REFERER']  . "', '" . $_SERVER['HTTP_USER_AGENT'] . "', '" . $browser['platform'] . "')");
+  	   $DBS->sql_update("INSERT INTO {$DBS->hitstatstable} ({$DBS->hitstatsfield['pid']}, {$DBS->hitstatsfield['ip']}, {$DBS->hitstatsfield['search_phrase']}, {$DBS->hitstatsfield['sdate']}, {$DBS->hitstatsfield['referer']}, {$DBS->hitstatsfield['browser']}, {$DBS->hitstatsfield['os']}) VALUES ('{$pictureid}', '" . $this->getRawIP() . "', '" . $search_phrase . "', '" . time() . "', '" . $_SERVER['HTTP_REFERER']  . "', '" . $_SERVER['HTTP_USER_AGENT'] . "', '" . $browser['platform'] . "')");
     }
     
     function showPictureData ($PICTURE_DATA) {
@@ -268,7 +288,7 @@ class picturefunctions {
     function createComment($pictureid, $msgbody, $authorname, $authorid) {
     	global $DBS, $CF, $CONFIG;
     	
-    	$DBS->sql_update("INSERT INTO {$DBS->commentstable} ({$DBS->commentsfield['pid']},{$DBS->commentsfield['msgauthor']},{$DBS->commentsfield['msgbody']},{$DBS->commentsfield['msgdate']},{$DBS->commentsfield['msg_raw_ip']},{$DBS->commentsfield['msg_hdr_ip']},{$DBS->commentsfield['author_id']},{$DBS->commentsfield['author_md5_id']}) VALUES ('{$pictureid}','{$authorname}','{$msgbody}','" . date("Y-m-d H:i:s") . "','" . $_SERVER['REMOTE_ADDR'] . "','" . $_SERVER['REMOTE_ADDR'] . "','{$authorid}','" . md5($authorid) . "')");
+    	$DBS->sql_update("INSERT INTO {$DBS->commentstable} ({$DBS->commentsfield['pid']},{$DBS->commentsfield['msgauthor']},{$DBS->commentsfield['msgbody']},{$DBS->commentsfield['msgdate']},{$DBS->commentsfield['msg_raw_ip']},{$DBS->commentsfield['msg_hdr_ip']},{$DBS->commentsfield['author_id']},{$DBS->commentsfield['author_md5_id']}) VALUES ('{$pictureid}','{$authorname}','{$msgbody}','" . date("Y-m-d H:i:s") . "','" . $this->getRawIP() . "','" . $this->getHdrIP() . "','{$authorid}','" . md5($authorid) . "')");
 		$msgid = $DBS->sql_insert_id();
 		
 		if($CONFIG['comment_approval']) {
@@ -393,7 +413,7 @@ class picturefunctions {
 		if(!mysql_numrows($results)) {
     	   $DBS->sql_update("INSERT INTO {$DBS->votestable} ({$DBS->votesfield['pid']},{$DBS->votesfield['user_md5_id']},{$DBS->votesfield['vote_time']}) VALUES ('{$pictureid}','" . md5($CURRENT_USER['user_id']) . "','" . time() . "')");
     	   $browser = get_browser(null, true);
-  	       $DBS->sql_update("INSERT INTO {$DBS->votestatstable} ({$DBS->votestatsfield['pid']}, {$DBS->votestatsfield['ip']}, {$DBS->votestatsfield['rating']}, {$DBS->votestatsfield['sdate']}, {$DBS->votestatsfield['referer']}, {$DBS->votestatsfield['browser']}, {$DBS->votestatsfield['os']}, {$DBS->votestatsfield['uid']}) VALUES ('{$pictureid}', '" . $_SERVER['REMOTE_ADDR'] . "', '" . $rating . "', '" . time() . "', '" . $_SERVER['HTTP_REFERER']  . "', '" . $_SERVER['HTTP_USER_AGENT'] . "', '" . $browser['platform'] . "', '" . $CURRENT_USER['user_id'] . "')");
+  	       $DBS->sql_update("INSERT INTO {$DBS->votestatstable} ({$DBS->votestatsfield['pid']}, {$DBS->votestatsfield['ip']}, {$DBS->votestatsfield['rating']}, {$DBS->votestatsfield['sdate']}, {$DBS->votestatsfield['referer']}, {$DBS->votestatsfield['browser']}, {$DBS->votestatsfield['os']}, {$DBS->votestatsfield['uid']}) VALUES ('{$pictureid}', '" . $this->getRawIP() . "', '" . $rating . "', '" . time() . "', '" . $_SERVER['HTTP_REFERER']  . "', '" . $_SERVER['HTTP_USER_AGENT'] . "', '" . $browser['platform'] . "', '" . $CURRENT_USER['user_id'] . "')");
 		}
 		
     	return $DBS->sql_insert_id();

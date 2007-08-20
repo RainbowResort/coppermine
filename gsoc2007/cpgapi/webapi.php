@@ -20,6 +20,8 @@
 define('COPPERMINE_API_VERSION', '0.1');
 define('COPPERMINE_API_VERSION_STATUS', 'dev');
 define('IN_COPPERMINE', true);
+define('USER_GAL_CAT', 1);
+define('FIRST_USER_CAT', 10000);
 
 /*
  * Specify the required permission to execute an API command.
@@ -859,7 +861,7 @@ case 'modifycategory':
    	  $categoryparent = 0;
    }
    $CF->printMessage("success");
-   $AF->showSingleCategoryData($AF->modifyCategory($categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
+   $AF->showSingleCategoryData($AF->modifyCategory($CURRENT_USER, $categoryid, $categoryname, $categorydesc, $categoryparent, $categorythumb));
    break;
 
 /* Command: viewcategory
@@ -887,7 +889,7 @@ case 'viewcategory':
 case 'movecategory':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $categorypos = $CF->getvariable("categorypos");
-   if ($AF->moveCategory($categoryid, $categorypos))
+   if ($AF->moveCategory($CURRENT_USER, $categoryid, $categorypos))
       $CF->printMessage("success");
    else
       $CF->printMessage("could_not_move");   
@@ -951,6 +953,10 @@ case 'showadmincategories':
  */
 case 'createalbum':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
+   // NG - INCOMPATIBLE
+   if ($categorid == 1) {
+   	  $categoryid = FIRST_USER_CAT + $userid;
+   }
    $addalbumname = $CF->getvariable("albumname");
    $addalbumdesc = $CF->getvariable("albumdesc");
    $addalbumkeywords = $CF->getvariable("albumkeywords");

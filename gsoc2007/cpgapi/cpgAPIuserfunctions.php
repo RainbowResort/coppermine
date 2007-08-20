@@ -444,6 +444,7 @@ class userfunctions {
 
     $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['user_group']},{$DBS->field['group_list']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']},{$DBS->field['profile1']},{$DBS->field['profile2']},{$DBS->field['profile3']},{$DBS->field['profile4']},{$DBS->field['profile5']},{$DBS->field['profile6']}) VALUES ('{$addusername}', '{$group_id}', '', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}','{$profile[1]}','{$profile[2]}','{$profile[3]}','{$profile[4]}','{$profile[5]}','{$profile[6]}')";
     $DBS->sql_update($sql);
+    $userid = $DBS->sql_insert_id();
 
     $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
     $results = $DBS->sql_query($sql);
@@ -452,10 +453,10 @@ class userfunctions {
        mysql_free_result($results);
     }
 
-	$CAT_DATA = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
+	// NG - INCOMPATIBLE - $CAT_DATA = $AF->createCategory($adduserid, "Personal Gallery", "", 0, 0, 0);
     // Create a personal album if corresponding option is enabled
     if ($CONFIG['personal_album_on_registration'] == 1) {
-		$albumid = $AF->createAlbum($addusername, "", "", $CAT_DATA['cid']);
+		$albumid = $AF->createAlbum($addusername, "", "", FIRST_USER_CAT + $userid);
     }
 
     return $this->getpersonaldata($addusername);

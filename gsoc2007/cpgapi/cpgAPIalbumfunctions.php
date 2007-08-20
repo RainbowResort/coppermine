@@ -30,6 +30,9 @@ class albumfunctions {
 			  return false;
 		   }
 		}  else {
+		   if ($categoryid == USER_GAL_CAT)
+			  return true;
+			
 		   // Admin can access everything
 		   if ($UF->isAdmin($CURRENT_USER['username']))
     		  return true;
@@ -119,8 +122,10 @@ class albumfunctions {
 		return $this->getCategoryData($DBS->sql_insert_id());
 	}
 	
-	function moveCategory($catid, $catpos) {
+	function moveCategory($CURRENT_USER, $catid, $catpos) {
 		global $DBS;
+
+        if($catid == USER_GAL_CAT && !($UF->isAdmin($CURRENT_USER['username']))) return false;
 		
 		$results = $DBS->sql_query("SELECT * FROM {$DBS->categorytable} WHERE {$DBS->catfield['cid']}=" . $catid);
 		if (mysql_numrows($results)) {
@@ -138,8 +143,10 @@ class albumfunctions {
 		return false;
 	}	
 
-	function modifyCategory($catid, $catname, $catdesc, $catparent, $catthumb) {
-		global $DBS;
+	function modifyCategory($CURRENT_USER, $catid, $catname, $catdesc, $catparent, $catthumb) {
+		global $DBS, $UF;
+
+        if($catid == USER_GAL_CAT && !($UF->isAdmin($CURRENT_USER['username']))) return false;
 
 	    $sets = "";
 	    if ($catname === false) { }
@@ -148,8 +155,10 @@ class albumfunctions {
 	    if ($catdesc === false) { }
 	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['description']}='{$catdesc}'";
 
-	    if ($catparent === false) { }
-	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['parent']}='{$catparent}'";
+        if ($catid != USER_GAL_CAT) {
+	       if ($catparent === false) { }
+	       else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['parent']}='{$catparent}'";
+        }
 
 	    if ($catthumb === false) { }
 	    else $sets = $sets . (($sets == "")? "" : ",") . "{$DBS->catfield['thumb']}='{$catthumb}'";
@@ -160,6 +169,8 @@ class albumfunctions {
 
 	function removeCategory($catid) {
 		global $DBS, $DISPLAY;
+
+        if($catid == USER_GAL_CAT) return;
 
 		$DBS->sql_update("DELETE FROM {$DBS->categorytable} WHERE {$DBS->catfield['cid']}=" . $catid);
 
@@ -317,13 +328,22 @@ class albumfunctions {
          else print "\"";
       }
       if($ot=="attr") print ">";
-      
-      $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->albumfield['pos']}");
-	  for($i=0; $i < mysql_numrows($results); $i++) {
-         $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
-	     if($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
-	     	$this->showSingleAlbumData($this->getAlbumData($albumid));
-	  }
+
+      if ($CAT_DATA['cid'] != USER_GAL_CAT) {      
+         $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->albumfield['pos']}");
+	     for($i=0; $i < mysql_numrows($results); $i++) {
+            $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+   	           $this->showSingleAlbumData($this->getAlbumData($albumid));
+	     }
+      }  else {
+         $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . (FIRST_USER_CAT+$CURRENT_USER['user_id']) . " ORDER BY {$DBS->albumfield['pos']}");
+	     for($i=0; $i < mysql_numrows($results); $i++) {
+            $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+   	           $this->showSingleAlbumData($this->getAlbumData($albumid));
+	     }      	
+      }
 
       $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->catfield['pos']}");
 	  for($i=0; $i < mysql_numrows($results); $i++) {
@@ -332,10 +352,57 @@ class albumfunctions {
       print "</categorydata>";
     }
 
+
+    /* Shows the data corresponding to a single category and its subtree.
+     * @ CAT_DATA
+     */
+    function showAdminCategoryData ($CAT_DATA, $CURRENT_USER) {
+      global $DISPLAY, $DBS, $CF;
+      $ot = $CF->getvariable("setoutputtype");
+
+      print "<categorydata";
+      if($ot!="attr") print ">";
+      for($i=0;$i<count($DISPLAY->categoryfields);$i++) {
+         if($ot!="attr") print "<";
+         else print " ";
+         print $DISPLAY->categoryfields[$i];
+         if($ot!="attr") print ">";
+         else print "=\"";
+         print $CAT_DATA[$DISPLAY->categoryfields[$i]];
+         if($ot!="attr") print "</" . $DISPLAY->categoryfields[$i] . ">";
+         else print "\"";
+      }
+      if($ot=="attr") print ">";
+
+      if ($CAT_DATA['cid'] != USER_GAL_CAT) {      
+         $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->albumfield['pos']}");
+	     for($i=0; $i < mysql_numrows($results); $i++) {
+            $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+   	           $this->showSingleAlbumData($this->getAlbumData($albumid));
+	     }
+      }  else {
+         $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}>" . FIRST_USER_CAT . " ORDER BY {$DBS->albumfield['pos']}");
+	     for($i=0; $i < mysql_numrows($results); $i++) {
+            $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+   	           $this->showSingleAlbumData($this->getAlbumData($albumid));
+	     }      	
+      }
+
+      $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->catfield['pos']}");
+	  for($i=0; $i < mysql_numrows($results); $i++) {
+	  	 $this->showCategoryData($this->getCategoryData(mysql_result($results, $i, $DBS->catfield['cid'])), $CURRENT_USER);
+	  }
+      print "</categorydata>";
+    }
+
+
 	function showCategories ($CURRENT_USER) {
       global $DISPLAY, $DBS;
       
-      $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0 AND {$DBS->catfield['ownerid']}=0" . " ORDER BY {$DBS->catfield['pos']}");
+      //NG - INCOMPATIBLE - $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0 AND {$DBS->catfield['ownerid']}=0" . " ORDER BY {$DBS->catfield['pos']}");
+      $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0" . " ORDER BY {$DBS->catfield['pos']}");
 	  for($i=0; $i < mysql_numrows($results); $i++) {
 	  	 $this->showCategoryData($this->getCategoryData(mysql_result($results, $i, $DBS->catfield['cid'])), $CURRENT_USER);
 	  }
@@ -352,7 +419,7 @@ class albumfunctions {
       global $DISPLAY, $DBS, $UF;
       
 	  if($CURRENT_USER['username']) {
-      	 $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0 AND {$DBS->catfield['ownerid']}=" . $CURRENT_USER['user_id'] . " ORDER BY {$DBS->catfield['pos']}");
+      	 $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0 AND ({$DBS->catfield['ownerid']}=" . $CURRENT_USER['user_id'] . " OR {$DBS->catfield['cid']}=1) ORDER BY {$DBS->catfield['pos']}");
 	  	 for($i=0; $i < mysql_numrows($results); $i++) {
 	  	 	$this->showCategoryData($this->getCategoryData(mysql_result($results, $i, $DBS->catfield['cid'])), $CURRENT_USER);
 	  	 }	  	
@@ -364,8 +431,10 @@ class albumfunctions {
       
       $results = $DBS->sql_query("SELECT {$DBS->catfield['cid']} FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=0 AND {$DBS->catfield['ownerid']}=0" . " ORDER BY {$DBS->catfield['pos']}");
 	  for($i=0; $i < mysql_numrows($results); $i++) {
-	     $this->showCategoryData($this->getCategoryData(mysql_result($results, $i, $DBS->catfield['cid'])), $CURRENT_USER);
+         if (mysql_result($results, $i, $DBS->catfield['cid']) != 1)
+	         $this->showCategoryData($this->getCategoryData(mysql_result($results, $i, $DBS->catfield['cid'])), $CURRENT_USER);
 	  }
+	  $this->showAdminCategoryData($this->getCategoryData(1), $CURRENT_USER);
 	}
 
 	function createAlbum($albumname, $albumdesc, $albumkeywords, $catid) {
