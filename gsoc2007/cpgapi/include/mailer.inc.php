@@ -23,11 +23,10 @@ function cpg_mail($to, $subject, $msg_body = '', $type = 'text/plain', $sender_n
    if ($to == 'admin'){
       $to = array($CONFIG['gallery_admin_email']);
 
-      $results = $DBS->sql_query("SELECT {$DBS->userxgroup['user_id']} FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['group_id']} = 1");
+      $results = $DBS->sql_query("SELECT {$DBS->field['user_id']}, {$DBS->field['email']} FROM {$DBS->usertable} WHERE {$DBS->field['user_group']} = 1");
       for($i=0;$i < mysql_numrows($results); $i++) {
-         print mysql_result($results, $i, $DBS->userxgroup['user_id']);
-         $iresult = $DBS->sql_query("SELECT {$DBS->field['email']} FROM {$DBS->usertable} WHERE {$DBS->field['user_id']}=" . mysql_result($results, $i, $DBS->userxgroup['user_id']));
-         $to[$i+1] = mysql_result($iresult, 0, $DBS->field['email']);
+         print mysql_result($results, $i, $DBS->field['user_id']);
+         $to[$i+1] = mysql_result($results, 0, $DBS->field['email']);
       }
    }  else {
       $to = array($to);

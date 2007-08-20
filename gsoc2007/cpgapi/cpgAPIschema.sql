@@ -17,6 +17,19 @@
 ##  ********************************************
 
 #
+# Table structure for table `CPG_sessions`
+#
+
+CREATE TABLE IF NOT EXISTS CPG_sessions (
+  session_id varchar(40) NOT NULL default '',
+  user_id int(11) default '0',
+  time int(11) default NULL,
+  remember int(1) default '0',
+  PRIMARY KEY (session_id)
+) TYPE=MyISAM COMMENT='Used to store sessions';
+# --------------------------------------------------------
+
+#
 # Table structure for table `CPG_albums`
 #
 
@@ -167,11 +180,13 @@ CREATE TABLE CPG_usergroups (
 
 CREATE TABLE CPG_users (
   user_id int(11) NOT NULL auto_increment,
+  user_group int(11) NOT NULL default '2',
   user_active enum('YES','NO') NOT NULL default 'NO',
   user_name varchar(25) NOT NULL default '',
   user_password varchar(40) NOT NULL default '',
   user_lastvisit datetime NOT NULL default '0000-00-00 00:00:00',
   user_regdate datetime NOT NULL default '0000-00-00 00:00:00',
+  user_group_list varchar(255) NOT NULL default '',
   user_email varchar(255) NOT NULL default '',
   user_profile1 varchar(255) NOT NULL default '',
   user_profile2 varchar(255) NOT NULL default '',
@@ -180,23 +195,10 @@ CREATE TABLE CPG_users (
   user_profile5 varchar(255) NOT NULL default '',
   user_profile6 text NOT NULL,
   user_actkey varchar(32) NOT NULL default '',
-  user_sessionkey varchar(32) NOT NULL default '',
 
   PRIMARY KEY  (user_id),
   UNIQUE KEY user_name (user_name)
 ) TYPE=MyISAM COMMENT='Used to store users, not used when bridged';
-# --------------------------------------------------------
-
-#
-# Table structure for table `CPG_userxgroup`
-#
-
-CREATE TABLE CPG_userxgroup (
-  user_id int(11) NOT NULL auto_increment,
-  group_id int(11) NOT NULL default '2',
-
-  PRIMARY KEY  (user_id, group_id)
-) TYPE=MyISAM COMMENT='Used to store user group relation, not used when bridged';
 # --------------------------------------------------------
 
 #

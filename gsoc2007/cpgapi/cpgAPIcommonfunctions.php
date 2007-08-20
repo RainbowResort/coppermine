@@ -87,7 +87,7 @@ class commonfunctions {
     $val = "";
     if(isset($_POST[$variablename])) 
       $val = addslashes($_POST[$variablename]);
-    if($CONFIG['allow_get_api'] && isset($_GET[$variablename])) 
+    if(!isset($CONFIG['allow_get_api']) || ($CONFIG['allow_get_api'] && isset($_GET[$variablename]))) 
       $val = addslashes($_GET[$variablename]);
     $val = $this->typeCheck($variablename, $val);
     return $val;
@@ -101,7 +101,7 @@ class commonfunctions {
     global $CONFIG;
     if(isset($_POST[$variablename])) 
       return true;
-    if($CONFIG['allow_get_api'] && isset($_GET[$variablename])) 
+    if(!isset($CONFIG['allow_get_api']) || ($CONFIG['allow_get_api'] && isset($_GET[$variablename]))) 
       return true;
     return false;
   }

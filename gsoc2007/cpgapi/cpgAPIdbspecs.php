@@ -21,7 +21,7 @@
  * Class specifying everthing about the database structure
  */
 class dbspecs {
-  var $db, $table, $usertable, $groupstable, $configtable, $userxgrouptable, $field, $group, $userxgroup;
+  var $db, $table, $usertable, $groupstable, $configtable, $field, $group, $sessiontable, $sessionfield;
   var $categorytable, $catfield, $albumtable, $albumfield, $picturetable, $picturefield, $filetypetable, $filetypefield;
   var $commentstable, $commentsfield, $hitstatstable, $hitstatsfield, $votestable, $votesfield, $votestatstable, $votestatsfield;
   var $dbactive = false;
@@ -41,7 +41,7 @@ class dbspecs {
     // Board table names
     $this->table = array(
         'users' => 'users',
-        'userxgroup' => 'userxgroup',
+        'sessions' => 'sessions',
         'groups' => 'usergroups',
         'config' => 'config',
         'categories' => 'categories',
@@ -56,7 +56,7 @@ class dbspecs {
 	
     // Derived full table names
     $this->usertable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['users'];
-    $this->userxgrouptable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['userxgroup'];
+    $this->sessiontable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['sessions'];
     $this->groupstable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['groups'];
     $this->configtable =  '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['config'];
     $this->categorytable = '`' . $this->db['name'] . '`.' . $this->db['prefix'] . $this->table['categories'];
@@ -72,13 +72,14 @@ class dbspecs {
     $this->field = array(
         'username' => 'user_name', // name of 'username' field in users table
         'user_id' => 'user_id', // name of 'id' field in users table
+        'user_group' => 'user_group',
         'password' => 'user_password', // name of the password field in the users table
         'email' => 'user_email', // name of 'email' field in users table
         'regdate' => 'user_regdate', // name of 'registered' field in users table
+        'group_list' => 'user_group_list',
         'lastvisit' => 'user_lastvisit', // last time user logged in
         'active' => 'user_active', // is user account active?
         'act_key' => 'user_actkey', // user activation key
-        'sessionkey' => 'user_sessionkey', // session key if the user is logged in
         'profile1' => 'user_profile1',
         'profile2' => 'user_profile2',
         'profile3' => 'user_profile3',
@@ -87,10 +88,10 @@ class dbspecs {
         'profile6' => 'user_profile6'
     );
 
-    // Table userxgroup values
-    $this->userxgroup = array(
-        'user_id' => 'user_id', // name of 'id' field in users table
-        'group_id' => 'group_id' // group this user belongs to
+   // Table field names
+    $this->sessionfield = array(
+        'sessionkey' => 'session_id',
+        'user_id' => 'user_id'
     );
 
     // Group field names

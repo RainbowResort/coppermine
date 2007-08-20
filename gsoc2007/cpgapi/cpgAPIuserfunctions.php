@@ -48,8 +48,11 @@ class userfunctions {
    */
   function logout ($username) {
     global $DBS, $CF;
-    $randomkey = $CF->str_makerand(15,25, true, false, true);
-    $sql = "UPDATE {$DBS->usertable} SET {$DBS->field['sessionkey']}='{$randomkey}' WHERE {$DBS->field['username']} = '$username'";
+    
+    $results = $DBS->sql_query("SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $username . "'");
+    if(!mysql_numrows($results)) return;    
+    
+    $sql = "DELETE FROM {$DBS->sessiontable} WHERE {$DBS->sessionfield['user_id']} = '" . mysql_result($results, 0, $DBS->field['user_id']) . "'";
     $DBS->sql_update($sql);
   }
 
@@ -60,8 +63,14 @@ class userfunctions {
   function setlastvisit ($username) {
     global $DBS, $CF;
     $sessionkey = $CF->str_makerand(15,25, true, false, true);
-    $sql = "UPDATE {$DBS->usertable} SET {$DBS->field['lastvisit']}=NOW(), {$DBS->field['sessionkey']}='{$sessionkey}' WHERE {$DBS->field['username']} = '$username'";
+    $sql = "UPDATE {$DBS->usertable} SET {$DBS->field['lastvisit']}=NOW() WHERE {$DBS->field['username']} = '$username'";
     $DBS->sql_update($sql);
+    
+    $sql =  "SELECT {$DBS->field['user_id']} FROM {$DBS->usertable} WHERE {$DBS->field['username']} = '{$username}'";
+    $results = $DBS->sql_query($sql);
+    $sql = "INSERT INTO {$DBS->sessiontable} ({$DBS->sessionfield['user_id']}, {$DBS->sessionfield['sessionkey']}) VALUES ('" . mysql_result($results, 0, $DBS->field['user_id']) . "','" . $sessionkey . "')";
+    $DBS->sql_update($sql);        
+    
     return $sessionkey;
   }
 
@@ -69,14 +78,14 @@ class userfunctions {
    * @ username
    * @ return sessionkey
    */
-  function getsessionkey ($username) {
+  function getsessionkey ($user_id) {
     global $DBS;
 
-    $sql =  "SELECT {$DBS->field['sessionkey']} FROM {$DBS->usertable} WHERE {$DBS->field['username']} = '$username'";
+    $sql =  "SELECT {$DBS->sessionfield['sessionkey']} FROM {$DBS->sessiontable} WHERE {$DBS->sessionfield['user_id']} = '{$user_id}'";
     $results = $DBS->sql_query($sql);
 
     if (mysql_num_rows($results)) {
-       $sessionkey = mysql_result($results, 0, $DBS->field['sessionkey']);
+       $sessionkey = mysql_result($results, 0, $DBS->sessionfield['sessionkey']);
        mysql_free_result($results);
        return $sessionkey;
     }  else {
@@ -116,7 +125,7 @@ class userfunctions {
    * @ USER_DATA
    */
   function showdata ($USER_DATA) {
-    global $DISPLAY;
+    global $DISPLAY, $DBS;
 
     print "<userdata>";
     for($i=0;$i<count($DISPLAY->userpersonalfields);$i++) {
@@ -124,8 +133,11 @@ class userfunctions {
        print $USER_DATA[$DISPLAY->userpersonalfields[$i]];
        print "</" . $DISPLAY->userpersonalfields[$i] . ">";
     }
-    if($USER_DATA['sessionkey']!="")
-      print "<sessionkey>" . $USER_DATA['sessionkey'] . "</sessionkey>";
+    
+    $results = $DBS->sql_query("SELECT * FROM {$DBS->sessiontable} WHERE {$DBS->sessionfield['user_id']}='" . $USER_DATA['user_id'] . "'");
+    if (mysql_numrows($results)) {    
+       print "<sessionkey>" . mysql_result($results, 0, $DBS->sessionfield['sessionkey']) . "</sessionkey>";
+    }
 
     $GROUP_DATA = $this->getgroupdata($USER_DATA['user_id']);
     $this->showmultigroupdata($GROUP_DATA);
@@ -160,9 +172,12 @@ class userfunctions {
 
   /* Authenticate user login */
   function authenticateuser($username, $sessionkey) {
-    global $CF;
+    global $CF, $DBS;
 
-    $userkey = $this->getsessionkey($username);
+    $results = $DBS->sql_query("SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $username . "'");
+    if(!mysql_numrows($results)) return false;
+
+    $userkey = $this->getsessionkey(mysql_result($results, 0, $DBS->field['user_id']));
     if($userkey=='' || $userkey!=$sessionkey) {
        return false;
     }
@@ -250,16 +265,30 @@ class userfunctions {
     }
 
     $res = array();
-    $sql = "SELECT {$DBS->userxgroup['group_id']} FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']} = '{$user_id}'";
+    $sql = "SELECT {$DBS->field['user_group']}, {$DBS->field['group_list']} FROM {$DBS->usertable} WHERE {$DBS->field['user_id']} = '{$user_id}'";
     $results = $DBS->sql_query($sql);
-    for($i = 0; $i < mysql_numrows($results); $i++) {
-      $isql =  "SELECT $fieldstring FROM {$DBS->groupstable}";
-      $isql .= " WHERE {$DBS->group['group_id']}=" . mysql_result($results, $i, $DBS->userxgroup['group_id']);
-      $iresult = $DBS->sql_query($isql);
-      if (mysql_num_rows($iresult)) {
-         $res[$i] = mysql_fetch_assoc($iresult);
-         mysql_free_result($iresult);
-      }
+
+    $isql =  "SELECT $fieldstring FROM {$DBS->groupstable}";
+    $isql .= " WHERE {$DBS->group['group_id']}=" . mysql_result($results, 0, $DBS->field['user_group']);
+    $iresult = $DBS->sql_query($isql);
+    if (mysql_num_rows($iresult)) {
+       $res[0] = mysql_fetch_assoc($iresult);
+       mysql_free_result($iresult);
+    }
+    
+    if (mysql_result($results, 0, $DBS->field['group_list']) != "") {
+       $allgroups = explode(",", mysql_result($results, 0, $DBS->field['group_list']));
+       $cnt = 1;    
+       for($i = 0; $i < count($allgroups); $i++) {
+         $isql =  "SELECT $fieldstring FROM {$DBS->groupstable}";
+         $isql .= " WHERE {$DBS->group['group_id']}=" . $allgroups[$i];
+         $iresult = $DBS->sql_query($isql);
+         if (mysql_num_rows($iresult)) {
+            $res[$cnt] = mysql_fetch_assoc($iresult);
+            mysql_free_result($iresult);
+            $cnt++;
+         }
+       }
     }
     mysql_free_result($results);
     return $res;
@@ -413,7 +442,7 @@ class userfunctions {
        }
     }
 
-    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']},{$DBS->field['profile1']},{$DBS->field['profile2']},{$DBS->field['profile3']},{$DBS->field['profile4']},{$DBS->field['profile5']},{$DBS->field['profile6']}) VALUES ('{$addusername}', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}','{$profile[1]}','{$profile[2]}','{$profile[3]}','{$profile[4]}','{$profile[5]}','{$profile[6]}')";
+    $sql =  "INSERT INTO {$DBS->usertable} ({$DBS->field['username']},{$DBS->field['user_group']},{$DBS->field['group_list']},{$DBS->field['password']},{$DBS->field['active']},{$DBS->field['email']},{$DBS->field['regdate']},{$DBS->field['lastvisit']},{$DBS->field['act_key']},{$DBS->field['profile1']},{$DBS->field['profile2']},{$DBS->field['profile3']},{$DBS->field['profile4']},{$DBS->field['profile5']},{$DBS->field['profile6']}) VALUES ('{$addusername}', '{$group_id}', '', md5('{$password}'), '{$active}', '{$email}', NOW(), NOW(),'{$act_key}','{$profile[1]}','{$profile[2]}','{$profile[3]}','{$profile[4]}','{$profile[5]}','{$profile[6]}')";
     $DBS->sql_update($sql);
 
     $sql = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['username']}='" . $addusername . "'";
@@ -428,9 +457,6 @@ class userfunctions {
     if ($CONFIG['personal_album_on_registration'] == 1) {
 		$albumid = $AF->createAlbum($addusername, "", "", $CAT_DATA['cid']);
     }
-
-    $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";
-    $DBS->sql_update($sql);
 
     return $this->getpersonaldata($addusername);
   }
@@ -713,8 +739,6 @@ class userfunctions {
     $res = $this->getpersonaldata($addusername);
     $sql =  "DELETE FROM {$DBS->usertable} WHERE {$DBS->field['username']}='{$addusername}'";
     $DBS->sql_update($sql);
-    $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}='{$adduserid}'";
-    $DBS->sql_update($sql);
 
     return $res;
   }
@@ -827,8 +851,9 @@ class userfunctions {
     $res = $this->getsinglegroupdata($group_id);
     $sql =  "DELETE FROM {$DBS->groupstable} WHERE {$DBS->group['group_id']}='{$group_id}'";
     $DBS->sql_update($sql);
-    $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['group_id']}='{$group_id}'";
-    $DBS->sql_update($sql);
+
+    // Remove this group from the list of groups for the user
+    // TBD
 
     return $res;
   }
@@ -845,6 +870,7 @@ class userfunctions {
     $results = $DBS->sql_query($sql);
     if (mysql_num_rows($results)) {
        $adduserid = mysql_result($results, 0, $DBS->field['user_id']);
+       $gl = mysql_result($results, 0, $DBS->field['group_list']);
        mysql_free_result($results);
     } else {
        $USER_DATA = array();
@@ -864,7 +890,10 @@ class userfunctions {
        return $USER_DATA;
     }
 
-    $sql =  "INSERT INTO {$DBS->userxgrouptable} ({$DBS->userxgroup['user_id']},{$DBS->userxgroup['group_id']}) VALUES ('{$adduserid}', '{$group_id}')";
+    if($gl == "") $gl = $group_id;
+    else $gl = $gl . "," . $group_id; 
+
+    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['group_list']} = '{$gl}' WHERE {$DBS->field['user_id']}='{$adduserid}'";
     $DBS->sql_update($sql);
 
     return $this->getpersonaldata($addusername);
@@ -882,6 +911,7 @@ class userfunctions {
     $results = $DBS->sql_query($sql);
     if (mysql_num_rows($results)) {
        $adduserid = mysql_result($results, 0, $DBS->field['user_id']);
+       $gl = mysql_result($results, 0, $DBS->field['group_list']);
        mysql_free_result($results);
     } else {
        $USER_DATA = array();
@@ -901,7 +931,18 @@ class userfunctions {
        return $USER_DATA;
     }
 
-    $sql =  "DELETE FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}='{$adduserid}' AND {$DBS->userxgroup['group_id']}='{$group_id}'";
+    $ngl = "";
+    if($gl != "") {
+       $allgroups = explode(",", $gl);
+       for($i=0; $i < count($allgroups); $i++) {
+    	   if ($group_id != $allgroups[$i]) {
+              if($ngl == "") $ngl = $allgroups[$i];
+              else $ngl = $ngl . "," . $allgroups[$i]; 
+       	   }
+       }
+    }
+    
+    $sql =  "UPDATE {$DBS->usertable} SET {$DBS->field['group_list']} = '{$ngl}' WHERE {$DBS->field['user_id']}='{$adduserid}'";
     $DBS->sql_update($sql);
 
     return $this->getpersonaldata($addusername);

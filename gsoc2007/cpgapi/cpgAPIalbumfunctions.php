@@ -81,9 +81,14 @@ class albumfunctions {
 		   if ($this->authorizeusercat($CURRENT_USER, $catid, "owner"))
 		      return true;
 		   // am i in the moderator group?
-		   $iresult = "SELECT * FROM {$DBS->userxgrouptable} WHERE {$DBS->userxgroup['user_id']}=" . $CURRENT_USER['user_id'] . " AND {$DBS->userxgroup['group_id']}=" . $mg;
-		   if (mysql_numrows($iresult))
-		      return true;
+		   $iresult = "SELECT * FROM {$DBS->usertable} WHERE {$DBS->field['user_id']}=" . $CURRENT_USER['user_id'];
+		   if (mysql_result($iresult, 0, $DBS->field['user_group']) == $mg) 
+		   	  return true;
+		   if (mysql_result($iresult, 0, $DBS->field['group_list']) != "") {
+		   	  $allgroups = explode(",", mysql_result($iresult, 0, $DBS->field['group_list']));
+		   	  if (in_array($mg, $allgroups))
+		   	     return true;
+		   }
 		      
            if ($perm == "view") {
 		   	  if ($password) {

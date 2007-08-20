@@ -21,6 +21,8 @@ define('COPPERMINE_API_VERSION', '0.1');
 define('COPPERMINE_API_VERSION_STATUS', 'dev');
 define('IN_COPPERMINE', true);
 
+$DEFAULT_COPPERMINE = false;
+
 /*
  * Specify the required permission to execute an API command.
  * These permissions may later get overridden by the saved config settings.
@@ -505,7 +507,7 @@ case 'forgotpassword':
    $email = $CF->getvariable("email");
 
    $USER_DATA = $UF->forgotpassword($addusername, $email);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
    }
    else $CF->printMessage($USER_DATA['messagecode']);
@@ -522,7 +524,7 @@ case 'generatepassword':
    $pass_key = $CF->getvariable("pass_key");
 
    $USER_DATA = $UF->generatepassword($addusername, $pass_key);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
@@ -548,7 +550,7 @@ case 'adduser':
       $profile[$i] = "";
    }
    $USER_DATA = $UF->adduser($addusername, $password, $group_id, $email, $profile);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
@@ -600,7 +602,7 @@ case 'updateuser':
    else $active = false;
 
    $USER_DATA = $UF->updateuser($addusername, $password, $email, $active);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
@@ -630,7 +632,7 @@ case 'addgroup':
    $admin = $CF->getvariable("admin"); if($admin=="") $admin = "NO";
 
    $GROUP_DATA = $UF->addgroup($groupname, $admin);
-   if (!$GROUP_DATA['error']) {
+   if (!isset($GROUP_DATA['error']) || !$GROUP_DATA['error']) {
       $CF->printMessage("success");
       $UF->showgroupdata($GROUP_DATA);
    }
@@ -651,7 +653,7 @@ case 'updategroup':
    if($admin=="") $admin = "NO";
 
    $GROUP_DATA = $UF->updategroup($group_id, $groupname, $admin);
-   if (!$GROUP_DATA['error']) {
+   if (!isset($GROUP_DATA['error']) || !$GROUP_DATA['error']) {
       $CF->printMessage("success");
       $UF->showgroupdata($GROUP_DATA);
    }
@@ -660,7 +662,7 @@ case 'updategroup':
 
 /* Command: removegroup
  * Admin specific command to remove an existing group from the system. Destroys
- * the related entries in userxgroup.
+ * the related entries in the user list having this group.
  * @ username	The username of the admin
  * @ sessionkey	The key of the current admin session
  * @ group_id	The integral value of the id of the group to be removed
@@ -692,7 +694,7 @@ case 'addusertogroup':
    $group_id = $CF->getvariable("group_id");
 
    $USER_DATA = $UF->addusertogroup($addusername, $group_id);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
@@ -715,7 +717,7 @@ case 'removeuserfromgroup':
    }
 
    $USER_DATA = $UF->removeuserfromgroup($addusername, $group_id);
-   if (!$USER_DATA['error']) {
+   if (!isset($USER_DATA['error']) || !$USER_DATA['error']) {
       $CF->printMessage("success");
       $UF->showdata($USER_DATA);
    }
