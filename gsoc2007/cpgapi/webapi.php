@@ -21,8 +21,6 @@ define('COPPERMINE_API_VERSION', '0.1');
 define('COPPERMINE_API_VERSION_STATUS', 'dev');
 define('IN_COPPERMINE', true);
 
-$DEFAULT_COPPERMINE = true;
-
 /*
  * Specify the required permission to execute an API command.
  * These permissions may later get overridden by the saved config settings.
@@ -32,6 +30,7 @@ $DEFAULT_COPPERMINE = true;
  * admin  => only an administrator can execute this command
  */
 $APITYPE = array(
+    'base_install'		=> array('unauth'),
     'install' 			=> array('unauth'),
     'uninstall'			=> array('unauth'),
 
@@ -182,6 +181,22 @@ if ($query != "getpicture" && $query != "getthumb" && $query != "phpinfo") {
 $GF = new globalfunctions();
 $query = $CF->getuncheckedvariable("query");
 
+if($query == 'base_install') {
+  // check if already installed
+  $installed = true;
+  $fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $installed = false;
+
+  if ($installed) {
+     fclose($fh);
+   	 $CF->unsafeexit("install_error");
+  }  else {
+     // current query is install. let it proceed
+     require('cpgAPIinstall.php');
+     $INSTALL = new install();
+     $INSTALL->baseinstall();
+  }
+} 
+
 /*
  * Install Application -- open currently for debug only
  * @ dbserver
@@ -221,16 +236,20 @@ if($query == 'uninstall') {
 }
 
 
+$API_MODE = 0;
 
-if (!$DEFAULT_COPPERMINE) {
-  /*
-   * First check the install, and then do anything else.
-   */
-  $fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error");
-  fclose($fh);
-  /*
-   * Install is OK. Now include the required files and do initialization
-   */
+/*
+ * First check the install, and then do anything else.
+ */
+$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error");
+fclose($fh);
+/*
+ * Install is OK. Now include the required files and do initialization
+ */
+$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'r') or $API_MODE = 1;
+fclose($fh);
+
+if($API_MODE == 0) {
   require($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
 } else {
   require("../" . $DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
@@ -249,23 +268,26 @@ $CONFIG = $GF->getconfig($CONFIG);
 require($DFLT['cfg_d'] . "/" . $DFLT['mail_f']);
 require($DFLT['lang_d'] . "/" . $CONFIG['lang'] . ".php");
 
-
-/*
- * Check the existance of upload folders. If they do not exist, create them
- */
-if (!is_dir($CONFIG['fullpath'])) {
+if($API_MODE==0) {
+  /*
+   * Check the existance of upload folders. If they do not exist, create them
+   */
+  if (!is_dir($CONFIG['fullpath'])) {
 	 mkdir($CONFIG['fullpath'], octdec($CONFIG['default_dir_mode']));
      if (!is_dir($CONFIG['fullpath'])) {
         $CF->unsafeexit('upload_dir_error');
      }
      @chmod($CONFIG['fullpath'], octdec($CONFIG['default_dir_mode'])); //silence the output in case chmod is disabled
-}
-if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
+  }
+  if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
 	 mkdir($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode']));
      if (!is_dir($CONFIG['fullpath'] . $CONFIG['userpics'])) {
         $CF->unsafeexit('upload_dir_error');
      }
      @chmod($CONFIG['fullpath'] . $CONFIG['userpics'], octdec($CONFIG['default_dir_mode'])); //silence the output in case chmod is disabled
+  }
+} else {
+	$CONFIG['fullpath'] = "../" . $CONFIG['fullpath'];
 }
 
 /*

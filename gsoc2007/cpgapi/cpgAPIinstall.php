@@ -24,6 +24,16 @@ require('include/sql_parse.php');
  */
 class install {
 
+  function baseinstall() {
+     global $DFLT, $CF, $DBS, $CONFIG;
+
+     $fh = fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'w') or $CF->unsafeexit("install_error");
+     fwrite($fh, "1");
+     fclose($fh);
+
+     $CF->safeexit("success");
+  }
+
   function newinstall($dbserver, $dbuser, $dbpass, $dbname, $prefix, $adminusername, $adminpassword, $adminemail) {
      global $DFLT, $CF, $DBS, $CONFIG;
 
