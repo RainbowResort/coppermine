@@ -41,7 +41,7 @@ public class JCpgGallery{
 	
 	private String name = null ;
 	private String description = null ;
-	private int id = 1; // the id of "User Galleries" in Cpg is 1
+	private int id = 0; // the id of "User Galleries" in Cpg is 0
 	private boolean isModified = false; // says if the component is modified or not. If it is, modify parameters must be generated at sync time
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
 	private ArrayList<JCpgAlbum> albums = new ArrayList<JCpgAlbum>();
@@ -211,16 +211,26 @@ public class JCpgGallery{
 	 * 
 	 * @param name
 	 * 		name of the album you search
+	 * @param id
+	 * 		if this is not -1, checking will happen using the id, not the name
 	 * @return
 	 * 		the album if it has been found, else null
 	 */
-	public JCpgAlbum getAlbum(String name){
+	public JCpgAlbum getAlbum(String name, int id){
 		
 		for(int i=0; i<getAlbums().size(); i++){
 			
 			JCpgAlbum album = getAlbums().get(i);
 			
-			if(album.getName().equals(name)){
+			if(id != -1){
+				
+				if(album.getId() == id){
+					
+					return album; // category found
+					
+				}
+			
+			}else if(album.getName().equals(name)){
 				
 				return album; // album found
 				

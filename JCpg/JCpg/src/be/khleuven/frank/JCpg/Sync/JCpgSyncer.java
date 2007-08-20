@@ -179,7 +179,7 @@ public class JCpgSyncer {
 		// Categories
 		
 		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); isn't showing anything at the moment
-		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); // get components in "user galleries" category
 		
 		if(phpCommunicator.performPhpRequest(parameters) == 0){ // result ok
 			
@@ -204,9 +204,13 @@ public class JCpgSyncer {
 						
 						if(element.getName().equals("categorydata")){
 							
-							if(element.getAttributeValue("name").equals("User galleries")){
+							if(element.getAttributeValue("name").equals("User galleries")){ // search for the "User Galleries" node and use this object as the parent to add all fetched components
+								
+								DefaultMutableTreeNode node = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), "category", "User Galleries");
 							
-								downloadComponents(element, (JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject(), phpCommunicator);
+								JCpgGallery gallery = (JCpgGallery)node.getUserObject();
+								
+								downloadComponents(element, gallery, phpCommunicator);
 								
 							}
 							
@@ -262,6 +266,105 @@ public class JCpgSyncer {
 			
 			Element element = (Element)it.next();
 			
+			// albums in parent object
+			if(element.getName().equals("albumdata")){
+				
+				try {
+					
+					JCpgAlbum album = null;
+					DefaultMutableTreeNode treealbum = null;
+					
+					String parenttype = "";
+					if(parent.getClass().equals(JCpgGallery.class)){
+						
+						parenttype = "gallery";
+						
+					}else if(parent.getClass().equals(JCpgCategory.class)){
+						
+						parenttype = "category";
+						
+					}
+					
+					DefaultMutableTreeNode parentnode = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), parenttype, parent.getName());
+					
+					if(parent.getAlbum(element.getAttribute("title").getValue(), element.getAttribute("aid").getIntValue()) == null){
+					
+						album = new JCpgAlbum(element.getAttribute("aid").getIntValue(), element.getAttribute("title").getValue(), element.getAttribute("description").getValue(), element.getAttribute("visibility").getIntValue(), element.getAttribute("uploads").getBooleanValue(), element.getAttribute("comments").getBooleanValue(), element.getAttribute("votes").getBooleanValue(), element.getAttribute("position").getIntValue(), parent.getId(), element.getAttribute("thumb").getIntValue(), element.getAttribute("keyword").getValue(), element.getAttribute("alb_password").getValue(), element.getAttribute("alb_password_hint").getValue());
+						album.addUi(getUi());
+						parent.addAlbum(album);
+						
+						treealbum = new DefaultMutableTreeNode(album);
+						
+						parentnode.add(treealbum);
+						
+					}else{
+						
+						album = parent.getAlbum(element.getAttribute("title").getValue(), element.getAttribute("aid").getIntValue());
+						
+						album.changeName(element.getAttribute("title").getValue());
+						album.changeDescription(element.getAttribute("description").getValue());
+						
+						treealbum = getUi().visitAllNodes(parentnode, "album", element.getAttribute("title").getValue());
+						
+					}
+					
+					// extract pictures
+					List pictures = element.getChildren();
+					ListIterator picturesit = pictures.listIterator();
+					
+					while(picturesit.hasNext()){
+						
+						Element pictureelement = (Element)picturesit.next();
+						
+						if(pictureelement.getName().equals("picturedata")){
+							
+							try {
+								
+								if(album.getPicture(pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("pid").getIntValue()) == null){ // only create picture if not already on local machine
+								
+									JCpgPicture picture = new JCpgPicture(pictureelement.getAttribute("pid").getIntValue(), album.getId(), pictureelement.getAttribute("filepath").getValue(), pictureelement.getAttribute("filename").getValue(), pictureelement.getAttribute("filesize").getLongValue(), pictureelement.getAttribute("totalfilesize").getLongValue(), pictureelement.getAttribute("pwidth").getIntValue(), pictureelement.getAttribute("pheight").getIntValue(), pictureelement.getAttribute("hits").getIntValue(),
+																				pictureelement.getAttribute("ctime").getIntValue(), pictureelement.getAttribute("ownerid").getIntValue(), pictureelement.getAttribute("ownername").getValue(), pictureelement.getAttribute("picrating").getIntValue(), pictureelement.getAttribute("votes").getIntValue(), pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("caption").getValue(), pictureelement.getAttribute("keywords").getValue(), pictureelement.getAttribute("approved").getBooleanValue(), pictureelement.getAttribute("galleryicon").getIntValue(),
+																				pictureelement.getAttribute("urlprefix").getIntValue(), pictureelement.getAttribute("position").getIntValue());
+									picture.addUi(getUi());
+									album.addPicture(picture);
+									
+									DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
+									treealbum.add(treepicture);
+									
+									// get picture data
+									String parameters = "getpicturedata&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+									
+									int result = phpCommunicator.performPhpRequest(parameters);
+									
+									if(result == 0)
+										System.out.println("JCpgSyncer: " + picture.getName() + " data was succesfully downloaded");
+									else if(result == 1)
+										System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data: INVALID SESSION");
+									else
+										System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data");
+								
+								}
+								
+							} catch (DataConversionException e) {
+								
+								System.out.println("JCpgSyncer: couldn't convert xml attributes - picture");
+								
+							}
+							
+						}
+						
+					}
+					
+				} catch (DataConversionException e) {
+					
+					System.out.println("JCpgSyncer: couldn't convert xml attributes - album");
+					
+				}
+				
+			}
+			
+			
+			// categories in parent object
 			if(element.getName().equals("categorydata")){
 				
 				try {
@@ -299,12 +402,27 @@ public class JCpgSyncer {
 								
 								try {
 									
-									JCpgAlbum album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("position").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), albumelement.getAttribute("alb_password").getValue(), albumelement.getAttribute("alb_password_hint").getValue());
-									album.addUi(getUi());
-									category.addAlbum(album);
+									JCpgAlbum album = null;
+									DefaultMutableTreeNode treealbum = null;
+									if(category.getAlbum(albumelement.getAttribute("title").getValue()) == null){
 									
-									DefaultMutableTreeNode treealbum = new DefaultMutableTreeNode(album);
-									treecategory.add(treealbum);
+										album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("position").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), albumelement.getAttribute("alb_password").getValue(), albumelement.getAttribute("alb_password_hint").getValue());
+										album.addUi(getUi());
+										category.addAlbum(album);
+										
+										treealbum = new DefaultMutableTreeNode(album);
+										treecategory.add(treealbum);
+										
+									}else{
+										
+										album = category.getAlbum(albumelement.getAttribute("title").getValue());
+										
+										album.changeName(albumelement.getAttribute("title").getValue());
+										album.changeDescription(albumelement.getAttribute("description").getValue());
+										
+										treealbum = getUi().visitAllNodes(treecategory, "album", albumelement.getAttribute("title").getValue());
+										
+									}
 									
 									// extract pictures
 									List pictures = albumelement.getChildren();
@@ -318,26 +436,30 @@ public class JCpgSyncer {
 											
 											try {
 												
-												JCpgPicture picture = new JCpgPicture(pictureelement.getAttribute("pid").getIntValue(), album.getId(), pictureelement.getAttribute("filepath").getValue(), pictureelement.getAttribute("filename").getValue(), pictureelement.getAttribute("filesize").getLongValue(), pictureelement.getAttribute("totalfilesize").getLongValue(), pictureelement.getAttribute("pwidth").getIntValue(), pictureelement.getAttribute("pheight").getIntValue(), pictureelement.getAttribute("hits").getIntValue(),
-																							pictureelement.getAttribute("ctime").getIntValue(), pictureelement.getAttribute("ownerid").getIntValue(), pictureelement.getAttribute("ownername").getValue(), pictureelement.getAttribute("picrating").getIntValue(), pictureelement.getAttribute("votes").getIntValue(), pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("caption").getValue(), pictureelement.getAttribute("keywords").getValue(), pictureelement.getAttribute("approved").getBooleanValue(), pictureelement.getAttribute("galleryicon").getIntValue(),
-																							pictureelement.getAttribute("urlprefix").getIntValue(), pictureelement.getAttribute("position").getIntValue());
-												picture.addUi(getUi());
-												album.addPicture(picture);
+												if(album.getPicture(pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("pid").getIntValue()) == null){ // only create picture if not already on local machine
 												
-												DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
-												treealbum.add(treepicture);
+													JCpgPicture picture = new JCpgPicture(pictureelement.getAttribute("pid").getIntValue(), album.getId(), pictureelement.getAttribute("filepath").getValue(), pictureelement.getAttribute("filename").getValue(), pictureelement.getAttribute("filesize").getLongValue(), pictureelement.getAttribute("totalfilesize").getLongValue(), pictureelement.getAttribute("pwidth").getIntValue(), pictureelement.getAttribute("pheight").getIntValue(), pictureelement.getAttribute("hits").getIntValue(),
+																								pictureelement.getAttribute("ctime").getIntValue(), pictureelement.getAttribute("ownerid").getIntValue(), pictureelement.getAttribute("ownername").getValue(), pictureelement.getAttribute("picrating").getIntValue(), pictureelement.getAttribute("votes").getIntValue(), pictureelement.getAttribute("title").getValue(), pictureelement.getAttribute("caption").getValue(), pictureelement.getAttribute("keywords").getValue(), pictureelement.getAttribute("approved").getBooleanValue(), pictureelement.getAttribute("galleryicon").getIntValue(),
+																								pictureelement.getAttribute("urlprefix").getIntValue(), pictureelement.getAttribute("position").getIntValue());
+													picture.addUi(getUi());
+													album.addPicture(picture);
+													
+													DefaultMutableTreeNode treepicture = new DefaultMutableTreeNode(picture);
+													treealbum.add(treepicture);
+													
+													// get picture data
+													String parameters = "getpicturedata&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+													
+													int result = phpCommunicator.performPhpRequest(parameters);
+													
+													if(result == 0)
+														System.out.println("JCpgSyncer: " + picture.getName() + " data was succesfully downloaded");
+													else if(result == 1)
+														System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data: INVALID SESSION");
+													else
+														System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data");
 												
-												// get picture data
-												String parameters = "getpicturedata&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&pictureid=" + picture.getId() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
-												
-												int result = phpCommunicator.performPhpRequest(parameters);
-												
-												if(result == 0)
-													System.out.println("JCpgSyncer: " + picture.getName() + " data was succesfully downloaded");
-												else if(result == 1)
-													System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data: INVALID SESSION");
-												else
-													System.out.println("JCpgSyncer: " + picture.getName() + " failed to download data");
+												}
 												
 											} catch (DataConversionException e) {
 												

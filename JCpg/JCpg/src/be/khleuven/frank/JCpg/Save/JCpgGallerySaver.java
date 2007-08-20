@@ -172,6 +172,7 @@ public class JCpgGallerySaver{
 				List content1 = egallery.getChildren();
 				ListIterator it1 = content1.listIterator();
 				
+				// albums in root
 				while(it1.hasNext()){
 					
 					Element element1 = (Element)it1.next();
@@ -198,12 +199,11 @@ public class JCpgGallerySaver{
 							}
 							
 						}
-						
+					
+					// categories
 					}else if(element1.getName().equals("category")){
 						
-						
 						loadCategories(element1, getGallery());
-						
 						
 					}
 					

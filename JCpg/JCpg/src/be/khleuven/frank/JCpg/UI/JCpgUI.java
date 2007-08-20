@@ -62,6 +62,7 @@ import be.khleuven.frank.JCpg.Editor.JCpgEditorColors;
 import be.khleuven.frank.JCpg.Editor.JCpgEditorCrop;
 import be.khleuven.frank.JCpg.Editor.JCpgEditorResize;
 import be.khleuven.frank.JCpg.Editor.JCpgEditorRotate;
+import be.khleuven.frank.JCpg.Manager.JCpgAddAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerCategory;
 import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
@@ -106,8 +107,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JCpgPicture currentPicture; // the currently selected picture
 	private JCpgAlbum currentAlbum; // the currently selected album
 	
-	private static JCpgGallery gallery = new JCpgGallery("User galleries", "This category contains albums that belong to Coppermine users."); // default static gallery to store all catgories and albums
-
+	private static JCpgGallery gallery = new JCpgGallery("Root", ""); // default static gallery to store all catgories and albums
+	private JCpgCategory usergalleries = new JCpgCategory(1, 0, "User Galleries", "This category contains albums that belong to Coppermine users.", 0, 0, 0);
+	
 	private Dimension screensize;
 	private Dimension framesize;
 	private Dimension buttonPreferredSize;
@@ -141,7 +143,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JScrollPane megaTreeView;
 	private JScrollPane pictureView;
 	private JScrollPane megaPictureView;
-	private DefaultMutableTreeNode root;
+	private DefaultMutableTreeNode root, usergalleriesnode;
 	
 	private JMenuBar menubar;
 	private JMenu menu, api, config, users, groups;
@@ -275,13 +277,28 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		closeMegaExplorer.setBackground(new Color(168, 168, 168));
 		
 		root = new DefaultMutableTreeNode(gallery);
+		
+		// check if user galleries category must be added
+		File galleryxml = new File("config/gallery.xml");
+		
+		if(!galleryxml.exists()){
+			
+			usergalleriesnode = new DefaultMutableTreeNode(usergalleries);
+			root.add(usergalleriesnode);
+			
+			getGallery().addCategory(usergalleries);
+			
+		}
+		
 		tree = new JTree(root);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
 		tree.setBackground(new Color(230, 237, 248));
+		
 		treeView = new JScrollPane(tree);
 		treeView.setMinimumSize(new Dimension(200, 400));
 		treeView.setBackground(new Color(230, 237, 248));
+		
 		megaTreeView = new JScrollPane();
 		megaTreeView.setMinimumSize(new Dimension(200, 501));
 		megaTreeView.setBackground(new Color(230, 237, 248));
@@ -758,15 +775,28 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			
 	    	return;
 	    	
-		}else if(object.getClass().equals(JCpgGallery.class)){ // add category
+		}else if(object.getClass().equals(JCpgGallery.class)){ // add category or album
 			
 			String[] options = {"album", "category"};
 			new JCpgAddSelectManagerGallery(this, new JCpgImageUrlValidator("data/wtc_logo.jpg").createImageIcon(), node, options);
 		
-		}else if(object.getClass().equals(JCpgCategory.class)){ // add album
+		}else if(object.getClass().equals(JCpgCategory.class)){ // add category or album
 			
-			String[] options = {"album", "category"};
-			new JCpgAddSelectManagerCategory(this, new JCpgImageUrlValidator("data/wtc_logo.jpg").createImageIcon(), node, options);
+			JCpgCategory category = (JCpgCategory)object;
+			
+			if(category.getId() == 1){ // only albums can be added to user galleries category
+				
+				new JCpgAddAlbumManager(this, new JCpgImageUrlValidator("data/createalbum_logo.jpg").createImageIcon(), node);
+				
+			}else{ // albums and categories can be added to all other categories
+				
+				String[] options = {"album", "category"};
+				
+				new JCpgAddSelectManagerCategory(this, new JCpgImageUrlValidator("data/wtc_logo.jpg").createImageIcon(), node, options);
+				
+			}
+			
+			
 		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
@@ -803,16 +833,21 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 				}else if(object.getClass().equals(JCpgCategory.class)){ // leaf is category
 					
 					JCpgCategory category = (JCpgCategory)node.getUserObject();
-					DefaultMutableTreeNode categoryParentNode = (DefaultMutableTreeNode)node.getParent();
-			    	JCpgGallery galleryParent = (JCpgGallery)categoryParentNode.getUserObject();
-			    	
-			    	getGallery().deleteCategory(category);
-			    	category.delete(this); // delete category and all underlying components.
-			    	node.removeFromParent();
-			    	
-			    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
-
-			    	explorer.removeAll();
+					
+					if(category.getId() != 1){ // user galleries category can not be deleted
+					
+						DefaultMutableTreeNode categoryParentNode = (DefaultMutableTreeNode)node.getParent();
+				    	JCpgGallery galleryParent = (JCpgGallery)categoryParentNode.getUserObject();
+				    	
+				    	galleryParent.deleteCategory(category);
+				    	category.delete(this); // delete category and all underlying components.
+				    	node.removeFromParent();
+				    	
+				    	SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+	
+				    	explorer.removeAll();
+				    	
+					}
 			    	
 			    }else if(object.getClass().equals(JCpgAlbum.class)){ // leaf is album
 			    	
@@ -910,8 +945,14 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	
 		}else if(object.getClass().equals(JCpgCategory.class)){ // category
 			
-			new JCpgEditCategoryManager(this, new JCpgImageUrlValidator("data/editcategory_logo.jpg").createImageIcon(), node);
-			SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+			JCpgCategory category = (JCpgCategory)object;
+			
+			if(category.getId() != 1){ // "User Galleries" category can not be edited
+			
+				new JCpgEditCategoryManager(this, new JCpgImageUrlValidator("data/editcategory_logo.jpg").createImageIcon(), node);
+				SwingUtilities.updateComponentTreeUI(tree); // workaround for Java bug 4173369
+				
+			}
 		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // album
 			

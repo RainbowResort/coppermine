@@ -112,7 +112,7 @@ public class JCpgAddCategoryManager extends JCpgAddManager implements JCpgAddTre
 		}
 		
 		// make new category
-		JCpgCategory category = new JCpgCategory(-1, -1, getTitleField().getText(), getDescriptionField().getText(), -1, 0, 0);
+		JCpgCategory category = new JCpgCategory(-1, 0, getTitleField().getText(), getDescriptionField().getText(), -1, 0, 0);
 		
 		category.addUi(super.getJCpgUIReference());
 		

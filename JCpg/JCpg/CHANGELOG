@@ -1,3 +1,6 @@
+Fixed bug in sync code where albums where not correctly fetched from the server
+Added some constraints so that the "User Galleries" category can not be edited or deleted
+Changed tree structure: there's a root node with in it the "User Galleries" category that can only contain albums
 Added new menu: add user
 Did complete code structure and comments check
 Fixed bug in allowed Extensions Filter where, if the config was not allowing 'ALL' extensions, JCpg wasn't using the ones found in the config
@@ -5,7 +8,7 @@ Fixed bug where a 'removecategory' was generated when deleting a picture
 When uploading pictures, binary picture data is now sent along in the parameter string
 Delete parameters are now stored in a file so the can be loaded later on when not executed before closing JCpg
 Fixed nullpointer when trying to go into albumview when an album does not have pictures
-Fixed bug where the albul id wasn't correctly passed to its pictures when adding these pictures
+Fixed bug where the album id wasn't correctly passed to its pictures when adding these pictures
 Found bug where only one album in a category is shown in albumview when the category actually has more albums
 Further extented the album view: the albums are now clickable and activate that particular album
 Fixed bug in resizer where it was possible the up handler went back up when keep going down with the mouse resulting in very strange behaviour

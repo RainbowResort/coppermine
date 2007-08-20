@@ -408,16 +408,26 @@ public class JCpgAlbum extends JCpgGallery{
 	 * 
 	 * @param name
 	 * 		name of the picture you search
+	 * @param id
+	 * 		if this is not -1, checking will happen using the id, not the name
 	 * @return
 	 * 		the picture if it has been found, else null
 	 */
-	public JCpgPicture getPicture(String name){
+	public JCpgPicture getPicture(String name, int id){
 		
 		for(int i=0; i<getPictures().size(); i++){
 			
 			JCpgPicture picture = getPictures().get(i);
 			
-			if(picture.getFileName().equals(name)){
+			if(id != -1){
+				
+				if(picture.getId() == id){
+					
+					return picture;
+					
+				}
+				
+			}else if(picture.getFileName().equals(name)){
 				
 				return picture; // picture found
 				
