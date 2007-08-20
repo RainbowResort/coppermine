@@ -1,3 +1,4 @@
+Fixed bug in sync code where components added to 'root' where not correctly fetched from the server
 Fixed bug in sync code where albums where not correctly fetched from the server
 Added some constraints so that the "User Galleries" category can not be edited or deleted
 Changed tree structure: there's a root node with in it the "User Galleries" category that can only contain albums

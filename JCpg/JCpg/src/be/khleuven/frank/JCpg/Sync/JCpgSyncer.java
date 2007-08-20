@@ -206,11 +206,11 @@ public class JCpgSyncer {
 							
 							if(element.getAttributeValue("name").equals("User galleries")){ // search for the "User Galleries" node and use this object as the parent to add all fetched components
 								
-								DefaultMutableTreeNode node = getUi().visitAllNodes((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot(), "category", "User Galleries");
-							
-								JCpgGallery gallery = (JCpgGallery)node.getUserObject();
+								downloadComponents(element, getUi().getGallery().getCategory("User Galleries", 1), phpCommunicator);
 								
-								downloadComponents(element, gallery, phpCommunicator);
+							}else{
+								
+								downloadComponents(root, ((JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject()), phpCommunicator);
 								
 							}
 							

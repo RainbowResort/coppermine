@@ -108,7 +108,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	private JCpgAlbum currentAlbum; // the currently selected album
 	
 	private static JCpgGallery gallery = new JCpgGallery("Root", ""); // default static gallery to store all catgories and albums
-	private JCpgCategory usergalleries = new JCpgCategory(1, 0, "User Galleries", "This category contains albums that belong to Coppermine users.", 0, 0, 0);
+	private JCpgCategory usergalleries = new JCpgCategory(1, 0, "User galleries", "This category contains albums that belong to Coppermine users.", 0, 0, 0);
 	
 	private Dimension screensize;
 	private Dimension framesize;
