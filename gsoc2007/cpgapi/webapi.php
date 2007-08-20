@@ -21,7 +21,7 @@ define('COPPERMINE_API_VERSION', '0.1');
 define('COPPERMINE_API_VERSION_STATUS', 'dev');
 define('IN_COPPERMINE', true);
 
-$DEFAULT_COPPERMINE = false;
+$DEFAULT_COPPERMINE = true;
 
 /*
  * Specify the required permission to execute an API command.
@@ -221,16 +221,20 @@ if($query == 'uninstall') {
 }
 
 
-/*
- * First check the install, and then do anything else.
- */
-$fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error");
-fclose($fh);
 
-/*
- * Install is OK. Now include the required files and do initialization
- */
-require($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
+if (!$DEFAULT_COPPERMINE) {
+  /*
+   * First check the install, and then do anything else.
+   */
+  $fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['ins_f'], 'r') or $CF->unsafeexit("init_error");
+  fclose($fh);
+  /*
+   * Install is OK. Now include the required files and do initialization
+   */
+  require($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
+} else {
+  require("../" . $DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
+}
 $DBS->initialize();
 require('cpgAPIuserfunctions.php');
 $UF = new userfunctions();
