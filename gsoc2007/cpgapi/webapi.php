@@ -785,8 +785,16 @@ case 'createcategory':
    $categoryid = $CF->getvariable("categoryid"); // Parent category
    $addcategoryname = $CF->getvariable("categoryname");
    $addcategorydesc = $CF->getvariable("categorydesc");
-   if ($UF->isAdmin($CURRENT_USER['username']) && $categoryid == "0") {
-   	  $isadmincategory = 1;
+   if ($UF->isAdmin($CURRENT_USER['username'])) {
+      if ($categoryid == "0") {
+   	     $isadmincategory = 1;
+   	  }  else {
+   	     $results = $DBS->sql_query("SELECT * FROM {$DBS->categorytable} WHERE {$DBS->catfield['parent']}=" . $categoryid);
+   	     $ownerid = mysql_result($results, 0, $DBS->catfield['ownerid']);
+   	     if ($ownerid == 0) {
+   	        $isadmincategory = 1;
+   	     }
+   	  }
    }
    $CF->printMessage("success");
    $AF->showSingleCategoryData($AF->createCategory($CURRENT_USER, $addcategoryname, $addcategorydesc, $categoryid, $isadmincategory));
@@ -1223,6 +1231,15 @@ case 'removepicture':
    $CF->printMessage("success");
    break;
 
+/* Command: createthumb
+ * Command to create the thumbnail for a picture. Requires GD. Can be invoked by both users and admin.
+ * However, users can only create thumbnails for pictures they own or their group is responsible for.
+ * Admin can access all pictures.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose metadata is required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'createthumb':
    if(!$GD->GD_SUPPORTED) {
       $CF->safeexit('gd_not_supported');   	
@@ -1386,6 +1403,13 @@ case 'createvote':
    $PF->showPictureData($PF->getPictureData($pictureid));
    break;
 
+/* Command: getvotes
+ * Command to get all info about the votes of an existing picture. Can be invoked only by admin.
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose votes are required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'getvotes':
    $pictureid = $CF->getvariable("pictureid");
    $CF->printMessage("success");
@@ -1405,6 +1429,15 @@ case 'removevote':
    $CF->printMessage("success");
    break;
 
+/* Command: gethits
+ * Command to get all info about the hits of an existing picture. Can be invoked by both users and admin.
+ * However, users can get details only for the pictures they own or their group is responsible for.
+ * Admin can access all hits. 
+ * @ username		The username of the current user
+ * @ sessionkey		The sessionkey for the current session of this user
+ * @ pictureid		The id of the picture whose hits are required
+ * @ albumpassword	(optional) Password required for a non-owner to access the album
+ */
 case 'gethits':
    $pictureid = $CF->getvariable("pictureid");
    $CF->printMessage("success");
@@ -1423,5 +1456,5 @@ default:
    $CF->printMessage("query_not_implemented");   
 }
 
-$CF->safeexit();
+$CF->safeexit(false);
 ?>
