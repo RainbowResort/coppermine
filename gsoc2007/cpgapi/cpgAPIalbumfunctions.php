@@ -382,14 +382,14 @@ class albumfunctions {
          $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}=" . $CAT_DATA['cid'] . " ORDER BY {$DBS->albumfield['pos']}");
 	     for($i=0; $i < mysql_numrows($results); $i++) {
             $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
-	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view", ""))
    	           $this->showSingleAlbumData($this->getAlbumData($albumid));
 	     }
       }  else {
          $results = $DBS->sql_query("SELECT {$DBS->albumfield['aid']} FROM {$DBS->albumtable} WHERE {$DBS->albumfield['category']}>" . FIRST_USER_CAT . " ORDER BY {$DBS->albumfield['pos']}");
 	     for($i=0; $i < mysql_numrows($results); $i++) {
             $albumid = mysql_result($results, $i, $DBS->albumfield['aid']);
-	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view"))
+	        if ($this->authorizeuseralbum($CURRENT_USER, $albumid, "view", ""))
    	           $this->showSingleAlbumData($this->getAlbumData($albumid));
 	     }      	
       }
