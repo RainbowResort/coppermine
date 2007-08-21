@@ -2335,4 +2335,45 @@ $lang_xp_publish_php = array(
   'link' => 'this link',
 );
 }
+
+$lang_watermarker_php = array(
+	'title'		=> 'Coppermine Watermarker',
+	'upload'	=> 'Upload',
+	'preview'	=>	'Preview',
+	'save'		=>	'Save',
+	'text'		=>	'Text',
+	'image'		=>	'Image',
+	'upload_image'	=>	'Upload Image',
+	'upload_font'	=>	'Upload Font',
+);
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

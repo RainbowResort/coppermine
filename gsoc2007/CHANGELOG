@@ -25,6 +25,9 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+2007-08-20 [A] Added languages to the uploader & configurator {SaWey}
+2007-08-20 [O] Changed some parts in the configurator so it would work more nicely {SaWey}
+2007-08-20 [D] Added some documenting in the configurator and uploader {SaWey}
 2007-08-18 [B] Fixed another minor problem with uploading {SaWey}
 2007-08-15 [B] Fixed problems when creating a lot of new categories {SaWey}
 2007-08-14 [B] Fixed some uploading problems {SaWey}
