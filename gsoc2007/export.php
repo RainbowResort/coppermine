@@ -16,92 +16,27 @@
   $LastChangedBy:  $
   $Date:  $
 **********************************************/
-
 define('IN_COPPERMINE',true);
+require('include/init.inc.php');
 
-require("include/init.inc.php");
-
-if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
-
-if(isset($_POST['album']) && isset($_POST['directory'])) 
+if(isset($_POST['exportSubmit']))
 {
-  mkdir($_POST['directory']);
-  pageheader($section, $meta_keywords);
-  starttable('100%', 'ID',2);
-  echo "<tr><td>ID</td><td>Path</td></tr>";
-  $pic_array = array();
-  $pictures = cpg_db_query("SELECT pid,title,filename,filepath FROM {$CONFIG['TABLE_PICTURES']} WHERE `aid` = {$_POST['album']}");
-  while($picture = mysql_fetch_array($pictures))
-  {
-    echo "<tr><td><span id='id_{$picture['pid']}'>{$picture['pid']}</span></td><td><span id='path_{$picture['pid']}'>{$picture['filepath']}{$picture['filename']}</span></td></tr>\n";
-    $pic_array[] = $picture;
-  }
-  
-  $js_pictures = phpArrayToJS($pic_array,'pictures');
-  
-  ?>
-    
-    <script type="text/javascript">
-      var <?php echo $js_pictures ?>;
-      processPicture(0);
-      
-      function processPicture(offset)
-      {
-        if(offset >= pictures.length) {return 0;};
-        	// Create an xmlHttp Object (Tries Activex object then xmlHttp request)
-          try {
-            ajxobj = new ActiveXObject('Msxml2.XMLHTTP');
-          } catch (e) {
-            try {
-              ajxobj = new ActiveXObject('Microsoft.XMLHTTP');
-                } catch (E) {
-                 ajxobj = false;
-              }
-          }
-            if (!ajxobj && typeof XMLHttpRequest!='undefined') {
-              ajxobj = new XMLHttpRequest(); //If we were able to get a working active x object, start an XMLHttpRequest
-            } 
-            ajxobj.onreadystatechange=function() {	//Handle successful xmlHttp transfer
-              if(ajxobj.readyState==4) {
-                document.getElementById('path_'+pictures[offset]['pid']).style.textDecoration = 'line-through';
-                document.getElementById('id_'+pictures[offset]['pid']).style.textDecoration = 'line-through';
-                processPicture(offset+1);
-              }
-            };
-            
-            // Generate and do xmlHttp call
-          ajxobj.open('GET',"<?php echo $_SERVER[PHP_SELF]?>?dir=<?php echo $_POST[directory]?>&id=" + pictures[offset]['pid'], true);
-          ajxobj.send(null);
-      }
-
-
-
-    </script>
-    
-  <?
-  
-  endtable();
+  ($_POST['exportType'] == 'html') ? initHTMLExport($_POST['album'],$_POST['directory']) : initPhotoCopy($_POST['album'],$_POST['directory']);
+} else if (isset($_GET['album']) && isset($_GET['path']) && isset($_GET['page'])) {
+  exportThumbnailPage();
 } else if (isset($_GET['id']) && isset($_GET['dir'])) { 
-  $result = cpg_db_query("SELECT filename,filepath,title FROM {$CONFIG['TABLE_PICTURES']} WHERE `pid` = '{$_GET['id']}' LIMIT 1");
-  $picture = mysql_fetch_array($result);
-
-  $safename  = preg_replace('[\s]','_',$picture['title']);
-  $safename  = preg_replace('[\W]','',$safename);
-  
-  $extension = preg_replace('[^\.]','',$picture['filename']); // Extract file extension
-  $filename  = $safename . $extension;
-  
-  copy('albums/'.$picture['filepath'].$picture['filename'],$_GET[dir].'/'.$filename);
+  copyPhoto($_GET['id'],$_GET['dir']);
 } else {
   pageheader($section, $meta_keywords);
   starttable('60%', 'Chose an Album');
   ?>
-    <tr><td><p>This is very experimental/early functionality demo.  Do not use unless you would just like to see how it works.  Do not run on a large album, throttling will be added soon.  At the moment all this does is take the directory name you give it and writes out the pictures in the album in that directory with filenames based on their titles.  Directory name can be a relative path to the root coppermine dir.</td></tr>
     <tr><td>&nbsp;</td></tr>
     <tr>
-    <td>
-    Select a Album:
     <form action='<?php echo $_SERVER['PHP_SELF']?>' method='POST'>
+    <td>
+    Export Type:<br/>
+    <input type='radio' name='exportType' value='html'>Formatted HTML</input> <input type='radio' name='exportType' value='img'>Images Only</input><br/><br/>
+    Select a Album:
     <select name='album' class='listbox'>
       <?php
         $albums = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_ALBUMS']} WHERE 1 ORDER BY `title`");
@@ -109,10 +44,10 @@ if(isset($_POST['album']) && isset($_POST['directory']))
           echo "<option value='$album[aid]'>$album[title]</option>";
         }
       ?>
-    </select><br/>
+    </select><br/><br/>
     Export Directory:<br/>
     <input type='text' value='export' name='directory'/><br/><br/>
-    <input type='submit' value='Submit'/>
+    <input type='submit' name='exportSubmit' value='Submit'/>
     </form>
     <br/><br/>
   <?php
@@ -180,3 +115,236 @@ function phpArrayToJS($array, $baseName) {
   
   return $return;
 }
+
+function initHTMLExport($album,$path)
+{
+  global $CONFIG;
+
+  $pictures = cpg_db_query("SELECT pid,title,filename,filepath FROM {$CONFIG['TABLE_PICTURES']} WHERE `aid` = '$album'");
+  $picture_r = array();
+  // Copy pictures to export directory
+  while($picture = mysql_fetch_array($pictures))
+  {
+    $picture_r[$picture['pid']] = $picture['filepath'].$picture['filename'];
+    if(!is_dir("$path/albums/{$picture['filepath']}")) {
+      recursive_mkdir("$path/albums/{$picture['filepath']}");
+    }
+    copy("albums/{$picture['filepath']}{$picture['filename']}","$path/albums/{$picture['filepath']}{$picture['filename']}");
+    copy("albums/{$picture['filepath']}thumb_{$picture['filename']}","$path/albums/{$picture['filepath']}thumb_{$picture['filename']}");
+  }
+
+  $pages = ceil(count($picture_r)/($CONFIG['thumbrows']*$CONFIG['thumbcols'])); // Calculate number of thumnail pages necessary 
+  pageheader($section, $meta_keywords);
+
+  echo "<p align=center>Processing...</p>";
+  echo<<<EOT
+    
+    <script type="text/javascript">
+      var album = "{$album}";
+      var path = "{$path}";
+      var pages = "{$pages}";
+      getPage(1);
+      function getPage(page)
+      {
+        if(page<=pages) {
+            // Create an xmlHttp Object (Tries Activex object then xmlHttp request)
+            try {
+              ajxobj = new ActiveXObject('Msxml2.XMLHTTP');
+            } catch (e) {
+              try {
+                ajxobj = new ActiveXObject('Microsoft.XMLHTTP');
+                  } catch (E) {
+                   ajxobj = false;
+                }
+            }
+              if (!ajxobj && typeof XMLHttpRequest!='undefined') {
+                ajxobj = new XMLHttpRequest(); //If we were able to get a working active x object, start an XMLHttpRequest
+              } 
+              ajxobj.onreadystatechange=function() {	//Handle successful xmlHttp transfer
+                if(ajxobj.readyState==4) {
+                  getPage(page+1);
+                }
+              };
+              
+              // Generate and do xmlHttp call
+            ajxobj.open('GET',"{$_SERVER['PHP_SELF']}?album="+album+"&path="+path+"&page="+page, true);
+            ajxobj.send(null);
+        } else {
+          window.location = path;
+        }
+      }
+
+    </script>
+EOT;
+}
+
+function exportThumbnailPage()
+{
+    global $CONFIG;
+    $album = $_GET['album'];
+    $page = $_GET['page'];
+    $path = $_GET['path'];
+       
+    $filename = "thumbnails.php";
+    include $filename;
+    $contents = ob_get_contents();
+    ob_end_clean();
+
+    $pictures = cpg_db_query("SELECT pid,title,filename,filepath FROM {$CONFIG['TABLE_PICTURES']} WHERE `aid` = '$album'");
+    $picture_r = array();
+    while($picture = mysql_fetch_array($pictures))
+    {
+      $picture_r[$picture['pid']] = $picture['filepath'].$picture['filename'];
+    }
+  
+    // Create a DOM Object to parse the html (Removing links to dynamic content/functions that require php)
+    $doc = new DomDocument();
+    $doc->loadHtml($contents);
+    $divs = $doc->getElementsByTagName('div');
+    foreach($divs as $div)
+    {
+      if($div->getAttribute('id') == 'MENUS' || $div->getAttribute('class') == 'admin_menu_wrapper') {
+        $div->setAttribute('style','display:none');
+      }
+    }
+    $tds = $doc->getElementsByTagName('td');
+    foreach($tds as $td)
+    {
+      if($td->getAttribute('class') == 'sortorder_options') {
+        $td->setAttribute('style','display:none');
+      }
+    }
+    
+    $contents = $doc->saveHTML();
+
+    foreach($picture_r as $id => $filename)
+    {
+      $contents = preg_replace("/displayimage.php\?album=$album&amp;pid=$id/","albums/$filename",$contents);    
+    }
+    $contents = preg_replace("/thumbnails.php\?album=2&amp;page=([\d]+)/",'thumbnails_$1.html',$contents);
+
+    // Find out the theme currently used and copy over necessary files to replicate this
+    $result = cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE `name` = 'theme'");
+    $theme  = mysql_fetch_array($result);
+
+    recursive_copy("themes/{$theme['value']}","$path/themes/{$theme['value']}");
+
+    file_put_contents("$path/thumbnails_$page.html",$contents);
+    if($page==1)
+      copy("$path/thumbnails_$page.html","$path/index.html");
+}
+
+function copyPhoto($id,$dir)
+{
+  global $CONFIG;
+  $result = cpg_db_query("SELECT filename,filepath,title FROM {$CONFIG['TABLE_PICTURES']} WHERE `pid` = '$id' LIMIT 1");
+  $picture = mysql_fetch_array($result);
+
+  $safename  = preg_replace('[\s]','_',$picture['title']);
+  $safename  = preg_replace('[\W]','',$safename);
+  
+  $extension = preg_replace('[^\.]','',$picture['filename']); // Extract file extension
+  $filename  = $safename . $extension;
+  
+  copy('albums/'.$picture['filepath'].$picture['filename'],$dir.'/'.$filename);
+}
+
+function initPhotoCopy($album,$directory)
+{
+  global $CONFIG;
+  mkdir($directory);
+  pageheader($section, $meta_keywords);
+  starttable('100%', 'ID',2);
+  echo "<tr><td>ID</td><td>Path</td></tr>";
+  $pic_array = array();
+  $pictures = cpg_db_query("SELECT pid,title,filename,filepath FROM {$CONFIG['TABLE_PICTURES']} WHERE `aid` = '$album'");
+  while($picture = mysql_fetch_array($pictures))
+  {
+    echo "<tr><td><span id='id_{$picture['pid']}'>{$picture['pid']}</span></td><td><span id='path_{$picture['pid']}'>{$picture['filepath']}{$picture['filename']}</span></td></tr>\n";
+    $pic_array[] = $picture;
+  }
+  
+  $js_pictures = phpArrayToJS($pic_array,'pictures');
+  
+  ?>
+    
+    <script type="text/javascript">
+      var <?php echo $js_pictures ?>;
+      processPicture(0);
+      
+      function processPicture(offset)
+      {
+        if(offset >= pictures.length) {return 0;};
+        	// Create an xmlHttp Object (Tries Activex object then xmlHttp request)
+          try {
+            ajxobj = new ActiveXObject('Msxml2.XMLHTTP');
+          } catch (e) {
+            try {
+              ajxobj = new ActiveXObject('Microsoft.XMLHTTP');
+                } catch (E) {
+                 ajxobj = false;
+              }
+          }
+            if (!ajxobj && typeof XMLHttpRequest!='undefined') {
+              ajxobj = new XMLHttpRequest(); //If we were able to get a working active x object, start an XMLHttpRequest
+            } 
+            ajxobj.onreadystatechange=function() {	//Handle successful xmlHttp transfer
+              if(ajxobj.readyState==4) {
+                document.getElementById('path_'+pictures[offset]['pid']).style.textDecoration = 'line-through';
+                document.getElementById('id_'+pictures[offset]['pid']).style.textDecoration = 'line-through';
+                processPicture(offset+1);
+              }
+            };
+            
+            // Generate and do xmlHttp call
+          ajxobj.open('GET',"<?php echo $_SERVER[PHP_SELF]?>?dir=<?php echo $_POST[directory]?>&id=" + pictures[offset]['pid'], true);
+          ajxobj.send(null);
+      }
+
+
+
+    </script>
+    
+  <?
+  
+  endtable();
+}
+// Does a recursive copy on a directory
+function recursive_copy($src,$dest)
+{
+	// Base case, is file so just copy
+	if (is_file($src)) {
+		$c = copy($src, $dest);
+		return $c;
+	}
+
+
+	if(!is_dir($dest)) {
+		recursive_mkdir($dest);
+	}
+	
+		$dir = dir($src);
+		while (false !== $entry = $dir->read()) {		
+		if($entry== '.' || $entry == '..' || preg_match('/^\./',$entry)) // Skips the index '.' and '..' along with hidden files
+			continue;
+		if($dest !== "$src/$entry") {
+			recursive_copy("$src/$entry","$dest/$entry");
+		}
+	}
+}
+
+// Recursively makes directories as necessary to create a given path:
+function recursive_mkdir( $folder )
+{
+$folder = explode( DIRECTORY_SEPARATOR , $folder );
+$mkfolder = '';
+for(  $i=0 ; isset( $folder[$i] ) ; $i++ )
+    {
+    $mkfolder .= $folder[$i];
+    if( !is_dir( $mkfolder ) )
+        mkdir( "$mkfolder" ,  0777);
+    $mkfolder .= DIRECTORY_SEPARATOR;
+    }
+}
+?>
+
