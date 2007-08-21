@@ -249,9 +249,9 @@ fclose($fh);
  * Install is OK. Now include the required files and do initialization
  */
 $fh = @fopen($DFLT['cfg_d'] . "/" . $DFLT['cfg_f'], 'r') or $API_MODE = 1;
-fclose($fh);
 
 if($API_MODE == 0) {
+  fclose($fh);
   require($DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
 } else {
   require("../" . $DFLT['cfg_d'] . "/" . $DFLT['cfg_f']);
