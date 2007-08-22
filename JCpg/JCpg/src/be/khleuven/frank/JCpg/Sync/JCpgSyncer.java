@@ -36,6 +36,7 @@ import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
@@ -151,6 +152,8 @@ public class JCpgSyncer {
 	public void sync() {
 		
 		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
+		JCpgProgressManager progressManager = new JCpgProgressManager(getUi(), 100, "data/syncing.jpg", true, false);
+		progressManager.changeProgressbarValue(10);
 		
 		// DELETE
 		for(int i=0; i<getUi().getDeleteParameters().size(); i++){
@@ -208,7 +211,7 @@ public class JCpgSyncer {
 								
 								downloadComponents(element, getUi().getGallery().getCategory("User Galleries", 1), phpCommunicator);
 								
-							}else{
+							}else{ // process root components
 								
 								downloadComponents(root, ((JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject()), phpCommunicator);
 								
@@ -234,6 +237,8 @@ public class JCpgSyncer {
 		
 		// CLIENT -> SERVER
 		uploadComponents(getUi().getGallery(), phpCommunicator);
+		
+		progressManager.changeProgressbarValue(100);
 		
 		
 		// save new information
