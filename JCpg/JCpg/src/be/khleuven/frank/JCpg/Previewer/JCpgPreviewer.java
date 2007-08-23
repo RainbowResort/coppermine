@@ -271,7 +271,7 @@ public class JCpgPreviewer extends JDialog{
 		
 		final ArrayList<JCpgPicture> pictures = getAlbum().getPictures();
 
-		// second thread: do the waiting and recalculate the currentIndex variable and load that picture
+		// Do the waiting and recalculate the currentIndex variable and load that picture
 		// TODO: overhead still remains: always loading the pictures will take a lot of RAM
 		Thread t1 = new Thread(new Runnable() {
 			

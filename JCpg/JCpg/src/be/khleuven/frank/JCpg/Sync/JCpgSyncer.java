@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -140,6 +141,7 @@ public class JCpgSyncer {
 	
 	
 	
+	
 
 													// *************************************
 													// 				MUTATORS & OTHERS 	   *
@@ -151,103 +153,140 @@ public class JCpgSyncer {
 	 */
 	public void sync() {
 		
-		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
-		JCpgProgressManager progressManager = new JCpgProgressManager(getUi(), 100, "data/syncing.jpg", true, false);
-		progressManager.changeProgressbarValue(10);
+		// make them final so the are accessible from within the thread
+		final JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUi().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
 		
-		// DELETE
-		for(int i=0; i<getUi().getDeleteParameters().size(); i++){
+		final JCpgProgressManager progressManager = new JCpgProgressManager(getUi(), 100, "data/syncing.jpg", true, false);
+		
+		// we use this thread to do the syncing process and to make sure the progress window is refreshed by Java
+		Thread t1 = new Thread(new Runnable() {
 			
-			if(phpCommunicator.performPhpRequest(getUi().getDeleteParameters().get(i)) == 0){ // result ok
+			public void run() {
 				
-				System.out.println("JCpgSyncer: delete parameter " + i + " succesfully executed");
+					progressManager.changeProgressbarValue(10); // 10% done
+					progressManager.changeFinishedText("Delete parameters");
 				
-			}else{
-				
-				System.out.println("JCpgSyncer: delete parameter " + i + " failed to execute");
-				
-			}
-			
-		}
-		
-		getUi().getDeleteParameters().clear(); // clear delete parameters
-		
-		File delete = new File("config/delete.dat"); // clear saved delete parameters
-		if(delete.exists()) delete.delete();
-		
-		
-		
-		
-		// SERVER -> CLIENT
-		// Categories
-		
-		//String parameters = "showmycategories&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); isn't showing anything at the moment
-		String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); // get components in "user galleries" category
-		
-		if(phpCommunicator.performPhpRequest(parameters) == 0){ // result ok
-			
-			SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
-			
-			File file = new File("svr.xml");
-			
-			if(file.exists()){
-			
-				try {
-					
-					Document doc = builder.build("svr.xml");
-					
-					Element root = doc.getRootElement();
-					
-					List content = root.getChildren();
-					ListIterator it = content.listIterator();
-					
-					while(it.hasNext()){
+					try {
 						
-						Element element = (Element)it.next();
-						
-						if(element.getName().equals("categorydata")){
+						// DELETE
+						for(int i=0; i<getUi().getDeleteParameters().size(); i++){
 							
-							if(element.getAttributeValue("name").equals("User galleries")){ // search for the "User Galleries" node and use this object as the parent to add all fetched components
+							if(phpCommunicator.performPhpRequest(getUi().getDeleteParameters().get(i)) == 0){ // result ok
 								
-								downloadComponents(element, getUi().getGallery().getCategory("User Galleries", 1), phpCommunicator);
+								System.out.println("JCpgSyncer: delete parameter " + i + " succesfully executed");
 								
-							}else{ // process root components
+							}else{
 								
-								downloadComponents(root, ((JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject()), phpCommunicator);
+								System.out.println("JCpgSyncer: delete parameter " + i + " failed to execute");
 								
 							}
 							
 						}
 						
+						getUi().getDeleteParameters().clear(); // clear delete parameters
+						
+						File delete = new File("config/delete.dat"); // clear saved delete parameters
+						if(delete.exists()) delete.delete();
+						
+						
+						progressManager.changeProgressbarValue(30); // 30% done
+						progressManager.changeFinishedText("Downloading");
+						
+						
+						// SERVER -> CLIENT
+						// Categories
+						String parameters = "showcategories&setoutputtype=attr&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey(); // get components in "user galleries" category
+						
+						if(phpCommunicator.performPhpRequest(parameters) == 0){ // result ok
+							
+							SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+							
+							File file = new File("svr.xml");
+							
+							if(file.exists()){
+							
+								try {
+									
+									Document doc = builder.build("svr.xml");
+									
+									Element root = doc.getRootElement();
+									
+									List content = root.getChildren();
+									ListIterator it = content.listIterator();
+									
+									while(it.hasNext()){
+										
+										Element element = (Element)it.next();
+										
+										if(element.getName().equals("categorydata")){
+											
+											if(element.getAttributeValue("name").equals("User galleries")){ // search for the "User Galleries" node and use this object as the parent to add all fetched components
+												
+												downloadComponents(element, getUi().getGallery().getCategory("User Galleries", 1), phpCommunicator);
+												
+											}else{ // process root components
+												
+												downloadComponents(root, ((JCpgGallery)((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getUserObject()), phpCommunicator);
+												
+											}
+											
+										}
+										
+									}
+									
+								} catch (JDOMException e) {
+									
+									System.out.println("JCpgSyncer: Couldn't extract categories from xml root tag");
+									
+								}
+								
+							}	
+								
+						}
+						
+						
+						
+						
+						progressManager.changeProgressbarValue(60); // 60% done
+						progressManager.changeFinishedText("Uploading");
+						
+						
+						// CLIENT -> SERVER
+						uploadComponents(getUi().getGallery(), phpCommunicator);
+						
+						
+						
+					
+						progressManager.changeProgressbarValue(90); // 90% done
+						progressManager.changeFinishedText("Saving");
+						
+						
+						
+						// save new information
+						new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+						
+						// refresh JTree
+						SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
+						
+						
+						
+						
+						progressManager.changeProgressbarValue(100); // 100% done
+						
+						
+					
+					} catch (Exception e) {
+						
+						System.out.println("JCpgSyncer: problem with the syncing thread");
+						
 					}
-					
-				} catch (JDOMException e) {
-					
-					System.out.println("JCpgSyncer: Couldn't extract categories from xml root tag");
 					
 				}
 				
-			}	
-				
-		}
-		
-		
-		
-		
-		
-		// CLIENT -> SERVER
-		uploadComponents(getUi().getGallery(), phpCommunicator);
-		
-		progressManager.changeProgressbarValue(100);
-		
-		
-		// save new information
-		new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
-		
-		// refresh JTree
-		SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
-		
+		});
 
+		// start the thread
+		t1.start();
 	}
 	/**
 	 * 
@@ -823,7 +862,6 @@ public class JCpgSyncer {
 		for(int i=0; i<b.length; i++){
 			
 			result = (byte) (result + b[i]);
-			System.out.println(result);
 			
 		}
 		

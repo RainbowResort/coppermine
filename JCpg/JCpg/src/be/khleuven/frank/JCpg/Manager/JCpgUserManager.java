@@ -117,7 +117,7 @@ public class JCpgUserManager extends JDialog {
 		addActionListeners();
 		
 		readUserconfig();
-		loadDeleteParameters();
+		new JCpgGallerySaver(jCpgInterface.getGallery()).loadDeleteParameters(jCpgInterface);
 		
 	}
 	
@@ -569,42 +569,6 @@ public class JCpgUserManager extends JDialog {
 			System.out.println("JCpgUserManager: couldn't save user configuration");
 			
 		}
-		
-	}
-	/**
-	 * 
-	 * Load the currently saved delete parameters
-	 *
-	 */
-	private void loadDeleteParameters(){
-		
-		File file = new File("config/delete.dat");
-	    FileInputStream fis = null;
-	    BufferedInputStream bis = null;
-	    DataInputStream dis = null;
-
-	    try {
-	    	
-	      fis = new FileInputStream(file);
-	      bis = new BufferedInputStream(fis);
-	      dis = new DataInputStream(bis);
-
-	      while (dis.available() != 0) {
-	    	  
-	    	getJCpgInterface().addDeleteParameter(dis.readLine());
-	        
-	      }
-
-	      // dispose all the resources after using them.
-	      fis.close();
-	      bis.close();
-	      dis.close();
-
-	    } catch (Exception e) {
-	    	
-	      System.out.println("JCpgUserManager: couldn't load delete parameters");
-	      
-	    }
 		
 	}
 

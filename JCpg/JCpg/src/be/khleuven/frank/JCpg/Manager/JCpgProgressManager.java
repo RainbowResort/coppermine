@@ -38,6 +38,19 @@ import be.khleuven.frank.JCpg.Interfaces.JCpgProgressManagerInterface;
  */
 public class JCpgProgressManager extends JDialog implements JCpgProgressManagerInterface{
 	
+	
+	
+	
+	
+	
+	
+												
+	
+	
+	
+												//*************************************
+												//				VARIABLES			  *
+												//*************************************
 	private static final long serialVersionUID = 1L;
 	
 	private Window parent;
@@ -56,6 +69,16 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	private Dimension screensize;
 	
 	
+	
+	
+	
+	
+	
+	
+												
+												//*************************************
+												//				CONSTRUCTOR			  *
+												//*************************************
 	/**
 	 * 
 	 * Create new JCpgUpdater object
@@ -89,6 +112,22 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+												
+	
+	
+												//*************************************
+												//				SETTERS				  *
+												//*************************************
 	/**
 	 * 
 	 * Set the parent reference
@@ -101,21 +140,49 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		this.parent = parent;
 		
 	}
+	/**
+	 * 
+	 * Set the maximum value of the progress bar
+	 * 
+	 * @param maximum
+	 * 		the maximum value of the progress bar
+	 */
 	private void setMaximum(int maximum){
 		
 		this.maximumprogress = maximum;
 		
 	}
+	/**
+	 * 
+	 * Set the path to the logo to use
+	 * 
+	 * @param logopath
+	 * 		the path to the logo to use
+	 */
 	private void setLogopath(String logopath){
 		
 		this.logopath = logopath;
 		
 	}
+	/**
+	 * 
+	 * Set if the close button should be showed or not
+	 * 
+	 * @param showCloseButton
+	 * 		show or not show the close button
+	 */
 	private void setShowCloseButton(boolean showCloseButton){
 		
 		this.showCloseButton = showCloseButton;
 		
 	}
+	/**
+	 * 
+	 * Set if the progress manager should auto close on completion or not 
+	 * 
+	 * @param autoClose
+	 * 		the progress manager should auto close on completion or not
+	 */
 	private void setAutoClose(boolean autoClose){
 		
 		this.autoClose = autoClose;
@@ -128,6 +195,14 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	
 	
+	
+	
+	
+	
+												
+												//*************************************
+												//				GETTERS				  *
+												//*************************************
 	/**
 	 * 
 	 * Get the parent reference
@@ -140,21 +215,49 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		return this.parent;
 		
 	}
+	/**
+	 * 
+	 * Get the maximum progress bar value
+	 * 
+	 * @return
+	 * 		the maximum progress bar value
+	 */
 	public int getMaximum(){
 		
 		return this.maximumprogress;
 		
 	}
+	/**
+	 * 
+	 * Get the path to the logo
+	 * 
+	 * @return
+	 * 		the path to the logo
+	 */
 	public String getLogopath(){
 		
 		return this.logopath;
 		
 	}
+	/**
+	 * 
+	 * Check if the close button will be shown or not
+	 * 
+	 * @return
+	 * 		true if the close button will be shown, otherwhise false
+	 */
 	public boolean getShowCloseButton(){
 		
 		return this.showCloseButton;
 		
 	}
+	/**
+	 * 
+	 * Check if the progress manager will be autoclosed after completion or not
+	 * 
+	 * @return
+	 * 		true of the progress manager will be autoclosed, else false
+	 */
 	public boolean getAutoClose(){
 		
 		return this.autoClose;
@@ -177,8 +280,13 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	
 	
 	
+												
 	
 	
+	
+												//*************************************
+												//				SWING				  *
+												//*************************************
 	/**
 	 * 
 	 * Init swing components
@@ -217,7 +325,7 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		logo.setBounds(0, 0, 500, 50);
 		title.setBounds(30, 70, 100, 20);
 		progress.setBounds(30, 100, 300, 20);
-		finished.setBounds(340, 100, 100, 20);
+		finished.setBounds(340, 100, 150, 20);
 		close.setBounds(10, 150, 100, 30);
 	
 	}
@@ -238,20 +346,61 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 	}
 	
 	
-	public void changeProgressMaximum(int maximum){
-		
-		progress.setMaximum(maximum);
-		
-	}
 	
 	
 	
+	
+	
+	
+	
+	
+	
+
+												//*************************************
+												//				EVENTS				  *
+												//*************************************
+	/**
+	 * 
+	 * Perform the right actions when the close button
+	 * 
+	 */
 	private void closeActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		getParent().setEnabled(true);
 		this.dispose();
     	
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+												//*************************************
+												//				MUTATORS & OTHERS	  *
+												//*************************************
+	/**
+	 * 
+	 * Change the maximum value of the progress bar
+	 * 
+	 * @param maximum
+	 * 		the new maximum value of the progress bar
+	 */
+	public void changeProgressMaximum(int maximum){
+		
+		progress.setMaximum(maximum);
+		
+	}
+	/**
+	 * 
+	 * Change the current value of the progress bar
+	 * 
+	 * @param value
+	 * 		the new value of the progress bar
+	 */
 	public void changeProgressbarValue(int value){
 		
 		progress.setValue(value);
@@ -268,9 +417,29 @@ public class JCpgProgressManager extends JDialog implements JCpgProgressManagerI
 		}
 		
 	}
-
-
-
+	/**
+	 * 
+	 * Change the text of the finished label
+	 * 
+	 * @param text
+	 * 		the new text for the finished label
+	 */
+	public void changeFinishedText(String text){
+		
+		finished.setText(text);
+		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * Interface implementation
+	 * 
+	 */
 	public boolean doAction() {
 		
 		return false;

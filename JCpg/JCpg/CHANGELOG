@@ -1,3 +1,5 @@
+Added thread to JCpgAddPictureManager and JCpgSyncer to correctly display the JCpgProgressManager
+Moved the save and load delete parameters code from JCpgUI to JCpgGallerySaver
 Fixed bug in sync code where components added to 'root' where not correctly fetched from the server
 Fixed bug in sync code where albums where not correctly fetched from the server
 Added some constraints so that the "User Galleries" category can not be edited or deleted

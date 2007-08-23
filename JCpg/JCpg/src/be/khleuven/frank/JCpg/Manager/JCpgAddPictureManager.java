@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
@@ -196,87 +197,100 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 			useralbumdir.mkdirs();
 		
 		// add pictures to album and transfer them locally
-		JCpgAlbum album = (JCpgAlbum)getNode().getUserObject();	
+		final JCpgAlbum album = (JCpgAlbum)getNode().getUserObject();	
 
-		File[] selectedFiles = pictureChooser.getSelectedFiles();
+		final File[] selectedFiles = pictureChooser.getSelectedFiles();
 
 		if (selectedFiles.length > 0) { // only proceed if user selected file(s)
 
-			JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
+			final JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
+			
+			Thread t1 = new Thread(new Runnable() {
+				
+				public void run() {
+					
+					for (int i = 0; i < selectedFiles.length; i++) {
+						
+						if(selectedFiles[i].isFile()){
+						
+							// make new picture
+							ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
+							File source = new File(selectedFiles[i].getAbsolutePath());
+							String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
+							File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
+							JCpgPictureTransferer transferer = new JCpgPictureTransferer();
+							
+							String newFilename = selectedFiles[i].getName().substring(0, selectedFiles[i].getName().length()-4);
+							String extension = selectedFiles[i].getName().substring(selectedFiles[i].getName().length()-3, selectedFiles[i].getName().length());
+							int nr = 0;
+							
+							if(destination.exists()){
+								
+								while(destination.exists()){
+									
+									nr++;
+									newFilename = newFilename + nr;
+									destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + newFilename + "." + extension);
+									
+								}
+								
+							}
+							
+							long filesize = 0;
+							
+							// only copy if the picture is not too big in resolution and in bytes
+							if(image.getIconWidth() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && image.getIconHeight() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && source.length() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_size")) * 1000){
+							
+								try {
+				
+									filesize = transferer.copyFile(source, destination); // copy picture locally
+									JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension);				
+									thumb.makeThumb();
+				
+								} catch (Exception e) {
+									
+									System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
+				
+								}
+				
+								Date date = new Date(); // used to get number of seconds since 1970 for ctime
+				
+								JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension, filesize, filesize, image.getIconWidth(), image.getIconHeight(), 0, date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
+				
+								picture.addUi(getJCpgUIReference());
+				
+								album.addPicture(picture);
+								DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
+								getNode().add(newNode);
+				
+								getGallerySaver().saveGallery(); // save current gallery state
+				
+								SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for java bug 4173369
+								
+							}
+							
+							progress.changeProgressbarValue(i);
+							//progress.repaint();
+							
+						}
 
-			for (int i = 0; i < selectedFiles.length; i++) {
-				
-				if(selectedFiles[i].isFile()){
-				
-					// make new picture
-					ImageIcon image = new ImageIcon(selectedFiles[i].getAbsolutePath()); // for width and height
-					File source = new File(selectedFiles[i].getAbsolutePath());
-					String userdir = 10000 + getJCpgUIReference().getCpgConfig().getUserConfig().getId() + "/";
-					File destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + selectedFiles[i].getName());
-					JCpgPictureTransferer transferer = new JCpgPictureTransferer();
-					
-					String newFilename = selectedFiles[i].getName().substring(0, selectedFiles[i].getName().length()-4);
-					String extension = selectedFiles[i].getName().substring(selectedFiles[i].getName().length()-3, selectedFiles[i].getName().length());
-					int nr = 0;
-					
-					if(destination.exists()){
-						
-						while(destination.exists()){
-							
-							nr++;
-							newFilename = newFilename + nr;
-							destination = new File(getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir + newFilename + "." + extension);
-							
-						}
-						
 					}
+
+					progress.dispose();
 					
-					long filesize = 0;
-					
-					// only copy if the picture is not too big in resolution and in bytes
-					if(image.getIconWidth() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && image.getIconHeight() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_width_height")) && source.length() < new Integer(getJCpgUIReference().getCpgConfig().getSiteConfig().getValueFor("max_upl_size")) * 1000){
-					
-						try {
-		
-							filesize = transferer.copyFile(source, destination); // copy picture locally
-							JCpgPictureResizer thumb = new JCpgPictureResizer(getJCpgUIReference(), getCpgConfig().getValueFor("fullpath") + getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension);				
-							thumb.makeThumb();
-		
-						} catch (Exception e) {
-							
-							System.out.println("JCpgAddPictureManager: couldn't copy picture to local Cpg");
-		
-						}
-		
-						Date date = new Date(); // used to get number of seconds since 1970 for ctime
-		
-						JCpgPicture picture = new JCpgPicture(-1, album.getId(), getCpgConfig().getValueFor("userpics") + userdir, newFilename + "." + extension, filesize, filesize, image.getIconWidth(), image.getIconHeight(), 0, date.getTime(), 0,"", 0, 0, getTitleField().getText(),getDescriptionField().getText(), "", true, 0, 0, 0);
-		
-						picture.addUi(super.getJCpgUIReference());
-		
-						album.addPicture(picture);
-						DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(picture);
-						getNode().add(newNode);
-		
-						getGallerySaver().saveGallery(); // save current gallery state
-		
-						SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for java bug 4173369
-						
-					}
-					
-					progress.changeProgressbarValue(i);
-					progress.repaint();
+					getJCpgUIReference().setEnabled(true);
+					dispose();
 					
 				}
+				
+			});
 
-			}
-
-			progress.dispose();
+			// start the thread
+			t1.start();
 
 		}
 
-		getJCpgUIReference().setEnabled(true);
-		this.dispose();
+		
 		
 	}
 		

@@ -278,7 +278,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		
 		root = new DefaultMutableTreeNode(gallery);
 		
-		// check if user galleries category must be added
+		// check if user galleries category must be added, this is only necesarry if gallery.xml does not exist
 		File galleryxml = new File("config/gallery.xml");
 		
 		if(!galleryxml.exists()){
@@ -712,7 +712,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	/**
 	 * 
 	 * When the user selects a different item in the picture list, perform the right actions: make a new button with the selected image in it and then add it to the explorer pane which has
-	 * just been cleaned. The explorer pane has a flow layout manager so the button will alsways be placed correctly.
+	 * just been cleaned. The explorer pane has a flow layout manager so the button will always be placed correctly.
 	 * 
 	 * If the user selects a photo and we are in mega explorer view, exit mega explorer view
 	 * 
@@ -784,7 +784,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			
 			JCpgCategory category = (JCpgCategory)object;
 			
-			if(category.getId() == 1){ // only albums can be added to user galleries category
+			if(category.getId() == 1){ // only albums can be added to "user galleries" category
 				
 				new JCpgAddAlbumManager(this, new JCpgImageUrlValidator("data/createalbum_logo.jpg").createImageIcon(), node);
 				
@@ -796,8 +796,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 				
 			}
 			
-			
-		
 		}else if(object.getClass().equals(JCpgAlbum.class)){ // add picture
 			
 			new JCpgAddPictureManager(this, getCpgConfig().getSiteConfig(), new JCpgImageUrlValidator("data/createpicture_logo.jpg").createImageIcon(), node);
@@ -892,42 +890,11 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 			}
 			
 			// save delete parameters for later loading
-			saveDeleteParameters();
+			new JCpgGallerySaver(getGallery()).saveDeleteParameters(this);
 			
 		//}
 		
-    }
-	/**
-	 * 
-	 * Save all delete parameters to a file so they can be loaded later on
-	 *
-	 */
-	private void saveDeleteParameters(){
-	
-		File delete = new File("config/delete.dat");
-		if(delete.exists()) delete.delete();
-		
-		try{
-			
-			FileWriter fstream = new FileWriter("config/delete.dat");
-			BufferedWriter out = new BufferedWriter(fstream);
-			
-			// write delete parameters to a file for later loading
-			for(int i=0; i<deleteparameters.size(); i++){
-
-				out.write(deleteparameters.get(i) + "\n");
-	
-			}
-			
-			out.close();
-		
-		}catch (Exception e){//Catch exception if any
-		      
-			System.err.println("Error: " + e.getMessage());
-			    
-		}	
-			
-	}	
+    }	
 	/**
 	 * 
 	 * Action when user clicks on 'edit' button. 

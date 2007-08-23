@@ -17,8 +17,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.Save;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -33,6 +38,7 @@ import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 
 
@@ -467,6 +473,73 @@ public class JCpgGallerySaver{
 			processCategories(ecategory, category);
 			
 		}
+		
+	}
+	/**
+	 * 
+	 * Save all delete parameters to a file so they can be loaded later on
+	 *
+	 */
+	public void saveDeleteParameters(JCpgUI ui){
+	
+		File delete = new File("config/delete.dat");
+		if(delete.exists()) delete.delete();
+		
+		try{
+			
+			FileWriter fstream = new FileWriter("config/delete.dat");
+			BufferedWriter out = new BufferedWriter(fstream);
+			
+			// write delete parameters to a file for later loading
+			for(int i=0; i<ui.getDeleteParameters().size(); i++){
+
+				out.write(ui.getDeleteParameters().get(i) + "\n");
+	
+			}
+			
+			out.close();
+		
+		}catch (Exception e){
+		      
+			System.err.println("JCpgGallerySaver: couldn't save delete parameters.");
+			    
+		}	
+			
+	}
+	/**
+	 * 
+	 * Load the currently saved delete parameters
+	 *
+	 */
+	public void loadDeleteParameters(JCpgUI ui){
+		
+		File file = new File("config/delete.dat");
+	    FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    DataInputStream dis = null;
+
+	    try {
+	    	
+	      fis = new FileInputStream(file);
+	      bis = new BufferedInputStream(fis);
+	      dis = new DataInputStream(bis);
+
+	      while (dis.available() != 0) {
+	    	  
+	    	ui.addDeleteParameter(dis.readLine());
+	        
+	      }
+
+	      // dispose all the resources after using them.
+	      fis.close();
+	      bis.close();
+	      dis.close();
+
+	    } catch (Exception e) {
+	    	
+	      System.out.println("JCpgGallerySaver: couldn't load delete parameters");
+	      
+	    }
 		
 	}
 
