@@ -277,6 +277,7 @@ public class JCpgSyncer {
 					
 					} catch (Exception e) {
 						
+						e.printStackTrace();
 						System.out.println("JCpgSyncer: problem with the syncing thread");
 						
 					}
