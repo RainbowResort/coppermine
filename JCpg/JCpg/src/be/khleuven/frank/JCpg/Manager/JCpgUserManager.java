@@ -431,6 +431,8 @@ public class JCpgUserManager extends JDialog {
 				
 				writeUserConfig();
 				
+				System.out.println("Fetched sessionkey: " + phpCommunicator.getXmlTagText("userdata", "sessionkey"));
+				
 				JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText(), phpCommunicator.getXmlTagText("userdata", "sessionkey")); // build user and site config, then put in global JCpg config
 				JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), true);
 				
