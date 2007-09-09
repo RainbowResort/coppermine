@@ -24,9 +24,9 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -87,7 +87,7 @@ import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
  * @author    Frank Cleynen
  * 
  */
-public class JCpgUI extends JFrame implements TreeSelectionListener{
+public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelListener{
 	
 	
 	
@@ -151,6 +151,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	
 	private ArrayList<String> deleteparameters = new ArrayList<String>(); // used to store all the delete parameters from deleted components
 	private ArrayList<JCpgAlbum> albumViewAlbums = new ArrayList<JCpgAlbum>(); // holds the current albums when in albumview
+	
+	private int albumscrollindex = 0; // holds the index of the current thumb to show when scrolling of album in albumview
 
 	
 	
@@ -1120,7 +1122,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 	    	
 	    	JCpgCategory category = (JCpgCategory)node.getUserObject();
 	    	
-	    	for(int i=0; i<category.getAlbums().size(); i++){
+	    	for(int i=0; i<category.getAlbums().size(); i++){ // build album view
 	    		
 	    		try {
 	    			
@@ -1557,5 +1559,52 @@ public class JCpgUI extends JFrame implements TreeSelectionListener{
 		return false;
 		
 	}
+
+
+
+
+
+
+
+
+
+
+	public void mouseWheelMoved(MouseWheelEvent m) {
+		
+		albumscrollindex++;
+		
+		int albumindex = getPictureList().locationToIndex(m.getPoint());
+		
+		JCpgAlbum album = albumViewAlbums.get(albumindex);
+		
+		if(albumscrollindex >= album.getPictures().size()){
+			
+			albumscrollindex = 0;
+			
+		}
+		
+		String path = getCpgConfig().getSiteConfig().getValueFor("fullpath") + album.getPictures().get(albumscrollindex).getFilePath() + "thumb_" + album.getPictures().get(albumscrollindex).getFileName();
+		
+		getPictureListModel().removeElementAt(albumindex);
+		getPictureListModel().add(albumindex, album.getPictures().get(albumscrollindex));
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

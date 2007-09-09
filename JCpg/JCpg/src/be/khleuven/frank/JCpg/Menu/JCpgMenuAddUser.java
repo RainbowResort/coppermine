@@ -136,7 +136,7 @@ public class JCpgMenuAddUser extends JDialog {
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 				
-		logo = new JLabel(new JCpgImageUrlValidator("data/menu_changeyoursiteconfig.jpg").createImageIcon(), JLabel.CENTER); // 1000x50
+		logo = new JLabel(new JCpgImageUrlValidator("data/menu_adduser.jpg").createImageIcon(), JLabel.CENTER); // 1000x50
 		
 		msg = new JLabel();
 		
