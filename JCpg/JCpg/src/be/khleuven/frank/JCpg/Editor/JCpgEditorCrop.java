@@ -270,7 +270,7 @@ public class JCpgEditorCrop extends JCpgEditor implements MouseMotionListener {
 			getPicture().changeHeight(rleft.height);
 			
 			// save this new information
-			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
+			new JCpgGallerySaver(getJCpgUI().getGallery(), getJCpgUI().getCpgConfig().getUserConfig().getId()).saveGallery();
 			
 			//getJCpgUI().getPictureList().remove(getListIndex());
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());

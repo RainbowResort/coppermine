@@ -280,18 +280,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		
 		root = new DefaultMutableTreeNode(gallery);
 		
-		// check if user galleries category must be added, this is only necesarry if gallery.xml does not exist
-		File galleryxml = new File("config/gallery.xml");
-		
-		if(!galleryxml.exists()){
-			
-			usergalleriesnode = new DefaultMutableTreeNode(usergalleries);
-			root.add(usergalleriesnode);
-			
-			getGallery().addCategory(usergalleries);
-			
-		}
-		
 		tree = new JTree(root);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		tree.addTreeSelectionListener(this);
@@ -699,7 +687,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		return this.albumViewAlbums;
 		
 	}
-	
+	public DefaultMutableTreeNode getRoot(){
+		
+		return this.root;
+		
+	}
+	public JCpgCategory getUserGalleries(){
+		
+		return this.usergalleries;
+		
+	}
 	
 	
 	
@@ -887,12 +884,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			    	
 			    }
 				
-				new JCpgGallerySaver(getGallery()).saveGallery(); // save gallery
+				new JCpgGallerySaver(getGallery(), getCpgConfig().getUserConfig().getId()).saveGallery(); // save gallery
 				
 			}
 			
 			// save delete parameters for later loading
-			new JCpgGallerySaver(getGallery()).saveDeleteParameters(this);
+			new JCpgGallerySaver(getGallery(), getCpgConfig().getUserConfig().getId()).saveDeleteParameters(this);
 			
 		//}
 		

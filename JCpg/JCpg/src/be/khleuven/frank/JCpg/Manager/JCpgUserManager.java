@@ -117,7 +117,6 @@ public class JCpgUserManager extends JDialog {
 		addActionListeners();
 		
 		readUserconfig();
-		new JCpgGallerySaver(jCpgInterface.getGallery()).loadDeleteParameters(jCpgInterface);
 		
 	}
 	
@@ -442,8 +441,23 @@ public class JCpgUserManager extends JDialog {
 				
 				connectionStatus.setText("Login successful");
 				
-				new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
+				new JCpgGallerySaver(getJCpgInterface().getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
 	        	getJCpgInterface().buildTree();
+	        	
+	        	new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
+	        	
+	    		// check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
+	        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_galery.xml";
+	        	
+	        	File galleryxml = new File(gallerypath);
+	    		
+	    		if(!galleryxml.exists()){
+	    			
+	    			getJCpgInterface().getRoot().add(new DefaultMutableTreeNode(getJCpgInterface().getUserGalleries()));
+	    			
+	    			getJCpgInterface().getGallery().addCategory(getJCpgInterface().getUserGalleries());
+	    			
+	    		}
 	        	
 	        	getJCpgInterface().setEnabled(true);
 	        	this.dispose();
@@ -485,8 +499,23 @@ public class JCpgUserManager extends JDialog {
 			
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
 	        
-	        new JCpgGallerySaver(getJCpgInterface().getGallery()).loadGallery(); // load gallery and show contents on screen
+	        new JCpgGallerySaver(getJCpgInterface().getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
 	        getJCpgInterface().buildTree(); // build the tree with loaded information
+	        
+	        new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
+	        
+	        // check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
+        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_galery.xml";
+        	
+        	File galleryxml = new File(gallerypath);
+    		
+    		if(!galleryxml.exists()){
+    			
+    			getJCpgInterface().getRoot().add(new DefaultMutableTreeNode(getJCpgInterface().getUserGalleries()));
+    			
+    			getJCpgInterface().getGallery().addCategory(getJCpgInterface().getUserGalleries());
+    			
+    		}
 	        
 		}
 		

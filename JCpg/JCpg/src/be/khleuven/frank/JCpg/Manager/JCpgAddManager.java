@@ -99,7 +99,7 @@ public abstract class JCpgAddManager extends JDialog implements JCpgAddTreeEntry
 		boundComponents();
 		placeComponents();
 		
-		gallerySaver = new JCpgGallerySaver(jCpgUIReference.getGallery());
+		gallerySaver = new JCpgGallerySaver(jCpgUIReference.getGallery(), getJCpgUIReference().getCpgConfig().getUserConfig().getId());
 		
 	}
 

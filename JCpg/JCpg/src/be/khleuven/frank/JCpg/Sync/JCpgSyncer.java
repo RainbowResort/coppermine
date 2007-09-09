@@ -263,7 +263,7 @@ public class JCpgSyncer {
 						
 						
 						// save new information
-						new JCpgGallerySaver(ui.getGallery()).saveGallery(); // save gallery
+						new JCpgGallerySaver(ui.getGallery(), getUi().getCpgConfig().getUserConfig().getId()).saveGallery(); // save gallery
 						
 						// refresh JTree
 						SwingUtilities.updateComponentTreeUI(getUi().getTree()); // workaround for Java bug 4173369
@@ -451,7 +451,7 @@ public class JCpgSyncer {
 									DefaultMutableTreeNode treealbum = null;
 									if(category.getAlbum(albumelement.getAttribute("title").getValue()) == null){
 									
-										album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("position").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), albumelement.getAttribute("alb_password").getValue(), albumelement.getAttribute("alb_password_hint").getValue());
+										album = new JCpgAlbum(albumelement.getAttribute("aid").getIntValue(), albumelement.getAttribute("title").getValue(), albumelement.getAttribute("description").getValue(), albumelement.getAttribute("visibility").getIntValue(), albumelement.getAttribute("uploads").getBooleanValue(), albumelement.getAttribute("comments").getBooleanValue(), albumelement.getAttribute("votes").getBooleanValue(), albumelement.getAttribute("pos").getIntValue(), category.getId(), albumelement.getAttribute("thumb").getIntValue(), albumelement.getAttribute("keyword").getValue(), "", albumelement.getAttribute("alb_password_hint").getValue());
 										album.addUi(getUi());
 										category.addAlbum(album);
 										

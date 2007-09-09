@@ -170,7 +170,7 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
 			thumb.makeThumb();
 			
 			// save new changes
-			new JCpgGallerySaver(getJCpgUI().getGallery()).saveGallery();
+			new JCpgGallerySaver(getJCpgUI().getGallery(), getJCpgUI().getCpgConfig().getUserConfig().getId()).saveGallery();
 			
 			//getJCpgUI().getPictureList().remove(getListIndex());
 			//getJCpgUI().getPictureListModel().add(getListIndex(), getPicture());

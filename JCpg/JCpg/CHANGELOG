@@ -1,3 +1,5 @@
+JCpg now supports multiple users and builds gseperate allery and delete parameter files for each user
+Solved null pointer exception while getting an album from the server when syncing
 Added thread to JCpgAddPictureManager and JCpgSyncer to correctly display the JCpgProgressManager
 Moved the save and load delete parameters code from JCpgUI to JCpgGallerySaver
 Fixed bug in sync code where components added to 'root' where not correctly fetched from the server

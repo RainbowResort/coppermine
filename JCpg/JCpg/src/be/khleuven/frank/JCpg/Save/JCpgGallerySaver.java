@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+
 import java.util.List;
 import java.util.ListIterator;
 
@@ -60,6 +61,7 @@ public class JCpgGallerySaver{
 																					//				VARIABLES             *
 																					//*************************************
 	private JCpgGallery gallery = null;
+	private int userid = 0;
 	
 	
 	
@@ -75,10 +77,16 @@ public class JCpgGallerySaver{
 	 * 
 	 * Makes a new JCpgGallerySaver object, no arguments
 	 *
+	 * @param gallery
+	 * 		the gallery object to save
+	 * @param userid
+	 * 		the userid of the current user
+	 *
 	 */
-	public JCpgGallerySaver(JCpgGallery gallery){
+	public JCpgGallerySaver(JCpgGallery gallery, int userid){
 		
 		setGallery(gallery);
+		setUserid(userid);
 		
 	}
 
@@ -100,6 +108,18 @@ public class JCpgGallerySaver{
 	private void setGallery(JCpgGallery gallery){
 		
 		this.gallery = gallery;
+		
+	}
+	/**
+	 * 
+	 * Set the userid of the current user
+	 * 
+	 * @param userid
+	 * 		the userid of the current user
+	 */
+	private void setUserid(int userid){
+		
+		this.userid = userid;
 		
 	}
 	
@@ -126,6 +146,18 @@ public class JCpgGallerySaver{
 	public JCpgGallery getGallery(){
 		
 		return this.gallery;
+		
+	}
+	/**
+	 * 
+	 * Get the userid of the current user
+	 * 
+	 * @return
+	 * 		the userid of the current user
+	 */
+	public int getUserid(){
+		
+		return this.userid;
 		
 	}
 	
@@ -163,7 +195,9 @@ public class JCpgGallerySaver{
 	 */
 	public JCpgGallery loadGallery(){
 		
-		File gallery = new File("config/gallery.xml");
+		String gallerypath = "config/" + 1000 + getUserid() + "_gallery.xml";
+		
+		File gallery = new File(gallerypath);
 		
 		if(gallery.exists()){
 		
@@ -171,7 +205,7 @@ public class JCpgGallerySaver{
 			
 			try {
 				
-				Document doc = builder.build("config/gallery.xml");
+				Document doc = builder.build(gallerypath);
 			
 				Element egallery = doc.getRootElement();
 				
@@ -217,7 +251,7 @@ public class JCpgGallerySaver{
 				
 			} catch (JDOMException e) {
 				
-				System.out.println("JCpgGallery: couldn't load gallery.xml");
+				System.out.println("JCpgGallery: couldn't load " + gallerypath);
 				
 			}
 			
@@ -374,7 +408,9 @@ public class JCpgGallerySaver{
 		
 		try{
 			
-			FileOutputStream file = new FileOutputStream("config/gallery.xml");
+			String gallerypath = "config/" + 1000 + getUserid() + "_gallery.xml";
+			
+			FileOutputStream file = new FileOutputStream(gallerypath);
 			
 			out.output(doc , file);	
 			
@@ -481,8 +517,10 @@ public class JCpgGallerySaver{
 	 *
 	 */
 	public void saveDeleteParameters(JCpgUI ui){
+		
+		String deletepath = "config/" + 1000 + getUserid() + "_delete.xml";
 	
-		File delete = new File("config/delete.dat");
+		File delete = new File(deletepath);
 		if(delete.exists()) delete.delete();
 		
 		try{
@@ -513,32 +551,39 @@ public class JCpgGallerySaver{
 	 */
 	public void loadDeleteParameters(JCpgUI ui){
 		
-		File file = new File("config/delete.dat");
+		String deletepath = "config/" + 1000 + getUserid() + "_delete.xml";
+		
+		File file = new File(deletepath);
+		
 	    FileInputStream fis = null;
 	    BufferedInputStream bis = null;
 	    DataInputStream dis = null;
+	    
+	    if(file.exists()){
 
-	    try {
-	    	
-	      fis = new FileInputStream(file);
-	      bis = new BufferedInputStream(fis);
-	      dis = new DataInputStream(bis);
-
-	      while (dis.available() != 0) {
-	    	  
-	    	ui.addDeleteParameter(dis.readLine());
-	        
-	      }
-
-	      // dispose all the resources after using them.
-	      fis.close();
-	      bis.close();
-	      dis.close();
-
-	    } catch (Exception e) {
-	    	
-	      System.out.println("JCpgGallerySaver: couldn't load delete parameters");
-	      
+		    try {
+		    	
+		      fis = new FileInputStream(file);
+		      bis = new BufferedInputStream(fis);
+		      dis = new DataInputStream(bis);
+	
+		      while (dis.available() != 0) {
+		    	  
+		    	ui.addDeleteParameter(dis.readLine());
+		        
+		      }
+	
+		      // dispose all the resources after using them.
+		      fis.close();
+		      bis.close();
+		      dis.close();
+	
+		    } catch (Exception e) {
+		    	
+		      System.out.println("JCpgGallerySaver: couldn't load " + deletepath);
+		      
+		    }
+		    
 	    }
 		
 	}
