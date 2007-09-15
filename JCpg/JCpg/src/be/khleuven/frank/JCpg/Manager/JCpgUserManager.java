@@ -21,10 +21,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import javax.swing.JButton;
@@ -430,8 +427,6 @@ public class JCpgUserManager extends JDialog {
 				
 				writeUserConfig();
 				
-				System.out.println("Fetched sessionkey: " + phpCommunicator.getXmlTagText("userdata", "sessionkey"));
-				
 				JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), this.userid, baseurlField.getText(), phpCommunicator.getXmlTagText("userdata", "sessionkey")); // build user and site config, then put in global JCpg config
 				JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), true);
 				
@@ -447,7 +442,7 @@ public class JCpgUserManager extends JDialog {
 	        	new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
 	        	
 	    		// check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
-	        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_galery.xml";
+	        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
 	        	
 	        	File galleryxml = new File(gallerypath);
 	    		
@@ -505,7 +500,7 @@ public class JCpgUserManager extends JDialog {
 	        new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
 	        
 	        // check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
-        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_galery.xml";
+        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
         	
         	File galleryxml = new File(gallerypath);
     		

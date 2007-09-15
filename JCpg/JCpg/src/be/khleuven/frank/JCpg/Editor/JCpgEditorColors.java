@@ -19,10 +19,13 @@ package be.khleuven.frank.JCpg.Editor;
 
 import java.awt.Dimension;
 import java.awt.color.ColorSpace;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.awt.image.RescaleOp;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -54,7 +57,7 @@ public class JCpgEditorColors extends JCpgEditor{
 	private JSlider brightnessSlider;
 	private int currentBrightnessSliderValue = 0; // this holds the slider's value just before it changes. This is needed to apply the right brightness to the image.
 	
-	
+	private JButton gray, ciexyz, rgb; 
 	
 	
 	
@@ -98,15 +101,24 @@ public class JCpgEditorColors extends JCpgEditor{
 	private void doExtraSwingComponents(){
 		
 		changeColorLabel = new JLabel("Change color: ");
-		changeColorLabel.setBounds(510, 60, 150, 20);
+		changeColorLabel.setBounds(610, 60, 150, 20);
 		brightnessLabel = new JLabel("Brightness: ");
-		brightnessLabel.setBounds(510, 90, 150, 20);
+		brightnessLabel.setBounds(610, 90, 150, 20);
 		
 		changeColorSlider = new JSlider(0, 255);
 		changeColorSlider.setValue(0);
-		changeColorSlider.setBounds(670, 60, 150, 20);
+		changeColorSlider.setBounds(770, 60, 150, 20);
 		brightnessSlider = new JSlider(-5, 5);
-		brightnessSlider.setBounds(670, 90, 150, 20);
+		brightnessSlider.setBounds(770, 90, 150, 20);
+		
+		gray = new JButton("Gray");
+		gray.setBounds(770, 110, 100, 20);
+		
+		ciexyz = new JButton("CieXYZ");
+		ciexyz.setBounds(770, 140, 100, 20);
+		
+		rgb = new JButton("Rgb");
+		rgb.setBounds(770, 170, 100, 20);
 		
 		changeColorSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt) {
@@ -121,10 +133,32 @@ public class JCpgEditorColors extends JCpgEditor{
 			}
 	    });
 		
+		gray.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				grayActionPerformed(evt);
+			}
+		});
+		
+		ciexyz.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				ciexyzActionPerformed(evt);
+			}
+		});
+		
+		rgb.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				rgbActionPerformed(evt);
+			}
+		});
+		
 		this.getContentPane().add(changeColorLabel);
 		this.getContentPane().add(brightnessLabel);
 		this.getContentPane().add(changeColorSlider);
 		this.getContentPane().add(brightnessSlider);
+		
+		this.getContentPane().add(gray);
+		this.getContentPane().add(ciexyz);
+		this.getContentPane().add(rgb);
 		
 	}
 	
@@ -144,7 +178,7 @@ public class JCpgEditorColors extends JCpgEditor{
 		
 		BufferedImage preview = getBufferedPreview(); // read the current preview picture
 		
-		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY); // do the effect
+		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ); // do the effect
 	    ColorConvertOp op = new ColorConvertOp(cs, null);
 	    preview = op.filter(preview, null);
 	    
@@ -166,6 +200,40 @@ public class JCpgEditorColors extends JCpgEditor{
 	    
 	    previewPicture(preview); // show new result
 	    
+	}
+	
+	private void grayActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		BufferedImage preview = getBufferedPreview(); // read the current preview picture
+		
+		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY); // do the effect
+	    ColorConvertOp op = new ColorConvertOp(cs, null);
+	    preview = op.filter(preview, null);
+	    
+	    previewPicture(preview); // show new result
+    	
+	}
+	private void ciexyzActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		BufferedImage preview = getBufferedPreview(); // read the current preview picture
+		
+		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ); // do the effect
+	    ColorConvertOp op = new ColorConvertOp(cs, null);
+	    preview = op.filter(preview, null);
+	    
+	    previewPicture(preview); // show new result
+    	
+	}
+	private void rgbActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		BufferedImage preview = getBufferedPreview(); // read the current preview picture
+		
+		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_sRGB); // do the effect
+	    ColorConvertOp op = new ColorConvertOp(cs, null);
+	    preview = op.filter(preview, null);
+	    
+	    previewPicture(preview); // show new result
+    	
 	}
 
 }

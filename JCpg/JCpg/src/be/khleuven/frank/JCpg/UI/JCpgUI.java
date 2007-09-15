@@ -222,7 +222,6 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		pictureList = new JList(pictureListModel);
 		pictureList.setBorder(new EtchedBorder());
 		pictureList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		pictureList.setVisibleRowCount(-1);
 		pictureList.setCellRenderer(new JCpgPictureCellRenderer(this));
 		pictureListSelectionModel = pictureList.getSelectionModel();
 		
@@ -461,7 +460,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		framesize = this.getSize();
 		
-		pictureView.setBounds(0, 0, framesize.width, 100);
+		pictureView.setBounds(0, 0, framesize.width, 150);
 		
 		explorer.setBorder(new EtchedBorder());
 		tools.setBounds(200, framesize.height - 145, framesize.width - 200, 50);
@@ -471,7 +470,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		albumcontrol.setBorder(new EtchedBorder());
 		albumcontrol.setLayout(new FlowLayout());
 		
-		splitPane.setBounds(0, 100, framesize.width, framesize.height - 245);
+		splitPane.setBounds(0, 150, framesize.width, framesize.height - 295);
 		megaSplitPane.setBounds(0, 0, framesize.width, framesize.height - 145);
 		
 		edit_crop.setPreferredSize(buttonPreferredSize);
@@ -1468,6 +1467,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			edit_resize.setVisible(false);
 			edit_colorcorrection.setVisible(false);
 			
+			getPictureList().setVisibleRowCount(-1);
+			
 		}else{
 
 			pictureView.getViewport().add(getPictureList());
@@ -1483,6 +1484,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			edit_crop.setVisible(true);
 			edit_resize.setVisible(true);
 			edit_colorcorrection.setVisible(true);
+			
+			getPictureList().setVisibleRowCount(1);
 			
 		}
 		

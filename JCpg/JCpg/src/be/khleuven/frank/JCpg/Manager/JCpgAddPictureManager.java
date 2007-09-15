@@ -264,13 +264,12 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 								getNode().add(newNode);
 				
 								getGallerySaver().saveGallery(); // save current gallery state
-				
+								
 								SwingUtilities.updateComponentTreeUI(getJCpgUIReference().getTree()); // workaround for java bug 4173369
 								
 							}
 							
 							progress.changeProgressbarValue(i);
-							//progress.repaint();
 							
 						}
 

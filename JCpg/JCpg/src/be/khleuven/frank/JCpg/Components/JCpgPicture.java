@@ -685,7 +685,7 @@ public class JCpgPicture extends JCpgGallery{
 		
 		generateDeleteParamaters();
 		
-		if(jCpgUIReference.getCurrentAlbum().equals(album)) // only delete from the picturelist if the currently showing album is this picture's album
+		if(jCpgUIReference.getCurrentAlbum() != null && jCpgUIReference.getCurrentAlbum().equals(album)) // only delete from the picturelist if the currently showing album is this picture's album
 			jCpgUIReference.getPictureListModel().removeElement(this); // delete from picture list
 		
 	}

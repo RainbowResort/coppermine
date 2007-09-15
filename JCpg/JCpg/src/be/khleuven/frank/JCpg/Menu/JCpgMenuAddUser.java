@@ -180,7 +180,7 @@ public class JCpgMenuAddUser extends JDialog {
 		
 		logo.setBounds(0, 0, 1000, 50);
 		
-		msg.setBounds(330, 630, 400, 20);
+		msg.setBounds(330, 630, 600, 20);
 		
 		username.setBounds(10, 50, 250, 20);
 		password.setBounds(10, 70, 250, 20);
