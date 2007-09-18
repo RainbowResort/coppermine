@@ -4,10 +4,14 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
@@ -33,6 +37,8 @@ public class JCpgMenuHelp extends JDialog {
 	private Dimension screensize;
 	
 	private JButton close;
+	private JScrollPane htmlscroll;
+	private JEditorPane htmlpane;
 	
 	
 	
@@ -125,6 +131,23 @@ public class JCpgMenuHelp extends JDialog {
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		close = new JButton("Close");
+
+		htmlpane = new JEditorPane();
+		htmlpane.setEditable(false);
+		
+		htmlscroll = new JScrollPane(htmlpane);
+		
+		try {
+			
+			String filename = "file:" + System.getProperty("user.dir") + System.getProperty("file.separator") + "help/help.html";
+			htmlpane.setPage(new URL(filename));
+			
+		} catch (IOException e) {
+			
+			System.out.println("JCpgMenuHelp: couldn't add help.html to JEditorPane");
+			e.printStackTrace();
+			
+		}
 		
 		close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
@@ -140,11 +163,13 @@ public class JCpgMenuHelp extends JDialog {
 	 */
 	private void boundComponents(){
 		
-		this.setBounds(10, 10, screensize.width - 10, screensize.height - 70);
+		this.setBounds(10, 30, screensize.width - 20, screensize.height - 70);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		
-		close.setBounds(490, 660, 100, 30);
+		close.setBounds((screensize.width - 20) / 2, screensize.height - 110, 100, 30);
+		
+		htmlscroll.setBounds(10, 10, screensize.width - 30, screensize.height - 140);
 	
 	}
 	/**
@@ -154,7 +179,9 @@ public class JCpgMenuHelp extends JDialog {
 	 */
 	private void placeComponents(){
 		
+		this.getContentPane().add(htmlscroll);
 		this.getContentPane().add(close);
+		
 		this.setVisible(true);
 		
 	}

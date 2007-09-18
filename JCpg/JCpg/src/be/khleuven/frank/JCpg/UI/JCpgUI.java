@@ -148,8 +148,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	private DefaultMutableTreeNode root;
 	
 	private JMenuBar menubar;
-	private JMenu menu, api, config, users, groups, help;
-	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
+	private JMenu menu, menu_api, menu_config, menu_users, menu_groups, menu_help;
+	private JMenuItem menu_item_InstallApi, menu_item_ShowConfig, menu_item_SetConfig, menu_item_ShowUser, menu_item_AddUser, menu_item_UpdateUser, menu_item_Help;
 	
 	private ArrayList<String> deleteparameters = new ArrayList<String>(); // used to store all the delete parameters from deleted components
 	private ArrayList<JCpgAlbum> albumViewAlbums = new ArrayList<JCpgAlbum>(); // holds the current albums when in albumview
@@ -303,46 +303,48 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		menu = new JMenu("Manage");
 		menubar.add(menu);
 		
-		api = new JMenu("API");
-		menu.add(api);
+		menu_api = new JMenu("API");
+		menu.add(menu_api);
 		
-		menuInstallApi = new JMenuItem("Install the API");
-		api.add(menuInstallApi);
-		
-		menu.addSeparator();
-		
-		config = new JMenu("Configuration");
-		menu.add(config);
-		
-		menuShowConfig = new JMenuItem("Show configuration");
-		config.add(menuShowConfig);
-		
-		menuSetConfig = new JMenuItem("Change configuration");
-		config.add(menuSetConfig);
+		menu_item_InstallApi = new JMenuItem("Install the API");
+		menu_api.add(menu_item_InstallApi);
 		
 		menu.addSeparator();
 		
-		users = new JMenu("Users");
-		menu.add(users);
+		menu_config = new JMenu("Configuration");
+		menu.add(menu_config);
 		
-		menuShowUser = new JMenuItem("Show my user information");
-		users.add(menuShowUser);
+		menu_item_ShowConfig = new JMenuItem("Show configuration");
+		menu_config.add(menu_item_ShowConfig);
 		
-		menuAddUser = new JMenuItem("Add user");
-		users.add(menuAddUser);
-		
-		menuUpdateUser = new JMenuItem("Update user");
-		users.add(menuUpdateUser);
+		menu_item_SetConfig = new JMenuItem("Change configuration");
+		menu_config.add(menu_item_SetConfig);
 		
 		menu.addSeparator();
 		
-		groups = new JMenu("Groups");
-		groups.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery groups");
-		menu.add(groups);
+		menu_users = new JMenu("Users");
+		menu.add(menu_users);
 		
-		help = new JMenu("Help");
-		menubar.add(help);
+		menu_item_ShowUser = new JMenuItem("Show my user information");
+		menu_users.add(menu_item_ShowUser);
 		
+		menu_item_AddUser = new JMenuItem("Add user");
+		menu_users.add(menu_item_AddUser);
+		
+		menu_item_UpdateUser = new JMenuItem("Update user");
+		menu_users.add(menu_item_UpdateUser);
+		
+		menu.addSeparator();
+		
+		menu_groups = new JMenu("Groups");
+		menu_groups.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery groups");
+		menu.add(menu_groups);
+		
+		menu_help = new JMenu("Help");
+		menubar.add(menu_help);
+		
+		menu_item_Help = new JMenuItem("Launch help");
+		menu_help.add(menu_item_Help);
 		
 		this.setJMenuBar(menubar);
 		
@@ -417,43 +419,43 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		});
 		
 		// menu
-		menuInstallApi.addActionListener(new ActionListener(){
+		menu_item_InstallApi.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuInstallApiActionPerformed(evt);
 			}
 		});
 		
-		menuShowConfig.addActionListener(new ActionListener(){
+		menu_item_ShowConfig.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuShowConfigActionPerformed(evt);
 			}
 		});
 		
-		menuSetConfig.addActionListener(new ActionListener(){
+		menu_item_SetConfig.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuSetConfigActionPerformed(evt);
 			}
 		});
 		
-		menuShowUser.addActionListener(new ActionListener(){
+		menu_item_ShowUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuShowUserActionPerformed(evt);
 			}
 		});
 		
-		menuAddUser.addActionListener(new ActionListener(){
+		menu_item_AddUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuAddUserActionPerformed(evt);
 			}
 		});
 		
-		menuUpdateUser.addActionListener(new ActionListener(){
+		menu_item_UpdateUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				
 			}
 		});
 		
-		help.addActionListener(new ActionListener(){
+		menu_item_Help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				menuHelpActionPerformed(evt);
 			}

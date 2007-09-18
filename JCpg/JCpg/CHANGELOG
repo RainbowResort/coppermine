@@ -1,3 +1,4 @@
+Added help menu which loads help.html
 Fixed nullpointer exception when deleting stuff when there was never an album selected for viewing
 The picture selector's height is now bigger so thumbs are fully shown
 When exiting mega explorer view, thus viewing one single picture, the upper scrollpane now shows all pictures in one row. This is much handier to select other pictures. When going back into mega explorer view, the pictures are again shown in several rows
