@@ -120,7 +120,7 @@ public class JCpgImageUrlValidator{
 		
 		if(image.exists()){
 			
-			return new ImageIcon(getPath());
+			return new ImageIcon(getPath()); // if the image exists, return an image icon of this image
 			
 		}
 		

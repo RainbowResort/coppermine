@@ -141,7 +141,7 @@ public class JCpgPhpCommunicator {
 			File delete = new File("svr.xml"); // delete file if it already exists
 			if(delete.exists()) delete.delete();
 			
-			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters;
+			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters; // built parameter string
 	    	
 			URL responseUrl = new URL(url); // download server xml response
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
@@ -178,17 +178,17 @@ public class JCpgPhpCommunicator {
 						
 						Element element = (Element)it.next();
 						
-						if(element.getName().equals("messagecode")){
+						if(element.getName().equals("messagecode")){ // look if query was succesful or not
 							
 							if(element.getText().equals("success")){
 								
 								return 0; // if respons is success return 0
 							
-							}else if(element.getText().equals("invalid_session")){
+							}else if(element.getText().equals("invalid_session")){ // invalid session
 								
 								return 1;
 								
-							}else if(element.getText().equals("query_permission_error")){
+							}else if(element.getText().equals("query_permission_error")){ // query permission error
 								
 								return 2;
 								

@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -71,6 +72,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuAddUser;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuHelp;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuInstallApi;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuSetConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
@@ -143,10 +145,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	private JScrollPane megaTreeView;
 	private JScrollPane pictureView;
 	private JScrollPane megaPictureView;
-	private DefaultMutableTreeNode root, usergalleriesnode;
+	private DefaultMutableTreeNode root;
 	
 	private JMenuBar menubar;
-	private JMenu menu, api, config, users, groups;
+	private JMenu menu, api, config, users, groups, help;
 	private JMenuItem menuInstallApi, menuShowConfig, menuSetConfig, menuShowUser, menuAddUser, menuUpdateUser;
 	
 	private ArrayList<String> deleteparameters = new ArrayList<String>(); // used to store all the delete parameters from deleted components
@@ -338,6 +340,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		groups.getAccessibleContext().setAccessibleDescription("Manage your Coppermine Photo Gallery groups");
 		menu.add(groups);
 		
+		help = new JMenu("Help");
+		menubar.add(help);
+		
 		
 		this.setJMenuBar(menubar);
 		
@@ -445,6 +450,12 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		menuUpdateUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				
+			}
+		});
+		
+		help.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				menuHelpActionPerformed(evt);
 			}
 		});
 		
@@ -1091,6 +1102,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		
 		new JCpgMenuAddUser(this);
 		
+	}
+	/**
+	 * 
+	 * Start help.htm
+	 * 
+	 */
+	private void menuHelpActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuHelp(this);
+	    
 	}
 	/**
 	 * 
