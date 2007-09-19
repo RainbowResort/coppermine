@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
@@ -347,6 +348,7 @@ public class JCpgMenuSetConfig extends JDialog {
 		
 		if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters) == 0){ // change config ok
 			
+			new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
 			msg.setText("Configuration changed succesfully.");
 			
 		}else{

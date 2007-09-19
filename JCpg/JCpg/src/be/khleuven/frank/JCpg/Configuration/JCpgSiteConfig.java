@@ -30,6 +30,7 @@ import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 
 /**
@@ -247,6 +248,7 @@ public class JCpgSiteConfig {
 				
 			}else{ // respons not ok
 				
+				new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
 				System.out.println("JCpgSiteConfig: unable to retrieve the Coppermine configuration");
 				
 			}

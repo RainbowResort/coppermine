@@ -1,3 +1,5 @@
+All classes that user the JCpg php communicator now store the error messages they receive in this seperate log file
+Added a error handler that writes all error messages return by the API to a seperate log file
 Added help menu which loads help.html
 Fixed nullpointer exception when deleting stuff when there was never an album selected for viewing
 The picture selector's height is now bigger so thumbs are fully shown

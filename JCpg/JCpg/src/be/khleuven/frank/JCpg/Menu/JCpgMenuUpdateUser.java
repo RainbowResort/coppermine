@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,27 +15,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+
 import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
-
-/**
- * 
- * Shows a screen from which the user can add new users
- * 
- * @author Frank Cleynen
- *
- */
-public class JCpgMenuAddUser extends JDialog {
+public class JCpgMenuUpdateUser extends JDialog {
 	
 	
 	
-															
-															//*************************************
-															//				VARIABLES             *
-															//*************************************
+	
+	
+													//*************************************
+													//				VARIABLES             *
+													//*************************************
 	private static final long serialVersionUID = 1L;
 	
 	private JCpgUI ui;
@@ -42,18 +43,22 @@ public class JCpgMenuAddUser extends JDialog {
 	
 	private JLabel logo, msg;
 	
-	private JButton close, add;
-	private JLabel username, password, email, activation;
-	private JTextField usernameField, passwordField, emailField;
-	private JComboBox activationCombo;
+	private JButton close, update;
+	private JLabel password, email, activation, user;
+	private JTextField passwordField, emailField;
+	private JComboBox activationCombo, userCombo;
 	
 	
 	
 	
-															
-															//*************************************
-															//				CONSTRUCTOR			  *
-															//*************************************
+	
+	
+	
+	
+	
+													//*************************************
+													//				CONSTRUCTOR			  *
+													//*************************************
 	/**
 	 * 
 	 * Makes a new JCpgMenuAddUser object
@@ -61,7 +66,7 @@ public class JCpgMenuAddUser extends JDialog {
 	 * @param ui
 	 * 		UI reference
 	 */
-	public JCpgMenuAddUser(JCpgUI ui){
+	public JCpgMenuUpdateUser(JCpgUI ui){
 		
 		super(ui);
 		
@@ -73,14 +78,17 @@ public class JCpgMenuAddUser extends JDialog {
 		boundComponents();
 		placeComponents();
 		
+		fillUsersCombo();
+		
 	}
 	
 	
 	
-															
-															//*************************************
-															//				SETTERS	              *
-															//*************************************
+	
+	
+													//*************************************
+													//				SETTERS	              *
+													//*************************************
 	/**
 	* 
 	* Set the UI
@@ -99,10 +107,9 @@ public class JCpgMenuAddUser extends JDialog {
 	
 	
 	
-															
-															//*************************************
-															//				GETTERS	              *
-															//*************************************
+													//*************************************
+													//				GETTERS	              *
+													//*************************************
 	/**
 	* 
 	* Get the UI
@@ -122,10 +129,12 @@ public class JCpgMenuAddUser extends JDialog {
 	
 	
 	
-															
-															//*************************************
-															//				SWING                 *
-															//*************************************
+	
+	
+	
+													//*************************************
+													//				SWING                 *
+													//*************************************
 	/**
 	 * 
 	 * Init swing components
@@ -141,19 +150,19 @@ public class JCpgMenuAddUser extends JDialog {
 		
 		msg = new JLabel();
 		
-		username = new JLabel("Username");
 		password = new JLabel("Password");
 		email = new JLabel("E-mail");
 		activation = new JLabel("Activation");
+		user = new JLabel("User");
 		
-		usernameField = new JTextField();
 		passwordField = new JTextField();
 		emailField = new JTextField();
 		
 		activationCombo = new JComboBox(activenotactive);
+		userCombo = new JComboBox();
 		
 		close = new JButton("Close");
-		add = new JButton("Add user");
+		update = new JButton("Update user");
 		
 		close.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
@@ -161,7 +170,7 @@ public class JCpgMenuAddUser extends JDialog {
 			}
 		});
 		
-		add.addActionListener(new ActionListener(){
+		update.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				AddActionPerformed(evt);
 			}
@@ -183,18 +192,18 @@ public class JCpgMenuAddUser extends JDialog {
 		
 		msg.setBounds(330, 630, 600, 20);
 		
-		username.setBounds(10, 50, 250, 20);
+		user.setBounds(10, 50, 250, 20);
 		password.setBounds(10, 70, 250, 20);
 		email.setBounds(10, 90, 250, 20);
 		activation.setBounds(10, 110, 250, 20);
 		
-		usernameField.setBounds(270, 50, 250, 20);
+		userCombo.setBounds(270, 50, 250, 20);
 		passwordField.setBounds(270, 70, 250, 20);
 		emailField.setBounds(270, 90, 250, 20);
 		activationCombo.setBounds(270, 110, 250, 20);
 		
 		close.setBounds(490, 660, 100, 30);
-		add.setBounds(330, 660, 150, 30);
+		update.setBounds(330, 660, 150, 30);
 	
 	}
 	/**
@@ -208,18 +217,19 @@ public class JCpgMenuAddUser extends JDialog {
 		
 		this.getContentPane().add(msg);
 		
-		this.getContentPane().add(username);
 		this.getContentPane().add(password);
 		this.getContentPane().add(email);
 		this.getContentPane().add(activation);
+		this.getContentPane().add(user);
 		
-		this.getContentPane().add(usernameField);
 		this.getContentPane().add(passwordField);
 		this.getContentPane().add(emailField);
+		
 		this.getContentPane().add(activationCombo);
+		this.getContentPane().add(userCombo);
 		
 		this.getContentPane().add(close);
-		this.getContentPane().add(add);
+		this.getContentPane().add(update);
 		this.setVisible(true);
 		
 	}
@@ -227,13 +237,88 @@ public class JCpgMenuAddUser extends JDialog {
 	
 	
 	
+													//*************************************
+													//				MUTATORS & OTHERS     *
+													//*************************************
+	private void fillUsersCombo(){
+		
+		JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUI().getCpgConfig().getSiteConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
+		
+		String parameters = "showusers&username=" + getUI().getCpgConfig().getUserConfig().getUsername() + "&sessionkey=" + getUI().getCpgConfig().getUserConfig().getSessionkey();
+		
+		if(phpCommunicator.performPhpRequest(parameters) == 0){ // query ok
+			
+			if(phpCommunicator.performPhpRequest(parameters) == 0){ // result ok
+				
+				SAXBuilder builder = new SAXBuilder(false); // no validation for illegal xml format
+				
+				File file = new File("svr.xml");
+				
+				if(file.exists()){
+				
+					try {
+						
+						Document doc = builder.build("svr.xml");
+						
+						Element root = doc.getRootElement();
+						
+						List content = root.getChildren();
+						ListIterator it = content.listIterator();
+						
+						while(it.hasNext()){
+							
+							Element element = (Element)it.next();
+							
+							if(element.getName().equals("userdata")){
+								
+								List content2 = element.getChildren();
+								ListIterator it2 = content2.listIterator();
+								
+								while(it2.hasNext()){
+									
+									Element element2 = (Element)it2.next();
+									
+									if(element2.getName().equals("username")){
+										
+										userCombo.addItem(element2.getText());
+										
+									}
+									
+								}
+								
+							}
+							
+						}
+						
+					} catch (JDOMException e) {
+						
+						System.out.println("JCpgMenuUpdateUser: Couldn't extract users from server response");
+						
+					}
+					
+				}	
+					
+			}
+			
+		}else{
+			
+			new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
+			msg.setText("You need to be online and an admin to update a user's information");
+			
+		}
+		
+	}
+	
+	
+
+
 	
 	
 	
-															
-															//*************************************
-															//				EVENTS	              *
-															//*************************************
+
+													//*************************************
+													//				EVENTS	              *
+													//*************************************
 	/**
 	 * 
 	 * Perform right actions when user clicks the close button
@@ -252,20 +337,18 @@ public class JCpgMenuAddUser extends JDialog {
 	 */
 	private void AddActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		if(!usernameField.getText().equals("") && !passwordField.getText().equals("") && !emailField.getText().equals("")){
+		if(!passwordField.getText().equals("") && !emailField.getText().equals("")){
 		
 			JCpgPhpCommunicator phpCommunicator = new JCpgPhpCommunicator(getUI().getCpgConfig().getUserConfig().getBaseUrl()); // make a phpCommunicator object to talk with the API
 			
-			String parameters = "adduser&username=" + getUI().getCpgConfig().getUserConfig().getUsername() + "&addusername=" + usernameField.getText() + "&password=" + passwordField.getText()
-							+ "&email=" + emailField.getText() + "&active=" + activationCombo.getSelectedIndex() + "&sessionkey=" + getUI().getCpgConfig().getUserConfig().getSessionkey();
-			
+			String parameters = "";
+				
 			if(getUI().getOnlinemode() && phpCommunicator.performPhpRequest(parameters) == 0){ // change config ok
 				
 				msg.setText("New user added succesfully.");
 				
 			}else{
 				
-				new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
 				msg.setText("New user failed to add. Maybe you are not online or the user already exists.");
 				
 			}
@@ -277,5 +360,15 @@ public class JCpgMenuAddUser extends JDialog {
 		}
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -36,6 +36,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
@@ -74,7 +75,7 @@ public class JCpgUserManager extends JDialog {
 	private JButton connect;
 	private JButton startOffline;
 	
-	private JCpgUI jCpgInterface;
+	private JCpgUI ui;
 	
 	private int userManagerWidth, userManagerHeight, userid;
 	private String sessionkey = "";
@@ -98,14 +99,14 @@ public class JCpgUserManager extends JDialog {
 	 * @param jCpgInterface
 	 * 		reference to UI
 	 */
-	public JCpgUserManager(int width, int height, JCpgUI jCpgInterface){
+	public JCpgUserManager(int width, int height, JCpgUI ui){
 		
-		super(jCpgInterface); // on top of jCpgInterface
+		super(ui); // on top of jCpgInterface
 		
-		jCpgInterface.setEnabled(false);
+		ui.setEnabled(false);
 		
 		setUserManagerSize(width, height);
-		setJCpgInterfaceReference(jCpgInterface);
+		setUi(ui);
 		
 		initComponents();
 		boundComponents();
@@ -143,12 +144,12 @@ public class JCpgUserManager extends JDialog {
 	 * 
 	 * Set the reference to the JCpgInterface object for communication between both frames
 	 * 
-	 * @param jCpgInterface
+	 * @param ui
 	 * 		the JCpgInterface reference to communicate with
 	 */
-	private void setJCpgInterfaceReference(JCpgUI jCpgInterface){
+	private void setUi(JCpgUI ui){
 		
-		this.jCpgInterface = jCpgInterface;
+		this.ui = ui;
 		
 	}
 	/**
@@ -308,9 +309,9 @@ public class JCpgUserManager extends JDialog {
 	 * @return
 	 * 		the reference to the JCpgInterface object
 	 */
-	public JCpgUI getJCpgInterface(){
+	public JCpgUI getUi(){
 		
-		return this.jCpgInterface;
+		return this.ui;
 		
 	}
 	/**
@@ -423,7 +424,7 @@ public class JCpgUserManager extends JDialog {
 			
 			if(phpCommunicator.performPhpRequest(parameters) == 0){ // login ok
 				
-				getJCpgInterface().changeOnlinemode(true); // we go into online mode
+				getUi().changeOnlinemode(true); // we go into online mode
 				
 				writeUserConfig();
 				
@@ -432,34 +433,35 @@ public class JCpgUserManager extends JDialog {
 				
 				JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
 				
-				getJCpgInterface().changeCpgConfig(cpgConfig); // pass this config to te UI
+				getUi().changeCpgConfig(cpgConfig); // pass this config to te UI
 				
 				connectionStatus.setText("Login successful");
 				
-				new JCpgGallerySaver(getJCpgInterface().getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
-	        	getJCpgInterface().buildTree();
+				new JCpgGallerySaver(getUi().getGallery(), getUi().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
+				getUi().buildTree();
 	        	
-	        	new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
+	        	new JCpgGallerySaver(getUi().getGallery(), getUi().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(getUi());
 	        	
 	    		// check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
-	        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
+	        	String gallerypath = "config/" + 1000 + getUi().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
 	        	
 	        	File galleryxml = new File(gallerypath);
 	    		
 	    		if(!galleryxml.exists()){
 	    			
-	    			getJCpgInterface().getRoot().add(new DefaultMutableTreeNode(getJCpgInterface().getUserGalleries()));
+	    			getUi().getRoot().add(new DefaultMutableTreeNode(getUi().getUserGalleries()));
 	    			
-	    			getJCpgInterface().getGallery().addCategory(getJCpgInterface().getUserGalleries());
+	    			getUi().getGallery().addCategory(getUi().getUserGalleries());
 	    			
 	    		}
 	        	
-	        	getJCpgInterface().setEnabled(true);
+	    		getUi().setEnabled(true);
 	        	this.dispose();
 				
 			}else{ // login failed
 				
-				connectionStatus.setText("Wrong username / password");
+				new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
+				connectionStatus.setText("Wrong username / password / not active");
 				
 			}
 
@@ -478,43 +480,43 @@ public class JCpgUserManager extends JDialog {
 	 */
 	private void startOfflineActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		getJCpgInterface().changeOnlinemode(false); // we go into offline mode
+		getUi().changeOnlinemode(false); // we go into offline mode
 		
 		JCpgUserConfig userConfig = new JCpgUserConfig(usernameField.getText(), passwordField.getText(), getId(), baseurlField.getText(), getSessionkey()); // build user and site config, then put in global JCpg config
 		JCpgSiteConfig siteConfig = new JCpgSiteConfig(baseurlField.getText(), false);
 		
 		JCpgConfig cpgConfig = new JCpgConfig(userConfig, siteConfig);
 		
-		getJCpgInterface().changeCpgConfig(cpgConfig);
+		getUi().changeCpgConfig(cpgConfig);
 		
 		// only load saved gallery if the root of the gallery tree has one child or more. This indicates the gallery already has been loaded and the user just clicked the sync button
 		// in offline mode, which will trigger the usermanager to display so the user can connect.
 		// if, at this point, he again clicks the offline button, the gallery will be loaded again and displayed double in the tree. This if-statement resolves that.
-		if(((DefaultMutableTreeNode)getJCpgInterface().getTree().getModel().getRoot()).getChildCount() == 0){
+		if(((DefaultMutableTreeNode)getUi().getTree().getModel().getRoot()).getChildCount() == 0){
 			
 	        connectionStatus.setText("Working offline"); // make clear we are working offline
 	        
-	        new JCpgGallerySaver(getJCpgInterface().getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
-	        getJCpgInterface().buildTree(); // build the tree with loaded information
+	        new JCpgGallerySaver(getUi().getGallery(), getUi().getCpgConfig().getUserConfig().getId()).loadGallery(); // load gallery and show contents on screen
+	        getUi().buildTree(); // build the tree with loaded information
 	        
-	        new JCpgGallerySaver(jCpgInterface.getGallery(), getJCpgInterface().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(jCpgInterface);
+	        new JCpgGallerySaver(getUi().getGallery(), getUi().getCpgConfig().getUserConfig().getId()).loadDeleteParameters(getUi());
 	        
 	        // check if user galleries category must be added, this is only necesarry if the user's gallery xml file does not exist
-        	String gallerypath = "config/" + 1000 + getJCpgInterface().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
+        	String gallerypath = "config/" + 1000 + getUi().getCpgConfig().getUserConfig().getId() + "_gallery.xml";
         	
         	File galleryxml = new File(gallerypath);
     		
     		if(!galleryxml.exists()){
     			
-    			getJCpgInterface().getRoot().add(new DefaultMutableTreeNode(getJCpgInterface().getUserGalleries()));
+    			getUi().getRoot().add(new DefaultMutableTreeNode(getUi().getUserGalleries()));
     			
-    			getJCpgInterface().getGallery().addCategory(getJCpgInterface().getUserGalleries());
+    			getUi().getGallery().addCategory(getUi().getUserGalleries());
     			
     		}
 	        
 		}
 		
-        getJCpgInterface().setEnabled(true);
+        getUi().setEnabled(true);
         this.dispose();
 		
 	}

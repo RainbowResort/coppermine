@@ -48,6 +48,7 @@ public class JCpgPhpCommunicator {
 																	//*************************************
 	private String baseUrl = "";
 	private ArrayList<JCpgCategory> categories = new ArrayList<JCpgCategory>();
+	private String errormsg = "";
 	
 	
 	
@@ -95,6 +96,18 @@ public class JCpgPhpCommunicator {
 		this.baseUrl = baseUrl;
 		
 	}
+	/**
+	 * 
+	 * Sets the error message returned by the API
+	 * 
+	 * @param msg
+	 * 		the error message returned by the API
+	 */
+	private void setErrorMessage(String msg){
+		
+		this.errormsg = msg;
+		
+	}
 	
 																	
 	
@@ -113,6 +126,18 @@ public class JCpgPhpCommunicator {
 	public String getBaseUrl(){
 		
 		return this.baseUrl;
+		
+	}
+	/**
+	 * 
+	 * Get the error message returned by the API
+	 * 
+	 * @return
+	 * 		the error message returned by the API
+	 */
+	public String getErrorMessage(){
+		
+		return this.errormsg;
 		
 	}
 	
@@ -182,15 +207,13 @@ public class JCpgPhpCommunicator {
 							
 							if(element.getText().equals("success")){
 								
-								return 0; // if respons is success return 0
+								setErrorMessage("success");
+								return 0;
 							
-							}else if(element.getText().equals("invalid_session")){ // invalid session
+							}else{
 								
-								return 1;
-								
-							}else if(element.getText().equals("query_permission_error")){ // query permission error
-								
-								return 2;
+								setErrorMessage(element.getText());
+								return -1;
 								
 							}
 							

@@ -26,8 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -77,6 +75,7 @@ import be.khleuven.frank.JCpg.Menu.JCpgMenuInstallApi;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuSetConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowConfig;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuShowUser;
+import be.khleuven.frank.JCpg.Menu.JCpgMenuUpdateUser;
 import be.khleuven.frank.JCpg.Previewer.JCpgPreviewer;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.Sync.JCpgSyncer;
@@ -451,7 +450,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		
 		menu_item_UpdateUser.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
-				
+				menuUpdateUserActionPerformed(evt);
 			}
 		});
 		
@@ -1103,6 +1102,16 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	private void menuAddUserActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		new JCpgMenuAddUser(this);
+		
+	}
+	/**
+	 * 
+	 * Update new user
+	 * 
+	 */
+	private void menuUpdateUserActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgMenuUpdateUser(this);
 		
 	}
 	/**

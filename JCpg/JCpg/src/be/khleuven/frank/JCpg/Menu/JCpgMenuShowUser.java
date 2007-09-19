@@ -19,6 +19,7 @@ package be.khleuven.frank.JCpg.Menu;
 
 import javax.swing.JLabel;
 
+import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
@@ -108,6 +109,8 @@ public class JCpgMenuShowUser extends JCpgMenuShow {
 			getTextArea().setText(userString);
 
 		}else{
+			
+			new JCpgErrorHandler().addLogEntry(phpCommunicator.getErrorMessage());
 			
 			userString = "Couldn't fetch your user information. Maybe you are not online.";
 			getTextArea().setText(userString);
