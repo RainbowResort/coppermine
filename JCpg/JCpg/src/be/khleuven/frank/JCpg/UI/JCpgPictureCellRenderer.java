@@ -157,28 +157,26 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         gblc.gridx = index % 10;
         gblc.gridy = getRow(index, 10);
         
-        
         JPanel p = new JPanel(new GridBagLayout()); // make a panel to put everything in it
         p.setBorder(new EtchedBorder());
         p.setBackground(new Color(255,255,255));
         
         GridBagConstraints panelgblc = new GridBagConstraints();
         
-        panelgblc.gridx = 1;
+        panelgblc.gridx = 1; // picture
         panelgblc.gridy = 0;
         p.add(label, panelgblc);
         
-        panelgblc.gridx = 1;
+        panelgblc.gridx = 1; // filename
         panelgblc.gridy = 1;
         p.add(new JLabel(picture.getFileName()), panelgblc);
         
-        panelgblc.gridx = 1;
+        panelgblc.gridx = 1; // rating
         panelgblc.gridy = 2;
         JPanel rating = new JPanel(new FlowLayout());
         rating.setBackground(new Color(255,255,255));
-        picture.changePicRating(3);
         
-        for(int i=0; i<picture.getPicRating(); i++){
+        for(int i=0; i<picture.getPicRating(); i++){ // put enough stars
 
         	JLabel star = new JLabel();
         	star.setIcon(new ImageIcon("data/star.jpg"));
