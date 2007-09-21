@@ -19,10 +19,12 @@ package be.khleuven.frank.JCpg.UI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -168,8 +170,24 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
         
         panelgblc.gridx = 1;
         panelgblc.gridy = 1;
-        p.add(new JLabel(((JCpgPicture)value).getFileName()), panelgblc);
-    	
+        p.add(new JLabel(picture.getFileName()), panelgblc);
+        
+        panelgblc.gridx = 1;
+        panelgblc.gridy = 2;
+        JPanel rating = new JPanel(new FlowLayout());
+        rating.setBackground(new Color(255,255,255));
+        picture.changePicRating(3);
+        
+        for(int i=0; i<picture.getPicRating(); i++){
+
+        	JLabel star = new JLabel();
+        	star.setIcon(new ImageIcon("data/star.jpg"));
+        	rating.add(star);
+        	
+        }
+        
+        p.add(rating, panelgblc);
+        
     	this.add(p, gblc); // add the panel with all components in it to the list
     	
         return this;

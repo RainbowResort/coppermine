@@ -1,3 +1,4 @@
+Picrating is now shown with stars under each picture
 Filenames are now shown under each picture
 Fixed minor bug in show config screen. Text is now scrollable
 All classes that user the JCpg php communicator now store the error messages they receive in this seperate log file

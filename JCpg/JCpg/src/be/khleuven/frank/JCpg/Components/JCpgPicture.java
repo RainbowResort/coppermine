@@ -763,6 +763,18 @@ public class JCpgPicture extends JCpgGallery{
 	}
 	/**
 	 * 
+	 * Change the picrating
+	 * 
+	 * @param rating
+	 * 		the new picrating
+	 */
+	public void changePicRating(int rating){
+		
+		setPicRating(rating);
+		
+	}
+	/**
+	 * 
 	 * Generate delete parameters and add them to the arraylist in the ui
 	 *
 	 */
