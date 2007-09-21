@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package be.khleuven.frank.JCpg.UI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -149,13 +150,27 @@ public class JCpgPictureCellRenderer extends JPanel implements ListCellRenderer 
     	
     	JCpgPicture picture = (JCpgPicture)value;
     	JLabel label = new JLabel(new JCpgImageUrlValidator(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + "thumb_" + picture.getFileName()).createImageIcon());
-    	label.setBorder(new EtchedBorder());
         
     	// determine grid position
         gblc.gridx = index % 10;
         gblc.gridy = getRow(index, 10);
+        
+        
+        JPanel p = new JPanel(new GridBagLayout()); // make a panel to put everything in it
+        p.setBorder(new EtchedBorder());
+        p.setBackground(new Color(255,255,255));
+        
+        GridBagConstraints panelgblc = new GridBagConstraints();
+        
+        panelgblc.gridx = 1;
+        panelgblc.gridy = 0;
+        p.add(label, panelgblc);
+        
+        panelgblc.gridx = 1;
+        panelgblc.gridy = 1;
+        p.add(new JLabel(((JCpgPicture)value).getFileName()), panelgblc);
     	
-    	this.add(label, gblc);
+    	this.add(p, gblc); // add the panel with all components in it to the list
     	
         return this;
         

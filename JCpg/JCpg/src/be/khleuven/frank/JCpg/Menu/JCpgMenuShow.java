@@ -26,10 +26,10 @@ import java.io.FileWriter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 
 import be.khleuven.frank.JCpg.UI.JCpgUI;
@@ -58,7 +58,7 @@ public abstract class JCpgMenuShow extends JDialog {
 	private Dimension screensize;
 	
 	private JButton close, savetofile;
-	private JTextArea textArea;
+	private JEditorPane textArea;
 	
 	private JScrollPane scrollPane;
 	
@@ -136,7 +136,7 @@ public abstract class JCpgMenuShow extends JDialog {
 	 * @return
 	 * 		the text area
 	 */
-	public JTextArea getTextArea(){
+	public JEditorPane getTextArea(){
 		
 		return this.textArea;
 		
@@ -159,7 +159,7 @@ public abstract class JCpgMenuShow extends JDialog {
 		
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		textArea = new JTextArea();
+		textArea = new JEditorPane();
 		textArea.setBorder(new EtchedBorder());
 		
 		scrollPane = new JScrollPane(textArea);
@@ -192,7 +192,7 @@ public abstract class JCpgMenuShow extends JDialog {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		
-		textArea.setBounds(10, 50, 980, 600);
+		scrollPane.setBounds(10, 50, 980, 600);
 		
 		close.setBounds(450, 660, 100, 30);
 		savetofile.setBounds(330, 660, 100, 30);
@@ -205,7 +205,6 @@ public abstract class JCpgMenuShow extends JDialog {
 	 */
 	private void placeComponents(){
 		
-		this.getContentPane().add(textArea);
 		this.getContentPane().add(scrollPane);
 		this.getContentPane().add(close);
 		this.getContentPane().add(savetofile);

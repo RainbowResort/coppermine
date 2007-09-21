@@ -1,3 +1,5 @@
+Filenames are now shown under each picture
+Fixed minor bug in show config screen. Text is now scrollable
 All classes that user the JCpg php communicator now store the error messages they receive in this seperate log file
 Added a error handler that writes all error messages return by the API to a seperate log file
 Added help menu which loads help.html

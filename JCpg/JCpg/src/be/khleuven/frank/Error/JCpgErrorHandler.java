@@ -8,12 +8,29 @@ import java.util.Date;
 
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
+/**
+ * 
+ * Used to handle error messages received by the API
+ * 
+ * @author Frank Cleynen
+ *
+ */
 public class JCpgErrorHandler {
+	
+	
+	
 	
 	private JCpgUI ui;
 	private File log = null;
 	private boolean writingIsPossible = false;
 	
+	
+	
+	/**
+	 * 
+	 * Make a new JCpgErrorHandler object
+	 *
+	 */
 	public JCpgErrorHandler(){
 		
 		setUi(ui);
@@ -41,18 +58,43 @@ public class JCpgErrorHandler {
 		
 	}
 	
+	
+	
+	/**
+	 * 
+	 * Set the ui
+	 * 
+	 * @param ui
+	 * 		the ui
+	 */
 	private void setUi(JCpgUI ui){
 		
 		this.ui = ui;
 		
 	}
 	
+	
+	/**
+	 * 
+	 * Get the ui
+	 * 
+	 * @return
+	 * 		the ui
+	 */
 	public JCpgUI getUi(){
 		
 		return this.ui;
 		
 	}
 	
+	
+	/**
+	 * 
+	 * Add a log entry to the logfile
+	 * 
+	 * @param entry
+	 * 		the entry to add to the log file
+	 */
 	public void addLogEntry(String entry){
 		
 		if(writingIsPossible){
