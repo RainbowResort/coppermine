@@ -1,3 +1,4 @@
+Added ratemanager with clickable stars to rate an image
 Picrating is now shown with stars under each picture
 Filenames are now shown under each picture
 Fixed minor bug in show config screen. Text is now scrollable
