@@ -826,8 +826,16 @@ public class JCpgSyncer {
 		
 		try {
 			
-			FileInputStream fileInputStream = new FileInputStream(file);
-			fileInputStream.read(b);
+			int offset = 0;
+	        int numRead = 0;
+	        
+	        FileInputStream fileInputStream = new FileInputStream(file);
+	        
+	        while (offset < b.length && (numRead=fileInputStream.read(b, offset, b.length-offset)) >= 0) {
+	        	
+	            offset += numRead;
+	            
+	        }
 			
 		} catch (Exception e) {
 			

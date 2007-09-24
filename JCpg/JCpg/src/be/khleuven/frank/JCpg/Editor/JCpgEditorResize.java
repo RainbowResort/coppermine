@@ -212,7 +212,7 @@ public class JCpgEditorResize extends JCpgEditor implements MouseMotionListener 
         sup = new Rectangle(rup.x + rup.width / 2, rup.y - 2, 10, 10);
         
         // draw in correct color: red = not selected, white = selected  	
-        g2.setPaint(Color.red);
+        g2.setPaint(Color.black);
         g2.fill(rleft);
         g2.fill(rdown);
         g2.fill(rup);

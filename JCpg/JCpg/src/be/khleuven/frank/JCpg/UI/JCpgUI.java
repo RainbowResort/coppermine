@@ -26,12 +26,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -68,6 +70,7 @@ import be.khleuven.frank.JCpg.Manager.JCpgAddSelectManagerGallery;
 import be.khleuven.frank.JCpg.Manager.JCpgEditAlbumManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditCategoryManager;
 import be.khleuven.frank.JCpg.Manager.JCpgEditPictureManager;
+import be.khleuven.frank.JCpg.Manager.JCpgRateManager;
 import be.khleuven.frank.JCpg.Manager.JCpgUserManager;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuAddUser;
 import be.khleuven.frank.JCpg.Menu.JCpgMenuHelp;
@@ -133,6 +136,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	private JButton edit_colorcorrection;
 	private JButton edit_resize;
 	private JButton edit_rotate;
+	private JButton edit_rate;
 	private JButton control_new;
 	private JButton control_delete;
 	private JButton control_sync;
@@ -145,6 +149,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	private JScrollPane pictureView;
 	private JScrollPane megaPictureView;
 	private DefaultMutableTreeNode root;
+	private JComboBox edit_sort;
 	
 	private JMenuBar menubar;
 	private JMenu menu, menu_api, menu_config, menu_users, menu_groups, menu_help;
@@ -254,6 +259,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		edit_rotate.setIcon(new JCpgImageUrlValidator("data/edit_rotate.jpg").createImageIcon());
 		edit_rotate.setToolTipText("Rotate");
 		edit_rotate.setBackground(new Color(168, 168, 168));
+		edit_rate = new JButton();
+		edit_rate.setIcon(new JCpgImageUrlValidator("data/edit_rate.jpg").createImageIcon());
+		edit_rate.setToolTipText("Rate");
+		edit_rate.setBackground(new Color(168, 168, 168));
 		control_new = new JButton();
 		control_new.setIcon(new JCpgImageUrlValidator("data/album_add.jpg").createImageIcon());
 		control_new.setToolTipText("New album");
@@ -279,6 +288,10 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		closeMegaExplorer.setBackground(new Color(168, 168, 168));
 		
 		root = new DefaultMutableTreeNode(gallery);
+		
+		String[] sortoptions = {"NONE", "NAME", "CREATION", "MODIFICATION"};
+		edit_sort = new JComboBox(sortoptions);
+		edit_sort.setVisible(false);
 		
 		tree = new JTree(root);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -411,6 +424,18 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			}
 		});
 		
+		edit_rate.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				edit_rateActionPerformed(evt);
+			}
+		});
+		
+		edit_sort.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt) {
+				edit_sortActionPerformed(evt);
+			}
+		});
+		
 		closeMegaExplorer.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				closeMegaExplorerActionPerformed(evt);
@@ -489,6 +514,8 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		edit_colorcorrection.setPreferredSize(buttonPreferredSize);
 		edit_resize.setPreferredSize(buttonPreferredSize);
 		edit_rotate.setPreferredSize(buttonPreferredSize);
+		edit_rate.setPreferredSize(buttonPreferredSize);
+		edit_sort.setPreferredSize(new Dimension(100, 20));
 		closeMegaExplorer.setPreferredSize(buttonPreferredSize);
 		
 		control_new.setPreferredSize(buttonPreferredSize);
@@ -510,7 +537,9 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		tools.add(edit_crop);
 		tools.add(edit_resize);
 		tools.add(edit_colorcorrection);
+		tools.add(edit_rate);
 		tools.add(closeMegaExplorer);
+		tools.add(edit_sort);
 		this.getContentPane().add(tools);
 		albumcontrol.add(control_sync);
 		albumcontrol.add(control_new);
@@ -672,6 +701,18 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	public JCpgAlbum getCurrentAlbum(){
 		
 		return this.currentAlbum;
+		
+	}
+	/**
+	 * 
+	 * Get the current picture
+	 * 
+	 * @return
+	 * 		the current picture
+	 */
+	public JCpgPicture getCurrentPicture(){
+		
+		return this.currentPicture;
 		
 	}
 	/**
@@ -1045,6 +1086,73 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		
 	}
 	/**
+	 * 
+	 * Action when user clicks on 'rate' button. 
+	 * 
+	 */
+	private void edit_rateActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		new JCpgRateManager(this, new JCpgImageUrlValidator("data/edit_rate.jpg").createImageIcon());
+		
+	}
+	/**
+	 * 
+	 * Action when user selects something from the sort combobox
+	 * 
+	 */
+	private void edit_sortActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		DefaultListModel dlm = getPictureListModel();
+		
+		int numItems = dlm.getSize();
+		String[] a = new String[numItems];
+		
+		for (int i=0;i<numItems;i++){
+			
+			a[i] = dlm.getElementAt(i).toString();
+		
+		}
+		
+		sortArray(Collator.getInstance(), a);
+
+		for (int i=0;i<numItems;i++) {
+			
+			dlm.setElementAt(a[i], i);
+			
+		}
+		
+	}
+	/**
+	 * 
+	 * Used to sort the contents of the listmodel
+	 * 
+	 * @param collator
+	 * @param strArray
+	 * 		array to sort
+	 */
+	public static void sortArray(Collator collator, String[] strArray) {
+		
+		String tmp;
+		if (strArray.length == 1) return;
+		
+		for (int i = 0; i < strArray.length; i++) {
+			
+			for (int j = i + 1; j < strArray.length; j++) {
+				
+				if( collator.compare(strArray[i], strArray[j] ) > 0 ) {
+					
+					tmp = strArray[i];
+					strArray[i] = strArray[j];
+					strArray[j] = tmp;
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	/**
 	 *  
 	 * Action when user clicks 'close' mega explorer view 
 	 * 
@@ -1255,6 +1363,17 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	    	SwingUtilities.updateComponentTreeUI(explorer); // workaround for Java bug 4173369
 	    	
 	    }
+	    
+	    // control sort selection visibility
+	    if(currentAlbum == null){
+			
+			edit_sort.setVisible(false);
+			
+		}else{
+			
+			edit_sort.setVisible(true);
+			
+		}
 	    
 	    SwingUtilities.updateComponentTreeUI(getPictureList()); // workaround for Java bug 4173369
 	    
@@ -1498,6 +1617,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			edit_crop.setVisible(false);
 			edit_resize.setVisible(false);
 			edit_colorcorrection.setVisible(false);
+			edit_rate.setVisible(false);
 			
 			getPictureList().setVisibleRowCount(-1);
 			
@@ -1516,6 +1636,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 			edit_crop.setVisible(true);
 			edit_resize.setVisible(true);
 			edit_colorcorrection.setVisible(true);
+			edit_rate.setVisible(true);
 			
 			getPictureList().setVisibleRowCount(1);
 			
