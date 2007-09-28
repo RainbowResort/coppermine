@@ -612,7 +612,7 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&filecontents=" + getBytesFromFile(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()) + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 						
 						if(phpCommunicator.performPhpRequest(parameters) != 0){
 							
@@ -726,7 +726,7 @@ public class JCpgSyncer {
 					
 					if(picture.getId() == -1){
 						
-						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&filecontents=" + getBytesFromFile(getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName()) + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
+						parameters = "addpicture&username=" + getUi().getCpgConfig().getUserConfig().getUsername() + "&albumid=" + album.getId() + "&pictitle=" + picture.getName() + "&piccaption=" + picture.getCaption() + "&pickeywords=" + picture.getKeywords() + "&user1=&user2=&user3=&user4=&filename=" + getUi().getCpgConfig().getSiteConfig().getValueFor("fullpath") + picture.getFilePath() + picture.getFileName() + "&sessionkey=" + getUi().getCpgConfig().getUserConfig().getSessionkey();
 							
 						if(phpCommunicator.performPhpRequest(parameters) != 0){
 							

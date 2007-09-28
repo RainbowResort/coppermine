@@ -739,16 +739,33 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		return this.albumViewAlbums;
 		
 	}
+	/**
+	 * 
+	 * Gets the root of the tree
+	 * 
+	 * @return
+	 * 		the root of the tree
+	 */
 	public DefaultMutableTreeNode getRoot(){
 		
 		return this.root;
 		
 	}
+	/**
+	 * 
+	 * Gets the user gallery default category
+	 * 
+	 * @return
+	 * 		the user gallery default category
+	 */
 	public JCpgCategory getUserGalleries(){
 		
 		return this.usergalleries;
 		
 	}
+	
+	
+	
 	
 	
 	

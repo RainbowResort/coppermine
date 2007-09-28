@@ -294,7 +294,7 @@ public class JCpgRateManager extends JDialog {
 				
 		}
 		
-		starsToActivate = 0;
+		starsToActivate = 0; // reset rating
 		
 	}
 	/**

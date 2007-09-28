@@ -161,17 +161,33 @@ public class JCpgPhpCommunicator {
 		
 		System.out.println("DEBUG: " + parameters);
 		
+		String[] firstsplit = parameters.split("&"); // split so we have the initial command and parameters + value
+		
 		try {
+			
+			JCpgHttpPoster httpPoster = new JCpgHttpPoster(getBaseUrl() + "cpgapi/webapi.php");
+			
+			httpPoster.setParameter("query", firstsplit[0]); // API function we want to use
+			
+			for(int i=1; i<firstsplit.length; i++){
+				
+				String[] secondsplit = firstsplit[i].split("="); // extract parameters and add them to the http poster
+				
+				if(secondsplit.length == 2) // parameter has value
+					httpPoster.setParameter(secondsplit[0], secondsplit[1]);
+				else if (secondsplit.length == 1) // paramater has no value
+					httpPoster.setParameter(secondsplit[0], "");
+				
+				if(secondsplit[0].equals("filename")) // if we are dealing with a picture, also add a parameter filecontents with the contents of the file
+					httpPoster.setParameter("_FILE[" + new File(".").getCanonicalPath() + secondsplit[1] + "]", "");
+				
+			}
 			
 			File delete = new File("svr.xml"); // delete file if it already exists
 			if(delete.exists()) delete.delete();
-			
-			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters; // built parameter string
 	    	
-			URL responseUrl = new URL(url); // download server xml response
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
-			URLConnection conn = responseUrl.openConnection();
-			InputStream in = conn.getInputStream();
+			InputStream in = httpPoster.post();
 			
 			byte[] buffer = new byte[1024];
 			int numRead;
@@ -240,56 +256,6 @@ public class JCpgPhpCommunicator {
 		}
 		
 		return -1; // unknown answer
-		
-	}
-	/**
-	 * 
-	 * Get the XML server response and return the received xml file
-	 * 
-	 * @param parameters
-	 * 		parameters that need to be added to the base url
-	 * @return
-	 * 		true if the server respons was collected successfully, else false
-	 */
-	public File performPhpRequestAndGetXml(String parameters){
-		
-		System.out.println("DEBUG: " + parameters);
-		
-		try {
-			
-			File delete = new File("svr.xml"); // delete file if it already exists
-			if(delete.exists()) delete.delete();
-			
-			String url = getBaseUrl() + "cpgapi/webapi.php?query=" + parameters;
-	    	
-			URL responseUrl = new URL(url); // download server xml response
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("svr.xml"));
-			URLConnection conn = responseUrl.openConnection();
-			InputStream in = conn.getInputStream();
-			
-			byte[] buffer = new byte[1024];
-			int numRead;
-			
-			while ((numRead = in.read(buffer)) != -1) {
-				
-				out.write(buffer, 0, numRead);
-				
-			}
-
-		    out.close();
-		    
-		    // check if svr.xml has been made, then return handle
-		    File file = new File("svr.xml");
-		    
-		    if(file.exists()) return file;
-			
-		} catch (Exception exception) {
-			
-			System.out.println("JCpgPhpCommunicator: couldn't process server respons xml file");
-		
-		}
-		
-		return null; // svr.xml was not made
 		
 	}
 	/**
