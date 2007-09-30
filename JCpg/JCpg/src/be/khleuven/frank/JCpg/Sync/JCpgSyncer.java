@@ -808,49 +808,5 @@ public class JCpgSyncer {
 		}
 		
 	}
-	/**
-	 * 
-	 * Transform a file into bytes so it can be send to the API
-	 * 
-	 * @param path
-	 * 		path of the file
-	 * @return
-	 * 		row of bytes representing this file
-	 */
-	private byte getBytesFromFile(String path){
-		
-		File file = new File(path);
-
-		byte[] b = new byte[(int) file.length()];
-		byte result = 0;
-		
-		try {
-			
-			int offset = 0;
-	        int numRead = 0;
-	        
-	        FileInputStream fileInputStream = new FileInputStream(file);
-	        
-	        while (offset < b.length && (numRead=fileInputStream.read(b, offset, b.length-offset)) >= 0) {
-	        	
-	            offset += numRead;
-	            
-	        }
-			
-		} catch (Exception e) {
-			
-			System.out.println("JCpgSyncer: couldn't convert " + path + " into array of bytes");
-			
-		}
-		
-		for(int i=0; i<b.length; i++){
-			
-			result = (byte) (result + b[i]);
-			
-		}
-		
-		return result;
-		
-	}
 
 }

@@ -1109,7 +1109,7 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 	 */
 	private void edit_rateActionPerformed(java.awt.event.ActionEvent evt) {
 		
-		new JCpgRateManager(this, new JCpgImageUrlValidator("data/edit_rate.jpg").createImageIcon());
+		new JCpgRateManager(this, new JCpgImageUrlValidator("data/ratepicture.jpg").createImageIcon());
 		
 	}
 	/**
@@ -1123,18 +1123,28 @@ public class JCpgUI extends JFrame implements TreeSelectionListener, MouseWheelL
 		
 		int numItems = dlm.getSize();
 		String[] a = new String[numItems];
+		JCpgPicture[] dlmcopy = new JCpgPicture[numItems];
 		
 		for (int i=0;i<numItems;i++){
 			
-			a[i] = dlm.getElementAt(i).toString();
-		
+			a[i] = ((JCpgPicture)dlm.getElementAt(i)).getName(); // sort on name
+			dlmcopy[i] = (JCpgPicture)dlm.getElementAt(i); // copy object
+			
 		}
 		
 		sortArray(Collator.getInstance(), a);
 
 		for (int i=0;i<numItems;i++) {
 			
-			dlm.setElementAt(a[i], i);
+			for(int j=0; j<getCurrentAlbum().getPictures().size(); j++){
+				
+				if((dlmcopy[j]).getName().equals(a[i])){
+					
+					dlm.setElementAt(dlmcopy[j], i);
+					
+				}
+				
+			}
 			
 		}
 		

@@ -22,7 +22,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.Date;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
@@ -203,7 +202,7 @@ public class JCpgAddPictureManager extends JCpgAddManager implements JCpgAddTree
 
 		if (selectedFiles.length > 0) { // only proceed if user selected file(s)
 
-			final JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length - 1, "data/updater_logo.jpg", false,true); // new progress manager
+			final JCpgProgressManager progress = new JCpgProgressManager(this, selectedFiles.length - 1, "data/picture_add.jpg", false,true); // new progress manager
 			
 			Thread t1 = new Thread(new Runnable() {
 				

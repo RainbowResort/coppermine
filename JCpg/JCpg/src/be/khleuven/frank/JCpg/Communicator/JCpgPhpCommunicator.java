@@ -19,10 +19,9 @@ package be.khleuven.frank.JCpg.Communicator;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -178,8 +177,8 @@ public class JCpgPhpCommunicator {
 				else if (secondsplit.length == 1) // paramater has no value
 					httpPoster.setParameter(secondsplit[0], "");
 				
-				if(secondsplit[0].equals("filename")) // if we are dealing with a picture, also add a parameter filecontents with the contents of the file
-					httpPoster.setParameter("_FILE[" + new File(".").getCanonicalPath() + secondsplit[1] + "]", "");
+				if(secondsplit[0].equals("filename")) // if we are dealing with a picture, also add a parameter with the contents of the file
+					httpPoster.setParameter("_FILE[" + getBytesFromFile(new File(".").getCanonicalPath() + "/" + secondsplit[1]) + "]", "");
 				
 			}
 			
@@ -364,6 +363,51 @@ public class JCpgPhpCommunicator {
 		}
 		
 		return categories;
+		
+	}
+	/**
+	 * 
+	 * Transform a file into bytes so it can be send to the API
+	 * 
+	 * @param path
+	 * 		path of the file
+	 * @return
+	 * 		row of bytes representing this file
+	 */
+	private byte getBytesFromFile(String path){
+		
+		File file = new File(path);
+
+		byte[] b = new byte[(int) file.length()];
+		byte result = 0;
+		
+		try {
+			
+			int offset = 0;
+	        int numRead = 0;
+	        
+	        FileInputStream fileInputStream = new FileInputStream(file);
+	        
+	        while (offset < b.length && (numRead=fileInputStream.read(b, offset, b.length-offset)) >= 0) {
+	        	
+	            offset += numRead;
+	            
+	        }
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("JCpgSyncer: couldn't convert " + path + " into array of bytes");
+			
+		}
+		
+		for(int i=0; i<b.length; i++){
+			
+			result = (byte) (result + b[i]);
+			
+		}
+		
+		return result;
 		
 	}
 	

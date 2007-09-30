@@ -1,3 +1,4 @@
+Created and added "adding pictures" and "rate picture" logos
 JCpg now only uses the POST method to send queries to the API
 Added ratemanager with clickable stars to rate an image
 Picrating is now shown with stars under each picture
