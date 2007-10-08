@@ -20,9 +20,9 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
+import be.khleuven.frank.JCpg.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 public class JCpgMenuUpdateUser extends JDialog {

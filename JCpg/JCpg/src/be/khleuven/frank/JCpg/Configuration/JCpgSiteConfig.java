@@ -30,8 +30,8 @@ import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
+import be.khleuven.frank.JCpg.Error.JCpgErrorHandler;
 
 /**
  * This class contains all the information found in the Cpg _config table.

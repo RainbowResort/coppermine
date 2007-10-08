@@ -18,7 +18,6 @@
 package be.khleuven.frank.JCpg.Sync;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -31,12 +30,12 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.Components.JCpgAlbum;
 import be.khleuven.frank.JCpg.Components.JCpgCategory;
 import be.khleuven.frank.JCpg.Components.JCpgGallery;
 import be.khleuven.frank.JCpg.Components.JCpgPicture;
+import be.khleuven.frank.JCpg.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.Manager.JCpgProgressManager;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;

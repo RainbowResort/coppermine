@@ -36,12 +36,12 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
 import be.khleuven.frank.JCpg.Configuration.JCpgConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgSiteConfig;
 import be.khleuven.frank.JCpg.Configuration.JCpgUserConfig;
+import be.khleuven.frank.JCpg.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.Save.JCpgGallerySaver;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 

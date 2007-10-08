@@ -28,9 +28,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import be.khleuven.frank.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.JCpgImageUrlValidator;
 import be.khleuven.frank.JCpg.Communicator.JCpgPhpCommunicator;
+import be.khleuven.frank.JCpg.Error.JCpgErrorHandler;
 import be.khleuven.frank.JCpg.UI.JCpgUI;
 
 /**
