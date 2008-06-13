@@ -24,6 +24,10 @@ define('UPLOAD_PHP', true);
 require('include/init.inc.php');
 require('include/picmgmt.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
+
 $defpicnum = 25; // Default number of pictures to process at a time when rebuilding thumbs or normals:
 $dayolder = 365; // Default number of days for deleting files older than xxx days {Frantz}
 $lineBreak = "\r\n";
