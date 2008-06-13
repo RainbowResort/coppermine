@@ -2278,6 +2278,90 @@ function display_film_strip($album, $cat, $pos)
         }
 }
 
+
+
+/**
+ * display_slideshow()
+ *
+ * gets data for thumbnails in an album for the film stript using Ajax call
+ *
+ * this added by Nuwan Sameera Hettiarachchi
+ *
+ * @param integer $album
+ * @param integer $cat
+ * @param integer $pos
+ **/
+function& display_slideshow()
+{
+   global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
+   global $cat, $date;
+
+	$Pic = array();
+	$Pid = array();
+	$Title = array();
+
+	
+	$i = 0;
+	$j = 0;
+	$a =0;
+	//$pid = (int)$_GET['pid'];
+	$start_img = '';
+ 
+$pic_data = get_pic_data($album, $pic_count, $album_name, -1, -1, false);
+
+foreach ($pic_data as $picture) {
+
+    if($CONFIG['thumb_use']=='ht' && $picture['pheight'] > $CONFIG['picture_width'] ){ // The wierd comparision is because only picture_width is stored
+      $condition = true;
+    }elseif($CONFIG['thumb_use']=='wd' && $picture['pwidth'] > $CONFIG['picture_width']){
+      $condition = true;
+    }elseif($CONFIG['thumb_use']=='any' && max($picture['pwidth'], $picture['pheight']) > $CONFIG['picture_width']){
+      $condition = true;
+        //thumb cropping
+    }elseif($CONFIG['thumb_use']=='ex' && max($picture['pwidth'], $picture['pheight']) > $CONFIG['picture_width']){
+      $condition = true;
+    }else{
+     $condition = false;
+    }
+			
+    if (is_image($picture['filename'])) {
+        if ($CONFIG['make_intermediate'] && $condition ) {
+            $picture_url = get_pic_url($picture, 'normal');
+        } else {
+            $picture_url = get_pic_url($picture, 'fullsize');
+        }
+
+		if ( $picture['title'] ) {
+            $Title_get = $picture['title'];
+		
+        } else {
+            $Title_c = $picture['filename'];
+        }
+		
+        $Pic[$i] =  htmlspecialchars($picture_url, ENT_QUOTES) ;
+        $Pid[$i] =  $picture['pid'] ;		
+        $Title[$i] = $Title_get;
+			
+        if ($picture['pid'] == $pid) {
+            $j = $i;
+            $start_img = $picture_url;
+        }
+        $i++; 
+    }
+}
+if (!$i) {
+    echo "Pic[0] = 'images/thumb_document.jpg'\n";
+}
+//print_r($Title);
+	$PicTest = $Pic; 
+	$Image_title = $Title; 
+	set_js_var('Pic',$PicTest);
+	set_js_var('Title',$Image_title);
+	set_js_var('Time','5000');
+	return theme_slideshow();
+	
+	}
+
 // Return the url for a picture, allows to have pictures spreaded over multiple servers
 
 /**
@@ -3417,7 +3501,7 @@ EOT;
  * @return
  **/
 
-function cpg_display_help($reference = 'f=index.htm', $width = '600', $height = '350') {
+function cpg_display_help($reference = 'f=index.htm', $width = '500', $height = '200') {
 global $CONFIG, $USER;
 if ($reference == '' || $CONFIG['enable_help'] == '0') {return; }
 if ($CONFIG['enable_help'] == '2' && GALLERY_ADMIN_MODE == false) {return; }
@@ -3426,7 +3510,7 @@ if (isset($USER['theme'])) {
     $help_theme = $USER['theme'];
 }
 
-$help_html = "<a href=\"javascript:;\" onclick=\"coppermine_help_window=window.open('help.php?css=" . $help_theme . "&amp;" . $reference . "','coppermine_help','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=" . $width . ",height=" . $height . "'); coppermine_help_window.focus()\" style=\"cursor:help\"><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\" alt=\"\" title=\"\" /></a>";
+$help_html = "<a class=\"jt\" href='help.php?". $reference."'  rel='help.php?". $reference."'  ><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\"  /></a>";
 return $help_html;
 }
 
