@@ -892,12 +892,13 @@ if (!isset($template_display_media)) { //{THEMES}
 // HTML template for intermediate image display
 $template_display_media = <<<EOT
         <tr>
-                <td align="center" class="display_media" nowrap="nowrap">
-                        <table cellspacing="2" cellpadding="0" class="imageborder">
+                <td  class="display_media" nowrap="nowrap" align="center">
+                        <table cellspacing="2" cellpadding="0">
                                 <tr>
-                                        <td align="center">
-                                                {IMAGE}
-
+                                        <td div="gallery" align="center">
+											<div id="slideShow" style="position:relative;">
+                                               {IMAGE}
+											</div>
                                         </td>
                                 </tr>
                         </table>
@@ -1108,9 +1109,15 @@ $template_add_your_comment = <<<EOT
                                 <td class="tableb_compact">
                                 {COMMENT}
                                                                 </td>
-                                <td width="100%" class="tableb_compact">
-                                <input type="text" class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" />
-                                                                </td>
+				<td width="100%" class="tableb_compact">
+						<div id="create_formatting" style="margin-bottom: 5px;float:left;">
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif"/></div>
+							</div>
+                               <textarea class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" ></textarea>
+				</td>
 <!-- END input_box_smilies -->
 <!-- BEGIN input_box_no_smilies -->
                                 <td class="tableb_compact">
@@ -1606,6 +1613,8 @@ function theme_javascript_head() {
 	}
 
     $return .= '<script type="text/javascript" src="scripts.js"></script>'."\n"; // do not remove this line unless you really know what you're doing
+    // styles for ajax dialog box 
+	$return .='  <link rel="stylesheet" href="js/css/jquery.cluetip.css" type="text/css" />'."\n";
     $return .= <<< EOT
 
 <script type="text/javascript">
@@ -3371,24 +3380,27 @@ function theme_html_comments($pid)
 ******************************************************************************/
 }  //{THEMES}
 
+
 if (!function_exists('theme_slideshow')) {  //{THEMES}
 /******************************************************************************
 ** Section <<<theme_slideshow>>> - START
 ******************************************************************************/
-function theme_slideshow()
+function theme_slideshow($start_img)
 {
     global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
     global $cat, $date;
 
     pageheader($lang_display_image_php['slideshow']);
 
-    include "include/slideshow.inc.php";
-
-    $start_slideshow = '<script language="JavaScript" type="text/JavaScript">runSlideShow()</script>';
+    //include "include/slideshow.inc.php";
+    
+	$start_slideshow = '<script language="JavaScript" type="text/JavaScript">
+	
+	</script>';
     template_extract_block($template_display_media, 'img_desc', $start_slideshow);
 
     $params = array('{CELL_HEIGHT}' => $CONFIG['picture_width'] + 100,
-        '{IMAGE}' => '<img src="' . $start_img . '" name="SlideShow" class="image" /><br />',
+        '{IMAGE}' => '<img src="' . $start_img . '" name="SlideShow" class="image" id="showImage" />',
         '{ADMIN_MENU}' => '',
         );
 
@@ -3416,7 +3428,7 @@ EOT;
     echo <<<EOT
         <tr>
                 <td align="center" class="navmenu" style="white-space: nowrap;">
-                        <a href="javascript:endSlideShow()" class="navmenu">{$lang_display_image_php['stop_slideshow']}</a>
+                        <a onclick="history.back();" style="cursor: pointer" class="navmenu">{$lang_display_image_php['stop_slideshow']}</a>
                 </td>
         </tr>
 
@@ -3428,6 +3440,7 @@ EOT;
 ** Section <<<theme_slideshow>>> - END
 ******************************************************************************/
 }  //{THEMES}
+
 
 if (!function_exists('theme_display_fullsize_pic')) {  //{THEMES}
 /******************************************************************************
