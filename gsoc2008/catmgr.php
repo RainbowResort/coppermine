@@ -24,6 +24,9 @@ ini_set('memory_limit', '128M');
 
 require('include/init.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
 //ob_end_flush(); //commented out, as it doesn't seem to do anything particularly helpful
 
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
