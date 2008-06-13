@@ -25,6 +25,9 @@ define('REVIEWCOM_PHP', true);
 require('include/init.inc.php');
 include("include/smilies.inc.php");
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
