@@ -25,6 +25,8 @@ require_once('include/init.inc.php');
 require_once('include/sql_parse.php');
 
 js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
 
 $admin_data_array = $CONFIG;
 
