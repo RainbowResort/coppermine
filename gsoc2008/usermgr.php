@@ -23,6 +23,9 @@ define('PROFILE_PHP', true);
 
 require('include/init.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
 $cpg_udb->view_users();
 
 if (USER_ID !='') {
