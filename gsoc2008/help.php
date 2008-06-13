@@ -104,10 +104,11 @@ $header = @unserialize(@base64_decode($header));
 $text = @unserialize(@base64_decode($text));
 }
 
-if ($close != 1) {
-$close_link = '<br />&nbsp;<br /><div align="center"><a href="#" class="admin_menu" onclick="window.close();">'.$lang_common['close'].'</a><br />&nbsp;</div>';
-}
-
+/**
+ * if ($close != 1) {
+ * $close_link = '<br />&nbsp;<br /><div align="center"><a href="#" class="admin_menu" onclick="window.close();">'.$lang_common['close'].'</a><br />&nbsp;</div>';
+ * }
+ */
 // Determine the language of the user and display the help file in his language if available. Fall back to English if the file is not available in his/her language
 // This should a later stage be done in a i18n table. For now, let's do a straightforward if/then
 if ($CONFIG['lang'] = 'german') {
@@ -167,9 +168,6 @@ $string = str_replace('<a internalAnchorLinkTempReplacement', '<a href="#', $str
         $string .= $text;
     }
     $string .= $close_link."\n</div>\n</body>\n</html>";
-
-
-
 
 print $string;
 ?>
