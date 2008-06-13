@@ -34,6 +34,9 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 1) {
 
 js_include('js/jquery.js');
 js_include('js/displayimage.js');
+js_include('js/bbc.js');
+js_include('js/jquery.cluetip.js');
+js_include('js/jquery.slideshow.js');
 
 if ($CONFIG['enable_smilies']) include("include/smilies.inc.php");
 
@@ -348,6 +351,11 @@ if (!$superCage->get->keyExists('fullsize') && !count($CURRENT_PIC_DATA)) {
 }
 ######################################
 
+	//set javascript variables added by Nuwan Sameera Hettiarachchi
+	set_js_var('position', $pos) ;
+	set_js_var('album',$album);
+	
+
 // If we have film_strip key in GET then it means this is an ajax call for filmstrip
 if ($superCage->get->keyExists('film_strip')) {
 	// Get the filmstrip, display it and exit.
@@ -379,7 +387,7 @@ if ($superCage->get->keyExists('fullsize')) {
     ob_end_flush();
 } elseif ($superCage->get->keyExists('slideshow')) {
     $slideshow = $superCage->get->getInt('slideshow');
-    theme_slideshow();
+    display_slideshow();
     ob_end_flush();
 } else {
     if (!$pos && !$pid) cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
