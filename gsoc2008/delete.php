@@ -80,12 +80,16 @@ function delete_picture($pid)
     $red = "<img src=\"images/red.gif\" border=\"0\" width=\"12\" height=\"12\"><br />";
 
     if (GALLERY_ADMIN_MODE) {
-        $query = "SELECT aid, filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
+    	// OVI
+        //$query = "SELECT aid, filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
+		$query = "SELECT aid, filepath, filename, owner_id,total_filesize FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
         $result = cpg_db_query($query);
         if (!mysql_num_rows($result)) cpg_die(CRITICAL_ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
         $pic = mysql_fetch_array($result);
     } else {
-        $query = "SELECT {$CONFIG['TABLE_PICTURES']}.aid as aid, category, filepath, filename, owner_id FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
+    	// OVI
+        //$query = "SELECT {$CONFIG['TABLE_PICTURES']}.aid as aid, category, filepath, filename, owner_id FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
+        $query = "SELECT {$CONFIG['TABLE_PICTURES']}.aid as aid, category, filepath, filename, owner_id, total_filesize FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
         $result = cpg_db_query($query);
         if (!mysql_num_rows($result)) cpg_die(CRITICAL_ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
         $pic = mysql_fetch_array($result);
@@ -101,8 +105,23 @@ function delete_picture($pid)
 
     echo "<td class=\"tableb\">" . htmlspecialchars($file) . "</td>";
 
+    ///////// OVI
+    $picture_id = $pid;
+    $owner_id = $pic['owner_id'];
+ 
+    $imageContainer = new image($picture_id, $owner_id);
+    
+    $imageContainer->original_url = $dir . $file; // check
+    $imageContainer->total_filesize = $pic['total_filesize'];
+    ///////// OVI
+
     $files = array($dir . $file, $dir . $CONFIG['normal_pfx'] . $file, $dir . $CONFIG['orig_pfx'] . $file, $dir . $CONFIG['thumb_pfx'] . $file);
     foreach ($files as $currFile) {
+    	
+		// OVI
+		if($currFile!=($dir . $file))
+			$imageContainer->thumb_urls[] = $currFile;
+    	
         echo "<td class=\"tableb\" align=\"center\">";
         if (is_file($currFile)) {
             if (@unlink($currFile))
@@ -113,6 +132,13 @@ function delete_picture($pid)
             echo "&nbsp;";
         echo "</td>";
     }
+
+    ///// OVI
+    
+    global $storage;
+    $storage->delete_images(array($imageContainer));
+    
+    ///// OVI
 
     $query = "DELETE FROM {$CONFIG['TABLE_COMMENTS']} WHERE pid='$pid'";
     $result = cpg_db_query($query);

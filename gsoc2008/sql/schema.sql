@@ -382,3 +382,49 @@ CREATE TABLE CPG_temp_messages (
   PRIMARY KEY (message_id)
 ) TYPE=MyISAM COMMENT='Used to store messages from one page to the other';
 # --------------------------------------------------------
+
+#
+# Table structure for table `CPG_ftp_pic2server`
+#
+
+CREATE TABLE `CPG_ftp_pic2server` (
+  `pic_id` int(11) NOT NULL,
+  `server_id` int(11) NOT NULL,
+  KEY `pic_id` (`pic_id`,`server_id`)
+) TYPE=MyISAM COMMENT='Lists all FTP servers where an image is stored';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_ftp_servers`
+#
+
+CREATE TABLE `CPG_ftp_servers` (
+  `id` int(11) NOT NULL auto_increment,
+  `hostname` tinytext NOT NULL,
+  `username` tinytext NOT NULL,
+  `password` tinytext NOT NULL,
+  `prefix_url` tinytext NOT NULL,
+  `subfolder_path` tinytext NOT NULL,
+  `ssl_secure_connection` tinyint(1) NOT NULL,
+  `status` enum('active','to_be_deleted','inactive') NOT NULL,
+  `quota` bigint(20) NOT NULL,
+  `used` bigint(20) NOT NULL,
+  `free` bigint(20) NOT NULL,
+  `users` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `status` (`status`),
+  KEY `free` (`free`),
+  KEY `users` (`users`)
+) TYPE=MyISAM COMMENT='Used to store FTP accounts for the ftp storage module';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_ftp_user2server`
+#
+
+CREATE TABLE `CPG_ftp_user2server` (
+  `user_id` int(11) NOT NULL,
+  `server_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`,`server_id`)
+) TYPE=MyISAM COMMENT='Used for FTP sharding';
+# --------------------------------------------------------

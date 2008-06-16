@@ -397,4 +397,7 @@ if (USER_ID && !USER_IS_ADMIN && !$USER['am']) { // user is logged in, but is no
 	die();
 }
 
+// OVI
+require("storage/init.inc.php");
+
 ?>
