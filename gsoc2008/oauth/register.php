@@ -4,8 +4,13 @@ define('IN_COPPERMINE', true);
 
 require_once 'cpgOAuth.php';
 
-global $superCage;
 $store = OAuthStore::instance();
+
+// Install the necessary database tables
+$store->install();
+
+// Get the consumer's information from POST
+global $superCage;
 $consumer['requester_name'] = $superCage->post->getRaw('requester_name');
 $consumer['requester_email'] = $superCage->post->getRaw('requester_email');
 $consumer['application_title'] = $superCage->post->getRaw('application_title');

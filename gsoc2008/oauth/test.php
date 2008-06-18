@@ -37,7 +37,7 @@ EOT;
 print(time());
 echo <<<EOT
 " />
-<input type="hidden" name="oauth_consumer_key" value="fd63d3e2402d21370c64c1d699c96e0e0484338de" />
+<input type="hidden" name="oauth_consumer_key" value="0939a5e84f061e904d1d3319de5c6e8a04849fd94" />
 <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
 <!-- <input type="hidden" name="oauth_signature" value="" /> -->
 

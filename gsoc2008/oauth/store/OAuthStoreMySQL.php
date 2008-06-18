@@ -928,7 +928,8 @@ class OAuthStoreMySQL
 						ost_token_secret	as token_secret,
 						osr_consumer_key	as consumer_key,
 						osr_consumer_secret	as consumer_secret,
-						ost_token_type		as token_type
+						ost_token_type		as token_type,
+						ost_osr_id_ref		as consumer_id
 				FROM oauth_server_token
 						JOIN oauth_server_registry
 						ON ost_osr_id_ref = osr_id
@@ -1549,6 +1550,29 @@ class OAuthStoreMySQL
 			die();
 		}
 	}
+
+	/** 
+	 * Get information about a consumer from the osr_id (see modified getConsumerRequestToken())
+	 */
+	public function getConsumerInfo ( $osr_id )
+	{
+		$rs = $this->query_all_assoc('
+				SELECT	osr_usa_id_ref			as requester_id,
+						osr_consumer_key 		as consumer_key,
+						osr_consumer_secret		as consumer_secret,
+						osr_enabled				as enabled,
+						osr_status 				as status,
+						osr_issue_date			as issue_date,
+						osr_application_title	as application_title,
+						osr_application_descr	as application_descr,
+						osr_requester_name		as requester_name,
+						osr_requester_email		as requester_email
+				FROM oauth_server_registry
+				WHERE osr_id = %d
+				', $osr_id);
+		return $rs;
+	}
+
 }
 
 

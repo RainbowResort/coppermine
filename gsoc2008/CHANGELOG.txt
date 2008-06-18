@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-06-17 [M] Continued work on the oauth/ folder, mostly authorize.php {daorange}
 2008-05-16 [A] Alpha version of the storage plugin, FTP storage module {zmarty}
 2008-06-05 [A] Added oauth/ directory, an early version of code for Coppermine API authentication {daorange}
 2008-05-26 [D] Created sub-folders in docs folder to prepare translation of documentation {GauGau}

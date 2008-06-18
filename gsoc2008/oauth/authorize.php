@@ -4,25 +4,39 @@ define('IN_COPPERMINE', true);
 
 require_once 'cpgOAuth.php';
 
-if ($superCage->get->keyExists('oauth_token')) {
-	$token = $superCage->get->getAlnum('oauth_token');	
-	$server = new OAuthServer();
-	$server->setParam('oauth_token', $token, true);
-	$server->authorizeVerify();
+$token = $superCage->get->getAlnum('oauth_token');
+$authorized = $superCage->get->getAlnum('authorized');
+
+$server = new OAuthServer();
+$server->setParam('oauth_token', $token, true);
+$rs = $server->authorizeVerify();
+
+if ($authorized == 'yes' && $token != '') {
 	$server->authorizeFinish(true, USER_ID);
-	echo 'Token "' . $token . '" authorized.';
+	print 'Token "' . $rs['token'] . '" authorized.';
+}
+
+else if ($authorized == 'no' && $token != '') {
+	$server->authorizeFinish(false, USER_ID);
+	print 'Token "' . $rs['token'] . '" deleted.';
+}
+
+else if ($token == '') {
+	print 'No "oauth_token" provided via HTTP GET';
 }
 
 else {
-	die('No "oauth_token" from HTTP GET.');
+	$store = OAuthStore::instance();
+	$consumer = $store->getConsumerInfo($rs['consumer_id']);
+	print 'Would you like to allow "' . $consumer[0]['application_title'] . '" to access your photos from this site?  This permission will only be granted for (X) hours.'; // How long should "X" be?
+	print '<br /><br />';
+
+	print '<form method="get" action="authorize.php">';
+	print '<input type="hidden" name="oauth_token" id="oauth_token" value="' . $token . '" />';
+	print '<input type="radio" name="authorized" id="yes" value="yes" /><label for="yes">Yes</label>';
+	print '<input type="radio" name="authorized" id="no" value="no" checked="checked" /><label for="no">No</label>';
+	print '<br /><br /><button type="submit">Submit</button>';
+	print '</form>';
 }
 
-/*
-	echo <<<EOT
-	<form method="get" action="authorize.php">
-	<input type="text" name="oauth_token"
-	</form>
-	<p>Authorize the above token?</p>
-}
-*/
 ?>

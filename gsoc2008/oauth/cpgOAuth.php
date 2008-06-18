@@ -15,8 +15,7 @@ $options['server'] = $CONFIG['dbserver'];
 $options['username'] = $CONFIG['dbuser'];
 $options['password'] = $CONFIG['dbpass'];
 $options['database'] = $CONFIG['dbname'];
-$store = OAuthStore::instance('MySQL', $options);
-$store->install();
+OAuthStore::instance('MySQL', $options);
 
 /** 
  * Object to process OAuth requests for Coppermine

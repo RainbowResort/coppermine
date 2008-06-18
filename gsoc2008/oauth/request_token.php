@@ -4,9 +4,10 @@ define('IN_COPPERMINE', true);
 
 require_once 'cpgOAuth.php';
 
-$oauth = new cpgOAuth($superCage->post->getAlnum('oauth_consumer_key'), $superCage->post->getAlnum('oauth_nonce'), $superCage->post->getInt('oauth_timestamp'), $superCage->post->getRaw('oauth_signature_method'), false);
+$matches = $superCage->post->getMatched('oauth_signature_method', '/[\w-]+/');
+
+$oauth = new cpgOAuth($superCage->post->getAlnum('oauth_consumer_key'), $superCage->post->getAlnum('oauth_nonce'), $superCage->post->getInt('oauth_timestamp'), $matches[0], false);
 
 $oauth->checkRequest(false);
 $oauth->requestToken();
-
 ?>
