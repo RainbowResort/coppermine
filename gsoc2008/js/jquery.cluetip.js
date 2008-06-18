@@ -22,7 +22,7 @@ $(document).ready(function() {
     sticky: true,
     closeText:'<img src=\"js/images/close.png\" alt=\"close\"  />',
 	closePosition: 'title',
-	activation: 'click',
+	activation: 'click'
 	
   });
 });
