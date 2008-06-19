@@ -1028,8 +1028,35 @@ $template_image_comments = <<<EOT
                                                 </tr>
                                                 <tr>
                                                 <td width="80%">
-                                                        <textarea cols="40" rows="2" class="textinput" name="msg_body" onselect="storeCaret_f{MSG_ID}(this);" onclick="storeCaret_f{MSG_ID}(this);" onkeyup="storeCaret_f{MSG_ID}(this);" style="width: 100%;">{MSG_BODY_RAW}</textarea>
-                                                </td>
+<div id="create_formatting" style="margin-bottom: 5px;float:left;">
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif"/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif"/></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png"/></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_color" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color_2').slideDown()" /></div>
+
+			<div id="dsrte-color_2" class="rte panel" style="display: none; float:left; width:300px;">
+<table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
+<tbody>
+	<tr>
+		<td bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer;;"/>
+		<td bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td><img src="images/editor/delete.png" style="cursor:pointer;" alt="Delete" onclick="$('#dsrte-color_2').slideUp()" /></td>
+	</tr>
+</tbody>
+</table>
+
+	</div>				
+</div>
+            <textarea cols="40" rows="2" class="textinput" name="msg_body" onselect="storeCaret_f{MSG_ID}(this);" onclick="storeCaret_f{MSG_ID}(this);" onkeyup="storeCaret_f{MSG_ID}(this);" style="width: 100%;">{MSG_BODY_RAW}</textarea>
+        </td>
                                                 <td class="tableb_compact">
                                                 </td>
                                                 <td>
@@ -1106,18 +1133,38 @@ $template_add_your_comment = <<<EOT
                                 </td>
 <!-- END user_name_input -->
 <!-- BEGIN input_box_smilies -->
-                                <td class="tableb_compact">
-                                {COMMENT}
-                                                                </td>
+        <td class="tableb_compact">                              
+             </td>
 				<td width="100%" class="tableb_compact">
 						<div id="create_formatting" style="margin-bottom: 5px;float:left;">
 						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif"/></div>
 						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif"/></div>
 						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif"/></div>
 						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif"/></div>
-							</div>
-                               <textarea class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" ></textarea>
-				</td>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png"/></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_color" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').slideDown()" /></div>
+
+			<div id="dsrte-color" class="rte panel" style="display: none; float:left; width:300px;">
+<table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
+<tbody>
+	<tr>
+		<td bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer;;"/>
+		<td bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;"/>
+		<td><img src="images/editor/delete.png" style="cursor:pointer;" alt="Delete" onclick="$('#dsrte-color').slideUp()" /></td>
+	</tr>
+</tbody>
+</table>
+
+		</div>				
+	</div>
+         <textarea class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" ></textarea>
+</td>
 <!-- END input_box_smilies -->
 <!-- BEGIN input_box_no_smilies -->
                                 <td class="tableb_compact">
