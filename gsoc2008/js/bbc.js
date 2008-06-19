@@ -25,7 +25,7 @@ $.fn.insertTags = function (open, close, myValue) {
 		else if (this.selectionStart || this.selectionStart == '0') {
 			var startPos = this.selectionStart;
 			var endPos = this.selectionEnd;
-			var scrollTop = this.scrollTop;
+			var scrollPos = this.scrollTop;
 			mySel = this.value.substring(startPos, endPos);
 
 			if (mySel != '') myValue = mySel;
@@ -41,11 +41,27 @@ $.fn.insertTags = function (open, close, myValue) {
 				}
 			}
 
+
+	
+		//.focus();
+
+
+
 			this.value = this.value.substring(0, startPos) + open + myValue + close + this.value.substring(endPos,this.value.length);
-			this.focus();
-			this.selectionStart = startPos + myValue.length;
-			this.selectionEnd = startPos + myValue.length;
-			this.scrollTop = scrollTop;
+			
+			if (this.setSelectionRange || myValue.length==0){
+				this.focus();
+				this.setSelectionRange(startPos + open.length, startPos + open.length);
+			}
+			
+			if(this.setSelectionRange && myValue.length>0){
+				this.focus();
+				this.setSelectionRange(startPos + ((open + myValue + close).length), startPos +(open + myValue + close).length  );
+			}
+			this.scrollTop = scrollPos;
+			//this.selectionStart = startPos + myValue.length;
+			//this.selectionEnd = startPos + myValue.length;
+			
 		}
 		else {
 			this.value += myValue;
@@ -68,5 +84,6 @@ $(document).ready(function() {
 		else if (editId == "bb_underline") editBox.insertTags('[u]','[/u]', editTitle);
 		else if (editId == "bb_url") editBox.insertTags('[url=http://www.domain.com]','[/url]', editTitle);
 		else if (editId == "bb_img") editBox.insertTags('[img]','[/img]', 'http://domain.com/image.jpg');
+		else if (editId == "bb_email") editBox.insertTags('[email]','[/email]',editTitle);
 	});
 });
