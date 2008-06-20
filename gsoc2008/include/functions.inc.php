@@ -2291,7 +2291,7 @@ function display_film_strip($album, $cat, $pos)
  * @param integer $cat
  * @param integer $pos
  **/
-function& display_slideshow()
+function& display_slideshow($pos,$ajax_show=0)
 {
    global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
    global $cat, $date;
@@ -2299,7 +2299,6 @@ function& display_slideshow()
 	$Pic = array();
 	$Pid = array();
 	$Title = array();
-
 	
 	$i = 0;
 	$j = 0;
@@ -2310,7 +2309,6 @@ function& display_slideshow()
 $pic_data = get_pic_data($album, $pic_count, $album_name, -1, -1, false);
 
 foreach ($pic_data as $picture) {
-
     if($CONFIG['thumb_use']=='ht' && $picture['pheight'] > $CONFIG['picture_width'] ){ // The wierd comparision is because only picture_width is stored
       $condition = true;
     }elseif($CONFIG['thumb_use']=='wd' && $picture['pwidth'] > $CONFIG['picture_width']){
@@ -2333,7 +2331,6 @@ foreach ($pic_data as $picture) {
 
 		if ( $picture['title'] ) {
             $Title_get = $picture['title'];
-		
         } else {
             $Title_c = $picture['filename'];
         }
@@ -2349,18 +2346,22 @@ foreach ($pic_data as $picture) {
         $i++; 
     }
 }
+	$Pic_length = count($Pic);
+	set_js_var('Time',$slideshow);
+	set_js_var('Pic_count',$Pic_length);
+	
 if (!$i) {
     echo "Pic[0] = 'images/thumb_document.jpg'\n";
 }
-//print_r($Title);
-	$PicTest = $Pic; 
-	$Image_title = $Title; 
-	set_js_var('Pic',$PicTest);
-	set_js_var('Title',$Image_title);
-	set_js_var('Time','5000');
-	return theme_slideshow();
-	
+	if($ajax_show==0){
+		theme_slideshow($Pic[$pos],$Title[$pos]);
 	}
+	if($ajax_show==1){
+	echo $Pic[$pos]."|".$Title[$pos];
+	}
+	
+}
+
 
 // Return the url for a picture, allows to have pictures spreaded over multiple servers
 
