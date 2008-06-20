@@ -3432,23 +3432,18 @@ if (!function_exists('theme_slideshow')) {  //{THEMES}
 /******************************************************************************
 ** Section <<<theme_slideshow>>> - START
 ******************************************************************************/
-function theme_slideshow($start_img)
+function theme_slideshow($start_img,$title)
 {
     global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
     global $cat, $date;
 
     pageheader($lang_display_image_php['slideshow']);
-
-    //include "include/slideshow.inc.php";
-    
-	$start_slideshow = '<script language="JavaScript" type="text/JavaScript">
-	
-	</script>';
     template_extract_block($template_display_media, 'img_desc', $start_slideshow);
 
     $params = array('{CELL_HEIGHT}' => $CONFIG['picture_width'] + 100,
         '{IMAGE}' => '<img src="' . $start_img . '" name="SlideShow" class="image" id="showImage" />',
         '{ADMIN_MENU}' => '',
+        '{TITLE}' =>$title
         );
 
     starttable();
