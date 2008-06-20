@@ -19,51 +19,63 @@
 /**
  * This file contains dispalyimge.php specific javascript
  */
+
 $(document).ready(function(){
 
-		var  Pics = new Array();		
-		var Titel = new Array();
-		Titel =js_vars.Title;	
-		Pics = js_vars.Pic;
-		var Time = js_vars.Time;
-
-		var j = js_vars.position;
-		var p = Pics.length;
+		//set variable from php  
+		var Time = 		js_vars.Time;
+		var j = 		js_vars.position;
+		var $album = 	js_vars.album;
+		var run_slideshow = js_vars.run_slideshow;
+		var p = 		js_vars.Pic_count;
+		
+		var Title ="";
 	 	var i = new Image();
 		
-		loadImage(Pics[j],1 );
+		//called to laoadImage 
+		loadImage(j);
+	 	
+		//start to run slideshow
 		runSlideShow();
-		
-		var tempImageNumber = 1;
-		
-	 function loadImage (src, stateImage){ 
-	 	tempImageNumber = stateImage; 
-		 i.src = src;
-		
- } 
- 
- 	function showNextSlide(){
+		 
+		//implement ajax call to get pic url and title
+	 function loadImage (j){ 	 
+	 	var prev_url = "displayimage.php?ajax_show=1&pos="+j+"&album="+$album;  
+			$.get(prev_url, {}, function(msg) {
+				if (msg.indexOf("|") != -1) {
+						splitMsg = msg.split("|");
+						i.src = splitMsg[0];
+						Title= splitMsg[1];
+					}
+			});
+ }
+
+ 		// next pic view
+ 	function showNextSlide(i){
 			j = j + 1;
         	if (j > (p-1)) j=0;
-		 $("#showImage").attr({ src: i.src, title: "jQuery", alt: "jQuery Logo", style: "visibility:hidden;"});
-			$("#showImage").fadeIn("slow");
-			$("#showImage").css('visibility','visible');
-			$("#Title").html(Titel[(j-1)]);
+			var temp = i.src;
 			
-		/*
-	tempImageNumber = tempImageNumber +1;
-			if(tempImageNumber>2) {
-				tempImageNumber = 1;
+			if (temp) {
+				$("#showImage").attr({
+					src: i.src,
+					title: "jQuery",
+					alt: "jQuery Logo",
+					style: "visibility:hidden;"
+				});
+				$("#showImage").fadeIn("slow");
+				$("#showImage").css('visibility', 'visible');
+				$("#Title").html(Title);
+				loadImage(j);
 			}
-*/ 
-			loadImage(Pics[j], tempImageNumber );
 			
 	}
-	
+	//set time to run slideshow 
 	function runSlideShow(){	
-		showNextSlide();
+		showNextSlide(i);
 		setTimeout(runSlideShow,Time);
-}
+	}
 
 			
 });
+
