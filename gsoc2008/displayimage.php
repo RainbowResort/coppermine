@@ -240,13 +240,11 @@ function get_subcat_data($parent, $level)
  */
 
 $pos = $superCage->get->getInt('pos');
-
 /**
  * Hack added by tarique to prevent incorrect picture being seen on last view or last uploaded
  */
 
 $pid = $superCage->get->getInt('pid');
-
 $cat = $superCage->get->getInt('cat');
 /**
  * TODO: Add the code to handle date parameter
@@ -259,7 +257,8 @@ if ($superCage->get->testAlpha('album')) {
         $album = $superCage->get->getInt('album');
 }
 
-
+//get ajax call to thubm photo added by Nuwan Sameera Hettiarachchi. 
+$ajax_show = $superCage->get->getInt('ajax_show');
 // Build the album set if required
 /*
 //disabled by donnoman
@@ -355,6 +354,10 @@ if (!$superCage->get->keyExists('fullsize') && !count($CURRENT_PIC_DATA)) {
 	set_js_var('position', $pos) ;
 	set_js_var('album',$album);
 	
+//if slideshow is has a key or ajax_show has a key then call to jquery.slideshow.js file
+if($superCage->get->keyExists('slideshow') || $superCage->get->keyExists('ajax_show')){
+	js_include('js/jquery.slideshow.js');
+}	
 
 // If we have film_strip key in GET then it means this is an ajax call for filmstrip
 if ($superCage->get->keyExists('film_strip')) {
@@ -364,6 +367,12 @@ if ($superCage->get->keyExists('film_strip')) {
 	exit;
 }
 
+//if there is value for ajax_show key in GET then it means this is an ajax call to display sideshow...
+if ($superCage->get->keyExists('ajax_show')) {	
+    display_slideshow($pos,$ajax_show);
+    ob_end_flush();
+	exit;
+}
 // Retrieve data for the current album
 if (isset($CURRENT_PIC_DATA)) {
     $ref_album = (is_numeric($album) ? $album : $CURRENT_PIC_DATA['aid']);
@@ -387,7 +396,7 @@ if ($superCage->get->keyExists('fullsize')) {
     ob_end_flush();
 } elseif ($superCage->get->keyExists('slideshow')) {
     $slideshow = $superCage->get->getInt('slideshow');
-    display_slideshow();
+    display_slideshow($pos);
     ob_end_flush();
 } else {
     if (!$pos && !$pid) cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
