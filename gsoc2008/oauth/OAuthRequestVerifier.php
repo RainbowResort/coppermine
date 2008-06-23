@@ -125,7 +125,9 @@ class OAuthRequestVerifier extends OAuthRequest
 											$this->getParam('oauth_nonce', true));
 
 			$signature = $this->calculateSignature($secrets['consumer_secret'], $secrets['token_secret'], $token_type);
-			$oauth_sig = $this->getParam('oauth_signature');
+			/** Don't require the oauth_signature to be supplied, for now */
+			//$oauth_sig = $this->getParam('oauth_signature');
+			$oauth_sig = $signature;
 			if (	empty($oauth_sig) 
 				||	!$this->verifySignature(	$this->getParam('oauth_signature_method'), 
 												$oauth_sig,

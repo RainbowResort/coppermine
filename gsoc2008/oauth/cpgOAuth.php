@@ -1,5 +1,6 @@
 <?php
-
+// The base include file for all of the Coppermine OAuth pages
+// The cpgOAuth class currently approves the request without an oauth_signature (in OAuthRequestVerifier.php, ~line 128), for ease of testing.  This will probably go away with my next check-in {daorange}
 chdir('../');
 
 // Call basic functions, etc.
@@ -22,8 +23,7 @@ OAuthStore::instance('MySQL', $options);
  */
 class cpgOAuth extends OAuthServer {
 	function __construct($consumer_key, $nonce, $timestamp, $signature_method, $token) {
-	// , $signature, $token) {				
-		
+	// , $signature, $token) {
 		$this->setParam('oauth_consumer_key', $consumer_key, true);
 		$this->setParam('oauth_nonce', $nonce, true);		
 		$this->setParam('oauth_timestamp', $timestamp, true);
@@ -34,23 +34,10 @@ class cpgOAuth extends OAuthServer {
 		parent::__construct();
 	}
 
-// This will go away once oauth_signature is treated properly.	
-	function checkRequest($token_type) {
-		$store = OAuthStore::instance();
-		$secrets = $store->getSecretsForVerify(urldecode($this->getParam('oauth_consumer_key')), urldecode($this->getParam('oauth_token')), $token_type);
-		$this->setParam('oauth_signature', $this->calculateSignature($secrets['consumer_secret'], $secrets['token_secret'], $token_type), true);
-	}
-
 	public function accessProtectedResource() {
 		try
 		{
 			$result = $this->verify('access');
-			
-			/* if ($result) {
-				header('HTTP/1.1 200 OK');
-				header('Content-Length: '.strlen($result));
-				header('Content-Type: application/x-www-form-urlencoded');				
-			}*/
 
 			if ($result != null) {
 				echo "Protected resource accessed!";
@@ -59,13 +46,13 @@ class cpgOAuth extends OAuthServer {
 		catch (OAuthException $e)
 		{
 			header('HTTP/1.1 401 Access Denied');
-			header('Content-Type: text/plain');
+			header('Content-Type: text/xml');
 
-			echo $e->getMessage();
+			echo xml_encoding() . '<api_error>' . $e->getMessage() . '</api_error>';
 		}
 		OAuthRequestLogger::flush();
 		exit();
-	}	
+	}
 }
 
-?> 
+?>

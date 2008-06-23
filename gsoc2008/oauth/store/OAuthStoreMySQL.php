@@ -1147,6 +1147,10 @@ class OAuthStoreMySQL
 	 */
 	public function checkServerNonce ( $consumer_key, $token, $timestamp, $nonce )
 	{
+		if ($nonce == '') {
+			throw new OAuthException('No oauth_nonce provided. Request rejected.');
+		}
+
 		$r = $this->query_row('
 							SELECT MAX(osn_timestamp), MAX(osn_timestamp) > %d
 							FROM oauth_server_nonce

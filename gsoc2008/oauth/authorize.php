@@ -1,28 +1,28 @@
 <?php
-// Confirm we are in Coppermine
-define('IN_COPPERMINE', true);
+// Users "authorize" a request token here.  This should first involve logging in to a Coppermine account, but it doesn't yet.  An application "consuming" the API should direct users here once they have received a request token.
 
+define('IN_COPPERMINE', true);
 require_once 'cpgOAuth.php';
 
 $token = $superCage->get->getAlnum('oauth_token');
 $authorized = $superCage->get->getAlnum('authorized');
 
+if ($token == '') {
+	api_die('No "oauth_token" provided via HTTP GET.');
+}
+
 $server = new OAuthServer();
 $server->setParam('oauth_token', $token, true);
 $rs = $server->authorizeVerify();
 
-if ($authorized == 'yes' && $token != '') {
+if ($authorized == 'yes') {
 	$server->authorizeFinish(true, USER_ID);
-	print 'Token "' . $rs['token'] . '" authorized.';
+	print xml_encoding() . '<message>Token "' . $rs['token'] . '" authorized.</message>';
 }
 
-else if ($authorized == 'no' && $token != '') {
+else if ($authorized == 'no') {
 	$server->authorizeFinish(false, USER_ID);
-	print 'Token "' . $rs['token'] . '" deleted.';
-}
-
-else if ($token == '') {
-	print 'No "oauth_token" provided via HTTP GET';
+	print xml_encoding() . '<message>Token "' . $rs['token'] . '" deleted.</message>';
 }
 
 else {

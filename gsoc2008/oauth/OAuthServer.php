@@ -158,9 +158,8 @@ class OAuthServer extends OAuthRequestVerifier
 		catch (OAuthException $e)
 		{
 			header('HTTP/1.1 401 Access Denied');
-			header('Content-Type: text/plain');
-
-			echo $e->getMessage();
+			header('Content-Type: text/xml');
+			echo xml_encoding() . '<api_error>' . $e->getMessage() . '</api_error>';
 		}
 		OAuthRequestLogger::flush();
 		exit();
