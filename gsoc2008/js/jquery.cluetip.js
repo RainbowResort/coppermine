@@ -18,9 +18,9 @@ $(document).ready(function() {
 	arrows: true, 
 	width: 550,
 	height: 250,
-    dropShadow: false, 
-    sticky: true,
-    closeText:'<img src=\"js/images/close.png\" alt=\"close\"  />',
+    	dropShadow: false, 
+    	sticky: true,
+    	closeText:'<img src=\"themes/classic/images/cluetip_close.png\" alt=\"close\"  />',
 	closePosition: 'title',
 	activation: 'click'
 	
@@ -99,8 +99,8 @@ $(document).ready(function() {
       if (!$('#cluetip').length) {
         $cluetipInner = $('<div id="cluetip-inner"></div>');
         $cluetipTitle = $('<h3 id="cluetip-title"></h3>');        
-        $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
-        $cluetip = $('<div id="cluetip"></div>').css({zIndex: opts.cluezIndex})
+        $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner);
+        $cluetip = $('<div id="cluetip"></div>').css({zIndex: opts.cluezIndex}).append($cluetipTitle)
         .append($cluetipOuter).append('<div id="cluetip-extra"></div>')[insertionType](insertionElement).hide();
         $('<div id="cluetip-waitimage"></div>').css({position: 'absolute', zIndex: cluezIndex-1})
         .insertBefore('#cluetip').hide();
