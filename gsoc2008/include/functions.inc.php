@@ -2356,8 +2356,11 @@ if (!$i) {
 	if($ajax_show==0){
 		theme_slideshow($Pic[$pos],$Title[$pos]);
 	}
+	$a = array ('url'=>$Pic[$pos],'title'=>$Title[$pos]);
+	$a_jons = json_encode($a);
 	if($ajax_show==1){
-	echo $Pic[$pos]."|".$Title[$pos];
+	echo $a_jons;
+
 	}
 	
 }
@@ -3512,7 +3515,7 @@ EOT;
  * @return
  **/
 
-function cpg_display_help($reference = 'f=index.htm', $width = '500', $height = '200') {
+function cpg_display_help($reference = 'f=index.htm', $width = '500', $height = '200',$title_help='Coppermine-Help') {
 global $CONFIG, $USER;
 if ($reference == '' || $CONFIG['enable_help'] == '0') {return; }
 if ($CONFIG['enable_help'] == '2' && GALLERY_ADMIN_MODE == false) {return; }
@@ -3520,8 +3523,7 @@ $help_theme = $CONFIG['theme'];
 if (isset($USER['theme'])) {
     $help_theme = $USER['theme'];
 }
-
-$help_html = "<a class=\"jt\" href='help.php?". $reference."'  rel='help.php?". $reference."'  ><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\"  /></a>";
+$help_html = "<a class=\"jt\" href='help.php?". $reference."'  rel='help.php?". $reference."' title=".$title_help." ><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\"  /></a>";
 return $help_html;
 }
 
