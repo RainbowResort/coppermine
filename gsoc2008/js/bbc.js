@@ -40,7 +40,10 @@ $.fn.insertTags = function (open, close, myValue) {
 					myValue = linkText;
 				}
 			}
-
+			
+			if(close=="[/color]"){
+				open = open.replace("black",myValue);
+			}
 
 	
 		//.focus();
@@ -71,19 +74,42 @@ $.fn.insertTags = function (open, close, myValue) {
 }
 
 $(document).ready(function() {
+	
+	$('.choose_color').click(function(){
+		editRel = $(this).attr('rel');
+
+		editBox = $("#comment_box"+editRel).children();
+		editTitle = $(this).attr('bgcolor');
+		
+		if(editTitle[0] == '#'){
+			editTitle = editTitle.toUpperCase();
+		}
+			
+		if(editBox) editBox.insertTags('[color='+ editTitle +']','[/color]', '');
+		$('#dsrte-color'+editRel).slideUp(); 
+		
+		
+	});
+	
 	$('img.bb_img').click(function() {
+		editRel = $(this).attr('rel');
+
 		// getting the text area
-		editBox = $(this).parent().parent().next();
+		editBox = $("#comment_box"+editRel).children();
 
 		// getting the id
 		editId = $(this).attr('id');
+		//alert(editId);
 		editTitle = $(this).attr('title');
 
-		if (editId == "bb_bold") editBox.insertTags('[b]','[/b]', editTitle);
-		else if (editId == "bb_italic") editBox.insertTags('[i]','[/i]', editTitle);
-		else if (editId == "bb_underline") editBox.insertTags('[u]','[/u]', editTitle);
-		else if (editId == "bb_url") editBox.insertTags('[url=http://www.domain.com]','[/url]', editTitle);
-		else if (editId == "bb_img") editBox.insertTags('[img]','[/img]', 'http://domain.com/image.jpg');
-		else if (editId == "bb_email") editBox.insertTags('[email]','[/email]',editTitle);
+		if (editId == "bb_bold"+editRel ) editBox.insertTags('[b]','[/b]', editTitle);
+		else if (editId == "bb_italic"+editRel ) editBox.insertTags('[i]','[/i]', editTitle);
+		else if (editId == "bb_underline"+editRel ) editBox.insertTags('[u]','[/u]', editTitle);
+		else if (editId == "bb_url" +editRel ) editBox.insertTags('[url=http://www.domain.com]','[/url]', editTitle);
+		else if (editId == "bb_img"+ editRel) editBox.insertTags('[img]','[/img]', 'http://domain.com/image.jpg');
+		else if (editId == "bb_email"+editRel ) editBox.insertTags('[email]','[/email]',editTitle);
+		
 	});
+	
+
 });
