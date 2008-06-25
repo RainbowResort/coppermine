@@ -73,7 +73,7 @@ p {
 }
 
 ul {
-        margin-left: 5px;
+       
         padding: 0px;
 }
 
@@ -479,8 +479,8 @@ a:active {
 
 .image {
         border-style:solid;
-        border-width:1px;
-        border-color:#000000;
+        border-width:5px;
+        border-color:#2B2B2B;
         margin:2px;
 }
 
@@ -785,3 +785,8 @@ div.social_bookmarks {
 .dtree .clip {
         overflow: hidden;
 }
+div#tape_prev { float: left; margin-top:45px;}
+div#tape_next { float: right; margin-top:-55px;}
+div#film { margin:0; padding:0;  overflow:hidden; position:relative; width: 335px;  }
+div#film ul.tape{ float: left;  width: 450px;  }
+div#film ul.tape li{ list-style: none; display: inline;  position: relative; margin: 0 1px 0 1px; }
