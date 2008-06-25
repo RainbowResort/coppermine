@@ -317,7 +317,7 @@ $(document).ready(function() {
       }
 // now that content is loaded, finish the positioning 
       var direction = '';
-      $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
+      $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', maxHeight: defHeight});
       tipHeight = defHeight == 'auto' ? Math.max($cluetip.outerHeight(),$cluetip.height()) : parseInt(defHeight,10);   
       tipY = posY;
       baseline = sTop + wHeight;
