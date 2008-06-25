@@ -20,6 +20,7 @@
  * This file contains dispalyimge.php specific javascript
  */
 
+
 $(document).ready(function(){
 
 		//set variable from php  
@@ -28,28 +29,24 @@ $(document).ready(function(){
 		var $album = 	js_vars.album;
 		var run_slideshow = js_vars.run_slideshow;
 		var p = 		js_vars.Pic_count;
-		
+				
 		var Title ="";
 	 	var i = new Image();
 		
-		//called to laoadImage 
-		loadImage(j);
-	 	
-		//start to run slideshow
-		runSlideShow();
+		if(length.run_slideshow!=0){
+		loadImage(j+1);
+		}
 		 
 		//implement ajax call to get pic url and title
 	 function loadImage (j){ 	 
-	 	var prev_url = "displayimage.php?ajax_show=1&pos="+j+"&album="+$album;  
-			$.get(prev_url, {}, function(msg) {
-				if (msg.indexOf("|") != -1) {
-						splitMsg = msg.split("|");
-						i.src = splitMsg[0];
-						Title= splitMsg[1];
-					}
-			});
- }
-
+	 
+	  $.getJSON("displayimage.php?ajax_show=1&pos="+j+"&album="+$album,
+            function(data){
+				i.src = data['url'];
+				Title = data['title'];
+              }); 
+			}
+		runSlideShow(i);
  		// next pic view
  	function showNextSlide(i){
 			j = j + 1;
@@ -59,7 +56,7 @@ $(document).ready(function(){
 			if (temp) {
 				$("#showImage").attr({
 					src: i.src,
-					title: "jQuery",
+					title: Title,
 					alt: "jQuery Logo",
 					style: "visibility:hidden;"
 				});
@@ -75,7 +72,10 @@ $(document).ready(function(){
 		showNextSlide(i);
 		setTimeout(runSlideShow,Time);
 	}
-
-			
+	
+	$(".navmenu").click(function () { 
+     self.document.location = 'displayimage.php?album='+$album+'&pos='+j;
+    });
+		
 });
 
