@@ -33,10 +33,15 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 1) {
 }
 
 js_include('js/jquery.js');
-js_include('js/displayimage.js');
+js_include('js/facebox.js');
 js_include('js/bbc.js');
 js_include('js/jquery.cluetip.js');
-js_include('js/jquery.slideshow.js');
+js_include('js/displayimage.js');
+js_include('js/ui.core.js');
+js_include('js/ui.dialog.js');
+js_include('js/ui.draggable.js');
+js_include('js/ui.resizable.js');
+js_include('js/approval.js');
 
 if ($CONFIG['enable_smilies']) include("include/smilies.inc.php");
 
@@ -259,6 +264,7 @@ if ($superCage->get->testAlpha('album')) {
 
 //get ajax call to thubm photo added by Nuwan Sameera Hettiarachchi. 
 $ajax_show = $superCage->get->getInt('ajax_show');
+$ajax_call = $superCage->get->getInt('ajax_call');
 // Build the album set if required
 /*
 //disabled by donnoman
@@ -396,6 +402,7 @@ if ($superCage->get->keyExists('fullsize')) {
     ob_end_flush();
 } elseif ($superCage->get->keyExists('slideshow')) {
     $slideshow = $superCage->get->getInt('slideshow');
+	set_js_var('run_slideshow','true');
     display_slideshow($pos);
     ob_end_flush();
 } else {
