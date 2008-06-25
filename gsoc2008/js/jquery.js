@@ -1,29 +1,3 @@
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
-  ********************************************
-  Coppermine version: 1.5.0
-  $HeadURL$
-  $Revision: 4220 $
-  $LastChangedBy: Nuwan Sameera $
-  $Date: 2008-06-13 23:08:30 $
-**********************************************/
-
-/*
- * jQuery 1.2.1 - New Wave Javascript
- *
- * Copyright (c) 2007 John Resig (jquery.com)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
- */
-
 (function(){
 /*
  * jQuery 1.2.6 - New Wave Javascript
