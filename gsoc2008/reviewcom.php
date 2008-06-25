@@ -25,9 +25,6 @@ define('REVIEWCOM_PHP', true);
 require('include/init.inc.php');
 include("include/smilies.inc.php");
 
-js_include('js/jquery.js');
-js_include('js/jquery.cluetip.js');
-
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
@@ -43,7 +40,8 @@ foreach ($single_approval_array as $value) {
 }
 // We have gathered enough data for a basic check - let's only perform the rest of the individual approval if everthying is OK, i.e. all previous critieria have been met.
 if ($get_data_rejected==0) { // individual approval start
-    pageheader($lang_reviewcom_php['title']);
+   //commented by Nuwan Sameear to remove the header of the page. the reason is that will be loaded this page content only 
+   // pageheader($lang_reviewcom_php['title']);
 
     // Normally, we could trust this input, as only the admin should have gotten that far.
     // Anyway, let's perform some more testing, it won't hurt performance-wise, but should be more secure - maybe the admin has followed a made-up link that led him here.
@@ -110,7 +108,13 @@ if ($get_data_rejected==0) { // individual approval start
             $query_approval = 'NO';
             $title = $lang_reviewcom_php['comment_disapproved'];
         }
-        cpg_db_query("UPDATE {$CONFIG['TABLE_COMMENTS']} SET `approval` = '{$query_approval}' WHERE msg_id = {$single_approval_array['msg_id']}");
+        // added to respod to the ajax called to apporveal system
+      	if($superCage->get->keyExists('action')){
+		cpg_db_query("UPDATE {$CONFIG['TABLE_COMMENTS']} SET `approval` = '{$query_approval}' WHERE msg_id = {$single_approval_array['msg_id']}");
+			print "ok";
+			ob_end_flush();
+			exit; 
+		}
         starttable('-2', $title, 2);
         print <<< EOT
         <tr>
@@ -129,15 +133,15 @@ if ($get_data_rejected==0) { // individual approval start
             <td class="tableb tableb_alternate">{$lang_reviewcom_php['file']}</td>
             <td class="tableb tableb_alternate"><a href="$thumb_link"><img src="$thumb_url" {$image_size['geom']} class="image" border="0" alt="" /></a></td>
         </tr>
-        <tr>
+        <!--<tr>
             <td class="tablef" colspan="2" align="center"><a href="$thumb_link#comment{$single_approval_array['msg_id']}" class="admin_menu">{$lang_common['continue']}</a></td>
-        </tr>
+        </tr>-->
 EOT;
         endtable();
     } else { // verification not passed
         cpg_die(ERROR, $lang_errors['non_exist_comment'], __FILE__, __LINE__);
     }
-    pagefooter();
+     //pagefooter();
     ob_end_flush();
 } else { // individual approval end, mass-approval start
 
