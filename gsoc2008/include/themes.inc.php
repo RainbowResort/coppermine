@@ -68,7 +68,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}         //{THEMES
 //    The entire block needs to be present like in Coppermine 1.3 themes
 //  ('THEME_IS_XHTML10_TRANSITIONAL',1) : If theme is defined as XHTML10_TRANSITIONAL the VANITY footer will be enabled
 //    if the theme has a {VANITY} token in its template.html. Don't enable this if you have modified the code! See the
-//    docs/en/theme.html documentation for validation methodology.
+//    docs/theme.html documentation for validation methodology.
 // ('THEME_HAS_SIDEBAR_GRAPHICS', 1) : The location for the sidebar graphics that compose the tree menu will
 //    be directed to the themes images folder, subfolder 'sidebar', i.e. themes/yourtheme/images/sidebar/.
 //    Gallery root                                                             : images/sidebar/base.gif
@@ -462,7 +462,7 @@ $template_album_list = <<<EOT
         </tr>
         <tr>
                 <td width="100%" valign="top" class="tableb_compact">
-                    <div class="thumbnails" style="background-color:transparent"><img src="images/spacer.gif" width="1" height="1" border="0" class="image" style="border:0;margin-top:1px;margin-bottom:0" alt="" /></div>
+                    <div class="thumbnails" style="background-color:transparent"><img src="images/spacer.gif" width="1" height="{SPACER}" border="0" class="image" style="border:0;margin-top:1px;margin-bottom:0" alt="" /></div>
                 </td>
         </tr>
         </table>
@@ -502,30 +502,32 @@ if (!isset($template_film_strip)) { //{THEMES}
 ******************************************************************************/
 // HTML template for filmstrip display
 $template_film_strip = <<<EOT
-
-        <tr>
+		<tr>
          <td valign="top" style="background-image: url({TILE1});"><img src="{TILE1}" alt="" border="0" /></td>
         </tr>
         <tr>
-        <td valign="bottom" class="thumbnails" align="center" style="{THUMB_TD_STYLE}">
-          <table width="100%" cellspacing="0" cellpadding="3" border="0">
-              <tr>
-                 <td width="50%"><span id="filmstrip_prev_link" style="display: none;">{PREV_LINK}</span></td>
-                 {THUMB_STRIP}
-                 <td width="50%" align="right"><span id="filmstrip_next_link" style="display: none;">{NEXT_LINK}</a></span></td>
-              </tr>
+	<td valign="bottom"  align="center" style="{THUMB_TD_STYLE}">
+		<table width="100%" cellspacing="0" cellpadding="3" border="0">
+         <tr>
+			<td width="50%" class="prve_strip"></td>
+				<td valign="bottom" class="thumbnails" style="{THUMB_TD_STYLE}">
+					<div id="film"><ul class="tape" style="{SET_MARGIN}">{THUMB_STRIP}</ul></div>
+				</td>	
+				<td width="50%" align="right" class="next_strip"></td>
+			</tr>
           </table>
         </td>
         </tr>
-        <tr>
+		<tr>
          <td valign="top" style="background-image: url({TILE2});"><img src="{TILE2}" alt="" border="0" /></td>
         </tr>
+ 
 <!-- BEGIN thumb_cell -->
-                <td valign="top" align="center">
+                <li valign="top" class="thumb" align="center">
                                         <a href="{LINK_TGT}">{THUMB}</a>
                                         {CAPTION}
                                         {ADMIN_MENU}
-                </td>
+                </li>
 <!-- END thumb_cell -->
 <!-- BEGIN empty_cell -->
                 <td valign="top" align="center" >&nbsp;</td>
@@ -536,6 +538,7 @@ EOT;
 ** Section <<<$template_film_strip>>> - END
 ******************************************************************************/
 } //{THEMES}
+
 
 if (!isset($template_album_list_cat)) { //{THEMES}
 /******************************************************************************
@@ -597,7 +600,7 @@ $template_album_list_cat = <<<EOT
         </tr>
         <tr>
                 <td width="100%" valign="top" class="tableb_compact" >
-                      <div class="thumbnails" style="background-color:transparent"><img src="images/spacer.gif" width="1" height="1" border="0" class="image" style="border:0;margin-top:1px;margin-bottom:0" alt="" /></div>
+                      <div class="thumbnails" style="background-color:transparent"><img src="images/spacer.gif" width="1" height="{SPACER}" border="0" class="image" style="border:0;margin-top:1px;margin-bottom:0" alt="" /></div>
                 </td>
         </tr>
         </table>
@@ -667,34 +670,31 @@ $template_thumb_view_title_row = <<<EOT
                         <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                                 <td width="100%" class="statlink"><h2>{ALBUM_NAME}</h2></td>
-                                <!-- Use JavaScript to display the sorting options only to humans, but hide them from search engines to avoid double-content indexing -->
-                                <script type="text/javascript">
-	                                document.write('<td><img src="images/spacer.gif" width="1" alt="" /></td>');
-	                                document.write('<td class="sortorder_cell">');
-	                                document.write('        <table cellpadding="0" cellspacing="0">');
-	                                document.write('        <tr>');
-	                                document.write('                <td class="sortorder_options">{TITLE}</td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=ta" title="{SORT_TA}">+</a>&nbsp;</span></td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=td" title="{SORT_TD}">-</a>&nbsp;</span></td>');
-	                                document.write('        </tr>');
-	                                document.write('        <tr>');
-	                                document.write('                <td class="sortorder_options">{NAME}</td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=na" title="{SORT_NA}">+</a>&nbsp;</span></td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=nd" title="{SORT_ND}">-</a>&nbsp;</span></td>');
-	                                document.write('        </tr>');
-	                                document.write('        <tr>');
-	                                document.write('                <td class="sortorder_options">{DATE}</td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=da" title="{SORT_DA}">+</a>&nbsp;</span></td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=dd" title="{SORT_DD}">-</a>&nbsp;</span></td>');
-	                                document.write('        </tr>');
-	                                document.write('        <tr>');
-	                                document.write('                <td class="sortorder_options">{POSITION}</td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=pa" title="{SORT_PA}">+</a>&nbsp;</span></td>');
-	                                document.write('                <td class="sortorder_options"><span class="statlink">&nbsp;<a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=pd" title="{SORT_PD}">-</a>&nbsp;</span></td>');
-	                                document.write('        </tr>');
-	                                document.write('        </table>');
-	                                document.write('</td>');
-                                </script>
+                                <td><img src="images/spacer.gif" width="1" alt="" /></td>
+                                <td class="sortorder_cell">
+                                        <table cellpadding="0" cellspacing="0">
+                                        <tr>
+                                                <td class="sortorder_options">{TITLE}</td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=ta" title="{SORT_TA}">&nbsp;+&nbsp;</a></span></td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=td" title="{SORT_TD}">&nbsp;-&nbsp;</a></span></td>
+                                        </tr>
+                                        <tr>
+                                                <td class="sortorder_options">{NAME}</td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=na" title="{SORT_NA}">&nbsp;+&nbsp;</a></span></td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=nd" title="{SORT_ND}">&nbsp;-&nbsp;</a></span></td>
+                                        </tr>
+                                        <tr>
+                                                <td class="sortorder_options">{DATE}</td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=da" title="{SORT_DA}">&nbsp;+&nbsp;</a></span></td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=dd" title="{SORT_DD}">&nbsp;-&nbsp;</a></span></td>
+                                        </tr>
+                                        <tr>
+                                                <td class="sortorder_options">{POSITION}</td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=pa" title="{SORT_PA}">&nbsp;+&nbsp;</a></span></td>
+                                                <td class="sortorder_options"><span class="statlink"><a href="thumbnails.php?album={AID}&amp;page={PAGE}&amp;sort=pd" title="{SORT_PD}">&nbsp;-&nbsp;</a></span></td>
+                                        </tr>
+                                        </table>
+                                </td>
                         </tr>
                         </table>
 
@@ -907,7 +907,6 @@ $template_display_media = <<<EOT
                                                 <table width="100%" cellspacing="2" cellpadding="0" class="tableb">
                                 <tr>
                                         <td align="center">
-
                                                 {ADMIN_MENU}
                                         </td>
                                 </tr>
@@ -944,6 +943,33 @@ EOT;
 ******************************************************************************/
 } //{THEMES}
 
+
+if (!isset($template_display_media_ajax)) { //{THEMES}
+/******************************************************************************
+** Section <<<$template_display_media>>> - START
+******************************************************************************/
+// HTML template for intermediate image display
+$template_display_media_ajax = <<<EOT
+        <tr>
+                <td  class="display_media" nowrap="nowrap" align="center">
+                        <table cellspacing="2" cellpadding="0">
+                                <tr>
+                                        <td div="gallery" align="center">
+											<div id="slideShow" style="position:relative;">
+                                               {IMAGE}
+											</div>
+                                        </td>
+                                </tr>
+				   </table>
+            </td>
+	</tr>
+EOT;
+/******************************************************************************
+** Section <<<$template_display_media>>> - END
+******************************************************************************/
+} //{THEMES}
+
+
 if (!isset($template_image_rating)) { //{THEMES}
 /******************************************************************************
 ** Section <<<$template_image_rating>>> - START
@@ -977,7 +1003,7 @@ if (!isset($template_image_comments)) { //{THEMES}
 $template_image_comments = <<<EOT
 <table align="center" width="{WIDTH}" cellspacing="1" cellpadding="0" class="maintable" border="0">
 
-        <tr>
+        <tr><tr><div id="dialog"></div></tr>
                 <td>
                         <table width="100%" cellpadding="0" cellspacing="0">
                            <tr>
@@ -1028,35 +1054,41 @@ $template_image_comments = <<<EOT
                                                 </tr>
                                                 <tr>
                                                 <td width="80%">
-<div id="create_formatting" style="margin-bottom: 5px;float:left;">
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif"/></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png"/></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_color" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color_2').slideDown()" /></div>
+<div id="create_formatting" style="margin-bottom: 5px;float:left;width:100%;">
 
-			<div id="dsrte-color_2" class="rte panel" style="display: none; float:left; width:300px;">
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold{MSG_ID}" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic{MSG_ID}" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline{MSG_ID}" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel={MSG_ID} /></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel={MSG_ID} /></div>
+
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color{MSG_ID}').slideDown()" /></div>
+
+</div><div>
+			<div id="dsrte-color{MSG_ID}" class="rte panel" style="display: none; float:left; width:300px;">
 <table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
 <tbody>
 	<tr>
-		<td bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer;;"/>
-		<td bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td><img src="images/editor/delete.png" style="cursor:pointer;" alt="Delete" onclick="$('#dsrte-color_2').slideUp()" /></td>
+		<td class="choose_color" bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;"  rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;border: 1px solid #FFF;" rel={MSG_ID} />
+		<td><input type="button" alt="Delete" style="margin-left:5px;"  onclick="$('#dsrte-color{MSG_ID}').slideUp()" value="Cancel" /></td>
 	</tr>
 </tbody>
 </table>
 
 	</div>				
 </div>
-            <textarea cols="40" rows="2" class="textinput" name="msg_body" onselect="storeCaret_f{MSG_ID}(this);" onclick="storeCaret_f{MSG_ID}(this);" onkeyup="storeCaret_f{MSG_ID}(this);" style="width: 100%;">{MSG_BODY_RAW}</textarea>
-        </td>
+<div id="comment_box{MSG_ID}">
+  <textarea cols="40" rows="2" class="textinput" name="msg_body" onselect="storeCaret_f{MSG_ID}(this);" onclick="storeCaret_f{MSG_ID}(this);" onkeyup="storeCaret_f{MSG_ID}(this);" style="width: 100%;">{MSG_BODY_RAW}</textarea>
+</div>
+ 
+                                                </td>
                                                 <td class="tableb_compact">
                                                 </td>
                                                 <td>
@@ -1119,12 +1151,13 @@ $template_add_your_comment = <<<EOT
                         <tr>
                                         <td width="100%" class="tableh2_compact">{ADD_YOUR_COMMENT}{HELP_ICON}</td>
                         </tr>
+
                         <tr>
                 <td colspan="1">
                         <table width="100%" cellpadding="0" cellspacing="0">
 
 <!-- BEGIN user_name_input -->
-                                                        <tr>
+                                <tr>
                                <td class="tableb_compact">
                                         {NAME}
                                 </td>
@@ -1133,37 +1166,39 @@ $template_add_your_comment = <<<EOT
                                 </td>
 <!-- END user_name_input -->
 <!-- BEGIN input_box_smilies -->
-        <td class="tableb_compact">                              
-             </td>
+                                <td class="tableb_compact">
+                                                                </td>
 				<td width="100%" class="tableb_compact">
-						<div id="create_formatting" style="margin-bottom: 5px;float:left;">
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif"/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif"/></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png"/></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_color" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').slideDown()" /></div>
-
-			<div id="dsrte-color" class="rte panel" style="display: none; float:left; width:300px;">
+						<div id="create_formatting" style="margin-bottom: 5px;float:left; width:100%">
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel=""/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel=""/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel=""/></div>
+						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel="" /></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel="" /></div>
+<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').slideDown()"  rel="" /></div>
+</div><div>
+			<div id="dsrte-color" class="rte panel" style="float: left; display: none;margin: 0; width:300px;">
 <table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
 <tbody>
 	<tr>
-		<td bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer;;"/>
-		<td bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;"/>
-		<td><img src="images/editor/delete.png" style="cursor:pointer;" alt="Delete" onclick="$('#dsrte-color').slideUp()" /></td>
+		<td class="choose_color" bgcolor="#000" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="red" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="blue" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="green" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="yellow" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#00FFFF" rel="" style= "width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#FF00FF"  rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#333" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
+		<td><input type="button" alt="Delete" style="margin-left:5px;"  onclick="$('#dsrte-color').slideUp()" value="Cancel" /></td>
 	</tr>
 </tbody>
 </table>
 
-		</div>				
+	</div>				
+</div>
+<div id="comment_box">
+                               <textarea class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" ></textarea>
 	</div>
-         <textarea class="textinput" id="message" name="msg_body" onselect="storeCaret_post(this);" onclick="storeCaret_post(this);" onkeyup="storeCaret_post(this);" maxlength="{MAX_COM_LENGTH}" style="width: 100%;" ></textarea>
 </td>
 <!-- END input_box_smilies -->
 <!-- BEGIN input_box_no_smilies -->
@@ -1182,6 +1217,7 @@ $template_add_your_comment = <<<EOT
                                 </td>
 <!-- END submit -->
                                                         </tr>
+
 <!-- BEGIN comment_captcha -->
                                                         <tr>
                                 <td class="tableb_compact" colspan="2">
@@ -1641,14 +1677,14 @@ if (!function_exists('theme_javascript_head')) {  //{THEMES}
 // Function for the JavaScript inside the <head>-section
 function theme_javascript_head() {
     global $CONFIG, $JS;
-    
+
 	$return = '';
 	// Check if we have any variables being set using set_js_vars function
 	if (isset($JS['vars']) && count($JS['vars'])) {
 		// Convert the $JS['vars'] array to json object string
 		$json_vars = json_encode($JS['vars']);
 		// Output the json object
-		$return .= "<script type=\"text/javascript\">var js_vars = eval('($json_vars)');</script>\n";
+		$return .= '<script type="text/javascript">var js_vars = ' . $json_vars . ";</script>\n";
 	}
 
 	// Check if we have any js includes
@@ -1660,9 +1696,7 @@ function theme_javascript_head() {
 	}
 
     $return .= '<script type="text/javascript" src="scripts.js"></script>'."\n"; // do not remove this line unless you really know what you're doing
-    // styles for ajax dialog box 
-	$return .='  <link rel="stylesheet" href="js/css/jquery.cluetip.css" type="text/css" />'."\n";
-    $return .= <<< EOT
+	$return .= <<< EOT
 
 <script type="text/javascript">
 </script>
@@ -2618,7 +2652,7 @@ if (!function_exists('theme_display_film_strip')) {  //{THEMES}
 // Function to display the film strip
 function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $cat, $pos, $sort_options, $mode = 'thumb', $date='', $filmstrip_prev_pos, $filmstrip_next_pos) {
     global $CONFIG, $THEME_DIR;
-    global $template_film_strip, $lang_film_strip, $pic_count;
+    global $template_film_strip, $lang_film_strip, $pic_count,$mar_pic;
 
     $superCage = Inspekt::makeSuperCage();
 
@@ -2677,6 +2711,7 @@ function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $ca
                 '{ADMIN_MENU}' => ''
                 );
         }
+	
         $thumb_strip .= template_eval($thumb_cell, $params);
     }
 
@@ -2694,15 +2729,19 @@ function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $ca
 	} else {
 		$location= '';
 	}
-	$prev_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_prev_pos&amp;album=$aid&amp;cat=$cat";
-	$next_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_next_pos&amp;album=$aid&amp;cat=$cat";
+	
+	//adding marign by Nuwan Sameera
+	if(isset($mar_pic) && $mar_pic == '1'){
+		$set_margin = "margin-left: -109px";
+		}
+//	$prev_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_prev_pos&amp;album=$aid&amp;cat=$cat&amp;mar_pic=1";
+//	$next_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_next_pos&amp;album=$aid&amp;cat=$cat&amp;next=2";
     $params = array('{THUMB_STRIP}' => $thumb_strip,
         '{COLS}' => $i,
         '{TILE1}' => $tile1,
         '{TILE2}' => $tile2,
-        '{PREV_LINK}' => $pos > 0 ? "<a href=\"$prev_tgt\" id=\"filmstrip_prev\" rel=\"nofollow\"><img src=\"{$location}images/prev.gif\" border=\"0\" /></a>" : ' ',
-        '{NEXT_LINK}' => $pos < $pic_count - 1 ? "<a href=\"$next_tgt\" id=\"filmstrip_next\" rel=\"nofollow\"><img src=\"{$location}images/next.gif\" border=\"0\" /></a>" : ' ',
-        '{THUMB_TD_STYLE}' => $superCage->get->keyExists('film_strip') ? 'display: none;' : '',
+		'{SET_MARGIN}' => $set_margin,
+        
         );
 
     ob_start();
@@ -2720,6 +2759,92 @@ function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $ca
 ** Section <<<theme_display_film_strip>>> - END
 ******************************************************************************/
 }  //{THEMES}
+
+if (!function_exists('theme_display_film_strip_ajax')) {  //{THEMES}
+/******************************************************************************
+** Section <<<theme_html_controller_pictuer>>> - START
+Done by Nuwan Sameera Hettiarachci 
+******************************************************************************/
+function theme_display_film_strip_ajax(&$thumb_list, $nbThumb, $album_name, $aid, $cat, $pos, $sort_options, $mode = 'thumb', $date='', $filmstrip_prev_pos, $filmstrip_next_pos,$mar_pic) {
+	
+	global $CONFIG, $THEME_DIR;
+    global $template_film_strip, $lang_film_strip, $pic_count,$mar_pic;
+
+    $superCage = Inspekt::makeSuperCage();
+
+    static $template = '';
+    static $thumb_cell = '';
+    static $empty_cell = '';
+    static $spacer = '';
+
+    if ((!$template)) {
+        $template = $template_film_strip;
+        $thumb_cell = template_extract_block($template, 'thumb_cell');
+        $empty_cell = template_extract_block($template, 'empty_cell');
+    }
+
+    $cat_link = is_numeric($aid) ? '' : '&amp;cat=' . $cat;
+    $date_link = $date=='' ? '' : '&amp;date=' . $date;
+
+    if ($superCage->get->getInt('uid')) {
+        $uid_link = '&amp;uid=' . $superCage->get->getInt('uid');
+    } else {
+        $uid_link = '';
+    }
+
+    $thumbcols = $CONFIG['thumbcols'];
+    $cell_width = ceil(100 / $CONFIG['max_film_strip_items']) . '%';
+
+    $i = 0;
+    $thumb_strip = '';
+    foreach($thumb_list as $thumb) {
+        $i++;
+        if ($mode == 'thumb') {
+            if ($thumb['pos'] == $pos && !$superCage->get->keyExists('film_strip')) {
+                    $thumb['image'] = str_replace('class="image"', 'class="image middlethumb"', $thumb['image']);
+            }
+            // determine if thumbnail link targets should open in a pop-up
+            if ($CONFIG['thumbnail_to_fullsize'] == 1) { // code for full-size pop-up
+                if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 2) {
+                       $target = 'javascript:;" onClick="alert(\''.sprintf($lang_errors['login_needed'],'','','','').'\');';
+                } else {
+                    $target = 'javascript:;" onClick="MM_openBrWindow(\'displayimage.php?pid=' . $thumb['pid'] . '&fullsize=1\',\'' . uniqid(rand()) . '\',\'scrollbars=yes,toolbar=no,status=no,resizable=yes,width=' . ((int)$thumb['pwidth']+(int)$CONFIG['fullsize_padding_x']) .  ',height=' .   ((int)$thumb['pheight']+(int)$CONFIG['fullsize_padding_y']). '\');';
+                }
+            } else {
+                $target = "displayimage.php?album=$aid$cat_link$date_link&amp;pid={$thumb['pid']}$uid_link";
+            }
+            $params = array('{CELL_WIDTH}' => $cell_width,
+                '{LINK_TGT}' => $target,
+                '{THUMB}' => $thumb['image'],
+                '{CAPTION}' => $thumb['caption'],
+                '{ADMIN_MENU}' => ''
+                );
+        } else {
+            $params = array('{CELL_WIDTH}' => $cell_width,
+                '{LINK_TGT}' => "index.php?cat={$thumb['cat']}",
+                '{THUMB}' => $thumb['image'],
+                '{CAPTION}' => '',
+                '{ADMIN_MENU}' => ''
+                );
+        }
+	
+        $thumb_strip .= template_eval($thumb_cell, $params);
+    }
+
+	// $params = array('{THUMB_STRIP}' => $thumb_strip);
+	 
+	ob_start();
+	echo $thumb_strip; 
+    $film_strip = ob_get_contents();
+    ob_end_clean();
+
+    return $film_strip;
+	}
+/******************************************************************************
+** Section <<<theme_html_controller_pictuer>>> - END
+******************************************************************************/
+}  //{THEMES}
+
 
 if (!function_exists('theme_no_img_to_display')) {  //{THEMES}
 /******************************************************************************
@@ -2768,6 +2893,7 @@ function theme_display_image($nav_menu, $picture, $votes, $pic_info, $comments, 
     endtable();
     if ($CONFIG['display_film_strip'] == 1) {
         echo $film_strip;
+	
     }
 
 
@@ -2915,11 +3041,14 @@ function theme_html_picture()
     }
 
     if ($mime_content['content']=='image') {
+		
         if (isset($image_size['reduced'])) {
+			
             $imginfo=getimagesize($picture_url);
             $winsizeX = $CURRENT_PIC_DATA['pwidth']+$CONFIG['fullsize_padding_x'];  //the +'s are the mysterious FF and IE paddings
             $winsizeY = $CURRENT_PIC_DATA['pheight']+$CONFIG['fullsize_padding_y']; //the +'s are the mysterious FF and IE paddings
-            if ($CONFIG['transparent_overlay'] == 1) {
+            
+           if ($CONFIG['transparent_overlay'] == 1) {
                 $pic_html = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td background=\"" . $picture_url . "\" width=\"{$imginfo[0]}\" height=\"{$imginfo[1]}\" class=\"image\">";
                 if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 2) {
                    $pic_html .= '<a href="javascript:;" onClick="alert(\''.sprintf($lang_errors['login_needed'],'','','','').'\');">';
@@ -2929,13 +3058,15 @@ function theme_html_picture()
                 $pic_title = $lang_display_image_php['view_fs'] . "\n==============\n" . $pic_title;
                 $pic_html .= "<img src=\"images/image.gif?id=".floor(rand()*1000+rand())."\" width={$imginfo[0]} height={$imginfo[1]}  border=\"0\" alt=\"{$lang_display_image_php['view_fs']}\" /><br />";
                 $pic_html .= "</a>\n </td></tr></table>";
-            } else {
+            }  else {
                 if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 2) {
                    $pic_html = '<a href="javascript:;" onClick="alert(\''.sprintf($lang_errors['login_needed'],'','','','').'\');">';
                 } else {
-                  $pic_html = "<a href=\"javascript:;\" onclick=\"MM_openBrWindow('displayimage.php?pid=$pid&amp;fullsize=1','" . uniqid(rand()) . "','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=$winsizeX,height=$winsizeY')\">";
-                }
-                $pic_title = $lang_display_image_php['view_fs'] . "\n==============\n" . $pic_title;
+                 // $pic_html = "<a href=\"javascript:;\" onclick=\"MM_openBrWindow('displayimage.php?pid=$pid&amp;fullsize=1','" . uniqid(rand()) . "','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=$winsizeX,height=$winsizeY')\">";
+                $pic_html .= "<a href='displayimage.php?pid=$pid&amp;fullsize=1' rel='facebox'>";  
+			   }
+			   $pic_title = $lang_display_image_php['view_fs'] . "\n==============\n" . $pic_title;
+               
                 $pic_html .= "<img src=\"" . $picture_url . "\" class=\"image\" border=\"0\" alt=\"{$lang_display_image_php['view_fs']}\" /><br />";
                 $pic_html .= "</a>\n";
             }
@@ -2945,6 +3076,8 @@ function theme_html_picture()
                 $pic_html .= "<img src=\"images/image.gif?id=".floor(rand()*1000+rand())."\" width={$CURRENT_PIC_DATA['pwidth']} height={$CURRENT_PIC_DATA['pheight']} border=\"0\" alt=\"\" /><br />\n";
                 $pic_html .= "</td></tr></table>";
             } else {
+				 $picture_url = get_pic_url($CURRENT_PIC_DATA, 'fullsize');
+				print $picture_url; 
                 $pic_html = "<img src=\"" . $picture_url . "\" {$image_size['geom']} class=\"image\" border=\"0\" alt=\"\" /><br />\n";
             }
         }
@@ -3095,8 +3228,7 @@ function theme_html_img_nav_menu() {
         $ecard_title = $lang_img_nav_bar['ecard_disabled'];*/
     }
 
-    //report to moderator buttons
-    $report_tgt = '';
+                //report to moderator buttons
     if (($CONFIG['report_post']==1) && (USER_CAN_SEND_ECARDS)) {
         $report_tgt = "report_file.php?album=$album$cat_link$date_link&amp;pid=$pid&amp;pos=$pos";
     } else { // remove button if report toggle is off
@@ -3107,7 +3239,7 @@ function theme_html_img_nav_menu() {
                               $thumb_tgt = "thumbnails.php?album=$album$cat_link$date_link&amp;page=$page$uid_link";
         $meta_nav .= "<link rel=\"up\" href=\"$thumb_tgt\" title=\"".$lang_img_nav_bar['thumb_title']."\"/>\n";
 
-    $slideshow_tgt = "$CPG_PHP_SELF?album=$album$cat_link$date_link$uid_link&amp;pid=$pid&amp;slideshow=".$CONFIG['slideshow_interval'].'#top_display_media';
+    $slideshow_tgt = "$CPG_PHP_SELF?album=$album$cat_link$date_link$uid_link&amp;pid=$pid&amp;start_slideshow=1&amp;slideshow=".$CONFIG['slideshow_interval'].'#top_display_media';
 
     $pic_pos = sprintf($lang_img_nav_bar['pic_pos'], $human_pos, $pic_count);
 
@@ -3237,12 +3369,13 @@ if (!function_exists('theme_html_comments')) {  //{THEMES}
 ** Section <<<theme_html_comments>>> - START
 ******************************************************************************/
 // Displays comments for a specific picture
-function theme_html_comments($pid)
-{
+function theme_html_comments($pid){
+	
     global $CONFIG, $USER, $CURRENT_ALBUM_DATA, $comment_date_fmt, $HTML_SUBST;
     global $template_image_comments, $template_add_your_comment, $lang_display_comments, $lang_common, $REFERER, $lang_bbcode_help_title, $lang_bbcode_help;
 
     $html = '';
+	
 
 //report to moderator buttons
     if (!(($CONFIG['report_post']==1) && (USER_CAN_SEND_ECARDS))) {
@@ -3287,9 +3420,9 @@ function theme_html_comments($pid)
         if (USER_IS_ADMIN) {
             //display the selector approve/disapprove
             if ($row['approval'] == 'NO') {
-                $pending_approval = '<a href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" title="' . $lang_display_comments['approve'] . '"><img src="images/approve.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval = '<a href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"  rel="{MSG_ID}"  id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a>';
             } else {
-                $pending_approval = '<a href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" title="' . $lang_display_comments['disapprove'] . '"><img src="images/disapprove.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="disapprove" rel="{MSG_ID}"  class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a>';
             }
         } else { // user or guest is logged in - start
             if ($row['approval'] == 'NO') { // the comment is not approved - start
@@ -3379,13 +3512,15 @@ function theme_html_comments($pid)
             template_extract_block($template_add_your_comment, 'comment_captcha');
         }
 
-		if ($CONFIG['show_bbcode_help']) {$captionLabel = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);}
-
+		if ($CONFIG['show_bbcode_help']) {			
+			$captionLabel = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245,'bbcode-help');
+			}
+			
         $params = array('{ADD_YOUR_COMMENT}' => $lang_display_comments['add_your_comment'],
             // Modified Name and comment field
             '{NAME}' => $lang_display_comments['name'],
             '{COMMENT}' => $lang_display_comments['comment'],
-            '{CONFIRM}' => $lang_common['confirm'].'&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_common['captcha_help_title']))).'&amp;t='.urlencode(base64_encode(serialize($lang_common['captcha_help']))),470,245),
+            '{CONFIRM}' => $lang_common['confirm'].'&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_common['captcha_help_title']))).'&amp;t='.urlencode(base64_encode(serialize($lang_common['captcha_help']))),470,245,'BBCODE Help'),
             '{PIC_ID}' => $pid,
             '{USER_NAME}' => $user_name,
             '{MAX_COM_LENGTH}' => $CONFIG['max_com_size'],
@@ -3396,15 +3531,17 @@ function theme_html_comments($pid)
             '{WIDTH}' => $CONFIG['picture_table_width'],
 			'{HELP_ICON}' => $captionLabel,
             );
+			
 
         if ($CONFIG['enable_smilies']){
-                        $params['{SMILIES}'] = generate_smilies();
+                       $params['{SMILIES}'] = generate_smilies();
                 } else {
                         template_extract_block($template_add_your_comment, 'smilies');
                 }
 
         template_extract_block($template_add_your_comment, 'login_to_comment');
         $html .= template_eval($template_add_your_comment, $params);
+		
     } else { // user can not post comments
         if ($CONFIG['comment_promote_registration'] == 1 && $CURRENT_ALBUM_DATA['comments'] == 'YES') {
           template_extract_block($template_add_your_comment, 'user_name_input');
@@ -3416,7 +3553,7 @@ function theme_html_comments($pid)
               '{WIDTH}' => $CONFIG['picture_table_width'],
               '{LOGIN_TO_COMMENT}' => sprintf($lang_display_comments['log_in_to_comment'], '<a href="login.php?referer='.$REFERER.'">', '</a>'),
               );
-          $html .= template_eval($template_add_your_comment, $params);
+         $html .= template_eval($template_add_your_comment, $params);
         }
     }
 
@@ -3427,7 +3564,6 @@ function theme_html_comments($pid)
 ******************************************************************************/
 }  //{THEMES}
 
-
 if (!function_exists('theme_slideshow')) {  //{THEMES}
 /******************************************************************************
 ** Section <<<theme_slideshow>>> - START
@@ -3437,13 +3573,12 @@ function theme_slideshow($start_img,$title)
     global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
     global $cat, $date;
 
-    pageheader($lang_display_image_php['slideshow']);
+	pageheader($lang_display_image_php['slideshow']);
     template_extract_block($template_display_media, 'img_desc', $start_slideshow);
 
     $params = array('{CELL_HEIGHT}' => $CONFIG['picture_width'] + 100,
         '{IMAGE}' => '<img src="' . $start_img . '" name="SlideShow" class="image" id="showImage" />',
         '{ADMIN_MENU}' => '',
-        '{TITLE}' =>$title
         );
 
     starttable();
@@ -3457,7 +3592,7 @@ function theme_slideshow($start_img,$title)
         </noscript>
         <tr>
             <td align="center" class="navmenu" style="white-space: nowrap;">
-                <div id="Title"></div>
+                <div id="Title">{$title}</div>
             </td>
         </tr>
 EOT;
@@ -3470,7 +3605,7 @@ EOT;
     echo <<<EOT
         <tr>
                 <td align="center" class="navmenu" style="white-space: nowrap;">
-                        <a onclick="history.back();" style="cursor: pointer" class="navmenu">{$lang_display_image_php['stop_slideshow']}</a>
+                        <a class="navmenu" style="cursor:pointer">{$lang_display_image_php['stop_slideshow']}</a>
                 </td>
         </tr>
 
@@ -3482,6 +3617,8 @@ EOT;
 ** Section <<<theme_slideshow>>> - END
 ******************************************************************************/
 }  //{THEMES}
+
+
 
 
 if (!function_exists('theme_display_fullsize_pic')) {  //{THEMES}
@@ -3526,79 +3663,17 @@ function theme_display_fullsize_pic()
        $row['pwidth'] = 200;
        $row['pheight'] = 100;
     }
-
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-  <head>
-  <meta http-equiv="content-type" content="text/html; charset=<?php echo $CONFIG['charset'] == 'language file' ? $lang_charset : $CONFIG['charset'] ?>" />
-  <title><?php echo $CONFIG['gallery_name'] ?>: <?php echo $lang_fullsize_popup['click_to_close'];
-      ?></title>
-  <style type="text/css">
-    body { margin: 0; padding: 0; background-color: gray; }
-    img { margin:0; padding:0; border:0; }
-    #content { margin:0 auto; padding:0; border:0; }
-    table { border:0; width:<?php echo $row['pwidth'] ?>px; height:<?php echo $row['pheight'] ?>px; border-collapse:collapse}
-    td { vertical-align: middle; text-align:center; }
-  </style>
-
-  <script type="text/javascript" src="scripts.js"></script>
-  </head>
-  <body style="margin:0px; padding:0px; background-color: gray;">
-    <script language="JavaScript" type="text/JavaScript">
-      adjust_popup();
-    </script>
-<?php
-  if ($CONFIG['transparent_overlay'] == 1) {
-?>
-    <table cellpadding="0" cellspacing="0" align="center" style="padding:0px;">
-      <tr>
-<?php
-        echo '<td align="center" valign="middle" background="' . htmlspecialchars($imagedata['path']) . '" ' . $imagedata['geometry'] . ' class="image">';
-        echo '<div id="content">';
-        echo  '<a href="javascript: window.close()" style="border:none"><img src="images/image.gif?id='
-                . floor(rand()*1000+rand())
-                . '&amp;fullsize=yes" '
-                . $imagedata['geometry']
-                . ' alt="'
-                . htmlspecialchars($imagedata['name'])
-                . '" title="'
-                . htmlspecialchars($imagedata['name'])
-                . "\n" . $lang_fullsize_popup['click_to_close']
-                . '" /></a><br />' ."\n";
-?>
-          </div>
-        </td>
-      </tr>
-    </table>
-<?php
-  } else {
-?>
-    <table class="fullsize">
-      <tr>
-        <td>
-          <div id="content">
-              <?php     echo  '<a href="javascript: window.close()"><img src="'
-                . htmlspecialchars($imagedata['path']) . '" '
+   echo  '<img src="'. htmlspecialchars($imagedata['path']) . '" '
                 . $imagedata['geometry']
                 . 'alt="'
                 . htmlspecialchars($imagedata['name'])
                 . '" title="'
                 . htmlspecialchars($imagedata['name'])
-                . "\n" . $lang_fullsize_popup['click_to_close']
-                . '" /></a><br />' ."\n";
-               ?>
-          </div>
-        </td>
-      </tr>
-    </table>
-<?php
-  }
+                . '" />' ."\n";
+           
+     
+  
 
-?>
-  </body>
-</html>
-<?php
 }
 /******************************************************************************
 ** Section <<<theme_display_fullsize_pic>>> - END
