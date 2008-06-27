@@ -4474,14 +4474,4 @@ function cpg_getimagesize($image, $force_cpg_function = false){
         }
 }
 
-
-function xml_encoding() {
-	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-}
-
-function api_die($message) {
-	die(xml_encoding() . '<api_error>' . $message . '</api_error>');
-	
-}
-
 ?>

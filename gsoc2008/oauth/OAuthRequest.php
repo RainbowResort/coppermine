@@ -64,21 +64,14 @@ class OAuthRequest
 	 * @param string	body			optional body of the OAuth request (POST or PUT)
 	 */
 	function __construct ( $uri = null, $method = 'GET', $parameters = '', $headers = array(), $body = null )
-	{global $superCage;
+	{
+		global $superCage;
+
 		if (empty($uri))
-		{
-			if (is_object($_SERVER))
-			{
-				// Tainted arrays - the normal stuff in anyMeta
-				$method	= $_SERVER->REQUEST_METHOD->getRawUnsafe();
-				$uri	= $_SERVER->REQUEST_URI->getRawUnsafe();
-			}
-			else
-			{
-				// non anyMeta systems
-				$method	= $superCage->server->getRaw('REQUEST_METHOD');
-				$uri	= $superCage->server->getRaw('REQUEST_URI');
-			}
+		{			
+			$method	= $superCage->server->getAlpha('REQUEST_METHOD');
+			$matches = $superCage->server->getMatched('REQUEST_URI', '/^[0-9A-Za-z\/_.-]+$/');
+			$uri = $matches[0];
 			$headers      = getallheaders();
 			$parameters   = '';
 			$this->method = strtoupper($method);
@@ -446,9 +439,11 @@ class OAuthRequest
 		// Get the current/requested host
 		if (empty($ps['host']))
 		{
-			if ($superCage->server->getRaw('HTTP_HOST'))
+			$matches = $superCage->server->getMatched('HTTP_HOST', '/^[a-z0-9\.\-]+$/');
+			if ($matches[0])
 			{
-				$ps['host'] = $superCage->server->getRaw('HTTP_HOST');
+				$matches[0] = mb_strtolower($matches[0]);
+				$ps['host'] = $matches[0];
 			}
 			else
 			{
@@ -456,7 +451,9 @@ class OAuthRequest
 			}
 		}
 		$ps['host'] = mb_strtolower($ps['host']);
-		if (!preg_match('/^[a-z0-9\.\-]+$/', $ps['host']))
+
+		// getRaw() used for comparison purposes only
+		if ($ps['host'] != $superCage->server->getRaw('HTTP_HOST'))
 		{
 			throw new OAuthException('Unsupported characters in host name');
 		}
@@ -646,10 +643,12 @@ class OAuthRequest
 	 */
 	private function getRequestContentType ()
 	{
+		global $superCage;
+
 		$content_type = 'application/octet-stream';
-		if (!empty($_SERVER) && array_key_exists('CONTENT_TYPE', $_SERVER))
+		if ($superCage->server->keyExists('CONTENT_TYPE'))
 		{
-			list($content_type) = explode(';', $_SERVER['CONTENT_TYPE']);
+			list($content_type) = explode(';', $superCage->server->getMatched('CONTENT_TYPE', '/^[A-Za-z0-9\/-]+$/'));
 		}
 		return trim($content_type);
 	}

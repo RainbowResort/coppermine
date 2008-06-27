@@ -898,7 +898,7 @@ class OAuthStoreMySQL
 		$this->query('
 				INSERT INTO oauth_server_token
 				SET ost_osr_id_ref		= %d,
-					ost_usa_id_ref		= 1,
+					ost_usa_id_ref		= 0,
 					ost_token			= \'%s\',
 					ost_token_secret	= \'%s\',
 					ost_token_type		= \'request\'
@@ -967,8 +967,7 @@ class OAuthStoreMySQL
 		$this->query('
 					UPDATE oauth_server_token
 					SET ost_authorized = 1,
-						ost_usa_id_ref = %d,
-						ost_timestamp  = NOW()
+						ost_usa_id_ref = %d
 					WHERE ost_token      = \'%s\'
 					  AND ost_token_type = \'request\'
 					', $user_id, $token);
@@ -1162,7 +1161,7 @@ class OAuthStoreMySQL
 		{
 			throw new OAuthException('Timestamp is out of sequence. Request rejected');
 		}
-		
+
 		// Insert the new combination
 		$this->query('
 				INSERT IGNORE INTO oauth_server_nonce
@@ -1217,6 +1216,8 @@ class OAuthStoreMySQL
 	 */
 	public function addLog ( $keys, $received, $sent, $base_string, $notes, $user_id = null )
 	{
+//		global $superCage;
+
 		$args = array();
 		$ps   = array();
 		foreach ($keys as $key => $value)
@@ -1225,13 +1226,15 @@ class OAuthStoreMySQL
 			$ps[]   = "olg_$key = '%s'";
 		}
 
-		if (!empty($_SERVER['REMOTE_ADDR']))
-		{
-			$remote_ip = $_SERVER['REMOTE_ADDR'];
+		if ($superCage->server->keyExists('REMOTE_ADDR'))
+		{			
+			$matches = $superCage->server->getMatched('REMOTE_ADDR', '/^[0-9]{1,3}(\.[0-9]{1,3}){3}$/');
+			$remote_ip = $matches[0];
 		}	
-		else if (!empty($_SERVER['REMOTE_IP']))
+		else if ($superCage->server->keyExists('REMOTE_IP'))
 		{
-			$remote_ip = $_SERVER['REMOTE_IP'];
+			$matches = $superCage->server->getMatched('REMOTE_IP', '/^[0-9]{1,3}(\.[0-9]{1,3}){3}$/');
+			$remote_ip = $matches[0];
 		}
 		else
 		{
@@ -1549,17 +1552,15 @@ class OAuthStoreMySQL
 	{
 		if (mysql_errno($this->conn))
 		{
-			echo "SQL Error in OAuthStoreMySQL: ".mysql_error($this->conn)."\n\n";
-			echo $sql;
-			die();
+			include '../include/functions.inc.php';
+			throw new OAuthException('SQL error');
 		}
 	}
 
 	/** 
 	 * Get information about a consumer from the osr_id (see modified getConsumerRequestToken())
 	 */
-	public function getConsumerInfo ( $osr_id )
-	{
+	public function getConsumerInfo($osr_id) {
 		$rs = $this->query_all_assoc('
 				SELECT	osr_usa_id_ref			as requester_id,
 						osr_consumer_key 		as consumer_key,
@@ -1577,6 +1578,21 @@ class OAuthStoreMySQL
 		return $rs;
 	}
 
+	public function checkTokenExpired($user_id, $token, $timestamp) {		
+		if (!$token) {
+			return;
+		}
+
+		$r = $this->query_row('
+							SELECT MAX(ost_timestamp)
+							FROM oauth_server_token
+							WHERE ost_usa_id_ref = \'%d\'
+							', $user_id);
+
+		if (time() - strtotime($r[0]) > 86400) {
+			throw new OAuthException('Token "' . $token . '" was issued over 24 hours ago and is now expired.');
+		}
+	}
 }
 
 

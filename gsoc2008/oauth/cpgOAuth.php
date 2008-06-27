@@ -48,11 +48,19 @@ class cpgOAuth extends OAuthServer {
 			header('HTTP/1.1 401 Access Denied');
 			header('Content-Type: text/xml');
 
-			echo xml_encoding() . '<api_error>' . $e->getMessage() . '</api_error>';
+			throw new OAuthException($e->getMessage());
 		}
 		OAuthRequestLogger::flush();
 		exit();
 	}
+}
+
+function xml_encoding() {
+	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+}
+
+function api_message($message) {
+	die(xml_encoding() . '<api_message>' . $message . '</api_message>');	
 }
 
 ?>

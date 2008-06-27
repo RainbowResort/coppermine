@@ -23,7 +23,7 @@
 <input type="text" name="oauth_token" value="" />
 </form>
 
-<form method="POST" action="../oauth_register.php">
+<form method="POST" action="register.php">
 <input type="hidden" name="requester_name" value="Consumer" />
 <input type="hidden" name="requester_email" value="name@domain.com" />
 <input type="hidden" name="application_title" value="My API" />

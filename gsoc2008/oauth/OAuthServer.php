@@ -43,8 +43,8 @@ class OAuthServer extends OAuthRequestVerifier
 			// Create a request token
 			$store  = OAuthStore::instance();
 			$token  = $store->addConsumerRequestToken($this->getParam('oauth_consumer_key', true));
-			$result = 'oauth_token='.$this->urlencode($token['token'])
-					.'&oauth_token_secret='.$this->urlencode($token['token_secret']);
+			$result = xml_encoding() . '<request_token>oauth_token='.$this->urlencode($token['token'])
+					.'&oauth_token_secret='.$this->urlencode($token['token_secret']) . '</request_token>';
 					
 			header('HTTP/1.1 200 OK');
 			header('Content-Length: '.strlen($result));
@@ -146,8 +146,8 @@ class OAuthServer extends OAuthRequestVerifier
 			
 			$store  = OAuthStore::instance();
 			$token  = $store->exchangeConsumerRequestForAccessToken($this->getParam('oauth_token', true));
-			$result = 'oauth_token='.$this->urlencode($token['token'])
-					.'&oauth_token_secret='.$this->urlencode($token['token_secret']);
+			$result = xml_encoding() . '<access_token>oauth_token='.$this->urlencode($token['token'])
+					.'&oauth_token_secret='.$this->urlencode($token['token_secret']) . '</access_token>';
 					
 			header('HTTP/1.1 200 OK');
 			header('Content-Length: '.strlen($result));
@@ -159,7 +159,7 @@ class OAuthServer extends OAuthRequestVerifier
 		{
 			header('HTTP/1.1 401 Access Denied');
 			header('Content-Type: text/xml');
-			echo xml_encoding() . '<api_error>' . $e->getMessage() . '</api_error>';
+			throw new OAuthException($e->getMessage());
 		}
 		OAuthRequestLogger::flush();
 		exit();
