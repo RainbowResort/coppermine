@@ -243,26 +243,6 @@ function parse_list($value)
 * Picture manager functions
 **************************************************************************/
 
-function parse_pic_select_option($value)
-{
-   global $HTML_SUBST;
-
-    if (!preg_match("/.+?no=(\d+),picture_nm='(.+?)',picture_sort=(\d+),action=(\d)/", $value, $matches)) {
-        return false;
-    }
-
-   return array(
-           'picture_no'   => (int)$matches[1],
-           //'picture_nm'   => get_magic_quotes_gpc() ? strtr(stripslashes($matches[2]), $HTML_SUBST) : strtr($matches[2], $HTML_SUBST),
-           /**
-            * TODO: Picture name - Ideal case for using KSES. For now doing complete strip_tags
-            */
-           'picture_nm' => strip_tags($matches[2]),
-           'picture_sort' => (int)$matches[3],
-           'action'     => (int)$matches[4]
-               );
-}
-
 function parse_pic_orig_sort_order($value)
 {
     if (!preg_match("/(\d+)@(\d+)/", $value, $matches)) {
@@ -274,6 +254,7 @@ function parse_pic_orig_sort_order($value)
         'pos'   => (int)$matches[2],
     );
 }
+
 
 function parse_pic_list($value)
 {
@@ -401,63 +382,48 @@ switch ($what) {
          $restrict = '';
       }
 
-      pageheader($lang_delete_php['pic_mgr']);
-      starttable("100%", $lang_delete_php['pic_mgr'], 6);
-
-      $sort_order_matched = $superCage->post->getMatched('sort_order', '/^[0-9@,]+$/');
-      $orig_sort_order = parse_pic_list($sort_order_matched[0]);
-      foreach ($orig_sort_order as $picture){
-         $op = parse_pic_orig_sort_order($picture);
-         if (count ($op) == 2){
-            $query = "UPDATE $CONFIG[TABLE_PICTURES] SET position='{$op['pos']}' WHERE pid='{$op['aid']}' $restrict LIMIT 1";
-            cpg_db_query($query);
-         } else {
-            cpg_die (sprintf(CRITICAL_ERROR, $lang_delete_php['err_invalid_data'], $sort_order_matched[0]), __FILE__, __LINE__);
-         }
-      }
-
-      //Using getRaw(). The data is sanitized in foreach
-      $to_delete = parse_pic_list($superCage->post->getRaw('delete_picture'));
-      foreach ($to_delete as $picture_id){
-         delete_picture((int)$picture_id);
-      }
-
-      if ($superCage->post->keyExists('to')) {
-          //Using getRaw(). The data is sanitized in parse_pic_select_option() function
-          $to_arr = $superCage->post->getRaw('to');
-          foreach ($to_arr as $option_value){
-             $op = parse_pic_select_option(stripslashes($option_value));
-             switch ($op['action']){
+	$album_id = $category = $superCage->post->getInt('albunm_id');
+	$result = cpg_db_query("SELECT aid, pid, filename,title,position FROM {$CONFIG['TABLE_PICTURES']} WHERE aid =".$album_id." ORDER BY position ASC, pid");
+			$rowset = cpg_db_fetch_rowset($result);	 
+		//	print_r($rowset);
+			
+				//$aa = $superCage->post->getMatched('ajax_to', '/^[0-9@,]+$/');
+			if ($superCage->post->keyExists('ajax_to')) {
+					$get_rows = $superCage->post->getRaw('ajax_to');
+					$i =0;
+					$action= '';
+					$assign_position = '';
+					$sucess="";
+					$sort_rows = parse_pic_list($get_rows);
+					foreach($sort_rows as $option_value){
+							if($option_value==$rowset[$i]['pid']){
+							$action = 0;
+						}
+							if($option_value!=$rowset[$i]['pid']){
+							$action = 2;
+						}
+						$assign_position=$rowset[$i]['position'];
+					
+			switch ($action){
                 case '0':
-                   break;
-                case '1':
-                   if(GALLERY_ADMIN_MODE){
-                      $category = $superCage->post->getInt('cat');
-                   } else {
-                      $category = FIRST_USER_CAT + USER_ID;
-                   }
-                   echo "<tr><td colspan=\"6\" class=\"tableb\">".sprintf($lang_delete_php['create_alb'], $op['album_nm'])."</td></tr>\n";
-                   $query = "INSERT INTO {$CONFIG['TABLE_ALBUMS']} (category, title, uploads, pos, description) VALUES ('$category', '".addslashes($op['album_nm'])."', 'NO',  '{$op['album_sort']}', '')";
-                   cpg_db_query($query);
+					continue;
                    break;
                 case '2':
-                   echo "<tr><td colspan=\"6\" class=\"tableb\">".sprintf($lang_delete_php['update_pic'], $op['picture_no'], $op['picture_nm'], $op['picture_sort'])."</td></tr>\n";
-                   $query = "UPDATE $CONFIG[TABLE_PICTURES] SET position='{$op['picture_sort']}' WHERE pid='{$op['picture_no']}' $restrict LIMIT 1";
-                   cpg_db_query($query);
+                 //  print "<tr><td colspan=\"6\" class=\"tableb\"> Updating picture ".$option_value." Position to ".$assign_position."</td></tr>\n";
+				$sucess = "Successfully  Sorting"; 
+                  $query = "UPDATE $CONFIG[TABLE_PICTURES] SET position='{$assign_position}' WHERE pid='{$option_value}' $restrict LIMIT 1";
+                cpg_db_query($query);
                    break;
                 default:
-                   cpg_die (CRITICAL_ERROR, $lang_delete_php['err_invalid_data'], __FILE__, __LINE__);
+				cpg_die (CRITICAL_ERROR, $lang_delete_php['err_invalid_data'], __FILE__, __LINE__);
+				print "Error In sorting Prosess"; 
              }
-          }
-      }
-      if ($need_caption) output_caption();
-      echo "<tr><td colspan=\"6\" class=\"tablef\" align=\"center\">\n";
-      echo "<div class=\"admin_menu_thumb\"><a href=\"index.php\"  class=\"adm_menu\">".$lang_common['continue']."</a></div>\n";
-      echo "</td></tr>";
-      endtable();
-      pagefooter();
-      ob_end_flush();
-      break;
+						$i=$i+1;
+					}
+				print $sucess; 
+				} 
+	ob_end_flush();
+    break;
 
     // Comment
     case 'comment':

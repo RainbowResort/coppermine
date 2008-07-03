@@ -42,6 +42,7 @@
 
 
 (function($) {
+	
   $.facebox = function(data) {
     $.facebox.init()
     $.facebox.loading()
@@ -50,7 +51,7 @@
 
   $.facebox.settings = {
     loading_image : 'themes/classic/images/face_loading.gif',
-    close_image   : 'themes/classic/images/face_remove.png',
+    close_image   : 'themes/classic/images/closelabel.gif',
     image_types   : [ 'png', 'jpg', 'jpeg', 'gif' ],
     facebox_html  : '\
   <div id="facebox" style="display:none;"> \
@@ -70,6 +71,8 @@
               </div> \
               <div class="content"> \
               </div> \
+              <div class="title">\
+              </div>\
             </td> \
             <td class="b"/> \
           </tr> \
@@ -86,6 +89,7 @@
     if ($('#facebox .loading').length == 1) return true
 
     $('#facebox .content').empty()
+    $('#facebox .title').empty();
     $('#facebox .body').children().hide().end().
       append('<div class="loading"><img src="'+$.facebox.settings.loading_image+'"/></div>')
 
@@ -100,17 +104,19 @@
     })
   }
 
-  $.facebox.reveal = function(data, klass) {
+  $.facebox.reveal = function(data, klass,a) {  
     if (klass) $('#facebox .content').addClass(klass)
-    $('#facebox .content').append(data)
-    $('#facebox .loading').remove()
-    $('#facebox .body').children().fadeIn('normal')
+    $('#facebox .content').append(data['url'])
+    $('#facebox .title').append(data['title']);
+    $('#facebox .loading').remove();
+    $('#facebox .body').children().fadeIn('normal');
   }
 
   $.facebox.close = function() {
     $(document).unbind('keydown.facebox')
     $('#facebox').fadeOut(function() {
-      $('#facebox .content').removeClass().addClass('content')
+      $('#facebox .content').removeClass().addClass('content');
+       $('#facebox .fotter').removeClass().addClass('fotter');
     })
     return false
   }
@@ -144,7 +150,9 @@
 
       // ajax
       } else {
-        $.get(this.href, function(data) { $.facebox.reveal(data, klass) })
+        $.getJSON(this.href, function(data){
+			$.facebox.reveal(data, klass) 
+		})
       }
 
       return false
@@ -212,9 +220,10 @@
 
     jQuery(document).ready(function($) {
       $('a[rel*=facebox]').facebox({
-       loading_image : 'themes/classic/images/face_loading.gif',
-       close_image   : 'themes/classic/images/face_remove.png'
+       //loading_image : 'themes/classic/images/face_loading.gif',
+      // close_image   : 'themes/classic/images/face_remove.png'
       }); 
+     // alert($('.someclass').metadata().some);
     });
 
 

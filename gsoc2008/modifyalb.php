@@ -22,6 +22,9 @@ define('MODIFYALB_PHP', true);
 
 include("include/init.inc.php");
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
 if ($superCage->get->keyExists('album')){
     $CLEAN['album'] = $superCage->get->getInt('album');
 } else {

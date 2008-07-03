@@ -1076,7 +1076,7 @@ function get_pic_data($album, &$count, &$album_name, $limit1=-1, $limit2=-1, $se
           'pa' => 'position ASC',
           'pd' => 'position DESC',
         );
-
+		
         $sort_code = isset($USER['sort'])? $USER['sort'] : $CONFIG['default_sort_order'];
         $sort_order = isset($sort_array[$sort_code]) ? $sort_array[$sort_code] : $sort_array[$CONFIG['default_sort_order']];
         $limit = ($limit1 != -1) ? ' LIMIT '. $limit1 : '';
@@ -2184,51 +2184,54 @@ function& cpg_get_system_thumb($filename,$user=10001)
  * @param integer $pos
  **/
 
-function display_film_strip($album, $cat, $pos)
+function display_film_strip($album, $cat, $pos,$ajax_call)
 {
+	//	print $pos; 
         global $CONFIG, $AUTHORIZED;
-        global $album_date_fmt, $lang_display_thumbnails, $lang_errors, $lang_byte_units, $lang_common, $pic_count;
-
+        global $album_date_fmt, $lang_display_thumbnails, $lang_errors, $lang_byte_units, $lang_common, $pic_count,$ajax_call,$pos; 
+	//.	print $ajax_call; 
         $superCage = Inspekt::makeSuperCage();
 
-        $max_item=$CONFIG['max_film_strip_items'];
+        $max_item= $CONFIG['max_film_strip_items'];
         //$thumb_per_page = $pos+$CONFIG['max_film_strip_items'];
-        $thumb_per_page = $max_item*2;
-        $l_limit = max(0,$pos-$CONFIG['max_film_strip_items']);
-        $new_pos=max(0,$pos-$l_limit);
-
+        $thumb_per_page = $max_item;
+        $l_limit = max(0,$pos-1);
+		
         $pic_data = get_pic_data($album, $thumb_count, $album_name, $l_limit, $thumb_per_page);
-
         if (count($pic_data) < $max_item ){
-                $max_item = count($pic_data);
+			$max_item = count($pic_data);
         }
-        $lower_limit=3;
+		
+			$lower_limit = 0;	
+		
+		if($ajax_call==2){
+			$lower_limit = 2; 
+			$max_item =1;
+		}
+		if($ajax_call ==1){
+			$lower_limit = 0; 
+			$max_item =1; 
+		}
+		
+		$pic_data=array_slice($pic_data,$lower_limit,$max_item);
+		$i=$l_limit;
+		
+		//set javascript count variable:: added by Nuwan Sameera Hettiarachchi
+		set_js_var('count', $pic_count);
+		
+	$cat_link = is_numeric($album) ? '' : '&amp;cat=' . $cat;
+    $date_link = $date=='' ? '' : '&amp;date=' . $date;
 
-        if(!isset($pic_data[$new_pos+1])) {
-           $lower_limit=$new_pos-$max_item+1;
-        } else if(!isset($pic_data[$new_pos+2])) {
-           $lower_limit=$new_pos-$max_item+2;
-        } else if(!isset($pic_data[$new_pos-1])) {
-           $lower_limit=$new_pos;
-        } else {
-          $hf=$max_item/2;
-          $ihf=(int)($max_item/2);
-          if($new_pos > $hf ) {
-             //if($max_item%2==0) {
-               //$lower_limit=
-             //} else {
-             {
-               $lower_limit=$new_pos-$ihf;
-             }
-          }
-          elseif($new_pos <= $hf ) { $lower_limit=0; }
-        }
-
-        $pic_data=array_slice($pic_data,$lower_limit,$max_item);
-        $i=$l_limit;
-        if (count($pic_data) > 0) {
+    if ($superCage->get->getInt('uid')) {
+        $uid_link = '&amp;uid=' . $superCage->get->getInt('uid');
+    } else {
+        $uid_link = '';
+    }
+	//	print_r($pic_data);
+		if (count($pic_data) > 0){
+			
                 foreach ($pic_data as $key => $row) {
-                        $hi =(($pos==($i + $lower_limit)) ? '1': '');
+                        $hi =(($pos==($i + $lower_limit))  ? '1': '');
                         $i++;
 
                         $pic_title =$lang_common['filename'].'='.$row['filename']."\n".
@@ -2237,6 +2240,7 @@ function display_film_strip($album, $cat, $pos)
                                 $lang_display_thumbnails['date_added'].localised_date($row['ctime'], $album_date_fmt);
 
                         $pic_url =  get_pic_url($row, 'thumb');
+						//print $pic_url; 
                         if (!is_image($row['filename'])) {
                                 $image_info = cpg_getimagesize(urldecode($pic_url));
                                 $row['pwidth'] = $image_info[0];
@@ -2253,18 +2257,19 @@ function display_film_strip($album, $cat, $pos)
                         $p=$i - 1 + $lower_limit;
                         $p=($p < 0 ? 0 : $p);
                         $thumb_list[$i]['pos'] = $key < 0 ? $key : $p;
-                        $thumb_list[$i]['image'] = "<img src=\"" . $pic_url . "\" class=\"image\" {$image_size['geom']} border=\"0\" alt=\"{$row['filename']}\" title=\"$pic_title\" />";
+                        $thumb_list[$i]['image'] = "<img src=\"" . $pic_url . "\" class=\"strip_image\"  width=\"100px\" height=\"80\" border=\"0\" alt=\"{$row['filename']}\" title=\"$pic_title\" />";
                         $thumb_list[$i]['caption'] = $CONFIG['display_film_strip_filename'] ? '<span class="thumb_filename">'.$row['filename'].'</span>' : '';
                         $thumb_list[$i]['admin_menu'] = '';
                         ######### Added by Abbas #############
                         $thumb_list[$i]['pid'] = $row['pid'];
                         ######################################
-
+						$target = "displayimage.php?album=$album$cat_link$date_link&amp;pid={$row['pid']}$uid_link";
+					
                 }
 
                                 // Get the pos for next and prev links in filmstrip navigation
-                                $filmstrip_next_pos = $pos + $CONFIG['max_film_strip_items'];
-                                $filmstrip_prev_pos = $pos - $CONFIG['max_film_strip_items'];
+                                $filmstrip_next_pos = $pos + 1;
+                                $filmstrip_prev_pos = $pos - 1;
                                 // If next pos is greater then total pics then make it pic_count - 1
                                 $filmstrip_next_pos = $filmstrip_next_pos >= $pic_count ? $pic_count - 1 : $filmstrip_next_pos;
                                 // If prev pos is less than 0 then make it 0
@@ -2272,11 +2277,20 @@ function display_film_strip($album, $cat, $pos)
 
                 //Using getRaw(). The date is sanitized in the called function.
                 $date = $superCage->get->keyExists('date') ? cpgValidateDate($superCage->get->getRaw('date')) : null;
-                return theme_display_film_strip($thumb_list, $thumb_count, $album_name, $album, $cat, $pos, is_numeric($album), 'thumb', $date, $filmstrip_prev_pos, $filmstrip_next_pos);
+				
+				if($ajax_call==2 || $ajax_call==1){
+					$a = array ('url'=>$pic_url,'target'=>$target);
+					$a_jons = json_encode($a);
+						echo $a_jons;
+	}
+				else{
+					    return theme_display_film_strip($thumb_list, $thumb_count, $album_name, $album, $cat, $pos, is_numeric($album), 'thumb', $date, $filmstrip_prev_pos, $filmstrip_next_pos,$mar_pic);
+					}
         } else {
-                theme_no_img_to_display($album_name);
+               theme_no_img_to_display($album_name);
         }
 }
+
 
 
 
@@ -2506,10 +2520,10 @@ function& get_pic_url(&$pic_row, $mode,$system_pic = false)
         
         ///// OVI
         
-        $imageContainer = new image($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
+       // $imageContainer = new image($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
         
-        global $storage;
-        $pic_row['url'] = $storage->build_url($imageContainer);
+      //  global $storage;
+      //  $pic_row['url'] = $storage->build_url($imageContainer);
 
         ///// OVI
         

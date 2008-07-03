@@ -1,4 +1,4 @@
-
+//bbc.js for commentting box
 $.fn.insertTags = function (open, close, myValue) {
 	return this.each(function(){
 		//IE support
@@ -75,6 +75,9 @@ $.fn.insertTags = function (open, close, myValue) {
 
 $(document).ready(function() {
 	
+	//close and open the color pallet in toggel event 
+//	$("#bb_color").toggle(	function () {  	$('#dsrte-color').slideDown(); 	}, 	function () { $('#dsrte-color').slideUp(); } );
+
 	$('.choose_color').click(function(){
 		editRel = $(this).attr('rel');
 

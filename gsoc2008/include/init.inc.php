@@ -398,6 +398,6 @@ if (USER_ID && !USER_IS_ADMIN && !$USER['am']) { // user is logged in, but is no
 }
 
 // OVI
-require("storage/init.inc.php");
+//require("storage/init.inc.php");
 
 ?>

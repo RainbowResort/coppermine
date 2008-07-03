@@ -21,6 +21,8 @@ define('IN_COPPERMINE', true);
 define('EDITPICS_PHP', true);
 require('include/init.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
 
 if ($superCage->get->keyExists('id')) {
     $pid = $superCage->get->getInt('id');
@@ -241,8 +243,8 @@ $CURRENT_PIC = mysql_fetch_array($result);
 mysql_free_result($result);
 
 if (!(GALLERY_ADMIN_MODE || $CURRENT_PIC['category'] == FIRST_USER_CAT + USER_ID || ($CONFIG['users_can_edit_pics'] && $CURRENT_PIC['owner_id'] == USER_ID)) || !USER_ID) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
-
-pageheader($lang_editpics_php['edit_pics']);
+// comment by Nuwan Sameera for ajax called 
+//pageheader($lang_editpics_php['edit_pics']);
 
 $thumb_url = get_pic_url($CURRENT_PIC, 'thumb');
 $thumb_link = 'displayimage.php?pos='.(-$CURRENT_PIC['pid']);
@@ -456,6 +458,6 @@ EOT;
 
 endtable();
 echo '</form>';
-pagefooter();
+//pagefooter();
 ob_end_flush();
 ?>

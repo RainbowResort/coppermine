@@ -1056,29 +1056,27 @@ $template_image_comments = <<<EOT
                                                 <td width="80%">
 <div id="create_formatting" style="margin-bottom: 5px;float:left;width:100%;">
 
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold{MSG_ID}" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic{MSG_ID}" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline{MSG_ID}" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel={MSG_ID} /></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_bold{MSG_ID}" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_italic{MSG_ID}" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_underline{MSG_ID}" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel={MSG_ID} /></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_url{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel={MSG_ID} /></div>
+<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_email{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel={MSG_ID} /></div>
 
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color{MSG_ID}').slideDown()" /></div>
+<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color{MSG_ID}').toggle(); return false;" /></div>
 
 </div><div>
 			<div id="dsrte-color{MSG_ID}" class="rte panel" style="display: none; float:left; width:300px;">
 <table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
 <tbody>
 	<tr>
-		<td class="choose_color" bgcolor="#000"  style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FF0000" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#0000FF" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#00FF00" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FFFF00" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#00FFFF" style= "width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;"  rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FF00FF" style="width: 15px; height: 20px;cursor:pointer; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#333" style="width: 15px; height: 20px;cursor:pointer;border: 1px solid #FFF;" rel={MSG_ID} />
-		<td><input type="button" alt="Delete" style="margin-left:5px;"  onclick="$('#dsrte-color{MSG_ID}').slideUp()" value="Cancel" /></td>
-	</tr>
+		<td class="choose_color" bgcolor="#000"  style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF0000" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#0000FF" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FF00" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FFFF00" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FFFF" style= "width: 15px; height: 20px; border: 1px solid #FFF;"  rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF00FF" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#333" style="width: 15px; height: 20px;border: 1px solid #FFF;" rel={MSG_ID} />	</tr>
 </tbody>
 </table>
 
@@ -1170,27 +1168,25 @@ $template_add_your_comment = <<<EOT
                                                                 </td>
 				<td width="100%" class="tableb_compact">
 						<div id="create_formatting" style="margin-bottom: 5px;float:left; width:100%">
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel=""/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel=""/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel=""/></div>
-						<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel="" /></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel="" /></div>
-<div class="create_format" style="float:left;cursor:pointer;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').slideDown()"  rel="" /></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel=""/></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel=""/></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel=""/></div>
+						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel="" /></div>
+<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel="" /></div>
+<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').toggle(); return false;"  rel="" /></div>
 </div><div>
 			<div id="dsrte-color" class="rte panel" style="float: left; display: none;margin: 0; width:300px;">
 <table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
 <tbody>
 	<tr>
-		<td class="choose_color" bgcolor="#000" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="red" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="blue" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="green" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="yellow" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#00FFFF" rel="" style= "width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#FF00FF"  rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#333" rel="" style="width: 15px; height: 20px;cursor:pointer;border:1px solid #FFF;"/>
-		<td><input type="button" alt="Delete" style="margin-left:5px;"  onclick="$('#dsrte-color').slideUp()" value="Cancel" /></td>
-	</tr>
+		<td class="choose_color" bgcolor="#000" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="red" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="blue" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="green" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="yellow" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#00FFFF" rel="" style= "width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#FF00FF"  rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
+		<td class="choose_color" bgcolor="#333" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>	</tr>
 </tbody>
 </table>
 
@@ -2760,90 +2756,6 @@ function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $ca
 ******************************************************************************/
 }  //{THEMES}
 
-if (!function_exists('theme_display_film_strip_ajax')) {  //{THEMES}
-/******************************************************************************
-** Section <<<theme_html_controller_pictuer>>> - START
-Done by Nuwan Sameera Hettiarachci 
-******************************************************************************/
-function theme_display_film_strip_ajax(&$thumb_list, $nbThumb, $album_name, $aid, $cat, $pos, $sort_options, $mode = 'thumb', $date='', $filmstrip_prev_pos, $filmstrip_next_pos,$mar_pic) {
-	
-	global $CONFIG, $THEME_DIR;
-    global $template_film_strip, $lang_film_strip, $pic_count,$mar_pic;
-
-    $superCage = Inspekt::makeSuperCage();
-
-    static $template = '';
-    static $thumb_cell = '';
-    static $empty_cell = '';
-    static $spacer = '';
-
-    if ((!$template)) {
-        $template = $template_film_strip;
-        $thumb_cell = template_extract_block($template, 'thumb_cell');
-        $empty_cell = template_extract_block($template, 'empty_cell');
-    }
-
-    $cat_link = is_numeric($aid) ? '' : '&amp;cat=' . $cat;
-    $date_link = $date=='' ? '' : '&amp;date=' . $date;
-
-    if ($superCage->get->getInt('uid')) {
-        $uid_link = '&amp;uid=' . $superCage->get->getInt('uid');
-    } else {
-        $uid_link = '';
-    }
-
-    $thumbcols = $CONFIG['thumbcols'];
-    $cell_width = ceil(100 / $CONFIG['max_film_strip_items']) . '%';
-
-    $i = 0;
-    $thumb_strip = '';
-    foreach($thumb_list as $thumb) {
-        $i++;
-        if ($mode == 'thumb') {
-            if ($thumb['pos'] == $pos && !$superCage->get->keyExists('film_strip')) {
-                    $thumb['image'] = str_replace('class="image"', 'class="image middlethumb"', $thumb['image']);
-            }
-            // determine if thumbnail link targets should open in a pop-up
-            if ($CONFIG['thumbnail_to_fullsize'] == 1) { // code for full-size pop-up
-                if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 2) {
-                       $target = 'javascript:;" onClick="alert(\''.sprintf($lang_errors['login_needed'],'','','','').'\');';
-                } else {
-                    $target = 'javascript:;" onClick="MM_openBrWindow(\'displayimage.php?pid=' . $thumb['pid'] . '&fullsize=1\',\'' . uniqid(rand()) . '\',\'scrollbars=yes,toolbar=no,status=no,resizable=yes,width=' . ((int)$thumb['pwidth']+(int)$CONFIG['fullsize_padding_x']) .  ',height=' .   ((int)$thumb['pheight']+(int)$CONFIG['fullsize_padding_y']). '\');';
-                }
-            } else {
-                $target = "displayimage.php?album=$aid$cat_link$date_link&amp;pid={$thumb['pid']}$uid_link";
-            }
-            $params = array('{CELL_WIDTH}' => $cell_width,
-                '{LINK_TGT}' => $target,
-                '{THUMB}' => $thumb['image'],
-                '{CAPTION}' => $thumb['caption'],
-                '{ADMIN_MENU}' => ''
-                );
-        } else {
-            $params = array('{CELL_WIDTH}' => $cell_width,
-                '{LINK_TGT}' => "index.php?cat={$thumb['cat']}",
-                '{THUMB}' => $thumb['image'],
-                '{CAPTION}' => '',
-                '{ADMIN_MENU}' => ''
-                );
-        }
-	
-        $thumb_strip .= template_eval($thumb_cell, $params);
-    }
-
-	// $params = array('{THUMB_STRIP}' => $thumb_strip);
-	 
-	ob_start();
-	echo $thumb_strip; 
-    $film_strip = ob_get_contents();
-    ob_end_clean();
-
-    return $film_strip;
-	}
-/******************************************************************************
-** Section <<<theme_html_controller_pictuer>>> - END
-******************************************************************************/
-}  //{THEMES}
 
 
 if (!function_exists('theme_no_img_to_display')) {  //{THEMES}
@@ -3063,7 +2975,7 @@ function theme_html_picture()
                    $pic_html = '<a href="javascript:;" onClick="alert(\''.sprintf($lang_errors['login_needed'],'','','','').'\');">';
                 } else {
                  // $pic_html = "<a href=\"javascript:;\" onclick=\"MM_openBrWindow('displayimage.php?pid=$pid&amp;fullsize=1','" . uniqid(rand()) . "','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=$winsizeX,height=$winsizeY')\">";
-                $pic_html .= "<a href='displayimage.php?pid=$pid&amp;fullsize=1' rel='facebox'>";  
+                $pic_html .= "<a href='displayimage.php?pid=$pid&amp;fullsize=1' class='someclass {some: \"data\"}' rel='facebox'>";  
 			   }
 			   $pic_title = $lang_display_image_php['view_fs'] . "\n==============\n" . $pic_title;
                
@@ -3420,9 +3332,9 @@ function theme_html_comments($pid){
         if (USER_IS_ADMIN) {
             //display the selector approve/disapprove
             if ($row['approval'] == 'NO') {
-                $pending_approval = '<a href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"  rel="{MSG_ID}"  id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"    id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a>';
             } else {
-                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="disapprove" rel="{MSG_ID}"  class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" title="disapprove" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}"  class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a>';
             }
         } else { // user or guest is logged in - start
             if ($row['approval'] == 'NO') { // the comment is not approved - start
@@ -3663,16 +3575,14 @@ function theme_display_fullsize_pic()
        $row['pwidth'] = 200;
        $row['pheight'] = 100;
     }
-   echo  '<img src="'. htmlspecialchars($imagedata['path']) . '" '
-                . $imagedata['geometry']
-                . 'alt="'
-                . htmlspecialchars($imagedata['name'])
-                . '" title="'
-                . htmlspecialchars($imagedata['name'])
-                . '" />' ."\n";
-           
-     
+    $fullImageUrl =  '<img src="'. htmlspecialchars($imagedata['path']) . '"  />';
+    $fullTitle_caption = "<h3><strong>".htmlspecialchars($row['title'])."</strong></h3>";
+    $fullTitle_caption .="<p>".htmlspecialchars($row['caption'])."</p>";
   
+    $fullImageData = array ('url'=>$fullImageUrl,'title'=>$fullTitle_caption);
+	$full_jons = json_encode($fullImageData);
+	echo $full_jons;
+ 
 
 }
 /******************************************************************************

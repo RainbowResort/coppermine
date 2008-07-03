@@ -22,6 +22,10 @@ define('EDITPICS_PHP', true);
 
 require('include/init.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.cluetip.js');
+
+
 if ($superCage->get->keyExists('album')) {
             $album_id = $superCage->get->getInt('album');
     } elseif ($superCage->post->keyExists('album')) {

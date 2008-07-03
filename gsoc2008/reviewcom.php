@@ -25,8 +25,6 @@ define('REVIEWCOM_PHP', true);
 require('include/init.inc.php');
 include("include/smilies.inc.php");
 
-js_include('js/jquery.js');
-js_include('js/jquery.cluetip.js');
 
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
@@ -41,11 +39,15 @@ foreach ($single_approval_array as $value) {
         $get_data_rejected++;
     }
 }
+
+
+	
 // We have gathered enough data for a basic check - let's only perform the rest of the individual approval if everthying is OK, i.e. all previous critieria have been met.
 if ($get_data_rejected==0) { // individual approval start
-   //commented by Nuwan Sameear to remove the header of the page. the reason is that will be loaded this page content only 
-   // pageheader($lang_reviewcom_php['title']);
-
+    
+    if(!$superCage->get->keyExists('ajax_call')){
+	pageheader($lang_reviewcom_php['title']);
+	}
     // Normally, we could trust this input, as only the admin should have gotten that far.
     // Anyway, let's perform some more testing, it won't hurt performance-wise, but should be more secure - maybe the admin has followed a made-up link that led him here.
     // Some of those checks could be performed more elegantly using regex - contributions would be welcome.
@@ -81,6 +83,7 @@ if ($get_data_rejected==0) { // individual approval start
         if ($row['pid'] != abs($single_approval_array['pos'])) {
             $get_data_rejected++;
         }
+		
         $thumb_url =  get_pic_url($row, 'thumb');
         if (!is_image($row['filename'])) {
         $image_info = cpg_getimagesize($thumb_url);
@@ -111,13 +114,16 @@ if ($get_data_rejected==0) { // individual approval start
             $query_approval = 'NO';
             $title = $lang_reviewcom_php['comment_disapproved'];
         }
-        // added to respod to the ajax called to apporveal system
-      	if($superCage->get->keyExists('action')){
+	
+	if($superCage->get->keyExists('action')){
 		cpg_db_query("UPDATE {$CONFIG['TABLE_COMMENTS']} SET `approval` = '{$query_approval}' WHERE msg_id = {$single_approval_array['msg_id']}");
 			print "ok";
 			ob_end_flush();
-			exit; 
-		}
+			exit;
+	}
+	if(!$superCage->get->keyExists('ajax_call')){
+        cpg_db_query("UPDATE {$CONFIG['TABLE_COMMENTS']} SET `approval` = '{$query_approval}' WHERE msg_id = {$single_approval_array['msg_id']}");
+	}
         starttable('-2', $title, 2);
         print <<< EOT
         <tr>
@@ -136,15 +142,21 @@ if ($get_data_rejected==0) { // individual approval start
             <td class="tableb tableb_alternate">{$lang_reviewcom_php['file']}</td>
             <td class="tableb tableb_alternate"><a href="$thumb_link"><img src="$thumb_url" {$image_size['geom']} class="image" border="0" alt="" /></a></td>
         </tr>
-        <!--<tr>
-            <td class="tablef" colspan="2" align="center"><a href="$thumb_link#comment{$single_approval_array['msg_id']}" class="admin_menu">{$lang_common['continue']}</a></td>
-        </tr>-->
 EOT;
+    if(!$superCage->get->keyExists('ajax_call')){
+        print <<< EOT
+		<tr>
+            <td class="tablef" colspan="2" align="center"><a href="$thumb_link#comment{$single_approval_array['msg_id']}" class="admin_menu">{$lang_common['continue']}</a></td>
+        </tr>
+EOT;
+}
         endtable();
     } else { // verification not passed
         cpg_die(ERROR, $lang_errors['non_exist_comment'], __FILE__, __LINE__);
     }
-     //pagefooter();
+     if(!$superCage->get->keyExists('ajax_call')){
+	 	 pagefooter();
+   }
     ob_end_flush();
 } else { // individual approval end, mass-approval start
 
@@ -574,12 +586,13 @@ echo <<<EOT
             <td colspan="2" align="center" class="tablef">
                 <input type="submit" value="{$lang_reviewcom_php['save_changes']}" class="button" onclick="return checkBeforeSubmit();" />
                 </td>
+        </form>
         </tr>
 
 EOT;
 endtable();
-echo '</form>';
 pagefooter();
 ob_end_flush();
 } // mass approval end
+
 ?>

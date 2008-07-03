@@ -75,3 +75,4 @@
   overflow: hidden;
   padding: 0;
 }
+.title h3 { padding: 5px 0; border-top: 1px solid #000; }
