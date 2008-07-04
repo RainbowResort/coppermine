@@ -2520,10 +2520,10 @@ function& get_pic_url(&$pic_row, $mode,$system_pic = false)
         
         ///// OVI
         
-       // $imageContainer = new image($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
+       	$imageContainer = new image($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
         
-      //  global $storage;
-      //  $pic_row['url'] = $storage->build_url($imageContainer);
+      	global $storage;
+      	$pic_row['url'] = $storage->build_url($imageContainer);
 
         ///// OVI
         

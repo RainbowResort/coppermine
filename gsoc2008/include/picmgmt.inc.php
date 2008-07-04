@@ -175,7 +175,7 @@ function add_picture($aid, $filepath, $filename, $position = 0, $title = '', $ca
     /* OVI START */
     $picture_id = mysql_insert_id();
     
-   /// $imageContainer = new image($picture_id, $CURRENT_PIC_DATA['owner_id']);
+   	$imageContainer = new image($picture_id, $CURRENT_PIC_DATA['owner_id']);
     $imageContainer->total_filesize = $CURRENT_PIC_DATA['total_filesize'];
     
     if(is_file($image)) $imageContainer->original_url = $image;
@@ -185,7 +185,7 @@ function add_picture($aid, $filepath, $filename, $position = 0, $title = '', $ca
     // $ mini is not used
     
     global $storage;
-  //  $storage->store_images(array($imageContainer)); // check $result?
+  	$storage->store_images(array($imageContainer)); // check $result?
     /* OVI END */
 
     return $result;

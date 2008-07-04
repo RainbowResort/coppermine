@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-04 [B] Decommented code previously commented by Sameera
 2008-06-24 [M] Updates to the oauth/ folder, /oauth_register.php added {daorange}
 2008-06-17 [M] Continued work on the oauth/ folder, mostly authorize.php {daorange}
 2008-05-16 [A] Alpha version of the storage plugin, FTP storage module {zmarty}
