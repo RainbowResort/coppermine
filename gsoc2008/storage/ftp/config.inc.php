@@ -15,7 +15,7 @@ define("PIC_URL_SOURCE_FIRST_SERVER", 3); // show the image from the first serve
 // from the list of all servers which have this image, keep the others for backup
 
 $CONFIG['storage_rule'] = MIRROR_TO_SOME;
-$CONFIG['storage_copies_per_image'] = 3; // default is 3 // this is used only if storage_rule is not equal to MIRROR_TO_ALL
+$CONFIG['storage_copies_per_file'] = 3; // default is 3 // this is used only if storage_rule is not equal to MIRROR_TO_ALL
 // TODO: this must exist and must be smaller than.. - make checks
 
 $CONFIG['storage_keep_local_copy'] = false; // if set to true, copies of all images are stored

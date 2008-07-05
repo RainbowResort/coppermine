@@ -660,12 +660,16 @@ function list_albums()
                 if ($alb_thumb['filename']) {
                     $picture = &$alb_thumb;
                 } elseif ($alb_thumb['thumb'] < 0) {
-                    $sql = "SELECT filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = '{$alb_thumb['aid']}' ORDER BY RAND() LIMIT 0,1";
+                    //$sql = "SELECT filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = '{$alb_thumb['aid']}' ORDER BY RAND() LIMIT 0,1";
+					// OVI
+					$sql = "SELECT pid, filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = '{$alb_thumb['aid']}' ORDER BY RAND() LIMIT 0,1";
                     $result = cpg_db_query($sql);
                     $picture = mysql_fetch_array($result);
                     mysql_free_result($result);
                 } else {
-                    $sql = "SELECT filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} " . "WHERE pid='{$alb_stat['last_pid']}'";
+                    //$sql = "SELECT filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} " . "WHERE pid='{$alb_stat['last_pid']}'";
+					// OVI
+					$sql = "SELECT pid, filepath, filename, url_prefix, pwidth, pheight " . "FROM {$CONFIG['TABLE_PICTURES']} " . "WHERE pid='{$alb_stat['last_pid']}'";
                     $result = cpg_db_query($sql);
                     $picture = mysql_fetch_array($result);
                     mysql_free_result($result);
@@ -790,7 +794,7 @@ function album_adm_menu($aid, $cat)
 * @param integer $cat Category id for which albums are needed
 */
 function list_cat_albums($cat = 0)
-{
+{echo "pzida";
     global $CONFIG, $USER, $lastup_date_fmt, $USER_DATA, $FORBIDDEN_SET, $FORBIDDEN_SET_DATA, $cpg_show_private_album;
     global $lang_list_albums, $lang_errors;
 

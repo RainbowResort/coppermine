@@ -109,9 +109,9 @@ function delete_picture($pid)
     $picture_id = $pid;
     $owner_id = $pic['owner_id'];
  
-    $imageContainer = new image($picture_id, $owner_id);
+    $imageContainer = new FileContainer($picture_id, $owner_id);
     
-    $imageContainer->original_url = $dir . $file; // check
+    $imageContainer->original_path = $dir . $file; // check
     $imageContainer->total_filesize = $pic['total_filesize'];
     ///////// OVI
 
@@ -120,7 +120,7 @@ function delete_picture($pid)
     	
 		// OVI
 		if($currFile!=($dir . $file))
-			$imageContainer->thumb_urls[] = $currFile;
+			$imageContainer->thumb_paths[] = $currFile;
     	
         echo "<td class=\"tableb\" align=\"center\">";
         if (is_file($currFile)) {
@@ -134,9 +134,9 @@ function delete_picture($pid)
     }
 
     ///// OVI
-    
+
     global $storage;
-    $storage->delete_images(array($imageContainer));
+    $storage->delete_file($imageContainer);
     
     ///// OVI
 

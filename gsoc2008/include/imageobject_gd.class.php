@@ -17,6 +17,61 @@
   $Date$
 **********************************************/
 
+// OVI - temporary (?) Ubuntu PHP bugfix: https://bugs.launchpad.net/ubuntu/+source/php5/+bug/39719
+// taken from http://www.php.net/manual/en/function.imagerotate.php#82261
+// START
+if(!function_exists("imagerotate"))
+{
+
+    function imagerotate($src_img, $angle)
+    {
+        $src_x = imagesx($src_img);
+        $src_y = imagesy($src_img);
+        if ($angle == 180)
+        {
+            $dest_x = $src_x;
+            $dest_y = $src_y;
+        }
+        elseif (($angle == 90) || ($angle == 270))
+        {
+            $dest_x = $src_y;
+            $dest_y = $src_x;
+        }
+        else
+        {
+            return $src_img;
+        }
+       
+        $rotate=imagecreatetruecolor($dest_x,$dest_y);
+        imagealphablending($rotate, false);
+              
+        switch ($angle)
+        {
+            case 270:
+                $dest_x--;
+                for ($y = 0; $y < $src_y; $y++)
+                    for ($x = 0; $x < $src_x; $x++)
+                        imagesetpixel($rotate, $dest_x - $y, $x, imagecolorat($src_img, $x, $y));
+                break;
+            case 90:
+                $dest_y--;
+                for ($y = 0; $y < $src_y; $y++)
+                    for ($x = 0; $x < $src_x; $x++)
+                        imagesetpixel($rotate, $y, $dest_y - $x, imagecolorat($src_img, $x, $y));
+                break;
+            case 180:
+                $dest_x--;
+                $dest_y--;
+                for ($y = 0; $y < $src_y; $y++)
+                    for ($x = 0; $x < $src_x; $x++)
+                        imagesetpixel($rotate, $dest_x - $x, $dest_y - $y, imagecolorat($src_img, $x, $y));
+                break;
+        }
+        return $rotate;
+    }
+}
+// OVI - END
+
 class imageObject{
 
          // image resource

@@ -16,7 +16,7 @@
   $LastChangedBy$
   $Date$
 **********************************************/
- 
+
 define('IN_COPPERMINE', true);
 define('ADMIN_PHP', true);
 define('CONFIG_PHP', true); // added for backwards compatibility (language fallback)

@@ -45,7 +45,7 @@ if(!is_file($storage_class_path))
 // load the module
 require($storage_class_path);
 
-require("image.php"); // this class represents one image, with a url and an owner
+require("FileContainer.php"); // this class represents one image, with a url and an owner
 
 // initialize the storage class
 $storage = new storage;

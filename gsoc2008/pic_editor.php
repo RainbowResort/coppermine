@@ -93,7 +93,7 @@ if ($pid > 0){
 
         $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = '$pid'");
         $CURRENT_PIC = mysql_fetch_array($result);
-                if (!(GALLERY_ADMIN_MODE || ($CONFIG['users_can_edit_pics'] && $CURRENT_PIC['owner_id'] == USER_ID)) || !USER_ID) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+		if (!(GALLERY_ADMIN_MODE || ($CONFIG['users_can_edit_pics'] && $CURRENT_PIC['owner_id'] == USER_ID)) || !USER_ID) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
         mysql_free_result($result);
         $pic_url = get_pic_url($CURRENT_PIC,'fullsize');
 }
@@ -133,9 +133,16 @@ if (!$img_dir) $img_dir = IMG_DIR;
 
 //if ($_GET['id']){
 if ($superCage->get->getInt('id')) {
-	
+
+
    //Copy the Image file to the editing directory
-   if (copy($CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'],$img_dir.$CURRENT_PIC['filename']))
+   //if (copy($CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'],$img_dir.$CURRENT_PIC['filename']))
+
+	// OVI start
+	$file_contents = file_get_contents($pic_url);
+	file_put_contents($img_dir.$CURRENT_PIC['filename'], $file_contents);
+	// OVI end
+
    $newimage = $CURRENT_PIC['filename'];
 }else if(!isset($newimage)){
    //$newimage = $_POST['newimage'];
@@ -167,7 +174,6 @@ if ($superCage->get->getInt('id')) {
           				$imgObj = $imgObj->rotateImage($superCage->post->getInt('angle'));
           }
 
-
       }
       $newimage = $imgObj->filename;
    }//   newimage
@@ -176,25 +182,54 @@ if ($superCage->get->getInt('id')) {
    if ($superCage->post->keyExists('save')) {
 
                 $width=$imgObj->width;
-        $height=$imgObj->height;
+        		$height=$imgObj->height;
                 $normal = $CONFIG['fullpath'] . $CURRENT_PIC['filepath'] . $CONFIG['normal_pfx'] . $CURRENT_PIC['filename'];
                 $thumbnail = $CONFIG['fullpath'] . $CURRENT_PIC['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC['filename'];
                 $filesize = @filesize($img_dir.$newimage);
 
           //Full image replace
-          copy($img_dir.$newimage,$CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'])   ;
+          copy($img_dir.$newimage,$CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename']);
+			
+		// OVI - start		
+		$imageContainer = new FileContainer($CURRENT_PIC['pid'], $CURRENT_PIC['owner_id']);
+		$imageContainer->original_path = $CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'];
+		
+		global $storage;
+		$storage->replace_file($imageContainer);
+		// OVI - end
 
           // Normal image resized and replace, use the CPG resize method instead of the object resizeImage
           // as using the object resizeImage will make the final display of image to be a thumbnail in the editor
 
           if (max($width, $height) > $CONFIG['picture_width'] && $CONFIG['make_intermediate']) {
+		// OVI - START
                 resize_image($img_dir.$newimage, $normal, $CONFIG['picture_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+		
+		//resize_image($img_dir.$newimage, $img_dir.$CONFIG['normal_pfx'].$newimage, $CONFIG['picture_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+
+		$imageContainer = new FileContainer($CURRENT_PIC['pid'], $CURRENT_PIC['owner_id']);
+		$imageContainer->original_path = $normal;
+		
+		global $storage;
+		$storage->replace_file($imageContainer);
+		// OVI - END
           } else {
                 @unlink($normal);
           }
 
           //thumbnail resized and replace
-               resize_image($img_dir.$newimage, $thumbnail, $CONFIG['thumb_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+		// OVI - START
+    		resize_image($img_dir.$newimage, $thumbnail, $CONFIG['thumb_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+
+
+                //resize_image($img_dir.$newimage, $img_dir.$CONFIG['thumb_pfx'].$newimage, $CONFIG['thumb_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+
+		$imageContainer = new FileContainer($CURRENT_PIC['pid'], $CURRENT_PIC['owner_id']);
+		$imageContainer->original_path = $thumbnail;
+		
+		global $storage;
+		$storage->replace_file($imageContainer);
+		// OVI - END
                        $total_filesize = $filesize + (file_exists($normal) ? filesize($normal) : 0) + filesize($thumbnail);
 
           //Update the image size in the DB
@@ -233,7 +268,16 @@ if ($superCage->get->getInt('id')) {
         $imgObj = $imgObj->resizeImage($dstWidth,$dstHeight);
         $newimage = $imgObj->filename;
 
-        copy($img_dir.$newimage,$CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CONFIG['thumb_pfx'].$CURRENT_PIC['filename'])   ;
+        copy($img_dir.$newimage,$CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CONFIG['thumb_pfx'].$CURRENT_PIC['filename']);
+
+		// OVI - start		
+		$imageContainer = new FileContainer($CURRENT_PIC['pid'], $CURRENT_PIC['owner_id']);
+		$imageContainer->original_path = $CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CONFIG['thumb_pfx'].$CURRENT_PIC['filename'];
+		
+		global $storage;
+		$storage->replace_file($imageContainer);
+		// OVI - end
+
 
         $total_filesize = filesize($currentPic) + (file_exists($normal) ? filesize($normal) : 0) + filesize($thumbnail);
 
@@ -586,11 +630,15 @@ if ($superCage->get->getInt('id')) {
 <input type="hidden" name="newimage" value="<?php print $newimage ; ?>" />
 <input type="hidden" name="img_dir" value="<?php print $img_dir ; ?>" />
 <?php
+// OVI bugfix
+/*
 if ($superCage->get->keyExists('id')) {
 		$get_id = $superCage->get->getInt('id');
 	} else {
 		$get_int = $superCage->post->getInt('id');
 	}
+*/
+if($pid!=-1) $get_id = $pid;
 ?>
 <input type="hidden" name="id" value="<?php print ($get_id); ?>" />
 

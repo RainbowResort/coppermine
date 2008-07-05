@@ -175,17 +175,17 @@ function add_picture($aid, $filepath, $filename, $position = 0, $title = '', $ca
     /* OVI START */
     $picture_id = mysql_insert_id();
     
-   	$imageContainer = new image($picture_id, $CURRENT_PIC_DATA['owner_id']);
+    $imageContainer = new FileContainer($picture_id, $CURRENT_PIC_DATA['owner_id']);
     $imageContainer->total_filesize = $CURRENT_PIC_DATA['total_filesize'];
     
-    if(is_file($image)) $imageContainer->original_url = $image;
-    if(is_file($normal)) $imageContainer->thumb_urls[] = $normal;
-    if(is_file($thumb)) $imageContainer->thumb_urls[] = $thumb;
-    if(is_file($orig)) $imageContainer->thumb_urls[] = $orig; // useless? does it upload twice?
+    if(is_file($image)) $imageContainer->original_path = $image;
+    if(is_file($normal)) $imageContainer->thumb_paths[] = $normal;
+    if(is_file($thumb)) $imageContainer->thumb_paths[] = $thumb;
+    if(is_file($orig)) $imageContainer->thumb_paths[] = $orig; // useless? does it upload twice?
     // $ mini is not used
     
     global $storage;
-  	$storage->store_images(array($imageContainer)); // check $result?
+  	$storage->store_file($imageContainer); // TODO: check $result?
     /* OVI END */
 
     return $result;

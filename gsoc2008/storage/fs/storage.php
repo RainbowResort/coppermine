@@ -6,17 +6,21 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 class storage
 {
 
-	function delete_images($images)
+	function delete_file($fileContainer)
 	{
 	}
 
-	function store_images($images)
+	function store_file($fileContainer)
 	{
 	}
 	
-	function build_url($image)
+	function build_url($fileContainer)
 	{
-		return $image->original_url;
+		return $fileContainer->original_path;
+	}
+	
+	function replace_file($fileContainer)
+	{
 	}
 	
 }
