@@ -2,7 +2,7 @@
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
-$CONFIG['storage_module_dir'] = "ftp";
+//$CONFIG['storage_module_dir'] = "ftp";
 
 define("MIRROR_TO_ALL", 1); // mirror to all servers
 define("MIRROR_TO_SOME", 2);
@@ -14,7 +14,7 @@ define("PIC_URL_SOURCE_RANDOM_SERVER", 2); // show the image from a random serve
 define("PIC_URL_SOURCE_FIRST_SERVER", 3); // show the image from the first server
 // from the list of all servers which have this image, keep the others for backup
 
-$CONFIG['storage_rule'] = MIRROR_TO_SOME;
+$CONFIG['storage_rule'] = MIRROR_TO_SOME; //MIRROR_TO_SOME;
 $CONFIG['storage_copies_per_file'] = 3; // default is 3 // this is used only if storage_rule is not equal to MIRROR_TO_ALL
 // TODO: this must exist and must be smaller than.. - make checks
 

@@ -425,30 +425,30 @@ class storage
 				if(!isset($fileContainer->owner_id))
 				    cpg_die(ERROR, '$fileContainer->owner_id is not set in MIRROR_USER_SHARDING');
 
-				    
-				echo "Not implemented"; exit(1);
-				
-				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
-				
-				// TODO: check if id is empty
-				// TODO: quota column?	
-			
+				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				$result = cpg_db_query($sql);
+
+				if(!mysql_num_rows($result))
+				{
+					$sql = "SELECT id FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$result = cpg_db_query($sql);
+       				while($row = mysql_fetch_assoc($result))
+						cpg_db_query("INSERT INTO {$this->config['TABLE_FTP_USER2SERVER']} SET user_id='{$fileContainer->owner_id}', server_id='{$row[id]}'");
+					$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$result = cpg_db_query($sql);
+				}
+
+				if(!mysql_num_rows($result))
+				{
+					exit(1);
+					cpg_die(ERROR, 'Could not assign servers to user in MIRROR_USER_SHARDING');
+				}
+
 				$servers = array();
-				
-				$user_id = $fileContainer->owner_id;
-				
-				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
-				
-				if(!isset($this->config['storage_copies_per_file']))
-					$this->config['storage_copies_per_file'] = 3;
-					
-				// TODO SHARDING
-				
-       			$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
-       			echo $sql."<br>\n";
-       			$result = cpg_db_query($sql);
+
        			while ($row = mysql_fetch_assoc($result))
-       				$servers[] = $row;
+					$servers[] = $row;
+
 				return $servers;
 				break;
 			}
