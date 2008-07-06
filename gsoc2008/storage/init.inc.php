@@ -3,7 +3,7 @@
 // if we're not in coppermine, exit
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
-$CONFIG['storage_module'] = "ftp"; // delete this in production!!!!!!!!!
+//$CONFIG['storage_module'] = "ftp"; // delete this in production!!!!!!!!!
 
 // the folder where all the modules are stored
 $CONFIG['storage_modules_dir'] = "storage";

@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-06 [B] De-activated the ftp storage module, was activated by default {zmarty}
 2008-07-06 [A] User-based sharding now works {zmarty}
 2008-07-06 [B] Fixed FTP-related table indexes in schema.sql {zmarty}
 2008-07-05 [A] API picture uploads are now possible.  Note that I added "if (!defined('API_CALL'))" in a few places {daorange}

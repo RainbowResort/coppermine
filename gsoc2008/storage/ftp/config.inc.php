@@ -2,7 +2,7 @@
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
-//$CONFIG['storage_module_dir'] = "ftp";
+$CONFIG['storage_module_dir'] = "ftp";
 
 define("MIRROR_TO_ALL", 1); // mirror to all servers
 define("MIRROR_TO_SOME", 2);
