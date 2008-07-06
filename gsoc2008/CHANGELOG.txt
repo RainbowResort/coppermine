@@ -25,9 +25,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-06 [B] Fixed FTP-related table indexes in schema.sql {zmarty}
 2008-07-05 [A] API picture uploads are now possible.  Note that I added "if (!defined('API_CALL'))" in a few places {daorange}
-2008-07-05 [A] Crop and Rotate (pic_editor.php) now uses the storage modules
-2008-07-04 [B] Decommented code previously commented by Sameera
+2008-07-05 [A] Crop and Rotate (pic_editor.php) now uses the storage modules {zmarty}
+2008-07-04 [B] Decommented code previously commented by Sameera {zmarty}
 2008-06-24 [M] Updates to the oauth/ folder, /oauth_register.php added {daorange}
 2008-06-17 [M] Continued work on the oauth/ folder, mostly authorize.php {daorange}
 2008-05-16 [A] Alpha version of the storage plugin, FTP storage module {zmarty}

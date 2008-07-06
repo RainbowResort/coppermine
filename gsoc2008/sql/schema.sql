@@ -390,7 +390,8 @@ CREATE TABLE CPG_temp_messages (
 CREATE TABLE `CPG_ftp_pic2server` (
   `pic_id` int(11) NOT NULL,
   `server_id` int(11) NOT NULL,
-  KEY `pic_id` (`pic_id`,`server_id`)
+  KEY `pic_id` (`pic_id`),
+  KEY `server_id` (`server_id`)
 ) TYPE=MyISAM COMMENT='Lists all FTP servers where an image is stored';
 # --------------------------------------------------------
 
@@ -425,6 +426,7 @@ CREATE TABLE `CPG_ftp_servers` (
 CREATE TABLE `CPG_ftp_user2server` (
   `user_id` int(11) NOT NULL,
   `server_id` int(11) NOT NULL,
-  KEY `user_id` (`user_id`,`server_id`)
+  KEY `user_id` (`user_id`),
+  KEY `server_id` (`server_id`)
 ) TYPE=MyISAM COMMENT='Used for FTP sharding';
 # --------------------------------------------------------

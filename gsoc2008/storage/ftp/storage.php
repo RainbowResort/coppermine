@@ -419,7 +419,17 @@ class storage
 			}
 			case MIRROR_USER_SHARDING:
 			{
+				if(!isset($fileContainer->id))
+				    cpg_die(ERROR, '$fileContainer->id is not set in MIRROR_USER_SHARDING');
+
+				if(!isset($fileContainer->owner_id))
+				    cpg_die(ERROR, '$fileContainer->owner_id is not set in MIRROR_USER_SHARDING');
+
+				    
 				echo "Not implemented"; exit(1);
+				
+				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				
 				// TODO: check if id is empty
 				// TODO: quota column?	
 			
@@ -428,7 +438,6 @@ class storage
 				$user_id = $fileContainer->owner_id;
 				
 				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
-				
 				
 				if(!isset($this->config['storage_copies_per_file']))
 					$this->config['storage_copies_per_file'] = 3;
