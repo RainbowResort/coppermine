@@ -2524,7 +2524,6 @@ function& get_pic_url(&$pic_row, $mode,$system_pic = false)
         $pic_row = CPGPluginAPI::filter('picture_url',$pic_row);
 
         ///// OVI
-        
        	$imageContainer = new FileContainer($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
 
       	global $storage;

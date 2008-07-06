@@ -134,19 +134,20 @@ if (!$img_dir) $img_dir = IMG_DIR;
 //if ($_GET['id']){
 if ($superCage->get->getInt('id')) {
 
-
    //Copy the Image file to the editing directory
    //if (copy($CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'],$img_dir.$CURRENT_PIC['filename']))
 
 	// OVI start
-	$file_contents = file_get_contents($pic_url);
+	$file_contents = file_get_contents(urldecode($pic_url));
 	file_put_contents($img_dir.$CURRENT_PIC['filename'], $file_contents);
 	// OVI end
 
    $newimage = $CURRENT_PIC['filename'];
 }else if(!isset($newimage)){
    //$newimage = $_POST['newimage'];
-   $matches = $superCage->post->getMatched('newimage','/^[0-9A-Za-z\/_.-]+$/');
+   //$matches = $superCage->post->getMatched('newimage','/^[0-9A-Za-z\/_.-]+$/');
+   // Ovi
+   $matches = $superCage->post->getMatched('newimage','/^[~0-9A-Za-z\/_.-]+$/');
    $newimage = $matches[0];
 }
 
@@ -189,7 +190,7 @@ if ($superCage->get->getInt('id')) {
 
           //Full image replace
           copy($img_dir.$newimage,$CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename']);
-			
+
 		// OVI - start		
 		$imageContainer = new FileContainer($CURRENT_PIC['pid'], $CURRENT_PIC['owner_id']);
 		$imageContainer->original_path = $CONFIG['fullpath'].$CURRENT_PIC['filepath'].$CURRENT_PIC['filename'];

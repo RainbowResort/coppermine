@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-06 [B] Fixed a general Coppermine bug that prevented editing images containing a tilda ~ {zmarty}
+2008-07-06 [B] Fixed the loading of images in pic_editor.php when the filename contains a tilda ~ {zmarty}
 2008-07-06 [B] De-activated the ftp storage module, was activated by default {zmarty}
 2008-07-06 [A] User-based sharding now works {zmarty}
 2008-07-06 [B] Fixed FTP-related table indexes in schema.sql {zmarty}

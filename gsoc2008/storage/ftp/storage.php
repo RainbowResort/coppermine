@@ -142,7 +142,11 @@ class storage
     			@unlink($fileContainer->original_path);
 	    
 	}
-		
+	
+	function file_exists()
+	{
+	}
+
 	/**
 	 * delete_file($fileContainer)
 	 *
