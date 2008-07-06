@@ -76,7 +76,7 @@ class OAuthStoreMySQL
 					$this->sql_errcheck();
 				}
 			}
-			$this->query('set character set utf8');
+			//$this->query('set character set utf8');
 		}
 	}
 
@@ -1216,7 +1216,7 @@ class OAuthStoreMySQL
 	 */
 	public function addLog ( $keys, $received, $sent, $base_string, $notes, $user_id = null )
 	{
-//		global $superCage;
+		$superCage = Inspekt::makeSuperCage();
 
 		$args = array();
 		$ps   = array();
@@ -1551,8 +1551,8 @@ class OAuthStoreMySQL
 	protected function sql_errcheck ( $sql )
 	{
 		if (mysql_errno($this->conn))
-		{
-			include '../include/functions.inc.php';
+		{			
+//			die($sql . "\n\n" . mysql_error());
 			throw new OAuthException('SQL error');
 		}
 	}
@@ -1591,6 +1591,22 @@ class OAuthStoreMySQL
 
 		if (time() - strtotime($r[0]) > 86400) {
 			throw new OAuthException('Token "' . $token . '" was issued over 24 hours ago and is now expired.');
+		}
+	}
+
+	public function lookup_id($token) {
+		$r = $this->query_row('
+							SELECT ost_usa_id_ref as user
+							FROM oauth_server_token
+							WHERE ost_token = \'%s\'
+							', $token);
+		if ($r) {
+			return $r['user'];
+		}
+
+		else {
+			//throw new OAuthException('No use associated with token "' . $token . '"');
+			return false;
 		}
 	}
 }

@@ -65,7 +65,7 @@ class OAuthRequest
 	 */
 	function __construct ( $uri = null, $method = 'GET', $parameters = '', $headers = array(), $body = null )
 	{
-		global $superCage;
+		$superCage = Inspekt::makeSuperCage();
 
 		if (empty($uri))
 		{			
@@ -422,7 +422,8 @@ class OAuthRequest
 	 * @param string $parameters  optional extra parameters (from eg the http post)
 	 */
 	protected function parseUri ( $parameters )
-	{global $superCage;
+	{
+		$superCage = Inspekt::makeSuperCage();
 
 		$ps = parse_url($this->uri);
 
@@ -643,12 +644,13 @@ class OAuthRequest
 	 */
 	private function getRequestContentType ()
 	{
-		global $superCage;
+		$superCage = Inspekt::makeSuperCage();
 
 		$content_type = 'application/octet-stream';
 		if ($superCage->server->keyExists('CONTENT_TYPE'))
 		{
-			list($content_type) = explode(';', $superCage->server->getMatched('CONTENT_TYPE', '/^[A-Za-z0-9\/-]+$/'));
+			$matches = $superCage->server->getMatched('CONTENT_TYPE', '/^[A-Za-z0-9\/-]+$/');
+			list($content_type) = explode(';', $matches[0]);
 		}
 		return trim($content_type);
 	}

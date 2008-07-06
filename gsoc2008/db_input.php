@@ -497,12 +497,18 @@ switch ($event) {
             ob_end_flush();
         } else {
             //$header_location = (@preg_match('/Microsoft|WebSTAR|Xitami/', getenv('SERVER_SOFTWARE'))) ? 'Refresh: 0; URL=' : 'Location: ';
+
+            // start daorange
+            if (defined('API_CALL')) {
+                api_message('Picture "' . $title . '" uploaded successfully via the Coppermine API');
+            } // end daorange
+
             $redirect = "displayimage.php?pid=" . mysql_insert_id($CONFIG['LINK_ID']);
             cpgRedirectPage($redirect, $lang_common['information'], $lang_db_input_php['upl_success'], 1);
         }
         break;
 
-    // Unknow event
+    // Unknown event
 
     default:
         cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);

@@ -124,9 +124,9 @@ class OAuthRequestVerifier extends OAuthRequest
 											$this->getParam('oauth_timestamp', true),
 											$this->getParam('oauth_nonce', true));
 
-			$this->store->checkTokenExpired(	USER_ID,
-											$this->urldecode($token),
-											$this->getParam('oauth_timestamp', true));
+//			$this->store->checkTokenExpired(	USER_ID,
+//											$this->urldecode($token),
+//											$this->getParam('oauth_timestamp', true));
 
 			$signature = $this->calculateSignature($secrets['consumer_secret'], $secrets['token_secret'], $token_type);
 			/** Don't require the oauth_signature to be supplied, for now */

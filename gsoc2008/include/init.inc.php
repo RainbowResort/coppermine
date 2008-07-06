@@ -82,7 +82,7 @@ define('CRITICAL_ERROR', 3);
 // Include config and functions files
 if(file_exists('include/config.inc.php')){
 		ob_start();
-		require_once 'include/config.inc.php';
+		require 'include/config.inc.php';
 		ob_clean();
 } else {
   // error handling: if the config file doesn't exist go to install
@@ -264,8 +264,9 @@ if (!file_exists("themes/{$CONFIG['theme']}/theme.php")) {
 
 require "themes/{$CONFIG['theme']}/theme.php";
 
-require "include/themes.inc.php";  //All Fallback Theme Templates and Functions
-
+if (!defined('API_CALL')) {
+    require "include/themes.inc.php";  //All Fallback Theme Templates and Functions
+}
 $THEME_DIR = "themes/{$CONFIG['theme']}/";
 
 // Process language selection if present in URI or in user profile or try
@@ -359,12 +360,14 @@ if ($matches = $superCage->get->getMatched('referer', '/((\%3C)|<)[^\n]+((\%3E)|
 
 CPGPluginAPI::action('page_start',null);
 
-// load the main template
-load_template();
-// Remove expired bans
-$now = date('Y-m-d H:i:s', localised_timestamp());
+if (!defined('API_CALL')) {
+    // load the main template
+    load_template();
+    // Remove expired bans
+    $now = date('Y-m-d H:i:s', localised_timestamp());
 
-$CONFIG['template_loaded'] = true;
+    $CONFIG['template_loaded'] = true;
+}
 
 cpg_db_query("DELETE FROM {$CONFIG['TABLE_BANNED']} WHERE expiry < '$now'");
 // Check if the user is banned
@@ -388,7 +391,7 @@ if (!USER_IS_ADMIN && $CONFIG['offline'] && !strstr($CPG_PHP_SELF,'login')) {
 }
 
 // kick user into user_admin_mode (needed to fix "removed user mode for users" when upgrading)
-if (USER_ID && !USER_IS_ADMIN && !$USER['am']) { // user is logged in, but is not gallery admin and not in admin mode
+if (USER_ID && !USER_IS_ADMIN && !$USER['am'] && !defined('API_CALL')) { // user is logged in, but is not gallery admin and not in admin mode
 	$USER['am'] = 1;
 	pageheader($lang_common['information'], "<META http-equiv=\"refresh\" content=\"1;url=$referer\">");
 	msg_box($lang_common['information'], 'Sending you to admin mode', $lang_common['continue'], $referer);

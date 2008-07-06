@@ -39,7 +39,6 @@ function add_picture($aid, $filepath, $filename, $position = 0, $title = '', $ca
     $mini = $CONFIG['fullpath'] . $filepath . $CONFIG['mini_pfx'] . $filename;#########
     $work_image = $image;#########
 
-
     if (!is_known_filetype($image)) {
         return false;
     } elseif (is_image($filename)) {
@@ -183,9 +182,11 @@ function add_picture($aid, $filepath, $filename, $position = 0, $title = '', $ca
     if(is_file($thumb)) $imageContainer->thumb_paths[] = $thumb;
     if(is_file($orig)) $imageContainer->thumb_paths[] = $orig; // useless? does it upload twice?
     // $ mini is not used
-    
-    global $storage;
-  	$storage->store_file($imageContainer); // TODO: check $result?
+
+    if (!defined('API_CALL')) {
+        global $storage;
+        $storage->store_file($imageContainer); // TODO: check $result?
+    }
     /* OVI END */
 
     return $result;

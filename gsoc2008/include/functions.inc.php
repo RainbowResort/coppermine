@@ -356,6 +356,11 @@ function cpg_die($msg_code, $msg_text,  $error_file, $error_line, $output_buffer
 {
         global $CONFIG, $lang_cpg_die, $template_cpg_die, $lang_common;
 
+        if (defined('API_CALL')) {
+                die("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" .
+                '<api_error>' . $msg_text . '</api_error>');
+        }
+
         // Simple output if theme file is not loaded
         if(!function_exists('pageheader')){
                 echo 'Fatal error :<br />'.$msg_text;

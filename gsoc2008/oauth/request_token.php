@@ -1,7 +1,6 @@
 <?php
 // Get an unauthorized request token here, to be authorized by the user and then exchanged for an access token.
 
-define('IN_COPPERMINE', TRUE);
 require_once 'cpgOAuth.php';
 
 $matches = $superCage->post->getMatched('oauth_signature_method', '/^[\w-]+$/');

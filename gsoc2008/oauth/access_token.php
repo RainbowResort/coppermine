@@ -1,7 +1,6 @@
 <?php
 // Request an OAuth access token from the server.  This can be used to access "protected resources", e.g., password-protected photos.
 
-define('IN_COPPERMINE', true);
 require_once 'cpgOAuth.php';
 
 $matches = $superCage->post->getMatched('oauth_signature_method', '/^[\w-]+$/');

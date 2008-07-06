@@ -33,7 +33,8 @@ class OAuthException extends Exception
 	{
 		Exception::__construct($message);
 		OAuthRequestLogger::addNote('OAuthException: '.$message);
-		die(xml_encoding() . '<api_error>' . $message . '</api_error>');
+		die("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" .
+		'<api_error>' . $message . '</api_error>');
 	}
 
 }

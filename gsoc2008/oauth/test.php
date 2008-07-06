@@ -17,10 +17,16 @@
 <input type="text" name="oauth_token" value="" />
 </form>
 
-<form method="POST" action="protected.php">
+<form method="POST" action="api_index.php" enctype="multipart/form-data">
 <?php fields(); ?>
-<button type="submit">Protected Resource</button>
+<button type="submit">API Functions</button>
 <input type="text" name="oauth_token" value="" />
+<input type="hidden" name="function" value="upload" />
+<input type="hidden" name="event" value="picture" />
+<input type="hidden" name="album" value="3" />
+<input type="hidden" name="title" value="testpic" />
+<input type="hidden" name="caption" value="A picture." />
+<input type="file" name="userpicture" value="" />
 </form>
 
 <form method="POST" action="register.php">
@@ -32,7 +38,6 @@
 
 <form action="<?php 
 // This should be an admin option, or perhaps part of core (?)
-define('IN_COPPERMINE', TRUE);
 require 'cpgOAuth.php';
 $store = OAuthStore::instance();
 $store->install();
