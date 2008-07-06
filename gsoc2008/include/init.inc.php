@@ -264,9 +264,9 @@ if (!file_exists("themes/{$CONFIG['theme']}/theme.php")) {
 
 require "themes/{$CONFIG['theme']}/theme.php";
 
-if (!defined('API_CALL')) {
-    require "include/themes.inc.php";  //All Fallback Theme Templates and Functions
-}
+
+require "include/themes.inc.php";  //All Fallback Theme Templates and Functions
+
 $THEME_DIR = "themes/{$CONFIG['theme']}/";
 
 // Process language selection if present in URI or in user profile or try
@@ -360,14 +360,12 @@ if ($matches = $superCage->get->getMatched('referer', '/((\%3C)|<)[^\n]+((\%3E)|
 
 CPGPluginAPI::action('page_start',null);
 
-if (!defined('API_CALL')) {
-    // load the main template
-    load_template();
-    // Remove expired bans
-    $now = date('Y-m-d H:i:s', localised_timestamp());
+// load the main template
+load_template();
+// Remove expired bans
+$now = date('Y-m-d H:i:s', localised_timestamp());
 
-    $CONFIG['template_loaded'] = true;
-}
+$CONFIG['template_loaded'] = true;
 
 cpg_db_query("DELETE FROM {$CONFIG['TABLE_BANNED']} WHERE expiry < '$now'");
 // Check if the user is banned

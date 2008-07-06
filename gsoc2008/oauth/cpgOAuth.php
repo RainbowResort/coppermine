@@ -54,7 +54,7 @@ class cpgOAuth extends OAuthServer {
     }
 
     public function access_protected_resource() {
-        global $CONFIG;
+        global $CONFIG, $THEME_DIR;
             try {
                 $result = $this->verify('access');
 
