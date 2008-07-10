@@ -1609,6 +1609,28 @@ class OAuthStoreMySQL
 			return false;
 		}
 	}
+
+	public function group_info($user_id) {
+		global $CONFIG;
+		$r = $this->query_row('
+							SELECT user_group
+							FROM ' . $CONFIG['TABLE_PREFIX'] . 'users
+							WHERE user_id = \'%d\'
+							', $user_id);
+		if ($r['user_group']) {
+			$group_info = $this->query_row_assoc('
+								SELECT 	can_upload_pictures AS can_upload,
+										has_admin_access AS admin_access
+								FROM ' . $CONFIG['TABLE_PREFIX'] . 'usergroups
+								WHERE group_id = \'%d\'
+								', $r['user_group']);
+			return $group_info;
+		}
+
+		else {			
+			return false;
+		}
+	}
 }
 
 

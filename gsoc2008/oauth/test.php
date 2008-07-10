@@ -23,7 +23,7 @@
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="upload" />
 <input type="hidden" name="event" value="picture" />
-<input type="hidden" name="album" value="3" />
+<input type="hidden" name="album" value="1" />
 <input type="hidden" name="title" value="testpic" />
 <input type="hidden" name="caption" value="A picture." />
 <input type="file" name="userpicture" value="" />

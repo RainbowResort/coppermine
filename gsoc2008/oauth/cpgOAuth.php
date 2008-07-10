@@ -28,11 +28,19 @@ if (!$token) {
 }
 
 if ($token) {
-    $user = $oauth_store->lookup_id($token);
-    if ($user) {
-        define('USER_ID', $user);
+    $user_id = $oauth_store->lookup_id($token);
+    if ($user_id) {
+        define('USER_ID', $user_id);
         define('USER_NAME', 'API');
-        define('USER_CAN_UPLOAD_PICTURES', true);  // Still need to check if the user is banned
+
+        $group_info = $oauth_store->group_info($user_id);
+        if ($group_info['can_upload']) {
+            define('USER_CAN_UPLOAD_PICTURES', true);
+        }
+        if ($group_info['admin_access']) {
+            define('GALLERY_ADMIN_MODE', true);
+            define('USER_IS_ADMIN', true);
+        }
     }
 }
 // End main code
