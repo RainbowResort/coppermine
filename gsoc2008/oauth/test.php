@@ -36,15 +36,6 @@
 <button type="submit">Register Consumer</button>
 </form>
 
-<form action="<?php 
-// This should be an admin option, or perhaps part of core (?)
-require 'cpgOAuth.php';
-$store = OAuthStore::instance();
-$store->install();
-?>">
-<button type="submit">Install OAuth database tables</button>
-</form>
-
 <?php
 function fields() {
 echo <<<EOT
@@ -54,7 +45,7 @@ EOT;
 print(time());
 echo <<<EOT
 " />
-<input type="hidden" name="oauth_consumer_key" value="2bbd8af7ca3e08f07b2c59ddba316bc70485ffd55" />
+<input type="hidden" name="oauth_consumer_key" value="278c2e73743f531c42a71fe308c48ba104877fc36" />
 <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
 <!-- <input type="hidden" name="oauth_signature" value="" /> -->
 EOT;

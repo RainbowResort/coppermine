@@ -95,13 +95,14 @@ class OAuthStoreMySQL
 	 */
 	public function getSecretsForVerify ( $consumer_key, $token, $token_type = 'access' )
 	{
+		global $CONFIG;
 		if ($token_type === false)
 		{
 			$rs = $this->query_row_assoc('
 						SELECT	osr_id, 
 								osr_consumer_key		as consumer_key,
 								osr_consumer_secret		as consumer_secret
-						FROM oauth_server_registry
+						FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 						WHERE osr_consumer_key	= \'%s\'
 						  AND osr_enabled		= 1
 						', 
@@ -125,8 +126,8 @@ class OAuthStoreMySQL
 								osr_consumer_secret		as consumer_secret,
 								ost_token				as token,
 								ost_token_secret		as token_secret
-						FROM oauth_server_registry
-								JOIN oauth_server_token
+						FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
+								JOIN ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 								ON ost_osr_id_ref = osr_id
 						WHERE ost_token_type	= \'%s\'
 						  AND osr_consumer_key	= \'%s\'
@@ -715,6 +716,7 @@ class OAuthStoreMySQL
 	 */
 	public function updateConsumer ( $consumer, $user_id, $user_is_admin = false )
 	{
+		global $CONFIG;
 		foreach (array('requester_name', 'requester_email') as $f)
 		{
 			if (empty($consumer[$f]))
@@ -738,7 +740,7 @@ class OAuthStoreMySQL
 			{
 				$osr_usa_id_ref = $this->query_one('
 									SELECT osr_usa_id_ref
-									FROM oauth_server_registry
+									FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 									WHERE osr_id = %d
 									', $consumer['id']);
 				
@@ -749,7 +751,7 @@ class OAuthStoreMySQL
 			}
 			
 			$this->query('
-				UPDATE oauth_server_registry
+				UPDATE ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 				SET osr_requester_name		= \'%s\',
 					osr_requester_email		= \'%s\',
 					osr_callback_uri		= \'%s\',
@@ -787,7 +789,7 @@ class OAuthStoreMySQL
 			$consumer_secret= $this->generateKey();
 
 			$this->query('
-				INSERT INTO oauth_server_registry
+				INSERT INTO ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 				SET osr_enabled				= 1,
 					osr_status				= \'active\',
 					osr_usa_id_ref			= %d,
@@ -834,8 +836,9 @@ class OAuthStoreMySQL
 	 */
 	public function deleteConsumer ( $consumer_key, $user_id, $user_is_admin = false )
 	{
+		global $CONFIG;
 		$this->query('
-				DELETE FROM oauth_server_registry
+				DELETE FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 				WHERE osr_consumer_key = \'%s\'
 				  AND osr_usa_id_ref   = %d
 				', $consumer_key, $user_id);
@@ -852,9 +855,10 @@ class OAuthStoreMySQL
 	 */
 	public function getConsumer ( $consumer_key )
 	{
+		global $CONFIG;
 		$consumer = $this->query_row_assoc('
 						SELECT	*
-						FROM oauth_server_registry
+						FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 						WHERE osr_consumer_key = \'%s\'
 						', $consumer_key);
 		
@@ -881,11 +885,12 @@ class OAuthStoreMySQL
 	 */
 	public function addConsumerRequestToken ( $consumer_key )
 	{
+		global $CONFIG;
 		$token  = $this->generateKey(true);
 		$secret = $this->generateKey();
 		$osr_id	= $this->query_one('
 						SELECT osr_id
-						FROM oauth_server_registry
+						FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 						WHERE osr_consumer_key = \'%s\'
 						  AND osr_enabled      = 1
 						', $consumer_key);
@@ -896,7 +901,7 @@ class OAuthStoreMySQL
 		}	
 
 		$this->query('
-				INSERT INTO oauth_server_token
+				INSERT INTO ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 				SET ost_osr_id_ref		= %d,
 					ost_usa_id_ref		= 0,
 					ost_token			= \'%s\',
@@ -923,6 +928,7 @@ class OAuthStoreMySQL
 	 */
 	public function getConsumerRequestToken ( $token )
 	{
+		global $CONFIG;
 		$rs = $this->query_row_assoc('
 				SELECT	ost_token			as token,
 						ost_token_secret	as token_secret,
@@ -930,8 +936,8 @@ class OAuthStoreMySQL
 						osr_consumer_secret	as consumer_secret,
 						ost_token_type		as token_type,
 						ost_osr_id_ref		as consumer_id
-				FROM oauth_server_token
-						JOIN oauth_server_registry
+				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
+						JOIN ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 						ON ost_osr_id_ref = osr_id
 				WHERE ost_token_type = \'request\'
 				  AND ost_token      = \'%s\'
@@ -948,8 +954,9 @@ class OAuthStoreMySQL
 	 */
 	public function deleteConsumerRequestToken ( $token )
 	{
+		global $CONFIG;
 		$this->query('
-					DELETE FROM oauth_server_token
+					DELETE FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 					WHERE ost_token 	 = \'%s\'
 					  AND ost_token_type = \'request\'
 					', $token);
@@ -964,8 +971,9 @@ class OAuthStoreMySQL
 	 */
 	public function authorizeConsumerRequestToken ( $token, $user_id )
 	{
+		global $CONFIG;
 		$this->query('
-					UPDATE oauth_server_token
+					UPDATE ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 					SET ost_authorized = 1,
 						ost_usa_id_ref = %d
 					WHERE ost_token      = \'%s\'
@@ -982,10 +990,11 @@ class OAuthStoreMySQL
 	 */
 	public function countConsumerAccessTokens ( $consumer_key )
 	{
+		global $CONFIG;
 		$count = $this->query_one('
 					SELECT COUNT(ost_id)
-					FROM oauth_server_token
-							JOIN oauth_server_registry
+					FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
+							JOIN ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 							ON ost_osr_id_ref = osr_id
 					WHERE ost_token_type   = \'access\'
 					  AND osr_consumer_key = \'%s\'
@@ -1005,11 +1014,12 @@ class OAuthStoreMySQL
 	 */
 	public function exchangeConsumerRequestForAccessToken ( $token )
 	{
+		global $CONFIG;
 		$new_token  = $this->generateKey(true);
 		$new_secret = $this->generateKey();
 
 		$this->query('
-					UPDATE oauth_server_token
+					UPDATE ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 					SET ost_token			= \'%s\',
 						ost_token_secret	= \'%s\',
 						ost_token_type		= \'access\',
@@ -1037,6 +1047,7 @@ class OAuthStoreMySQL
 	 */
 	public function getConsumerAccessToken ( $token, $user_id )
 	{
+		global $CONFIG;
 		$rs = $this->query_row_assoc('
 				SELECT	ost_token				as token,
 						ost_token_secret		as token_secret,
@@ -1044,8 +1055,8 @@ class OAuthStoreMySQL
 						osr_consumer_secret		as consumer_secret,
 						osr_application_title	as application_title,
 						osr_application_descr	as application_descr
-				FROM oauth_server_token
-						JOIN oauth_server_registry
+				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
+						JOIN ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 						ON ost_osr_id_ref = osr_id
 				WHERE ost_token_type = \'access\'
 				  AND ost_token      = \'%s\'
@@ -1068,8 +1079,9 @@ class OAuthStoreMySQL
 	 */
 	public function deleteConsumerAccessToken ( $token, $user_id )
 	{
+		global $CONFIG;
 		$this->query('
-					DELETE FROM oauth_server_token
+					DELETE FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 					WHERE ost_token 	 = \'%s\'
 					  AND ost_token_type = \'access\'
 					  AND ost_usa_id_ref = %d
@@ -1085,6 +1097,7 @@ class OAuthStoreMySQL
 	 */
 	public function listConsumers ( $user_id )
 	{
+		global $CONFIG;
 		$rs = $this->query_all_assoc('
 				SELECT	osr_id					as id,
 						osr_consumer_key 		as consumer_key,
@@ -1096,7 +1109,7 @@ class OAuthStoreMySQL
 						osr_application_descr	as application_descr,
 						osr_requester_name		as requester_name,
 						osr_requester_email		as requester_email
-				FROM oauth_server_registry
+				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 				WHERE osr_usa_id_ref = %d
 				ORDER BY osr_application_title
 				', $user_id);
@@ -1112,6 +1125,7 @@ class OAuthStoreMySQL
 	 */
 	public function listConsumerTokens ( $user_id )
 	{
+		global $CONFIG;
 		$rs = $this->query_all_assoc('
 				SELECT	osr_consumer_key 		as consumer_key,
 						osr_consumer_secret		as consumer_secret,
@@ -1123,8 +1137,8 @@ class OAuthStoreMySQL
 						ost_timestamp			as timestamp,	
 						ost_token				as token,
 						ost_token_secret		as token_secret
-				FROM oauth_server_registry
-					JOIN oauth_server_token
+				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
+					JOIN ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 					ON ost_osr_id_ref = osr_id
 				WHERE ost_usa_id_ref = %d
 				  AND ost_token_type = \'access\'
@@ -1146,13 +1160,14 @@ class OAuthStoreMySQL
 	 */
 	public function checkServerNonce ( $consumer_key, $token, $timestamp, $nonce )
 	{
+		global $CONFIG;
 		if ($nonce == '') {
 			throw new OAuthException('No oauth_nonce provided. Request rejected.');
 		}
 
 		$r = $this->query_row('
 							SELECT MAX(osn_timestamp), MAX(osn_timestamp) > %d
-							FROM oauth_server_nonce
+							FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_nonce
 							WHERE osn_consumer_key = \'%s\'
 							  AND osn_token        = \'%s\'
 							', $timestamp, $consumer_key, $token);
@@ -1164,7 +1179,7 @@ class OAuthStoreMySQL
 
 		// Insert the new combination
 		$this->query('
-				INSERT IGNORE INTO oauth_server_nonce
+				INSERT IGNORE INTO ' . $CONFIG['TABLE_PREFIX'] . 'oauth_nonce
 				SET osn_consumer_key	= \'%s\',
 					osn_token			= \'%s\',
 					osn_timestamp		= %d,
@@ -1178,7 +1193,7 @@ class OAuthStoreMySQL
 
 		// Clean up all timestamps older than the one we just received
 		$this->query('
-				DELETE FROM oauth_server_nonce
+				DELETE FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_nonce
 				WHERE osn_consumer_key	= \'%s\'
 				  AND osn_token			= \'%s\'
 				  AND osn_timestamp     < %d
@@ -1561,6 +1576,7 @@ class OAuthStoreMySQL
 	 * Get information about a consumer from the osr_id (see modified getConsumerRequestToken())
 	 */
 	public function getConsumerInfo($osr_id) {
+		global $CONFIG;
 		$rs = $this->query_all_assoc('
 				SELECT	osr_usa_id_ref			as requester_id,
 						osr_consumer_key 		as consumer_key,
@@ -1572,20 +1588,22 @@ class OAuthStoreMySQL
 						osr_application_descr	as application_descr,
 						osr_requester_name		as requester_name,
 						osr_requester_email		as requester_email
-				FROM oauth_server_registry
+				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
 				WHERE osr_id = %d
 				', $osr_id);
 		return $rs;
 	}
 
 	public function checkTokenExpired($user_id, $token, $timestamp) {		
+		global $CONFIG;
+
 		if (!$token) {
 			return;
 		}
 
 		$r = $this->query_row('
 							SELECT MAX(ost_timestamp)
-							FROM oauth_server_token
+							FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 							WHERE ost_usa_id_ref = \'%d\'
 							', $user_id);
 
@@ -1595,9 +1613,10 @@ class OAuthStoreMySQL
 	}
 
 	public function lookup_id($token) {
+		global $CONFIG;
 		$r = $this->query_row('
 							SELECT ost_usa_id_ref as user
-							FROM oauth_server_token
+							FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
 							WHERE ost_token = \'%s\'
 							', $token);
 		if ($r) {
