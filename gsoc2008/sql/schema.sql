@@ -430,3 +430,67 @@ CREATE TABLE `CPG_ftp_user2server` (
   KEY `server_id` (`server_id`)
 ) TYPE=MyISAM COMMENT='Used for FTP sharding';
 # --------------------------------------------------------
+
+#
+# Table structure for table `CPG_oauth_nonce`
+#
+
+CREATE TABLE `CPG_oauth_nonce` (
+  `osn_id` int(11) NOT NULL auto_increment,
+  `osn_consumer_key` varchar(64) NOT NULL,
+  `osn_token` varchar(64) NOT NULL,
+  `osn_timestamp` bigint NOT NULL,
+  `osn_nonce` varchar(80) NOT NULL,
+    PRIMARY KEY  (`osn_id`),
+    UNIQUE KEY (osn_consumer_key, osn_token, osn_timestamp, osn_nonce)
+) TYPE=MyISAM COMMENT='Used to store nonces used in OAuth requests';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_oauth_token`
+#
+
+CREATE TABLE `CPG_oauth_token` (
+  `ost_id` int(11) NOT NULL auto_increment,
+  `ost_osr_id_ref` int(11) NOT NULL,
+  `ost_usa_id_ref` int(11) NOT NULL,
+  `ost_token` varchar(64) binary NOT NULL,
+  `ost_token_secret` varchar(64) binary NOT NULL,
+  `ost_token_type` enum('request','access'),
+  `ost_authorized` tinyint(1) NOT NULL default '0',
+  `ost_timestamp` timestamp NOT NULL default current_timestamp,
+  PRIMARY KEY (`ost_id`),
+  UNIQUE KEY (ost_token),
+  KEY `ost_osr_id_ref` (`ost_osr_id_ref`),
+  KEY `ost_usa_id_ref` (`ost_usa_id_ref`),
+  FOREIGN KEY (ost_osr_id_ref) references CPG_oauth_registry (osr_id)
+) TYPE=MyISAM COMMENT='Used to track OAuth tokens';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_oauth_registry`
+#
+
+CREATE TABLE `CPG_oauth_registry` (
+  `osr_id` int(11) not null auto_increment,
+  `osr_usa_id_ref` int(11),
+  `osr_consumer_key` varchar(64) binary not null,
+  `osr_consumer_secret` varchar(64) binary not null,
+  `osr_enabled` tinyint(1) not null default '1',
+  `osr_status` varchar(16) not null,
+  `osr_requester_name` varchar(64) not null,
+  `osr_requester_email` varchar(64) not null,
+  `osr_callback_uri` varchar(255) not null,
+  `osr_application_uri` varchar(255) not null,
+  `osr_application_title` varchar(80) not null,
+  `osr_application_descr` text not null,
+  `osr_application_notes` text not null,
+  `osr_application_type` varchar(20) not null,
+  `osr_application_commercial` tinyint(1) not null default '0',
+  `osr_issue_date` datetime not null,
+  `osr_timestamp` timestamp not null default current_timestamp,
+  PRIMARY KEY (`osr_id`),
+  UNIQUE KEY (osr_consumer_key),
+  key (osr_usa_id_ref)
+) TYPE=MyISAM COMMENT='Used to store details on OAuth consumers';
+# --------------------------------------------------------
