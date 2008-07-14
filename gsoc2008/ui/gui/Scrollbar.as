@@ -34,6 +34,7 @@ public class Scrollbar extends Sprite {
 	var myObj:Object;
 				
 	//constructor
+	// object which needs a scrollbar
 	public function Scrollbar(myObj:Object){
 	obj_x = myObj.x;
 	obj_y = myObj.y;
@@ -46,6 +47,7 @@ public class Scrollbar extends Sprite {
 	bounds = new Rectangle(track.x,track.y,0,maxScroll);
 	}
 	
+	//object thats scrolled
 	public function attach(myObj:Object):void{
 		
 		this.myObj=myObj;
@@ -54,7 +56,7 @@ public class Scrollbar extends Sprite {
 	public function drawPick():void{
 			pick = new Sprite();
 			pick.graphics.beginFill(0xFF9900,1); //orange pick
-			pick.graphics.drawRect(obj_x + obj_width - 10, obj_y ,10,20);
+			pick.graphics.drawRect(obj_x + obj_width - 10, obj_y ,10,30);
 			pick.graphics.endFill();
 			addChild(pick);
 			pick.buttonMode = true;
@@ -87,7 +89,7 @@ function beginDrag(event:MouseEvent):void {
 		}
 		
 		function checkingProgress(event:Event):void {
-			var percent:Number = pick.y/maxScroll;
+			var percent:Number = pick.y/maxScroll ;
 			//trace("checking progress");
 			//trace(percent);
 			if (dragging) {
