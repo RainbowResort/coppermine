@@ -1,13 +1,18 @@
 // this jquery.tablednd is to drag and drop sort images. 
 jQuery(document).ready(function() {
     jQuery("#pic_sort").tableDnD();
-	
-	/*
-$("#close_show").click(function () {
-      $("#information").slideToggle("fast");
+
+    jQuery("#pic_sort tr").hover(function() {
+          $(this.cells[0]).addClass('showDragHandle');
+	    $(this).find("td").css({ borderBottom:'1px solid #CCC',
+					     borderTop: '1px solid #CCC' 
+						});
+    }, function() {
+          $(this.cells[0]).removeClass('showDragHandle');
+	    $(this).find("td").css('border','none');
+
     });
 
-*/
 });
 
 

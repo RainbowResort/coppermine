@@ -32,9 +32,14 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     $keywordIds[] = $row["keyId"];
     $keywords[]   = $row["keyword"];
 }
+if ($superCage->get->keyExists('ajax_key')) {	
+	$a = array ('keywords'=>$keywords);
+	$a_jons = json_encode($a);
+	echo $a_jons;
+	exit(0);
+}
 
 $total = mysql_num_rows($result);
-
 mysql_free_result($result);
 
 $charset = $CONFIG['charset'] == 'language file' ? $lang_charset : $CONFIG['charset'];

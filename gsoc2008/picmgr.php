@@ -22,6 +22,10 @@ define('PICMGR_PHP', true);
 
 require('include/init.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jquery.tablednd.js');
+js_include('js/jquery.blockUI.js');
+
 if (!(GALLERY_ADMIN_MODE || USER_ADMIN_MODE)) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 
 function get_album_data()
@@ -34,6 +38,7 @@ function get_album_data()
       foreach ($rowset as $alb){
          $ALBUM_LIST[]=array($alb['aid'], $alb['title']);
       }
+     //s print_r($ALBUM_LIST);
    }
 }
 
@@ -69,6 +74,7 @@ function albumselect($id = "album") {
                 $listArray[$list_count]['aid'] = $row['aid'];
                 $listArray[$list_count]['title'] = $row['title'];
                 $list_count++;
+               
             }
             mysql_free_result($result);
         }
@@ -93,12 +99,12 @@ function albumselect($id = "album") {
             // Add to multi-dim array for later sorting
             $listArray[$list_count]['cat'] = $lang_search_new_php['personal_albums'];
             $listArray[$list_count]['aid'] = $row['aid'];
-            $listArray[$list_count]['title'] = $row['title'];
+            $listArray[$list_count]['title'] = $row['title']; 
             $list_count++;
         }
         mysql_free_result($result);
-
-        if (!$aid) {
+	
+	    if (!$aid) {
             $select = '<option value="0">' . $lang_picmgr_php['no_album'] . "</option>\n";
         }
 
@@ -346,7 +352,8 @@ pageheader($lang_picmgr_php['pic_mgr']);
     }
 -->
 </script>
-<form name="picture_menu" id="cpgform" method="post" action="delete.php?what=picmgr" onSubmit="return CheckPictureForm(this);">
+<!--<form name="picture_menu" id="cpgform" method="post" action="delete.php?what=picmgr" onSubmit="return CheckPictureForm(this);"> -->
+<div id="information"></div>
 <?php starttable("100%", $lang_picmgr_php['pic_mgr'], 1); ?>
 <noscript>
 <tr>
@@ -360,7 +367,7 @@ pageheader($lang_picmgr_php['pic_mgr']);
    //$aid = isset($_GET['aid']) ? (int) $_GET['aid'] : 0;
 	$aid = ($superCage->get->keyExists('aid')) ? $superCage->get->getInt('aid') : 0;
    if (GALLERY_ADMIN_MODE || USER_ADMIN_MODE) {
-      $result = cpg_db_query("SELECT aid, pid, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = $aid ORDER BY position ASC, pid");
+      $result = cpg_db_query("SELECT aid, pid, filename,title FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = $aid ORDER BY position ASC, pid");
 //BM in case I have to fix an album      $result = cpg_db_query("SELECT aid, pid, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = $aid ORDER BY filename");
    } else cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
 
@@ -371,11 +378,14 @@ pageheader($lang_picmgr_php['pic_mgr']);
    if (count ($rowset) > 0) foreach ($rowset as $picture){
       $sort_order .= $picture['pid'].'@'.($i++).',';
    }
+  // print_r($sort_order);
 ?>
-
-   <td class="tableb" valign="top" align="center">
+	
+  <!-- <
 	   <input type="hidden" name="delete_picture" value="" />
-	   <input type="hidden" name="sort_order" value="<?php echo $sort_order ?>" />   
+	   <input type="hidden" name="sort_order" value="<?php echo $sort_order ?>" />
+	   <input type="hidden" id="to" name="ajax_to" value="aa" />-->
+	<td class="tableb" valign="top" align="center">   
       <br />
       <table width="300" border="0" cellspacing="0" cellpadding="0">
 <?php
@@ -394,25 +404,34 @@ EOT;
 echo <<<EOT
          </td>
       </tr>
-
+</table>
 EOT;
 }
 ?>
-      <tr>
-         <td>
-            <select id="to" name="to[]" size="<?php echo min(max(count ($rowset)+3,15), 40) ?>" multiple onChange="Picture_Select(this.selectedIndex);" class="listbox" style="width: 300px">
+      
+        <!-- <td> Comment by Nuwan Sameea for new sorting 
+            <select id="to" name="to[]" size="<?php //echo min(max(count ($rowset)+3,15), 40) ?>" multiple onChange="Picture_Select(this.selectedIndex);" class="listbox" style="width: 300px">
+            -->
+		<div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding-top:10px;background:#FFF;">
+			<table id="pic_sort">
 <?php
    $i=100;
    $lb = '';
-   if (count ($rowset) > 0) foreach ($rowset as $picture){
-         $lb .= '               <option value="picture_no=' . $picture['pid'] .',picture_nm=\'' . $picture['filename'] .'\',picture_sort=' .($i++). ',action=0">' . stripslashes($picture['filename']) . "</option>\n";
+   $j=1;
+   if (count ($rowset) > 0) 
+   		foreach ($rowset as $picture){
+     //$lb .= '               <option value="picture_no=' . $picture['pid'] .',picture_nm=\'' . $picture['filename'] .'\',picture_sort=' .($i++). ',action=0">' . stripslashes($picture['filename']) . "</option>\n";
+	//create a table to sort the picture  
+ 	$lb .='<tr style=\'height:20px;cursor:move;width:100%\' id='.$picture["pid"].'><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /><td style="width:250px;padding-left:10px;">'.$picture["title"].'</td><td style="width:100px">'.$picture['filename'].'</td></tr>';
+	$j++;
    }
    echo $lb;
    echo <<<EOT
-   </select>
+  <!-- </select>/nuwan changes-->
          </td>
-      </tr>
-      <tr>
+      </table></div>
+	<table>
+	  <!--<tr>
          <td>
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
@@ -424,7 +443,7 @@ EOT;
             </tr>
             </table>
          </td>
-      </tr>
+      </tr>-->
       <tr>
          <td><br />
             <br />
@@ -447,15 +466,31 @@ EOT;
 </tr>
 EOT;
      }
+
      echo <<<EOT
 <tr>
    <td colspan="2" align="center" class="tablef">
-   <input type="submit" class="button" value="{$lang_picmgr_php['apply_modifs']}" />
-   </td>
+<button id="sort"  class="button" onclick="if(confirm('Confirm modifications')) {
+	jQuery.blockUI({ css: { 
+        		border: 'none', 
+        		padding: '20px', 
+        		backgroundColor: '#333333', 
+        		'-webkit-border-radius': '10px', 
+        		'-moz-border-radius': '10px', 
+        		color: '#FFF' 
+    		} });
+jQuery.tableDnD.currentTable = document.getElementById('pic_sort');
+jQuery.post('delete.php', { what:'picmgr', ajax_to:  jQuery.tableDnD.serialize(), albunm_id: {$aid} },  function(data){ if(data.length==0){ data='Sorting not done';}
+		document.getElementById('information').innerHTML = '<table id=\'informtion\' class=\'maintable\' align=\'center\' width=\'100%\'><tr><td class=\'tableh1\'>Prictur Mananger</td></tr><tr><td>'+data+'</td></tr></table>'; 
+});
+setTimeout($.unblockUI);			
+return true;}	 else return false;  ">Sort Picture</button>
+<a href="index.php"  class="button"> Home </a>
+</td>
 </tr>
 EOT;
    endtable();
-   print '</form>';
+ //  print '</form>';
    pagefooter();
    ob_end_flush();
 ?>
