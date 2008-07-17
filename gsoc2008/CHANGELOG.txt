@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-16 [A] Beginnings of the API album list function
 2008-07-10 [B] Fixed API upload permissions - different user groups now respected {daorange}
 2008-07-06 [B] Fixed a general Coppermine bug that prevented editing images containing a tilda ~ {zmarty}
 2008-07-06 [B] Fixed the loading of images in pic_editor.php when the filename contains a tilda ~ {zmarty}

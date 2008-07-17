@@ -74,6 +74,12 @@ class cpgOAuth extends OAuthServer {
                         case 'upload':
                             require 'db_input.php';
                             break;
+                        case 'cat_list':
+                            define('IN_COPPERMINE', true);
+                            require 'include/init.inc.php';
+                            pub_user_albums();
+                            upload_form_alb_list('', '');
+                            break;
                         default:
                             throw new OAuthException('No function specified via HTTP POST');
                     }

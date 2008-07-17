@@ -17,9 +17,10 @@
 <input type="text" name="oauth_token" value="" />
 </form>
 
+
 <form method="POST" action="api_index.php" enctype="multipart/form-data">
 <?php fields(); ?>
-<button type="submit">API Functions</button>
+<button type="submit">API Upload</button>
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="upload" />
 <input type="hidden" name="event" value="picture" />
@@ -27,6 +28,14 @@
 <input type="hidden" name="title" value="testpic" />
 <input type="hidden" name="caption" value="A picture." />
 <input type="file" name="userpicture" value="" />
+</form>
+
+
+<form method="POST" action="api_index.php" enctype="multipart/form-data">
+<?php fields(); ?>
+<button type="submit">API Category List</button>
+<input type="text" name="oauth_token" value="" />
+<input type="hidden" name="function" value="cat_list" />
 </form>
 
 <form method="POST" action="register.php">

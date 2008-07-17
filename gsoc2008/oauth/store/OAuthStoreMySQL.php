@@ -76,7 +76,7 @@ class OAuthStoreMySQL
 					$this->sql_errcheck();
 				}
 			}
-			//$this->query('set character set utf8');
+			$this->query('set character set utf8');
 		}
 	}
 
@@ -1403,253 +1403,255 @@ class OAuthStoreMySQL
 		if (!($res = mysql_query($sql, $this->conn)))
 		{
 			$this->sql_errcheck($sql);
-		}
-		mysql_free_result($res);
-	}
-	
+		}		
+		if (is_resource($res)) {
+            mysql_free_result($res);
+        }
+    }
+    
 
-	/**
-	 * Perform a query, ignore the results
-	 * 
-	 * @param string sql
-	 * @param vararg arguments (for sprintf)
-	 * @return array
-	 */
-	protected function query_all_assoc ( $sql )
-	{
-		$sql = $this->sql_printf(func_get_args());
-		if (!($res = mysql_query($sql, $this->conn)))
-		{
-			$this->sql_errcheck($sql);
-		}
-		$rs = array();
-		while ($row  = mysql_fetch_assoc($res))
-		{
-			$rs[] = $row;
-		}
-		mysql_free_result($res);
-		return $rs;
-	}
-	
-	
-	/**
-	 * Perform a query, return the first row
-	 * 
-	 * @param string sql
-	 * @param vararg arguments (for sprintf)
-	 * @return array
-	 */
-	protected function query_row_assoc ( $sql )
-	{
-		$sql = $this->sql_printf(func_get_args());
-		if (!($res = mysql_query($sql, $this->conn)))
-		{
-			$this->sql_errcheck($sql);
-		}
-		if ($row = mysql_fetch_assoc($res))
-		{
-			$rs = $row;
-		}
-		else
-		{
-			$rs = false;
-		}
-		mysql_free_result($res);
-		return $rs;
-	}
+    /**
+     * Perform a query, ignore the results
+     * 
+     * @param string sql
+     * @param vararg arguments (for sprintf)
+     * @return array
+     */
+    protected function query_all_assoc ( $sql )
+    {
+        $sql = $this->sql_printf(func_get_args());
+        if (!($res = mysql_query($sql, $this->conn)))
+        {
+            $this->sql_errcheck($sql);
+        }
+        $rs = array();
+        while ($row  = mysql_fetch_assoc($res))
+        {
+            $rs[] = $row;
+        }
+        mysql_free_result($res);
+        return $rs;
+    }
+    
+    
+    /**
+     * Perform a query, return the first row
+     * 
+     * @param string sql
+     * @param vararg arguments (for sprintf)
+     * @return array
+     */
+    protected function query_row_assoc ( $sql )
+    {
+        $sql = $this->sql_printf(func_get_args());
+        if (!($res = mysql_query($sql, $this->conn)))
+        {
+            $this->sql_errcheck($sql);
+        }
+        if ($row = mysql_fetch_assoc($res))
+        {
+            $rs = $row;
+        }
+        else
+        {
+            $rs = false;
+        }
+        mysql_free_result($res);
+        return $rs;
+    }
 
-	
-	/**
-	 * Perform a query, return the first row
-	 * 
-	 * @param string sql
-	 * @param vararg arguments (for sprintf)
-	 * @return array
-	 */
-	protected function query_row ( $sql )
-	{
-		$sql = $this->sql_printf(func_get_args());
-		if (!($res = mysql_query($sql, $this->conn)))
-		{
-			$this->sql_errcheck($sql);
-		}
-		if ($row = mysql_fetch_array($res))
-		{
-			$rs = $row;
-		}
-		else
-		{
-			$rs = false;
-		}
-		mysql_free_result($res);
-		return $rs;
-	}
-	
-		
-	/**
-	 * Perform a query, return the first column of the first row
-	 * 
-	 * @param string sql
-	 * @param vararg arguments (for sprintf)
-	 * @return mixed
-	 */
-	protected function query_one ( $sql )
-	{
-		$sql = $this->sql_printf(func_get_args());
-		if (!($res = mysql_query($sql, $this->conn)))
-		{
-			$this->sql_errcheck($sql);
-		}
-		$val = @mysql_result($res, 0, 0);
-		mysql_free_result($res);
-		return $val;
-	}
-	
-	
-	/**
-	 * Return the number of rows affected in the last query
-	 */
-	protected function query_affected_rows ()
-	{
-		return mysql_affected_rows($this->conn);
-	}
+    
+    /**
+     * Perform a query, return the first row
+     * 
+     * @param string sql
+     * @param vararg arguments (for sprintf)
+     * @return array
+     */
+    protected function query_row ( $sql )
+    {
+        $sql = $this->sql_printf(func_get_args());
+        if (!($res = mysql_query($sql, $this->conn)))
+        {
+            $this->sql_errcheck($sql);
+        }
+        if ($row = mysql_fetch_array($res))
+        {
+            $rs = $row;
+        }
+        else
+        {
+            $rs = false;
+        }
+        mysql_free_result($res);
+        return $rs;
+    }
+    
+        
+    /**
+     * Perform a query, return the first column of the first row
+     * 
+     * @param string sql
+     * @param vararg arguments (for sprintf)
+     * @return mixed
+     */
+    protected function query_one ( $sql )
+    {
+        $sql = $this->sql_printf(func_get_args());
+        if (!($res = mysql_query($sql, $this->conn)))
+        {
+            $this->sql_errcheck($sql);
+        }
+        $val = @mysql_result($res, 0, 0);
+        mysql_free_result($res);
+        return $val;
+    }
+    
+    
+    /**
+     * Return the number of rows affected in the last query
+     */
+    protected function query_affected_rows ()
+    {
+        return mysql_affected_rows($this->conn);
+    }
 
 
-	/**
-	 * Return the id of the last inserted row
-	 * 
-	 * @return int
-	 */
-	protected function query_insert_id ()
-	{
-		return mysql_insert_id($this->conn);
-	}
-	
-	
-	protected function sql_printf ( $args )
-	{
-		$sql  = array_shift($args);
-		if (count($args) == 1 && is_array($args[0]))
-		{
-			$args = $args[1];
-		}
-		$args = array_map(array($this, 'sql_escape_string'), $args);
-		return vsprintf($sql, $args);
-	}
-	
-	
-	protected function sql_escape_string ( $s )
-	{
-		if (is_string($s))
-		{
-			return mysql_real_escape_string($s, $this->conn);
-		}
-		else if (is_null($s))
-		{
-			return NULL;
-		}
-		else if (is_bool($s))
-		{
-			return intval($s);
-		}
-		else if (is_int($s) || is_float($s))
-		{
-			return $s;
-		}
-		else
-		{
-			return mysql_real_escape_string(strval($s), $this->conn);
-		}
-	}
-	
-	
-	protected function sql_errcheck ( $sql )
-	{
-		if (mysql_errno($this->conn))
-		{			
-//			die($sql . "\n\n" . mysql_error());
-			throw new OAuthException('SQL error');
-		}
-	}
+    /**
+     * Return the id of the last inserted row
+     * 
+     * @return int
+     */
+    protected function query_insert_id ()
+    {
+        return mysql_insert_id($this->conn);
+    }
+    
+    
+    protected function sql_printf ( $args )
+    {
+        $sql  = array_shift($args);
+        if (count($args) == 1 && is_array($args[0]))
+        {
+            $args = $args[1];
+        }
+        $args = array_map(array($this, 'sql_escape_string'), $args);
+        return vsprintf($sql, $args);
+    }
+    
+    
+    protected function sql_escape_string ( $s )
+    {
+        if (is_string($s))
+        {
+            return mysql_real_escape_string($s, $this->conn);
+        }
+        else if (is_null($s))
+        {
+            return NULL;
+        }
+        else if (is_bool($s))
+        {
+            return intval($s);
+        }
+        else if (is_int($s) || is_float($s))
+        {
+            return $s;
+        }
+        else
+        {
+            return mysql_real_escape_string(strval($s), $this->conn);
+        }
+    }
+    
+    
+    protected function sql_errcheck ( $sql )
+    {
+        if (mysql_errno($this->conn))
+        {            
+//            die($sql . "\n\n" . mysql_error());
+            throw new OAuthException('SQL error');
+        }
+    }
 
-	/** 
-	 * Get information about a consumer from the osr_id (see modified getConsumerRequestToken())
-	 */
-	public function getConsumerInfo($osr_id) {
-		global $CONFIG;
-		$rs = $this->query_all_assoc('
-				SELECT	osr_usa_id_ref			as requester_id,
-						osr_consumer_key 		as consumer_key,
-						osr_consumer_secret		as consumer_secret,
-						osr_enabled				as enabled,
-						osr_status 				as status,
-						osr_issue_date			as issue_date,
-						osr_application_title	as application_title,
-						osr_application_descr	as application_descr,
-						osr_requester_name		as requester_name,
-						osr_requester_email		as requester_email
-				FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
-				WHERE osr_id = %d
-				', $osr_id);
-		return $rs;
-	}
+    /** 
+     * Get information about a consumer from the osr_id (see modified getConsumerRequestToken())
+     */
+    public function getConsumerInfo($osr_id) {
+        global $CONFIG;
+        $rs = $this->query_all_assoc('
+                SELECT    osr_usa_id_ref            as requester_id,
+                        osr_consumer_key         as consumer_key,
+                        osr_consumer_secret        as consumer_secret,
+                        osr_enabled                as enabled,
+                        osr_status                 as status,
+                        osr_issue_date            as issue_date,
+                        osr_application_title    as application_title,
+                        osr_application_descr    as application_descr,
+                        osr_requester_name        as requester_name,
+                        osr_requester_email        as requester_email
+                FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry
+                WHERE osr_id = %d
+                ', $osr_id);
+        return $rs;
+    }
 
-	public function checkTokenExpired($user_id, $token, $timestamp) {		
-		global $CONFIG;
+    public function checkTokenExpired($user_id, $token, $timestamp) {        
+        global $CONFIG;
 
-		if (!$token) {
-			return;
-		}
+        if (!$token) {
+            return;
+        }
 
-		$r = $this->query_row('
-							SELECT MAX(ost_timestamp)
-							FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
-							WHERE ost_usa_id_ref = \'%d\'
-							', $user_id);
+        $r = $this->query_row('
+                            SELECT MAX(ost_timestamp)
+                            FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
+                            WHERE ost_usa_id_ref = \'%d\'
+                            ', $user_id);
 
-		if (time() - strtotime($r[0]) > 86400) {
-			throw new OAuthException('Token "' . $token . '" was issued over 24 hours ago and is now expired.');
-		}
-	}
+        if (time() - strtotime($r[0]) > 86400) {
+            throw new OAuthException('Token "' . $token . '" was issued over 24 hours ago and is now expired.');
+        }
+    }
 
-	public function lookup_id($token) {
-		global $CONFIG;
-		$r = $this->query_row('
-							SELECT ost_usa_id_ref as user
-							FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
-							WHERE ost_token = \'%s\'
-							', $token);
-		if ($r) {
-			return $r['user'];
-		}
+    public function lookup_id($token) {
+        global $CONFIG;
+        $r = $this->query_row('
+                            SELECT ost_usa_id_ref as user
+                            FROM ' . $CONFIG['TABLE_PREFIX'] . 'oauth_token
+                            WHERE ost_token = \'%s\'
+                            ', $token);
+        if ($r) {
+            return $r['user'];
+        }
 
-		else {
-			//throw new OAuthException('No use associated with token "' . $token . '"');
-			return false;
-		}
-	}
+        else {
+            //throw new OAuthException('No use associated with token "' . $token . '"');
+            return false;
+        }
+    }
 
-	public function group_info($user_id) {
-		global $CONFIG;
-		$r = $this->query_row('
-							SELECT user_group
-							FROM ' . $CONFIG['TABLE_PREFIX'] . 'users
-							WHERE user_id = \'%d\'
-							', $user_id);
-		if ($r['user_group']) {
-			$group_info = $this->query_row_assoc('
-								SELECT 	can_upload_pictures AS can_upload,
-										has_admin_access AS admin_access
-								FROM ' . $CONFIG['TABLE_PREFIX'] . 'usergroups
-								WHERE group_id = \'%d\'
-								', $r['user_group']);
-			return $group_info;
-		}
+    public function group_info($user_id) {
+        global $CONFIG;
+        $r = $this->query_row('
+                            SELECT user_group
+                            FROM ' . $CONFIG['TABLE_PREFIX'] . 'users
+                            WHERE user_id = \'%d\'
+                            ', $user_id);
+        if ($r['user_group']) {
+            $group_info = $this->query_row_assoc('
+                                SELECT     can_upload_pictures AS can_upload,
+                                        has_admin_access AS admin_access
+                                FROM ' . $CONFIG['TABLE_PREFIX'] . 'usergroups
+                                WHERE group_id = \'%d\'
+                                ', $r['user_group']);
+            return $group_info;
+        }
 
-		else {			
-			return false;
-		}
-	}
+        else {            
+            return false;
+        }
+    }
 }
 
 

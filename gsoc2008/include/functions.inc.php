@@ -4491,4 +4491,174 @@ function cpg_getimagesize($image, $force_cpg_function = false){
         }
 }
 
+function pub_user_albums() {
+global $CONFIG, $public_albums_list, $user_albums_list;
+	if (GALLERY_ADMIN_MODE) {
+	$public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT);
+	//select albums that don't belong to a category
+	$public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0");
+	} else {
+		$public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."))");
+		//select albums that don't belong to a category
+		$public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0 AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."))");   
+	}
+	
+	
+	if (mysql_num_rows($public_albums)) {
+	$public_albums_list = cpg_db_fetch_rowset($public_albums);
+	} else {
+	$public_albums_list = array();
+	}
+	
+	//do the same for non categorized albums
+	if (mysql_num_rows($public_albums_no_cat)) {
+	$public_albums_list_no_cat = cpg_db_fetch_rowset($public_albums_no_cat);
+	} else {
+	$public_albums_list_no_cat = array();
+	}
+	
+	//merge the 2 album arrays
+	$public_albums_list = array_merge($public_albums_list, $public_albums_list_no_cat);
+	
+	
+	if (USER_ID) {
+	$user_albums = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category='" . (FIRST_USER_CAT + USER_ID) . "' ORDER BY title");
+	if (mysql_num_rows($user_albums)) {
+		$user_albums_list = cpg_db_fetch_rowset($user_albums);
+	} else {
+		$user_albums_list = array();
+	}
+	} else {
+	$user_albums_list = array();
+	}
+}
+
+// The function to create the album list drop down.
+function upload_form_alb_list($text, $name) {
+    $superCage = Inspekt::makeSuperCage();
+    // Pull the $CONFIG array and the GET array into the function
+    global $CONFIG, $lang_upload_php;
+
+    // Also pull the album lists into the function
+    global $user_albums_list, $public_albums_list;
+
+    // Check to see if an album has been preselected by URL addition or the last selected album. If so, make $sel_album the album number. Otherwise, make $sel_album 0.
+    if ($superCage->get->keyExists('album')) {
+      $sel_album = $superCage->get->getInt('album');
+    } elseif ($superCage->post->keyExists('album')) {
+      $sel_album = $superCage->post->getInt('album');
+    } else {
+      $sel_album = 0;
+    }
+
+    // Get the ancestry of the categories
+    $vQuery = "SELECT cid, parent, name FROM " . $CONFIG['TABLE_CATEGORIES'] . " WHERE 1";
+    $vResult = cpg_db_query($vQuery);
+    $vRes = cpg_db_fetch_rowset($vResult);
+    mysql_free_result($vResult);
+    foreach ($vRes as $vResI => $vResV) {
+        $vResRow = $vRes[$vResI];
+        $catParent[$vResRow['cid']] = $vResRow['parent'];
+        $catName[$vResRow['cid']] = $vResRow['name'];
+    }
+    $catAnces = array();
+    foreach ($catParent as $cid => $cid_parent) {
+        $catAnces[$cid] = '';
+        while ($cid_parent != 0) {
+            $catAnces[$cid] = $catName[$cid_parent] . ($catAnces[$cid]?' - '.$catAnces[$cid]:'');
+            $cid_parent = $catParent[$cid_parent];
+        }
+    }
+
+    // Reset counter
+    $list_count = 0;
+
+    // Cycle through the User albums
+    foreach($user_albums_list as $album) {
+
+        // Add to multi-dim array for later sorting
+        $listArray[$list_count]['cat'] = $lang_upload_php['personal_albums'];
+        $listArray[$list_count]['aid'] = $album['aid'];
+        $listArray[$list_count]['title'] = $album['title'];
+        $list_count++;
+    }
+
+    // Cycle through the public albums
+    foreach($public_albums_list as $album) {
+
+        // Set $album_id to the actual album ID
+        $album_id = $album['aid'];
+
+        // Add to multi-dim array for sorting later
+        if ($album['name']) {
+            $listArray[$list_count]['cat'] = $catAnces[$album['cid']] . ($catAnces[$album['cid']]?' - ':'') . $album['name'];
+            $listArray[$list_count]['cid'] = $album['cid'];
+        } else {
+            $listArray[$list_count]['cat'] = $lang_upload_php['albums_no_category'];
+            $listArray[$list_count]['cid'] = 0;
+        }
+        $listArray[$list_count]['aid'] = $album['aid'];
+        $listArray[$list_count]['title'] = $album['title'];
+        $list_count++;
+    }
+
+/* Output XML - for API */
+    if (defined('API_CALL')) {
+        $listArray = array_csort($listArray,'aid'); // Sort the array alphabetically by aid
+        echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+        echo "<album_list>\n";
+	foreach ($listArray as $val) {
+	    echo ' <album id="' . $val['aid'] . '">' . "\n";
+	    echo '  <title>' . $val['title'] . '</title>' . "\n";
+            echo '  <cat_id>' . $val['cid'] . '</cat_id>' . "\n";
+	    echo ' </album>' . "\n";
+	}
+        echo "</album_list>";
+
+        header('Content-Type: text/xml');
+        return;
+    }
+
+
+/* Output HTML - for upload.php */
+
+    // Sort the pulldown options by category and album name
+    $listArray = array_csort($listArray,'cat','title');     // alphabetically by category name
+    // $listArray = array_csort($listArray,'cid','title');  // numerically by category ID
+    // print_r($listArray);exit;
+
+    // Create the opening of the drop down box
+    echo <<<EOT
+    <tr>
+        <td class="tableb">
+            $text
+        </td>
+        <td class="tableb" valign="top">
+            <select name="$name" class="listbox">
+
+EOT;
+
+    // Finally, print out the nicely sorted and formatted drop down list
+    $alb_cat = '';
+    echo '                <option value="">' . $lang_upload_php['select_album'] . "</option>\n";
+    foreach ($listArray as $val) {
+        //if ($val['cat'] != $alb_cat) {  // old method compared names which might not be unique
+        if ($val['cid'] != $alb_cat) {
+            if ($alb_cat) echo "                </optgroup>\n";
+            echo '                <optgroup label="' . $val['cat'] . '">' . "\n";
+            $alb_cat = $val['cid'];
+        }
+        echo '                <option value="' . $val['aid'] . '"' . ($val['aid'] == $sel_album ? ' selected' : '') . '>   ' . $val['title'] . "</option>\n";
+    }
+    if ($alb_cat) echo "                </optgroup>\n";
+
+    // Close the drop down
+    echo <<<EOT
+            </select>
+        </td>
+    </tr>
+
+EOT;
+}
+
 ?>
