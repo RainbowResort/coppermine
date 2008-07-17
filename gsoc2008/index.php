@@ -794,7 +794,7 @@ function album_adm_menu($aid, $cat)
 * @param integer $cat Category id for which albums are needed
 */
 function list_cat_albums($cat = 0)
-{echo "pzida";
+{
     global $CONFIG, $USER, $lastup_date_fmt, $USER_DATA, $FORBIDDEN_SET, $FORBIDDEN_SET_DATA, $cpg_show_private_album;
     global $lang_list_albums, $lang_errors;
 
