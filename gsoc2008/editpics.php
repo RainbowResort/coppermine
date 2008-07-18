@@ -24,8 +24,8 @@ require('include/init.inc.php');
 
 js_include('js/jquery.js');
 js_include('js/jquery.cluetip.js');
-js_include('js/jSerach.js');
 js_include('js/jquery.blockUI.js');
+js_include('js/jSerach.js');
 
 
 
@@ -445,7 +445,7 @@ function form_input($text, $name, $max_length,$field_width=100)
                         $text
         </td>
         <td width="100%" class="{$row_style_class}" valign="top">
-                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp"  />
+                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp" autocomplete="off" />
                 </td>
         </tr>
 
@@ -765,7 +765,6 @@ EOT;
 echo <<<EOT
 <script type="text/javascript" language="javascript">
 <!--
-
 -->
 </script>
 EOT;
@@ -773,7 +772,7 @@ EOT;
 $mode= (UPLOAD_APPROVAL_MODE==1) ? "&amp;mode=upload_approval":"";
 $cat_l = (isset($actual_cat))? "?cat=$actual_cat" : (isset($cat) ? "?cat=$cat" : '');
 echo <<< EOT
-<form method="post" name="editForm" id="cpgform" action="$form_target$mode">
+<form autocomplete="off" method="post" name="editForm" id="cpgform" action="$form_target$mode"  >
 EOT;
 starttable("100%", $title.$help, 3);
 echo <<<EOT
@@ -864,7 +863,7 @@ mysql_free_result($result);
 echo <<<EOT
         <tr>
                 <td colspan="3" align="center" class="tablef">
-                        <input type="submit" name="go" value="{$lang_editpics_php['apply']}" class="button" />
+                        <input type="submit" name="go" value="{$lang_editpics_php['apply']}" class="button"  />
                 </td>
         </tr>
 

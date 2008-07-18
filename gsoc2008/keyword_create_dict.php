@@ -40,7 +40,7 @@ $i=0;
    while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
     $keywords = $row["keywords"];
-    $keyArr   = explode(" ",$keywords);
+    $keyArr   = explode(",",$keywords);
         foreach ($keyArr as $keyword) {
             $query = "SELECT keyword from {$CONFIG['TABLE_PREFIX']}dict WHERE keyword = '$keyword'";
             $result2 = cpg_db_query($query);

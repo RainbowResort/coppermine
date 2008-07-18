@@ -795,6 +795,6 @@ div#film ul.tape li{ list-style: none; display: inline;  position: relative; mar
 
 .tDnD_whileDrag { background-color: #0E72A4; color: #FFF; }
 table#pic_sort .showDragHandle { background: url(../../images/sort.png) no-repeat 5% ;}
-#suggestionContainer ul {height : 180px; overflow: auto; border: 2px solid #ffe594;  }
+#suggestionContainer ul {height : 180px; overflow: auto;   }
 #suggestionContainer ul li{ margin: 0; padding: 2px 4px; border-bottom: 2px solid #ffe594; color:#666; background:#fff9e7; cursor:pointer; list-style: none; }
 #suggestionContainer ul li.jSuggestHover{ background:#ffeaaa; color:#333; }

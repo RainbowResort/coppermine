@@ -24,13 +24,57 @@ $(document).ready(function(){
 								
 		});
 		
+		var blockSubmit=true;
+	
+	// prevent form submit in opera when selecting with return key
+	$.browser.opera && $(input.form).bind("submit.autocomplete", function() {
+		if (blockSubmit) {
+			blockSubmit = false;
+			return false;
+		}
+	});	
+	function trimWords(value) {
+		var words = value.split(',');
+		var result = [];
+		$.each(words, function(i, value) {
+			if ( $.trim(value) )
+				result[i] = $.trim(value);
+		});
+		return result;
+	}
+	
+	function lastWord(value) {
+		var words = trimWords(value);
+		return words[words.length - 1];
+	}
+	
+	function matchSubset(s, sub) {
+			s   = s.toLowerCase();
+			sub = sub.toLowerCase();
+		var i = s.indexOf(sub);
+		if (i == -1) 
+			return false;
+		return i == 0 || false;
+	};
+	
+	function validInputBox(value){
+		var validWords = trimWords(value);
+		var temp ="";
+			validWords = validWords.splice(0,[validWords.length-1]) 
+		$.each(validWords, function(i, value) {
+			temp += value + ',';
+		});
+		return temp;
+	}
 		
-		$("input.serachUp").bind("keyup", function(e){
+	$("input.serachUp").bind("keyup keypress", function(e){
 		var inputString = $(this).val();
 		var inputBoxId = $(this).attr('id');
 		
 		if(inputString.length != 0) {
 		// Hide the suggestion box.
+			var getCurrentWord = lastWord(inputString);
+					
 			var offSet = $(this).offset(); 
 			var $content ="";
 			
@@ -41,11 +85,63 @@ $(document).ready(function(){
 					width: $(this).outerWidth()-2 + "px",
 					zIndex: 20000,
 				}).show();
-				
-				if(setArray) {				
+		//key handling for enter,down,up and ESC
+  	   if (e.keyCode == 27 ) {
+  					$(jId).hide();
+  				}				
+  				// if enter key
+  			
+    	else if (e.keyCode == 13 ) {
+    			e.preventDefault();
+    			var	getValueOfCurrentbox = $("input[name='"+inputBoxId+"']").attr("value");
+    			if ($(jH).length == 1)
+						$("input[name='"+inputBoxId+"']").val(validInputBox(getValueOfCurrentbox) +$(jH).text()+',');
+						$(jId).hide();
+				return false;
+    				}
+   
+  				// if down arrow
+  		else if (e.keyCode == 40) {
+  					// if any suggestion is highlighted
+  					if ($(jH).length == 1) {
+  						if (!$(jH).next().length == 0) {
+  							$(jH).next().addClass(jsH);
+  							$(".jSuggestHover:eq(0)").removeClass(jsH);		
+  						}
+  					}
+  					else {
+  						$("#suggestionContainer ul li:first-child").addClass(jsH);
+  					}
+  					
+  				}
+  				
+  				// if up arrow
+  		else if (e.keyCode == 38) {
+  					// if any suggestion is highlighted
+  					if ($(jH).length == 1 ) {
+ 						if (!$(jH).prev().length == 0) {
+  							$(jH).prev().addClass(jsH);
+  							$(".jSuggestHover:eq(1)").removeClass(jsH);
+  						
+  						}
+  						// if is first child
+  						else {
+  							$(jH).removeClass(jsH);
+  						}
+  					}
+  				}
+  				
+ 
+				//suggestions displying 				
+		else if(setArray) {				
 					$content += "<ul id='seach_box'>";
 					for(var i=0; i< setArray.length ; i++){
-						$content += "<li>"+ setArray[i] + "</li>";
+						if (matchSubset(setArray[i],getCurrentWord)){
+							$content += "<li>"+ setArray[i] + "</li>";	
+						}
+						else{
+							continue;
+						}
 					}
 					$content += "</ul>";
 					
@@ -65,7 +161,7 @@ $(document).ready(function(){
 									if(getValueOfCurrentbox.lenght ==0 ){
 										setValue = textVal;
 									}else{
-										setValue = getValueOfCurrentbox + " " +textVal;
+										setValue = validInputBox(getValueOfCurrentbox)+textVal+",";
 									}									
 									$("input[name='"+inputBoxId+"']").val(setValue);
 									$("input[name='"+inputBoxId+"']").focus();
@@ -95,7 +191,7 @@ $(document).ready(function(){
 		$("#dictionary_message").hide();
 		
    	 $.ajax({
-  		type: "POST",
+  		type: "GET",
    		url: "keyword_create_dict.php",
    		success: function(msg){
    			var message_dic ="<p style='position:relative;text-align:center;top:7px; color: #c00000; font-size:14px'><strong>Keyword dictionary updated..</strong></p>"; 
@@ -118,9 +214,7 @@ $(document).ready(function(){
      		setTimeout($.unblockUI);
      		setTimeout(function () {
 				$("#dictionary_message").fadeOut("slow");
-			},5000); 
-
-     		
+				},5000);      		
    			}
  		});
 	});
