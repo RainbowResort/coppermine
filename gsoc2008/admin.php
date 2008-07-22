@@ -76,6 +76,9 @@ if (!function_exists('array_is_associative')) { // make sure that this will not 
 
 require_once('include/admin.inc.php'); // populate the array for the admin data (could later be done using an XML file)
 
+// OVI
+ob_end_flush();
+// OVI
 
 // loop through the config sections and populate the array that determines what sections to expand/collapse
 $collapseSections_array = array(); // By default, all sections should be hidden. Let's populate the array first with all existing sections and then later remove the ones that are suppossed to be expanded by default

@@ -20,7 +20,6 @@ class storage
 		$this->config = $CONFIG;
 	}
 
-
 	/**
 	 * store_file($fileContainer)
 	 *
@@ -48,7 +47,7 @@ class storage
 	 * This function stores an image and its thumbnails to the right
 	 * FTP accounts.
 	 *
-	 * @param images
+	 * @param image
 	 * @return nothing, for now
 	 */
 	function ftp_store_file($fileContainer)
@@ -114,26 +113,40 @@ class storage
 			
 		} // if(sizeof($servers) && sizeof($fileContainer->thumb_paths))// TODO: Else what? Error message?
 	} // ftp_store_file
-	
+
+	/**
+	 * replace_file($fileContainer)
+	 *
+	 * This function gets an image object and calls ftp_replace_file($fileContainer);
+	 * 
+	 * @see ftp_replace_file
+	 */	
 	function replace_file($fileContainer)
 	{
 		$this->ftp_replace_file($fileContainer);
 	}
 
+	/**
+	 * ftp_replace_file($fileContainer)
+	 * 
+	 * The function overwrites a file already located on one or
+	 * more FTP servers with a new image.
+	 *
+	 */
 	function ftp_replace_file($fileContainer)
 	{
-       	    $sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_PIC2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_PIC2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_PIC2SERVER']}.pic_id='{$fileContainer->id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive'";
-       	    $result = cpg_db_query($sql);
-       	    while($server = mysql_fetch_assoc($result))
+		$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_PIC2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_PIC2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_PIC2SERVER']}.pic_id='{$fileContainer->id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive'";
+		$result = cpg_db_query($sql);
+		while($server = mysql_fetch_assoc($result))
 	    {
-		$conn_id = $this->get_ftp_connection_id($server); // this queries the open connections list for the right $conn_id.
-		$relative_path_to_store = $server['subfolder_path'].$fileContainer->original_path;
-		//echo "Saving ".$fileContainer->original_path." to ".$relative_path_to_store." on ".$server['username']."<br>";
-		if(!ftp_put($conn_id, $relative_path_to_store, $fileContainer->original_path, FTP_BINARY)) // uploads an image to the FTP account
-		{
-		    echo "Couldn't replace file ".$fileContainer."<br>\n";
-		    return FALSE; // TODO: Better error handling
-		}
+			$conn_id = $this->get_ftp_connection_id($server); // this queries the open connections list for the right $conn_id.
+			$relative_path_to_store = $server['subfolder_path'].$fileContainer->original_path;
+			//echo "Saving ".$fileContainer->original_path." to ".$relative_path_to_store." on ".$server['username']."<br>";
+			if(!ftp_put($conn_id, $relative_path_to_store, $fileContainer->original_path, FTP_BINARY)) // uploads an image to the FTP account
+			{
+		    	echo "Couldn't replace file ".$fileContainer."<br>\n";
+		    	return FALSE; // TODO: Better error handling
+			}
 	    }
 	    
 	    if(isset($this->config['storage_keep_local_copy']) && $this->config['storage_keep_local_copy']==false)
@@ -142,11 +155,51 @@ class storage
     			@unlink($fileContainer->original_path);
 	    
 	}
-	
-	function file_exists()
+
+	/**
+	 * rename_file($fileContainer, $new_name)
+	 *
+	 * This function gets an image object and calls ftp_rename_file($fileContainer, $new_name);
+	 * 
+	 * @see ftp_rename_file
+	 */	
+	function rename_file($fileContainer, $new_name)
 	{
+		return $this->ftp_rename_file($fileContainer, $new_name);
 	}
 
+	/**
+	 * ftp_rename_file($fileContainer, $new_name)
+	 * 
+	 * The function renames a file already located on one or
+	 * more FTP servers with a new image.
+	 *
+	 */
+	function ftp_rename_file($fileContainer, $new_name)
+	{
+		$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_PIC2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_PIC2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_PIC2SERVER']}.pic_id='{$fileContainer->id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive'";
+		$result = cpg_db_query($sql);
+		while($server = mysql_fetch_assoc($result))
+	    {
+			$conn_id = $this->get_ftp_connection_id($server); // this queries the open connections list for the right $conn_id.
+			$levels = $this->ftp_chdir_mkdir($conn_id, explode("/", $server['subfolder_path'].dirname($fileContainer->original_path)));			
+			if($levels!=false)
+			{
+				$old_name = basename($fileContainer->original_path);
+				$new_name = basename($new_name);
+				if(!ftp_rename($conn_id, $old_name, $new_name)) // renames a file on the FTP account
+				{
+					echo "Couldn't rename file ".$fileContainer."<br>\n";
+					return false; // TODO: Better error handling
+				}			
+				for($i=0; $i<$levels; $i++) ftp_cdup($conn_id); // using the depth calculated above, we change the path back to the original position
+			}
+			else
+				{echo "Couldn't chdir"; exit(1);} // TODO: Error handling
+	    }
+		return true;
+	}
+	
 	/**
 	 * delete_file($fileContainer)
 	 *
@@ -331,8 +384,6 @@ class storage
 	 * and prepends the right server path. The server where we server the image from
 	 * is selected using the rules set in config.inc.php (rules thing not completed yet).
 	 *
-	 * @param image
-	 * @return nothing, for now
 	 */
 	function build_url($fileContainer)
 	{	
@@ -376,8 +427,14 @@ class storage
 			}
 		}
 	}
-		
-	function get_all_servers($fileContainer) // returns all servers where an image is stored - used for delete, update
+
+	/**
+	 * get_all_servers($fileContainer)
+	 * 
+	 * Returns all servers where an image is stored - used for delete, update
+	 *
+	 */		
+	function get_all_servers($fileContainer)
 	{
 		$servers = array();			
        	$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_PIC2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_PIC2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_PIC2SERVER']}.pic_id='{$fileContainer->id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive'";
@@ -389,8 +446,14 @@ class storage
        		
 		return $servers;
 	}
-	
-	function get_target_servers($fileContainer) // all servers where an image must be stored
+
+	/**
+	 * get_target_servers($fileContainer)
+	 * 
+	 * Returns all servers where an image must be stored
+	 *
+	 */			
+	function get_target_servers($fileContainer)
 	{
 
 		// TODO: remove

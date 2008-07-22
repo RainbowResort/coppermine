@@ -159,7 +159,10 @@ function process_post_data()
 
         foreach ($prefices as $prefix)
         {
-            $oldname = urldecode(get_pic_url($pic, $prefix));
+			// OVI
+			// $oldname = urldecode(get_pic_url($pic, $prefix));
+			$oldname = urldecode(get_pic_url($pic, $prefix, false, true));
+			// OVI
             $filename = replace_forbidden($post_filename);
             $newname = str_replace($pic['filename'], $filename, $oldname);
 
@@ -172,17 +175,35 @@ function process_post_data()
             if (!is_known_filetype($newname))
                 cpg_die(CRITICAL_ERROR, $lang_editpics_php['forb_ext'], __FILE__, __LINE__);
 
-            if (file_exists($newname))
-                cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['file_exists'], $newname), __FILE__, __LINE__);
+			// OVI
+            //if (file_exists($newname))
+                //cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['file_exists'], $newname), __FILE__, __LINE__);
 
-            if (!file_exists($oldname))
-                cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['src_file_missing'], $oldname), __FILE__, __LINE__);
+            //if (!file_exists($oldname))
+                //cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['src_file_missing'], $oldname), __FILE__, __LINE__);
+			// OVI
 
-            if (rename($oldname, $newname))
+			// OVI
+			$imageContainer = new FileContainer($pic['pid'], $pic['owner_id']);
+			$imageContainer->original_path = $oldname;
+
+			//echo $imageContainer->original_path." ".$newname;exit(1);
+			global $storage;
+			if(!$storage->rename_file($imageContainer, $newname))
+				cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['rename_failed'], $oldname, $newname), __FILE__, __LINE__);
+			// OVI
+
+            /*if (rename($oldname, $newname))
             {
                 cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET filename = '$filename' WHERE pid = '$pid' LIMIT 1");
             } else cpg_die(CRITICAL_ERROR, sprintf($lang_editpics_php['rename_failed'], $oldname, $newname), __FILE__, __LINE__);
-        }
+			*/
+        } // foreach
+
+		// OVI
+		cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET filename = '$filename' WHERE pid = '$pid' LIMIT 1");
+		// OVI
+
     }
 }
 

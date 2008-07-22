@@ -2398,7 +2398,7 @@ if (!$i) {
  * @return string
  **/
 
-function& get_pic_url(&$pic_row, $mode,$system_pic = false)
+function& get_pic_url(&$pic_row, $mode,$system_pic = false, $skip_storage = false)
 {
         global $CONFIG,$THEME_DIR;
 
@@ -2524,11 +2524,12 @@ function& get_pic_url(&$pic_row, $mode,$system_pic = false)
         $pic_row = CPGPluginAPI::filter('picture_url',$pic_row);
 
         ///// OVI
-       	$imageContainer = new FileContainer($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
-
-      	global $storage;
-      	$pic_row['url'] = $storage->build_url($imageContainer);
-
+		if($skip_storage==false)
+		{
+			$imageContainer = new FileContainer($pic_row['pid'], $pic_row['owner_id'], $pic_row['url']);
+			global $storage;
+			$pic_row['url'] = $storage->build_url($imageContainer);
+		}
         ///// OVI
         return $pic_row['url'];
 }

@@ -22,6 +22,13 @@ class storage
 	function replace_file($fileContainer)
 	{
 	}
+
+	function rename_file($fileContainer, $new_name)
+	{
+		if (!rename($fileContainer->original_path, $new_name))
+			return false;
+		return true;
+	}
 	
 }
 
