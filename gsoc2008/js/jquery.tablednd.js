@@ -1,19 +1,226 @@
-// this jquery.tablednd is to drag and drop sort images. 
-jQuery(document).ready(function() {
-    jQuery("#pic_sort").tableDnD();
+//write function to get the table serialize 
+	function getSerialize (){
+	jQuery.tableDnD.currentTable = document.getElementById("album_sort"); // use your table ID obviously
+	var bb = jQuery.tableDnD.serialize();
+		return bb;
+	} 
 
-    jQuery("#pic_sort tr").hover(function() {
-          $(this.cells[0]).addClass('showDragHandle');
-	    $(this).find("td").css({ borderBottom:'1px solid #CCC',
+//write function to get the table serialize 
+	function getSerializePic (){
+	jQuery.tableDnD.currentTable = document.getElementById("pic_sort"); // use your table ID obviously
+	var bb = jQuery.tableDnD.serialize();
+		return bb;
+	} 
+	
+	
+	
+	
+	
+// this jquery.tablednd is to drag and drop sort images. 
+	jQuery(document).ready(function() {
+		
+    jQuery("#pic_sort").tableDnD();
+	$("#pic_sort tr:odd").css("background-color", "#EFEFEF");
+	
+    jQuery("#pic_sort tr").hover(function() {    	
+	$(this).find("td").css({ borderBottom:'1px solid #CCC',
 					     borderTop: '1px solid #CCC' 
 						});
     }, function() {
-          $(this.cells[0]).removeClass('showDragHandle');
-	    $(this).find("td").css('border','none');
-
+    	  $(this.cells[0]).removeClass('showDragHandle');
+	      $(this).find("td").css('border','none');
     });
+    //add query to input hidden when drop the pic item..
+    	$('#pic_sort').tableDnD({
+        	onDrop: function(table, row) {
+        	//call the getSerializePic() funtion to get query
+           $("#pictur_order").val(getSerializePic());
+        }
+    });
+    //load the form when click the submit button
+	$("#cpgformPic").submit(function () { 
+		$("#pictur_order").val(getSerializePic());
+		var a =	$("input[name='pictur_order']").attr("value");
+		if(a.length > 0){
+		if(confirm('Confirm modifications!')) {
+			return true;
+			}
+		}
+	  	return false; 
+	}); // so it won't submit
 
 });
+
+
+
+
+// this jquery.tablednd is to drag and drop sort albums. 
+	jQuery(document).ready(function() {
+	
+	//varible defining which need to handle the events
+		var object_edit ='';
+		var event 		="";
+		var getId 		="";
+		var amountOfRows="";
+		var currentRows =[];
+		
+	//styel to album list
+	$("#album_sort tr:odd").css("background-color", "#EFEFEF");
+
+	$("#add_new_album").click(function(){
+		$("#album_nm").removeAttr("disabled").focus().val("New album");
+		event = 'addAlbumButton';
+		
+	});
+	//edit the ablums 
+	$(".edit").click(function(){						
+			object_edit = $(this).parents("td").prev();
+			getId 		= $(this).parents("tr").attr("id");
+
+			$("#album_nm").removeAttr("disabled");
+				$("#album_nm").empty();
+				$("#album_nm").val(object_edit.text()).focus();
+				event = 'editAlbumButton';
+	});
+
+	//add new album when click the save buttons
+	$("#buttonEvent").click(function (){
+		var get_album = $("#album_nm").val();
+			
+			// add new album check whether nulll and event
+			if(get_album.length > 0 && event=='addAlbumButton'){
+		var get_album_item_count = $("#album_sort tr").length +1;				
+		var album_tr = '<tr id="sort'+get_album_item_count+'" title="'+get_album_item_count+'@'+get_album+'@1" style="height: 20px; cursor: move; width: 100%;"><td width="10%" style="padding-left: 20px;">'+get_album_item_count+'</td><td><img src="images/image.png"/></td><td style="width: 100px;">'+get_album+'</td><td style="border: medium none ;"><a class="edit" title="Edit" style="cursor: pointer;">Edit</a></td><td style="border: medium none ;"><a class="delete" title="Delet" style="cursor: pointer;">Delete</a></td></tr>';
+		
+			$("#album_sort").append(album_tr);
+			$("#album_nm").attr({ disabled: 'disabled' }).val("");
+}			
+			//check wheter null and event to edit the album
+			if(get_album.length > 0 && event=='editAlbumButton'){
+				getTitle = $("#"+getId).attr("title");
+		//split the title value
+		var words = getTitle.split('@');
+		var result = [];
+			//put values in to the array
+			$.each(words, function(i, value) {
+				if ( $.trim(value) )
+				result[i] = $.trim(value);
+		});
+				//change the title in main table
+				$("#"+getId).attr({title: result[0]+'@'+get_album+'@'+3})
+				//change the text which having album name.
+				$(object_edit).empty().text(get_album);
+				//to empty the box value 
+				$("#album_nm").attr({value: ""});
+			}
+		$("#sort_order").val(getSerialize());
+	});
+	
+		// Initialise the first table (as before)
+		jQuery("#album_sort").tableDnD();
+
+	$('#album_sort').tableDnD({
+        	onDrop: function(table, row) {
+        	var rows = table.tBodies[0].rows;
+            var debugStr = [];
+            for (var i=0; i<rows.length; i++) {
+                debugStr[i] = rows[i].id;
+            }
+            currentRows = debugStr;
+            compareRows(currentRows,amountOfRows);
+           $("#sort_order").val(getSerialize());
+        },
+        // Initialise the second table specifying a dragClass and an onDrop function that will display an alert
+ 		onDragStart: function(table, row) {
+ 			var rows1 = table.tBodies[0].rows;
+            var getRows = rows1.length; 
+	       		amountOfRows = getRows;
+  		}
+    });
+		//delete items which having the  album list 
+		$(".delete").click(function(){
+			var getDeleteId = $(this).parents("tr").attr("id");
+				if(confirm('Are you sure you want to delete this album ? \n All files and comments it contains will be lost !')) {
+						//get the current row title value
+						var getTitleRowDelete =  $("#"+getDeleteId).attr("title");
+						
+						//split the title value
+						var wordsDelete = getTitleRowDelete.split('@');
+						var resultDelete = [];
+						//put values in to the array
+						$.each(wordsDelete, function(i, value){
+							if ( $.trim(value) )
+							resultDelete[i] = $.trim(value);
+						});
+				$("#"+getDeleteId).attr({title: resultDelete[0]+'@'+resultDelete[1]+'@'+4}).hide();	
+				$("#sort_order").val(getSerialize());		
+			}				
+		});
+     
+		//highlight the albums item on hover
+		jQuery("#album_sort tr").hover(function() {
+          $(this.cells[0]).addClass('showDragHandle');
+		  $(this).find("td").css({ borderBottom:'1px solid #CCC',
+					     borderTop: '1px solid #CCC' 
+						});
+    	}, function() {
+          $(this.cells[0]).removeClass('showDragHandle');
+	      $(this).find("td").css('border','none');
+	});
+    	//load the form when click the submit button
+	    $("#cpgformAlbum").submit(function () { 
+			var a =	$("input[name='sort_order']").attr("value");
+				if(a.length > 0){
+					if(confirm('Are you sure you want to make these modifications ?')) {
+				return true;
+				}
+			}
+		   	return false; 
+	}); // so it won't submit
+	
+		//function to compare the current and initial rows..
+		function compareRows(rows,amount){
+			var getCurrentRows =[];
+				getCurrentRows = rows;
+			var getAmount	   = amount;
+				for(var i=0; i<getAmount; i++){
+					
+						//get the current row title value
+						var getTitleRow =  $("#"+(i+1)).attr("title");
+						
+						//split the title value
+						var words = getTitleRow.split('@');
+						var result = [];
+						//put values in to the array
+						$.each(words, function(i, value){
+							if ( $.trim(value) )
+							result[i] = $.trim(value);
+						});
+						
+					if(getCurrentRows[i]==(i+1)){
+						if(result[2]==2){
+							$("#"+(i+1)).attr({title: result[0]+'@'+result[1]+'@'+0})
+						}
+						else
+						continue;
+					}
+					else if(getCurrentRows[i]!=(i+1)){
+					
+						if(result[2]==0){
+						$("#"+(i+1)).attr({title: result[0]+'@'+result[1]+'@'+2})
+						}
+						else{
+							continue;
+						}
+					}
+					
+				}
+		}
+
+
+});
+
+
 
 
 jQuery.tableDnD = {
@@ -257,14 +464,15 @@ jQuery.tableDnD = {
             var tableId = jQuery.tableDnD.currentTable.id;
             var rows = jQuery.tableDnD.currentTable.rows;
             for (var i=0; i<rows.length; i++) {
-                if (result.length > 0) result += ",";
-                result += rows[i].id;
+               // if (result.length > 0)// result += ",";
+                result += rows[i].title+",";
             }
             return result;
         } else {
             return "Error: No Table id set, you need to set an id on your table and every row";
         }
     }
+    
 }
 
 jQuery.fn.extend(

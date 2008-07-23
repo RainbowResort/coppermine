@@ -445,7 +445,7 @@ function form_input($text, $name, $max_length,$field_width=100)
                         $text
         </td>
         <td width="100%" class="{$row_style_class}" valign="top">
-                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp" autocomplete="off" />
+                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp" autocomplete="off" onKeyPress="return disableEnterKey(event)" />
                 </td>
         </tr>
 
@@ -765,6 +765,8 @@ EOT;
 echo <<<EOT
 <script type="text/javascript" language="javascript">
 <!--
+
+
 -->
 </script>
 EOT;

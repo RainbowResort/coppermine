@@ -67,7 +67,7 @@ $(document).ready(function(){
 		return temp;
 	}
 		
-	$("input.serachUp").bind("keyup keypress", function(e){
+	$("input.serachUp").bind("keyup click", function(e){
 		var inputString = $(this).val();
 		var inputBoxId = $(this).attr('id');
 		
@@ -103,6 +103,7 @@ $(document).ready(function(){
   				// if down arrow
   		else if (e.keyCode == 40) {
   					// if any suggestion is highlighted
+  					e.preventDefault();
   					if ($(jH).length == 1) {
   						if (!$(jH).next().length == 0) {
   							$(jH).next().addClass(jsH);
@@ -118,6 +119,7 @@ $(document).ready(function(){
   				// if up arrow
   		else if (e.keyCode == 38) {
   					// if any suggestion is highlighted
+  					e.preventDefault();
   					if ($(jH).length == 1 ) {
  						if (!$(jH).prev().length == 0) {
   							$(jH).prev().addClass(jsH);
@@ -219,3 +221,14 @@ $(document).ready(function(){
  		});
 	});
 });
+
+function disableEnterKey(e)
+{
+     var key;     
+     if(window.event)
+          key = window.event.keyCode; //IE
+     else
+          key = e.which; //firefox     
+
+     return (key != 13);
+}
