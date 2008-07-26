@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-07-26 [A] The active storage module can be configured in admin.php {zmarty}
 2008-07-22 [A] Files can now be renamed when using the FTP module + bugfixes {zmarty}
 2008-07-16 [B] Removed useless echo of "pzida" that someone (probably me) accidentally put in index.php
 2008-07-16 [A] Beginnings of the API album list function

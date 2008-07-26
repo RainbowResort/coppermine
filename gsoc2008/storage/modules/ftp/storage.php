@@ -393,7 +393,7 @@ class storage
 		{
 			return $fileContainer->original_path; // probably a local icon
 		}
-	
+
 		// TODO: Show "Not available if we can't find any server"
 		
 		switch($this->config['storage_pic_url_source'])
@@ -405,7 +405,6 @@ class storage
 			}
 			case PIC_URL_SOURCE_RANDOM_SERVER:
 			{
-
        			    $sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_PIC2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_PIC2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_PIC2SERVER']}.pic_id='{$fileContainer->id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY RAND() LIMIT 1";
        			    $result = cpg_db_query($sql);
        			    $server = mysql_fetch_assoc($result);

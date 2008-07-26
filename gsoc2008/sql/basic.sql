@@ -212,6 +212,9 @@ INSERT INTO CPG_config VALUES ('keep_votes_time', '30');
 INSERT INTO CPG_config VALUES ('show_which_exif', '|0|0|0|0|0|0|0|0|1|0|1|1|0|0|0|0|0|0|0|0|0|0|0|1|0|0|0|1|0|0|0|1|1|0|0|0|0|1|0|0|0|1|0|0|1|1|0|0|0|0|0|1|0|1|1');
 INSERT INTO CPG_config VALUES ('bridge_enable', '0');
 
+# OVI
+INSERT INTO CPG_config VALUES ('storage_module', 'local_fs');
+# OVI
 
 #
 # Dumping data for table `CPG_filetypes`

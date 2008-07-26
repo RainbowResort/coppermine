@@ -1341,6 +1341,15 @@ $config_data = array(
       'end_description' => '('.$lang_admin_php['display_coppermine_detail'].')',
     ),
   ),
+  // OVI
+  'active_storage_module' => array(
+    'storage_module' => array(
+      'type' => 'select',
+      'help_link' => 'f=configuration.htm&amp;as=active_storage_module&amp;ae=active_storage_module_end',
+      'options' => form_get_foldercontent('storage/modules/','folder')
+    ),
+  ),
+  // OVI
 );
 
 
