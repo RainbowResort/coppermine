@@ -117,7 +117,9 @@ if ($get_data_rejected==0) { // individual approval start
 	
 	if($superCage->get->keyExists('action')){
 		cpg_db_query("UPDATE {$CONFIG['TABLE_COMMENTS']} SET `approval` = '{$query_approval}' WHERE msg_id = {$single_approval_array['msg_id']}");
-			print "ok";
+		$a = array ('resopnd'=>true);
+		$a_jons = json_encode($a);
+			echo $a_jons;
 			ob_end_flush();
 			exit;
 	}

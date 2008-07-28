@@ -511,7 +511,7 @@ $template_film_strip = <<<EOT
          <tr>
 			<td width="50%" class="prve_strip"></td>
 				<td valign="bottom" class="thumbnails" style="{THUMB_TD_STYLE}">
-					<div id="film"><ul class="tape" style="{SET_MARGIN}">{THUMB_STRIP}</ul></div>
+					<div id="film" style="{SET_WIDTH}"><ul class="tape" style="{SET_MARGIN}">{THUMB_STRIP}</ul></div>
 				</td>	
 				<td width="50%" align="right" class="next_strip"></td>
 			</tr>
@@ -523,8 +523,8 @@ $template_film_strip = <<<EOT
         </tr>
  
 <!-- BEGIN thumb_cell -->
-                <li valign="top" class="thumb" align="center">
-                                        <a href="{LINK_TGT}">{THUMB}</a>
+                <li valign="top" class="thumb"  >
+                                        <a href="{LINK_TGT}" >{THUMB}</a>
                                         {CAPTION}
                                         {ADMIN_MENU}
                 </li>
@@ -1016,19 +1016,27 @@ $template_image_comments = <<<EOT
 </td>
 
 
-                                <td class="tableh2_compact" align="right" width="100%">
+                                <td class="tableh2_compact" align="left" width="100%">
+                                <div style="float:right;width:20px">
 <!-- BEGIN report_comment_button -->
      <a href="report_file.php?pid={PID}&amp;msg_id={MSG_ID}&amp;what=comment" title="{REPORT_COMMENT_TITLE}"><img src="images/report.gif" width="16" height="16" border="0" align="middle" alt="{REPORT_COMMENT_TITLE}" /></a>
 <!-- END report_comment_button -->
-<!-- BEGIN pending approval -->
-                                        {PENDING_APPROVAL}
-<!-- END pending approval -->
+								</div>
 <!-- BEGIN buttons -->
+								<div style="float:right;width:20px">
+                                        <a href="delete.php?msg_id={MSG_ID}&amp;what=comment" onclick="return confirm('{CONFIRM_DELETE}');" title="{DELETE_TITLE}"><img src="images/delete.gif" border="0" align="middle" alt="" /></a>
+                                </div>
+                                <div style="float:right;width:20px">
                                         <script type="text/javascript">
                                           document.write('<a href="javascript:;" onclick="blocking(\'cbody{MSG_ID}\',\'\', \'block\'); blocking(\'cedit{MSG_ID}\',\'\', \'block\'); return false;" title="{EDIT_TITLE}"><img src="images/edit.gif" border="0" align="middle" alt="" /></a>');
                                         </script>
-                                        <a href="delete.php?msg_id={MSG_ID}&amp;what=comment" onclick="return confirm('{CONFIRM_DELETE}');" title="{DELETE_TITLE}"><img src="images/delete.gif" border="0" align="middle" alt="" /></a>
+                                </div>
 <!-- END buttons -->
+<!-- BEGIN pending approval -->
+                                        {PENDING_APPROVAL}
+<!-- END pending approval -->
+							
+
                                 </td>
                                 <td class="tableh2_compact" align="right" nowrap="nowrap">
                                         <span class="comment_date">[{MSG_DATE}]</span>
@@ -2646,7 +2654,7 @@ if (!function_exists('theme_display_film_strip')) {  //{THEMES}
 ** Section <<<theme_display_film_strip>>> - START
 ******************************************************************************/
 // Function to display the film strip
-function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $cat, $pos, $sort_options, $mode = 'thumb', $date='', $filmstrip_prev_pos, $filmstrip_next_pos) {
+function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $cat, $pos, $sort_options, $mode = 'thumb', $date='', $filmstrip_prev_pos, $filmstrip_next_pos,$max_itme_width) {
     global $CONFIG, $THEME_DIR;
     global $template_film_strip, $lang_film_strip, $pic_count,$mar_pic;
 
@@ -2726,18 +2734,20 @@ function theme_display_film_strip(&$thumb_list, $nbThumb, $album_name, $aid, $ca
 		$location= '';
 	}
 	
-	//adding marign by Nuwan Sameera
-	if(isset($mar_pic) && $mar_pic == '1'){
-		$set_margin = "margin-left: -109px";
-		}
-//	$prev_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_prev_pos&amp;album=$aid&amp;cat=$cat&amp;mar_pic=1";
-//	$next_tgt = "displayimage.php?film_strip=1&amp;pos=$filmstrip_next_pos&amp;album=$aid&amp;cat=$cat&amp;next=2";
+	$max_itme_width_ul = $max_itme_width;
+	if(($max_itme_width%2)==0){
+		$max_itme_width_ul = $max_itme_width +1;
+	}
+	$set_width = "width:".(($max_itme_width_ul+1)*105)."px;position:relative;";
+	$set_width_to_film = "width:".($max_itme_width*100)."px;position:relative;";
+
     $params = array('{THUMB_STRIP}' => $thumb_strip,
         '{COLS}' => $i,
         '{TILE1}' => $tile1,
         '{TILE2}' => $tile2,
-		'{SET_MARGIN}' => $set_margin,
-        
+		'{SET_MARGIN}' => $set_width,
+		'{SET_WIDTH}'  => $set_width_to_film,
+		
         );
 
     ob_start();
@@ -3329,13 +3339,15 @@ function theme_html_comments($pid){
 
         // comment approval
         $pending_approval = '';
+        
         if (USER_IS_ADMIN) {
             //display the selector approve/disapprove
             if ($row['approval'] == 'NO') {
-                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"    id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval .= '<div style="float:right;width:20px"><a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"    id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a></div>';
             } else {
-                $pending_approval = '<a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" title="disapprove" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}"  class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a>';
+                $pending_approval .= '<div style="float:right;width:20px"><a   href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="disapprove" class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a></div>';
             }
+			$pending_approval .="<div style='float:right;width:170px'><div  class='aproval_button' style='cursor:pointer;padding:1px 0 1px 5px; float:left; margin-left:5px; width:150px; background-image:url(images/button_bg.gif);background-position:center bottom; border:1px solid #005D8C;'><span style='float:left' id='approval_button'>Approval</span><span style='float:right'><img src='images/arrow_down.png' /></span></div><ul class='approval_box' style='display:none;margin:20px 0 0 0;width:163px;position:absolute;'><li class='aproval_event' style='padding:5px;float:left;margin: 0 0  0 5px;list-style:none;width:146px;background:#FFF9E7; border:1px solid #FFE594;cursor:pointer;'>Mark as Approval</li><li class='disapproval_event' style='padding:5px; float:left;margin:0 0 0 5px;list-style:none;width:146px; background:#FFF9E7; border:1px solid #FFE594;cursor:pointer;'>Mark as Disapproval</li></ul></div></div>";
         } else { // user or guest is logged in - start
             if ($row['approval'] == 'NO') { // the comment is not approved - start
                 if ($user_can_edit) { // the comment comes from the current visitor, display it with a warning that it needs admin approval
@@ -3579,10 +3591,15 @@ function theme_display_fullsize_pic()
     $fullTitle_caption = "<h3><strong>".htmlspecialchars($row['title'])."</strong></h3>";
     $fullTitle_caption .="<p>".htmlspecialchars($row['caption'])."</p>";
   
+  	if($superCage->get->keyExists('full_image_ajax')){
     $fullImageData = array ('url'=>$fullImageUrl,'title'=>$fullTitle_caption);
 	$full_jons = json_encode($fullImageData);
 	echo $full_jons;
- 
+	exit;
+	
+	}
+	
+	print "sameera";
 
 }
 /******************************************************************************

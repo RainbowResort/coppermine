@@ -170,11 +170,11 @@
     	//load the form when click the submit button
 	    $("#cpgformAlbum").submit(function () { 
 			var a =	$("input[name='sort_order']").attr("value");
-				if(a.length > 0){
+			//	if(a.length > 0){
 					if(confirm('Are you sure you want to make these modifications ?')) {
 				return true;
 				}
-			}
+		//	}
 		   	return false; 
 	}); // so it won't submit
 	
@@ -186,8 +186,7 @@
 				for(var i=0; i<getAmount; i++){
 					
 						//get the current row title value
-						var getTitleRow =  $("#"+(i+1)).attr("title");
-						
+						var getTitleRow =  $("#"+(i+1)).attr("title");						
 						//split the title value
 						var words = getTitleRow.split('@');
 						var result = [];

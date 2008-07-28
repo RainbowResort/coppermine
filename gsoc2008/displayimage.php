@@ -33,17 +33,16 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] <= 1) {
 }
 
 js_include('js/jquery.js');
-js_include('js/facebox.js');
 js_include('js/bbc.js');
 js_include('js/jquery.cluetip.js');
 js_include('js/displayimage.js');
-js_include('js/ui.core.js');
-js_include('js/ui.dialog.js');
-js_include('js/ui.draggable.js');
-js_include('js/ui.resizable.js');
+/**
+ * js_include('js/ui.core.js');
+ * js_include('js/ui.dialog.js');
+ * js_include('js/ui.draggable.js');
+ * js_include('js/ui.resizable.js');
+ */
 js_include('js/approval.js');
-js_include('js/editoneimage.js');
-js_include('js/jquery.blockUI.js');
 
 if ($CONFIG['enable_smilies']) include("include/smilies.inc.php");
 

@@ -2,22 +2,6 @@
   background-color:#C6D9E9;
 }
 
-#facebox .tl {
-  background:url(images/face_tl.png);
-}
-
-#facebox .tr {
-  background:url(images/face_tr.png);
-}
-
-#facebox .bl {
-  background:url(images/face_bl.png);
-}
-
-#facebox .br {
-  background:url(images/face_br.png);
-}
-
 #facebox {
   position: absolute;
   width: 100%;
@@ -42,9 +26,9 @@
 }
 
 #facebox .body {
-  padding: 6px 10px 10px;
+  padding: 10px;
   background: #fff;
-  width: 450px;
+  width: 400px;
   color: #000;
 }
 
@@ -65,7 +49,7 @@
 }
 
 #facebox .footer {
-  border-bottom: 1px solid #DDDDDD;
+  margin-top: 10px;
   text-align: right;
 }
 
@@ -75,4 +59,17 @@
   overflow: hidden;
   padding: 0;
 }
-.title h3 { padding: 5px 0; border-top: 1px solid #000; }
+div#facebox .title { width:85%; float: left; }
+.title h3 { padding: 5px 0; }
+
+/*
+* this is styles for viewing full size images
+*/
+#jquery-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 100%;
+}
+

@@ -789,10 +789,9 @@ div.social_bookmarks {
 div#tape_prev { float: left; margin-top:45px;}
 div#tape_next { float: right; margin-top:-55px;}
 
-div#film { margin:0; padding:0;  overflow:hidden; position:relative; width: 306px;  }
-div#film ul.tape{ float: left;  width: 450px;  }
-div#film ul.tape li{ list-style: none; display: inline;  position: relative; margin: 0 1px 0 1px; }
-
+div#film {   overflow:hidden; position:relative; }
+div#film ul.tape li{  margin: 0 1px 0 1px; float: left; list-style: none; display: inline;  position: relative;}
+div#film ul.tape li a { width:100px;height:100px;float:left;}
 .tDnD_whileDrag { background-color: #0E72A4; color: #FFF; }
 #suggestionContainer ul {height : 180px; overflow: auto;   }
 #suggestionContainer ul li{ margin: 0; padding: 2px 4px; border: 1px solid #ffe594; color:#666; background:#fff9e7; cursor:pointer; list-style: none; }

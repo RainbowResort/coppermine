@@ -60,7 +60,7 @@ $(document).ready(function(){
 					alt: "jQuery Logo",
 					style: "visibility:hidden;"
 				});
-				$("#showImage").fadeIn("slow");
+				//$("#showImage").fadeIn("slow");
 				$("#showImage").css('visibility', 'visible');
 				$("#Title").html(Title);
 				loadImage(j);

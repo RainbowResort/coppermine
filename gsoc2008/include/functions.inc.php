@@ -2194,23 +2194,35 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 	//	print $pos; 
         global $CONFIG, $AUTHORIZED;
         global $album_date_fmt, $lang_display_thumbnails, $lang_errors, $lang_byte_units, $lang_common, $pic_count,$ajax_call,$pos; 
-	//.	print $ajax_call; 
+	
         $superCage = Inspekt::makeSuperCage();
-
         $max_item= $CONFIG['max_film_strip_items'];
+        
+		if(($CONFIG['max_film_strip_items']%2)==0){
+			 $max_item= $CONFIG['max_film_strip_items']+1;
+		}
+       	//print $max_item;
+       	 $max_item_real = $max_item;
+		 //pass the max_items to the dispalyimage.js file
+		 set_js_var('max_item',$max_item_real);
+       	
+		$max_item_to_set_width = $CONFIG['max_film_strip_items'];
         //$thumb_per_page = $pos+$CONFIG['max_film_strip_items'];
-        $thumb_per_page = $max_item;
+        $thumb_per_page = $max_item_real;
         $l_limit = max(0,$pos-1);
-		
+		//set $l_limit to last images 
+		if($l_limit >($pic_count-$max_item_real)){
+			$l_limit = $pic_count-$max_item_real;
+		} 
         $pic_data = get_pic_data($album, $thumb_count, $album_name, $l_limit, $thumb_per_page);
         if (count($pic_data) < $max_item ){
 			$max_item = count($pic_data);
         }
-		
-			$lower_limit = 0;	
+        
+		$lower_limit = 0;	
 		
 		if($ajax_call==2){
-			$lower_limit = 2; 
+			$lower_limit = $max_item_real -1; 
 			$max_item =1;
 		}
 		if($ajax_call ==1){
@@ -2223,6 +2235,8 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 		
 		//set javascript count variable:: added by Nuwan Sameera Hettiarachchi
 		set_js_var('count', $pic_count);
+	
+
 		
 	$cat_link = is_numeric($album) ? '' : '&amp;cat=' . $cat;
     $date_link = $date=='' ? '' : '&amp;date=' . $date;
@@ -2232,7 +2246,6 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
     } else {
         $uid_link = '';
     }
-	//	print_r($pic_data);
 		if (count($pic_data) > 0){
 			
                 foreach ($pic_data as $key => $row) {
@@ -2262,7 +2275,7 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
                         $p=$i - 1 + $lower_limit;
                         $p=($p < 0 ? 0 : $p);
                         $thumb_list[$i]['pos'] = $key < 0 ? $key : $p;
-                        $thumb_list[$i]['image'] = "<img src=\"" . $pic_url . "\" class=\"strip_image\"  width=\"100px\" height=\"80\" border=\"0\" alt=\"{$row['filename']}\" title=\"$pic_title\" />";
+                        $thumb_list[$i]['image'] = "<img src=\"" . $pic_url . "\" class=\"strip_image\"   border=\"0\" alt=\"{$row['filename']}\" title=\"$pic_title\" />";
                         $thumb_list[$i]['caption'] = $CONFIG['display_film_strip_filename'] ? '<span class="thumb_filename">'.$row['filename'].'</span>' : '';
                         $thumb_list[$i]['admin_menu'] = '';
                         ######### Added by Abbas #############
@@ -2289,7 +2302,8 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 						echo $a_jons;
 	}
 				else{
-					    return theme_display_film_strip($thumb_list, $thumb_count, $album_name, $album, $cat, $pos, is_numeric($album), 'thumb', $date, $filmstrip_prev_pos, $filmstrip_next_pos,$mar_pic);
+					//	print $thumb_count;
+					    return theme_display_film_strip($thumb_list, $thumb_count, $album_name, $album, $cat, $pos, is_numeric($album), 'thumb', $date, $filmstrip_prev_pos, $filmstrip_next_pos,$max_item_to_set_width);
 					}
         } else {
                theme_no_img_to_display($album_name);
