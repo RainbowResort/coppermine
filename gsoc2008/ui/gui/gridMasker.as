@@ -1,4 +1,10 @@
-﻿package gui{
+﻿/*
+	Provides mask for the Scroll effect of the grid
+	@AUTHOR SRIBABU DODDAPANENI
+	@CONTACT root [at] rusticgeek.net
+*/	
+
+package gui{
 	import flash.display.Sprite;
 	import fl.containers.UILoader;
 	import caurina.transitions.*;
