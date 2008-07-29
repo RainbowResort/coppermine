@@ -19,7 +19,6 @@ package gui {
 	import fl.controls.Label;
 	import flash.events.Event;
 	import flash.net.*;
-	import caurina.transitions.*;
 	import gui.Thumbnail;
 	import gui.gridMasker;
 	import gui.Scrollbar;
@@ -27,6 +26,9 @@ package gui {
 	import flash.geom.*;
 	import flash.events.MouseEvent;
 	import fl.events.SliderEvent;
+	
+	
+	import gui.Editor;
 
 	
 	public class picGrid extends Sprite {
@@ -39,12 +41,13 @@ package gui {
 		var holderArray:Array;
 		//--------represents the number of collumns-------
 		var gallery:Sprite = new Sprite();
-		var urlRequest:URLRequest = new URLRequest("flashmanager.php?allimages=1");
+		var urlRequest:URLRequest = new URLRequest();
 		var urlLoader:URLLoader = new URLLoader();
 		var myXML:XML = new XML();
 		var xmlList:XMLList;
 		
 		var gridslider:Slider;// = new Slider();
+		var gridslider_label:Label;
 		var pathLabel:Label = new Label();
 
 		
@@ -60,7 +63,7 @@ package gui {
 		// x , y , width , height
 		public function picGrid(xParm:int, yParm:int, widthParm:int , heightParm:int):void{
 
-			trace("widthParam" + widthParm);
+			
 			this.graphics.beginFill(0x0);
             this.graphics.drawRect(0, 0, widthParm, heightParm);
             this.graphics.endFill();
@@ -91,14 +94,15 @@ package gui {
 		
 		iconSize_x = 108;
 		iconSize_y = 75;
-		numofRows = 8;
+		numofRows = 7;
 			
 			
 		
 		//drawGrid();
 		
 		// first go we draw the root categories
-		getRoot();
+//		getRoot();
+getAlbum(2,false);
 //		addChild(thumbsHolder);
 
 		
@@ -115,9 +119,9 @@ package gui {
 		loaderHolder.graphics.beginFill(0x000000,1);
 		loaderHolder.graphics.drawRect(0,0,widthParm,heightParm);
 		loaderHolder.graphics.endFill();
-		loaderHolder.x = xParm + widthParm;
+		loaderHolder.x = 0 ; //xParm + widthParm;
 		loaderHolder.y = yParm;
-		addChild(loaderHolder);
+		//addChild(loaderHolder);
 		//-------- loads the big photo-------
 		photoLoader.width = widthParm;
 		photoLoader.height = heightParm;
@@ -125,14 +129,8 @@ package gui {
 		photoLoader.x = 5;
 		photoLoader.buttonMode = true;
 		photoLoader.addEventListener(MouseEvent.CLICK,onClickBack);
-		loaderHolder.addChild(photoLoader);
-				
-		
-		
-		
-		
-		
-	}
+		//loaderHolder.addChild(photoLoader);
+}
 		
 		
 /*		XML - represntation
@@ -166,7 +164,7 @@ package gui {
 					holderArray[i].y = iconSize_y;
 					holderArray[i].x = i * iconSize_x + iconSize_x/2;
 				} else {
-					holderArray[i].y = holderArray[i-numofRows].y + iconSize_y  ;
+					holderArray[i].y = holderArray[i-numofRows].y + iconSize_y;
 					holderArray[i].x = holderArray[i-numofRows].x;
 				}
 				thumbsHolder.addChild(holderArray[i]);
@@ -199,20 +197,26 @@ package gui {
 		function doubleClickEvent(event:MouseEvent):void {
 				if (event.currentTarget.type == "CAT")
 				{
-					getCategory(event.currentTarget.id);
+					getCategory(event.currentTarget.id,true);
 				}
 				else if (event.currentTarget.type == "ALB")
 				{
-					getAlbum(event.currentTarget.id);
+					getAlbum(event.currentTarget.id,true);
 									
 				}
 				else
 				{
-				photoLoader.source = event.currentTarget.bURL;
-			  	Tweener.addTween(thumbsHolder, {x:-650, time:1, transition:"easeOutQuint"});
-				Tweener.addTween(loaderHolder, {x:0, time:1, transition:"easeOutQuint"});
-				Tweener.addTween(thumbsHolder, {alpha:0, time:1, transition:"linear"});
-				Tweener.addTween(loaderHolder, {alpha:1, time:1, transition:"linear"});
+				
+				// lets load the editor for this image 
+				//this.parent.editor = new Editor();
+				var editor = new Editor(event.target.bURL ,this.parent.width,this.parent.height) ; //this.parent.editor;
+				editor.width = this.parent.width;
+				editor.height = this.parent.height;
+				editor.x = 0;
+				editor.y = 0;
+				this.parent.parent.addChild(editor);
+					
+				
 				}
 				
 		}
@@ -224,7 +228,7 @@ package gui {
 				case 1:
 						iconSize_y = 75;
 						iconSize_x = 108;
-						numofRows = 8;
+						numofRows = 7;
 						break;
 				case 2: 
 						iconSize_y = 90;
@@ -263,7 +267,7 @@ package gui {
 		}
 		
 		// populate grid with all root categories
-		function getRoot():void{
+		public function getRoot():void{
 		urlRequest.url = "flashmanager.php?getroot=1";
 		drawGrid();
 		drawPanel(false);
@@ -271,20 +275,20 @@ package gui {
 		}
 		
 		// populate grid with all albums in the category
-		function getCategory(catid:int):void{
+		public function getCategory(catid:int,_redraw:Boolean):void{
 		urlRequest.url = "flashmanager.php?getcat=1&cat=" + catid;
 		gridDestroy();
 		drawGrid();
-		drawPanel(false);
+		//drawPanel(_redraw);
 		pathLabel.htmlText = "<font color='#FFFFFF' size='15px'>Albums</font>" 
 		}
 		
 		//populate the grid with all the images 
-		function getAlbum(albumid:int):void{
+		public function getAlbum(albumid:int,_redraw:Boolean):void{
 		urlRequest.url = "flashmanager.php?getalb=1&alb=" + albumid;
 		gridDestroy();
 		drawGrid();
-		drawPanel(false);
+		//drawPanel(_redraw);
 		pathLabel.htmlText = "<font color='#FFFFFF' size='15px'>Photos</font>" 
 		}
 		
@@ -295,19 +299,16 @@ package gui {
 		}
 		
 		function gridDestroy():void{
-			
-			//trace ("holder array lenght ");
-			trace (holderArray.length);
-			
 			//remove the panel
-			
-			
+			if(holderArray != null)
+			{
 			for(var i:int = 0 ; i < holderArray.length ; i++)
 			{
 				//trace(" i : " + i );
 				thumbsHolder.removeChild(holderArray[i]);
 			}
 			holderArray = null;
+			}
 		}
 
 		function printSelectedpics()
@@ -319,7 +320,8 @@ package gui {
 		
 		function drawPanel(redraw:Boolean):void
 		{
-		 gridslider = new Slider();			
+		if (!redraw)			
+		gridslider = new Slider();			
 		gridslider.maximum = 4;
 		gridslider.minimum = 1;
 		gridslider.snapInterval = 1;
@@ -330,29 +332,25 @@ package gui {
 		gridslider.width = 60;
 		gridslider.addEventListener(SliderEvent.CHANGE, sliderChanged);
 		gridslider.value = 1;
-		//if (!redraw)
+		if (!redraw)
 		addChild(gridslider);
-		var gridslider_label:Label = new Label();
+		if (!redraw)
+		gridslider_label = new Label();
 		gridslider_label.htmlText = "<font color='#FFFFFF' size='12px'>Zoom:</font>" ;
 		gridslider_label.x = gridslider.x - 50;
 		gridslider_label.y = gridslider.y - 7;
 		gridslider_label.alpha = 1;
 		gridslider_label.width = 40;
 		gridslider_label.wordWrap = true;
-		//gridslider_label.opaqueBackground = 0x000000;
-		//gridslider_label.blendMode =  "lighten";
-		//if(!redraw)
+		if(!redraw)
 		this.addChild(gridslider_label);
 
-		//pathLabel.htmlText = "<font color='#FFFFFF' size='15px'></font>" ;
 		pathLabel.x =  20;
 		pathLabel.y =  10;
 		pathLabel.alpha = 1;
 		pathLabel.width = 100;
 		pathLabel.wordWrap = true;
-		//pathLabel.opaqueBackground = 0x000000;
-		//pathLabel.blendMode =  "lighten"
-		//if(!redraw)
+		if(!redraw)
 		this.addChild(pathLabel);
 		}
 		
