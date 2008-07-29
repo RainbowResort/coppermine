@@ -101,8 +101,8 @@ package gui {
 		//drawGrid();
 		
 		// first go we draw the root categories
-//		getRoot();
-getAlbum(2,false);
+		getRoot();
+//getAlbum(2,false);
 //		addChild(thumbsHolder);
 
 		
