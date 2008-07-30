@@ -14,14 +14,21 @@ define("PIC_URL_SOURCE_RANDOM_SERVER", 2); // show the image from a random serve
 define("PIC_URL_SOURCE_FIRST_SERVER", 3); // show the image from the first server
 // from the list of all servers which have this image, keep the others for backup
 
-$CONFIG['storage_rule'] = MIRROR_TO_SOME; //MIRROR_TO_SOME;
-$CONFIG['storage_copies_per_file'] = 3; // default is 3 // this is used only if storage_rule is not equal to MIRROR_TO_ALL
+if(!isset($CONFIG['storage_rule']))
+	$CONFIG['storage_rule'] = MIRROR_TO_SOME; //MIRROR_TO_SOME;
+
+if(!isset($CONFIG['storage_copies_per_file']))
+	$CONFIG['storage_copies_per_file'] = 1; // default is 1 // this is used only if storage_rule is not equal to MIRROR_TO_ALL
+else
+	$CONFIG['storage_copies_per_file'] = (int)$CONFIG['storage_copies_per_file'];
 // TODO: this must exist and must be smaller than.. - make checks
 
-$CONFIG['storage_keep_local_copy'] = false; // if set to true, copies of all images are stored
+if(!isset($CONFIG['storage_keep_local_copy']))
+	$CONFIG['storage_keep_local_copy'] = false; // if set to true, copies of all images are stored
 // on the local server also
 
-$CONFIG['storage_pic_url_source'] = PIC_URL_SOURCE_RANDOM_SERVER; // where to show the images from
+if(!isset($CONFIG['storage_pic_url_source']))
+	$CONFIG['storage_pic_url_source'] = PIC_URL_SOURCE_RANDOM_SERVER; // where to show the images from
 
 $CONFIG['timeout_check_http_servers'] = 6; // timeout in seconds
 

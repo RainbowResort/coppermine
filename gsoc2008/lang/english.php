@@ -968,8 +968,13 @@ if (defined('ADMIN_PHP')) $lang_admin_php = array(
   'warning_change' => 'When changing this setting, only the files that are added from that point on are affected, so it\'s advisable that this setting must not be changed if there are already files in the gallery. You can, however, apply the changes to the existing files with the "admin tools (resize pictures)" utility from the admin menu.', // cpg1.5
   'warning_exist' => 'These settings mustn\'t be changed if you already have files in your database.', // cpg1.5
   'warning_dont_submit' => 'If you\\\'re not sure about the impact that changing this setting will have, don\\\'t submit the form and review the documentation first.', // cpg1.5 //js-alert
-  'active_storage_module' => 'The active storage module', // cpg 1.5 gsoc 2008 ovi 
-  'storage_module' => 'Active storage module', // cpg 1.5 gsoc 2008 ovi
+  'active_storage_module' => 'The active storage module', // cpg 1.5 gsoc 2008 OVI
+  'storage_module' => 'Active storage module', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_module' => 'FTP Storage Module', // cpg 1.5 gsoc 2008 OVI
+  'storage_rule' => 'Storage Rule', // cpg 1.5 gsoc 2008 OVI
+  'storage_copies_per_file' => 'Mirrored copies for each file (including original)', // cpg 1.5 gsoc 2008 OVI
+  'storage_keep_local_copy' => 'Keep a copy of each image on the local server', // cpg 1.5 gsoc 2008 OVI
+  'storage_pic_url_source' => 'Show images from', // cpg 1.5 gsoc 2008 OVI
 );
 
 

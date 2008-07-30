@@ -212,9 +212,22 @@ INSERT INTO CPG_config VALUES ('keep_votes_time', '30');
 INSERT INTO CPG_config VALUES ('show_which_exif', '|0|0|0|0|0|0|0|0|1|0|1|1|0|0|0|0|0|0|0|0|0|0|0|1|0|0|0|1|0|0|0|1|1|0|0|0|0|1|0|0|0|1|0|0|1|1|0|0|0|0|0|1|0|1|1');
 INSERT INTO CPG_config VALUES ('bridge_enable', '0');
 
-# OVI
+# START OVI
 INSERT INTO CPG_config VALUES ('storage_module', 'local_fs');
-# OVI
+
+# Default: 2 - Mirror each image to some of the FTP storage servers (see copies per file below)
+INSERT INTO CPG_config VALUES ('storage_rule', '2');
+
+# This is used only if storage_rule is not equal to MIRROR_TO_ALL
+INSERT INTO CPG_config VALUES ('storage_copies_per_file', '1');
+
+# If set to true, copies of all images are stored locally / Default is 1, which means NO
+INSERT INTO CPG_config VALUES ('storage_keep_local_copy', '1');
+
+# Where to show the images from - default: 1 - Random FTP server that has the image
+INSERT INTO CPG_config VALUES ('storage_pic_url_source', '1');
+
+# END OVI
 
 #
 # Dumping data for table `CPG_filetypes`

@@ -74,10 +74,6 @@ if (!function_exists('array_is_associative')) { // make sure that this will not 
   }
 }
 
-// OVI
-require_once("storage/admin.inc.php");
-// OVI
-
 require_once('include/admin.inc.php'); // populate the array for the admin data (could later be done using an XML file)
 
 // OVI
