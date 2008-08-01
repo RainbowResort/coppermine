@@ -8,7 +8,7 @@
   it under the terms of the GNU General Public License version 3
   as published by the Free Software Foundation.
 
-  ********************************************
+********************************************
   Coppermine version: 1.5.0
   $HeadURL$
   $Revision: 4220 $
@@ -26,42 +26,68 @@ $(document).ready(function() {
 			var $next_position 	= js_vars.position; 
 			var $album 			= js_vars.album; 
 			var NumberOfPics 	= js_vars.count;
-			var NumberOfItems   = parseInt(js_vars.max_item);
+			var maxItems   		= parseInt(js_vars.max_item);
 				
-				if(NumberOfItems%2==0){
-					NumberOfItems = NumberOfItems +1;
+				if(maxItems%2==0){
+					maxItems 	= maxItems +1;
 				}
-				
-				var $go_next = parseInt(NumberOfItems/2); 
-			
-		//	alert($next_position)
+			//variables to handle the next - prev button
+			var picQeueu		=  (maxItems+1)/2;
+			var $go_next 		= parseInt(maxItems/2);
 			//cache the images RULs 
 			//create a objects to keep an array
 			var url_cache 		= new Array(NumberOfPics);
 			var link_cache		= new Array(NumberOfPics);
 			var img 	  		= new Image();
-			
-			for(var i=0; i<NumberOfItems; i++){
-				url_cache[($next_position-$go_next)+i] = $("img.strip_image").eq(i).attr("src");
+			//checking position is zero and assign $go_next to zero
+				if($next_position < picQeueu){
+					var	cacheIndex		= 0;
+						
+				} else if($next_position > (NumberOfPics-picQeueu)){
+					var cacheIndex		= NumberOfPics - maxItems;
+						url_cache[0]="";
+				}else{
+					var	cacheIndex		= ($next_position-$go_next);
+						url_cache[0]="";
+				}
+			//checking position is last thumb image..
+				
+			for(var i=0; i<maxItems; i++){ 
+				url_cache[cacheIndex+i] = $("img.strip_image").eq(i).attr("src");
+				link_cache[cacheIndex+i]= $("a.thumbLink").eq(i).attr("href");
 			}
-	
-			//alert(url_cache[$next_position]);
-			var prev_link = $next_position > 1 ? "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/prev.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/prev.gif\" border=\"0\" /></a>";
 			
-			var next_link = $next_position < (NumberOfPics - ((NumberOfItems+1)/2)) ? "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/next.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/next.gif\" border=\"0\" /></a>";
+			//alert(url_cache[$next_position]);
+			var prev_link = $next_position > (picQeueu-1) ? "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/prev.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/prev.gif\" border=\"0\" /></a>";			
+			var next_link = $next_position < (NumberOfPics - picQeueu) ? "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/next.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/next.gif\" border=\"0\" /></a>";
 
 			$('td.prve_strip').html(prev_link);
 			$('td.next_strip').html(next_link);
 			
-		// Bind a onclick event on element with id filmstrip_next
+				//set position if it is not zero 
+				if($next_position < $go_next){
+					$next_position 	= $go_next;
+				}
+				//set postion if it is at end 
+				if($next_position > (NumberOfPics-picQeueu)){
+					$next_position	= (NumberOfPics-picQeueu);
+				}		
+			// Bind a onclick event on element with id filmstrip_next
 		$('#filmstrip_next').click(function() {
 			// Get the url for next set of thumbnails. This will be the href of 'next' link; 
+		//	alert($next_position);
 			$next_position = $next_position +1;
-
-			if((NumberOfPics-((NumberOfItems+1)/2)) <= $next_position ){
+			
+			if(((NumberOfPics-1)-(picQeueu-1)) <= $next_position ){
 				$('#filmstrip_next').hide();
 			}
-			if($next_position >= (((NumberOfItems+1)/2)-2)){
+			//assign a variable to check initial position to next 
+			if($next_position < (picQeueu-1)){
+				// $next_position = picQeueu-1;
+			//	alert($next_position_to);
+			}
+
+			if($next_position > (picQeueu-1)){
 				$('#filmstrip_prev').show();			
 			}
 				
@@ -75,15 +101,15 @@ $(document).ready(function() {
 					link_cache[$next_position+$go_next] = data['target'];
 					
 					var itemLength = $("ul.tape > li.thumb").length;
-					var itemsToRemove = NumberOfItems+1;
+					var itemsToRemove = maxItems+1;
 					if (itemLength == itemsToRemove) {
 						$('li.remove').remove();
 					}
-					//$('ul.tape').css("marginLeft", '0px');
+					$('ul.tape').css("marginLeft", '0px');
 					var thumb = '<li align="center" class="thumb" valign="bottom"><a style="width:100px;float:left" href="' + data['target'] + '"><img border="0"  class="strip_image" src="' + data['url'] + '"/></a></li>';
 					$('ul.tape').append(thumb);
 					
-					$('ul.tape').css({
+					$('ul.tape').animate({
 						marginLeft: "-100px"
 					});
 					
@@ -94,14 +120,14 @@ $(document).ready(function() {
 			}
 			else {
 				var itemLength = $("ul.tape > li.thumb").length;
-				if (itemLength == (NumberOfItems+1)) {
+				if (itemLength == (maxItems+1)) {
 					$('li.remove').remove();
 				}
-				//$('ul.tape').css("marginLeft", '0px');
+				$('ul.tape').css("marginLeft", '0px');
 				var thumb = '<li align="center"  class="thumb" valign="bottom"><a style="width:100px;float:left" href="' + link_cache[$next_position + $go_next] + '"><img border="0"  class="strip_image" src="' + url_cache[$next_position + $go_next] + '"/></a></li>';
 				$('ul.tape').append(thumb);
 				
-				$('ul.tape').css({
+				$('ul.tape').animate({
 					marginLeft: "-100px"
 				});
 				
@@ -113,12 +139,19 @@ $(document).ready(function() {
 		// Bind a onclick event on element with id filmstrip_prev
 		$('#filmstrip_prev').click(function() {
 			// Get the url for previous set of thumbnails. This will be the href of 'previous' link
+		
 			$next_position = $next_position -1;
-			
-			if($next_position < (NumberOfPics-(((NumberOfItems+1)/2)-1))){
+		
+			if($next_position >= ((NumberOfPics-1)-(picQeueu-1))){
+			var	$next_position_to = (NumberOfPics-1)-(picQeueu-1);
+			}
+			else{
+			var	$next_position_to = $next_position;	
+			}
+			if($next_position_to <= (NumberOfPics-(picQeueu))){
 				$('#filmstrip_next').show();	
 			}
-			if($next_position < (((NumberOfItems+1)/2)-1)){
+			if($next_position_to < (picQeueu)){
 				$('#filmstrip_prev').hide();			
 			}
 						
@@ -126,45 +159,44 @@ $(document).ready(function() {
 			var prev_url = "displayimage.php?film_strip=1&album="+$album+"&ajax_call=1&pos="+$next_position;  
 			$.getJSON(prev_url, function(data){
 			
-				url_cache[$next_position-$go_next] 	= data['url'];
+				url_cache[$next_position-$go_next]	 	= data['url'];
 				link_cache[$next_position-$go_next] 	= data['target'];
 			
 				var itemLength = $("ul.tape > li.thumb").length;
-				if (itemLength == (NumberOfItems+1)) {
+				if (itemLength == (maxItems+1)) {
 					$('li.remove').remove();
 				}
 				
-
+				$('ul.tape').css("marginLeft", '-100px');
 				var thumb_prev = '<li align="center"  class="thumb" valign="bottom"><a style="width:100px;float:left" href="'+data['target']+'"><img border="0" class="strip_image" src="'+data['url']+'"/></a></li>';
 				$('ul.tape').prepend(thumb_prev);
-								$('ul.tape').css("marginLeft", '0');
-/**
- * 				$('ul.tape').css({
- * 					marginRight: "-102px"
- * 				});
- */
 
-				$('li.thumb').eq((NumberOfItems)).addClass("remove");
+ 				$('ul.tape').animate({
+ 					marginLeft: "0px"
+  				});
+ 
+
+				$('li.thumb').eq((maxItems)).addClass("remove");
 				
 			});
 		}
 		else{
 				var itemLength = $("ul.tape > li.thumb").length;
-				if (itemLength == (NumberOfItems+1)) {
+				if (itemLength == (maxItems+1)) {
 					$('li.remove').remove();
 				}
 		
+				$('ul.tape').css("marginLeft", '-100px');
 				var thumb_prev = '<li align="center"  class="thumb" valign="bottom"><a style="width:100px;float:left" href="'+link_cache[$next_position-$go_next]+'"><img border="0"  class="strip_image" src="'+url_cache[$next_position-$go_next]+'"/></a></li>';
 				$('ul.tape').prepend(thumb_prev);
-						$('ul.tape').css("marginLeft", '0');
-/**
- * 				$('ul.tape').css({
- * 					marginRight: "102px"
- * 				});
- */
+				
+  				$('ul.tape').animate({
+  					marginLeft: "0px"
+  				});
+ 
 				
 
-				$('li.thumb').eq(NumberOfItems).addClass("remove");
+				$('li.thumb').eq(maxItems).addClass("remove");
 		}
 		
 		})
@@ -554,7 +586,6 @@ function isNumber(test_input){
     jQuery(document).ready(function($) {
       $('a[rel*=facebox]').facebox({
       }); 
-     // alert($('.someclass').metadata().some);
     });
 
 

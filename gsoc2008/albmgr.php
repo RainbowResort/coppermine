@@ -179,15 +179,15 @@ EOT;
     	    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
         		<tr>
 <?php
-/**
- * // Only show move-buttons when admin or in user's private categorie
- * // sorting is also prevented in delete.php when user doesn't have the rights.
- * if(GALLERY_ADMIN_MODE||($cat == USER_ID + FIRST_USER_CAT)){
- * //echo '<td><a href="javascript:Moveup_Option();"><img src="images/move_up.gif" width="26" height="21" border="0" alt="" /></a><a href="javascript:Movedown_Option();"><img src="images/move_down.gif" width="26" height="21" border="0" alt="" /></a></td>';
- * }else{
- * echo '<td></td>';
- * }
- */
+
+  // Only show move-buttons when admin or in user's private categorie
+  // sorting is also prevented in delete.php when user doesn't have the rights.
+  if(GALLERY_ADMIN_MODE||($cat == USER_ID + FIRST_USER_CAT)){
+  echo '<td><a id="up_click" ><img src="images/move_up.gif" width="26" height="21" border="0" alt="" /></a><a id="down_click"><img src="images/move_down.gif" width="26" height="21" border="0" alt="" /></a></td>';
+  }else{
+  echo '<td></td>';
+  }
+ 
 ?> 
 		<td align="center" style="background-color: #D4D0C8; width: 80px; height: 21px; border-top: 1px solid White; border-left: 1px solid White; border-right: 1px solid #808080; border-bottom: 1px solid #808080;"><a id="add_new_album" title="New" style="color: Black; font-weight: bold;cursor:pointer;"><?php echo $lang_albmgr_php['new'] ?></a></td>
 		<td align="center" style="width: 10px;"><img src="images/spacer.gif" width="1" alt=""><br /></td>

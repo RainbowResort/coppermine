@@ -524,7 +524,7 @@ $template_film_strip = <<<EOT
  
 <!-- BEGIN thumb_cell -->
                 <li valign="top" class="thumb"  >
-                                        <a href="{LINK_TGT}" >{THUMB}</a>
+                                        <a href="{LINK_TGT}" class="thumbLink" >{THUMB}</a>
                                         {CAPTION}
                                         {ADMIN_MENU}
                 </li>

@@ -215,6 +215,24 @@
 					
 				}
 		}
+		
+		var tempCountToDown = 0;
+		//sort items up and donw arrows using 
+		$("#up_click").click(function(){
+				tempCountToDown ++;
+			if(jQuery.tableDnD.sortManually(tempCountToDown)){
+			}
+		//sort itmes down arrow click
+		$("#down_click").click(function(){
+					tempCountToDown --;
+			if(tempCountToDown){
+				
+			}
+			if(jQuery.tableDnD.sortManually(tempCountToDown)){
+				tempCountToDown ++;
+			}		
+		});		
+	});
 
 
 });
@@ -227,6 +245,8 @@ jQuery.tableDnD = {
     currentTable : null,
     /** Keep hold of the current drag object if any */
     dragObject: null,
+    /**keep hold of the currnt select object if any*/
+    selectObject: null,
     /** The current mouse offset */
     mouseOffset: null,
     /** Remember the old value of Y so that we don't do too much processing */
@@ -258,8 +278,8 @@ jQuery.tableDnD = {
         jQuery(document)
             .bind('mousemove', jQuery.tableDnD.mousemove)
             .bind('mouseup', jQuery.tableDnD.mouseup);
-
         // Don't break the chain
+        
         return this;
     },
 
@@ -276,6 +296,7 @@ jQuery.tableDnD = {
                 jQuery(rows[i]).mousedown(function(ev) {
                     if (ev.target.tagName == "TD") {
                         jQuery.tableDnD.dragObject = this;
+                        jQuery.tableDnD.selectObject  = this;
                         jQuery.tableDnD.currentTable = table;
                         jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
                         if (config.onDragStart) {
@@ -307,6 +328,7 @@ jQuery.tableDnD = {
 
         var docPos    = this.getPosition(target);
         var mousePos  = this.mouseCoords(ev);
+     //   alert(mousePos.y);
         return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
     },
 
@@ -453,10 +475,39 @@ jQuery.tableDnD = {
                 // Call the onDrop method if there is one
                 config.onDrop(jQuery.tableDnD.currentTable, droppedRow);
             }
-            jQuery.tableDnD.currentTable = null; // let go of the table too
+            //jQuery.tableDnD.currentTable = null; // let go of the table too
         }
     },
+	
+	sortManually: function(count){
+//	 alert(jQuery.tableDnD.oldY);
+		var downCount = 25*count;
+        var dragObj = jQuery(jQuery.tableDnD.selectObject);
+       // var config = jQuery.tableDnD.currentTable.tableDnDConfig;
+       // var mousePos = jQuery.tableDnD.mouseCoords(ev);
+        var y = (340 + downCount) - jQuery.tableDnD.mouseOffset.y;
+        //auto scroll the window
+	   	// var yOffset = window.pageYOffset;
 
+        if (y != jQuery.tableDnD.oldY) {
+            // work out if we're going up or down...
+            var movingDown = y > jQuery.tableDnD.oldY;
+            // If we're over a row then move the dragged row to there so that the user sees the
+            // effect dynamically
+            var currentRow = jQuery.tableDnD.findDropTargetRow(dragObj, y);
+            if (currentRow) {
+                // TODO worry about what happens when there are multiple TBODIES
+                if (movingDown && jQuery.tableDnD.selectObject != currentRow) {
+                    jQuery.tableDnD.selectObject.parentNode.insertBefore(jQuery.tableDnD.selectObject, currentRow.nextSibling);
+                } else if (! movingDown && jQuery.tableDnD.selectObject != currentRow) {
+                    jQuery.tableDnD.selectObject.parentNode.insertBefore(jQuery.tableDnD.selectObject, currentRow);
+                }
+            }
+        }
+
+        return true;
+	},
+	
     serialize: function() {
         if (jQuery.tableDnD.currentTable) {
             var result = "";
