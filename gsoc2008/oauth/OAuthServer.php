@@ -43,7 +43,7 @@ class OAuthServer extends OAuthRequestVerifier
 			// Create a request token
 			$store  = OAuthStore::instance();
 			$token  = $store->addConsumerRequestToken($this->getParam('oauth_consumer_key', true));
-			$result = xml_encoding() . '<request_token>oauth_token='.$this->urlencode($token['token'])
+			$result = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" . '<request_token>oauth_token='.$this->urlencode($token['token'])
 					.'&oauth_token_secret='.$this->urlencode($token['token_secret']) . '</request_token>';
 					
 			header('HTTP/1.1 200 OK');
@@ -146,7 +146,7 @@ class OAuthServer extends OAuthRequestVerifier
 			
 			$store  = OAuthStore::instance();
 			$token  = $store->exchangeConsumerRequestForAccessToken($this->getParam('oauth_token', true));
-			$result = xml_encoding() . '<access_token>oauth_token='.$this->urlencode($token['token'])
+			$result = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" . '<access_token>oauth_token='.$this->urlencode($token['token'])
 					.'&oauth_token_secret='.$this->urlencode($token['token_secret']) . '</access_token>';
 					
 			header('HTTP/1.1 200 OK');

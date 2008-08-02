@@ -69,12 +69,13 @@ class cpgOAuth extends OAuthServer {
                 if ($result != null) {
                     define('API_CALL', true);
                     $superCage = Inspekt::makeSuperCage();
-                    $matches = $superCage->post->getMatched('function', '/^[a-z_]+$/');
+                    $matches = $superCage->post->getMatched('function', '/^[a-z]+$/');
                     switch ($matches[0]) {
                         case 'upload':
                             require 'db_input.php';
                             break;
-                        case 'cat_list':
+                        case 'alblist': // Same functions for alblist and piclist                           
+                        case 'piclist':
                             define('IN_COPPERMINE', true);
                             require 'include/init.inc.php';
                             pub_user_albums();
@@ -97,12 +98,8 @@ class cpgOAuth extends OAuthServer {
     }
 }
 
-function xml_encoding() {
-    print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-}
-
 function api_message($message) {
-    die(xml_encoding() . '<api_message>' . $message . '</api_message>');	
+    die("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" . '<api_message>' . $message . '</api_message>');	
 }
 
 ?>

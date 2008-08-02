@@ -47,7 +47,7 @@ $store = OAuthStore::instance();
 $consumer_id = $store->updateConsumer($consumer, USER_ID, true);
 
 // Print registration information
-print xml_encoding() .
+print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" .
 '<consumer_key>' . $consumer_id . '</consumer_key>' .
 "\n<name>$name[0]</name>" .
 "\n<email>$email[0]</email>" .

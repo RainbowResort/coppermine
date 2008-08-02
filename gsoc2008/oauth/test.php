@@ -33,9 +33,16 @@
 
 <form method="POST" action="api_index.php" enctype="multipart/form-data">
 <?php fields(); ?>
-<button type="submit">API Category List</button>
+<button type="submit">API Album List</button>
 <input type="text" name="oauth_token" value="" />
-<input type="hidden" name="function" value="cat_list" />
+<input type="hidden" name="function" value="alblist" />
+</form>
+
+<form method="POST" action="api_index.php" enctype="multipart/form-data">
+<?php fields(); ?>
+<button type="submit">API Picture List</button>
+<input type="text" name="oauth_token" value="" />
+<input type="hidden" name="function" value="piclist" />
 </form>
 
 <form method="POST" action="register.php">
@@ -54,7 +61,7 @@ EOT;
 print(time());
 echo <<<EOT
 " />
-<input type="hidden" name="oauth_consumer_key" value="278c2e73743f531c42a71fe308c48ba104877fc36" />
+<input type="hidden" name="oauth_consumer_key" value="6be002f9d55a71f68d00458232abdaac0489113cb" />
 <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
 <!-- <input type="hidden" name="oauth_signature" value="" /> -->
 EOT;

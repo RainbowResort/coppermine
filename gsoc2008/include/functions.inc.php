@@ -4508,6 +4508,12 @@ function cpg_getimagesize($image, $force_cpg_function = false){
         }
 }
 
+/**
+ * function pub_user_albums()
+ *
+ * Get a list of public and user albums in upload.php and the API
+ *
+ */
 function pub_user_albums() {
 global $CONFIG, $public_albums_list, $user_albums_list;
 	if (GALLERY_ADMIN_MODE) {
@@ -4550,7 +4556,15 @@ global $CONFIG, $public_albums_list, $user_albums_list;
 	}
 }
 
-// The function to create the album list drop down.
+/**
+ * function upload_form_alb_list()
+ *
+ * Print a list of albums in HTML for upload.php and albums or pictures in XML for the API
+ * 
+ * @param string $text
+ * @param string $name
+ *
+ */
 function upload_form_alb_list($text, $name) {
     $superCage = Inspekt::makeSuperCage();
     // Pull the $CONFIG array and the GET array into the function
@@ -4621,23 +4635,65 @@ function upload_form_alb_list($text, $name) {
 
 /* Output XML - for API */
     if (defined('API_CALL')) {
-        $listArray = array_csort($listArray,'aid'); // Sort the array alphabetically by aid
-        echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
-        echo "<album_list>\n";
-	foreach ($listArray as $val) {
-	    echo ' <album id="' . $val['aid'] . '">' . "\n";
-	    echo '  <title>' . $val['title'] . '</title>' . "\n";
-            echo '  <cat_id>' . $val['cid'] . '</cat_id>' . "\n";
-	    echo ' </album>' . "\n";
-	}
-        echo "</album_list>";
+        if ($superCage->post->getAlpha('function') == 'alblist') {
+            $listArray = array_csort($listArray,'aid'); // Sort the array alphabetically by aid
+            echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+            echo "<album_list>\n";
+	    foreach ($listArray as $val) {
+	        echo ' <album id="' . $val['aid'] . '">' . "\n";
+	        echo '  <title>' . $val['title'] . '</title>' . "\n";
+                echo '  <cat_id>' . $val['cid'] . '</cat_id>' . "\n";
+	        echo ' </album>' . "\n";
+	    }
+            echo "</album_list>";
+        }
+
+	else if ($superCage->post->getAlpha('function') == 'piclist') {
+	    $listArray = array_csort($listArray,'cat','title');     // alphabetically by category name
+            echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+            echo '<pic_list>' . "\n";
+            $alb_cat = '';
+            foreach ($listArray as $val) {
+                if ($val['cid'] != $alb_cat) {
+                    if ($alb_cat) {
+                        echo " </category>\n";
+                    }
+                    echo ' <category name="' . $val['cat'] . '">' . "\n";
+                    $alb_cat = $val['cid'];
+                }
+                echo '  <album id="' . $val['aid'] . '" title="' . $val['title'] . '">' . "\n";
+
+                // Picture list
+                $result = cpg_db_query("SELECT pid, title, filepath, filename, pwidth, pheight, caption FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = {$val['aid']} AND approved='YES'");
+                while ($row = mysql_fetch_assoc($result)) {
+                    echo '   <picture id="' . $row['pid'] . '">' . "\n";
+                    echo '    <title>' . $row['title'] . '</title>' . "\n";
+                    echo '    <file>' . $row['filepath'] . $row['filename'] . '</file>' . "\n";
+                    echo '    <width>' . $row['pwidth'] . '</width>' . "\n";
+                    echo '    <height>' . $row['pheight'] . '</height>' . "\n";
+                    echo '    <caption>' . $row['caption'] . '</caption>' . "\n";
+                    echo '   </picture>' . "\n";                        
+                }
+                
+                mysql_free_result($result);
+                echo "  </album>\n";
+            }
+            if ($alb_cat) {
+                echo " </category>\n";
+            }
+            echo '</pic_list>';
+        }
+
+	else {
+            die('<api_error>Unknown API function.</api_error>');
+        }
 
         header('Content-Type: text/xml');
         return;
     }
 
 
-/* Output HTML - for upload.php */
+    /* Output HTML - for upload.php */
 
     // Sort the pulldown options by category and album name
     $listArray = array_csort($listArray,'cat','title');     // alphabetically by category name
@@ -4677,5 +4733,6 @@ EOT;
 
 EOT;
 }
+
 
 ?>
