@@ -177,18 +177,18 @@ if (GALLERY_ADMIN_MODE || USER_ADMIN_MODE) {
 
 echo <<<EOT
       <tr>
-         <td>
+         <td style="float:left; margin-left:60px;">
             <b>{$lang_picmgr_php['select_album']}</b>
 EOT;
         print albumselect('aid');
 echo <<<EOT
          </td>
       </tr>
-</table>
 EOT;
 }
-?>
-		<div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding-top:10px;background:#FFF; width:60%; border:1px solid #0E72A4; ">
+?>	<tr>
+		<td>
+		<div id="sort">
 			<table id="pic_sort">
 <?php
    $i=100;
@@ -197,19 +197,33 @@ EOT;
    if (count ($rowset) > 0) 
    		foreach ($rowset as $picture){
 	//create a table to sort the picture  
- 	$lb .='<tr style=\'height:20px;cursor:move;width:100%\' id='.$picture["pid"].' title='.$picture["pid"].'><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /><td style="width:250px;padding-left:10px;">'.$picture["title"].'</td><td style="width:100px"><a href="edit_one_pic.php?id='.$picture["pid"].'&what=picture" title="Edit Picture">Edit Picture</a></td></tr>';
+ 	$lb .='<tr id='.$picture["pid"].' title='.$picture["pid"].'><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /><td style="width:400px;padding-left:10px;">'.$picture["title"].'</td></tr>';
 	$j++;
    }
    echo $lb;
    echo <<<EOT
          </td>
-      </table></div>
-	<table>
-
+      </table>
+	  </div>
+	</td>
+     </tr>
       <tr>
          <td>
-		 <br />
-         <br />
+		 	<table>
+               <tr>
+               <td style="float:left; margin-left:50px;"><a class="photoUp"><img  src="images/move_up.gif" width="26" height="21" border="0" alt="" /></a>
+			   <a class="photoDown"><img src="images/move_down.gif" width="26" height="21" border="0" alt="" /></a>
+               </td>
+<!-- Joe Ernst: I commented this out because I can't get it to work. -->
+               <td align="center" style="width: 1px;"><img src="images/spacer.gif" width="1" alt=""><br />
+               </td>
+            </tr>
+            </table>
+         </td>
+      </tr>
+      <tr>
+         <td><br />
+            <br />
          </td>
       </tr>
         </table>

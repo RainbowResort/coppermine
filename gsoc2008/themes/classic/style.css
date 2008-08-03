@@ -796,3 +796,25 @@ div#film ul.tape li a { width:100px;height:100px;float:left;}
 #suggestionContainer ul {height : 180px; overflow: auto;   }
 #suggestionContainer ul li{ margin: 0; padding: 2px 4px; border: 1px solid #ffe594; color:#666; background:#fff9e7; cursor:pointer; list-style: none; }
 #suggestionContainer ul li.jSuggestHover{ background:#ffeaaa; color:#333; }
+
+/**styles for ablum manager*/
+table#album_sort tr.selected { background: #E0ECFF; border: 1px solid #C3D9FF; }
+a#up_click img { cursor: pointer; }
+a#down_click img { cursor: pointer; }
+table#album_sort tr {padding:0 5px 0 5px; height:20px;cursor:move;width:100%}
+table#album_sort tr td { padding: 1px; height: 18px; }
+table#album_sort tr.showDragHandle { background: #0E72A4; }
+
+/**styles for photo manager*/
+div#sort {  margin:10px; padding:5px 0 5px 50px; height:240px; overflow:auto; background:#FFF; width:550px; border:1px solid #0E72A4; }
+table#pic_sort tr {padding:0 5px 0 5px; height:20px;cursor:move;width:100%}
+a.photoUp { cursor: pointer; }
+a.photoDown { cursor: pointer; }
+
+/**suggestion dropdown styles*/
+div#dictionary_message { top: 0;}
+
+/**approval box styles*/
+div.aproval_button {cursor:pointer;padding:1px 0 1px 5px; float:left; margin-left:5px; width:150px; background-image:url(images/button_bg.gif);background-position:center bottom; border:2px solid #CCC;}
+ul.approval_box { display:none; margin:20px 0 0 0; width:163px; position:absolute; }
+ul.approval_box li { padding:5px;float:left;margin: 0 0  0 5px;list-style:none;width:146px;background:#EEE; border:2px solid #CCC;cursor:pointer; }

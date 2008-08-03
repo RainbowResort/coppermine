@@ -139,7 +139,7 @@ echo <<<EOT
          <tr>
             <td>
             <b>{$lang_albmgr_php['select_category']}</b>
-            <select onChange="if(this.options[this.selectedIndex].value) window.location.href='$CPG_PHP_SELF?cat='+this.options[this.selectedIndex].value;"  name="cat" class="listbox">
+            <select name="cat" class="listbox">
 EOT;
     foreach($CAT_LIST as $category) {
            echo '<option value="' . $category[0] . '"' . ($cat == $category[0] ? ' selected': '') . ">" . $category[1] . "</option>\n";
@@ -156,7 +156,7 @@ EOT;
 ?>
            </table>
               <!--<select id="to" name="to[]" size="<?php //echo min(max(count ($rowset) + 3, 15), 40) ?>" multiple onChange="Album_Select(this.selectedIndex);" class="listbox" style="width: 300px">-->
-              <div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding-top:10px;background:#FFF;width:60%; border:1px solid #0E72A4;">
+              <div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding:10px;background:#FFF;width:60%; border:1px solid #0E72A4;">
 			  <table id="album_sort">
 <?php
 	$i = 100;
@@ -166,7 +166,7 @@ EOT;
 	if (count ($rowset) > 0) 
 	foreach ($rowset as $album) {
        //$lb .= '<option value="album_no=' . $album['aid'] . ',album_nm=' . $album['title'] . ',album_sort=' . ($i++) . ',action=0">' . stripslashes($album['title']) . "</option>\n";
-        $lb .='<tr id="'.$j.'" style=\'padding:0 5px 0 5px; height:20px;cursor:move;width:100%\' title="'.$album['aid'].'@'.stripslashes($album['title']).'@0'.'"><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /></td><td style="width:300px">'.stripslashes($album['title']).'</td><td><a style="cursor:pointer;" class="edit" title="Edit">Edit</a></td><td><a class="delete" style="cursor:pointer;color:red" title="Delet">Delete</a></td></tr>';
+        $lb .='<tr id="'.$j.'"  title="'.$album['aid'].'@'.stripslashes($album['title']).'@0'.'"><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /></td><td class="album_text" style="width:400px;">'.stripslashes($album['title']).'</td></tr>';
 		$j++;
 	}		
 	echo $lb;
@@ -193,7 +193,8 @@ EOT;
 		<td align="center" style="width: 10px;"><img src="images/spacer.gif" width="1" alt=""><br /></td>
         <td><input type="text" id="album_nm" name="album_nm" id="album_nm" size="27" maxlength="80" class="textinput" value="" disabled="disabled" /></td>
 		<td align="center" style="width: 10px;"><img src="images/spacer.gif" width="1" alt=""><br /></td>
-		<td align="center" style="background-color: #D4D0C8; width: 80px; height: 21px; border-top: 1px solid White; border-left: 1px solid White; border-right: 1px solid #808080; border-bottom: 1px solid #808080;"><a id="buttonEvent" title="addAlbumButton" style="color: Black; font-weight: bold;cursor:pointer;" >Save</a></td>
+		<td align="center" ><button id="saveEvent" title="Save" style="color: Black; font-weight: bold;cursor:pointer;" disabled="disabled" >Ok</button></td>
+		<td align="center" ><a id="deleteEvent" title="addAlbumButton" style="color: red; font-weight: bold;cursor:pointer;margin-left:10px;text-decoration:underline;" ><?php echo $lang_albmgr_php['delete'] ?></a></td>
     </tr>
 </table>
         </td>

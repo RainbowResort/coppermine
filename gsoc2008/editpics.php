@@ -24,7 +24,6 @@ require('include/init.inc.php');
 
 js_include('js/jquery.js');
 js_include('js/jquery.cluetip.js');
-js_include('js/jquery.blockUI.js');
 js_include('js/jSerach.js');
 
 
@@ -85,9 +84,9 @@ if (EDIT_PICTURES_MODE) {
     $result = cpg_db_query("SELECT title, category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = '$album_id'");
         if (!mysql_num_rows($result)) cpg_die(CRITICAL_ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
         $ALBUM_DATA=mysql_fetch_array($result);
-        mysql_free_result($result);
-        $cat = $ALBUM_DATA['category'];
-        $actual_cat = $cat;
+mysql_free_result($result);
+$cat = $ALBUM_DATA['category'];
+$actual_cat = $cat;
         if ((!user_is_allowed() && !GALLERY_ADMIN_MODE && !MODERATOR_EDIT_MODE) || (!$CONFIG['users_can_edit_pics'] && !GALLERY_ADMIN_MODE && !MODERATOR_EDIT_MODE)) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
 } else {
         $ALBUM_DATA = array();
@@ -303,9 +302,8 @@ function process_post_data()
 
 function form_label($text)
 {
-    global $CURENT_PIC;
-
-    echo <<<EOT
+global $CURENT_PIC;
+	echo <<<EOT
     <tr>
             <td class="tableh2" colspan="3">
                     <b>$text</b>
@@ -402,10 +400,9 @@ EOT;
 
 function form_options()
 {
-        global $CURRENT_PIC, $lang_editpics_php, $row_style_class;
-
-        if (UPLOAD_APPROVAL_MODE) {
-                echo <<<EOT
+global $CURRENT_PIC, $lang_editpics_php, $row_style_class;
+if (UPLOAD_APPROVAL_MODE){
+	echo <<<EOT
         <tr>
                 <td class="{$row_style_class}" colspan="3" align="center">
                         <input type="radio" name="approved{$CURRENT_PIC['pid']}" id="approved{$CURRENT_PIC['pid']}yes" value="YES" class="radio" /><label for="approved{$CURRENT_PIC['pid']}yes" class="clickable_option">{$lang_editpics_php['approve']}</label>&nbsp;
@@ -445,7 +442,7 @@ function form_input($text, $name, $max_length,$field_width=100)
                         $text
         </td>
         <td width="100%" class="{$row_style_class}" valign="top">
-                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp" autocomplete="off" onKeyPress="return disableEnterKey(event)" />
+                <input type="text" style="width: {$field_width}%" name="$name" id="$name" maxlength="$max_length" value="$value" class="textinput serachUp" onKeyPress="return  disableEnterKey(event)" autocomplete="off"  />
                 </td>
         </tr>
 
@@ -762,14 +759,6 @@ function selectAll(d,box) {
 </script>
 EOT;
 
-echo <<<EOT
-<script type="text/javascript" language="javascript">
-<!--
-
-
--->
-</script>
-EOT;
 
 $mode= (UPLOAD_APPROVAL_MODE==1) ? "&amp;mode=upload_approval":"";
 $cat_l = (isset($actual_cat))? "?cat=$actual_cat" : (isset($cat) ? "?cat=$cat" : '');
