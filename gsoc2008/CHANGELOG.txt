@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-08-03 [A] First version of the SSH2/SFTP module {zmarty}
 2008-07-30 [A] Created the first version of the FTP Storage module config tab, in admin.php {zmarty}
 2008-07-30 [A] Coded a way for storage module to register config tabs for admin.php {zmarty}
 2008-07-26 [A] The active storage module can be configured in admin.php {zmarty}

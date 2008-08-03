@@ -4,14 +4,14 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
 $CONFIG['storage_module_dir'] = "ftp";
 
-define("MIRROR_TO_ALL", 1); // mirror to all servers
-define("MIRROR_TO_SOME", 2);
-define("MIRROR_USER_SHARDING", 3);
+define("MIRROR_TO_ALL", "1"); // mirror to all servers
+define("MIRROR_TO_SOME", "2");
+define("MIRROR_USER_SHARDING", "3");
 
-define("PIC_URL_SOURCE_LOCAL", 1); // show the image from the local machine
-define("PIC_URL_SOURCE_RANDOM_SERVER", 2); // show the image from a random server
+define("PIC_URL_SOURCE_LOCAL", "1"); // show the image from the local machine
+define("PIC_URL_SOURCE_RANDOM_SERVER", "2"); // show the image from a random server
 // from the ones that have a copy of the image we're showing
-define("PIC_URL_SOURCE_FIRST_SERVER", 3); // show the image from the first server
+define("PIC_URL_SOURCE_FIRST_SERVER", "3"); // show the image from the first server
 // from the list of all servers which have this image, keep the others for backup
 
 if(!isset($CONFIG['storage_rule']))

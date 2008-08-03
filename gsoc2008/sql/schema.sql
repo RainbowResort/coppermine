@@ -383,6 +383,8 @@ CREATE TABLE CPG_temp_messages (
 ) TYPE=MyISAM COMMENT='Used to store messages from one page to the other';
 # --------------------------------------------------------
 
+# OVI START
+
 #
 # Table structure for table `CPG_ftp_pic2server`
 #
@@ -430,6 +432,55 @@ CREATE TABLE `CPG_ftp_user2server` (
   KEY `server_id` (`server_id`)
 ) TYPE=MyISAM COMMENT='Used for FTP sharding';
 # --------------------------------------------------------
+
+#
+# Table structure for table `CPG_sftp_pic2server`
+#
+
+CREATE TABLE `CPG_sftp_pic2server` (
+  `pic_id` int(11) NOT NULL,
+  `server_id` int(11) NOT NULL,
+  KEY `pic_id` (`pic_id`),
+  KEY `server_id` (`server_id`)
+) TYPE=MyISAM COMMENT='Lists all SFTP servers where an image is stored';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_sftp_servers`
+#
+
+CREATE TABLE `CPG_sftp_servers` (
+  `id` int(11) NOT NULL auto_increment,
+  `hostname` tinytext NOT NULL,
+  `username` tinytext NOT NULL,
+  `password` tinytext NOT NULL,
+  `prefix_url` tinytext NOT NULL,
+  `root_path` tinytext NOT NULL,
+  `status` enum('active','to_be_deleted','inactive') NOT NULL,
+  `quota` bigint(20) NOT NULL,
+  `used` bigint(20) NOT NULL,
+  `free` bigint(20) NOT NULL,
+  `users` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `status` (`status`),
+  KEY `free` (`free`),
+  KEY `users` (`users`)
+) TYPE=MyISAM COMMENT='Used to store SFTP accounts for the SFTP storage module';
+# --------------------------------------------------------
+
+#
+# Table structure for table `CPG_sftp_user2server`
+#
+
+CREATE TABLE `CPG_sftp_user2server` (
+  `user_id` int(11) NOT NULL,
+  `server_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  KEY `server_id` (`server_id`)
+) TYPE=MyISAM COMMENT='Used for SFTP sharding';
+# --------------------------------------------------------
+
+# OVI END
 
 #
 # Table structure for table `CPG_oauth_nonce`

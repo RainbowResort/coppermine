@@ -1087,6 +1087,7 @@ function get_pic_data($album, &$count, &$album_name, $limit1=-1, $limit2=-1, $se
         $limit = ($limit1 != -1) ? ' LIMIT '. $limit1 : '';
         $limit .= ($limit2 != -1) ? ' ,'. $limit2 : '';
 
+
         if ($limit2 == 1) {
             $select_columns = '*';
         } else {
@@ -1131,10 +1132,10 @@ function get_pic_data($album, &$count, &$album_name, $limit1=-1, $limit2=-1, $se
                 mysql_free_result($result);
 
                 if($select_columns != '*') $select_columns .= ', title, caption,hits,owner_id,owner_name,pic_rating,votes';
-
                 $query = "SELECT $select_columns from {$CONFIG['TABLE_PICTURES']} WHERE ((aid='$album' $forbidden_set_string ) $keyword) $approved $ALBUM_SET ORDER BY $sort_order $limit";
-
+		
                 $result = cpg_db_query($query);
+
                 $rowset = cpg_db_fetch_rowset($result);
                 mysql_free_result($result);
                 // Set picture caption
@@ -2194,7 +2195,7 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 	//	print $pos; 
         global $CONFIG, $AUTHORIZED;
         global $album_date_fmt, $lang_display_thumbnails, $lang_errors, $lang_byte_units, $lang_common, $pic_count,$ajax_call,$pos; 
-	
+
         $superCage = Inspekt::makeSuperCage();
         $max_item= $CONFIG['max_film_strip_items'];
         
@@ -2202,6 +2203,7 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 			 $max_item= $CONFIG['max_film_strip_items']+1;
 		}
        	//print $max_item;
+
        	 $max_item_real = $max_item;
 		 //pass the max_items to the dispalyimage.js file
 		 set_js_var('max_item',$max_item_real);
@@ -2215,8 +2217,10 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
 		//set $l_limit to last images 
 		if($l_limit >($pic_count-$max_item_real)){
 			$l_limit = $pic_count-$max_item_real;
-		} 
+		}
+
         $pic_data = get_pic_data($album, $thumb_count, $album_name, $l_limit, $thumb_per_page);
+
         if (count($pic_data) < $max_item ){
 			$max_item = count($pic_data);
         }

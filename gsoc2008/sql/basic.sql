@@ -224,8 +224,8 @@ INSERT INTO CPG_config VALUES ('storage_copies_per_file', '1');
 # If set to true, copies of all images are stored locally / Default is 1, which means NO
 INSERT INTO CPG_config VALUES ('storage_keep_local_copy', '1');
 
-# Where to show the images from - default: 1 - Random FTP server that has the image
-INSERT INTO CPG_config VALUES ('storage_pic_url_source', '1');
+# Where to show the images from - default: 2 - Random FTP server that has the image
+INSERT INTO CPG_config VALUES ('storage_pic_url_source', '2');
 
 # END OVI
 
