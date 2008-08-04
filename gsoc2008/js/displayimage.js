@@ -599,6 +599,14 @@ function isNumber(test_input){
 		$('.aproval_button').bind("click", function(){
 				getCurrentDOM = $(this).parents("div");
 				approvalButtonHandel = $(this).next();
+				/**mark the right sign when */
+/**
+ * 				var getTitile = $(getCurrentDOM).attr("title");
+ * 				if(getTitile=="approve"){
+ * 					var a = $(this).next().children("li").eq(0).text();
+ * 					alert(a);
+ * 				}
+ */
 				$(this).next().toggle();
 		});
 	/**event handling for approval events*/
@@ -612,6 +620,8 @@ function isNumber(test_input){
 					getResult = data['resopnd'];	
 					if(getResult){
 				var a = 	getCurrentDOM.prev().children("a").children("img").attr({src:"images/disapprove.gif"});
+				getCurrentDOM.prev().children("a").attr({title: "approve"});
+				//	alert(b);
 					}		
 				});
 		/**close the approval box*/
@@ -631,6 +641,7 @@ function isNumber(test_input){
 					getCurrentDOM.prev().children("a").children("img").attr({
  						src: "images/approve.gif"
 						});
+					getCurrentDOM.prev().children("a").attr({title: "disapprove"});
 					}			
 				});
 	/**close the approval box after executing ajax*/
