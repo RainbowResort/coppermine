@@ -62,7 +62,7 @@ class cpgOAuth extends OAuthServer {
     }
 
     public function access_protected_resource() {
-        global $CONFIG, $THEME_DIR;
+        global $CONFIG, $THEME_DIR, $USER, $CAT_LIST;
             try {
                 $result = $this->verify('access');
 
@@ -80,6 +80,34 @@ class cpgOAuth extends OAuthServer {
                             require 'include/init.inc.php';
                             pub_user_albums();
                             upload_form_alb_list('', '');
+                            break;
+                        case 'search':
+                            define('IN_COPPERMINE', true);
+                            require 'include/init.inc.php';
+                            //echo "Testing";
+                            //
+                            require 'thumbnails.php';
+                            break;
+                        case 'catlist':
+                            define('IN_COPPERMINE', true);
+                            require 'include/init.inc.php';                            
+                            $cat = 0;
+                            if ($superCage->post->getInt('catid')) {
+                                $cat = $superCage->post->getInt('catid'); 
+                            }
+                            get_subcategory_data($cat);
+                            echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+                            echo "<cat_list>\n";                            
+                            foreach ($CAT_LIST as $category) {
+                                // get_subcat_data() prints 'nbsp;' three times for each level of depth of categories
+                                $level = substr_count($category['name'], 'nbsp;') / 3;
+                                $indent = '';
+                                for ($i = 0; $i < $level; $i++) {
+                                    $indent .= ' ';
+                                }
+                                echo $indent . '<category id="' . $category['cid'] . "\">\n";
+                            }
+                            echo "</cat_list>";
                             break;
                         default:
                             throw new OAuthException('No function specified via HTTP POST');

@@ -30,6 +30,13 @@
 <input type="file" name="userpicture" value="" />
 </form>
 
+<form method="POST" action="api_index.php">
+<?php fields(); ?>
+<button type="submit">API Category List</button>
+<input type="text" name="oauth_token" value="" />
+<input type="hidden" name="function" value="catlist" />
+<input type="hidden" name="catid" value="0" />
+</form>
 
 <form method="POST" action="api_index.php" enctype="multipart/form-data">
 <?php fields(); ?>
@@ -43,6 +50,15 @@
 <button type="submit">API Picture List</button>
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="piclist" />
+</form>
+
+<form method="POST" action="api_index.php">
+<?php fields(); ?>
+<button type="submit">API Search</button>
+<input type="text" name="oauth_token" value="" />
+<input type="hidden" name="function" value="search" />
+<input type="hidden" name="type" value="AND" />
+<input type="hidden" name="search" value="pic" />
 </form>
 
 <form method="POST" action="register.php">

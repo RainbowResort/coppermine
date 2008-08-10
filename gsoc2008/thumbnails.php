@@ -93,25 +93,32 @@ if ($superCage->get->keyExists('album')) {
     }
 }
 
+// POST for the API, GET for search.php
+if (defined('API_CALL')) {
+    $method = "post";
+} else {
+    $method = "get";
+}
+
 //if (isset($_GET['search'])) {
-if ($superCage->get->keyExists('search')) {
+if ($superCage->$method->keyExists('search')) {
     // find out if a parameter has been submitted at all
     $allowed = array('title', 'caption', 'keywords', 'owner_name', 'filename', 'pic_raw_ip', 'pic_hdr_ip', 'user1', 'user2', 'user3', 'user4');
     foreach ($allowed as $key) {
         //if (isset($_GET[$key]) == TRUE) {
-        if ($superCage->get->keyExists($key)) {
+        if ($superCage->$method->keyExists($key)) {
 			//can't work like this, have to remove the $_GET
             //$_GET['params'][$key] = $_GET[$key];
 			#####################################################################
 			##We use the raw again, have to look into this a little more later.##
 			#####################################################################
-			$temp_GET['params'][$key] = $superCage->get->getRaw($key);
+			$temp_GET['params'][$key] = $superCage->$method->getRaw($key);
         }
     }
         //$USER['search'] = $_GET;
 		$USER['search'] = $temp_GET;
 		//here again the use of getRaw, but it will be sanitized in search.inc.php
-        $USER['search']['search'] = utf_replace($superCage->get->getRaw('search'));
+        $USER['search']['search'] = utf_replace($superCage->$method->getRaw('search'));
         $USER['search']['search'] = str_replace('&quot;','\'',$USER['search']['search']);
         $album = 'search';
 }
@@ -184,6 +191,11 @@ if (is_numeric($album)) {
         }
         breadcrumb($cat, $breadcrumb, $breadcrumb_text);
     }
+}
+
+if (defined('API_CALL')) {    
+    display_thumbnails('search', 0, 1, 5, 5, false);
+    exit();
 }
 
 if (isset($CURRENT_ALBUM_DATA)) {

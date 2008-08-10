@@ -2039,7 +2039,7 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
         $lower_limit = ($page-1) * $thumb_per_page;
 
         $pic_data = get_pic_data($album, $thumb_count, $album_name, $lower_limit, $thumb_per_page);
-
+        
         $total_pages = ceil($thumb_count / $thumb_per_page);
 
         $i = 0;
@@ -2072,8 +2072,29 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
                         $thumb_list[$i]['aid'] = $row['aid'];
                         $thumb_list[$i]['pwidth'] = $row['pwidth'];
                         $thumb_list[$i]['pheight'] = $row['pheight'];
+                        
+                        if (defined('API_CALL')) {
+                            $thumb_list[$i]['title'] = $row['title'];
+                            $thumb_list[$i]['filename'] = get_pic_url($row);
+                        }
                 }
 
+                // Print out XML photo list and exit
+                if (defined('API_CALL')) {
+                    echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+                    echo "<api_search>\n";
+                    foreach ($thumb_list as $pic) {
+                        echo " <picture id=\"{$pic['pid']}\">\n";
+                        echo "  <title>{$pic['title']}</title>\n";
+                        echo "  <file>{$pic['filename']}</file>\n";
+                        echo "  <width>{$pic['pwidth']}</width>\n";
+                        echo "  <height>{$pic['pheight']}</height>\n";
+                        echo " </picture>\n";                        
+                    }
+                    echo "</api_search>\n";
+                    exit();
+                }                
+                
                 // Add a hit to album counter if it is a numeric album
                 if (is_numeric($album)) {
                         // Create an array to hold the album id for hits (if not created)
@@ -2088,7 +2109,7 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
                                 user_save_profile();
                         }
                 }
-
+                
                 //Using getRaw(). The date is sanitized in the called function.
                 $date = $superCage->get->keyExists('date') ? cpgValidateDate($superCage->get->getRaw('date')) : null;
                 theme_display_thumbnails($thumb_list, $thumb_count, $album_name, $album, $cat, $page, $total_pages, is_numeric($album), $display_tabs, 'thumb', $date);
@@ -2424,6 +2445,11 @@ function& get_pic_url(&$pic_row, $mode,$system_pic = false, $skip_storage = fals
 
         static $pic_prefix = array();
         static $url_prefix = array();
+
+        // Storage and API search don't seem to work together -daorange
+        if (defined('API_CALL')) {
+            $skip_storage = true;        
+        }
 
         if (!count($pic_prefix)) {
                 $pic_prefix = array(
@@ -4736,6 +4762,53 @@ EOT;
     </tr>
 
 EOT;
+}
+
+/**
+ * function get_subcategory_data()
+ *
+ * Get a hierarchical list of categories
+ * 
+ * @param integer $parent
+ * @param string $ident
+ *
+ */
+function get_subcategory_data($parent, $ident = '')
+{
+    global $CONFIG, $CAT_LIST;
+    if ($CONFIG['categories_alpha_sort'] == 1) {
+    $sort_query = 'name';
+    } else {
+    $sort_query = 'pos';
+    }
+
+    $sql = "SELECT cid, name, description " . "FROM {$CONFIG['TABLE_CATEGORIES']} " . "WHERE parent = '$parent' " . "ORDER BY $sort_query";
+    $result = cpg_db_query($sql);
+
+    if (($cat_count = mysql_num_rows($result)) > 0) {
+        $rowset = cpg_db_fetch_rowset($result);
+        $pos = 0;
+        foreach ($rowset as $subcat) {
+            if ($pos > 0) {
+                $CAT_LIST[$subcat['cid']] = array('cid' => $subcat['cid'],
+                    'parent' => $parent,
+                    'pos' => $pos++,
+                    'prev' => $prev_cid,
+                    'cat_count' => $cat_count,
+                    'name' => $ident . $subcat['name']);
+                $CAT_LIST[$last_index]['next'] = $subcat['cid'];
+            } else {
+                $CAT_LIST[$subcat['cid']] = array('cid' => $subcat['cid'],
+                    'parent' => $parent,
+                    'pos' => $pos++,
+                    'cat_count' => $cat_count,
+                    'name' => $ident . $subcat['name']);
+            }
+            $last_index = $prev_cid = $subcat['cid'];
+           // $last_index = count($CAT_LIST) -1;
+            get_subcategory_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;');
+        }
+    }
 }
 
 

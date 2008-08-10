@@ -48,9 +48,16 @@ if (!isset($USER['search']['params'])){
 //if (isset($_GET['album']) && $_GET['album'] == 'search'){
 //	$_POST = $USER['search'];
 //}
-if ($superCage->get->keyExists('album') && $superCage->get->getAlpha('album') == 'search'){
+
+// POST for the API, GET for search.php
+if (defined('API_CALL')) {
+    $method = "post";
+} else {
+    $method = "get";
+}
+if (($superCage->get->keyExists('album') && $superCage->get->getAlpha('album') == 'search')  || defined('API_CALL')){
 	$search_params = $USER['search'];
-	$search_params['type'] = $superCage->get->getAlpha('type');
+	$search_params['type'] = $superCage->$method->getAlpha('type');
 }else{
 	//put all original $_POST vars in $search_params, don't know if this could be used???
 	$search_params = $superCage->post->_source;

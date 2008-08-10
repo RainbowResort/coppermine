@@ -45,43 +45,7 @@ function fix_cat_table()
     }
 }
 
-function get_subcat_data($parent, $ident = '')
-{
-    global $CONFIG, $CAT_LIST;
-    if ($CONFIG['categories_alpha_sort'] == 1) {
-    $sort_query = 'name';
-    } else {
-    $sort_query = 'pos';
-    }
-
-    $sql = "SELECT cid, name, description " . "FROM {$CONFIG['TABLE_CATEGORIES']} " . "WHERE parent = '$parent' " . "ORDER BY $sort_query";
-    $result = cpg_db_query($sql);
-
-    if (($cat_count = mysql_num_rows($result)) > 0) {
-        $rowset = cpg_db_fetch_rowset($result);
-        $pos = 0;
-        foreach ($rowset as $subcat) {
-            if ($pos > 0) {
-                $CAT_LIST[$subcat['cid']] = array('cid' => $subcat['cid'],
-                    'parent' => $parent,
-                    'pos' => $pos++,
-                    'prev' => $prev_cid,
-                    'cat_count' => $cat_count,
-                    'name' => $ident . $subcat['name']);
-                $CAT_LIST[$last_index]['next'] = $subcat['cid'];
-            } else {
-                $CAT_LIST[$subcat['cid']] = array('cid' => $subcat['cid'],
-                    'parent' => $parent,
-                    'pos' => $pos++,
-                    'cat_count' => $cat_count,
-                    'name' => $ident . $subcat['name']);
-            }
-            $last_index = $prev_cid = $subcat['cid'];
-           // $last_index = count($CAT_LIST) -1;
-            get_subcat_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;');
-        }
-    }
-}
+// get_subcat_data() moved to include/functions.inc.php, renamed get_subcategory_data() 
 
 function update_cat_order()
 {
@@ -464,7 +428,7 @@ switch ($op) {
 }
 
 fix_cat_table();
-get_subcat_data(0);
+get_subcategory_data(0);
 
 if ($CONFIG['categories_alpha_sort'] != 1) {
     update_cat_order();
