@@ -5,6 +5,7 @@
 	import gui.albumListing;
 	import gui.previewBox;
 	import flash.utils.ByteArray;
+	import flash.geom.*;
 	
 	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.BMPEncoder;
@@ -34,6 +35,8 @@
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	
+	import gui.Window;
 
 	/*
 	@AUTHOR SRIBABU DODDAPANENI
@@ -56,15 +59,24 @@ public class Editor extends Sprite{
 		var effectList:List = new List();
 		public var previewImg:Bitmap;
 
-		private var loader:Loader;		
+		public var loader:Loader;		
 		//Memory copy of the image (original image)
 		public var mBMAP:BitmapData;
-		//Memroy copy of the image (modified image)
+		//Memory copy of the image (modified image)
 		public var mmBMAP:BitmapData;
+		//final copy of the edited bitmap
+		public var finalBMAP:BitmapData;
 		//visible image
+		// holds the runtime image ..for live image editing and previewing.
+		public var effectBMAP:BitmapData;
+		
 		private var bckButton:Button;
 		// preview box
 		private var previewbox:Sprite;
+		private var preview_myBorder:Sprite;
+		
+		public var effect_applied:Boolean;
+		public var effect_selected:Boolean;
 		
 		public function Editor(imgurl:String, _width:int,_height:int):void{
 		
@@ -74,30 +86,44 @@ public class Editor extends Sprite{
 		loader = new Loader();
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE,loaded);
 		loader.load(new URLRequest(imgurl));
-		
+		effect_applied  = false;
 
 		// Effects option list
 		var dp:DataProvider = new DataProvider();
-		dp.addItem( { label: "Brightness" } );
-		dp.addItem( { label: "Sharpen" } );
-		dp.addItem( { label: "Auto Color" } );
-		dp.addItem( { label: "White Bal" } );
-		dp.addItem( { label: "Saturation" } );
-		dp.addItem( { label: "Highlight" } );
-		dp.addItem( { label: "Fill Light" } );
-		dp.addItem( { label: "Soft" } );
-		dp.addItem( { label: "Pop Colors" } );
-		dp.addItem( { label: "Black & White" } );
-		dp.addItem( { label: "Sepia" } );
-		dp.addItem( { label: "Tint" } );
-		dp.addItem( { label: "Sketch" } );
+		
+		//BASICS
+		dp.addItem({ label: "BASICS" });
+		dp.addItem({ label: "  |-- Rotate" });
+		dp.addItem({ label: "  |-- Crop" });
+		
+		//ADJUSTMENTS
+		dp.addItem({ label: "ADJUSTMENTS" });
+		dp.addItem( { label: "  |-- Brightness" } );
+		dp.addItem( { label: "  |-- Brightness (slider)" } );		
+		dp.addItem( { label: "  |-- Contrast" } );
+		dp.addItem( { label: "  |-- Sharpen" } );
+		dp.addItem( { label: "  |-- Hue" } );
+		dp.addItem( { label: "  |-- Saturation" } );
+		
+		//EFFECTS 
+		dp.addItem({ label: "EFFECTS"});
+		dp.addItem( { label: "  |-- Pop Colors" } );
+		dp.addItem( { label: "  |-- White Bal" } );
+		dp.addItem( { label: "  |-- Highlight" } );
+		dp.addItem( { label: "  |-- Fill Light" } );
+		dp.addItem( { label: "  |-- Soft" } );
+		dp.addItem( { label: "  |-- Black & White" } );
+		dp.addItem( { label: "  |-- Sepia" } );
+		dp.addItem( { label: "  |-- Tint" } );
+		dp.addItem( { label: "  |-- Auto Color" } );
+		dp.addItem( { label: "  |-- Sketch" } );
 	
 		effectList.dataProvider = new DataProvider(dp);
 		effectList.width = 150;
-		effectList.height = 300;
+		effectList.height = 500;
 		addChild(effectList);
 		effectList.allowMultipleSelection = false;
-        effectList.addEventListener(Event.CHANGE, updateLists);
+        effectList.addEventListener(Event.CHANGE, handleEventLists);
 		effectList.enabled = false;
 		
 		// preparing Editor	
@@ -132,19 +158,64 @@ public class Editor extends Sprite{
 		}
 
 		// EVENT MANAGER for the LIST
-		private function updateLists(e:Event):void {
-            trace(effectList.selectedItem.label);
+		private function handleEventLists(e:Event):void {
+			if ( effect_applied  == true)
+			{	//copy the modified image back onto the code
+				finalBMAP = effectBMAP.clone();
+            	trace(effectList.selectedItem.label);
+				effect_appplied = false;
+				trace(effect_applied);
+			}
 			switch(effectList.selectedItem.label){
-			case "Sharpen" :
+			case "  |-- Sharpen" :
 			buildPreviewBox();
 			previewbox.draw_sharpen();
 			break;
-			case "Brightness" :
+			case "  |-- Brightness" :
 			buildPreviewBox();
 			previewbox.draw_brighten();
 			break;
-				
-				
+			case "  |-- Pop Colors":
+			buildPreviewBox();
+			previewbox.draw_popColors();
+			break;
+			case "  |-- Hue":
+			buildPreviewBox();
+			previewbox.draw_hue();
+			break;
+			case "  |-- Saturation":
+			buildPreviewBox();
+			previewbox.draw_saturation();
+			break;
+			case "  |-- Contrast":
+			buildPreviewBox();
+			previewbox.draw_contrast();
+			break;
+			case "  |-- Brightness (slider)":
+			buildPreviewBox();
+			previewbox.draw_brightnessSlider();
+			break;
+			case "  |-- Alhpa":
+			buildPreviewBox();
+			previewbox.draw_brightnessSlider();
+			break;
+			case "  |-- Rotate":
+			buildPreviewBox();
+			previewbox.draw_RotatePanel();
+			break;
+			case "  |-- Crop":
+			trace ("this.height " + this.height);
+			previewbox = new previewBox(550,this.width - 150);
+			previewbox.x = 160;
+			previewbox.y = 2;
+			//previewbox.width = this.width - 150;
+			//previewbox.height = this.height-100;
+			this.addChild(previewbox);
+			
+			previewbox.draw_crop();
+			
+			
+			
 			}
 			
         }
@@ -158,14 +229,21 @@ public class Editor extends Sprite{
 			previewbox.width = this.width - 150;
 			previewbox.height = 130;
 			this.addChild(previewbox);
+			//effect_applied  = false;
 		}
+		
 		
 		
 		// EVENT Manager for image loading 			
 		private function loaded(e:Event):void{
-			updatePreview(loader.content.bitmapData,false);
-			mBMAP =  (previewImg.bitmapData.clone());
-			mmBMAP = (previewImg.bitmapData.clone());
+			
+			mBMAP =  loader.content.bitmapData.clone() ; //(previewImg.bitmapData.clone());
+			mmBMAP = loader.content.bitmapData.clone() ; //(previewImg.bitmapData.clone());
+			finalBMAP = loader.content.bitmapData.clone() ;  //new BitmapData(previewImg.bitmapData.width,previewImg.bitmapData.height,false,0x0);
+			effectBMAP = finalBMAP.clone();
+//			finalBMAP = (previewImg.bitmapData.clone());
+			trace("FINALbmap . width " + finalBMAP.width);
+			updatePreview(finalBMAP,false);
 			this.addChild(bckButton);
 			this.addChild(undo);
 			this.addChild(save);
@@ -178,19 +256,42 @@ public class Editor extends Sprite{
 		}
 		
 		//Manages reloading of the preview 
-		private function updatePreview(source:BitmapData,redraw:Boolean){
-			if(redraw){ removeChild(previewImg);}
+		public function updatePreview(source:BitmapData,redraw:Boolean){
+			if (redraw){
+			this.removeChild(previewImg);
+			}
+			trace("WIDTH : " + source.width);
+			trace("Height : " + source.height);
 			previewImg =  new Bitmap(source);
-			previewImg.x = 300 ;
+			previewImg.x = 400 ;
 			previewImg.y = 150 ;
-			previewImg.width = 440 ; // previewImg.content.width * 0.4;// previewImg.width	/ 3;
-			previewImg.height = 330 ; //previewImg.content.height * 0.4; //previewImg.height / 4;
+			if ( source.width > source.height) // landscape
+			{
+				previewImg.width = source.width * (400 / source.width  );
+				previewImg.height = source.height * (400 / source.width  ); 
+			}
+			if ( source.width < source.height) //portrait
+			{
+				previewImg.width = source.width * (400 / source.height );
+				previewImg.height = source.height * (400 / source.height ); 
+			}
+
 			addChild(previewImg);
+			
+			if(redraw){
+			this.removeChild(preview_myBorder);
+			}
+			preview_myBorder = new Sprite();
+			preview_myBorder.graphics.lineStyle(2, 0x333333);
+			preview_myBorder.graphics.drawRect (previewImg.x ,previewImg.y , previewImg.width , previewImg.height );
+			this.addChild (preview_myBorder);
 		}
+		
 			
 		// UNDO EVENT
 		private function undoLastAction(E:Event):void{
-			updatePreview(mmBMAP,true);
+			var win:Sprite = new Window();
+			addChild(win);
 		}
 		
 		// Save EVENT
@@ -198,9 +299,9 @@ public class Editor extends Sprite{
 			
 			/* we need a way to figure out how to save it on to the server */
 			// right now it dumps the image into the /album/snapshot.jpg
-			
+			finalBMAP = effectBMAP.clone();
 			var jpgEncoder:JPGEncoder = new JPGEncoder(85);
-			var jpgStream:ByteArray = jpgEncoder.encode(previewImg.bitmapData);
+			var jpgStream:ByteArray = jpgEncoder.encode(finalBMAP);
 			var header:URLRequestHeader = new URLRequestHeader("Content-type", "application/octet-stream");
 			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?filename=snapshot.jpg");
 			jpgURLRequest.requestHeaders.push(header);

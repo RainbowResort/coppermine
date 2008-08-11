@@ -6,11 +6,10 @@ if($_GET['filename']=='snapshot.jpg'){
 
 echo $GLOBALS["HTTP_RAW_POST_DATA"];
 echo  $HTTP_RAW_POST_DATA;
-echo "CALLED " ;
 	// get bytearray
-	$jpg = $GLOBALS["HTTP_RAW_POST_DATA"]; ;//$superCage->server->getRAW('HTTP_RAW_POST_DATA') ;//$GLOBALS["HTTP_RAW_POST_DATA"];
+	$jpg = $GLOBALS["HTTP_RAW_POST_DATA"]; ;
 
-	// add headers for download dialog-box
+// add headers for download dialog-box
 //	header('Content-Type: image/jpeg');
 //	header('Content-Disposition: attachment; filename='.$superCage->get->getRAW('filename'));
 //	echo $jpg;
@@ -19,9 +18,6 @@ echo "CALLED " ;
 	$f = fopen("./albums/snapshot.jpg"/*$_GET['filename']*/, 'wb');
 	fwrite($f, $jpg);
 	fclose($f);
-	
-	echo "Written";
-
 }
 }
 else {
@@ -115,13 +111,34 @@ $image = cpg_db_fetch_rowset(cpg_db_query($query));
 header("Location: ".get_pic_url($image[0])) ;
 }
 
+function getPhotoInfo($photo){
+global $CONFIG;
+cpg_db_connect();
+$query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} where pid=".$photo;
+$image = cpg_db_fetch_rowset(cpg_db_query($query));
+$image = $image[0];
+varFormat("info", "Resolution: " . $image[6]  . "x" . $image[7] . " Size: " . $image[4]/1000 . " KB" ) ;
+varFormat("&Filename",$image[3]);
+varFormat("&Title", $image[15]);
+varFormat("&Desc", $image[16]);
+varFormat("&keywords", $image[17]);
+varFormat("&approved",$image[18]);
 
+$query = "SELECT title FROM {$CONFIG['TABLE_ALBUMS']}" ;
+$albums = cpg_db_fetch_rowset(cpg_db_query($query));
+$albumStr = "";
+foreach ($albums as $album)
+$albumStr = $albumStr . "," . $album[0] ;
 
+$albumStr = substr($albumStr,1,$albumStr.length-1);
+varFormat("&AlbumArray",$albumStr);
 
+}
 
-//echo "SELECT cid, name, thumb FROM {$CONFIG['TABLE_CATEGORIES']} WHERE parent = 0";
-//echo $CONFIG['TABLE_CATEGORIES'];
-//getRootCategory();
+function varFormat($id,$data){
+print "$id=$data" ;
+}
+
 
 function getImagepath($image_id){
 cpg_db_connect();
@@ -208,6 +225,8 @@ else if ($superCage->get->getRAW('albumlisting')==1)
 treeBuilder();
 else if ($superCage->get->getRAW('getimg')==1)
 getimg($superCage->get->getRAW('img'));
+else if ($superCage->get->getRAW('photoinfo')==1)
+getPhotoInfo($superCage->get->getRAW('photo'));
 
 
 
