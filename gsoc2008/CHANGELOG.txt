@@ -24,7 +24,7 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
-
+2008-08-11 [B] Added ability to filter API album list by category and picture list by album {daorange}
 2008-08-10 [A] Added API search, partial category list {daorange}
 2008-08-03 [A] First version of the SSH2/SFTP module {zmarty}
 2008-07-30 [A] Created the first version of the FTP Storage module config tab, in admin.php {zmarty}

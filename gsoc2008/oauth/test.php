@@ -38,18 +38,21 @@
 <input type="hidden" name="catid" value="0" />
 </form>
 
-<form method="POST" action="api_index.php" enctype="multipart/form-data">
+<form method="POST" action="api_index.php">
 <?php fields(); ?>
 <button type="submit">API Album List</button>
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="alblist" />
+<input type="hidden" name="cat" value="3" />
 </form>
 
-<form method="POST" action="api_index.php" enctype="multipart/form-data">
+<form method="POST" action="api_index.php">
 <?php fields(); ?>
 <button type="submit">API Picture List</button>
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="piclist" />
+<input type="hidden" name="aid" value="2" />
+<input type="hidden" name="password" value="secret" />
 </form>
 
 <form method="POST" action="api_index.php">

@@ -4546,16 +4546,52 @@ function cpg_getimagesize($image, $force_cpg_function = false){
  */
 function pub_user_albums() {
 global $CONFIG, $public_albums_list, $user_albums_list;
-	if (GALLERY_ADMIN_MODE) {
-	$public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT);
-	//select albums that don't belong to a category
-	$public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0");
-	} else {
-		$public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."))");
-		//select albums that don't belong to a category
-		$public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0 AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."))");   
+	$superCage = Inspekt::makeSuperCage();
+	// Filter albums by category
+	$api_sql = '';
+	$api_sql2 = '';
+	if (defined('API_CALL')) {
+	    if ($superCage->post->getAlpha('function') == 'alblist' && $catid = $superCage->post->getInt('cat')) {
+	        global $CAT_LIST;
+	        get_subcategory_data($catid);
+	        $api_sql .= " AND (";
+	        foreach ($CAT_LIST as $cat) {
+	            $api_sql .= "category = {$cat['cid']} OR ";
+	        }
+	        $api_sql .= "category = $catid)";
+	    }
+	    if ($superCage->post->getAlpha('function') == 'piclist' && $aid = $superCage->post->getInt('aid')) { 
+	        if ($password = $superCage->post->getEscaped('password')) {
+	            $sql = "SELECT aid FROM " . $CONFIG['TABLE_ALBUMS'] . " WHERE alb_password='$password' AND aid='$aid'";
+                    $result = cpg_db_query($sql);
+                    if (mysql_num_rows($result)) {
+                        $api_sql2 = "aid = $aid";
+	            }
+	            else {
+	                throw new OAuthException('Bad album password');
+	            }
+	        }    
+	        else {
+	            $api_sql2 = "aid = $aid";
+	        }
+	    }
 	}
 	
+	if (GALLERY_ADMIN_MODE) {
+	    if ($api_sql2) {
+	        $api_sql2 = " AND " . $api_sql2;
+	    }
+	    $public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . $api_sql . $api_sql2);
+	    //select albums that don't belong to a category
+	    $public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0" . $api_sql2);
+	} else {
+	    if ($api_sql2) {
+	        $api_sql2 = " OR " . $api_sql2 . " AND alb_password = '$password'";
+	    }
+	    $public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."){$api_sql2})" . $api_sql);
+	    //select albums that don't belong to a category
+	    $public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0 AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."){$api_sql2})");   
+	}
 	
 	if (mysql_num_rows($public_albums)) {
 	$public_albums_list = cpg_db_fetch_rowset($public_albums);
@@ -4571,16 +4607,25 @@ global $CONFIG, $public_albums_list, $user_albums_list;
 	}
 	
 	//merge the 2 album arrays
-	$public_albums_list = array_merge($public_albums_list, $public_albums_list_no_cat);
-	
+	if (!$api_sql) {
+	    $public_albums_list = array_merge($public_albums_list, $public_albums_list_no_cat);
+	}
 	
 	if (USER_ID) {
-	$user_albums = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category='" . (FIRST_USER_CAT + USER_ID) . "' ORDER BY title");
-	if (mysql_num_rows($user_albums)) {
+	    if ($api_sql) {
+	        $api_sql = preg_replace('/AND/', '', $api_sql);
+	        $api_sql .= " AND ";
+	    }
+	    if ($api_sql2) {
+	        $api_sql = "aid=$aid AND ";
+	    }
+	    
+	    $user_albums = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE " . $api_sql . "category='" . (FIRST_USER_CAT + USER_ID) . "' ORDER BY title");
+	    if (mysql_num_rows($user_albums)) {
 		$user_albums_list = cpg_db_fetch_rowset($user_albums);
-	} else {
+	    } else {
 		$user_albums_list = array();
-	}
+	    }
 	} else {
 	$user_albums_list = array();
 	}
