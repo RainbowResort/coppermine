@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-08-12 [C] Small fix: Commented an echo {zmarty}
 2008-08-12 [A] Images can now be deleted from editpics.php via the storage modules {zmarty}
 2008-08-12 [A] FTP servers can now be added, edited, deleted from Coppermine {zmarty}
 2008-08-12 [B] API category list should work now {daorange}

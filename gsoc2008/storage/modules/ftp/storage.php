@@ -264,7 +264,7 @@ class storage
 		} // if(sizeof($servers))
 		
 		$sql_pic2server = "DELETE FROM {$this->config['TABLE_FTP_PIC2SERVER']} WHERE pic_id='{$fileContainer->id}'";
-		echo "del sql_pic2server: ".$sql_pic2server."<br>\n"; 
+		//echo "del sql_pic2server: ".$sql_pic2server."<br>\n"; 
 		cpg_db_query($sql_pic2server);
 		
 	} // ftp_delete_file
