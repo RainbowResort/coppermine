@@ -4851,7 +4851,7 @@ function get_subcategory_data($parent, $ident = '')
             }
             $last_index = $prev_cid = $subcat['cid'];
            // $last_index = count($CAT_LIST) -1;
-            get_subcategory_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;');
+            get_subcategory_data($subcat['cid'], $ident . '&nbsp;&nbsp;&nbsp;'); // Note: API category list depends on these &nbsp;'s
         }
     }
 }

@@ -91,23 +91,7 @@ class cpgOAuth extends OAuthServer {
                         case 'catlist':
                             define('IN_COPPERMINE', true);
                             require 'include/init.inc.php';                            
-                            $cat = 0;
-                            if ($superCage->post->getInt('catid')) {
-                                $cat = $superCage->post->getInt('catid'); 
-                            }
-                            get_subcategory_data($cat);
-                            echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-                            echo "<cat_list>\n";                            
-                            foreach ($CAT_LIST as $category) {
-                                // get_subcat_data() prints 'nbsp;' three times for each level of depth of categories
-                                $level = substr_count($category['name'], 'nbsp;') / 3;
-                                $indent = '';
-                                for ($i = 0; $i < $level; $i++) {
-                                    $indent .= ' ';
-                                }
-                                echo $indent . '<category id="' . $category['cid'] . "\">\n";
-                            }
-                            echo "</cat_list>";
+                            api_cat_list();
                             break;
                         default:
                             throw new OAuthException('No function specified via HTTP POST');
@@ -128,6 +112,72 @@ class cpgOAuth extends OAuthServer {
 
 function api_message($message) {
     die("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" . '<api_message>' . $message . '</api_message>');	
+}
+
+/**
+ * function api_cat_list()
+ *
+ * Geta hierarchical list of categories, in XML
+ *
+ */
+function api_cat_list() {
+    global $CONFIG, $CAT_LIST;
+    $superCage = Inspekt::makeSuperCage();
+    $cat = 0;
+    if ($superCage->post->getInt('catid')) {
+        $cat = $superCage->post->getInt('catid'); 
+    }
+    get_subcategory_data($cat);
+    echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+    echo "<cat_list>\n";     
+    $catlevels = array();                       
+    // Loop through the category list and store the parent of each one in an array
+    foreach ($CAT_LIST as $category) {
+        // get_subcategory_data() prints '&nbsp;' three times for each level of depth of categories
+        $catlevels[] = substr_count($category['name'], 'nbsp;') / 3;
+    }
+                                                        
+    // Loop through again, printing out the list of categories
+    $count = 0; // The iteration of the loop
+    $level = 0; // How many levels deep in the hierarchy a category is
+    $indent2 = ''; // The spacing for closing tags
+    foreach ($CAT_LIST as $category) {
+        $level = $catlevels[$count];
+        $indent = '';
+        for ($i = 0; $i < $level; $i++) {
+            $indent .= ' ';
+        }
+
+        $previous = $catlevels[$count - 1];
+        $current = $catlevels[$count];                                
+        if ($previous == $current && $count > 0) {
+            $indent2 = substr($indent2, 1); // 1 less leading space for each closing tag in a series
+            echo $indent2 . "</category>\n";
+        }
+                                
+        else if ($previous > $current) {
+            for ($j = 0; $j <= $previous - $current; $j++) {
+                $indent2 = substr($indent2, 1);
+                echo $indent2 . "</category>\n";
+            }
+        }
+                                
+        $name = preg_replace("/((&nbsp;){3})+/", "", $category['name']); // Clean up the name text
+        echo $indent . '<category id="' . $category['cid'] . "\" name=\"" . $name . "\">\n";
+        $indent2 .= ' '; // 1 more leading space for each <category> element
+
+        $count++;
+    }
+
+    // The final (set of) closing tag(s)
+    if ($count > 0) {
+        for ($i = 0; $i <= $level; $i++) {
+            $indent2 = substr($indent2, 1);
+            echo $indent2 . "</category>\n";
+        }
+    }
+    
+    echo "</cat_list>";
 }
 
 ?>
