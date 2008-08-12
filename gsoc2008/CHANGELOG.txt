@@ -24,6 +24,8 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
+
+2008-08-12 [A] FTP servers can now be added, edited, deleted from Coppermine {zmarty}
 2008-08-12 [B] API category list should work now {daorange}
 2008-08-11 [B] Added ability to filter API album list by category and picture list by album {daorange}
 2008-08-10 [A] Added API search, partial category list {daorange}

@@ -975,6 +975,36 @@ if (defined('ADMIN_PHP')) $lang_admin_php = array(
   'storage_copies_per_file' => 'Mirrored copies for each file (including original)', // cpg 1.5 gsoc 2008 OVI
   'storage_keep_local_copy' => 'Keep a copy of each image on the local server', // cpg 1.5 gsoc 2008 OVI
   'storage_pic_url_source' => 'Show images from', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_configuration' => 'Storage Servers Configuration', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_admin_ftp_servers' => 'FTP Servers', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_not_set_doesnt_exist' => 'The Storage Module is not set or it doesn\'t exist', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_none_defined' => 'No storage servers are defined, please add one.', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_edit' => 'Edit', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_delete' => 'Delete', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_add_new' => 'Add new server', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_manage_ftp_server' => 'Manage FTP Server', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_hostname' => 'Hostname', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_username' => 'Username', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_password' => 'Password', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_prefix_url' => 'Prefix URL', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_subfolder_path' => 'Subfolder path', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_ssl_secure_connection' => 'SSL Secure Connection', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_status' => 'Status', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_go_back_server_list' => 'Go back to server list', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_the_account' => 'The account', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_was_added' => 'was added', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_add_new_server' => 'Add new server', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_edit_server' => 'Edit server', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_server_edited' => 'The server was edited.', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_server_deleted' => 'The server was deleted.', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_manage_ftp_servers' => 'Manage FTP Servers', // cpg 1.5 gsoc 2008 OVI
+
 );
 
 

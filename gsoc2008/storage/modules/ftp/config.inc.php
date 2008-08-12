@@ -45,7 +45,7 @@ $CONFIG['TABLE_FTP_SERVERS'] = $CONFIG['TABLE_PREFIX'].'ftp_servers';
 $CONFIG['TABLE_FTP_PIC2SERVER'] = $CONFIG['TABLE_PREFIX'].'ftp_pic2server';
 $CONFIG['TABLE_FTP_USER2SERVER'] = $CONFIG['TABLE_PREFIX'].'ftp_user2server';
 
-require($CONFIG['storage_modules_dir']."/".$CONFIG['storage_module_dir']."/http_servers_down.php"); // change to include
+//require($CONFIG['storage_modules_dir']."/".$CONFIG['storage_module_dir']."/http_servers_down.php"); // change to include
 // to be removed require($CONFIG['storage_modules_dir']."/".$CONFIG['storage_module_dir']."/ftp_servers_down.php"); // change to include
 
 ?>

@@ -13,7 +13,7 @@ $config_data['active_storage_module'] = array
 );
 
 foreach($storage_folders as $storage_folder)
-	require($CONFIG['storage_modules_dir']."/".$storage_folder."/admin.inc.php");
+	require($CONFIG['storage_modules_dir']."/".$storage_folder."/admin/admin.inc.php");
 
 function storage_folders()
 {

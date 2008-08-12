@@ -249,7 +249,7 @@ $cat = $superCage->get->getInt('cat');
 //$date = $superCage->get->getInt('cat');
 
 if ($superCage->get->testAlpha('album')) {
-    $album = $superCage->get->getAlpha('album');
+    $album = $superCage->get->getAlnum('album');
 } else {
         $album = $superCage->get->getInt('album');
 }

@@ -17,7 +17,8 @@ $config_data['storage_ftp_module']['storage_rule'] = array
 	'type' => 'select',
 	'default_value' => '2',
 	//'help_link' => 'f=configuration.htm&amp;as=active_storage_module&amp;ae=active_storage_module_end',
-	'options' => storage_rules()
+	'options' => storage_rules(),
+    'end_description' => '&nbsp;&nbsp;(<a href="admin-storage-servers.php?module=ftp">'.$lang_admin_php['storage_servers_manage_ftp_servers'].'</a>)',
 );
 
 function storage_rules()
