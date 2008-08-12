@@ -211,7 +211,9 @@ function process_post_data()
             $del_comments = $superCage->post->getInt('del_comments'.$pid) || $delete;
         }
 
-        $query = "SELECT category, filepath, filename, owner_id FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
+		// OVI
+        //$query = "SELECT category, filepath, filename, owner_id FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
+		$query = "SELECT {$CONFIG['TABLE_PICTURES']}.aid, category, filepath, filename, owner_id, total_filesize FROM {$CONFIG['TABLE_PICTURES']}, {$CONFIG['TABLE_ALBUMS']} WHERE {$CONFIG['TABLE_PICTURES']}.aid = {$CONFIG['TABLE_ALBUMS']}.aid AND pid='$pid'";
         $result = cpg_db_query($query);
 
         if (!mysql_num_rows($result)) {
@@ -286,10 +288,38 @@ function process_post_data()
                 cpg_die(CRITICAL_ERROR, sprintf($lang_errors['directory_ro'], $dir), __FILE__, __LINE__);
             }
 
+			///////// OVI
+			$picture_id = $pid;
+			$owner_id = $pic['owner_id'];
+		 
+			$imageContainer = new FileContainer($picture_id, $owner_id);
+			
+			$imageContainer->original_path = $dir . $file; // check
+			$imageContainer->total_filesize = $pic['total_filesize'];
+			///////// OVI
+
+			/* // OVI
             $files = array ($dir . $file, $dir . $CONFIG['normal_pfx'] . $file, $dir . $CONFIG['orig_pfx'] . $file, $dir . $CONFIG['thumb_pfx'] . $file);
             foreach ($files as $currFile){
                     if (is_file($currFile)) @unlink($currFile);
             }
+			*/
+
+			///////// OVI
+            $files = array ($dir . $file, $dir . $CONFIG['normal_pfx'] . $file, $dir . $CONFIG['orig_pfx'] . $file, $dir . $CONFIG['thumb_pfx'] . $file);
+            foreach ($files as $currFile){
+					if($currFile!=($dir . $file))
+						$imageContainer->thumb_paths[] = $currFile;
+					if (is_file($currFile)) @unlink($currFile);
+            }
+			///////// OVI
+
+			///// OVI
+
+			global $storage;
+			$storage->delete_file($imageContainer);
+			
+			///// OVI
 
             $query = "DELETE FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid' LIMIT 1";
             $result = cpg_db_query($query);

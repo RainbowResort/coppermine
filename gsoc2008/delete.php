@@ -82,7 +82,7 @@ function delete_picture($pid)
     if (GALLERY_ADMIN_MODE) {
     	// OVI
         //$query = "SELECT aid, filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
-		$query = "SELECT aid, filepath, filename, owner_id,total_filesize FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
+		$query = "SELECT aid, filepath, filename, owner_id, total_filesize FROM {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid'";
         $result = cpg_db_query($query);
         if (!mysql_num_rows($result)) cpg_die(CRITICAL_ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
         $pic = mysql_fetch_array($result);

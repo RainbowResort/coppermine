@@ -259,7 +259,7 @@ class storage
 				} // foreach($fileContainer->thumb_paths as $local_file_path)
 
 				$sql_quota = "UPDATE {$this->config['TABLE_SFTP_SERVERS']} SET used=used-{$fileContainer->total_filesize}, free=free+{$fileContainer->total_filesize} WHERE id='{$server['id']}'";
-				echo "sql_quota: ".$sql_quota."<br>\n";
+				//echo "sql_quota: ".$sql_quota."<br>\n";
 				cpg_db_query($sql_quota);
 				
 			} // foreach($servers as $server)
