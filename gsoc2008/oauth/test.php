@@ -51,8 +51,8 @@
 <button type="submit">API Picture List</button>
 <input type="text" name="oauth_token" value="" />
 <input type="hidden" name="function" value="piclist" />
-<input type="hidden" name="aid" value="2" />
-<input type="hidden" name="password" value="secret" />
+
+
 </form>
 
 <form method="POST" action="api_index.php">

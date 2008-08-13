@@ -2082,16 +2082,17 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
                 // Print out XML photo list and exit
                 if (defined('API_CALL')) {
                     echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-                    echo "<api_search>\n";
+                    echo $superCage->post->getAlpha('album') ? "<" . $superCage->post->getAlpha('album') . ">\n" : "<api_search>\n";
                     foreach ($thumb_list as $pic) {
+                        $file = preg_replace('/%7E/', '~', $pic['filename']);
                         echo " <picture id=\"{$pic['pid']}\">\n";
                         echo "  <title>{$pic['title']}</title>\n";
-                        echo "  <file>{$pic['filename']}</file>\n";
+                        echo "  <file>$file</file>\n";
                         echo "  <width>{$pic['pwidth']}</width>\n";
                         echo "  <height>{$pic['pheight']}</height>\n";
                         echo " </picture>\n";                        
                     }
-                    echo "</api_search>\n";
+                    echo $superCage->post->getAlpha('album') ? "</" . $superCage->post->getAlpha('album') . ">" : "</api_search>";
                     exit();
                 }                
                 
@@ -2114,7 +2115,11 @@ function display_thumbnails($album, $cat, $page, $thumbcols, $thumbrows, $displa
                 $date = $superCage->get->keyExists('date') ? cpgValidateDate($superCage->get->getRaw('date')) : null;
                 theme_display_thumbnails($thumb_list, $thumb_count, $album_name, $album, $cat, $page, $total_pages, is_numeric($album), $display_tabs, 'thumb', $date);
         } else {
+            if (defined('API_CALL')) {
+                new OAuthException('No pictures found');
+            } else {
                 theme_no_img_to_display($album_name);
+            }
         }
 }
 
@@ -4560,19 +4565,19 @@ global $CONFIG, $public_albums_list, $user_albums_list;
 	        }
 	        $api_sql .= "category = $catid)";
 	    }
-	    if ($superCage->post->getAlpha('function') == 'piclist' && $aid = $superCage->post->getInt('aid')) { 
+	    if ($superCage->post->getAlpha('function') == 'piclist' && $album = $superCage->post->getInt('album')) {
 	        if ($password = $superCage->post->getEscaped('password')) {
-	            $sql = "SELECT aid FROM " . $CONFIG['TABLE_ALBUMS'] . " WHERE alb_password='$password' AND aid='$aid'";
+	            $sql = "SELECT aid FROM " . $CONFIG['TABLE_ALBUMS'] . " WHERE alb_password='$password' AND aid='$album'";
                     $result = cpg_db_query($sql);
                     if (mysql_num_rows($result)) {
-                        $api_sql2 = "aid = $aid";
+                        $api_sql2 = "aid = $album";
 	            }
 	            else {
 	                throw new OAuthException('Bad album password');
 	            }
 	        }    
 	        else {
-	            $api_sql2 = "aid = $aid";
+	            $api_sql2 = "aid = $album";
 	        }
 	    }
 	}
@@ -4617,7 +4622,7 @@ global $CONFIG, $public_albums_list, $user_albums_list;
 	        $api_sql .= " AND ";
 	    }
 	    if ($api_sql2) {
-	        $api_sql = "aid=$aid AND ";
+	        $api_sql = "aid=$album AND ";
 	    }
 	    
 	    $user_albums = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE " . $api_sql . "category='" . (FIRST_USER_CAT + USER_ID) . "' ORDER BY title");

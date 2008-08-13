@@ -63,6 +63,7 @@ class cpgOAuth extends OAuthServer {
 
     public function access_protected_resource() {
         global $CONFIG, $THEME_DIR, $USER, $CAT_LIST;
+        global  $cpg_udb; // Needed for "lastcomby" meta album in picture list
             try {
                 $result = $this->verify('access');
 
@@ -78,14 +79,22 @@ class cpgOAuth extends OAuthServer {
                         case 'piclist':
                             define('IN_COPPERMINE', true);
                             require 'include/init.inc.php';
-                            pub_user_albums();
-                            upload_form_alb_list('', '');
+                            if ($superCage->post->getAlpha('function') == 'piclist' && $album = $superCage->post->getAlpha('album')) {
+                                $not_allowed = array('random', 'search', 'lastalb');
+                                if (in_array($album, $not_allowed)) {
+                                    new OAuthException('Invalid meta album name');
+                                }
+                                $USER['uid'] = USER_ID;
+                                require 'thumbnails.php';
+                            }
+                            else {
+                                pub_user_albums();
+                                upload_form_alb_list('', '');
+                            }                            
                             break;
                         case 'search':
                             define('IN_COPPERMINE', true);
                             require 'include/init.inc.php';
-                            //echo "Testing";
-                            //
                             require 'thumbnails.php';
                             break;
                         case 'catlist':
