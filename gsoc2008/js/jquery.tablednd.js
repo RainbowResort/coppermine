@@ -1,3 +1,4 @@
+
 //write function to get the table serialize 
 	function getSerialize (){
 	jQuery.tableDnD.currentTable = document.getElementById("album_sort"); // use your table ID obviously
@@ -18,10 +19,14 @@
 	
 // this jquery.tablednd is to drag and drop sort images. 
 	jQuery(document).ready(function() {
+	/**get the lang varivale to js file*/
+		var change_album = js_vars.change_album;
 	/**Keep hold the selected photo object*/
 		var photoSelectedObject = null;
 	/**Keep hold the selected photo color*/
 		var photoselectedColor  = null;
+	/**album changes option (it read that ok or not to change the albums)*/
+		var	albumSelectOption 	= true;
 		
     jQuery("#pic_sort").tableDnD();
 	/** styles to photo list this consider to even TR which apply color #EFEFEF*/
@@ -33,8 +38,10 @@
     //add query to input hidden when drop the pic item..
     	$('#pic_sort').tableDnD({
         	onDrop: function(table, row) {
-        	//call the getSerializePic() funtion to get query
+        /**call the getSerializePic() funtion to get query*/
            $("#pictur_order").val(getSerializePic());
+        /**set to category changes don't select if you have chaged */
+			albumSelectOption = false;	
         }
     });
     
@@ -58,15 +65,30 @@
 		/**sort manually to up wards*/
 			jQuery.tableDnD.sortManually(-1);
 		/**set to category changes don't select if you have chaged */
-			categorySelectOption = false;
+			albumSelectOption = false;
 		});		
 		$("a.photoDown").click(function(){
 		/**sort manually to down wards*/
 			jQuery.tableDnD.sortManually(1);		
 		/**set to category changes don't select if you have chaged */
-			categorySelectOption = false;			
+			albumSelectOption = false;			
 	});
-	
+	/**when user change the album name if user has done some changes to the current album name then let's use's known'*/
+			$("select[name='aid']").change(function(){
+			/**selected vale assigning*/
+				var getSelectedOption = $(this).val();
+				if(!albumSelectOption){
+					if(confirm(change_album)){
+						 window.location.href = ("picmgr.php?aid="+getSelectedOption);
+						return true;
+					}else 
+					/**will not load a page*/
+					return false;
+				}else{
+					/**load a page itself whitout any confrimation alert*/
+					window.location.href = ("picmgr.php?aid="+getSelectedOption);
+				}
+			});	
     //load the form when click the submit button
 	$("#cpgformPic").submit(function () { 
 		$("#pictur_order").val(getSerializePic());
@@ -86,7 +108,13 @@
 
 /** this jquery.tablednd is to drag and drop sort albums.*/ 
 jQuery(document).ready(function() {
-	
+	/**Get messages to the javascipt file*/
+		var confirm_modifs 	=	 js_vars.confirm_modifs; 
+		var confirm_delete	=	 js_vars.confirm_delete;
+		var dontDelete		= js_vars.dontDelete;
+		var category_change	= js_vars.category_change;
+		
+	//	alert (conferm);
 	//varible defining which need to handle the events
 		var object_edit =	null;
 		var event 		=	null;
@@ -192,6 +220,8 @@ jQuery(document).ready(function() {
             currentRows = debugStr;
             compareRows(currentRows,amountOfRows);
            $("#sort_order").val(getSerialize());
+		/**set to category changes don't select if you have chaged */
+			categorySelectOption = false;		
         },
         // Initialise the second table specifying a dragClass and an onDrop function that will display an alert
  		onDragStart: function(table, row) {
@@ -204,11 +234,11 @@ jQuery(document).ready(function() {
 		$("a#deleteEvent").livequery('click', function(){
 			/**if there  isn't any TR object to select then user has to select, if not can't delete'*/
 			 if(!albumObjectSelectedTr){
-				alert("Cannot delect!, You have to select the album");
+				alert(dontDelete);
 				return false;
 			}
 				var getDeleteId = $(albumObjectSelectedTr).attr("id");
-				if(confirm('Are you sure you want to delete this album ? \n All files and comments it contains will be lost !')) {
+				if(confirm(confirm_delete)) {
 					/**get the current row title value*/
 						var getTitleRowDelete =  $("#"+getDeleteId).attr("title");
 					/**get the class which is going to be deleted*/
@@ -239,7 +269,7 @@ jQuery(document).ready(function() {
 	    $("#cpgformAlbum").submit(function () { 
 			var a =	$("input[name='sort_order']").attr("value");
 			//	if(a.length > 0){
-					if(confirm('Are you sure you want to make these modifications ?')) {
+					if(confirm(confirm_modifs)) {
 				return true;
 				}
 		//	}
@@ -351,7 +381,7 @@ jQuery(document).ready(function() {
 			/**selected vale assigning*/
 				var getSelectedOption = $(this).val();
 				if(!categorySelectOption){
-					if(confirm("Don't change the category, your changes will be lost!")){
+					if(confirm(category_change)){
 						 window.location.href = ("albmgr.php?cat="+getSelectedOption);
 						return true;
 					}else 

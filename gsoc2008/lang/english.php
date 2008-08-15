@@ -440,7 +440,7 @@ if (defined('ALBMGR_PHP')) $lang_albmgr_php = array(
   'no_change' => 'You did not make any change !', //js-alert
   'new_album' => 'New album',
   'confirm_delete1' => 'Are you sure you want to delete this album ?', //js-alert
-  'confirm_delete2' => '\nAll files and comments it contains will be lost !', //js-alert
+  'confirm_delete2' => 'All files and comments it contains will be lost !', //js-alert
   'select_first' => 'Select an album first', //js-alert
   'alb_mrg' => 'Album Manager',
   'my_gallery' => '* My gallery *',
@@ -449,6 +449,8 @@ if (defined('ALBMGR_PHP')) $lang_albmgr_php = array(
   'new' => 'New',
   'apply_modifs' => 'Apply modifications',
   'select_category' => 'Select category',
+  'category_change' => 'If you change the category, your changes will be lost!',
+  
 );
 
 // ------------------------------------------------------------------------- //
@@ -1848,6 +1850,7 @@ if (defined('PICMGR_PHP')) $lang_picmgr_php = array(
   'explanation_header' => 'The custom sort order you can specify on this page will only be taken into account if',
   'explanation1' => 'the admin has set the "Default sort order for files" in the config to "Position descending" or "Position ascending" (global setting for all users who haven\'t chosen another sort option individually)',
   'explanation2' => 'the user has chosen "Position descending" or "Position ascending" on the thumbail page (per user setting)',
+  'change_album'	=> 'If you will change the album , your changes will be lost!',
 );
 
 

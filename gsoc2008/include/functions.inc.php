@@ -2231,6 +2231,10 @@ function display_film_strip($album, $cat, $pos,$ajax_call)
        	//print $max_item;
 
        	 $max_item_real = $max_item;
+       	 /**check the thumb_per_page variable valid to query database*/
+       	 if($pic_count < $max_item_real){
+				$max_item_real = $pic_count;
+			}
 		 //pass the max_items to the dispalyimage.js file
 		 set_js_var('max_item',$max_item_real);
        	
@@ -3584,15 +3588,16 @@ EOT;
  * @return
  **/
 
-function cpg_display_help($reference = 'f=index.htm', $width = '500', $height = '200',$title_help='Coppermine-Help') {
-global $CONFIG, $USER;
+function cpg_display_help($reference = 'f=index.htm', $width = '500', $height = '200') {
+global $CONFIG, $USER, $lang_common ;
 if ($reference == '' || $CONFIG['enable_help'] == '0') {return; }
 if ($CONFIG['enable_help'] == '2' && GALLERY_ADMIN_MODE == false) {return; }
 $help_theme = $CONFIG['theme'];
 if (isset($USER['theme'])) {
     $help_theme = $USER['theme'];
-}
-$help_html = "<a class=\"jt\" href='help.php?". $reference."'  rel='help.php?". $reference."' title=".$title_help." ><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\"  /></a>";
+	}
+	$title_help = 	$lang_common['help'];
+	$help_html = "<a class=\"jt\" href='help.php?". $reference."'  rel='help.php?". $reference."' title=".$title_help." ><img src=\"images/help.gif\" width=\"13\" height=\"11\" border=\"0\"  /></a>";
 return $help_html;
 }
 

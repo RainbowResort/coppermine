@@ -79,7 +79,7 @@ p {
 }
 
 ul {
-        margin-left: 5px;
+        margin:0 0 0 5px;
         padding: 0px;
 }
 
@@ -848,3 +848,96 @@ div.social_bookmarks {
 .dtree .clip {
         overflow: hidden;
 }
+
+/**styles for comment box*/
+div.create_format 	{ float:left;border: 1px solid;margin-right: 5px; }
+div#dsrte-color 	{ float: left; display: none;margin: 0; width:300px; }
+td.choose_color 	{ width: 15px; height: 20px;border:1px solid #FFF; }
+
+/** styles for filmstrip */
+div#tape_prev 	{ float: left; margin-top:45px;}
+div#tape_next 	{ float: right; margin-top:-55px;}
+div#film		 		{   overflow:hidden; position:relative; }
+div#film ul.tape li		{  margin: 0 1px 0 1px; float: left; list-style: none; display: inline;  position: relative;}
+div#film ul.tape li a 	{ width:100px;height:100px;float:left;}
+.tDnD_whileDrag 		{ background-color: #0E72A4; color: #FFF; }
+
+td.prve_strip, td.next_strip	{ background: #FFF  ; }
+
+/***keyword suggestion styels*/
+div#suggestionContainer { font-size: 12px; color: #000; }
+#suggestionContainer ul { height : 180px; overflow: auto;   }
+#suggestionContainer ul li	{ margin: 0; padding: 2px 4px; border: 1px solid #ffe594; color:#666; background:#fff9e7; cursor:pointer; list-style: none; }
+#suggestionContainer ul li.jSuggestHover	{ background:#ffeaaa; color:#333; }
+
+/**styles for ablum manager*/
+table#album_sort tr.selected	{ background: #E0ECFF; border: 1px solid #C3D9FF; }
+a#up_click img	 { cursor: pointer; }
+a#down_click img { cursor: pointer; }
+table#album_sort tr  		{ padding:0 5px 0 5px; height:20px;cursor:move;width:100%}
+table#album_sort tr td 		{ padding: 1px; height: 18px; }
+table#album_sort tr.showDragHandle { background: #0E72A4; }
+
+/**styles for photo manager*/
+div#sort 			{  margin:10px; padding:5px 0 5px 50px; color: #000; height:240px; overflow:auto; background:#FFF; width:550px; border:1px solid #0E72A4; }
+table#pic_sort tr 	{ padding:0 5px 0 5px; height:20px;cursor:move;width:100%}
+a.photoUp 			{ cursor: pointer; }
+a.photoDown 		{ cursor: pointer; }
+
+/**suggestion dropdown styles*/
+div#dictionary_message { top: 0;}
+
+/**approval box styles*/
+div.aproval_button 		{ cursor:pointer;padding:1px 0 1px 5px; float:left; margin-left:5px; width:150px; background-image:url(images/button_bg.gif);background-position:center bottom; border:2px solid #CCC;}
+ul.approval_box 		{ display:none; margin:20px 0 0 0; width:163px; position:absolute; }
+ul.approval_box li 		{ padding:5px;float:left;margin: 0 0  0 5px;list-style:none;width:146px;background:#EEE; border:2px solid #CCC;cursor:pointer; }
+
+/**dialog box styles*/
+/*************************************************/
+
+#cluetip-close img 	{ border: 0; }
+#cluetip-title 		{ overflow: hidden; }
+#cluetip-title #cluetip-close {   float: right;   position: relative; }
+#cluetip-inner { font-size: 12px; color: #000;}
+/**
+* #cluetip-waitimage {
+*   width: 43px;
+*   height: 11px;
+*   position: absolute;
+*   background-image: url(images/wait.gif);
+* }
+*/
+.cluetip-arrows { display: none;  position: absolute;  top: 0; left: -15px; height: 22px; width: 15px; background-repeat: no-repeat; background-position: 0 0; }
+#cluetip-extra  { display: none; }
+.cluetip-jtip   { background-color: transparent; }
+.cluetip-jtip #cluetip-outer 	{ position: relative; background-color: #fff; }
+.cluetip-jtip h3#cluetip-title 	{ margin: 0; padding: 5px; font-size: 13px; font-weight: bold; background-color: #D1D7DC; color: #333; }
+.cluetip-jtip #cluetip-inner  	{ padding: 0 5px 5px; display: inline-block; }
+.cluetip-jtip div#cluetip-close { text-align: right; color: #900; }
+
+.clue-right-jtip .cluetip-arrows{ background-image: url(images/cluetip_topright.png); }
+.clue-left-jtip .cluetip-arrows { background-image: url(images/cluetip_arrowright.png); left: 100%; margin-right: -11px; }
+.clue-top-jtip .cluetip-arrows 	{ background-image: url(images/cluetip_arrowdown.gif); top: 100%; left: 50%; margin-left: -11px; height: 11px; width: 22px; }  
+.clue-bottom-jtip .cluetip-arrows { background-image: url(images/cluetip_arrowup.png); top: -11px; left: 50%;  margin-left: -11px;  height: 11px;  width: 22px; }
+
+#cluetip {  border: 5px solid #444 ; }
+/* stupid IE6 HasLayout hack */
+.cluetip-rounded #cluetip-title, .cluetip-rounded #cluetip-inner { zoom: 1; }
+
+/**full size image styles*/
+
+#facebox .b 	{  background-color:#C6D9E9; }
+#facebox 		{  position: absolute;   width: 100%;   top: 0;   left: 0;   z-index: 100;  text-align: left; }
+#facebox td		{     border: none;    padding: 0; }
+#facebox .popup {   position: relative; }
+#facebox table 	{  margin: auto;  border-collapse: collapse; }
+#facebox .body 	{  padding: 10px;   background: #fff;  width: 400px;  color: #000; }
+#facebox .loading 	{   text-align: center; }
+#facebox .image 	{   text-align: center; }
+#facebox img 		{   border: 0; }
+#facebox label 		{     width: 100px; }
+#facebox .footer 	{   margin-top: 10px;   text-align: right; }
+#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br { height: 10px;   width: 10px;   overflow: hidden;   padding: 0; }
+div#facebox .title 	{ width:85%; float: left; }
+.title h3 			{ padding: 5px 0; }
+#jquery-overlay 	{ 	position: absolute; 	top: 0; 	left: 0;	z-index: 90;	width: 100%; }

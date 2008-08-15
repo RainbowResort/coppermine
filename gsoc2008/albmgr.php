@@ -40,7 +40,6 @@ define('ALBMGR_PHP', true);
 require('include/init.inc.php');
 
 js_include('js/jquery.js');
-js_include('js/jquery.cluetip.js');
 js_include('js/jquery.tablednd.js');
 
 if (!(GALLERY_ADMIN_MODE || USER_ADMIN_MODE)) {
@@ -77,9 +76,20 @@ function alb_get_subcat_data($parent, $ident = '')
 			}
 		}
 }
-
+	/**set the message varialble to javascript file*/
+	$confirm_modifs =  $lang_albmgr_php['confirm_modifs'];
+	set_js_var('confirm_modifs', $confirm_modifs) ;
+	/**Albums delete confirem message*/
+	$confirm_delete	 = $lang_albmgr_php['confirm_delete1'] ."\n". $lang_albmgr_php['confirm_delete2'];
+	set_js_var("confirm_delete", $confirm_delete);
+	/**When user try to delete albums without any selections*/
+	$delete_not_selected = $lang_albmgr_php['select_first'];
+	set_js_var('dontDelete', $delete_not_selected);
+	/**when user change the category*/
+	$category_change = $lang_albmgr_php['category_change'];
+	set_js_var('category_change', $category_change);
+	 
 pageheader($lang_albmgr_php['alb_mrg']);
-
 ?>
 <form name="album_menu" id="cpgformAlbum" method="post" action="delete.php?what=albmgr" >
 

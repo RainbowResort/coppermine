@@ -1062,29 +1062,28 @@ $template_image_comments = <<<EOT
                                                 </tr>
                                                 <tr>
                                                 <td width="80%">
-<div id="create_formatting" style="margin-bottom: 5px;float:left;width:100%;">
+				<div id="create_formatting" style="margin-bottom: 5px;float:left;width:100%;">
+						<div class="create_format"><img id="bb_bold{MSG_ID}" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel={MSG_ID} /></div>
+						<div class="create_format"><img id="bb_italic{MSG_ID}" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel={MSG_ID} /></div>
+						<div class="create_format"><img id="bb_underline{MSG_ID}" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel={MSG_ID} /></div>
+						<div class="create_format"><img id="bb_url{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel={MSG_ID} /></div>
+						<div class="create_format"><img id="bb_email{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel={MSG_ID} /></div>
+						<div class="create_format"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color{MSG_ID}').toggle(); return false;" /></div>
 
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_bold{MSG_ID}" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_italic{MSG_ID}" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_underline{MSG_ID}" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel={MSG_ID} /></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_url{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel={MSG_ID} /></div>
-<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_email{MSG_ID}" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel={MSG_ID} /></div>
-
-<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color{MSG_ID}').toggle(); return false;" /></div>
-
-</div><div>
+				</div>
+		<div>
 			<div id="dsrte-color{MSG_ID}" class="rte panel" style="display: none; float:left; width:300px;">
 <table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
 <tbody>
 	<tr>
-		<td class="choose_color" bgcolor="#000"  style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FF0000" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#0000FF" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#00FF00" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FFFF00" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#00FFFF" style= "width: 15px; height: 20px; border: 1px solid #FFF;"  rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#FF00FF" style="width: 15px; height: 20px; border: 1px solid #FFF;" rel={MSG_ID} />
-		<td class="choose_color" bgcolor="#333" style="width: 15px; height: 20px;border: 1px solid #FFF;" rel={MSG_ID} />	</tr>
+		<td class="choose_color" bgcolor="#000" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF0000" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#0000FF" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FF00" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FFFF00" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#00FFFF" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#FF00FF" rel={MSG_ID} />
+		<td class="choose_color" bgcolor="#333" rel={MSG_ID} />	</tr>
 </tbody>
 </table>
 
@@ -1172,30 +1171,31 @@ $template_add_your_comment = <<<EOT
                                 </td>
 <!-- END user_name_input -->
 <!-- BEGIN input_box_smilies -->
-                                <td class="tableb_compact">
-                                                                </td>
-				<td width="100%" class="tableb_compact">
-						<div id="create_formatting" style="margin-bottom: 5px;float:left; width:100%">
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel=""/></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel=""/></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel=""/></div>
-						<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel="" /></div>
-<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel="" /></div>
-<div class="create_format" style="float:left;border: 1px solid;margin-right: 5px"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').toggle(); return false;"  rel="" /></div>
-</div><div>
-			<div id="dsrte-color" class="rte panel" style="float: left; display: none;margin: 0; width:300px;">
-<table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
-<tbody>
-	<tr>
-		<td class="choose_color" bgcolor="#000" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="red" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="blue" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="green" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="yellow" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#00FFFF" rel="" style= "width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#FF00FF"  rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>
-		<td class="choose_color" bgcolor="#333" rel="" style="width: 15px; height: 20px;border:1px solid #FFF;"/>	</tr>
-</tbody>
+
+		<td width="100%" class="tableb_compact">
+			<div id="create_formatting" style="margin-bottom: 5px;float:left; width:100%">
+						<div class="create_format"><img id="bb_bold" class="bb_img" title="" alt="Bold Text" src="images/editor/html_bold.gif" rel=""/></div>
+						<div class="create_format"><img id="bb_italic" class="bb_img" title="" alt="Italic Text" src="images/editor/html_italic.gif" rel=""/></div>
+						<div class="create_format"><img id="bb_underline" class="bb_img" title="" alt="UnderLine Text" src="images/editor/html_underline.gif" rel=""/></div>
+						<div class="create_format"><img id="bb_url" class="bb_img" title="" alt="URL Link" src="images/editor/html_url.gif" rel="" /></div>
+						<div class="create_format"><img id="bb_email" class="bb_img" title="" alt="URL Link" src="images/editor/html_emil.png" rel="" /></div>
+						<div class="create_format"><img id="bb_color" class="bb_img" title="URL Link" alt="URL Link" src="images/editor/html_color.gif" onclick="$('#dsrte-color').toggle(); return false;"  rel="" /></div>
+			</div>
+			<div>
+				<div id="dsrte-color" class="rte panel" >
+	<table cellspacing="1" cellpadding="0" border="0" id="color-table" handled="1">
+	<tbody>
+		<tr>
+			<td class="choose_color" bgcolor="#000" rel=""/>
+			<td class="choose_color" bgcolor="red" rel=""/>
+			<td class="choose_color" bgcolor="blue" rel=""/>
+			<td class="choose_color" bgcolor="green" rel=""/>
+			<td class="choose_color" bgcolor="yellow" rel=""/>
+			<td class="choose_color" bgcolor="#00FFFF" rel=""/>
+			<td class="choose_color" bgcolor="#FF00FF" rel="" />
+			<td class="choose_color" bgcolor="#333" rel=""/>
+		</tr>
+	</tbody>
 </table>
 
 	</div>				
@@ -3343,11 +3343,11 @@ function theme_html_comments($pid){
         if (USER_IS_ADMIN) {
             //display the selector approve/disapprove
             if ($row['approval'] == 'NO') {
-                $pending_approval .= '<div style="float:right;width:20px"><a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"    id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a></div>';
+            $pending_approval .= '<div style="float:right;width:20px"><a  href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=approve" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="approve" class="approves"    id="{MSG_ID}"><img id="image{MSG_ID}" src="images/approve.gif" border="0" alt="" align="middle" /></a></div>';
             } else {
-                $pending_approval .= '<div style="float:right;width:20px"><a   href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="disapprove" class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a></div>';
+               $pending_approval .= '<div style="float:right;width:20px"><a   href="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}&amp;what=disapprove" rel="reviewcom.php?pos=-{PID}&amp;msg_id={MSG_ID}" title="disapprove" class="approves" id="{MSG_ID}" ><img id="image{MSG_ID}" src="images/disapprove.gif" border="0" alt="" align="middle" /></a></div>';
             }
-			$pending_approval .="<div style='float:right;width:170px'><div  class='aproval_button' ><span style='float:left' id='approval_button'>Choose Approval</span><span style='float:right'><img src='images/arrow_down.png' /></span></div><ul class='approval_box'><li class='aproval_event' >Mark as Approval</li><li class='disapproval_event' >Mark as Disapproval</li></ul></div></div>";
+		$pending_approval .="<div style='float:right;width:170px'><div  class='aproval_button' ><span style='float:left' id='approval_button'>Choose Approval</span><span style='float:right'><img src='images/arrow_down.png' /></span></div><ul class='approval_box'><li class='aproval_event' >Mark as Approval</li><li class='disapproval_event' >Mark as Disapproval</li></ul></div></div>";
         } else { // user or guest is logged in - start
             if ($row['approval'] == 'NO') { // the comment is not approved - start
                 if ($user_can_edit) { // the comment comes from the current visitor, display it with a warning that it needs admin approval
@@ -3437,14 +3437,14 @@ function theme_html_comments($pid){
         }
 
 		if ($CONFIG['show_bbcode_help']) {			
-			$captionLabel = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245,'bbcode-help');
+			$captionLabel = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);
 			}
 			
         $params = array('{ADD_YOUR_COMMENT}' => $lang_display_comments['add_your_comment'],
             // Modified Name and comment field
             '{NAME}' => $lang_display_comments['name'],
             '{COMMENT}' => $lang_display_comments['comment'],
-            '{CONFIRM}' => $lang_common['confirm'].'&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_common['captcha_help_title']))).'&amp;t='.urlencode(base64_encode(serialize($lang_common['captcha_help']))),470,245,'BBCODE Help'),
+            '{CONFIRM}' => $lang_common['confirm'].'&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_common['captcha_help_title']))).'&amp;t='.urlencode(base64_encode(serialize($lang_common['captcha_help']))),470,245),
             '{PIC_ID}' => $pid,
             '{USER_NAME}' => $user_name,
             '{MAX_COM_LENGTH}' => $CONFIG['max_com_size'],
@@ -3599,13 +3599,85 @@ function theme_display_fullsize_pic()
 	
 	}
 	
-	print "sameera";
+?>
+	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=<?php echo $CONFIG['charset'] == 'language file' ? $lang_charset : $CONFIG['charset'] ?>" />
+  <title><?php echo $CONFIG['gallery_name'] ?>: <?php echo $lang_fullsize_popup['click_to_close'];
+      ?></title>
+  <style type="text/css">
+    body { margin: 0; padding: 0; background-color: gray; }
+    img { margin:0; padding:0; border:0; }
+    #content { margin:0 auto; padding:0; border:0; }
+    table { border:0; width:<?php echo $row['pwidth'] ?>px; height:<?php echo $row['pheight'] ?>px; border-collapse:collapse}
+    td { vertical-align: middle; text-align:center; }
+  </style>
 
+  <script type="text/javascript" src="scripts.js"></script>
+  </head>
+  <body style="margin:0px; padding:0px; background-color: gray;">
+    <script language="JavaScript" type="text/JavaScript">
+      adjust_popup();
+    </script>
+<?php
+  if ($CONFIG['transparent_overlay'] == 1) {
+?>
+    <table cellpadding="0" cellspacing="0" align="center" style="padding:0px;">
+      <tr>
+<?php
+        echo '<td align="center" valign="middle" background="' . htmlspecialchars($imagedata['path']) . '" ' . $imagedata['geometry'] . ' class="image">';
+        echo '<div id="content">';
+        echo  '<a href="javascript: window.close()" style="border:none"><img src="images/image.gif?id='
+                . floor(rand()*1000+rand())
+                . '&amp;fullsize=yes" '
+                . $imagedata['geometry']
+                . ' alt="'
+                . htmlspecialchars($imagedata['name'])
+                . '" title="'
+                . htmlspecialchars($imagedata['name'])
+                . "\n" . $lang_fullsize_popup['click_to_close']
+                . '" /></a><br />' ."\n";
+?>
+          </div>
+        </td>
+      </tr>
+    </table>
+<?php
+  } else {
+?>
+    <table class="fullsize">
+      <tr>
+        <td>
+          <div id="content">
+              <?php     echo  '<a href="javascript: window.close()"><img src="'
+                . htmlspecialchars($imagedata['path']) . '" '
+                . $imagedata['geometry']
+                . 'alt="'
+                . htmlspecialchars($imagedata['name'])
+                . '" title="'
+                . htmlspecialchars($imagedata['name'])
+                . "\n" . $lang_fullsize_popup['click_to_close']
+                . '" /></a><br />' ."\n";
+               ?>
+          </div>
+        </td>
+      </tr>
+    </table>
+<?php
+  }
+
+?>
+  </body>
+</html>
+<?php
 }
 /******************************************************************************
 ** Section <<<theme_display_fullsize_pic>>> - END
 ******************************************************************************/
 }  //{THEMES}
+
 
 
 if (!function_exists('theme_vanity')) {  //{THEMES}

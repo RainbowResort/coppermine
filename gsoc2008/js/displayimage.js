@@ -595,20 +595,43 @@ function isNumber(test_input){
   	$(document).ready(function(){	
 			var getCurrentDOM = '';
 			var approvalButtonHandel = '';
+			var closeApproval		= false;
 		//click the aproval_button to view event box
 		$('.aproval_button').bind("click", function(){
 				getCurrentDOM = $(this).parents("div");
 				approvalButtonHandel = $(this).next();
+				
 				/**mark the right sign when */
 /**
  * 				var getTitile = $(getCurrentDOM).attr("title");
  * 				if(getTitile=="approve"){
  * 					var a = $(this).next().children("li").eq(0).text();
  * 					alert(a);
- * 				}
- */
+ * 				} */
+/**
+*  
+*  			var _checkMouse = function(e){
+* 			var el = e.target;
+* 			var cal = $('#dp-popup')[0];
+* 						
+* 						while (true){
+* 							if (el == cal) {
+* 								return true;
+* 							} else if (el == document) {
+* 								c._closeCalendar();
+* 								return false;
+* 							} else {
+* 								el = $(el).parent()[0];
+* 							}
+* 						}
+* 					};
+*/
+					
 				$(this).next().toggle();
-		});
+				closeApproval = true;
+		}
+		
+		);
 	/**event handling for approval events*/
 		$('.aproval_event').click(function(){
 				var getResult = '';
@@ -626,6 +649,7 @@ function isNumber(test_input){
 				});
 		/**close the approval box*/
 				approvalButtonHandel.slideUp();
+				closeApproval = false;
 		});
 		
 	/**event handeling for disapproval_event*/
@@ -646,7 +670,10 @@ function isNumber(test_input){
 				});
 	/**close the approval box after executing ajax*/
 				approvalButtonHandel.slideUp();
+				closeApproval = false;
 		});		
+
+			
 }); //end of the approval.js plugin
 
 
