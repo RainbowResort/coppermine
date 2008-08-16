@@ -96,8 +96,8 @@ class storage
 				
 			} // foreach($fileContainer->thumb_paths as $fileContainer)
 
-			// if $this->CONFIG['storage_keep_local_copy'] is set to false, delete the local files
-			if(isset($this->config['storage_keep_local_copy']) && $this->config['storage_keep_local_copy']==false)
+			// if $this->CONFIG['storage_sftp_keep_local_copy'] is set to false, delete the local files
+			if(isset($this->config['storage_sftp_keep_local_copy']) && $this->config['storage_sftp_keep_local_copy']==false)
 				if(sizeof($fileContainer->thumb_paths))
 					foreach($fileContainer->thumb_paths as $local_file_path)
 						if(is_file($local_file_path))
@@ -160,7 +160,7 @@ class storage
 			}
 	    }
 	    
-	    if(isset($this->config['storage_keep_local_copy']) && $this->config['storage_keep_local_copy']==false)
+	    if(isset($this->config['storage_sftp_keep_local_copy']) && $this->config['storage_sftp_keep_local_copy']==false)
     		if(sizeof($fileContainer->original_path))
 		    if(is_file($fileContainer->original_path))
     			@unlink($fileContainer->original_path);
@@ -347,7 +347,7 @@ class storage
 
 		// TODO: Show "Not available if we can't find any server"
 		
-		switch($this->config['storage_pic_url_source'])
+		switch($this->config['storage_sftp_pic_url_source'])
 		{
 			case PIC_URL_SOURCE_LOCAL:
 			{
@@ -410,7 +410,7 @@ class storage
 		//if(!isset($fileContainer->id))
 		//{echo "mumu654<br>\n"; return array();}
 	
-		switch($this->config['storage_rule'])
+		switch($this->config['storage_sftp_rule'])
 		{
 			case MIRROR_TO_ALL:
 			{
@@ -425,9 +425,9 @@ class storage
 			case MIRROR_TO_SOME:
 			{
 				$servers = array();
-				if(!isset($this->config['storage_copies_per_file']))
-					$this->config['storage_copies_per_file'] = 3;
-       				$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				if(!isset($this->config['storage_sftp_copies_per_file']))
+					$this->config['storage_sftp_copies_per_file'] = 3;
+       				$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_sftp_copies_per_file'];
        				$result = cpg_db_query($sql);
        				while ($row = mysql_fetch_assoc($result))
        				    $servers[] = $row;
@@ -442,16 +442,16 @@ class storage
 				if(!isset($fileContainer->owner_id))
 				    cpg_die(ERROR, '$fileContainer->owner_id is not set in MIRROR_USER_SHARDING');
 
-				$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} JOIN {$this->config['TABLE_SFTP_USER2SERVER']} ON {$this->config['TABLE_SFTP_SERVERS']}.id={$this->config['TABLE_SFTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_SFTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_SFTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_SFTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} JOIN {$this->config['TABLE_SFTP_USER2SERVER']} ON {$this->config['TABLE_SFTP_SERVERS']}.id={$this->config['TABLE_SFTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_SFTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_SFTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_SFTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_sftp_copies_per_file'];
 				$result = cpg_db_query($sql);
 
 				if(!mysql_num_rows($result))
 				{
-					$sql = "SELECT id FROM {$this->config['TABLE_SFTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$sql = "SELECT id FROM {$this->config['TABLE_SFTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_sftp_copies_per_file'];
 					$result = cpg_db_query($sql);
        				while($row = mysql_fetch_assoc($result))
 						cpg_db_query("INSERT INTO {$this->config['TABLE_SFTP_USER2SERVER']} SET user_id='{$fileContainer->owner_id}', server_id='{$row[id]}'");
-					$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} JOIN {$this->config['TABLE_SFTP_USER2SERVER']} ON {$this->config['TABLE_SFTP_SERVERS']}.id={$this->config['TABLE_SFTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_SFTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_SFTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_SFTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$sql = "SELECT * FROM {$this->config['TABLE_SFTP_SERVERS']} JOIN {$this->config['TABLE_SFTP_USER2SERVER']} ON {$this->config['TABLE_SFTP_SERVERS']}.id={$this->config['TABLE_SFTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_SFTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_SFTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_SFTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_sftp_copies_per_file'];
 					$result = cpg_db_query($sql);
 				}
 
@@ -471,7 +471,7 @@ class storage
 			}
 			default:
 			{
-				cpg_die(ERROR, "CONFIG 'storage_rule' is set to an unknown value");
+				cpg_die(ERROR, "CONFIG 'storage_sftp_rule' is set to an unknown value");
 				break;
 			}
 		}

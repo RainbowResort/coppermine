@@ -104,8 +104,8 @@ class storage
 				
 			} // foreach($fileContainer->thumb_paths as $fileContainer)
 
-			// if $this->CONFIG['storage_keep_local_copy'] is set to false, delete the local files
-			if(isset($this->config['storage_keep_local_copy']) && $this->config['storage_keep_local_copy']==false)
+			// if $this->CONFIG['storage_ftp_keep_local_copy'] is set to false, delete the local files
+			if(isset($this->config['storage_ftp_keep_local_copy']) && $this->config['storage_ftp_keep_local_copy']==false)
 				if(sizeof($fileContainer->thumb_paths))
 					foreach($fileContainer->thumb_paths as $local_file_path)
 						if(is_file($local_file_path))
@@ -149,7 +149,7 @@ class storage
 			}
 	    }
 	    
-	    if(isset($this->config['storage_keep_local_copy']) && $this->config['storage_keep_local_copy']==false)
+	    if(isset($this->config['storage_ftp_keep_local_copy']) && $this->config['storage_ftp_keep_local_copy']==false)
     		if(sizeof($fileContainer->original_path))
 		    if(is_file($fileContainer->original_path))
     			@unlink($fileContainer->original_path);
@@ -396,7 +396,7 @@ class storage
 
 		// TODO: Show "Not available if we can't find any server"
 		
-		switch($this->config['storage_pic_url_source'])
+		switch($this->config['storage_ftp_pic_url_source'])
 		{
 			case PIC_URL_SOURCE_LOCAL:
 			{
@@ -459,7 +459,7 @@ class storage
 		//if(!isset($fileContainer->id))
 		//{echo "mumu654<br>\n"; return array();}
 	
-		switch($this->config['storage_rule'])
+		switch($this->config['storage_ftp_rule'])
 		{
 			case MIRROR_TO_ALL:
 			{
@@ -474,9 +474,9 @@ class storage
 			case MIRROR_TO_SOME:
 			{
 				$servers = array();
-				if(!isset($this->config['storage_copies_per_file']))
-					$this->config['storage_copies_per_file'] = 3;
-       				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				if(!isset($this->config['storage_ftp_copies_per_file']))
+					$this->config['storage_ftp_copies_per_file'] = 3;
+       				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_ftp_copies_per_file'];
        				$result = cpg_db_query($sql);
        				while ($row = mysql_fetch_assoc($result))
        				    $servers[] = $row;
@@ -491,16 +491,16 @@ class storage
 				if(!isset($fileContainer->owner_id))
 				    cpg_die(ERROR, '$fileContainer->owner_id is not set in MIRROR_USER_SHARDING');
 
-				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+				$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_ftp_copies_per_file'];
 				$result = cpg_db_query($sql);
 
 				if(!mysql_num_rows($result))
 				{
-					$sql = "SELECT id FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$sql = "SELECT id FROM {$this->config['TABLE_FTP_SERVERS']} WHERE status!='inactive' ORDER BY free DESC LIMIT ".$this->config['storage_ftp_copies_per_file'];
 					$result = cpg_db_query($sql);
        				while($row = mysql_fetch_assoc($result))
 						cpg_db_query("INSERT INTO {$this->config['TABLE_FTP_USER2SERVER']} SET user_id='{$fileContainer->owner_id}', server_id='{$row[id]}'");
-					$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_copies_per_file'];
+					$sql = "SELECT * FROM {$this->config['TABLE_FTP_SERVERS']} JOIN {$this->config['TABLE_FTP_USER2SERVER']} ON {$this->config['TABLE_FTP_SERVERS']}.id={$this->config['TABLE_FTP_USER2SERVER']}.server_id WHERE {$this->config['TABLE_FTP_USER2SERVER']}.user_id='{$fileContainer->owner_id}' AND {$this->config['TABLE_FTP_SERVERS']}.status!='inactive' ORDER BY {$this->config['TABLE_FTP_SERVERS']}.free DESC LIMIT ".$this->config['storage_ftp_copies_per_file'];
 					$result = cpg_db_query($sql);
 				}
 
@@ -520,7 +520,7 @@ class storage
 			}
 			default:
 			{
-				cpg_die(ERROR, "CONFIG 'storage_ftp_type' is set to an unknown value");
+				cpg_die(ERROR, "CONFIG 'storage_ftp_rule' is set to an unknown value");
 				break;
 			}
 		}
@@ -559,127 +559,6 @@ class storage
 		}
 		
 		return $this->ftp_chdir_mkdir($conn_id, $folder_elements, ++$levels); // rerun the function for the remaining path, going one more level deep
-	}
-	
-	function check_http_servers()
-	{
-		$SERVERS_DOWN = array();
-		
-		if(sizeof($this->storage_servers))
-		foreach($this->storage_servers as $id => $server)
-		{
-			if(isset($server['prefix_url']))
-			{
-				if(!$this->check_url($server['prefix_url']))
-				{
-					$SERVERS_DOWN[]=$id;
-					echo $id." is NOT connectable<br>\n";
-				}
-				else
-					echo $id." is connectable<br>\n";
-			}
-		}
-		
-		$this->write_http_servers_down_file($SERVERS_DOWN);
-	}
-	
-	function write_http_servers_down_file($HTTP_SERVERS_DOWN)
-	{
-		$HTTP_SERVERS_DOWN_STRING = "";
-		
-		if(sizeof($HTTP_SERVERS_DOWN))
-		{
-			$HTTP_SERVERS_DOWN_STRING = "\"".implode("\",\"", $HTTP_SERVERS_DOWN)."\"";
-		}
-	
-		$http_servers_down_file_contents="<?php\n/* AUTOMATICALLY GENERATED on ".date("r").".\n* Please do not edit unless you really know what you're doing.\n*/\n\$HTTP_SERVERS_DOWN = array(".$HTTP_SERVERS_DOWN_STRING.");\n?>\n";
-		$http_servers_down_filename = $this->config['storage_modules_dir'].'/'.$this->config['storage_module_dir'].'/http_servers_down.php';
-		
-		$fp = fopen($http_servers_down_filename, 'w');
-		if(!$fp)
-			cpg_die(ERROR, 'Could not write in '.$http_servers_down_filename);
-			
-		fwrite($fp, $http_servers_down_file_contents);
-		fclose($fp);
-	}
-	
-	function check_url($url) // should be compatible with PHP 4.3
-	{
-		
-		if(!isset($this->config['timeout_check_http_servers']))
-			$this->config['timeout_check_http_servers']=6;
-	
-		$url_parts = @parse_url($url);
-			
-		if(!$url_parts || !isset($url_parts['host']))
-			return false;
-		
-		if(!isset($url_parts['port']))
-			$url_parts['port']=80;
-				
-		if( !isset($url_parts['path']) || $url_parts['path']=='' )
-			$url_parts['path'] = '/';
-					
-		$fp = fsockopen($url_parts['host'], $url_parts['port'], $errno, $errstr, $this->config['timeout_check_http_servers']);
-	
-		if(!$fp)
-			return false;
-
-		stream_set_timeout($fp, $this->config['timeout_check_http_servers']); // PHP 4.3
-			
-		@fputs($fp, "HEAD ".$url_parts['path']." HTTP/1.1\r\nHost: ".$url_parts['host']."\r\n\r\n");
-		$headers = @fread($fp, 128);
-		fclose ($fp);
-			
-		if(!$headers)
-			return false;
-		else
-			return (bool)substr_count($headers, "HTTP");
-	} // check_url($url)
-	
-	/////// TO BE REMOVED:
-	function check_ftp_servers()
-	{
-		echo "Testing FTP<br>\n";
-
-		$SERVERS_DOWN = array();
-		
-		if(sizeof($this->storage_servers))
-		foreach($this->storage_servers as $id => $server)
-		{
-		
-			$res = $this->get_ftp_connection_id($server, true);
-			if(!$res)
-			{
-				$SERVERS_DOWN[]=$id;
-				echo $id." FTP is NOT connectable<br>\n";
-			}
-			else
-				echo $id." FTP is connectable<br>\n";
-		}
-		
-		$this->close_ftp_connections();
-		$this->write_ftp_servers_down_file($SERVERS_DOWN);
-	}
-	
-	function write_ftp_servers_down_file($FTP_SERVERS_DOWN)
-	{
-		$FTP_SERVERS_DOWN_STRING = "";
-		
-		if(sizeof($FTP_SERVERS_DOWN))
-		{
-			$FTP_SERVERS_DOWN_STRING = "\"".implode("\",\"", $FTP_SERVERS_DOWN)."\"";
-		}
-	
-		$ftp_servers_down_file_contents="<?php\n/* AUTOMATICALLY GENERATED on ".date("r").".\n* Please do not edit unless you really know what you're doing.\n*/\n\$FTP_SERVERS_DOWN = array(".$FTP_SERVERS_DOWN_STRING.");\n?>\n";
-		$ftp_servers_down_filename = $this->config['storage_modules_dir'].'/'.$this->config['storage_module_dir'].'/ftp_servers_down.php';
-		
-		$fp = fopen($ftp_servers_down_filename, 'w');
-		if(!$fp)
-			cpg_die(ERROR, 'Could not write in '.$ftp_servers_down_filename);
-			
-		fwrite($fp, $ftp_servers_down_file_contents);
-		fclose($fp);
 	}
 	
 }

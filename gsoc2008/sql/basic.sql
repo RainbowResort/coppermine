@@ -216,16 +216,28 @@ INSERT INTO CPG_config VALUES ('bridge_enable', '0');
 INSERT INTO CPG_config VALUES ('storage_module', 'local_fs');
 
 # Default: 2 - Mirror each image to some of the FTP storage servers (see copies per file below)
-INSERT INTO CPG_config VALUES ('storage_rule', '2');
+INSERT INTO CPG_config VALUES ('storage_ftp_rule', '2');
 
 # This is used only if storage_rule is not equal to MIRROR_TO_ALL
-INSERT INTO CPG_config VALUES ('storage_copies_per_file', '1');
+INSERT INTO CPG_config VALUES ('storage_ftp_copies_per_file', '1');
 
-# If set to true, copies of all images are stored locally / Default is 1, which means NO
-INSERT INTO CPG_config VALUES ('storage_keep_local_copy', '1');
+# If set to true, copies of all images are stored locally / Default is 0, which means NO
+INSERT INTO CPG_config VALUES ('storage_ftp_keep_local_copy', '0');
 
 # Where to show the images from - default: 2 - Random FTP server that has the image
-INSERT INTO CPG_config VALUES ('storage_pic_url_source', '2');
+INSERT INTO CPG_config VALUES ('storage_ftp_pic_url_source', '2');
+
+# Default: 2 - Mirror each image to some of the SFTP storage servers (see copies per file below)
+INSERT INTO CPG_config VALUES ('storage_sftp_rule', '2');
+
+# This is used only if storage_rule is not equal to MIRROR_TO_ALL
+INSERT INTO CPG_config VALUES ('storage_sftp_copies_per_file', '1');
+
+# If set to true, copies of all images are stored locally / Default is 0, which means NO
+INSERT INTO CPG_config VALUES ('storage_sftp_keep_local_copy', '0');
+
+# Where to show the images from - default: 2 - Random SFTP server that has the image
+INSERT INTO CPG_config VALUES ('storage_sftp_pic_url_source', '2');
 
 # END OVI
 

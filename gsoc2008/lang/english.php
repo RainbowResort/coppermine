@@ -973,10 +973,14 @@ if (defined('ADMIN_PHP')) $lang_admin_php = array(
   'active_storage_module' => 'The active storage module', // cpg 1.5 gsoc 2008 OVI
   'storage_module' => 'Active storage module', // cpg 1.5 gsoc 2008 OVI
   'storage_ftp_module' => 'FTP Storage Module', // cpg 1.5 gsoc 2008 OVI
-  'storage_rule' => 'Storage Rule', // cpg 1.5 gsoc 2008 OVI
-  'storage_copies_per_file' => 'Mirrored copies for each file (including original)', // cpg 1.5 gsoc 2008 OVI
-  'storage_keep_local_copy' => 'Keep a copy of each image on the local server', // cpg 1.5 gsoc 2008 OVI
-  'storage_pic_url_source' => 'Show images from', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_rule' => 'Storage Rule', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_rule' => 'Storage Rule', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_copies_per_file' => 'Mirrored copies for each file (including original)', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_copies_per_file' => 'Mirrored copies for each file (including original)', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_keep_local_copy' => 'Keep a copy of each image on the local server', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_keep_local_copy' => 'Keep a copy of each image on the local server', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_pic_url_source' => 'Show images from', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_pic_url_source' => 'Show images from', // cpg 1.5 gsoc 2008 OVI
 
   'storage_servers_configuration' => 'Storage Servers Configuration', // cpg 1.5 gsoc 2008 OVI
   'storage_servers_admin_ftp_servers' => 'FTP Servers', // cpg 1.5 gsoc 2008 OVI
@@ -1006,6 +1010,31 @@ if (defined('ADMIN_PHP')) $lang_admin_php = array(
   'storage_servers_server_deleted' => 'The server was deleted.', // cpg 1.5 gsoc 2008 OVI
 
   'storage_servers_manage_ftp_servers' => 'Manage FTP Servers', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_manage_sftp_server' => 'Manage SFTP Server', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_admin_sftp_servers' => 'SFTP Servers', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_servers_root_path' => 'Root Path', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_sftp_module' => 'SFTP Storage Module', // cpg 1.5 gsoc 2008 OVI
+  'storage_servers_manage_sftp_servers' => 'Manage SFTP Servers', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_ftp_mirror_each_to_all' => 'Mirror each image to all FTP storage servers', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_mirror_each_to_some' => 'Mirror each image to some of the FTP storage servers (see copies per file below)', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_mirror_sharding' => 'Assign each user automatically to a few FTP storage servers (see copies per file below)', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_sftp_mirror_each_to_all' => 'Mirror each image to all SFTP storage servers', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_mirror_each_to_some' => 'Mirror each image to some of the SFTP storage servers (see copies per file below)', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_mirror_sharding' => 'Assign each user automatically to a few SFTP storage servers (see copies per file below)', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_ftp_pic_source_local' => 'Local server', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_pic_source_random' => 'Random FTP server that has the image', // cpg 1.5 gsoc 2008 OVI
+  'storage_ftp_pic_source_first' => 'First FTP server that has the image', // cpg 1.5 gsoc 2008 OVI
+
+  'storage_sftp_pic_source_local' => 'Local server', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_pic_source_random' => 'Random SFTP server that has the image', // cpg 1.5 gsoc 2008 OVI
+  'storage_sftp_pic_source_first' => 'First SFTP server that has the image', // cpg 1.5 gsoc 2008 OVI
+
 
 );
 
