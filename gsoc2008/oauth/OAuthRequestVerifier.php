@@ -129,15 +129,15 @@ class OAuthRequestVerifier extends OAuthRequest
 //											$this->getParam('oauth_timestamp', true));
 
 			$signature = $this->calculateSignature($secrets['consumer_secret'], $secrets['token_secret'], $token_type);
-			/** Don't require the oauth_signature to be supplied, for now */
-			//$oauth_sig = $this->getParam('oauth_signature');
-			$oauth_sig = $signature;
+			$oauth_sig = $this->getParam('oauth_signature');
+
 			if (	empty($oauth_sig) 
 				||	!$this->verifySignature(	$this->getParam('oauth_signature_method'), 
 												$oauth_sig,
 												$signature))
 			{
-				throw new OAuthException('Verification of signature failed (signature base string was "'.$this->signatureBaseString().'").');
+				throw new OAuthException('Verification of signature failed.');
+				//throw new OAuthException('Verification of signature failed (signature base string was "'.$this->signatureBaseString().'").');
 			}
 			
 			// Check the optional body signature

@@ -4736,37 +4736,25 @@ function upload_form_alb_list($text, $name) {
 	else if ($superCage->post->getAlpha('function') == 'piclist') {
 	    $listArray = array_csort($listArray,'cat','title');     // alphabetically by category name
             echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-            echo '<pic_list>' . "\n";
-            $alb_cat = '';
+            echo "<album"  . $superCage->post->getInt('album') . ">\n";
             foreach ($listArray as $val) {
-                if ($val['cid'] != $alb_cat) {
-                    if ($alb_cat) {
-                        echo " </category>\n";
-                    }
-                    echo ' <category name="' . $val['cat'] . '">' . "\n";
-                    $alb_cat = $val['cid'];
-                }
-                echo '  <album id="' . $val['aid'] . '" title="' . $val['title'] . '">' . "\n";
 
                 // Picture list
                 $result = cpg_db_query("SELECT pid, title, filepath, filename, pwidth, pheight, caption FROM {$CONFIG['TABLE_PICTURES']} WHERE aid = {$val['aid']} AND approved='YES'");
                 while ($row = mysql_fetch_assoc($result)) {
-                    echo '   <picture id="' . $row['pid'] . '">' . "\n";
-                    echo '    <title>' . $row['title'] . '</title>' . "\n";
-                    echo '    <file>' . $row['filepath'] . $row['filename'] . '</file>' . "\n";
-                    echo '    <width>' . $row['pwidth'] . '</width>' . "\n";
-                    echo '    <height>' . $row['pheight'] . '</height>' . "\n";
-                    echo '    <caption>' . $row['caption'] . '</caption>' . "\n";
-                    echo '   </picture>' . "\n";                        
+                    echo ' <picture id="' . $row['pid'] . '">' . "\n";
+                    echo '  <title>' . $row['title'] . '</title>' . "\n";
+                    echo '  <file>' . $row['filepath'] . $row['filename'] . '</file>' . "\n";
+                    echo '  <width>' . $row['pwidth'] . '</width>' . "\n";
+                    echo '  <height>' . $row['pheight'] . '</height>' . "\n";
+                    echo '  <caption>' . $row['caption'] . '</caption>' . "\n";
+                    echo ' </picture>' . "\n";                        
                 }
                 
                 mysql_free_result($result);
-                echo "  </album>\n";
             }
-            if ($alb_cat) {
-                echo " </category>\n";
-            }
-            echo '</pic_list>';
+            
+            echo "</album" . $superCage->post->getInt('album') . ">";
         }
 
 	else {

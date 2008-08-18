@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+<title>API - Coppermine Photo Gallery - Documentation &amp; Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="language"    content="en">
+<meta name="copyright"   content="Coppermine dev team">
+<meta name="description" content="API: a way for external applications to access Coppermine functions.">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="MSSmartTagsPreventParsing" content="true">
+<meta http-equiv="imagetoolbar" content="no">
+<link rel="stylesheet" type="text/css" href="../style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../screen.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../print.css" media="print" />
+<link rel="shortcut icon" href="../favicon.ico" />
+<script src="script.js" type="text/javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+  cpgDocHeader();
+</script>
+<div id="toc">
+<script type="text/javascript">
+  cpgDocToc();
+</script>
+<noscript>
+<a href="toc.htm">Table of Contents</a>
+</noscript>
+</div>
+
+<h1>The Coppermine API</h1>
+<a name="api"></a><h2>Introduction</h2>
+<p>The Coppermine API is a way for external applications to take advantage of Coppermine's functionality.  Applications that &quot;consume&quot; the API can upload photos, retrieve information about the structure of categories and albums, and search the gallery.</p>
+
+<a name="authentication"></a><h2>Authentication with OAuth</h2>
+<p>Coppermine uses the <a href="http://oauth.net" rel="external" class="external">OAuth</a> protocol for API authentication.  This allows applications that consume Coppermine's API to access private data (&quot;protected resources&quot;) without requiring users to provide their login credentials to any application other than the Coppermine gallery from which the data is being retrieved.</p>
+<p>More details of OAuth can be found in its <a href="http://oauth.net/core/1.0/" rel="external" class="external">specification</a>, but the basic structure of Coppermine's implementation of this protocol involves mainly two things: registered consumer applications and OAuth tokens.</p>
+<p><strong>&quot;Consumers&quot;</strong>, applications intending to use the Coppermine API, must first be registered with the Coppermine gallery they will be accessing.</p>
+<p>Three parameters must be provided in order to register a consumer of Coppermine's API in <tt class="code">oauth/register.php</tt>: the name of the person making the request, that individual's email address, and the title of the application.</p>
+<p>When these three pieces of information are successfully submitted, <tt class="code">oauth/register.php</tt> will display the submitted data along with a line displaying a &quot;Consumer key&quot;.  This last bit is crucial: no application can use the Coppermine API without first being registered as a consumer and receiving a consumer key.  Please note that the &quot;consumer secret&quot; is (for now) always an empty string.</p>
+<p><strong>OAuth tokens</strong> are the other key part of authentication for the Coppermine API.  The process of obtaining and using an OAuth token consists of the following five steps: </p>
+<ol>
+<li>The consumer application asks the Coppermine gallery for an unauthorized &quot;request token&quot; via HTTP POST in <tt class="code">oauth/request_token.php</tt>.  This token can be exchanged for an &quot;access token&quot; once it is authorized, and that access token can in turn be used to make API calls.</li>
+<li>If the request is valid, the gallery will reply with an XML document containing the request token.</li>
+<li>The consumer application directs the user to <tt class="code">oauth/authorize.php</tt>, where the <strong>oauth_token</strong> parameter should be supplied via HTTP GET.  For example, <a href="#authentication">http://site.example.com/oauth/authorize.php?oauth_token=1234abcd...</a>.</li>
+<li>The user must next authorize the request token, after logging in to the gallery.</li>
+<li>The user should then return to the consumer application, which can now exchange the authorized request token for an access token using HTTP POST at <tt class="code">oauth/access_token.php</tt>.</li>
+</ol>
+<p>An application in possession of an OAuth access token can make authenticated API calls via HTTP POST at <tt class="code">oauth/api_index.php</tt>.</p>
+
+<a name="oauth_params"></a><h3>OAuth parameters</h3>
+<p>Each API token request or function call must include <strong>6 required parameters</strong>:
+<ul>
+<li><strong>oauth_consumer_key</strong> - the &quot;Consumer key&quot; provided upon registering a consumer application at <tt class="code">oauth/register.php</tt>.</li>
+<li><strong>oauth_timestamp</strong> - the timestamp at which the request is being made: the number of seconds since January 1, 1970 00:00:00 GMT.  Each timestamp must be equal to or greater than previous timestamps used in a particular series of requests.</li>
+<li><strong>oauth_nonce</strong> - a randomly-generated string.  No API request may contain a previously-used timestamp and nonce combination.</li>
+<li><strong>oauth_signature_method</strong> - the method used to generate this request's oauth_signature: &quot;PLAINTEXT&quot; or &quot;HMAC-SHA1&quot;.</li>
+<li><strong>oauth_signature</strong> - a special <a href="http://oauth.net/core/1.0/#signing_process" rel="external" class="external">signature</a> used to verify OAuth requests.  It might be a good idea to use an <a href="http://oauth.net/code/" rel="external" class="external">OAuth library</a> for this part.</li>
+<li><strong>oauth_token</strong> - an OAuth &quot;request token&quot; or &quot;access token&quot;.  Not required when asking for the initial request token.</li>
+</ul>
+
+<h2>Coppermine API Functions</h2>
+<p>Each Coppermine API function has a set of optional and required parameters that can be sent to <tt class="code">oauth/api_index.php</tt> via HTTP POST.  The Coppermine API currently has 5 functions: 
+<ul>
+<li><strong>upload</strong>: upload photos to a Coppermine album</li>
+<li><strong>category list</strong>: get a hierarchical list of the gallery's categories</li>
+<li><strong>album list</strong>: get a list of visible albums</li>
+<li><strong>picture list</strong>: get a list of pictures, either by album id or meta album</li>
+<li><strong>search</strong>: search a gallery for pictures</li>
+</ul>
+
+<a name="function_params"></a><h3>API Function parameters</h3>
+<p>API upload:</p>
+<ul>
+<li><strong>function</strong> - <tt class="code">upload</tt>.  Required.</li>
+<li><strong>event</strong> - must be &quot;picture&quot;.  Required.</li>
+<li><strong>album</strong> - the integer id (&quot;aid&quot;) of the album into which the picture will be uploaded.  The user associated with the access token used in this request must be allowed to upload to this album.  Required.</li>
+<li><strong>userpicture</strong> - the file to be uploaded.  Required.</li>
+<li><strong>title</strong> - the title of the uploaded image.  Optional.</li>
+<li><strong>Other parameters</strong>: caption, keywords, user1, user2, user3, user4.  Optional.</li>
+</ul>
+
+<p>API category list:</p>
+<ul>
+<li><strong>function</strong> - <tt class="code">catlist</tt>.  Required.</li>
+<li><strong>catid</strong> - the integer id (&quot;cid&quot;) of the parent category whose children will be listed.  Defaults to &quot;0&quot;.  Optional.</li>
+</ul>
+
+<p>API album list:</p>
+<ul>
+<li><strong>function</strong> - <tt class="code">alblist</tt>.  Required.</li>
+<li><strong>cat</strong> - the integer id (&quot;cid&quot;) of the category that will have its albums displayed. Defaults to returning all visible albums.  Optional.</li>
+</ul>
+
+<p>API picture list:</p>
+<ul>
+<li><strong>function</strong> - <tt class="code">piclist</tt>.  Required.</li>
+<li><strong>album</strong> - The album of pictures to be displayed: either a meta album such as &quot;lastcom&quot; and &quot;topn&quot;, or an &quot;aid&quot;.  Required.</li>
+<li><strong>password</strong> - The password for the selected album, if necessary.  Optional.</li> 
+</ul>
+
+<p>API search:</p>
+<ul>
+<li><strong>function</strong> - <tt class="code">search</tt>.  Required.</li>
+<li><strong>search</strong> - the pattern(s) to be searched for.  Defaults to an empty string.  Optional.</li>
+<li><strong>type</strong> - the type of search that the terms provided will be treated as: &quot;OR&quot;, &quot;AND&quot;, or &quot;regex&quot;.  Defaults to &quot;OR&quot;.  Optional.</li>
+<li><strong>Other parameters</strong> - elements to search: title, caption, keywords, owner_name, filename, pic_raw_ip, pic_hdr_ip, user1, user2, user3, user4.  Defaults to filename, keyword, caption, and title.  Optional.</li>
+</ul>

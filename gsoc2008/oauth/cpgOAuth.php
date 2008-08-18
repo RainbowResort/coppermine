@@ -49,15 +49,14 @@ if ($token) {
  * Object to process OAuth requests for Coppermine
  */
 class cpgOAuth extends OAuthServer {
-    function __construct($consumer_key, $nonce, $timestamp, $signature_method, $token) {
-        // , $signature, $token) {
+    function __construct($consumer_key, $nonce, $timestamp, $signature_method, $signature, $token) {
+        
+        $this->setParam('oauth_token', $token, true);
         $this->setParam('oauth_consumer_key', $consumer_key, true);
         $this->setParam('oauth_nonce', $nonce, true);		
         $this->setParam('oauth_timestamp', $timestamp, true);
-        $this->setParam('oauth_signature_method', $signature_method, true);		
-        //$this->setParam('oauth_signature', $signature, true);
-        $this->setParam('oauth_token', $token, true);
-
+        $this->setParam('oauth_signature_method', $signature_method, true);
+        $this->setParam('oauth_signature', $signature, true);
         parent::__construct();
     }
 
@@ -75,22 +74,30 @@ class cpgOAuth extends OAuthServer {
                         case 'upload':
                             require 'db_input.php';
                             break;
-                        case 'alblist': // Same functions for alblist and piclist                           
+                        case 'alblist':
+                            define('IN_COPPERMINE', true);
+                            require 'include/init.inc.php';
+                            pub_user_albums();
+                            upload_form_alb_list('', '');
+                            break;                           
                         case 'piclist':
                             define('IN_COPPERMINE', true);
                             require 'include/init.inc.php';
-                            if ($superCage->post->getAlpha('function') == 'piclist' && $album = $superCage->post->getAlpha('album')) {
-                                $not_allowed = array('random', 'search', 'lastalb');
-                                if (in_array($album, $not_allowed)) {
-                                    new OAuthException('Invalid meta album name');
+                            if ($superCage->post->getInt('album')) {
+                                pub_user_albums();
+                                upload_form_alb_list('', '');
+                            }                            
+                            else if ($album = $superCage->post->getAlpha('album')) {
+                                $allowed = array('lastcom', 'lastcomby', 'lastup', 'lastupby', 'topn', 'toprated', 'lasthits');                                 
+                                if (!in_array($album, $allowed)) {
+                                    new OAuthException("Valid meta album names for this function are: 'lastcom', 'lastcomby', 'lastup', 'lastupby', 'topn', 'toprated', and 'lasthits'");
                                 }
                                 $USER['uid'] = USER_ID;
                                 require 'thumbnails.php';
                             }
-                            else {
-                                pub_user_albums();
-                                upload_form_alb_list('', '');
-                            }                            
+                            else { // No album provided
+                                new OAuthException('No album provided via HTTP POST');
+                            }
                             break;
                         case 'search':
                             define('IN_COPPERMINE', true);

@@ -785,8 +785,9 @@ class OAuthStoreMySQL
 		}
 		else
 		{
-			$consumer_key	= $this->generateKey(true);
-			$consumer_secret= $this->generateKey();
+			$consumer_key	  = $this->generateKey(true);
+//			$consumer_secret= $this->generateKey();
+                        $consumer_secret = ''; // Still need to find a way to tell the consumer secret to the consumer in a secure manner. {daorange}
 
 			$this->query('
 				INSERT INTO ' . $CONFIG['TABLE_PREFIX'] . 'oauth_registry

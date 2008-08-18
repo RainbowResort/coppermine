@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-08-17 [A] API documentation, enabled oauth_signature checking, removed oauth/test.php, various API function tweaks {daorange}
 2008-08-16 [A] Wrote the servers admin for the SFTP storage module (Click Config > SFTP Storage Module > Manage SFTP servers ) {zmarty}
 2008-08-16 [M] Some code cleanup, renaming of config variables {zmarty}
 2008-08-16 [A] The descriptions of config options in the FTP/SFTP admin are now taken from the lang file {zmarty}
