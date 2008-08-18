@@ -195,10 +195,10 @@ if (is_numeric($album)) {
 
 if (defined('API_CALL')) {    
     if ($superCage->post->getAlpha('function') == 'search') {
-        display_thumbnails('search', 0, 1, 5, 3, false);
+        display_thumbnails('search', 0, 1, 4, 3, false);
     }
     else if ($superCage->post->getAlpha('function') == 'piclist') {
-        display_thumbnails($superCage->post->getAlpha('album'), 0, 1, 5, 2, false);
+        display_thumbnails($superCage->post->getAlpha('album'), 0, 1, 4, 3, false);
     }
     else {
         new OAuthException('Unknown API function'); 

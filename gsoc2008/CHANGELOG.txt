@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-08-18 [A] Anonymous API access seems to work, added update SQL for OAuth tables {daorange} 
 2008-08-17 [A] API documentation, enabled oauth_signature checking, removed oauth/test.php, various API function tweaks {daorange}
 2008-08-16 [A] Wrote the servers admin for the SFTP storage module (Click Config > SFTP Storage Module > Manage SFTP servers ) {zmarty}
 2008-08-16 [M] Some code cleanup, renaming of config variables {zmarty}
@@ -44,8 +45,8 @@ Changelog
 2008-07-30 [A] Coded a way for storage module to register config tabs for admin.php {zmarty}
 2008-07-26 [A] The active storage module can be configured in admin.php {zmarty}
 2008-07-22 [A] Files can now be renamed when using the FTP module + bugfixes {zmarty}
-2008-07-16 [B] Removed useless echo of "pzida" that someone (probably me) accidentally put in index.php
-2008-07-16 [A] Beginnings of the API album list function
+2008-07-16 [B] Removed useless echo of "pzida" that someone (probably me) accidentally put in index.php {daorange}
+2008-07-16 [A] Beginnings of the API album list function {daorange}
 2008-07-10 [B] Fixed API upload permissions - different user groups now respected {daorange}
 2008-07-06 [B] Fixed a general Coppermine bug that prevented editing images containing a tilda ~ {zmarty}
 2008-07-06 [B] Fixed the loading of images in pic_editor.php when the filename contains a tilda ~ {zmarty}

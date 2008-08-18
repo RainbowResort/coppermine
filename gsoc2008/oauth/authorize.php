@@ -9,11 +9,6 @@ require_once 'include/init.inc.php';
 $token = $superCage->get->getAlnum('oauth_token');
 $authorized = $superCage->get->getAlnum('authorized');
 
-if (!USER_ID) {
-    echo 'Please <a href="../login.php?referer=oauth/authorize.php?oauth_token=' . $token . '">login</a> to your user account.';
-    exit();
-}
-
 if ($token == '') {
     throw new OAuthException('No "oauth_token" provided via HTTP GET.');
 }
@@ -35,8 +30,16 @@ else if ($authorized == 'no') {
 else {
     $store = OAuthStore::instance();
     $consumer = $store->getConsumerInfo($rs['consumer_id']);
-    print 'Would you like to allow "' . $consumer[0]['application_title'] . '" to access your photos from this site?  This permission will only be granted for 24 hours.';
-    print '<br /><br />';
+    
+    if (!USER_ID) {
+        print 'Please <a href="../login.php?referer=oauth/authorize.php?oauth_token=' . $token . '">login</a> to your user account.<br />';
+        print 'Access this gallery anonymously with the application "' . $consumer[0]['application_title'] . '"?';
+        print '<br /><br />';
+    }
+    else {
+        print 'Would you like to allow "' . $consumer[0]['application_title'] . '" to access your photos from this site?';
+        print '<br /><br />';
+    }
 
     print '<form method="get" action="authorize.php">';
     print '<input type="hidden" name="oauth_token" id="oauth_token" value="' . $token . '" />';

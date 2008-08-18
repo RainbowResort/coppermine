@@ -4598,7 +4598,12 @@ global $CONFIG, $public_albums_list, $user_albums_list;
 	    if ($api_sql2) {
 	        $api_sql2 = " OR " . $api_sql2 . " AND alb_password = '$password'";
 	    }
-	    $public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."){$api_sql2})" . $api_sql);
+	    if (defined('API_CALL')) {
+	        $public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND ((visibility = '0' OR visibility IN ".USER_GROUP_SET.") OR (owner=".USER_ID."){$api_sql2})" . $api_sql);
+	    }
+	    else {
+	        $public_albums = cpg_db_query("SELECT aid, title, cid, name FROM {$CONFIG['TABLE_ALBUMS']} INNER JOIN {$CONFIG['TABLE_CATEGORIES']} ON cid = category WHERE category < " . FIRST_USER_CAT . " AND (uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID.")");
+	    }
 	    //select albums that don't belong to a category
 	    $public_albums_no_cat = cpg_db_query("SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category = 0 AND ((uploads='YES' AND (visibility = '0' OR visibility IN ".USER_GROUP_SET.")) OR (owner=".USER_ID."){$api_sql2})");   
 	}
