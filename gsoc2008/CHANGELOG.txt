@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2008-08-20 [A] Added a step in the install process where the user can select the active Storage Module. {zmarty} 
 2008-08-18 [A] Anonymous API access seems to work, added update SQL for OAuth tables {daorange} 
 2008-08-17 [A] API documentation, enabled oauth_signature checking, removed oauth/test.php, various API function tweaks {daorange}
 2008-08-16 [A] Wrote the servers admin for the SFTP storage module (Click Config > SFTP Storage Module > Manage SFTP servers ) {zmarty}

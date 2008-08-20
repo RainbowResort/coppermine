@@ -51,7 +51,7 @@ if($superCage->post->keyExists('update_check_connection')) $step = 6;
 if($superCage->post->keyExists('update_create_db')) $step = 7;
 
 // if installation is done, only show last page
-if(isset($install->config['install_finished'])) $step = 10;
+if(isset($install->config['install_finished'])) $step = 11;
 
 
 $install->setTmpConfig('steps_done', $step, true);
@@ -352,7 +352,9 @@ switch($step) {
 			// create admin
 			if($install->createAdmin()) {
 				// add finished flag to config
-				$install->setTmpConfig('install_finished', 'done');
+				//$install->setTmpConfig('install_finished', 'done'); // OVI
+				$install->setTmpConfig('admin_account_created', 'done');
+				$install->setTmpConfig('step', '10'); // OVI
 				// redirect to last page
 				header('Location: install.php?step=' . ($step + 1));
 				exit;
@@ -368,7 +370,42 @@ switch($step) {
 		html_footer();
 		break;
 
-	case 10:	// Finally check if everything is set up properly and tell the user so
+
+// OVI
+
+	case 10:		// Ask for storage module
+		$install->page_title = $install->language['title_storage_module'];
+
+		if($superCage->post->keyExists('storage_module'))
+		{
+			$install->setTmpConfig('storage_module', $superCage->post->getRaw('storage_module'));
+		}
+
+		if(isset($install->config['storage_module']) && !isset($install->config['install_finished']))
+		{
+			// set active storage module
+			if($install->setStorageModule())
+			{
+				// add finished flag to config
+				$install->setTmpConfig('install_finished', 'done');
+				// set step
+				$install->setTmpConfig('step', '11');
+				// redirect to last page
+				header('Location: install.php?step=' . ($step + 1));
+				exit;
+			}
+		}
+		html_header();
+		if($install->error != '') {
+			html_error();
+		} else {
+			if(isset($install->config['storage_module'])) $install->setTmpConfig('step', '11');
+		}
+		html_storage_module();
+		html_footer();
+		break;
+
+	case 11:	// Finally check if everything is set up properly and tell the user so
 		// write real config file
 		$install->writeConfig();
 		
@@ -453,7 +490,7 @@ function html_stepper() {
 	$tpl_step_done = '<td class="stepper_d" onMouseOver="this.className=\'stepper_do\'" onMouseOut="this.className=\'stepper_d\'" onClick="document.location=\'install.php?step=%s\'"><a href="install.php?step=%s" title="Step: %s">%s</a></td>';
 	$tpl_step_current = '<td class="stepper_c"><span title="Step: %s">%s</span></td>';
 	$tpl_step_notyet = '<td class="stepper_n"><span title="Step: %s">%s</span></td>';
-	for($i = 1; $i < 11; $i++) {
+	for($i = 1; $i < 12; $i++) {
 		if($i == $step) {
 			$stepper .= sprintf($tpl_step_current, $i, $i);
 		} elseif(is_array($install->config['steps_done']) && in_array($i, $install->config['steps_done'])) {
@@ -781,7 +818,7 @@ function html_admin() {
          </tr>
 		 <tr>
 		  <td colspan="2" align="center" class="tableh2">
-            <input type="submit" value="<?php echo $install->language['last_step'] ?>" /><br /><br />
+            <input type="submit" value="<?php echo $install->language['continue'] ?>" /><br /><br />
           </td>
          </tr>
 		</table>
@@ -789,6 +826,56 @@ function html_admin() {
 <?php
 }
 
+/* html_storage_module()
+ * 
+ * prints the page where the user selects the storage module
+ */
+function html_storage_module() {
+	global $install, $step;
+?>
+      <form action="install.php?step=<?php echo $step; ?>" name="cpgform" id="cpgform" method="post" style="margin:0px;padding:0px">
+        <table width="100%" border="0" cellpadding="0" cellspacing="1" class="maintable">
+         <tr>
+          <td class="tableb" colspan="2">
+		  <?php echo $install->language['sect_storage_module']; ?><br /><br />
+		  </td>
+         </tr>
+		 <tr>
+          <td colspan="2">&nbsp;</td>
+         </tr>
+		 <tr>
+          <td align="right"><?php echo $install->language['active_storage_module']; ?></td>
+		  <td>
+				<select name="storage_module">
+					<?PHP
+						$install = new CPGInstall();
+						$storage_modules = $install->getStorageModules();
+						$default_storage_module = $install->getDefaultStorageModule();
+						foreach($storage_modules as $storage_module)
+						{
+							echo "<option value='".$storage_module."'";
+							if($storage_module == $default_storage_module)
+								echo " selected";
+							echo ">".$storage_module."</option>\n";
+						}
+					?>
+				</select>
+         </tr>
+          <tr>
+          <td colspan="2" align="center"><?PHP echo $install->language['active_storage_module_extrainfo']; ?></td>
+         </tr>
+		 <tr>
+		 <td colspan="2">&nbsp;</td>
+         </tr>
+		 <tr>
+		  <td colspan="2" align="center" class="tableh2">
+            <input type="submit" value="<?php echo $install->language['last_step'] ?>" /><br /><br />
+          </td>
+         </tr>
+		</table>
+	  </form>	
+<?php
+}
 
 /* html_finish()
  * 
@@ -1573,6 +1660,61 @@ class CPGInstall{
 		return true;
 	}
 	
+	/*
+	* setStorageModule
+	*
+	* Sets the active Storage module.
+	*
+	* @return bool
+	*/
+	function setStorageModule()
+	{
+		if(!isset($this->config['storage_module']))
+			return false;
+
+		if(!$this->checkSqlConnection())
+		{
+			return false;
+		}
+
+		$query = "UPDATE ".$this->config['db_prefix']."config SET value='".mysql_real_escape_string($this->config['storage_module'])."' WHERE name='storage_module'";
+
+		if(!mysql_query($query, $this->mysql_connection))
+			return false;
+
+		return true;
+	}
+
+	/*
+	* getStorageModules()
+	*
+	* Returns an array with the available storage modules.
+	*
+	* @return bool
+	*/
+	function getStorageModules()
+	{
+		$storage_modules_dir = "storage/modules";
+		$storage_modules = array();
+		$dir = opendir($storage_modules_dir);
+		while ($file = readdir($dir))
+			if(is_dir($storage_modules_dir."/".$file) && $file[0]!=".")
+				$storage_modules[] = $file;
+		natcasesort($storage_modules);
+		return $storage_modules;
+	}
+
+	/*
+	* getDefaultStorageModule()
+	*
+	* Returns the name of the default storage module.
+	*
+	* @return bool
+	*/
+	function getDefaultStorageModule()
+	{
+		return "local_fs";
+	}
 	
 	/*
 	* checkSillySafeMode()
