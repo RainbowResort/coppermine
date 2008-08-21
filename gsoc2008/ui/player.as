@@ -38,19 +38,19 @@ public class player extends MovieClip{
 			this.stage.align = StageAlign.TOP_LEFT;
 			//this.stage.addEventListener(Event.RESIZE, stageResizeHandler, false, 0, true);
 		}
-		
 			grid = new picGrid(0,0,800,500);
 			grid.x = 200;
-			grid.y = 10;
+			grid.y = 5;
 			addChild(grid);
 			
 			
 			myTree = new albumListing(200,this.height);
 			myTree.x=0;
-			myTree.y=10;
+			myTree.y=5;
 			addChild(myTree);
 			myTree.attach(grid);
 		
-}
+		}
+		
 }
 }
