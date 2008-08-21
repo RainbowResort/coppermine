@@ -34,6 +34,7 @@ package gui
 	import fl.controls.Label;
 	import fl.controls.Button;
 	import flash.display.Shape;
+	import flash.filters.BlurFilter;
 
 /*
 Prepares and previews the image
@@ -62,7 +63,13 @@ public class previewBox extends Sprite
 		var caseID:Number;
 		var gridslider:Slider;// = new Slider();
 		var	slider_label:Label;
-		
+		var sliderX:Slider;// = new Slider();
+		var	sliderX_label:Label;
+		var sliderY:Slider;
+		var	sliderY_label:Label;
+		var Quantity:Slider;
+		var	Quantity_label:Label;
+
 		//CROP Variables
 		var crop_down:Boolean = false;
 		var factor ;
@@ -83,7 +90,7 @@ public class previewBox extends Sprite
 
 		//draws a preview box of a given height and width
 		public function previewBox(heightParm:int ,widthParm:int)
-		{	trace("this point");
+		{	trace("Preview Box Drawn");
 						
 			this.graphics.beginFill(0x000000);
             this.graphics.drawRect(0, 0, widthParm, heightParm);
@@ -96,7 +103,7 @@ public class previewBox extends Sprite
 			
 		}
 		
-		
+		// SHARPEN //
 				
 		// Applies the sharpness effect to the preview images
 		public function draw_sharpen(){
@@ -159,9 +166,7 @@ public class previewBox extends Sprite
                            7, 0, 7,
                            7, 7, 7]);
 			for (var i:int = 0 ; i < bitmaps_preview.length - 1  ; i++)
-			{
-				
-				applyFilter(bitmaps_preview[i].bitmap.bitmapData,bitmaps_preview[bitmaps_preview.length - 1].bitmap.bitmapData, matrices[i]);
+			{	applyFilter(bitmaps_preview[i].bitmap.bitmapData,bitmaps_preview[bitmaps_preview.length - 1].bitmap.bitmapData, matrices[i]);
 				bitmaps_preview[i].effectValue.push(matrices[i]);
 				bitmaps_preview[i].addEventListener(MouseEvent.CLICK,apply_brighten,false, 0, true);
 				bitmaps_preview[i].buttonMode = true;
@@ -176,6 +181,9 @@ public class previewBox extends Sprite
 			this.parent.updatePreview(this.parent.effectBMAP,true);
 		
 		}
+		
+		// BRIGHTNESS SLIDER
+		
 		
 		public function draw_brightnessSlider():void{
 			slider = new Slider();			
@@ -210,7 +218,7 @@ public class previewBox extends Sprite
 			this.parent.updatePreview(this.parent.effectBMAP,true);
 		}
 		
-		
+		// POP COLORS //
 			
 		public function draw_popColors(){
 			
@@ -231,9 +239,7 @@ public class previewBox extends Sprite
 			matrices.push(mat);
 			
 			for (var i:int = 0 ; i < bitmaps_preview.length - 1  ; i++)
-			{
-				
-				apply_color_effect(bitmaps_preview[i].bitmap.bitmapData,bitmaps_preview[bitmaps_preview.length - 1].bitmap.BitmapData, matrices[i]);
+			{	apply_color_effect(bitmaps_preview[i].bitmap.bitmapData,bitmaps_preview[bitmaps_preview.length - 1].bitmap.bitmapData, matrices[i]);
 				bitmaps_preview[i].effectValue.push(matrices[i]);
 				bitmaps_preview[i].addEventListener(MouseEvent.CLICK,apply_popcolors,false, 0, true);
 				bitmaps_preview[i].buttonMode = true;
@@ -242,10 +248,14 @@ public class previewBox extends Sprite
 		}
 		
 		private function apply_popcolors(e:MouseEvent):void{			
-			apply_color_effect(this.parent.effectBMAP,this.parent.finalBMAP,e.target.effectValue.pop());
+			var copy =	e.target.effectValue.pop(); // for subsequent calls to the function
+			apply_color_effect(this.parent.effectBMAP,this.parent.finalBMAP,copy);
+			e.target.effectValue.push(copy);
 			this.parent.updatePreview(this.parent.effectBMAP,true);
 			this.parent.effect_applied = true;
 		}
+		
+		// APPLY HUE //
 		
 		public function draw_hue(){
 			slider = new Slider();			
@@ -280,6 +290,7 @@ public class previewBox extends Sprite
 			this.parent.effect_applied = true;
 		}
 		
+		// SATURATION //
 		
 		public function draw_saturation():void{
 			slider = new Slider();			
@@ -314,7 +325,7 @@ public class previewBox extends Sprite
 			this.parent.effect_applied = true;
 		}
 		
-		
+		// --  CONTRAST  -- //
 		
 		public function draw_contrast():void{
 			slider = new Slider();			
@@ -349,6 +360,9 @@ public class previewBox extends Sprite
 			this.parent.effect_applied = true;
 		}
 						
+						
+		// ROTATE //						
+		
 		public function draw_RotatePanel():void{
 			var rotRT:Button = new Button();
 			rotRT.label = "Right -->" 
@@ -369,8 +383,8 @@ public class previewBox extends Sprite
 			var matrix:Matrix = new Matrix();
 			var trans = new Matrix(); 
 			matrix.rotate( Math.PI / 2);
-			var transX = this.parent.finalBMAP.height; //100 ; //this.parent.previewImg.bitmapData.height;
-			var transY =0;//this.parent.previewImg.bitmapData.width;
+			var transX = this.parent.finalBMAP.height; 
+			var transY =0;
 			trans.translate(transX, transY);
 			matrix.concat(trans);
 			trace("this point");
@@ -395,7 +409,7 @@ public class previewBox extends Sprite
 			var matrix:Matrix = new Matrix();
 			var trans = new Matrix(); 
 			matrix.rotate(- Math.PI / 2);
-			var transX = 0 ; //- this.parent.finalBMAP.height; //100 ; //this.parent.previewImg.bitmapData.height;
+			var transX = 0 ;
 			var transY = this.parent.previewImg.bitmapData.width;
 			trans.translate(transX, transY);
 			matrix.concat(trans);
@@ -417,7 +431,6 @@ public class previewBox extends Sprite
 	
 	// --- CROP ---//
 		public function draw_crop(){
-
 			var crop_but:Button = new Button;
 			var crop_reset_but:Button = new Button;
 			
@@ -437,9 +450,7 @@ public class previewBox extends Sprite
 			
 			var img_width:int;
 			var img_height:int;
-			
-			
-			
+
 			if ( this.parent.finalBMAP.width > this.parent.finalBMAP.height) // landscape
 			{
 				img_width = this.parent.finalBMAP.width * (450 / this.parent.finalBMAP.width  );
@@ -461,7 +472,7 @@ public class previewBox extends Sprite
 				y = 0;
 				width = img_width;
 				height = img_height;
-			}
+			} 
 			
 			var crop_box:Sprite = new Sprite();
 			crop_box.name = "CROP_BOX";
@@ -485,18 +496,15 @@ public class previewBox extends Sprite
 			}
 	
 	
-	
-		
 	private function rectStartingPoint(m:MouseEvent):void
-		{
+		{	
 			crop_down = true;
 			ltx = mouseX;
 			lty = mouseY;
 			trace(m.target.name);
 		}
 
-		private function rectDraw(m:MouseEvent):void
-		{trace (" down ? " + crop_down);
+	private function rectDraw(m:MouseEvent):void {
 		if(crop_down == true){
 			m.updateAfterEvent();
 			rtx = mouseX;
@@ -532,7 +540,6 @@ public class previewBox extends Sprite
             button.move ( rtx - button.width - 10,rty - button.height - 10 );
             button.label = "Copy Area";
             addChild(button);
-
 			button.addEventListener(MouseEvent.CLICK, copyImage);
 
 		}
@@ -542,13 +549,132 @@ public class previewBox extends Sprite
 			trace (ltx, lty, rtx - ltx, rty - lty);
 		}
 	
-	
+		//---- BLUR -----//
+		
+		public function draw_blur():void{
+			trace("BLUR CALLED");
+			
+			sliderX = new Slider();			
+			sliderX.maximum = 255;
+			sliderX.minimum = 0;
+			sliderX.snapInterval = 1;
+			sliderX.liveDragging = true;
+			sliderX.x = 100;
+			sliderX.y = 20 ;
+			sliderX.height = 60;
+			sliderX.width = this.width - 150;
+			sliderX.addEventListener(SliderEvent.CHANGE, apply_blur);
+			sliderX.value = 0;
+			sliderX.name = "X";
+			addChild(sliderX);
+			
+			sliderX_label = new Label();
+			sliderX_label.htmlText = "<font color='#FFFFFF' size='12px'>Horizontal: " + String(sliderX.value) + "</font>" ;
+			sliderX_label.x = 20;
+			sliderX_label.y = 20;
+			sliderX_label.alpha = 1;
+			sliderX_label.width = 80;
+			sliderX_label.wordWrap = true;
+			this.addChild(sliderX_label);
+			
+			sliderY = new Slider();			
+			sliderY.maximum = 255;
+			sliderY.minimum = 0;
+			sliderY.snapInterval = 1;
+			sliderY.liveDragging = true;
+			sliderY.x = 100;
+			sliderY.y = 40 ;
+			sliderY.height = 60;
+			sliderY.width = this.width - 150;
+			sliderY.addEventListener(SliderEvent.CHANGE, apply_blur);
+			sliderY.value = 0;
+			sliderX.name = "Y";
+			addChild(sliderY);
+			
+			sliderY_label = new Label();
+			sliderY_label.htmlText = "<font color='#FFFFFF' size='12px'>Vertical: " + String(sliderY.value) + "</font>" ;
+			sliderY_label.x = 20;
+			sliderY_label.y = 40;
+			sliderY_label.alpha = 1;
+			sliderY_label.width = 80;
+			sliderY_label.wordWrap = true;
+			this.addChild(sliderY_label);
+			
+			Quantity = new Slider();			
+			Quantity.maximum = 3;
+			Quantity.minimum = 1;
+			Quantity.snapInterval = 1;
+			Quantity.liveDragging = true;
+			Quantity.x = 100;
+			Quantity.y = 60 ;
+			Quantity.height = 60;
+			Quantity.width = this.width - 150;
+			Quantity.addEventListener(SliderEvent.CHANGE, apply_blur);
+			Quantity.value = 0;
+			Quantity.name = "Q";
+			addChild(Quantity);
+			
+			Quantity_label = new Label();
+			Quantity_label.htmlText = "<font color='#FFFFFF' size='12px'>Quality: " + String(Quantity.value) + "</font>" ;
+			Quantity_label.x = 20;
+			Quantity_label.y = 60;
+			Quantity_label.alpha = 1;
+			Quantity_label.width = 80;
+			Quantity_label.wordWrap = true;
+			this.addChild(Quantity_label);
+		}
+		
+		private function apply_blur(event:SliderEvent):void{
+			var myBlur = new BlurFilter(int(sliderX.value),int(sliderY.value),int(Quantity.value));
+			sliderX_label.htmlText = "<font color='#FFFFFF' size='12px'>Horizontal: " + String(sliderX.value) + "</font>" ;
+			sliderY_label.htmlText = "<font color='#FFFFFF' size='12px'>Vertical: " + String(sliderY.value) + "</font>" ;
+			Quantity_label.htmlText = "<font color='#FFFFFF' size='12px'>Quality: " + String(Quantity.value) + "</font>" ;
+
+			this.parent.effectBMAP.applyFilter(this.parent.finalBMAP, new Rectangle(0,0,this.parent.finalBMAP.width,this.parent.finalBMAP.height), new Point(0, 0), myBlur);
+			this.parent.updatePreview(this.parent.effectBMAP,true);
+			this.parent.effect_applied = true;
+		}
 		
 		
+		//SEPIA //
+		
+		public function apply_sepia(){
+			var matrix:Array = new Array();
+			matrix = matrix.concat([0.35, 0.35, 0.35, 0, 0]);
+			// red
+			matrix = matrix.concat([0.3, 0.3, 0.3, 0, 0]);
+			// green
+			matrix = matrix.concat([0.21, 0.21, 0.21, 0, 0]);
+			// blue
+			matrix = matrix.concat([0, 0, 0, 1, 0]);
+			// alpha
+			var Sepiafilter:BitmapFilter = new ColorMatrixFilter(matrix);
+			this.parent.effectBMAP.applyFilter(this.parent.finalBMAP, new Rectangle(0,0,this.parent.finalBMAP.width,this.parent.finalBMAP.height), new Point(0, 0), Sepiafilter);
+			this.parent.updatePreview(this.parent.effectBMAP,true);
+			this.parent.effect_applied = true;
+		}
+		
+		// TINT //
+		
+		
+		// GRAY SCALE //
+		
+		public function apply_grayScale(){
+			var elements:Array =   [0.33, 0.33, 0.33, 0, 0,
+									0.33, 0.33, 0.33, 0, 0,
+									0.33, 0.33, 0.33, 0, 0,
+									0, 0, 0, 1, 0];
+									
+			var grayScaleFilter:ColorMatrixFilter = new ColorMatrixFilter(elements);
+			this.parent.effectBMAP.applyFilter(this.parent.finalBMAP, new Rectangle(0,0,this.parent.finalBMAP.width,this.parent.finalBMAP.height), new Point(0, 0), grayScaleFilter);
+			this.parent.updatePreview(this.parent.effectBMAP,true);
+			this.parent.effect_applied = true;
+			
+		}
+		
+
 		// prepares bitmap Array for effect preview
 		public function prepare_bitmaps(count:int){
-			
-
 			bitmaps_preview = new Array(count+1);
 			trace ("bitmap length " + bitmaps_preview.length);
 			for (var i:int ; i <= count ; i++){
@@ -560,12 +686,12 @@ public class previewBox extends Sprite
 			bitmaps_preview[i].x = 5 ; 
 			else
 			bitmaps_preview[i].x = bitmaps_preview[i-1].x + 160 + 10 ; 
-			bitmaps_preview[i].y = 5;
+			bitmaps_preview[i].y = 5; 
 			bitmaps_preview[i].width = 160;
 			bitmaps_preview[i].height = 120;
 			}
 		}
-		
+			
 		
 		
 		// Apply Filter 

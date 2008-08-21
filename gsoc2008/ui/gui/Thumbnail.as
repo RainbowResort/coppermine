@@ -34,8 +34,13 @@ package gui {
 		var cover:Sprite = new Sprite();
 		var tag_lbl:Label = new Label();
 		
+		
 		// border around the image
 		var myBorder:Sprite = new Sprite();
+		
+		var coloredBorder:Sprite = new Sprite();
+		var coloredBorderBool:Boolean;
+		
 		
 		function Thumbnail(id:int,tag:String,type:String,bURL:String,sURL:String,_width:int,_height:int):void {
 			this.id = id;
@@ -51,13 +56,45 @@ package gui {
 			
 			addEventListener(MouseEvent.MOUSE_OVER,onOver);
 			addEventListener(MouseEvent.MOUSE_OUT,onOut);
+			
+			//change the border on multiselect
+			addEventListener(MouseEvent.CLICK,clickHappened);
+			coloredBorderBool = false;
 			scaleThumb();
 			}
 		
 		private function myevent(event:Event):void {
-		trace("clickevent occured ");
+		//trace("clickevent occured ");
  		//event.stopPropagation();
 	}
+	
+		private function clickHappened(event:MouseEvent){
+			if (event.ctrlKey){
+							
+			if(coloredBorderBool == false){
+				coloredBorder = new Sprite();
+				coloredBorder.graphics.lineStyle(2, 0xFF8C00);
+				coloredBorder.graphics.drawRect (-(loader_width/2),-(loader_height/2),loader_width, loader_height);
+				coloredBorder.graphics.endFill();
+				
+				this.addChild (coloredBorder);
+				coloredBorderBool = true
+				
+			}
+			}
+			
+		}
+	
+		public function resetBorder(){
+			//trace("------------------- Removing borders -------------");
+			if(coloredBorderBool == true)
+			{
+				//trace("Removing border for : ID : " + id);
+				this.removeChild(coloredBorder);
+				coloredBorderBool = false;
+			}
+			
+		}
 		
 		private function drawLoader(resize:Boolean):void {
 			if(this.type == "CAT")
@@ -76,7 +113,8 @@ package gui {
 			{
 			loader = new UILoader();
 			loader.scaleContent = true;
-			loader.source = sURL;
+			//trace(sURL+ "?cacheBust=" + Math.random() * 9);
+			loader.source = sURL + "?cacheBust="  + Math.random() ;
 			loader.mouseEnabled = false;
 			}
 			loader.x = -(loader_width/2);
@@ -94,6 +132,7 @@ package gui {
 			myBorder = new Sprite();
 			myBorder.graphics.lineStyle(2, 0xFFFFFF);
 			myBorder.graphics.drawRect (-(loader_width/2),-(loader_height/2),loader_width, loader_height);
+			myBorder.graphics.endFill();
 			this.addChild (myBorder);
 		}
 		

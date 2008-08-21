@@ -26,12 +26,18 @@
 	import flash.display.Shape;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import fl.controls.TextInput;
 	import flash.events.Event;
+	import fl.events.SliderEvent;
 	import flash.text.TextFormat;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	import fl.core.UIComponent;
 	import fl.data.DataProvider;
+	import fl.controls.RadioButton;
+	import fl.controls.RadioButtonGroup;
+	import fl.controls.Slider;
+	import fl.controls.Label;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -78,9 +84,24 @@ public class Editor extends Sprite{
 		public var effect_applied:Boolean;
 		public var effect_selected:Boolean;
 		
-		public function Editor(imgurl:String, _width:int,_height:int):void{
+		
+		
+		
+		// save dialog
+		var dimmer:Sprite ;
+		var save_dialog:Sprite ;
+		var save_postUpload:int;
+		var jpgQualitySlider:Slider;
+		var jpgQualitySlider_label:Label;
+		var save_action_code:String ;
+		var myBorder:Sprite ;
+		var imageID:int;
+		var save_submitButton:Button;
+		
+		public function Editor(imgID:int,imgurl:String, _width:int,_height:int):void{
 		
 		trace ("B URL " + imgurl)
+		this.imageID = imgID;
 		
 		// Loads the image from the URL
 		loader = new Loader();
@@ -108,15 +129,11 @@ public class Editor extends Sprite{
 		//EFFECTS 
 		dp.addItem({ label: "EFFECTS"});
 		dp.addItem( { label: "  |-- Pop Colors" } );
-		dp.addItem( { label: "  |-- White Bal" } );
-		dp.addItem( { label: "  |-- Highlight" } );
-		dp.addItem( { label: "  |-- Fill Light" } );
-		dp.addItem( { label: "  |-- Soft" } );
-		dp.addItem( { label: "  |-- Black & White" } );
+		dp.addItem( { label: "  |-- Blur" } );
+		dp.addItem( { label: "  |-- Gray Scale" } );
 		dp.addItem( { label: "  |-- Sepia" } );
-		dp.addItem( { label: "  |-- Tint" } );
-		dp.addItem( { label: "  |-- Auto Color" } );
-		dp.addItem( { label: "  |-- Sketch" } );
+		//dp.addItem( { label: "  |-- Tint" } );
+		//dp.addItem( { label: "  |-- Sketch" } );
 	
 		effectList.dataProvider = new DataProvider(dp);
 		effectList.width = 150;
@@ -213,7 +230,22 @@ public class Editor extends Sprite{
 			this.addChild(previewbox);
 			
 			previewbox.draw_crop();
+			break;
 			
+			case  "  |-- Blur" :
+			buildPreviewBox();
+			previewbox.draw_blur();
+			break;
+
+			case  "  |-- Sepia" :
+			buildPreviewBox();
+			previewbox.apply_sepia();
+			break;
+			
+			case  "  |-- Gray Scale" :
+			buildPreviewBox();
+			previewbox.apply_grayScale();
+			break;
 			
 			
 			}
@@ -253,6 +285,7 @@ public class Editor extends Sprite{
 		//Back Button Event
 		private function bckEvent(e:Event):void{
 			this.parent.removeChild(this);
+			//this.parent.grid.cacheBust();
 		}
 		
 		//Manages reloading of the preview 
@@ -297,23 +330,298 @@ public class Editor extends Sprite{
 		// Save EVENT
 		private function saveAction(E:Event):void{
 			
+			/*
+			Bring up the save dialog....
+			-- after saving dismiss the dialog
+			-- Select the correct RADIO button .. .
+					-- take the required action
+					-- 
+			-- Saving animation
+			*/
+			
+			
+			//fader
+			dimmer = new Sprite();
+			with (dimmer){
+				x = 0 ;
+				y = 0;
+				
+				alpha = 0.6;
+				
+				graphics.beginFill(0x000000);
+				graphics.drawRect(0, 0, this.width,this.height);
+				graphics.endFill();
+
+			}
+			
+			dimmer.width = this.width;
+			dimmer.height = this.height;
+			
+			save_dialog = new Sprite();
+			with (save_dialog){
+				x = 200 ;
+				y = 50;
+				
+				alpha = 1;
+				scaleX= 4;
+				scaleY =4;
+				
+				graphics.beginFill(0x000000);
+				graphics.drawRect(0, 0, this.width,this.height);
+				graphics.endFill();
+
+			}
+			
+			save_dialog.width = 900;
+			save_dialog.height = 900 ;
+			
+			myBorder = new Sprite();
+			myBorder.graphics.lineStyle(3, 0xffffff);
+			myBorder.graphics.drawRect(save_dialog.x ,save_dialog.y , 500 , 500 );
+			
+			var myFormat:TextFormat = new TextFormat();
+			myFormat.font = "Georgia";
+			myFormat.size = 14;
+			myFormat.color = 0xffffff;
+			
+			
+			var save_cancelButton:Button = new Button();
+			with(save_cancelButton){
+				label = "Cancel";
+				save_cancelButton.setStyle("textFormat", myFormat);
+				alpha = 1;
+				addEventListener(MouseEvent.CLICK,save_cancel_action);
+				height = 80;
+				width = 100;
+				//scaleX = 3;
+				//scaleY = 3;
+			}
+			save_cancelButton.x = 100;
+			save_cancelButton.y =  500;
+			
+			save_submitButton = new Button();
+			with(save_submitButton){
+				label = "Save";
+				save_submitButton.setStyle("textFormat", myFormat);
+				alpha = 1;
+				addEventListener(MouseEvent.CLICK,save_submit_action);
+				height = 80;
+				width = 100;
+				//scaleX  = 3;
+				//scaleY = 3;
+				enabled = false;
+			}
+			save_submitButton.x = 300;
+			save_submitButton.y = 500;
+
+			
+
+			var rbg1:RadioButtonGroup = new RadioButtonGroup("group1");
+						
+			var rb1:RadioButton = new RadioButton();
+			var rb2:RadioButton = new RadioButton();
+			var rb3:RadioButton = new RadioButton();
+			
+
+			with(rb1){
+				group = rbg1;
+				setStyle("textFormat", myFormat);
+				//scaleX= 5;
+				//scaleY = 5;
+				move(225,200);
+				label = "Replace original ";
+				name = "1";
+				addEventListener( MouseEvent.CLICK  , setSaveAction);
+				width = 300;
+			}
+			
+			with(rb2){
+				group = rbg1;
+				setStyle("textFormat", myFormat);
+				//scaleX= 5;
+				//scaleY = 5;
+				move(225,300);
+				label = "Save as Copy";
+				name = "2";
+				addEventListener( MouseEvent.CLICK  , setSaveAction);
+				width = 300;
+			}
+
+		
+			with(rb3){
+				group = rbg1;
+				setStyle("textFormat", myFormat);
+				//scaleX= 5;
+				//scaleY = 5;
+				move(225,400);
+				label = "Save to Desktop :  ";
+				name = "3";
+				addEventListener( MouseEvent.CLICK  , setSaveAction);
+				width = 300;				
+			}
+			
+			  
+														  
+			jpgQualitySlider = new Slider();
+			with (jpgQualitySlider){
+			maximum = 100;
+			minimum = 0;
+			snapInterval = 1;
+			liveDragging = true;
+			x = 225;
+			y = 100 ;
+			height = 200;
+			width = 160;
+			addEventListener(SliderEvent.CHANGE, jpgQuality_sliderChanged);
+			value = 85;
+			//scaleX= 6;
+			//scaleY = 10;
+			setStyle("textFormat", myFormat);
+			}
+			jpgQualitySlider_label = new Label();
+			 with( jpgQualitySlider_label){
+			htmlText = "<font color='#FFFFFF' size='16px'>JPEG Quality: </font>" ;
+			x = jpgQualitySlider.x - 150;
+			y = jpgQualitySlider.y - 20 ;
+			alpha = 1;
+			width = 200;
+			height = 70;
+			wordWrap = true;
+			//scaleX = 5;
+			//scaleY = 5;
+			setStyle("textFormat", myFormat);
+			}
+			
+			save_dialog.addChild(jpgQualitySlider_label);
+			save_dialog.addChild(jpgQualitySlider);
+			
+			save_dialog.addChild(rb1);
+			save_dialog.addChild(rb2);
+			save_dialog.addChild(rb3);
+			
+			// fader
+			this.addChild(dimmer);
+			
+			// save dialog
+			this.addChild(save_dialog);
+			//Border
+			this.addChild(myBorder);
+
+			// fader
+			//SAVE CANCEL
+			save_dialog.addChild(save_cancelButton);
+			save_dialog.addChild(save_submitButton);
+			//save_dialog.addChild(saveAsTXT);
+			
+						
+			
+			
+			
+			
+			
+		}
+		
+		
+		function  jpgQuality_sliderChanged(e:Event):void{
+			 jpgQualitySlider_label.htmlText = "<font color='#FFFFFF' size='16px'>JPEG Quality: " + e.target.value + "</font>" ;
+		}
+		
+		function setSaveAction(e:MouseEvent):void {
+			save_action_code = String(e.target.name);
+			save_submitButton.enabled = true;
+			
+			
+			
+		}
+		
+		function save_submit_action(e:MouseEvent):void{
+						var loadingtext:Label = new Label();
+			with(loadingtext){
+			x =  300;
+			y =  300;
+			alpha = 1;
+			width = 400;
+			wordWrap = true;
+			htmlText = "<font color='#FFFFFF' size='30px'>Loading...</font>" ;
+			}
+			
+			save_dialog.addChild(loadingtext);
+			
+			switch(save_action_code)
+			{
+				case "1":
+				// handle Replace original
+				upload2Server(1,imageID);
+				
+				break;
+				case "2":
+				// handle save as copy
+				upload2Server(2,imageID);
+				break;
+				
+				case "3":
+				// handle save to desktop
+				upload2Server(3,imageID);
+				break;
+			}
+			
+			
+		}
+		
+		
+		function save_cancel_action(e:MouseEvent):void{
+			this.removeChild(myBorder);
+			this.removeChild(save_dialog);
+			this.removeChild(dimmer);
+			
+			
+		}
+		
+		
+		
+		private function upload2Server(action:int,url:int ):void{
+			
+
+			// ACCEPT parameters and perform the requested action.
+			
 			/* we need a way to figure out how to save it on to the server */
 			// right now it dumps the image into the /album/snapshot.jpg
+			if( effect_applied == true)
 			finalBMAP = effectBMAP.clone();
-			var jpgEncoder:JPGEncoder = new JPGEncoder(85);
+			var jpgEncoder:JPGEncoder = new JPGEncoder(jpgQualitySlider.value);
 			var jpgStream:ByteArray = jpgEncoder.encode(finalBMAP);
 			var header:URLRequestHeader = new URLRequestHeader("Content-type", "application/octet-stream");
-			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?filename=snapshot.jpg");
+			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url +"&size_x=" + finalBMAP.width + "&size_y=" + finalBMAP.height  );
+			trace("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url)
 			jpgURLRequest.requestHeaders.push(header);
 			jpgURLRequest.method = URLRequestMethod.POST;
 			jpgURLRequest.data = jpgStream;
-			
+						
 			var jpgURLLoader:URLLoader = new URLLoader();	
 			jpgURLLoader.load(jpgURLRequest);		
+			jpgURLLoader.addEventListener(Event.COMPLETE, savingComplete);
+
 			
-			// would require a Event Handler that shows a progress bar while the image is being saved
-			navigateToURL(new URLRequest("albums/snapshot.jpg"), "_blank");
+			
+			
+			
 		}
+		
+		function savingComplete(e:Event):void{
+			trace("GOT : " + e.target.data);
+			this.removeChild(myBorder);
+			this.removeChild(save_dialog);
+			this.removeChild(dimmer);
+			if(save_action_code == "3")
+			navigateToURL(new URLRequest("albums/snapshot.jpg"), "_blank");
+			
+		}
+		
+		
+		
+		
+		
+		
 				
 		}
 	}
