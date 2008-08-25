@@ -76,7 +76,22 @@ public class previewBox extends Sprite
 		var x_org;
 		var y_org;
 		var crop_mask:Sprite;
+		var crop_box:Sprite
 		
+		//Resize text box
+		var resize_x:TextInput;
+		var resize_y:TextInput;
+		var resizeButton:Button;
+		
+		
+		//Slider_values
+		var slider_value_brightness = -1000;
+		var slider_value_contrast = -1000 ;
+		var slider_value_hue = -1000 ;
+		var slider_value_saturation = -1000 ;
+		var slider_value_blur_x = -1000;
+		var slider_value_blur_y = -1000 ;
+		var slider_value_blur_q = -1000;
 		
 		private var myRectangle:Shape;
 		private var myRectSp:Sprite;
@@ -87,6 +102,7 @@ public class previewBox extends Sprite
 		private var button:Button;
 		private var buttonDrag:Button;
 		var drawn=false;
+		var previewImg;
 
 		//draws a preview box of a given height and width
 		public function previewBox(heightParm:int ,widthParm:int)
@@ -100,6 +116,8 @@ public class previewBox extends Sprite
 			myBorder.graphics.lineStyle(2, 0x333333);
 			myBorder.graphics.drawRect (this.x ,this.y , this.width , this.height );
 			this.addChild (myBorder);
+			
+			
 			
 		}
 		
@@ -194,9 +212,13 @@ public class previewBox extends Sprite
 			slider.x = 100;
 			slider.y = 40 ;
 			slider.height = 60;
-			slider.width = this.width - 150;
+			slider.width = 500 ; //this.width - 150;
 			slider.addEventListener(SliderEvent.CHANGE, apply_brightnessSlider);
+			if(slider_value_brightness != -1000)
+			slider.value = slider_value_brightness;
+			else 
 			slider.value = 0;
+			
 			addChild(slider);
 			
 			slider_label = new Label();
@@ -266,8 +288,11 @@ public class previewBox extends Sprite
 			slider.x = 100;
 			slider.y = 40 ;
 			slider.height = 60;
-			slider.width = this.width - 100;
+			slider.width = 500;// this.width - 100;
 			slider.addEventListener(SliderEvent.CHANGE, apply_hue);
+			if(slider_value_hue != -1000)
+			slider.value = slider_value_hue;
+			else 
 			slider.value = 0;
 			addChild(slider);
 			
@@ -301,8 +326,11 @@ public class previewBox extends Sprite
 			slider.x = 100;
 			slider.y = 40 ;
 			slider.height = 60;
-			slider.width = this.width - 150;
+			slider.width = 500 ; //this.width - 150;
 			slider.addEventListener(SliderEvent.CHANGE, apply_saturation);
+			if(slider_value_saturation != -1000)
+			slider.value = slider_value_saturation;
+			else 
 			slider.value = 100;
 			addChild(slider);
 			
@@ -336,8 +364,11 @@ public class previewBox extends Sprite
 			slider.x = 100;
 			slider.y = 40 ;
 			slider.height = 60;
-			slider.width = this.width - 150;
+			slider.width = 500 ; //this.width - 150;
 			slider.addEventListener(SliderEvent.CHANGE, apply_contrast);
+			if(slider_value_contrast != -1000)
+			slider.value = slider_value_contrast;
+			else 
 			slider.value = 0;
 			addChild(slider);
 			
@@ -366,14 +397,14 @@ public class previewBox extends Sprite
 		public function draw_RotatePanel():void{
 			var rotRT:Button = new Button();
 			rotRT.label = "Right -->" 
-			rotRT.x = (this.width /2 ) + 20;
+			rotRT.x = (this.width /2 ) + 40;
 			rotRT.y = 40;
 			rotRT.addEventListener(MouseEvent.CLICK,rotateRight,false,false);
 			addChild(rotRT);
 			
 			var rotLT:Button = new Button();
 			rotLT.label = "<-- Left" 
-			rotLT.x = (this.width /2 ) - 60;
+			rotLT.x = (this.width /2 ) - 80;
 			rotLT.y = 40;
 			rotLT.addEventListener(MouseEvent.CLICK,rotateLeft,false,false);
 			addChild(rotLT);
@@ -431,42 +462,165 @@ public class previewBox extends Sprite
 	
 	// --- CROP ---//
 		public function draw_crop(){
+			crop_down = false;
+			
+			var crop_help_lbl = new Label();
+			with (crop_help_lbl){
+				x = 0 ; y = 0;
+				width = 300;
+				height = 200;
+				wordWrap = 1;
+				htmlText = "<font color='#FFFFFF' size='12px'>hold the CTRL key down when selecting a crop region and draw a region from top to bottom</font>" ;
+				
+				
+			}
+			addChild(crop_help_lbl);
+			
 			var crop_but:Button = new Button;
 			var crop_reset_but:Button = new Button;
 			
 			with (crop_but){
 				x = this.width-200;
-				y = 0;
+				y = 10;
 				label = "CROP";
+				addEventListener(MouseEvent.CLICK,crop_action,false,false);
 			}
 			addChild(crop_but);
 			
 			with (crop_reset_but){
-				x = this.width - 310;
-				y = 0;
+				x = this.width - 200;
+				y = 40;
 				label = "RESET";
+				addEventListener(MouseEvent.CLICK,reset_crop,false,false);
 			}
 			addChild(crop_reset_but);
 			
+			var save_crop:Button = new Button();
+			with(save_crop){
+				x = this.width-200;
+				y = 70;
+				label = "Save CROP";
+				addEventListener(MouseEvent.CLICK,save_crop_action,false,false);
+				
+				
+			}
+			addChild(save_crop);
+			
+			
+			draw_crop_image(false);
+			
+
+					
+			var resize_x_lbl:Label = new Label();
+			with (resize_x_lbl){
+				x = this.width - 150;
+				y = 200;
+				htmlText = "<font color='#FFFFFF' size='12px'>Width</font>" ;
+				width = 80;
+				height = 20;
+				
+			}					
+			
+			
+			resize_x = new TextInput();
+			with (resize_x){
+				x = this.width - 150;
+				y = 230;
+				text = this.parent.finalBMAP.width;
+				
+			}
+
+			var resize_y_lbl:Label = new Label();
+			with (resize_y_lbl){
+				x = this.width - 150;
+				y = 260;
+				htmlText = "<font color='#FFFFFF' size='12px'>Height</font>" ;
+				width = 80;
+				height = 20;
+			}					
+			
+			
+			resize_y = new TextInput();
+			with(resize_y)
+			{
+				x = this.width - 150;
+				y =  280;
+				text = this.parent.finalBMAP.height;
+			
+			}
+
+			resizeButton = new Button();
+			with (resizeButton){
+				label = " Resize";
+				x = this.width - 150;
+				y = 310;
+				addEventListener(MouseEvent.CLICK , resizeImage,false,false);
+				
+			}
+					
+			addChild(resize_x_lbl);
+			addChild(resize_y_lbl);					
+			addChild(resize_x);
+			addChild(resize_y);
+			addChild(resizeButton);
+			
+}
+			
+		private function resizeImage(e:Event):void{
+
+			//trace("WIDTH : " + resize_x.text + "  Height : " + resize_y.text );
+			
+			var sx = resize_x.text / this.parent.finalBMAP.width;
+			var sy = resize_y.text / this.parent.finalBMAP.height;
+			var matrix:Matrix =  new Matrix(sx, 0, 0, sy, 0, 0);
+			
+			this.parent.effectBMAP = new BitmapData(resize_x.text,resize_y.text,false,0x0);
+		    this.parent.effectBMAP.draw(new Bitmap(this.parent.finalBMAP),matrix);
+			resizeBMAPS(this.parent.effectBMAP);
+			draw_crop_image(true);
+			this.parent.effect_applied = true;
+			
+		}
+		
+		
+		private function resizeBMAPS(bmd:BitmapData){
+			//RESET sizes
+			trace("RESIZING BITMAPS");
+			this.parent.finalBMAP = new BitmapData(bmd.width,bmd.height,false,0x0);
+			this.parent.mmBMAP =  new BitmapData(bmd.width,bmd.height,false,0x0);
+			this.parent.mBMAP =  new BitmapData(bmd.width,bmd.height,false,0x0);
+			this.parent.finalBMAP = bmd.clone();
+			this.parent.mBMAP = bmd.clone();
+			this.parent.mmBMAP = bmd.clone();
+			
+			
+		}
+		
+			
+		private function draw_crop_image(redrawBool:Boolean){
 			var img_width:int;
 			var img_height:int;
 
-			if ( this.parent.finalBMAP.width > this.parent.finalBMAP.height) // landscape
+			if ( this.parent.effectBMAP.width > this.parent.effectBMAP.height) // landscape
 			{
-				img_width = this.parent.finalBMAP.width * (450 / this.parent.finalBMAP.width  );
-				img_height = this.parent.finalBMAP.height * (450 / this.parent.finalBMAP.width  ); 
-				factor = 400 / this.parent.finalBMAP.width ;
+				img_width = this.parent.effectBMAP.width * (450 / this.parent.effectBMAP.width  );
+				img_height = this.parent.effectBMAP.height * (450 / this.parent.effectBMAP.width  ); 
+				factor = 400 / this.parent.effectBMAP.width ;
 			}
-			if ( this.parent.finalBMAP.width < this.parent.finalBMAP.height) //portrait
+			if ( this.parent.effectBMAP.width < this.parent.effectBMAP.height) //portrait
 			{
-				img_width = this.parent.finalBMAP.width * (450 / this.parent.finalBMAP.height );
-				img_height = this.parent.finalBMAP.height * (450 / this.parent.finalBMAP.height ); 
-				factor = 400 / this.parent.finalBMAP.height ;
+				img_width = this.parent.effectBMAP.width * (450 / this.parent.effectBMAP.height );
+				img_height = this.parent.effectBMAP.height * (450 / this.parent.effectBMAP.height ); 
+				factor = 400 / this.parent.effectBMAP.height ;
 			}
 
 			trace("Echo " + factor );
 			
-			var previewImg =  new Bitmap(this.parent.finalBMAP);
+			if (redrawBool){
+				crop_box.removeChild(previewImg);
+			}
+				
+			previewImg =  new Bitmap(this.parent.effectBMAP);
 			with (previewImg) {
 				x = 0 ;
 				y = 0;
@@ -474,39 +628,53 @@ public class previewBox extends Sprite
 				height = img_height;
 			} 
 			
-			var crop_box:Sprite = new Sprite();
+			if (redrawBool){
+				removeChild(crop_box);
+			}
+			
+			crop_box= new Sprite();
 			crop_box.name = "CROP_BOX";
 			with (crop_box){
 			x = 200;
 			y = 80;
 			graphics.beginFill(0xffffff);
-        	graphics.drawRect(0, 0, img_width,img_height);
+        	graphics.drawRect(0, 0, previewImg.width,previewImg.height);
         	graphics.endFill();
-			width = img_width;
-			height = img_height;
+			width = previewImg.width;
+			height = previewImg.height;
 			addChild(previewImg);
 			}
 			
 			addChild(crop_box);
 			with (crop_box){
-					addEventListener(MouseEvent.MOUSE_DOWN, rectStartingPoint,false,false);
-					addEventListener(MouseEvent.MOUSE_MOVE, rectDraw,false,false);
-					addEventListener(MouseEvent.MOUSE_UP, stopRectDraw,false, false);
+					addEventListener(MouseEvent.MOUSE_DOWN, rectStartingPoint,false,1);
+					addEventListener(MouseEvent.MOUSE_MOVE, rectDraw,false,2);
 					}
-			}
+			
+		}
+		
+			
 	
 	
-	private function rectStartingPoint(m:MouseEvent):void
+		private function rectStartingPoint(m:MouseEvent):void
 		{	
+			if(m.ctrlKey){
+			trace("MOUSE DOWN  EVENT:");
 			crop_down = true;
+			drawn = false;
 			ltx = mouseX;
 			lty = mouseY;
 			trace(m.target.name);
+			crop_box.addEventListener(MouseEvent.MOUSE_UP, stopRectDraw,false, 31);
+		}
 		}
 
 	private function rectDraw(m:MouseEvent):void {
+		
+		if(m.ctrlKey){
 		if(crop_down == true){
-			m.updateAfterEvent();
+			//trace("MOUSE MOVE EVENT:");
+			//m.updateAfterEvent();
 			rtx = mouseX;
 			rty = mouseY;
 
@@ -521,32 +689,52 @@ public class previewBox extends Sprite
 			myRectSp = new Sprite();
 			myRectSp.addChild(myRectangle);
 			myRectSp.alpha = 0.5;
-			addChild (myRectSp);
+			
+			this.addChild (myRectSp);
 			drawn = true;
+			
+			}
+		}
+	}
+		private function stopRectDraw(m:MouseEvent):void
+		{
+			
+			if(!m.ctrlKey){
+			trace("MOUSE UP EVENT:");
+			crop_down = false;
+			drawn = false ;
+			resizeBMAPS(this.parent.effectBMAP);
 			}
 		}
 
-		private function stopRectDraw(m:MouseEvent):void
-		{
-			crop_down = false;
-			addButtons();
+		private function crop_action(e:MouseEvent){
+
+			trace("effectBMAP width : " +this.parent.effectBMAP.width + " height "  +this.parent.effectBMAP.height); 
+			this.parent.effectBMAP = new BitmapData((rtx - ltx) * (1/factor),(rty - lty) * (1/factor),false,0x0);
+			this.parent.effectBMAP.copyPixels(this.parent.finalBMAP,new Rectangle((ltx - 200) * (1/factor) , (lty - 80) * (1/factor)  ,(rtx - ltx) * (1/factor),(rty - lty ) * (1/factor)),new Point(0,0));
+			
+			//this.parent.effectBMAP.copyPixels(this.parent.finalBMAP,new Rectangle( (myRectSp.x - 200) * (1/factor) , (myRectSp.y - 80) * (1/factor)  ,(myRectSp.width) * (1/factor),(myRectSp.height) * (1/factor)),new Point(0,0));			
+
+			
+			trace("effectBMAP width : " +this.parent.effectBMAP.width + " height "  +this.parent.effectBMAP.height); 
+			resize_x.text = this.parent.effectBMAP.width;
+			resize_y.text = this.parent.effectBMAP.height;
+			
+			draw_crop_image(true);
+			
 		}
+		
+		private function save_crop_action(e:MouseEvent){
 
-		private function addButtons():void
-		{
-			button = new Button();
-            button.width = 100;
-            button.height = 30;
-            button.move ( rtx - button.width - 10,rty - button.height - 10 );
-            button.label = "Copy Area";
-            addChild(button);
-			button.addEventListener(MouseEvent.CLICK, copyImage);
-
+			resizeBMAPS(this.parent.effectBMAP);
+			this.parent.updatePreview(this.parent.effectBMAP,true);
+			this.parent.removeChild(this);
+					
 		}
-
-		private function copyImage(m:Event):void
-		{
-			trace (ltx, lty, rtx - ltx, rty - lty);
+		
+		private function reset_crop(e:MouseEvent){
+			removeChild(myRectSp);
+			
 		}
 	
 		//---- BLUR -----//
@@ -562,9 +750,12 @@ public class previewBox extends Sprite
 			sliderX.x = 100;
 			sliderX.y = 20 ;
 			sliderX.height = 60;
-			sliderX.width = this.width - 150;
+			sliderX.width = 500 ; //this.width - 150;
 			sliderX.addEventListener(SliderEvent.CHANGE, apply_blur);
-			sliderX.value = 0;
+			if(slider_value_blur_x != -1000)
+				sliderX.value = slider_value_slider_value_blur_x ;
+			else 
+				sliderX.value = 0;
 			sliderX.name = "X";
 			addChild(sliderX);
 			
@@ -585,9 +776,12 @@ public class previewBox extends Sprite
 			sliderY.x = 100;
 			sliderY.y = 40 ;
 			sliderY.height = 60;
-			sliderY.width = this.width - 150;
+			sliderY.width = 500 ; // this.width - 150;
 			sliderY.addEventListener(SliderEvent.CHANGE, apply_blur);
-			sliderY.value = 0;
+			if(slider_value_blur_y != -1000)
+				sliderY.value = slider_value_slider_value_blur_y ;
+			else 
+				sliderY.value = 0;
 			sliderX.name = "Y";
 			addChild(sliderY);
 			
@@ -608,9 +802,12 @@ public class previewBox extends Sprite
 			Quantity.x = 100;
 			Quantity.y = 60 ;
 			Quantity.height = 60;
-			Quantity.width = this.width - 150;
+			Quantity.width = 500 ; //this.width - 150;
 			Quantity.addEventListener(SliderEvent.CHANGE, apply_blur);
-			Quantity.value = 0;
+			if(slider_value_blur_q != -1000)
+				Quantity.value = slider_value_slider_value_blur_q ;
+			else 
+				Quantity.value = 0;
 			Quantity.name = "Q";
 			addChild(Quantity);
 			
@@ -677,18 +874,40 @@ public class previewBox extends Sprite
 		public function prepare_bitmaps(count:int){
 			bitmaps_preview = new Array(count+1);
 			trace ("bitmap length " + bitmaps_preview.length);
+			var bm_height;
+			var bm_width;
+			
+			if ( this.parent.previewImg.bitmapData.width >= this.parent.previewImg.bitmapData.height) // landscape
+			{
+				bm_width = this.parent.previewImg.bitmapData.width * (160 / this.parent.previewImg.bitmapData.width );
+				
+				bm_height = this.parent.previewImg.bitmapData.height * (160 / this.parent.previewImg.bitmapData.width  ); 
+				//matrix.scale( (160 / bm.bitmapData.width ), (160 / bm.bitmapData.width ));
+			}
+			if ( this.parent.previewImg.bitmapData.width < this.parent.previewImg.bitmapData.height) //portrait
+			{
+				bm_width = this.parent.previewImg.bitmapData.width * (120 / this.parent.previewImg.bitmapData.height );
+				bm_height = this.parent.previewImg.bitmapData.height * (120 / this.parent.previewImg.bitmapData.height ); 
+				//matrix.scale( (120 / bm.bitmapData.height ), (120 / bm.bitmapData.height ));
+			}
+
+			trace("BM_WIDTH : " + bm_width);
+			trace("BM_Height: " + bm_height);
+			
+			
+			
 			for (var i:int ; i <= count ; i++){
 			
-			bitmaps_preview[i] = new effectPreview(this.parent.previewImg);
+			bitmaps_preview[i] = new effectPreview(this.parent.previewImg,bm_width,bm_height);
 			if(i != count)
 			this.addChild(bitmaps_preview[i]);
 			if(i == 0)
 			bitmaps_preview[i].x = 5 ; 
 			else
-			bitmaps_preview[i].x = bitmaps_preview[i-1].x + 160 + 10 ; 
+			bitmaps_preview[i].x = bitmaps_preview[i-1].x + bm_width + 10 ; 
 			bitmaps_preview[i].y = 5; 
-			bitmaps_preview[i].width = 160;
-			bitmaps_preview[i].height = 120;
+			bitmaps_preview[i].width = bm_width;
+			bitmaps_preview[i].height = bm_height;
 			}
 		}
 			

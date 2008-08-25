@@ -60,14 +60,14 @@ import flash.display.Sprite;
 		mytree.addEventListener(ListEvent.ITEM_CLICK, handleClick);
 		trace("TREE INITIED");	
 		
-		loadXML();
+		//loadXML();
 		}
 		
 		
 		//seperate function to handle reload/refresh requests
 		public function loadXML():void{
 		//finally load the url for album listing
-		urlRequest = new URLRequest("flashmanager.php?albumlisting=1");
+		urlRequest = new URLRequest("flashmanager.php?albumlisting=1&magik=" + this.parent.magik);
 		urlLoader.load(urlRequest);
 		}
 		
@@ -79,6 +79,7 @@ import flash.display.Sprite;
 		
 		//populate the tree
 		function fileLoaded(event:Event):void {
+		trace(event.target.data);
 		myXML = XML(event.target.data);
 		// Set the Tree's dataProvider to a new TreeDataProvider, instantiated with the above XML
 		mytree.setRendererStyle("textFormat", new TextFormat("Arial", 12, 0xFFCC00));

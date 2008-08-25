@@ -79,6 +79,8 @@ package gui{
 		// x , y , width , height
 		public function picGrid(xParm:int, yParm:int, widthParm:int , heightParm:int):void {
 
+			
+			
 			this.name = "GRID";
 			this.graphics.beginFill(0x0);
 			this.graphics.drawRect(0, 0, widthParm, heightParm);
@@ -119,7 +121,7 @@ package gui{
 			//drawGrid();
 
 			// first go we draw the root categories
-			getRoot();
+			//getRoot();
 
 			// TESTING added to bypass the loading of root folders
 			//getAlbum(1,false);
@@ -166,6 +168,7 @@ package gui{
 		//populate the arrayURL, arrayName and position the thumbnails
 		function fileLoaded(event:Event):void {
 			myXML = XML(event.target.data);
+			trace(event.target.data);
 			holderArray = new Array();
 			xmlList = myXML.children();
 			for (var i:int=0; i<xmlList.length(); i++) {
@@ -200,6 +203,10 @@ package gui{
 
 			}
 		}
+		
+		
+		
+		
 		// HANDLE MOVING PICTURES FROM ALBUMS
 
 
@@ -226,7 +233,7 @@ package gui{
 				}
 				// DROP down -- populate with albums
 				// load albums
-				var AlbumListurlRequest:URLRequest = new URLRequest("flashmanager.php?albumList=1");
+				var AlbumListurlRequest:URLRequest = new URLRequest("flashmanager.php?albumList=1&magik=" + this.parent.magik);
 				AlbumListurlLoader = new URLLoader();
 				AlbumListurlLoader.dataFormat = URLLoaderDataFormat.VARIABLES;
 				AlbumListurlLoader.addEventListener(Event.COMPLETE, albumListLoader_complete);
@@ -325,7 +332,7 @@ package gui{
 			picIDs = picIDs  + selectedPics[i] + "p";
 			}
 		trace("PIC IDS = " + picIDs);
-		var request:URLRequest = new URLRequest( "flashmanager.php?move=1" );
+		var request:URLRequest = new URLRequest( "flashmanager.php?move=1&magik=" + this.parent.magik );
 		var variables:URLVariables = new URLVariables();
 		request.method = URLRequestMethod.POST;
 		variables.albumID  = AlbumCombo.value;
@@ -482,14 +489,14 @@ package gui{
 		}
 		// populate grid with all root categories
 		public function getRoot():void {
-			urlRequest.url = "flashmanager.php?getroot=1";
+			urlRequest.url = "flashmanager.php?getroot=1&magik=" + this.parent.magik;
 			drawGrid();
 			drawPanel(false);
 			pathLabel.htmlText = "<font color='#FFFFFF' size='15px'>Categories</font>" ;
 		}
 		// populate grid with all albums in the category
 		public function getCategory(catid:int,_redraw:Boolean):void {
-			urlRequest.url = "flashmanager.php?getcat=1&cat=" + catid;
+			urlRequest.url = "flashmanager.php?getcat=1&cat=" + catid + "&magik=" + this.parent.magik;
 			gridDestroy();
 			drawGrid();
 			//drawPanel(_redraw);
@@ -497,7 +504,9 @@ package gui{
 		}
 		//populate the grid with all the images 
 		public function getAlbum(albumid:int,_redraw:Boolean):void {
-			urlRequest.url = "flashmanager.php?getalb=1&alb=" + albumid;
+			
+			urlRequest.url = "flashmanager.php?getalb=1&alb=" + albumid + "&magik=" + this.parent.magik;
+			trace(urlRequest.url);
 			gridDestroy();
 			drawGrid();
 			//drawPanel(_redraw);

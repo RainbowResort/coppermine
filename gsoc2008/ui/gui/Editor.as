@@ -106,7 +106,7 @@ public class Editor extends Sprite{
 		// Loads the image from the URL
 		loader = new Loader();
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE,loaded);
-		loader.load(new URLRequest(imgurl));
+		loader.load(new URLRequest(imgurl + "?cacheBust="  + Math.random() ));
 		effect_applied  = false;
 
 		// Effects option list
@@ -115,7 +115,7 @@ public class Editor extends Sprite{
 		//BASICS
 		dp.addItem({ label: "BASICS" });
 		dp.addItem({ label: "  |-- Rotate" });
-		dp.addItem({ label: "  |-- Crop" });
+		dp.addItem({ label: "  |-- Crop/Resize" });
 		
 		//ADJUSTMENTS
 		dp.addItem({ label: "ADJUSTMENTS" });
@@ -220,9 +220,9 @@ public class Editor extends Sprite{
 			buildPreviewBox();
 			previewbox.draw_RotatePanel();
 			break;
-			case "  |-- Crop":
+			case "  |-- Crop/Resize":
 			trace ("this.height " + this.height);
-			previewbox = new previewBox(550,this.width - 150);
+			previewbox = new previewBox(600,this.width - 150);
 			previewbox.x = 160;
 			previewbox.y = 2;
 			//previewbox.width = this.width - 150;
@@ -259,7 +259,7 @@ public class Editor extends Sprite{
 			previewbox.x = 160;
 			previewbox.y = 2;
 			previewbox.width = this.width - 150;
-			previewbox.height = 130;
+			previewbox.height = 135;
 			this.addChild(previewbox);
 			//effect_applied  = false;
 		}
@@ -512,13 +512,7 @@ public class Editor extends Sprite{
 			save_dialog.addChild(save_cancelButton);
 			save_dialog.addChild(save_submitButton);
 			//save_dialog.addChild(saveAsTXT);
-			
-						
-			
-			
-			
-			
-			
+
 		}
 		
 		
@@ -588,10 +582,13 @@ public class Editor extends Sprite{
 			// right now it dumps the image into the /album/snapshot.jpg
 			if( effect_applied == true)
 			finalBMAP = effectBMAP.clone();
+			
+			trace (" final BMAP . width " + finalBMAP.width + "  .height " + finalBMAP.height);
+			
 			var jpgEncoder:JPGEncoder = new JPGEncoder(jpgQualitySlider.value);
 			var jpgStream:ByteArray = jpgEncoder.encode(finalBMAP);
 			var header:URLRequestHeader = new URLRequestHeader("Content-type", "application/octet-stream");
-			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url +"&size_x=" + finalBMAP.width + "&size_y=" + finalBMAP.height  );
+			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url +"&size_x=" + finalBMAP.width + "&size_y=" + finalBMAP.height + "&magik=" + this.parent.magik );
 			trace("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url)
 			jpgURLRequest.requestHeaders.push(header);
 			jpgURLRequest.method = URLRequestMethod.POST;
@@ -617,11 +614,5 @@ public class Editor extends Sprite{
 			
 		}
 		
-		
-		
-		
-		
-		
-				
 		}
 	}
