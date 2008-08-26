@@ -792,8 +792,8 @@ table#album_sort tr td 		{ padding: 1px; height: 18px; }
 table#album_sort tr.showDragHandle { background: #0E72A4; }
 
 /**styles for photo manager*/
-div#sort 			{  margin:10px; padding:5px 0 5px 50px; color: #000; height:240px; overflow:auto; background:#FFF; width:550px; border:1px solid #0E72A4; }
-table#pic_sort tr 	{ padding:0 5px 0 5px; height:20px;cursor:move;width:100%}
+div#sort {  margin:10px; padding:5px 25px 5px 25px; height:240px; overflow:auto; background:#FFF; width:700px; border:5px solid #CCD7E0; }
+table#pic_sort tr { padding:0 5px 0 5px; height:20px;cursor:move; width:100%; border-collapse: collapse; }
 a.photoUp 			{ cursor: pointer; }
 a.photoDown 		{ cursor: pointer; }
 

@@ -166,7 +166,7 @@ EOT;
 ?>
            </table>
               <!--<select id="to" name="to[]" size="<?php //echo min(max(count ($rowset) + 3, 15), 40) ?>" multiple onChange="Album_Select(this.selectedIndex);" class="listbox" style="width: 300px">-->
-              <div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding:10px;background:#FFF;width:60%; border:1px solid #0E72A4;">
+              <div id="sort" style="margin-top:10px;height:250px;overflow:auto;padding:10px;background:#FFF;width:60%; border:5px solid #0E72A4;">
 			  <table id="album_sort">
 <?php
 	$i = 100;

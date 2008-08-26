@@ -201,7 +201,7 @@ EOT;
    if (count ($rowset) > 0) 
    		foreach ($rowset as $picture){
 	//create a table to sort the picture  
- 	$lb .='<tr id='.$picture["pid"].' title='.$picture["pid"].'><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /><td style="width:400px;padding-left:10px;">'.$picture["title"].'</td></tr>';
+ 	$lb .='<tr id='.$picture["pid"].' title='.$picture["pid"].'><td width="10%" style="padding-left:20px" >'.$j.'</td><td><img src="images/image.png"  /><td style="width:335px;padding-left:10px;">'.$picture["filename"].'</td><td style="width:300px;padding-left:10px;">'.$picture["title"].'</td></tr>';
 	$j++;
    }
    echo $lb;

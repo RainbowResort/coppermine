@@ -1750,16 +1750,19 @@ if (!function_exists('starttable')) {  //{THEMES}
 ** Section <<<starttable>>> - START
 ******************************************************************************/
 // Function to start a 'standard' table
-function starttable($width = '-1', $title = '', $title_colspan = '1')
+function starttable($width = '-1', $title = '', $title_colspan = '1',$tableId='')
 {
     global $CONFIG;
 
     if ($width == '-1') $width = $CONFIG['picture_table_width'];
     if ($width == '100%') $width = $CONFIG['main_table_width'];
+    if($tableId != ''){
+		$setId = "id=".$tableId;
+	}
     echo <<<EOT
 
 <!-- Start standard table -->
-<table align="center" width="$width" cellspacing="1" cellpadding="0" class="maintable">
+<table align="center" width="$width" cellspacing="1" cellpadding="0" class="maintable" $setId >
 
 EOT;
     if ($title) {

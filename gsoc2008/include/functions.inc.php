@@ -2401,7 +2401,7 @@ foreach ($pic_data as $picture) {
 		if ( $picture['title'] ) {
             $Title_get = $picture['title'];
         } else {
-            $Title_c = $picture['filename'];
+            $Title_get = $picture['filename'];
         }
 		
         $Pic[$i] =  htmlspecialchars($picture_url, ENT_QUOTES) ;
