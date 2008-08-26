@@ -7,6 +7,7 @@
 	import flash.utils.ByteArray;
 	import flash.geom.*;
 	
+	import caurina.transitions.*;
 	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.BMPEncoder;
 	import flash.net.navigateToURL;
@@ -42,7 +43,7 @@
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	
-	import gui.Window;
+	
 
 	/*
 	@AUTHOR SRIBABU DODDAPANENI
@@ -84,8 +85,9 @@ public class Editor extends Sprite{
 		public var effect_applied:Boolean;
 		public var effect_selected:Boolean;
 		
-		
-		
+		//Loading dialog
+		var loadingLbl:Label;
+		var loadingtext:Label
 		
 		// save dialog
 		var dimmer:Sprite ;
@@ -97,9 +99,14 @@ public class Editor extends Sprite{
 		var myBorder:Sprite ;
 		var imageID:int;
 		var save_submitButton:Button;
+		public var preview_drawn:Boolean;
 		
 		public function Editor(imgID:int,imgurl:String, _width:int,_height:int):void{
-		
+		Tweener.addTween(this, {alpha:0, time:1, transition:"linear"});
+		Tweener.addTween(this, {alpha:1, time:14, transition:"linear"});	
+		//scaleX = 1;
+		//scaleY = 1;
+		preview_drawn = false;
 		trace ("B URL " + imgurl)
 		this.imageID = imgID;
 		
@@ -142,6 +149,20 @@ public class Editor extends Sprite{
 		effectList.allowMultipleSelection = false;
         effectList.addEventListener(Event.CHANGE, handleEventLists);
 		effectList.enabled = false;
+
+		// loading dialog
+		loadingLbl = new Label();;
+			with (loadingLbl){
+				htmlText = "<font color='#FFFFFF' size='16'>Loading your photo for editing... </font>";
+				alpha =1 ;
+				width = 300;
+				height = 30;
+			}
+			addChild(loadingLbl);
+			loadingLbl.x = 400;
+			loadingLbl.y = 200;
+		
+		
 		
 		// preparing Editor	
 		graphics.beginFill(0x000000);
@@ -222,12 +243,17 @@ public class Editor extends Sprite{
 			break;
 			case "  |-- Crop/Resize":
 			trace ("this.height " + this.height);
-			previewbox = new previewBox(600,this.width - 150);
+			if(preview_drawn)
+			{
+				this.removeChild(previewbox);
+			}
+			previewbox = new previewBox(597,this.width - 150);
 			previewbox.x = 160;
 			previewbox.y = 2;
 			//previewbox.width = this.width - 150;
 			//previewbox.height = this.height-100;
 			this.addChild(previewbox);
+			preview_drawn = true ;
 			
 			previewbox.draw_crop();
 			break;
@@ -255,12 +281,17 @@ public class Editor extends Sprite{
 		
 		// Draws the previewBox for each Event. Requires addition of cleanup functionality
 		private function buildPreviewBox(){
+			if(preview_drawn)
+			{
+				this.removeChild(previewbox);
+			}
 			previewbox = new previewBox(130,this.width - 150);
 			previewbox.x = 160;
 			previewbox.y = 2;
 			previewbox.width = this.width - 150;
-			previewbox.height = 135;
+			previewbox.height = 130;
 			this.addChild(previewbox);
+			preview_drawn = true ;
 			//effect_applied  = false;
 		}
 		
@@ -268,7 +299,7 @@ public class Editor extends Sprite{
 		
 		// EVENT Manager for image loading 			
 		private function loaded(e:Event):void{
-			
+			removeChild(loadingLbl);
 			mBMAP =  loader.content.bitmapData.clone() ; //(previewImg.bitmapData.clone());
 			mmBMAP = loader.content.bitmapData.clone() ; //(previewImg.bitmapData.clone());
 			finalBMAP = loader.content.bitmapData.clone() ;  //new BitmapData(previewImg.bitmapData.width,previewImg.bitmapData.height,false,0x0);
@@ -298,6 +329,14 @@ public class Editor extends Sprite{
 			previewImg =  new Bitmap(source);
 			previewImg.x = 400 ;
 			previewImg.y = 150 ;
+			
+			previewImg.width = effectBMAP.width;
+			previewImg.height  = effectBMAP.height ;
+			
+			if (!( effectBMAP.width < 400 && effectBMAP.height <  400))
+			{
+						
+			
 			if ( source.width > source.height) // landscape
 			{
 				previewImg.width = source.width * (400 / source.width  );
@@ -308,7 +347,7 @@ public class Editor extends Sprite{
 				previewImg.width = source.width * (400 / source.height );
 				previewImg.height = source.height * (400 / source.height ); 
 			}
-
+			}
 			addChild(previewImg);
 			
 			if(redraw){
@@ -323,8 +362,13 @@ public class Editor extends Sprite{
 			
 		// UNDO EVENT
 		private function undoLastAction(E:Event):void{
-			var win:Sprite = new Window();
-			addChild(win);
+/*			for now it doesnt have a state machine . It just goes back one step */
+
+			effectBMAP = new BitmapData(finalBMAP.width,finalBMAP.height,false,0x0);
+			effectBMAP = finalBMAP.clone();
+			updatePreview(effectBMAP,true);
+			
+			
 		}
 		
 		// Save EVENT
@@ -363,17 +407,17 @@ public class Editor extends Sprite{
 				y = 50;
 				
 				alpha = 1;
-				scaleX= 4;
-				scaleY =4;
+				//scaleX= 1;
+				//scaleY =1;
 				
 				graphics.beginFill(0x000000);
-				graphics.drawRect(0, 0, this.width,this.height);
+				graphics.drawRect(0, 0, 600 , 600 ) ;//this.width,this.height);
 				graphics.endFill();
 
 			}
 			
-			save_dialog.width = 900;
-			save_dialog.height = 900 ;
+			save_dialog.width = 600;
+			save_dialog.height = 600 ;
 			
 			myBorder = new Sprite();
 			myBorder.graphics.lineStyle(3, 0xffffff);
@@ -397,7 +441,7 @@ public class Editor extends Sprite{
 				//scaleY = 3;
 			}
 			save_cancelButton.x = 100;
-			save_cancelButton.y =  500;
+			save_cancelButton.y =  400;
 			
 			save_submitButton = new Button();
 			with(save_submitButton){
@@ -412,8 +456,17 @@ public class Editor extends Sprite{
 				enabled = false;
 			}
 			save_submitButton.x = 300;
-			save_submitButton.y = 500;
+			save_submitButton.y = 400;
 
+			loadingtext = new Label();
+			with(loadingtext){
+			x =  200;
+			y =  0;
+			alpha = 1;
+			width = 400;
+			wordWrap = true;
+			htmlText = "<font color='#FFFFFF' size='10'>Saving photo to the server </font>" ;
+			}
 			
 
 			var rbg1:RadioButtonGroup = new RadioButtonGroup("group1");
@@ -440,7 +493,7 @@ public class Editor extends Sprite{
 				setStyle("textFormat", myFormat);
 				//scaleX= 5;
 				//scaleY = 5;
-				move(225,300);
+				move(225,250);
 				label = "Save as Copy";
 				name = "2";
 				addEventListener( MouseEvent.CLICK  , setSaveAction);
@@ -453,7 +506,7 @@ public class Editor extends Sprite{
 				setStyle("textFormat", myFormat);
 				//scaleX= 5;
 				//scaleY = 5;
-				move(225,400);
+				move(225,300);
 				label = "Save to Desktop :  ";
 				name = "3";
 				addEventListener( MouseEvent.CLICK  , setSaveAction);
@@ -469,7 +522,7 @@ public class Editor extends Sprite{
 			snapInterval = 1;
 			liveDragging = true;
 			x = 225;
-			y = 100 ;
+			y = 90 ;
 			height = 200;
 			width = 160;
 			addEventListener(SliderEvent.CHANGE, jpgQuality_sliderChanged);
@@ -529,17 +582,9 @@ public class Editor extends Sprite{
 		}
 		
 		function save_submit_action(e:MouseEvent):void{
-						var loadingtext:Label = new Label();
-			with(loadingtext){
-			x =  300;
-			y =  300;
-			alpha = 1;
-			width = 400;
-			wordWrap = true;
-			htmlText = "<font color='#FFFFFF' size='30px'>Loading...</font>" ;
-			}
 			
-			save_dialog.addChild(loadingtext);
+			
+			
 			
 			switch(save_action_code)
 			{
@@ -583,17 +628,20 @@ public class Editor extends Sprite{
 			if( effect_applied == true)
 			finalBMAP = effectBMAP.clone();
 			
+			save_dialog.addChild(loadingtext);
+			
 			trace (" final BMAP . width " + finalBMAP.width + "  .height " + finalBMAP.height);
 			
 			var jpgEncoder:JPGEncoder = new JPGEncoder(jpgQualitySlider.value);
 			var jpgStream:ByteArray = jpgEncoder.encode(finalBMAP);
 			var header:URLRequestHeader = new URLRequestHeader("Content-type", "application/octet-stream");
-			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url +"&size_x=" + finalBMAP.width + "&size_y=" + finalBMAP.height + "&magik=" + this.parent.magik );
+			var jpgURLRequest:URLRequest = new URLRequest("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url +"&size_x=" + finalBMAP.width + "&size_y=" + finalBMAP.height + "&magik=" /* + this.magik */ );
 			trace("flashmanager.php?upload=1&savetype=" + action + "&fileid=" + url)
 			jpgURLRequest.requestHeaders.push(header);
 			jpgURLRequest.method = URLRequestMethod.POST;
 			jpgURLRequest.data = jpgStream;
 						
+			
 			var jpgURLLoader:URLLoader = new URLLoader();	
 			jpgURLLoader.load(jpgURLRequest);		
 			jpgURLLoader.addEventListener(Event.COMPLETE, savingComplete);

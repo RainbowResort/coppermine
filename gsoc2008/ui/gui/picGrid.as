@@ -78,9 +78,7 @@ package gui{
 		//constructor : builds the Grid for the first time
 		// x , y , width , height
 		public function picGrid(xParm:int, yParm:int, widthParm:int , heightParm:int):void {
-
-			
-			
+		
 			this.name = "GRID";
 			this.graphics.beginFill(0x0);
 			this.graphics.drawRect(0, 0, widthParm, heightParm);
@@ -93,12 +91,12 @@ package gui{
 			gallery.blendMode = "lighten";
 
 
-
+	/* causing problems while rendering
 			var myBorder:Sprite = new Sprite();
 			myBorder.graphics.lineStyle(2, 0x333333);
 			myBorder.graphics.drawRect(this.x ,this.y , this.width , this.height );
 			this.addChild(myBorder);
-
+	*/
 
 
 			thumbsHolder =  new Sprite();
@@ -150,7 +148,7 @@ package gui{
 			photoLoader.y = 5;
 			photoLoader.x = 5;
 			photoLoader.buttonMode = true;
-			photoLoader.addEventListener(MouseEvent.CLICK,onClickBack);
+			
 			//loaderHolder.addChild(photoLoader);
 		}
 		/*XML - represntation
@@ -168,7 +166,7 @@ package gui{
 		//populate the arrayURL, arrayName and position the thumbnails
 		function fileLoaded(event:Event):void {
 			myXML = XML(event.target.data);
-			trace(event.target.data);
+			//trace(event.target.data);
 			holderArray = new Array();
 			xmlList = myXML.children();
 			for (var i:int=0; i<xmlList.length(); i++) {
@@ -190,7 +188,7 @@ package gui{
 				}
 				thumbsHolder.addChild(holderArray[i]);
 			}
-			trace("len " + holderArray.length );
+			//trace("len " + holderArray.length );
 		}
 		function multiSelect(event:MouseEvent):void {
 			if (event.ctrlKey) {
@@ -421,13 +419,7 @@ package gui{
 
 
 
-		//----handles the Click event added to the photoLoader----
-		function onClickBack(event:MouseEvent):void {
-			Tweener.addTween(thumbsHolder, {x:0, time:1, transition:"easeOutQuint"});
-			Tweener.addTween(loaderHolder, {x:1034, time:1, transition:"easeOutQuint"});
-			Tweener.addTween(thumbsHolder, {alpha:1, time:2, transition:"linear"});
-			Tweener.addTween(loaderHolder, {alpha:0, time:2, transition:"linear"});
-		}
+		
 		//-- performs an action based on the kind of thumbnail
 		function doubleClickEvent(event:MouseEvent):void {
 			if (event.currentTarget.type == "CAT") {
@@ -436,16 +428,18 @@ package gui{
 				getAlbum(event.currentTarget.id,true);
 
 			} else {
+				
+				trace( " EDITOR width : " + this.parent.width  + "  Height " +  this.parent.height  ) ;
 
 				// lets load the editor for this image 
 				//this.parent.editor = new Editor();
-				var editor = new Editor(event.target.id, event.target.bURL ,this.parent.width,this.parent.height);//this.parent.editor;
+				var editor = new Editor(event.target.id, event.target.bURL , this.parent.width  ,this.parent.height);//this.parent.editor;
 				editor.width = this.parent.width;
 				editor.height = this.parent.height;
 				editor.x = 0;
 				editor.y = 0;
 				this.parent.parent.addChild(editor);
-
+				
 
 			}
 		}

@@ -79,7 +79,7 @@ import flash.display.Sprite;
 		
 		//populate the tree
 		function fileLoaded(event:Event):void {
-		trace(event.target.data);
+		//trace(event.target.data);
 		myXML = XML(event.target.data);
 		// Set the Tree's dataProvider to a new TreeDataProvider, instantiated with the above XML
 		mytree.setRendererStyle("textFormat", new TextFormat("Arial", 12, 0xFFCC00));

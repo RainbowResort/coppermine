@@ -42,7 +42,7 @@ package gui{
 			
 				
 			var bd:BitmapData = new BitmapData(bm_width,bm_height,false,0x0); // transparent, in case your image is…
-			matrix.scale( (bm_width / bm.bitmapData.width ), (bm_height / bm.bitmapData.height ));
+			matrix.scale( (bm_width / bm.width ), (bm_height / bm.height ));
 			bd.draw(bm,matrix);
 			bitmap = new Bitmap(bd);
 			bitmap.height= bm_height;

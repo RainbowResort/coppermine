@@ -41,6 +41,8 @@ package gui {
 		var coloredBorder:Sprite = new Sprite();
 		var coloredBorderBool:Boolean;
 		
+		var loadingLbl:Label;
+		
 		
 		function Thumbnail(id:int,tag:String,type:String,bURL:String,sURL:String,_width:int,_height:int):void {
 			this.id = id;
@@ -121,8 +123,20 @@ package gui {
 			loader.y = -(loader_height/2);
 			loader.height = loader_height ; // 75 ; //this.height;
 			loader.width = loader_width ; //108 ; //this.width;
+			loader.addEventListener(Event.COMPLETE,completedLoading,false,false);
 			if(!resize)
 			addChild(loader);
+			loadingLbl = new Label();;
+			with (loadingLbl){
+				htmlText = "<font color='#FFFFFF' size='11'>Loading.. </font>";
+				
+				width = loader_width;
+				height = 20;
+			}
+			loader.addChild(loadingLbl);
+			loadingLbl.x = -(loader_width);
+			loadingLbl.y = -(loader_height);
+			
 			}
 		}
 		
@@ -180,6 +194,12 @@ package gui {
 				this.addChild(tag_lbl);
 
 				
+			
+		}
+		
+		function completedLoading(e:Event){
+			
+			loader.removeChild(loadingLbl);
 			
 		}
 		

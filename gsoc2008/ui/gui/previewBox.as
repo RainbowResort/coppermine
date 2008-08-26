@@ -480,7 +480,7 @@ public class previewBox extends Sprite
 			var crop_reset_but:Button = new Button;
 			
 			with (crop_but){
-				x = this.width-200;
+				x = this.width-150;
 				y = 10;
 				label = "CROP";
 				addEventListener(MouseEvent.CLICK,crop_action,false,false);
@@ -488,7 +488,7 @@ public class previewBox extends Sprite
 			addChild(crop_but);
 			
 			with (crop_reset_but){
-				x = this.width - 200;
+				x = this.width - 150;
 				y = 40;
 				label = "RESET";
 				addEventListener(MouseEvent.CLICK,reset_crop,false,false);
@@ -497,7 +497,7 @@ public class previewBox extends Sprite
 			
 			var save_crop:Button = new Button();
 			with(save_crop){
-				x = this.width-200;
+				x = this.width-150;
 				y = 70;
 				label = "Save CROP";
 				addEventListener(MouseEvent.CLICK,save_crop_action,false,false);
@@ -577,8 +577,14 @@ public class previewBox extends Sprite
 			this.parent.effectBMAP = new BitmapData(resize_x.text,resize_y.text,false,0x0);
 		    this.parent.effectBMAP.draw(new Bitmap(this.parent.finalBMAP),matrix);
 			resizeBMAPS(this.parent.effectBMAP);
-			draw_crop_image(true);
+			//draw_crop_image(true);
+			//this.parent.effect_applied = true;
+			//this.parent.updatePreview(this.parent.effectBMAP,true);
+			
+			this.parent.updatePreview(this.parent.effectBMAP,true);
 			this.parent.effect_applied = true;
+			this.parent.preview_drawn = false;
+			this.parent.removeChild(this);
 			
 		}
 		
@@ -598,22 +604,27 @@ public class previewBox extends Sprite
 		
 			
 		private function draw_crop_image(redrawBool:Boolean){
-			var img_width:int;
-			var img_height:int;
-
+			
+			var img_width:int = this.parent.effectBMAP.width;
+			var img_height:int = this.parent.effectBMAP.height ;
+			
+			if (!( this.parent.effectBMAP.width < 450 &&  this.parent.effectBMAP.height <  450))
+			{
+						
 			if ( this.parent.effectBMAP.width > this.parent.effectBMAP.height) // landscape
 			{
 				img_width = this.parent.effectBMAP.width * (450 / this.parent.effectBMAP.width  );
 				img_height = this.parent.effectBMAP.height * (450 / this.parent.effectBMAP.width  ); 
-				factor = 400 / this.parent.effectBMAP.width ;
+				factor = 450 / this.parent.effectBMAP.width ;
 			}
 			if ( this.parent.effectBMAP.width < this.parent.effectBMAP.height) //portrait
 			{
 				img_width = this.parent.effectBMAP.width * (450 / this.parent.effectBMAP.height );
 				img_height = this.parent.effectBMAP.height * (450 / this.parent.effectBMAP.height ); 
-				factor = 400 / this.parent.effectBMAP.height ;
+				factor = 450 / this.parent.effectBMAP.height ;
 			}
-
+			}
+			
 			trace("Echo " + factor );
 			
 			if (redrawBool){
@@ -728,6 +739,8 @@ public class previewBox extends Sprite
 
 			resizeBMAPS(this.parent.effectBMAP);
 			this.parent.updatePreview(this.parent.effectBMAP,true);
+			this.parent.effect_applied = true;
+			this.parent.preview_drawn = false;
 			this.parent.removeChild(this);
 					
 		}
@@ -874,21 +887,22 @@ public class previewBox extends Sprite
 		public function prepare_bitmaps(count:int){
 			bitmaps_preview = new Array(count+1);
 			trace ("bitmap length " + bitmaps_preview.length);
-			var bm_height;
-			var bm_width;
+			var bm_height;// = this.parent.effectBMAP.height;
+			var bm_width;// = this.parent.effectBMAP.width ;
 			
-			if ( this.parent.previewImg.bitmapData.width >= this.parent.previewImg.bitmapData.height) // landscape
+			this.parent.effectBMAP
+			
+			if ( this.parent.effectBMAP.width >= this.parent.effectBMAP.height) // landscape
 			{
-				bm_width = this.parent.previewImg.bitmapData.width * (160 / this.parent.previewImg.bitmapData.width );
+				bm_width = this.parent.effectBMAP.width * (160 / this.parent.effectBMAP.width );
 				
-				bm_height = this.parent.previewImg.bitmapData.height * (160 / this.parent.previewImg.bitmapData.width  ); 
-				//matrix.scale( (160 / bm.bitmapData.width ), (160 / bm.bitmapData.width ));
+				bm_height = this.parent.effectBMAP.height * (160 / this.parent.effectBMAP.width  ); 
+				
 			}
-			if ( this.parent.previewImg.bitmapData.width < this.parent.previewImg.bitmapData.height) //portrait
+			if ( this.parent.effectBMAP.width < this.parent.effectBMAP.height) //portrait
 			{
-				bm_width = this.parent.previewImg.bitmapData.width * (120 / this.parent.previewImg.bitmapData.height );
-				bm_height = this.parent.previewImg.bitmapData.height * (120 / this.parent.previewImg.bitmapData.height ); 
-				//matrix.scale( (120 / bm.bitmapData.height ), (120 / bm.bitmapData.height ));
+				bm_width = this.parent.effectBMAP.width * (120 / this.parent.effectBMAP.height );
+				bm_height = this.parent.effectBMAP.height * (120 / this.parent.effectBMAP.height ); 
 			}
 
 			trace("BM_WIDTH : " + bm_width);
@@ -898,7 +912,7 @@ public class previewBox extends Sprite
 			
 			for (var i:int ; i <= count ; i++){
 			
-			bitmaps_preview[i] = new effectPreview(this.parent.previewImg,bm_width,bm_height);
+			bitmaps_preview[i] = new effectPreview(this.parent.effectBMAP,bm_width,bm_height);
 			if(i != count)
 			this.addChild(bitmaps_preview[i]);
 			if(i == 0)

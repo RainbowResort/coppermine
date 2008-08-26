@@ -51,12 +51,12 @@ public class player extends MovieClip{
 		
 		super();
 			
-		if(this.stage)
-		{
-			this.stage.scaleMode = StageScaleMode.NO_SCALE;
-			this.stage.align = StageAlign.TOP_LEFT;
-			//this.stage.addEventListener(Event.RESIZE, stageResizeHandler, false, 0, true);
-		}
+		//if(this.stage)
+//		{
+//			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+//			this.stage.align = StageAlign.TOP_LEFT;
+//			//this.stage.addEventListener(Event.RESIZE, stageResizeHandler, false, 0, true);
+//		}
 		drawLogin();
 		
 		
@@ -152,8 +152,23 @@ public class player extends MovieClip{
 	
 	private function drawGrid():void{
 			
+			trace (" WINDOW width :  " + width  + " this.height " + height );
 			trace("MAGIK " + magik);
 		
+			//stage.scaleMode = StageScaleMode.SHOW_ALL;
+			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+			this.stage.align = StageAlign.TOP_LEFT;
+			
+
+			 
+
+			
+			trace (" WINDOW width :  " + stage.stageWidth  + " this.height " + stage.stageHeight );
+			stage.stageWidth = 1024;
+			stage.stageHeight = 600;
+			trace (" WINDOW width :  " + stage.stageWidth  + " this.height " + stage.stageHeight );
+
+			
 			grid = new picGrid(0,0,800,500);
 			grid.x = 200;
 			grid.y = 5;
@@ -172,8 +187,5 @@ public class player extends MovieClip{
 			
 			
 	}
-		
-		
-		
 }
 }

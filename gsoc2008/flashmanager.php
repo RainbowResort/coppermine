@@ -55,111 +55,111 @@ function make_thumbnail($img_dir , $sourceimage){
 				rename($CONFIG['fullpath'].$img_dir.$newimage,$CONFIG['fullpath'].$img_dir.$CONFIG['thumb_pfx'].$sourceimage);
 }
 
-//BYPASS Inspekt to make upload work
-if($_GET['upload']==1 /* && $_GET['magik']==$_SESSION["MAGIK"] */ )
-{
-	//get the JPG and write it to disk
-	$jpg = $GLOBALS["HTTP_RAW_POST_DATA"]; ;
-	// save image to a temporary location
-	$f = fopen("./albums/snapshot.jpg", 'wb');
-	fwrite($f, $jpg);
-	fclose($f);
-	
-	// can use Inspekt now :)
-
-	define('IN_COPPERMINE', true);
-	require('include/init.inc.php');
-	$input = Inspekt::makeSuperCage(); 
-	$get = Inspekt::makeGetCage();
+		//BYPASS Inspekt to make upload work
+		if($_GET['upload']==1 /* && $_GET['magik']==$_SESSION["MAGIK"] */ )
+		{
+			//get the JPG and write it to disk
+			$jpg = $GLOBALS["HTTP_RAW_POST_DATA"]; ;
+			// save image to a temporary location
+			$f = fopen("./albums/snapshot.jpg", 'wb');
+			fwrite($f, $jpg);
+			fclose($f);
+			
+			// can use Inspekt now :)
 		
-	// Pictures from a particular album
-	//print "image id ".$_GET['fileid'];
-	$img_id = $superCage->get->getRAW('fileid');
-	$img_savetype = $superCage->get->getRAW('savetype');
-
-	// could be done on the server .. but for now its easier to transmit	
-	$size_x = $superCage->get->getRAW('size_x');
-	$size_y = $superCage->get->getRAW('size_y');
-
-	if ($img_savetype == 3)
-	{
-		print "200";
-
-	}
-	
-	if ($img_savetype == 1 || $img_savetype == 2)
-	{
-			print "\n inside IF ... savetype =1 or 2? ";
-			//connect to the database get the filepath
-		
-
-			define('EDITPICS_PHP', true);
-			require('include/picmgmt.inc.php');
-		
-		//	require('include/picmgmt.inc.php');
-		
-			global $CONFIG;
-			cpg_db_connect();
-			$query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} where pid=".$img_id ;
-			$image = cpg_db_fetch_rowset(cpg_db_query($query));
-			$image = $image[0];
-			// REPLACE OPTION --- OVERWRITE FILE
-			if ($img_savetype  == 1 )
-			{
-						// copy the image to the require location
-						copy('./albums/snapshot.jpg', './albums/'.$image[2].$image[3]); 
-						// update the thumbnail
-						make_thumbnail($image[2],$image[3]);
-						print "200" ;
-			}
-			else if($img_savetype  == 2)
-			{
-						//save it with a new name in the album Directory with currentdate prefix
-						//require('include/functions.inc.php');
-						$siz_e = cpg_getimagesize('./albums/snapshot.jpg', true);
-						$file_name = date("Ymdgi").$image[3];
-						//copy temporary file to the final destination
-						rename('./albums/snapshot.jpg', './albums/'.$image[2].$file_name); 
-						
-						//copy entires into the database
-						// All fields are duplicated except the id field, which
-						// is auto-incremented to the next available value.
-						//cpg_db_connect();	
-						$sql = 	"SELECT * FROM {$CONFIG['TABLE_PICTURES']} where pid=".$img_id ;
+			define('IN_COPPERMINE', true);
+			require('include/init.inc.php');
+			$input = Inspekt::makeSuperCage(); 
+			$get = Inspekt::makeGetCage();
 				
-						$result = cpg_db_query($sql);
-						//print "\n fetched results ".echoArray($result);
-						
-						if ($result) {
-								$sql = "INSERT INTO {$CONFIG['TABLE_PICTURES']} SET ";
-								$row = mysql_fetch_array($result);
-								$RowKeys = array_keys($row);
-								$RowValues = array_values($row);
-							
-								$sql .= $RowKeys[3] . " = '" . $RowValues[3] . "',";
-								$sql .= $RowKeys[5] . " = '" . $RowValues[5] . "',";
-								$sql .= $RowKeys[7] . " = '" . $file_name . "',";
-								$sql .= $RowKeys[9] . " = '" . $RowValues[9] . "',";
-								$sql .= $RowKeys[11] . " = '" . $RowValues[11] . "',";
-								$sql .= $RowKeys[13] . " = '" . $size_x  . "'," ;
-								$sql .= $RowKeys[15] . " = '" . $size_y  . "'," ;
-								
-								
-										for ($i=17;$i<count($RowKeys);$i+=2) {
-												if ($i!=17) { $sql .= ", "; }
-												$sql .= $RowKeys[$i] . " = '" . $RowValues[$i] . "'";
-										}
-					
-					
-								make_thumbnail($image[2],$file_name);
-								$result = cpg_db_query($sql);
-								print "DONE";
-
-								}
+			// Pictures from a particular album
+			//print "image id ".$_GET['fileid'];
+			$img_id = $superCage->get->getRAW('fileid');
+			$img_savetype = $superCage->get->getRAW('savetype');
+		
+			// could be done on the server .. but for now its easier to transmit	
+			$size_x = $superCage->get->getRAW('size_x');
+			$size_y = $superCage->get->getRAW('size_y');
+		
+			if ($img_savetype == 3)
+			{
+				print "200";
+		
+			}
+			
+			if ($img_savetype == 1 || $img_savetype == 2)
+			{
+					print "\n inside IF ... savetype =1 or 2? ";
+					//connect to the database get the filepath
+				
+		
+					define('EDITPICS_PHP', true);
+					require('include/picmgmt.inc.php');
+				
+				//	require('include/picmgmt.inc.php');
+				
+					global $CONFIG;
+					cpg_db_connect();
+					$query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} where pid=".$img_id ;
+					$image = cpg_db_fetch_rowset(cpg_db_query($query));
+					$image = $image[0];
+					// REPLACE OPTION --- OVERWRITE FILE
+					if ($img_savetype  == 1 )
+					{
+								// copy the image to the require location
+								copy('./albums/snapshot.jpg', './albums/'.$image[2].$image[3]); 
+								// update the thumbnail
+								make_thumbnail($image[2],$image[3]);
+								print "200" ;
 					}
-		}	
-}
-
+					else if($img_savetype  == 2)
+					{
+								//save it with a new name in the album Directory with currentdate prefix
+								//require('include/functions.inc.php');
+								$siz_e = cpg_getimagesize('./albums/snapshot.jpg', true);
+								$file_name = date("Ymdgi").$image[3];
+								//copy temporary file to the final destination
+								rename('./albums/snapshot.jpg', './albums/'.$image[2].$file_name); 
+								
+								//copy entires into the database
+								// All fields are duplicated except the id field, which
+								// is auto-incremented to the next available value.
+								//cpg_db_connect();	
+								$sql = 	"SELECT * FROM {$CONFIG['TABLE_PICTURES']} where pid=".$img_id ;
+						
+								$result = cpg_db_query($sql);
+								//print "\n fetched results ".echoArray($result);
+								
+								if ($result) {
+										$sql = "INSERT INTO {$CONFIG['TABLE_PICTURES']} SET ";
+										$row = mysql_fetch_array($result);
+										$RowKeys = array_keys($row);
+										$RowValues = array_values($row);
+									
+										$sql .= $RowKeys[3] . " = '" . $RowValues[3] . "',";
+										$sql .= $RowKeys[5] . " = '" . $RowValues[5] . "',";
+										$sql .= $RowKeys[7] . " = '" . $file_name . "',";
+										$sql .= $RowKeys[9] . " = '" . $RowValues[9] . "',";
+										$sql .= $RowKeys[11] . " = '" . $RowValues[11] . "',";
+										$sql .= $RowKeys[13] . " = '" . $size_x  . "'," ;
+										$sql .= $RowKeys[15] . " = '" . $size_y  . "'," ;
+										
+										
+												for ($i=17;$i<count($RowKeys);$i+=2) {
+														if ($i!=17) { $sql .= ", "; }
+														$sql .= $RowKeys[$i] . " = '" . $RowValues[$i] . "'";
+												}
+							
+							
+										make_thumbnail($image[2],$file_name);
+										$result = cpg_db_query($sql);
+										print "DONE";
+		
+										}
+							}
+				}	
+		}
+		
 
 // IF we are not uploading an edited image
 else
@@ -457,7 +457,7 @@ else
 						
 					}
 			
-			if(verifykey($superCage->get->getRAW('magik')))
+			else if(verifykey($superCage->get->getRAW('magik')))
 			{
 			
 					if($superCage->get->getRAW('getalb')==1)  // Pictures from a particular album
@@ -493,8 +493,8 @@ else
 					{	
 						processMove();
 					}
-	
-					else 
+			}
+			else 
 					{
 						?>
 						<html>
@@ -510,6 +510,6 @@ else
 						</html>
 						<?php
 					}
-			}
+			
 }
 ?>
