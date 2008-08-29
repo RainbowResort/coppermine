@@ -35,7 +35,8 @@
 		jQuery("#pic_sort tr:even").css("background", "#EEE");
 		jQuery("#pic_sort tr:odd").css("background", "#FFFFFF");
 	}
-	addRowColorsPhoto();/**called to addRowColorsPhoto funtion to color*/	
+	/**called to addRowColorsPhoto funtion to color*/
+	addRowColorsPhoto();
     //add query to input hidden when drop the pic item..
     	$('#pic_sort').tableDnD({
         	onDrop: function(table, row) {
@@ -655,7 +656,7 @@ jQuery.tableDnD = {
             
         }
     },
-	
+	//**this edit by Nuwan sameera for manullay sorting*/
 	sortManually: function(count){
 //	 alert(jQuery.tableDnD.firstObjectHieght);
 		var downOrUp	= count;

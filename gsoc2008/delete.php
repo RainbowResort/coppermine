@@ -395,10 +395,11 @@ switch ($what) {
 	  $returnOutput .= '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
       
 	$sort_list_matched = $superCage->post->getMatched('sort_order', '/^[0-9@,]+$/');
-	$orig_sort_order = parse_pic_list($sort_order_matched[0]);
-      foreach ($orig_sort_order as $picture){
+	$orig_sort_order = parse_pic_list($sort_list_matched[0]);
+    
+	foreach ($orig_sort_order as $picture){
          $op = parse_pic_orig_sort_order($picture);
-         print_r($op);
+       //  print_r($op);
          
          if (count ($op) == 2){
             $query = "UPDATE $CONFIG[TABLE_PICTURES] SET position='{$op['pos']}' WHERE pid='{$op['aid']}' $restrict LIMIT 1";
@@ -412,7 +413,7 @@ switch ($what) {
 	$album_id = $category = $superCage->post->getInt('albunm_id');
 	$result = cpg_db_query("SELECT aid, pid, filename,title,position FROM {$CONFIG['TABLE_PICTURES']} WHERE aid =".$album_id." ORDER BY position ASC, pid");
 			$rowset = cpg_db_fetch_rowset($result);	 
-		//	print_r($rowset);
+			//print_r($rowset);
 			
 				//$aa = $superCage->post->getMatched('ajax_to', '/^[0-9@,]+$/');
 			if ($superCage->post->keyExists('pictur_order')) {
