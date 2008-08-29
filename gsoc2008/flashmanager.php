@@ -229,6 +229,16 @@ else
 					}
 			echo "</node>\n";
 			}
+			// Albums at root level
+			echo "<node label='Root Albums' t='C' i='10001'>\n";
+			$Albumquery = "SELECT aid, title FROM {$CONFIG['TABLE_ALBUMS']} WHERE category =10001 OR  category =0";
+				$albums = cpg_db_fetch_rowset(cpg_db_query($Albumquery));
+				foreach ($albums as $album)
+					{
+						echo "<node label='$album[1]' t='A' i='$album[0]'></node>\n";
+					}
+			
+			echo "</node>\n";
 			echo "</node>\n";
 			}
 			
@@ -306,6 +316,8 @@ else
 							echo "<b></b>\n";
 							echo "<s></s>\n";
 							echo "</image>\n";
+							
+							getAlbums(category);
 					}
 					echo "</images>\n";
 			}
@@ -346,10 +358,10 @@ else
 							echo "<i>".$image[0]."</i>\n";
 							echo "<l></l>\n";
 							echo "<t>IMG</t>\n";
-							echo "<b>".get_pic_url($image)."</b>\n";
-							echo "<s>".get_pic_url($image,thumb)."</s>\n";
-							//echo "<b>http://rgkdev.net/cpg/".get_pic_url($image)."</b>\n";
-							//echo "<s>http://rgkdev.net/cpg/".get_pic_url($image,thumb)."</s>\n";
+						//	echo "<b>".get_pic_url($image)."</b>\n";
+						//	echo "<s>".get_pic_url($image,thumb)."</s>\n";
+							echo "<b>http://rgkdev.net/cpg/".get_pic_url($image)."</b>\n";
+							echo "<s>http://rgkdev.net/cpg/".get_pic_url($image,thumb)."</s>\n";
 							echo "</image>\n";
 					}
 					echo "</images>\n";
