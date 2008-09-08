@@ -27,6 +27,10 @@ define('ADMIN_PHP', true);
 require('include/init.inc.php');
 require('include/picmgmt.inc.php');
 
+js_include('js/jquery.js');
+js_include('js/jSerach.js');
+js_include('js/jquery.form.js');
+js_include('js/upload.js');
 // Some placeholders.
 $customize = CUSTOMIZE_UPLOAD_FORM;
 $user_form = USER_UPLOAD_FORM;
@@ -82,7 +86,7 @@ EOT;
 
 // The text box form input function. Takes the text label for the box, the input name, the maximum length for text boxes,
 // and the number of iterations.
-function text_box_input($text, $name, $max_length, $iterations, $default='') {
+function text_box_input($text, $name, $max_length, $iterations, $default='',$className,$attribute,$type=0) {
 
     global $CONFIG;
 
@@ -92,7 +96,7 @@ function text_box_input($text, $name, $max_length, $iterations, $default='') {
         echo "        <input type=\"hidden\" name=\"$name\" value=\"$default\" />\n";
         return;
     }
-
+	$jTextInput = '';
     // Begin loop
     for ($counter=0; $counter<$iterations; $counter++) {
 
@@ -101,27 +105,51 @@ function text_box_input($text, $name, $max_length, $iterations, $default='') {
         $cardinal = $counter + 1;
         $ordinal = "".$cardinal.". ";
     }
-
-    // Create a text box.
+	
+	if($attribute!=""){
+		$attribute = $attribute;
+	}
+	else{
+		$attribute = "";
+	}
+	// Create a text box.
+	if($type == 0){
     echo <<<EOT
         <tr>
             <td width="40%" class="tableb">
                         $text  $ordinal
         </td>
         <td width="60%" class="tableb" valign="top">
-                <input type="text" style="width: 100%" name="$name" maxlength="$max_length" value="$default" class="textinput" id="$name" />
+                <input type="text" style="width: 100%" name="$name" maxlength="$max_length" value="$default" class="$className" id="$name" $attribute />
                 </td>
         </tr>
 
 EOT;
+	}
+	
+	if($type == 1){
+		
+		$jTextInput .= '
+		 	<div>
+              <lable>
+                       '.$text .  $ordinal.'
+        	</lable>
+        	<div>
+                <input type="text" style="width: 55%" name="'.$name.'" maxlength="'.$max_length.'" value="'.$default.'" class="'.$className.'"  '.$attribute.' />
+            </div>
+        	</div>';	
+		
+		}
     }
+    
+    return $jTextInput;	
 }
 
 // The file input function. Takes the label, field name, and number of iterations as arguments.
-function file_input($text, $name, $iterations) {
+function file_input($text, $name, $iterations, $type = 0) {
 
     $ordinal = '';
-
+	$jFile = "";
     // Begin loop
     for ($counter=0; $counter<$iterations; $counter++) {
 
@@ -130,36 +158,74 @@ function file_input($text, $name, $iterations) {
         $cardinal = $counter + 1;
         $ordinal = "".$cardinal.". ";
     }
-
+	
     // Create the file input box.
+    if($type == 0){
     echo <<<EOT
-        <tr>
-            <td class="tableb">
+        <div>
+            <lable>
                         $text  $ordinal
-        </td>
-        <td class="tableb" valign="top">
-                        <input type="file" name="$name" size="40" class="listbox" />
-                </td>
-        </tr>
+        </lable>
+        <div>
+                        <input type="file" name="$name" size="40" class="filebox" />
+        </div>
+        </div>
 
 EOT;
+	}
+	
+	/**create the file input box to javscrit handling*/
+	if($type == 1){
+	  
+	  $jFile	.=	<<<EOT
+        <div>
+            <lable>
+                        $text  $ordinal
+        </lable>
+        <div>
+                        <input type="file" name="$name" size="40" class="filebox" />
+        </div>
+        </div>
+
+EOT;
+	
+	}
+	
     }
+    
+    return $jFile;
 }
 
 // The function for text areas on forms. Takes the label, field name, and maximum length as arguments.
-function text_area_input($text, $name, $max_length,$default='') {
+function text_area_input($text, $name, $max_length,$default='',$type=0) {
 
     // Create the text area.
+    if($type == 0){
     echo <<<EOT
         <tr>
                 <td class="tableb" valign="top">
                         $text
                 </td>
                 <td class="tableb" valign="top">
-                        <textarea name="$name" rows="5" cols="40" class="textinput" style="width: 100%;" onKeyDown="textCounter(this, $max_length);" onKeyUp="textCounter(this, $max_length);">$default</textarea>
+                        <textarea name="$name" rows="5" cols="40" class="textinput" style="width: 55%;" onKeyDown="textCounter(this, $max_length);" onKeyUp="textCounter(this, $max_length);">$default</textarea>
                 </td>
         </tr>
 EOT;
+	}
+	//create the ext area to set as a variable
+	if($type == 1){
+		$jTextArea =<<<EOT
+        <div>
+        	<lable>
+                        $text
+            </lable>
+            <div>
+                        <textarea name="$name" rows="5" cols="40" class="textinput" style="width: 55%;" onKeyDown="textCounter(this, $max_length);" onKeyUp="textCounter(this, $max_length);">$default</textarea>
+            </div>
+        </div>
+EOT;
+	return $jTextArea;
+	}
 }
 
 
@@ -177,6 +243,7 @@ function create_form(&$data) {
     global $CONFIG, $lang_upload_php;
 
     // Cycle through the elements in the data array.
+   //print_r($data);
     foreach($data as $element) {
 
         // If the element is another array, parse the definition contained within the array.
@@ -184,7 +251,9 @@ function create_form(&$data) {
 			$element[2] = (isset($element[2])) ? $element[2] : '';
 			$element[3] = (isset($element[3])) ? $element[3] : '';
 			$element[4] = (isset($element[4])) ? $element[4] : '';
-
+			$element[6] = (isset($element[6])) ? $element[6] : '';
+			$element[7] = (isset($element[7])) ? $element[7] : '';
+			
             // Based on the type declared in the data array's third position, create a different form input.
             switch ($element[2]) {
 
@@ -192,7 +261,7 @@ function create_form(&$data) {
                 case 0 :
 
                     //Call the form input function.
-                    text_box_input($element[0], $element[1], $element[3], $element[4], (isset($element[5])) ? $element[5] : '');
+                    text_box_input($element[0], $element[1], $element[3], $element[4], (isset($element[5])) ? $element[5] : '',$element[6],$element[7]);
                     break;
 
                 // If the type is a file input.
@@ -235,6 +304,53 @@ function create_form(&$data) {
     }
 }
 
+pub_user_albums();
+
+/**create form to handle using javascript**/
+function createJFrom($inputFieldType)
+	{
+		
+    	// Globalize $CONFIG
+  		global $CONFIG, $lang_upload_php, $lang_common,$lang_bbcode_help_title, $lang_bbcode_help;
+  		
+  		$createJForm = '';
+       	//print $lang_upload_php['pic_title'];
+       	
+       	/**get the Ablum Drop donw to the varialbe*/
+       	$createJForm 	.=	 upload_form_alb_list($lang_common['album'], 'album_array[]', 1);
+    
+		/**get the File input field to the variable*/
+		if($inputFieldType == 1){
+		$createJForm	.= 	file_input('File', 'file_upload_array[]', 1, 1);
+	 	}
+	 	
+	 	if($inputFieldType == 2){
+		$createJForm	.=	text_box_input('URL', 'URI_array[]', 255, 1,'','url','',1);
+		}
+		 /**get the Title input field as a variable*/
+		$createJForm	.=	text_box_input($lang_upload_php['pic_title'], 'title_array[]', 255, 1,'','title','',1);
+
+		/**get the Text area field to the variable*/
+		$captionLabel = $lang_upload_php['description'];
+		if ($CONFIG['show_bbcode_help']) {
+		//	$captionLabel .= '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);
+		} 
+
+		$createJForm	.=	text_area_input($captionLabel, 'caption_array[]',$CONFIG['max_img_desc_length'],'',1);
+		
+		/**get the Text input field to the variable*/
+		$createJForm	.=	text_box_input($lang_common['keywords_insert1'], 'keywords_array[]', 255, 1,'','serachUp','onKeyPress="return  disableEnterKey(event)" autocomplete="off"', 1);
+
+		return $createJForm;
+	}
+	
+	//create a form which can be enter files
+	$createJForm = createJFrom(1);
+	set_js_var('albumForm',$createJForm);
+	//create a form which can be enter URLs 
+	$createJUrlForm = createJFrom(2);
+	set_js_var('albumUrlForm',$createJUrlForm);
+	
 // The open_form function creates the Javascript verification code and the opening form tags.
 // $path hold the form action path.
 function open_form($path) {
@@ -259,8 +375,9 @@ global $lang_upload_php;
 // Create the submit button and close the form.
 echo <<<EOT
         <tr>
-                <td colspan="2" align="center" class="tablef">
-                        <input type="submit" value="{$button_value}" class="button" />
+                <td colspan="2" id="SumbitButton" class="tablef">
+                	
+                        <input type="submit" name="{$button_value}" value="{$button_value}" /> <span class='message'></span>
                 </td>
 
         </tr>
@@ -367,36 +484,27 @@ function spring_cleaning($directory_path, $cache_time = 86400, $exclusion_list =
 
     // Now let's read through the directory contents.
     while (!(($file = readdir($directory_handle)) === false)) {
-
             // Avoid deleting the index page of the directory.
             if (in_array($file,$exclusion_list)) {
-
                 // This is the index file, so we move on.
                 continue;
-
             }
 
             $dir_path = $directory_path."/".$file;
-
             if (is_dir($dir_path)) {
-
                 // This is a directory, so we move on.
                 continue;
-
             }
 
             // We find out when the file was last accessed.
             $access_time = filemtime($dir_path); // fileatime() returned incorrect value on Windows
-
             // We find out the current time.
             $current_time = time();
-
             // We calculate the the delete time. We will delete anything older than $cache_time.
             $delete_time = $current_time - $access_time;
 
             // Now we compare the two.
             if ($delete_time >= $cache_time) {
-
                     // The file is old. We delete it.
                     $deleted_list[] = $dir_path; // Store the name of the file getting deleted
                     unlink($dir_path);
@@ -427,25 +535,19 @@ function create_record($encoded_string) {
 
         // Move all values into $unique_ID_array.
         while ($generic_array = mysql_fetch_array($result)) {
-
             // Store the values.
             $unique_ID_array[] = $generic_array['unique_ID'];
-
         }
 
     } else {
-
         // The table may be empty. Give it a value.
         $unique_ID_array[] = 0;
-
     }
 
     // Free resources.
     mysql_free_result($result);
-
     // Generate the unique ID. Keep generating new IDs until one that is not in use is found.
     do {
-
         // Create a random string by taking the first 8 characters of an MD5 hash of a concatenation of the current UNIX epoch time and the current server process ID.
         $unique_ID = substr(md5(uniqid("")), 0, 8);
 
@@ -453,19 +555,13 @@ function create_record($encoded_string) {
 
     // Create a timestamp to track the record.
     $timestamp = time();
-
     // Insert the new record.
     $result = cpg_db_query("INSERT INTO {$CONFIG['TABLE_TEMPDATA']} VALUES ('$unique_ID', '$encoded_string', '$timestamp')");
-
     // Return the unique ID if insertion was successful. Otherwise, return false.
     if ($result) {
-
         return $unique_ID;
-
     } else {
-
         return FALSE;
-
     }
 
 }
@@ -578,7 +674,7 @@ function clean_table() {
 //The function check_status determines the status of a URI resource.
 //It takes the URI as its argument and serves to give more specific error
 //messages about unavailable resources.
-function check_status($URI) {
+function check_status($URI) {	
 
     // Parse the URI into it's requisite parts.
     $parts = @parse_url($URI);
@@ -745,7 +841,6 @@ if ((CUSTOMIZE_UPLOAD_FORM) and (!$superCage->post->keyExists('file_upload_reque
     //Check for the number of file upload boxes.
 
     if ($superCage->post->keyExists('file_upload_request')) {
-
         // Do some validation.
         $filtered_request = max(0, $superCage->post->getInt('file_upload_request'));
 
@@ -810,9 +905,8 @@ if (!$superCage->post->keyExists('control')) {
 
     // Do some cleaning in the temp data table.
     clean_table();
-
     // Create upload form headers.
-    pageheader($lang_upload_php['title']);
+   	pageheader($lang_upload_php['title']);
 
 
 
@@ -826,11 +920,24 @@ if (!$superCage->post->keyExists('control')) {
     } else {
 
         // Direct the request to this script and print the form instructions.
-        open_form($CPG_PHP_SELF);
+        
         // Open the form table.
         starttable("100%", $lang_upload_php['title'], 2);
         form_instructions();
-
+        endtable();
+        
+		open_form($CPG_PHP_SELF);
+		starttable("100%", "Add Files", 2,"AddFile");
+		
+		//navigation to file upload area and URL upload area
+		echo "	<tr><td class='Nvi_bk'>
+					<a id='fileUploadNvi' class='currentUp'>File Upload</a> <a id='urlUploadNvi' class='uploadNvi'>URL Upload</a>
+				</td></tr>";
+		$avaible = "<div class= 'availableBox' >
+				  <div><lable>Available</lable></div>
+				  <div><input type='text'  size='5' name='added_files' value='$num_file_boxes' disabled /> / <input type='text'  size='5' name='max_files' value='$num_file_boxes' disabled /></div>
+			</div>";
+	
     }
 
 
@@ -838,12 +945,11 @@ if (!$superCage->post->keyExists('control')) {
     // Use a if-then-else construct to create the upload form for the user based on the setting in the
     // groups panel.
     if(USER_UPLOAD_FORM == '0') {
-
         // The user should have the 'single upload only' form.
 
         // Declare an array containing the various upload form box definitions.
         $captionLabel = $lang_upload_php['description'];
-        $keywordLabel = $lang_common['keywords_insert1']. '<br /><a href="#" onClick="return MM_openBrWindow(\'keyword_select.php\',\'selectKey\',\'width=250, height=400, scrollbars=yes,toolbar=no,status=yes,resizable=yes\')">' . $lang_common['keywords_insert2'] .'</a>';
+        
         if ($CONFIG['show_bbcode_help']) {$captionLabel .= '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);}
         $form_array = array(
         sprintf($lang_upload_php['max_fsize'], $CONFIG['max_upl_size']),
@@ -877,40 +983,53 @@ if (!$superCage->post->keyExists('control')) {
         // Check for valid form number.
         if ((USER_UPLOAD_FORM >= '0') and (USER_UPLOAD_FORM <= '7')) {
 
-            if ($sel_album) {
+            //if ($sel_album) {
                 //album id is available, put it in hidden field
-                $form_array[] = array('album', $sel_album, 4);
-            }
+             //   $form_array[] = array('album', $sel_album, 4);
+            //}
 
             // Create form array, and insert MAX_FILE_SIZE control.
-            $form_array[] = array('MAX_FILE_SIZE', $max_file_size);
+           $form_array[] = array('MAX_FILE_SIZE', $max_file_size);
 
             // Add each upload type depending on the form number,
             if((USER_UPLOAD_FORM == '1') or (USER_UPLOAD_FORM == '3') or (USER_UPLOAD_FORM == '4') or (USER_UPLOAD_FORM == '6')) {
 
-                if($num_file_boxes > 0) {
+			//create the submit form if there is not javscript enabled
+			if($num_file_boxes > 0) {
+				$getFields = file_input('', 'file_upload_array[]', $num_file_boxes, 1);
+            }
+            
+            //create the URL input fields here if javscript not enabled 
+            if($num_URI_boxes > 0){
+				$getUrlsFields = text_box_input('', 'URI_array[]', 255, $num_URI_boxes,'','url','',1);
+			}
+			//set form using javascript in this <tr class='mainFrom'>
 
-                    $form_array[] = $lang_upload_php['reg_instr_7'];
-
-                    $form_array[] = array('', 'file_upload_array[]', 1, $num_file_boxes);
-
-                }
-
+echo <<<EOT
+			 <tr><td>
+			 	{$avaible}
+				 	<div class='mainForm'>
+			 			<NOSCRIPT>
+						 	<div class='albumForm'>
+						 		<div>{$lang_upload_php['reg_instr_7']}</div>
+							 	{$getFields}
+							</div>
+						</NOSCRIPT>
+					</div>
+					<div class='UrlForm'>
+						<NOSCRIPT>
+							<div class='albumForm'>
+								<div>{$lang_upload_php['reg_instr_8']}</div>
+								{$getUrlsFields}
+							</div>
+						</NOSCRIPT>
+					</div>		
+			 </td></tr>
+EOT;
             }
 
-            if((USER_UPLOAD_FORM == '2') or (USER_UPLOAD_FORM == '3') or (USER_UPLOAD_FORM == '5') or (USER_UPLOAD_FORM == '6')) {
 
-                if($num_URI_boxes > 0) {
-
-                    $form_array[] = $lang_upload_php['reg_instr_8'];
-
-                    $form_array[] = array('', 'URI_array[]', 0, 256, $num_URI_boxes);
-
-                }
-
-            }
-
-            if((USER_UPLOAD_FORM == '4') or (USER_UPLOAD_FORM == '5') or (USER_UPLOAD_FORM == '6') or (USER_UPLOAD_FORM == '7')) {
+           if((USER_UPLOAD_FORM == '4') or (USER_UPLOAD_FORM == '5') or (USER_UPLOAD_FORM == '6') or (USER_UPLOAD_FORM == '7')) {
 
                 $form_array[] = $lang_upload_php['reg_instr_6'];
                 $form_array[] = array('', 'ZIP_array[]', 1, 1);
@@ -918,7 +1037,9 @@ if (!$superCage->post->keyExists('control')) {
             }
 
             // Add the control device.
-            $form_array[] = array('control', 'phase_1', 4);
+            $form_array[] = array('control', 'phase_2', 4);
+            $form_array[] = array('action',2,4);
+            $form_array[] = array('unique_ID', '', 4);
 
         } else {
 
@@ -928,27 +1049,51 @@ if (!$superCage->post->keyExists('control')) {
         }
 
     }
-
+    
     // Create the form.
     create_form($form_array);
 
-
-
+	/**added Close button upload box NS*/
+	echo "<tr><td class= 'tablef' >
+			<div><lable>Add file</lable></div>
+			<div><input  type='submit' name='Save' value='Add File' id='uploadAdd' class='FileUpoadAdd' /></div>
+		 </td></tr>";
+	//print USER_UPLOAD_FORM;
     // Close the form.
-    if (USER_UPLOAD_FORM == '0') {
 
-        // The user has the single upload only form. Select proper language for button.
-        close_form($lang_upload_php['title']);
-
-    } else {
-
-        // Make button say 'Continue.'
-        close_form($lang_common['continue']);
-
-    }
 
     // Close the table, create footers, and flush the output buffer.
     endtable();
+    
+    /**this table is use to store the uploaded file details untill submit to the databse..*/
+   	starttable("100%", "Stored file data", 2,"storeFile");
+ 	echo "	<tr><td class='tableh2'>
+	 			<div id='emptyEntry' >You have Empty files saved!</div>
+			</td></tr>
+	 	  	<tr><td>
+			   <div id='store_container'></div>
+			   <div id='store_url_container'></div>
+			</td></tr>";
+	 	  
+	/**this for showing uploaidng progress*/
+   	echo "<tr><td class='tableh2' id='uploadingImage' >
+	   			<div ><img src='images/uploading_image.gif' title='uploading' /></div>
+		  </td></tr>
+	 	  <tr><td>
+		   		<div id='uploadProgress'></div>
+		  </td></tr>";
+		  
+	 if (USER_UPLOAD_FORM == '0') {
+        // The user has the single upload only form. Select proper language for button.
+        close_form($lang_upload_php['title']);
+    } else {
+        // Make button say 'Continue.'
+    	close_form($lang_common['continue']);
+    	echo "<tr><td id='SaveEntryContainer' class='tablef' style='display: none' >
+				<input  type='button' name='SaveEntry' value='Save Entry' id='SaveEntry' />
+			  </td></tr>";
+	}
+	endtable();
     echo "</form>";
     pagefooter();
     ob_end_flush();
@@ -961,7 +1106,7 @@ if (!$superCage->post->keyExists('control')) {
 
 // Recieve incoming file uploads for phase I.
 //Using getRaw() for comparison only
-if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control') == 'phase_1') {
+if ( ($superCage->post->keyExists('control') && $superCage->get->getInt('action') == 1 ) or ($superCage->post->keyExists('control') && $superCage->post->getInt('action') == 2 ) ) {
     // $_FILES['file_upload_array']['name'][$counter]
     // $_FILES['file_upload_array']['size'][$counter]
     // $_FILES['file_upload_array']['tmp_name'][$counter]
@@ -974,48 +1119,38 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
     // 2 - Exceeded filesize allowed by HTML MAX_FILE_SIZE
     // 3 - Only a partial upload
     // 4 - No upload occurred.
-
     //$file_upload_count = count($_FILES['file_upload_array']['name']);
     $file_upload_count = count($superCage->files->getRaw('/file_upload_array/name'));
 
     if ($file_upload_count > 0) {
 
 
-        // Check for error code support. Set the error code.
-
-        if (count($superCage->files->getRaw('/file_upload_array/error')) == 0) {
-
-            // This version of PHP does not support error codes (PHP < 4.2.0).  Create our own error code.
-
-            $error_code = 'default';
-
+        		// Check for error code support. Set the error code.
+        if (count($superCage->files->getRaw('/file_upload_array/error')) == 0){
+            	// This version of PHP does not support error codes (PHP < 4.2.0).  Create our own error code.
+            	$error_code = 'default';
         } else {
-
-            // We have error support.
-            $error_support = 'TRUE';
+            	// We have error support.
+            	$error_support = 'TRUE';
 
         }
 
         for ($counter = 0; $counter < $file_upload_count; $counter++) {
 
-            // Check for error code support. Set the error code.
-
+            	// Check for error code support. Set the error code.
             if ($error_support) {
-
                 //$error_code = $_FILES['file_upload_array']['error'][$counter];
                 $error_code = $superCage->files->getInt("/file_upload_array/error/$counter");
-
             }
 
-            // Create the failure ordinal for ordering the report of failed uploads.
+            	// Create the failure ordinal for ordering the report of failed uploads.
 
-            $failure_cardinal = $counter + 1;
+            	$failure_cardinal = $counter + 1;
+            	$failure_ordinal = ''.$failure_cardinal.'. ';
 
-            $failure_ordinal = ''.$failure_cardinal.'. ';
+            	// If there is no file name, make a dummy name for the error reporting system.
 
-            // If there is no file name, make a dummy name for the error reporting system.
-
-            //if (($_FILES['file_upload_array']['name'][$counter] == '')) {
+            	//if (($_FILES['file_upload_array']['name'][$counter] == '')) {
             if ($superCage->files->getRaw("/file_upload_array/name/$counter") == '') {
                 $file_name = 'filename_unavailable';
             } else {
@@ -1024,35 +1159,31 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
                 $file_name = $superCage->files->getRaw("/file_upload_array/name/$counter");
             }
 
-            // Test for a blank file upload box.
-            //if (empty($_FILES['file_upload_array']['tmp_name'][$counter])) {
-            $tmp_filename = $superCage->files->getRaw("/file_upload_array/tmp_name/$counter");
+            	// Test for a blank file upload box.
+           	 	//if (empty($_FILES['file_upload_array']['tmp_name'][$counter])) {
+            	$tmp_filename = $superCage->files->getRaw("/file_upload_array/tmp_name/$counter");
             if (empty($tmp_filename)) {
-                // There is no need for further tests or action as there was no uploaded file, so skip the remainder of the iteration.
+            	// There is no need for further tests or action as there was no uploaded file, so skip the remainder of the iteration.
                 continue;
             }
 
             // Check to make sure the file was uploaded via POST.
-
             //if (!is_uploaded_file($_FILES['file_upload_array']['tmp_name'][$counter])) {
             if (!is_uploaded_file($superCage->files->getRaw("/file_upload_array/tmp_name/$counter"))) {
-
                 // We reject the file, and make a note of the error.
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['no_post']);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
             }
 
-            // Check filename and extension:
+            	// Check filename and extension:
+            	// Check that the file uploaded has a valid name and extension, and replace forbidden chars with underscores.
 
-            // Check that the file uploaded has a valid name and extension, and replace forbidden chars with underscores.
+            	// Initialise the $matches array.
+            	$matches = array();
 
-            // Initialise the $matches array.
-            $matches = array();
-
-            // If magic quotes is on, remove the slashes it added to the file name.
-            //if (get_magic_quotes_gpc()) $_FILES['file_upload_array']['name'][$counter] = stripslashes($_FILES['file_upload_array']['name'][$counter]);
+            	// If magic quotes is on, remove the slashes it added to the file name.
+            	//if (get_magic_quotes_gpc()) $_FILES['file_upload_array']['name'][$counter] = stripslashes($_FILES['file_upload_array']['name'][$counter]);
             if (get_magic_quotes_gpc()) {
                 //Using getRaw() as we have custom sanitization code below
             	$picture_name = stripslashes($superCage->files->getRaw("/file_upload_array/name/$counter"));
@@ -1060,11 +1191,10 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
             	$picture_name = $superCage->files->getRaw("/file_upload_array/name/$counter");
             }
 
-            // Create the holder $picture_name by translating the file name. Translate any forbidden character into an underscore.
-            //$picture_name = replace_forbidden($_FILES['file_upload_array']['name'][$counter]);
-            $picture_name = replace_forbidden($picture_name);
-
-            // Analyze the file extension using regular expressions.
+            	// Create the holder $picture_name by translating the file name. Translate any forbidden character into an underscore.
+            	//$picture_name = replace_forbidden($_FILES['file_upload_array']['name'][$counter]);
+            	$picture_name = replace_forbidden($picture_name);
+            	// Analyze the file extension using regular expressions.
             if (!preg_match("/(.+)\.(.*?)\Z/", $picture_name, $matches)) {
 
                 // The file name is invalid.
@@ -1074,19 +1204,15 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
                 $matches[2] = 'xxx';
             }
 
-            // If there is no extension, or if the extension is unknown/not permitted by Coppermine, zap the intruder.
+            	// If there is no extension, or if the extension is unknown/not permitted by Coppermine, zap the intruder.
             if ($matches[2] == '' || !is_known_filetype($matches)) {
-
                 // We reject the file, and make a note of the error.
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['forb_ext']);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
-
             }
 
             // Check for upload errors.
-
             if (!($error_code == '0') and !($error_code == 'default')) {
 
                 // PHP has detected a file upload error.
@@ -1104,137 +1230,108 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
 
                 //Make a note in the error array.
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$error_message);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
-
+                
             } elseif ($superCage->files->getRaw("/file_upload_array/tmp_name/$counter") == '') {
-
                 // There is no temporary file, so the file did not upload. Make a note of it in the file_failure_arrray and flip the failure switch to generate the ordinal. .
-
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['no_temp_name']);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
 
             } elseif ($superCage->files->getInt("/file_upload_array/size/$counter") <= 0) {
-
                 // The file contains no data or was corrupted. Make a note of it in the error array.
-
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['no_file_size']);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
 
             } elseif ($superCage->files->getDigits("/file_upload_array/size/$counter") > $max_file_size) {
-
                 // The file exceeds the amount specified by the max upload directive. Either the browser is stupid, or somebody isn't playing nice. (Ancient browser - MAX_UPLOAD forgery)
-
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['exc_file_size']);
-
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
 
             }
+	            // Now we need to move the file into the /edit directory.
+    	        // We need specify the path for the transitory file.
+        	    // Create a prefix for easier human recognition.
+            	$prefix = "mHTTP_temp_";
 
-            // Now we need to move the file into the /edit directory.
-
-            // We need specify the path for the transitory file.
-
-            // Create a prefix for easier human recognition.
-            $prefix = "mHTTP_temp_";
-
-            //Set the correct file extension.
-
-            $suffix = $matches[2];
+            	//Set the correct file extension.
+            	$suffix = $matches[2];
 
             // Generate the unique name. Keep generating new names until one that is not in use is found.
-
             do {
-
                 // Create a random seed by taking the first 8 characters of an MD5 hash of a concatenation of the current UNIX epoch time and the current server process ID.
                 $seed = substr(md5(uniqid("")), 0, 8);
-
                 // Assemble the file path.
                 $path_to_image = './'.$CONFIG['fullpath'].'edit/'. $prefix . $seed . '.' . $suffix;
-
             } while (file_exists($path_to_image));
-
-            // Create a holder called $tempname.
-            $tempname = $prefix . $seed . '.' . $suffix;
-
-            //Now we upload the file.
-            if (!(move_uploaded_file($superCage->files->getRaw("/file_upload_array/tmp_name/$counter"), $path_to_image))) {
-
+           	 	// Create a holder called $tempname.
+            	$tempname = $prefix . $seed . '.' . $suffix;
+            
+            	//Now we upload the file.
+            if (!(move_uploaded_file($superCage->files->getRaw("/file_upload_array/tmp_name/$counter"), $path_to_image))) 
+			{
                 // The file upload has failed.
-
                 $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['impossible']);
 
                 // There is no need for further tests or action, so skip the remainder of the iteration.
                 continue;
-
             }
+            	// Change file permission
+            	@chmod($path_to_image, octdec($CONFIG['default_file_mode'])); //silence the output in case chmod is disabled
+            	// Create a testing alias.
+            	$picture_alias = $matches[1].".".$matches[2];
 
-            // Change file permission
-            @chmod($path_to_image, octdec($CONFIG['default_file_mode'])); //silence the output in case chmod is disabled
-
-            // Create a testing alias.
-            $picture_alias = $matches[1].".".$matches[2];
-
-            // Check to see if the filename is consistent with that of a picture.
+            	// Check to see if the filename is consistent with that of a picture.
             if (is_image($picture_alias)) {
 
                 // If it is, get the picture information
                 $imginfo = cpg_getimagesize($path_to_image);
 
                 // If cpg_getimagesize does not recognize the file as a picture, delete the picture.
-                if ($imginfo === 'FALSE') {
-                    @unlink($path_to_image);
-
-                    // The file upload has failed -- the image is not an image or it is corrupt.
-                    $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['not_image']);
-
-                    // There is no need for further tests or action, so skip the remainder of the iteration.
-                    continue;
+            if ($imginfo === 'FALSE') {
+                @unlink($path_to_image);
+                // The file upload has failed -- the image is not an image or it is corrupt.
+                $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['not_image']);
+                // There is no need for further tests or action, so skip the remainder of the iteration.
+                continue;
 
                 // JPEG and PNG only are allowed with GD. If the image is not allowed for GD,delete it.
                 //} elseif ($imginfo[2] != GIS_JPG && $imginfo[2] != GIS_PNG && ($CONFIG['thumb_method'] == 'gd1' || $CONFIG['thumb_method'] == 'gd2')) {
-                } elseif ($imginfo[2] != GIS_JPG && $imginfo[2] != GIS_PNG && $CONFIG['GIF_support'] == 0) {
-                    @unlink($path_to_image);
-
-                    // The file upload has failed -- the image is not allowed with GD.
-                    $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['not_GD']);
-
-                    // There is no need for further tests or action, so skip the remainder of the iteration.
-                    continue;
+            } elseif ($imginfo[2] != GIS_JPG && $imginfo[2] != GIS_PNG && $CONFIG['GIF_support'] == 0) {
+                @unlink($path_to_image);
+                // The file upload has failed -- the image is not allowed with GD.
+                $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['not_GD']);                    
+				// There is no need for further tests or action, so skip the remainder of the iteration.
+                continue;
 
                 // Check that picture size (in pixels) is lower than the maximum allowed. If not, delete it.
-                } elseif (max($imginfo[0], $imginfo[1]) > $CONFIG['max_upl_width_height']) {
+            } elseif (max($imginfo[0], $imginfo[1]) > $CONFIG['max_upl_width_height']) {
                   if ((USER_IS_ADMIN && $CONFIG['auto_resize'] == 1) || (!USER_IS_ADMIN && $CONFIG['auto_resize'] > 0)) //($CONFIG['auto_resize']==1)
-                  {
-                    //resize_image($uploaded_pic, $uploaded_pic, $CONFIG['max_upl_width_height'], $CONFIG['thumb_method'], $imginfo[0] > $CONFIG['max_upl_width_height'] ? 'wd' : 'ht');
-                    resize_image($uploaded_pic, $uploaded_pic, $CONFIG['max_upl_width_height'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+                  {                  	
+                	 	//resize_image($uploaded_pic, $uploaded_pic, $CONFIG['max_upl_width_height'], $CONFIG['thumb_method'], $imginfo[0] > $CONFIG['max_upl_width_height'] ? 'wd' : 'ht');
+                    	resize_image($uploaded_pic, $uploaded_pic, $CONFIG['max_upl_width_height'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
                   }
                   else
                   {
                     @unlink($path_to_image);
-
                     // The file upload has failed -- the image dimensions exceed the allowed amount.
                     $file_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'file_name'=> $file_name, 'error_code'=>$lang_upload_php['pixel_allowance']);
-
                     // There is no need for further tests or action, so skip the remainder of the iteration.
                     continue;
                   }
                 }
-
             // Image is ok
             }
-
             // Put array info for a successful upload in $escrow_array. Hold the actual file name and the name of the temporary image. We do not use the path for security reasons.
             $escrow_array[] = array('actual_name'=>$picture_alias, 'temporary_name'=>$tempname);
 
         } // end for loop
     } // end if statement
+
+
 
     // Count the number of items in the URI array.
     //Using getRaw() for counting purpose only.
@@ -1901,43 +1998,126 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
 
             // Put array info for a successful upload in $escrow_array. Array hold the actual file name and the name of the temporary image. We do not use the path for security reasons.
             $escrow_array[] = array('actual_name'=>$picture_alias, 'temporary_name'=>$tempname);
-
         }
 
-    }
+    } //end of for loop
 
     // Decompressive ZIP uploading is disabled.
     // $zip_upload_count = count($_FILES['ZIP_array']['name']);
 
     //Now we must prepare the inital form for adding the pictures to the database, and we must move them to their final location.
 
-    // Count errors in each error array and the escrow array.
+ 
+   // Count errors in each error array and the escrow array.
     $escrow_array_count = count($escrow_array);
     $file_error_count = count($file_failure_array);
     $URI_error_count = count($URI_failure_array);
     $zip_error_count = count($zip_failure_array);
-
+        
     // Create page header.
-    pageheader($lang_upload_php['title']);
+  	//  pageheader($lang_upload_php['title']);
+		$previewThumbTHML	= '';
+    // Check for successful uploads.   
+    /**send Josn values to the jUpload.js file if action is 1*/
+    if ($escrow_array_count > '0' && $superCage->get->getInt('action') == 1) {
 
-    // Check for successful uploads.
+        // Serialize and base64_encode the array.
+        $cayman_escrow = base64_encode(serialize($escrow_array));
+        // Add temp data record to database.
+        $unique_ID = create_record($cayman_escrow);
+        // Verify record was created.
+        if (!$unique_ID) {
+            cpg_die(CRITICAL_ERROR, $lang_upload_php['cant_create_write'], __FILE__, __LINE__);
+        	}    
+			
+		/***********************************this is for creating thumb images to uploaded files*************************/  
+//added by Nuwan Sameera      
+
+	for($index = 0; $index < $escrow_array_count; $index++ ){
+ 	// Initialize $file_set as an array.
+    	$file_set = array();
+    	// Read the end of the $escrow_array array into $file_set.
+    	$file_set[0] = $escrow_array[$index]['actual_name'];
+    	$file_set[1] = $escrow_array[$index]['temporary_name'];
+
+    	// Create preview image.
+	    // Create path to image.
+    	$path_to_image = './'.$CONFIG['fullpath'].'edit/'.$file_set[1];
+	    // Create the preview function.
+	    // Get the extension for the preview.
+	    // First we parse the file name to determine the file type.
+    	$pieces = explode('.',$file_set[1]);
+    	// We pop off the end of the $pieces array to obtain the possible file name.
+    	$extension = array_pop($pieces);
+    	// Detect if the file is an image.
+    if(is_image($file_set[1])) {
+        // Create preview image file name.
+        do {
+            // Create a random seed by taking the first 8 characters of an MD5 hash of a concatenation of the current UNIX epoch time and the current server process ID.
+            $seed = substr(md5(uniqid("")), 0, 8);
+            // Assemble the file path.
+            $path_to_preview = './'.$CONFIG['fullpath'].'edit/preview_' . $seed . '.' . $extension;
+        } while (file_exists($path_to_preview));
+
+        // Create secure preview path.
+        $s_preview_path = 'preview_' . $seed . '.' . $extension;
+        // The file is an image, we must resize it for a preview image.
+        resize_image($path_to_image, $path_to_preview, '100', $CONFIG['thumb_method'],$CONFIG['thumb_use']);
+        if ($CONFIG['read_iptc_data']) {
+           $iptc = get_IPTC($path_to_image);
+        }
+    } else {
+        // The file is not an image, so we will use the non-image thumbs
+        // for preview images.
+        // We create the path to the preview image.
+        $path_to_preview = "images/thumb_{$extension}.jpg";
+    }
+	if($index == 0){
+    	$previewThumbTHML .= $path_to_preview;
+	}
+	if($index > 0){
+		$previewThumbTHML .= "@".$path_to_preview;
+	}
+    // Add preview image path to $escrow_array.
+    $escrow_array[$index]['preview_path'] = $path_to_preview;    
+}//end of the for loop 	  
+    
+    // Re-encode the $escrow_array.
+    $cayman_escrow = base64_encode(serialize($escrow_array));
+    // Update the record.
+    $update = update_record($unique_ID, $cayman_escrow);
+    // Verify that the update occurred.
+    if (!$update) {
+        // We cannot write to the temporary data file. Note a fatal error.
+        cpg_die(CRITICAL_ERROR, $lang_upload_php['not_writable'], __FILE__, __LINE__);
+    	}
+	
+		/**set the json arrays to send data back to jUpload.js*/
+   		$JUnique_ID = array ('JId'=>$unique_ID, 'thumbPrev' => $previewThumbTHML);
+		$Id_jons = json_encode($JUnique_ID);
+		echo $Id_jons; 
+	
+	}//end of the action one
+
+
+	
+	/**load page if action value is 2*/
+	if ($superCage->post->getInt('action') == 2){		
+		// Create page header.
+    	pageheader($lang_upload_php['title']);
+    	// Check for successful uploads.
     if ($escrow_array_count > '0') {
 
         // Serialize and base64_encode the array.
         $cayman_escrow = base64_encode(serialize($escrow_array));
-
         // Add temp data record to database.
         $unique_ID = create_record($cayman_escrow);
-
         // Verify record was created.
-        if (!$unique_ID) {
-
-            cpg_die(CRITICAL_ERROR, $lang_upload_php['cant_create_write'], __FILE__, __LINE__);
-
+       	if (!$unique_ID) {
+           cpg_die(CRITICAL_ERROR, $lang_upload_php['cant_create_write'], __FILE__, __LINE__);
         }
 
         // Prepare success data for user.
-        open_form($CPG_PHP_SELF); // Set the form action to this script.
         starttable("100%", $lang_upload_php['succ'], 2);
         echo "<tr><td colspan=\"2\">";
         printf ($lang_upload_php['success'], $escrow_array_count);
@@ -1945,10 +2125,17 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
         echo $lang_upload_php['add'];
         echo "</td></tr>";
 
+        // Set the form action to this script.
+        open_form($CPG_PHP_SELF);
+
         $form_array = array(
              array('unique_ID', $unique_ID, 4),
              array('control', 'phase_2', 4)
         );
+        
+        /**create a hidden field load page to place the album */
+        $form_array[] = array('create' , 'manual' , 4 );
+        
         if ($sel_album) {
             //album id is available, put it in hidden field
             $form_array[] = array('album', $sel_album, 4);
@@ -1957,7 +2144,7 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
         create_form($form_array);
         close_form($lang_common['continue']);
         endtable();
-
+        echo "</form>";
         // Throw in an HTML break for aesthetics.
         echo "<br />";
 
@@ -2035,101 +2222,129 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
     }
 
     // Create the footer and flush the output buffer.
-    echo "</form>";
     pagefooter();
     ob_end_flush();
 
-    // Exit the script.
+	}
 
+    // Exit the script.
     exit;
 }
 
 // Recieve incoming post information for phase II.
 //if ((isset($_POST['control'])) and ($_POST['control'] == 'phase_2')) {
-if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control') == 'phase_2') {
+if ( $superCage->post->keyExists('control') && $superCage->post->getRaw('control') == 'phase_2' ) {
 
-    // Check for incoming album placement data.
-    //if ((isset($_POST['album'])) and (isset($_POST['unique_ID']))) {
-    if ($superCage->post->keyExists('album') && $superCage->post->keyExists('unique_ID')) {
+    		// Check for incoming album placement data.
+    		//if ((isset($_POST['album'])) and (isset($_POST['unique_ID']))) {
+    if (($superCage->post->keyExists('unique_ID') && $superCage->post->keyExists('album_array')) or ($superCage->post->keyExists('unique_ID') && $superCage->post->keyExists('album'))) {
 
-            // Check if user selected an album to upload picture to. If not, die with error.
-        // added by frogfoot
-        $album = $superCage->post->getInt('album');
-        if (!$album) {
+    		$file_upload_count = count($superCage->files->getRaw('/file_upload_array/name')) + count($superCage->post->getRaw('URI_array'));
+
+    	/** $file_upload_count set to one if we have one file to uplaod*/
+    	if ( $superCage->post->keyExists('unique_ID') && $superCage->post->keyExists('album') ){
+			$file_upload_count = 1;
+		}
+		
+        for ($counter = ($file_upload_count-1); $counter >= 0; $counter--) {       
+			//Test for a blank file upload box.
+        	//if (empty($_FILES['file_upload_array']['tmp_name'][$counter])) {
+#        	$tmp_filename = $superCage->files->getRaw("/file_upload_array/tmp_name/$counter");
+#        	$url_filename = $superCage->post->getRaw("/URI_array/$counter");
+#        	$jAlbum = $superCage->post->getInt('album_array');
+#        		print_r($jAlbum);
+#        		exit;
+#        	/**set if this is manual process*/
+#        	if($superCage->post->getInt('album')){
+#				$tmp_filename = 'temp';
+#				$url_filename = 'temp_url';
+#			}        	
+#       
+#	    if (empty($tmp_filename) && !$url_filename) {
+#        	//There is no need for further tests or action as there was no uploaded file, so skip the remainder of the iteration.
+#        	continue;
+#        }           
+ 
+    		//Check if user selected an album to upload picture to. If not, die with error.
+   			$jAlbum = $superCage->post->getInt('album_array');
+   			$mAlbum = $superCage->post->getInt('album');
+   			
+        if (!$jAlbum && !$mAlbum) {
             cpg_die(ERROR, $lang_db_input_php['album_not_selected'], __FILE__, __LINE__);
         }
 
         if ($superCage->post->keyExists('unique_ID')) {
-
-            // The unique ID is set, so let us retrieve the record.
             $cayman_string = retrieve_record($superCage->post->getAlnum('unique_ID'));
-
-            // Verify record was retrieved.
-            if (!$cayman_string) {
-                cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
+        	// Verify record was retrieved.
+        if (!$cayman_string) {
+            cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
             }
         } else {
             // The $_POST['unique_ID'] value is not present.  Die with an error.
             cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
         }
 
-        // Now we decode the string.
-        $escrow_array = unserialize(base64_decode($cayman_string));
-
-        // Now we need to pop a file set off $escrow_array.
-        // The returned element will take the form: array('actual_name', 'temporary_name')
-
-        // First, we test to make sure $escrow_array is an array.
+        	// Now we decode the string.
+        	$escrow_array = unserialize(base64_decode($cayman_string));
+        	// Now we need to pop a file set off $escrow_array.
+        	// The returned element will take the form: array('actual_name', 'temporary_name')
+        	// First, we test to make sure $escrow_array is an array.
         if (!(is_array($escrow_array))) {
             // The decoded information is not an array. Die with an error.
             cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
         }
 
-        // Initialize $file_set as an array.
-        $file_set = array();
+        	// Initialize $file_set as an array.
+        	$file_set = array();
+        	// Create array index.
+        	$index = count($escrow_array) - 1;
 
-        // Create array index.
-        $index = count($escrow_array) - 1;
+        	// Read the end of the $escrow_array array into $file_set.
+        	$file_set[0] = $escrow_array[$index]['actual_name'];
+        	$file_set[1] = $escrow_array[$index]['temporary_name'];
 
-        // Read the end of the $escrow_array array into $file_set.
-        $file_set[0] = $escrow_array[$index]['actual_name'];
-        $file_set[1] = $escrow_array[$index]['temporary_name'];
+        	// Get the image preview path.
+        	$preview_path = $escrow_array[$index]['preview_path'];
 
-        // Get the image preview path.
-        $preview_path = $escrow_array[$index]['preview_path'];
+        	// Remove end of $escrow_array.
+        	unset($escrow_array[$index]['preview_path']);
+        	unset($escrow_array[$index]['actual_name']);
+        	unset($escrow_array[$index]['temporary_name']);
+        	unset($escrow_array[$index]);
+        
+        	// Re-encode the $escrow_array.
+        	$cayman_escrow = base64_encode(serialize($escrow_array));
 
-        // Remove end of $escrow_array.
-        unset($escrow_array[$index]['preview_path']);
-        unset($escrow_array[$index]['actual_name']);
-        unset($escrow_array[$index]['temporary_name']);
-        unset($escrow_array[$index]);
+        	// Update the record.
+        	$update = update_record($superCage->post->getAlnum('unique_ID'), $cayman_escrow);
 
-        // Re-encode the $escrow_array.
-        $cayman_escrow = base64_encode(serialize($escrow_array));
-
-        // Update the record.
-        $update = update_record($superCage->post->getAlnum('unique_ID'), $cayman_escrow);
-
-        // Verify that the update occurred.
+        	// Verify that the update occurred.
         if (!$update) {
-
             // We cannot write to the temporary data file. Note a fatal error.
             cpg_die(CRITICAL_ERROR, $lang_upload_php['not_writable'], __FILE__, __LINE__);
 
         }
 
-        // We have incoming placement data. Let's capture it.
+        	// We have incoming placement data. Let's capture it.
+        	$album = $superCage->post->getInt('album_array');
+        	$title = $superCage->post->getEscaped('title_array');
+        	$caption = $superCage->post->getEscaped('caption_array');
+        	$keywords = $superCage->post->getEscaped('keywords_array');
+        	$user1 = $superCage->post->getEscaped('user1');
+        	$user2 = $superCage->post->getEscaped('user2');
+        	$user3 = $superCage->post->getEscaped('user3');
+        	$user4 = $superCage->post->getEscaped('user4');
+ 			
+ 			//if we have no javacript then capture data
+ 			if ( $superCage->post->keyExists('unique_ID') && $superCage->post->keyExists('album') ){
+ 			  	$album = $superCage->post->getInt('album');
+        		$title = $superCage->post->getEscaped('title');
+        		$caption = $superCage->post->getEscaped('caption');
+        		$keywords = $superCage->post->getEscaped('keywords');
+			 }
 
-        $album = $superCage->post->getInt('album');
-        $title = $superCage->post->getEscaped('title');
-        $caption = $superCage->post->getEscaped('caption');
-        $keywords = $superCage->post->getEscaped('keywords');
-        $user1 = $superCage->post->getEscaped('user1');
-        $user2 = $superCage->post->getEscaped('user2');
-        $user3 = $superCage->post->getEscaped('user3');
-        $user4 = $superCage->post->getEscaped('user4');
-
-        // Capture movie or audio width and height if sent.
+ 		 	print $user2. $user2 . $user3 .$user4;
+        	// Capture movie or audio width and height if sent.
         if($superCage->post->keyExists('movie_wd')) {
             $movie_wd = $superCage->post->getInt('movie_wd');
         } else {
@@ -2142,22 +2357,22 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
             $movie_ht = 240;
         }
 
-        // Check if the album id provided is valid
+        	// Check if the album id provided is valid
         if (!GALLERY_ADMIN_MODE) {
-            $result = cpg_db_query("SELECT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid='$album' and (uploads = 'YES' OR category = '" . (USER_ID + FIRST_USER_CAT) . "' OR owner = '" . USER_ID . "')");
+            $result = cpg_db_query("SELECT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid='$album[$counter]' and (uploads = 'YES' OR category = '" . (USER_ID + FIRST_USER_CAT) . "' OR owner = '" . USER_ID . "')");
             if (mysql_num_rows($result) == 0)cpg_die(ERROR, $lang_db_input_php['unknown_album'], __FILE__, __LINE__);
             $row = mysql_fetch_array($result);
             mysql_free_result($result);
             $category = $row['category'];
         } else {
-            $result = cpg_db_query("SELECT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid='$album'");
+            $result = cpg_db_query("SELECT category FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid='$album[$counter]'");
             if (mysql_num_rows($result) == 0)cpg_die(ERROR, $lang_db_input_php['unknown_album'], __FILE__, __LINE__);
             $row = mysql_fetch_array($result);
             mysql_free_result($result);
             $category = $row['category'];
         }
 
-        // Pictures are moved in a directory named 10000 + USER_ID
+        	// Pictures are moved in a directory named 10000 + USER_ID
         if (USER_ID && $CONFIG['silly_safe_mode'] != 1) {
             $filepath = $CONFIG['userpics'] . (USER_ID + FIRST_USER_CAT);
             $dest_dir = $CONFIG['fullpath'] . $filepath;
@@ -2176,93 +2391,74 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
             $dest_dir = $CONFIG['fullpath'] . $filepath;
         }
 
-        // Check that target dir is writable
+        	// Check that target dir is writable
         if (!is_writable($dest_dir)) cpg_die(CRITICAL_ERROR, sprintf($lang_db_input_php['dest_dir_ro'], $dest_dir), __FILE__, __LINE__, true);
 
-        //Add the Perl regex to break the actual name.
-        preg_match("/(.+)\.(.*?)\Z/", $file_set[0], $matches);
+       	 	//Add the Perl regex to break the actual name.
+        	preg_match("/(.+)\.(.*?)\Z/", $file_set[0], $matches);
 
-        // Create a unique name for the uploaded file
-        $nr = 0;
-        $picture_name = $matches[1] . '.' . $matches[2];
+        	// Create a unique name for the uploaded file
+        	$nr = 0;
+        	$picture_name = $matches[1] . '.' . $matches[2];
         while (file_exists($dest_dir . $picture_name)) {
             $picture_name = $matches[1] . '~' . $nr++ . '.' . $matches[2];
         }
 
-        // Create path for final location.
-        $uploaded_pic = $dest_dir . $picture_name;
-
-        // Form path to temporary image.
-        $path_to_image = './'.$CONFIG['fullpath'].'edit/'.$file_set[1];
+        	// Create path for final location.
+        	$uploaded_pic = $dest_dir . $picture_name;
+        	// Form path to temporary image.
+        	$path_to_image = './'.$CONFIG['fullpath'].'edit/'.$file_set[1];
 
                 // prevent moving the edit directory...
                 if (is_dir($path_to_image)) cpg_die(CRITICAL_ERROR, $lang_upload_php['failure'] . " - '$path_to_image'", __FILE__, __LINE__, true);
 
-        // Move the picture into its final location
+        	// Move the picture into its final location
         if (rename($path_to_image, $uploaded_pic)) {
 
             // Change file permission
             @chmod($uploaded_pic, octdec($CONFIG['default_file_mode'])); //silence the output in case chmod is disabled
 
             // Create thumbnail and intermediate image and add the image into the DB
-            $result = add_picture($album, $filepath, $picture_name, 0,$title, $caption, $keywords, $user1, $user2, $user3, $user4, $category, $raw_ip, $hdr_ip, $movie_wd, $movie_ht);
+            $result = add_picture($album[$counter], $filepath, $picture_name, 0,$title[$counter], $caption[$counter], $keywords[$counter], $user1, $user2, $user3, $user4, $category, $raw_ip, $hdr_ip, $movie_wd, $movie_ht);
 
             if (!$result) {
-
                 // The file could not be placed.
                 $file_placement = 'no';
-
             } else {
-
                 // The file was placed successfully.
                 $file_placement = 'yes';
-
             }
 
         } else {
-
             // The file was not placed successfully.
             $file_placement = 'no';
-
         }
 
-        // Time for garbage cleanup.
-
-        // First, we delete the preview image.
+        	// Time for garbage cleanup.
+        	// First, we delete the preview image.
         if ((!strstr($preview_path, 'thumb')) and (file_exists($preview_path))) {
-
             unlink($preview_path);
 
         }
 
-        // Check to see if this is the last one.
+        	// Check to see if this is the last one.
         if(count($escrow_array) == '0') {
 
             // Create the final message.
             if ($PIC_NEED_APPROVAL) {
 
                 if ($file_placement == 'no') {
-
                     $final_message = ''.$lang_upload_php['no_place'].'<br /><br />'.$lang_db_input_php['upload_success'];
-
                 } else {
-
                     $final_message = ''.$lang_upload_php['yes_place'].'<br /><br />'.$lang_db_input_php['upload_success'];
-
                 }
 
             } else {
-
                 if ($file_placement == 'no') {
-
                     $final_message = ''.$lang_upload_php['no_place'].'<br /><br />'.$lang_upload_php['process_complete'];
-
                 } else {
-
                     $final_message = ''.$lang_upload_php['yes_place'].'<br /><br />'.$lang_upload_php['process_complete'];
-
                 }
-
             }
 
             // Delete the temporary data file.
@@ -2284,231 +2480,227 @@ if ($superCage->post->keyExists('control') && $superCage->post->getRaw('control'
             }
 
             // That was the last one. Create a redirect box.
-            pageheader($lang_common['information']);
-            msg_box($lang_common['information'], $final_message, $lang_common['continue'], 'index.php', "100%");
-            pagefooter();
+
+ 			  pageheader($lang_common['information']);
+              msg_box($lang_common['information'], $final_message, $lang_common['continue'], 'index.php', "100%");
+              pagefooter();
+
 
             // Exit the script.
-            exit;
+          exit;
 
         }
+        
+    } //end of the for loop
 
-    }
+}
 
     // The user has files that need to be processed and placed in albums.
     // We must pull that information from the temporary data file
     // whose ID is in $_POST['unique_ID'].
 
-    if ($superCage->post->keyExists('unique_ID')) {
+ if ($superCage->post->keyExists('unique_ID') && $superCage->post->getRaw('create') == 'manual') {
+		
+		       // The unique ID is set, so let us retrieve the record.
+              $cayman_string = retrieve_record($superCage->post->getAlnum('unique_ID'));
 
-            // The unique ID is set, so let us retrieve the record.
-            $cayman_string = retrieve_record($superCage->post->getAlnum('unique_ID'));
+              // Verify record was retrieved.
+              if (!$cayman_string) {
+                  cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
+              }
+      } else {
+          // The $_POST['cayman'] path is not present.  Die with an error.
+          cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
+      }
+      // Now we decode the string.
+      $escrow_array = unserialize(base64_decode($cayman_string));
 
-            // Verify record was retrieved.
-            if (!$cayman_string) {
-                cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
-            }
-    } else {
-        // The $_POST['cayman'] path is not present.  Die with an error.
-        cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
-    }
+      // Now we need to detect the end file set of $escrow_array.
+      // The returned element will take the form: array('actual_name', 'temporary_name')
 
-    // Now we decode the string.
-    $escrow_array = unserialize(base64_decode($cayman_string));
+      // First, we test to make sure $escrow_array is an array.
+      if (!(is_array($escrow_array))) {
+         // The decoded information is not an array. Die with an error.
+         cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
 
-    // Now we need to detect the end file set of $escrow_array.
-    // The returned element will take the form: array('actual_name', 'temporary_name')
+      }
 
-    // First, we test to make sure $escrow_array is an array.
-    if (!(is_array($escrow_array))) {
+      // Initialize $file_set as an array.
+      $file_set = array();
 
-        // The decoded information is not an array. Die with an error.
-        cpg_die(CRITICAL_ERROR, $lang_errors['param_missing'], __FILE__, __LINE__);
+      // Create array index.
+      $index = count($escrow_array) - 1;
 
-    }
+      // Read the end of the $escrow_array array into $file_set.
+      $file_set[0] = $escrow_array[$index]['actual_name'];
+      $file_set[1] = $escrow_array[$index]['temporary_name'];
 
-    // Initialize $file_set as an array.
-    $file_set = array();
+      // Create preview image.
 
-    // Create array index.
-    $index = count($escrow_array) - 1;
+     // Create path to image.
+     $path_to_image = './'.$CONFIG['fullpath'].'edit/'.$file_set[1];
 
-    // Read the end of the $escrow_array array into $file_set.
-    $file_set[0] = $escrow_array[$index]['actual_name'];
-    $file_set[1] = $escrow_array[$index]['temporary_name'];
+      // Create the preview function.
 
-    // Create preview image.
+      // Get the extension for the preview.
 
-    // Create path to image.
-    $path_to_image = './'.$CONFIG['fullpath'].'edit/'.$file_set[1];
+     // First we parse the file name to determine the file type.
+      $pieces = explode('.',$file_set[1]);
 
-    // Create the preview function.
+      // We pop off the end of the $pieces array to obtain the possible file name.
+      $extension = array_pop($pieces);
 
-    // Get the extension for the preview.
+      // Detect if the file is an image.
+      if(is_image($file_set[1])) {
 
-    // First we parse the file name to determine the file type.
-    $pieces = explode('.',$file_set[1]);
+          // Create preview image file name.
 
-    // We pop off the end of the $pieces array to obtain the possible file name.
-    $extension = array_pop($pieces);
+          do {
 
-    // Detect if the file is an image.
-    if(is_image($file_set[1])) {
+              // Create a random seed by taking the first 8 characters of an MD5 hash of a concatenation of the current UNIX epoch time and the current server process ID.
+              $seed = substr(md5(uniqid("")), 0, 8);
 
-        // Create preview image file name.
+              // Assemble the file path.
+              $path_to_preview = './'.$CONFIG['fullpath'].'edit/preview_' . $seed . '.' . $extension;
+          } while (file_exists($path_to_preview));
 
-        do {
+          // Create secure preview path.
+          $s_preview_path = 'preview_' . $seed . '.' . $extension;
 
-            // Create a random seed by taking the first 8 characters of an MD5 hash of a concatenation of the current UNIX epoch time and the current server process ID.
-            $seed = substr(md5(uniqid("")), 0, 8);
+          // The file is an image, we must resize it for a preview image.
+          resize_image($path_to_image, $path_to_preview, '150', $CONFIG['thumb_method'], 'wd');
 
-            // Assemble the file path.
-            $path_to_preview = './'.$CONFIG['fullpath'].'edit/preview_' . $seed . '.' . $extension;
+          if ($CONFIG['read_iptc_data']) {
+             $iptc = get_IPTC($path_to_image);
+          }
 
-        } while (file_exists($path_to_preview));
+      } else {
 
-        // Create secure preview path.
-        $s_preview_path = 'preview_' . $seed . '.' . $extension;
+          // The file is not an image, so we will use the non-image thumbs
+          // for preview images.
 
-        // The file is an image, we must resize it for a preview image.
-        resize_image($path_to_image, $path_to_preview, '150', $CONFIG['thumb_method'], 'wd');
+          // We create the path to the preview image.
+          $path_to_preview = "images/thumb_{$extension}.jpg";
 
-        if ($CONFIG['read_iptc_data']) {
-           $iptc = get_IPTC($path_to_image);
-        }
+      }
+      // Add preview image path to $escrow_array.
+      $escrow_array[$index]['preview_path'] = $path_to_preview;
 
-    } else {
+      // Re-encode the $escrow_array.
+      $cayman_escrow = base64_encode(serialize($escrow_array));
 
-        // The file is not an image, so we will use the non-image thumbs
-        // for preview images.
+      // Update the record.
+      $update = update_record($superCage->post->getAlnum('unique_ID'), $cayman_escrow);
 
-        // We create the path to the preview image.
-        $path_to_preview = "images/thumb_{$extension}.jpg";
+      // Verify that the update occurred.
+      if (!$update) {
+          // We cannot write to the temporary data file. Note a fatal error.
+          cpg_die(CRITICAL_ERROR, $lang_upload_php['not_writable'], __FILE__, __LINE__);
+      }
 
-    }
+      // Create upload form headers.
+      pageheader($lang_upload_php['title']);
+      
+      // Direct the request to this script.
+      open_form($CPG_PHP_SELF);
+      // Open the form table.
+      starttable("100%", $lang_upload_php['title'], 2);
 
-    // Add preview image path to $escrow_array.
-    $escrow_array[$index]['preview_path'] = $path_to_preview;
+      // Create image tag and echo it to the output buffer.
+      echo "<tr><td class=\"tableh2\"><img class=\"image\" src=\"".$path_to_preview."\"  /></td>";
+      // Echo instructions.
+      echo "<td class=\"tableh2\">{$lang_upload_php['picture']} - {$file_set[0]}<br /><br />{$lang_upload_php['place_instr_1']}<br /><br />";
 
-    // Re-encode the $escrow_array.
-    $cayman_escrow = base64_encode(serialize($escrow_array));
+      // If we have previously placed a picture, give a brief message about its success or failure.
+      if (isset($file_placement)) {
 
-    // Update the record.
-    $update = update_record($superCage->post->getAlnum('unique_ID'), $cayman_escrow);
+          if ($file_placement == 'yes') {
 
-    // Verify that the update occurred.
-    if (!$update) {
-        // We cannot write to the temporary data file. Note a fatal error.
-        cpg_die(CRITICAL_ERROR, $lang_upload_php['not_writable'], __FILE__, __LINE__);
-    }
+              // The previous picture was placed successfully.
+              echo "{$lang_upload_php['yes_place']}";
 
-    // Create upload form headers.
-    pageheader($lang_upload_php['title']);
-    
-    // Direct the request to this script.
-    open_form($CPG_PHP_SELF);
+          } elseif ($file_placement == 'no') {
 
-    // Open the form table.
-    starttable("100%", $lang_upload_php['title'], 2);
+              // The previous image placement failed.
+              echo "{$lang_upload_php['no_place']}";
 
-    // Create image tag and echo it to the output buffer.
-    echo "<tr><td class=\"tableh2\"><img class=\"image\" src=\"".$path_to_preview."\"  /></td>";
+          }
+      }
 
-    // Echo instructions.
-    echo "<td class=\"tableh2\">{$lang_upload_php['picture']} - {$file_set[0]}<br /><br />{$lang_upload_php['place_instr_1']}<br /><br />";
+      echo "</td></tr>";
 
-    // If we have previously placed a picture, give a brief message about its success or failure.
-    if (isset($file_placement)) {
+      // Declare an array containing the various upload form box definitions.
+      $captionLabel = $lang_upload_php['description'];
+      $keywordLabel = $lang_common['keywords_insert1']. '<br /><a href="#" onClick="return MM_openBrWindow(\'keyword_select.php\',\'selectKey\',\'width=250, height=400, scrollbars=yes,toolbar=no,status=yes,resizable=yes\')">' . $lang_common['keywords_insert2'] .'</a>';
+      if ($CONFIG['show_bbcode_help']) {$captionLabel .= '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);}
+      //$printed_file_name = "{$lang_upload_php['picture']} - {$file_set[0]}";
 
-        if ($file_placement == 'yes') {
+      //Use the IPTC title or headline for the Coppermine title if available.
+      if (isset($iptc['Title']) && !empty($iptc['Title'])) {
+          $title=$iptc['Title'];
+      } elseif (isset($iptc['Headline']) && !empty($iptc['Headline'])) {
+          $title=$iptc['Headline'];
+      } else {
+          $title='';
+      }
 
-            // The previous picture was placed successfully.
-            echo "{$lang_upload_php['yes_place']}";
+     $form_array = array(
+      array($lang_common['album'], 'album[]', 2),
+      array($lang_upload_php['pic_title'], 'title[]', 0, 255, 1, $title),
+      array($captionLabel, 'caption[]', 3, $CONFIG['max_img_desc_length'], (isset($iptc['Caption'])) ? $iptc['Caption'] : ''),
+      array($keywordLabel, 'keywords[]', 0, 255, 1,(isset($iptc['Keywords'])) ? implode(' ',$iptc['Keywords']): ''),
+      array('control', 'phase_2', 4),
+      array('create' , 'manual' , 4 ),
+      array('unique_ID', $superCage->post->getAlnum('unique_ID'), 4),
+      );
 
-        } elseif ($file_placement == 'no') {
+      // Check for user defined fields.
+      if(!empty($CONFIG['user_field1_name'])) {
+          $form_array[] = array($CONFIG['user_field1_name'], 'user1', 0, 255, 1);
+      }
 
-            // The previous image placement failed.
-            echo "{$lang_upload_php['no_place']}";
+      if(!empty($CONFIG['user_field2_name'])) {
+          $form_array[] = array($CONFIG['user_field2_name'], 'user2', 0, 255, 1);
+      }
 
-        }
+      if(!empty($CONFIG['user_field3_name'])) {
+          $form_array[] = array($CONFIG['user_field3_name'], 'user3', 0, 255, 1);
+      }
 
-    }
+      if(!empty($CONFIG['user_field4_name'])) {
+          $form_array[] = array($CONFIG['user_field4_name'], 'user4', 0, 255, 1);
+      }
 
-    echo "</td></tr>";
 
-    // Declare an array containing the various upload form box definitions.
-    $captionLabel = $lang_upload_php['description'];
-    $keywordLabel = $lang_common['keywords_insert1']. '<br /><a href="#" onClick="return MM_openBrWindow(\'keyword_select.php\',\'selectKey\',\'width=250, height=400, scrollbars=yes,toolbar=no,status=yes,resizable=yes\')">' . $lang_common['keywords_insert2'] .'</a>';
-    if ($CONFIG['show_bbcode_help']) {$captionLabel .= '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_bbcode_help_title))).'&amp;t='.urlencode(base64_encode(serialize($lang_bbcode_help))),470,245);}
-    //$printed_file_name = "{$lang_upload_php['picture']} - {$file_set[0]}";
+      // Check for movies and audio, and create width and height boxes if true.
+      if((is_movie($file_set[1])) or (is_audio($file_set[1]))) {
 
-    //Use the IPTC title or headline for the Coppermine title if available.
-    if (isset($iptc['Title']) && !empty($iptc['Title'])) {
-        $title=$iptc['Title'];
-    } elseif (isset($iptc['Headline']) && !empty($iptc['Headline'])) {
-        $title=$iptc['Headline'];
-    } else {
-        $title='';
-    }
+          //Add width and height boxes to the form.
+          $form_array[] = array($lang_admin_php['th_wd'],'movie_wd', 0, 4, 1);
+          $form_array[] = array($lang_admin_php['th_ht'],'movie_ht', 0, 4, 1);
 
-    $form_array = array(
-    array($lang_common['album'], 'album', 2),
-    array($lang_upload_php['pic_title'], 'title', 0, 255, 1, $title),
-    array($captionLabel, 'caption', 3, $CONFIG['max_img_desc_length'], (isset($iptc['Caption'])) ? $iptc['Caption'] : ''),
-    array($keywordLabel, 'keywords', 0, 255, 1,(isset($iptc['Keywords'])) ? implode(' ',$iptc['Keywords']): ''),
-    array('control', 'phase_2', 4),
-    array('unique_ID', $superCage->post->getAlnum('unique_ID'), 4),
-    );
+      }
 
-    // Check for user defined fields.
-    if(!empty($CONFIG['user_field1_name'])) {
-        $form_array[] = array($CONFIG['user_field1_name'], 'user1', 0, 255, 1);
-    }
+      // Create the form and echo more instructions.
+      create_form($form_array);
 
-    if(!empty($CONFIG['user_field2_name'])) {
-        $form_array[] = array($CONFIG['user_field2_name'], 'user2', 0, 255, 1);
-    }
+      // More instructions.
+      if(count($escrow_array) > '1') {
+          form_statement($lang_upload_php['place_instr_2']);
 
-    if(!empty($CONFIG['user_field3_name'])) {
-        $form_array[] = array($CONFIG['user_field3_name'], 'user3', 0, 255, 1);
-    }
+      }
 
-    if(!empty($CONFIG['user_field4_name'])) {
-        $form_array[] = array($CONFIG['user_field4_name'], 'user4', 0, 255, 1);
-    }
+      // Make button say 'Continue.'
+      close_form($lang_common['continue']);
 
+      // Close the table, create footers, and flush the output buffer.
+      endtable();
+      echo "</form>";
+      pagefooter();
+      ob_end_flush();
 
-    // Check for movies and audio, and create width and height boxes if true.
-    if((is_movie($file_set[1])) or (is_audio($file_set[1]))) {
+      // Exit the script.
+      exit;
 
-        //Add width and height boxes to the form.
-        $form_array[] = array($lang_admin_php['th_wd'],'movie_wd', 0, 4, 1);
-        $form_array[] = array($lang_admin_php['th_ht'],'movie_ht', 0, 4, 1);
-
-    }
-
-    // Create the form and echo more instructions.
-    create_form($form_array);
-
-    // More instructions.
-    if(count($escrow_array) > '1') {
-
-        form_statement($lang_upload_php['place_instr_2']);
-
-    }
-
-    // Make button say 'Continue.'
-    close_form($lang_common['continue']);
-
-    // Close the table, create footers, and flush the output buffer.
-    endtable();
-    echo "</form>";
-    pagefooter();
-    ob_end_flush();
-
-    // Exit the script.
-    exit;
-
-
-}
+ }
 ?>

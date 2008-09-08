@@ -4655,7 +4655,7 @@ global $CONFIG, $public_albums_list, $user_albums_list;
  * @param string $name
  *
  */
-function upload_form_alb_list($text, $name) {
+function upload_form_alb_list($text, $name, $type=0) {
     $superCage = Inspekt::makeSuperCage();
     // Pull the $CONFIG array and the GET array into the function
     global $CONFIG, $lang_upload_php;
@@ -4778,6 +4778,8 @@ function upload_form_alb_list($text, $name) {
     // $listArray = array_csort($listArray,'cid','title');  // numerically by category ID
     // print_r($listArray);exit;
 
+	//this will create for normal files 
+	if($type == 0){
     // Create the opening of the drop down box
     echo <<<EOT
     <tr>
@@ -4792,6 +4794,7 @@ EOT;
     // Finally, print out the nicely sorted and formatted drop down list
     $alb_cat = '';
     echo '                <option value="">' . $lang_upload_php['select_album'] . "</option>\n";
+    
     foreach ($listArray as $val) {
         //if ($val['cat'] != $alb_cat) {  // old method compared names which might not be unique
         if ($val['cid'] != $alb_cat) {
@@ -4810,6 +4813,48 @@ EOT;
     </tr>
 
 EOT;
+	} //end
+	
+	/**this create for set javascript variable*/
+	if($type == 1){
+		$jDropDwon = '';
+		$jDropDwon .=  <<<EOT
+    		<div>
+        		<lable>
+		            $text
+        		</lable>
+        <div>
+            <select name="$name" class="listbox">
+
+EOT;
+
+    // Finally, print out the nicely sorted and formatted drop down list
+    $alb_cat = '';
+    		$jDropDwon	.=  '<option value="">' . $lang_upload_php['select_album'] . "</option>\n";
+    
+    foreach ($listArray as $val) {
+        //if ($val['cat'] != $alb_cat) {  // old method compared names which might not be unique
+        if ($val['cid'] != $alb_cat) {
+            if ($alb_cat)
+				$jDropDwon .= "</optgroup>\n";
+            	$jDropDwon .=  '<optgroup label="' . $val['cat'] . '">' . "\n";
+            $alb_cat = $val['cid'];
+        }
+        $jDropDwon .= '<option value="' . $val['aid'] . '"' . ($val['aid'] == $sel_album ? ' selected' : '') . '>   ' . $val['title'] . "</option>\n";
+    }
+    if ($alb_cat)
+		$jDropDwon .= "</optgroup>\n";
+
+    // Close the drop down
+   		$jDropDwon .=  <<<EOT
+            </select>
+        </div>
+    </div>
+
+EOT;
+	
+	return $jDropDwon;
+	}
 }
 
 /**

@@ -31,6 +31,11 @@ $(document).ready(function() {
 				if(maxItems%2==0){
 					maxItems 	= maxItems +1;
 				}
+			/**stop, if we don't have enugh images than maxItem*/
+			if(NumberOfPics <= maxItems){				
+				return false;
+			}
+			
 			//variables to handle the next - prev button
 			var picQeueu		=  (maxItems+1)/2;
 			var $go_next 		= parseInt(maxItems/2);
@@ -56,7 +61,7 @@ $(document).ready(function() {
 				url_cache[cacheIndex+i] = $("img.strip_image").eq(i).attr("src");
 				link_cache[cacheIndex+i]= $("a.thumbLink").eq(i).attr("href");
 			}
-			
+
 			//alert(url_cache[$next_position]);
 			var prev_link = $next_position > (picQeueu-1) ? "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/prev.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_prev\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/prev.gif\" border=\"0\" /></a>";			
 			var next_link = $next_position < (NumberOfPics - picQeueu) ? "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;\"><img src=\"./images/next.gif\" border=\"0\" /></a>" : "<a id=\"filmstrip_next\" rel=\"nofollow\" style=\"cursor: pointer;display:none\"><img src=\"./images/next.gif\" border=\"0\" /></a>";
@@ -324,11 +329,11 @@ function isNumber(test_input){
 
 
 
-/**
+/*******************************************************************************************
  * this jquery plugin for view full size image. 
  * this full size image will fatch using ajax call. 
  * file name: facebox.js  
- */
+ ********************************************************************************************/
 
 (function($) {
 	
