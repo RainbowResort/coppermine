@@ -889,9 +889,10 @@ td#uploadingImage		{ margin: 10px 0 10px; display: none; text-align: center; hei
 table#storeFile			{ display: none; }
 div.availableBox		{ margin: 10px; padding-bottom: 10px;  }
 
-td.Nvi_bk				{ background-color: #D1D7DC; height: 40px; }
+td.Nvi_bk				{ background-color: #D1D7DC; height: 40px; display: none; }
 td.Nvi_bk a				{ margin-left: 5px; padding: 5px 10px 13px 10px; line-height: 200%; cursor: pointer; text-decoration: none; }
 td.Nvi_bk a.currentUp			{ background-color: #EFEFEF ; }
 td.Nvi_bk a.uploadNvi           { background-color: #D8DFEA;  }
-div.UrlForm				{}
+div.availableBox		{ display: none;}
+div#urlAvailable		{ display: none; }
 

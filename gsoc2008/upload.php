@@ -880,10 +880,14 @@ if (empty($num_URI_boxes) && empty($num_file_boxes)) {
     $num_file_boxes = 1;
 }
 
-// Get public and private albums, and set maximum individual file size.
+		//send the number of amx files and url to jUpload.js
+		set_js_var('maxFiles',$num_file_boxes);
+		set_js_var('maxUrls', $num_URI_boxes);
 
-pub_user_albums();
-global $public_albums_list, $user_albums_list;
+	// Get public and private albums, and set maximum individual file size.
+
+	pub_user_albums();
+	global $public_albums_list, $user_albums_list;
 
 if (!count($public_albums_list) && !count($user_albums_list)) {  // there's no album where the user is allowed to upload to
     if (USER_CAN_CREATE_ALBUMS) {
@@ -933,9 +937,12 @@ if (!$superCage->post->keyExists('control')) {
 		echo "	<tr><td class='Nvi_bk'>
 					<a id='fileUploadNvi' class='currentUp'>File Upload</a> <a id='urlUploadNvi' class='uploadNvi'>URL Upload</a>
 				</td></tr>";
+
+				
 		$avaible = "<div class= 'availableBox' >
 				  <div><lable>Available</lable></div>
-				  <div><input type='text'  size='5' name='added_files' value='$num_file_boxes' disabled /> / <input type='text'  size='5' name='max_files' value='$num_file_boxes' disabled /></div>
+				  <div id='fileAvailable'><input type='text'  size='5' name='added_files' value='$num_file_boxes' disabled /> / <input type='text'  size='5' name='max_files' value='$num_file_boxes' disabled /></div>
+				  <div id='urlAvailable'><input type='text'  size='5' name='added_urls' value='$num_URI_boxes' disabled /> / <input type='text'  size='5' name='max_urls' value='$num_URI_boxes' disabled /></div>
 			</div>";
 	
     }

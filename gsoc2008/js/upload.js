@@ -75,17 +75,19 @@ var Upload = {
 		return (fn == null)? "" : fn[fn.length-1];
 	}
 
-}
+};
+
+
 /**main controller of the events of uploadding*/
 $(document).ready(function(){
 	 
 	/**varibles for files uploading*/
-	var maxFiles 	= 5;
+	var maxFiles 	= js_vars.maxFiles;
 	var fileCount	= 0;
 	var formNumber 	= 0;
 	
 	/**varibles for Urls uploading*/	
-	var maxUrls		= 3;
+	var maxUrls		= js_vars.maxUrls;
 	var urlCount	= 0;
 	var urlFormNumber = 0;
 	
@@ -109,6 +111,10 @@ $(document).ready(function(){
 		
 	/**hide the UrlForm at frist time*/
 	$('.UrlForm').hide();
+	/**Upload form navigation form show*/
+	$('.Nvi_bk').show();
+	/**upload available box show*/
+	$('.availableBox').show();
 	/**Uplaod page loding states*/
 	$('table#storeFile').show();
 	/**remove the hidden action field*/
@@ -131,6 +137,11 @@ $(document).ready(function(){
 	{
 		$('.mainForm').show();
 		$('.UrlForm').hide();
+		
+		//change the available box
+		$('#fileAvailable').show();
+		$('#urlAvailable').hide();
+		
 		//menu highlight
 		$(this).removeClass().addClass('currentUp');
 		$('#urlUploadNvi').removeClass().addClass('uploadNvi');
@@ -146,6 +157,10 @@ $(document).ready(function(){
 	{
 		$('.UrlForm').show();
 		$('.mainForm').hide();
+		
+				//change the available box
+		$('#urlAvailable').show();
+		$('#fileAvailable').hide();
 		
 		//menu highlight
 		$(this).removeClass().addClass('currentUp');
@@ -277,7 +292,7 @@ $(document).ready(function(){
 				
 				$('#formUrl_'+urlFormNumber+' .listbox option[value="'+getCurrentAlbum+'"]').attr({selected: 'selected'});
 				/**decrese the number of files to having upload*/
-				$("input[name='added_files']").val(maxUrls - urlCount);
+				$("input[name='added_urls']").val(maxUrls - urlCount);
 				
 				/**remove the empty message*/
 			$("#emptyEntry").empty();
@@ -317,7 +332,7 @@ $(document).ready(function(){
 			if(fileCount == 0 && urlCount == 0){
 				$("#emptyEntry").text("You have Empty files saved!");
 			}
-			$("input[name='added_files']").val(maxUrls-urlCount);
+			$("input[name='added_urls']").val(maxUrls-urlCount);
 	});
 	/**this variable keeping hold unique_ID after uploading files */
 	var getUnique_ID	= 	null;
