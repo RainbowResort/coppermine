@@ -2250,10 +2250,11 @@ if ( $superCage->post->keyExists('control') && $superCage->post->getRaw('control
 
     	/** $file_upload_count set to one if we have one file to uplaod*/
     	if ( $superCage->post->keyExists('unique_ID') && $superCage->post->keyExists('album') ){
-			$file_upload_count = 1;
+			$file_upload_count = 2;
 		}
+
 		
-        for ($counter = ($file_upload_count-1); $counter >= 0; $counter--) {       
+        for ($counter = ($file_upload_count-2); $counter >= 0; $counter--) {      
 			//Test for a blank file upload box.
         	//if (empty($_FILES['file_upload_array']['tmp_name'][$counter])) {
 #        	$tmp_filename = $superCage->files->getRaw("/file_upload_array/tmp_name/$counter");

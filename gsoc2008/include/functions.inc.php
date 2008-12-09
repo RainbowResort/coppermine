@@ -2365,6 +2365,7 @@ function& display_slideshow($pos,$ajax_show=0)
    global $CONFIG, $lang_display_image_php, $template_display_media, $lang_common, $album, $pid, $slideshow;
    global $cat, $date;
 
+	print $Pid; 
 	$Pic = array();
 	$Pid = array();
 	$Title = array();
@@ -2415,17 +2416,19 @@ foreach ($pic_data as $picture) {
         $i++; 
     }
 }
+
 	$Pic_length = count($Pic);
 	set_js_var('Time',$slideshow);
 	set_js_var('Pic_count',$Pic_length);
-	
-if (!$i) {
-    echo "Pic[0] = 'images/thumb_document.jpg'\n";
-}
+	set_js_var('Pid',$pid);
+		
+	if (!$i) {
+	    echo "Pic[0] = 'images/thumb_document.jpg'\n";
+	}
 	if($ajax_show==0){
 		theme_slideshow($Pic[$pos],$Title[$pos]);
 	}
-	$a = array ('url'=>$Pic[$pos],'title'=>$Title[$pos]);
+	$a = array ('url'=>$Pic[$pos],'title'=>$Title[$pos],'pid'=>$Pid[$pos]);
 	$a_jons = json_encode($a);
 	if($ajax_show==1){
 	echo $a_jons;
