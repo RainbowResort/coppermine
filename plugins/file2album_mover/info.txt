@@ -1,0 +1,66 @@
+Name:        File2AlbumMover
+Application: Coppermine 1.4B
+
+My Name:     M. van Gorkom
+Mail:        geflopt666@hotmail.com
+-------------------------------------
+What's it about:
+
+When i started with coppermine the first thing i found a bit weird was that although Coppermine has a great
+album facility, but the underlaying structure can be a mess. 
+
+For example (a little scheme will do the trick):
+                Album        Directory
+Flower.jpg      Flowers      Flowers
+Rose.jpg        Flowers      Trees
+Oak.jpg         Trees        Flowers
+deadtree.jpg    Trees        Trees
+
+As you can see the albums don't correspond with the directories.
+Well that's when File2AlbumMover comes in to place. It checks in which Album a picture it's in and then moves it 
+to the directory with the same name. If that directory doen't exist, it creates it.
+
+So after running File2AlbumMover the structure is as follows:
+                Album        Directory
+Flower.jpg      Flowers      Flowers
+Rose.jpg        Flowers      Flowers
+Oak.jpg         Trees        Trees
+deadtree.jpg    Trees        Trees
+
+
+What do you have to do:
+- Unpack the files in a directory in the coppermine/plugin dir
+- Modify the configuration.php and change $imagefolder variable. 
+  At least it has to be / (/ stands for the first directory in the albums dir)
+- Make sure you're logged in as admin
+- Do not, i repeat do not install the plugin but start it as follows: /coppermine/index.php?file=f2am/codebase
+  I'm still learning Coppermine and so installing will not be plesant.
+  (f2am is the directory you put File2AlbumMover in)
+
+Of course running this can be a bit tricky: 
+- It's my first try at writing a plugin for Coppermine
+- I'm not a crack at programming in PHP
+- It's version 0.2(Machine Head)
+So always make sure you backup your database and files!
+
+Difference from v0.2 (Machine Head) to v0.3 (beta)
+- Small bug fixed in the configuration.php file
+
+
+Difference from v0.1 (Soulfly) to v0.2 (Machine Head)
+- Created Log Facility:
+		- Counting of how many files are moved
+		- Color codes if copy/move went correct or not
+		- Error_code to see what went wrong
+- Better checking if all files are moved
+
+Todo:
+- Better integration with Coppermine (Can anyone explain how to do this?!)
+- If the file has the same name, maybe change the filename and then move it
+V Create a better log facility (First Start is made)
+V Check before the files are deleted if they are really copied and/or the file is the same
+
+
+Hope to hear from you with updates, Bug reports or even angry letters that you've lost your complete album ;)
+
+Maikel van Gorkom Aka Ge-Flopt
