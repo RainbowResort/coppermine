@@ -8,7 +8,7 @@ $name = $lang_plugin_moncalb['config_name'];
 $description = $lang_plugin_moncalb['config_description'];
 
 $author='Joachim Müller';
-$version='1.0';
+$version='1.1';
 
 $extra_info = <<<EOT
     <a href="index.php?file=monitorcalibrationbar/index&amp;action=configure" class="admin_menu">{$lang_plugin_moncalb['config']}</a>&nbsp;
