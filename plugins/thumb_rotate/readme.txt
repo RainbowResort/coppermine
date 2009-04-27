@@ -1,5 +1,5 @@
 /**************************************************
-  Coppermine 1.5.x Plugin - Thumb Rotate $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Thumb Rotate
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -12,26 +12,42 @@
   What's this?
   ------------
   This plugin will rotate your thumbnails randomly, giving your gallery a 'comic' look.
-  Have a look at thumb_rotate_screenshot.jpg for an example.
+  Have a look at images/screenshot.jpg for an example.
+  For a working demo, visit http://cpgdev.timos-welt.de/cpg15x/
   
   Requirements
   ------------
   - a fast server
   - additional space for the generated thumbnails
-  - PHP 4.3.2 or PHP 5
+  - PHP 4.3.2 or better (yes, this means that PHP 5 is fine)
   - PHP with working GD2 (ImageMagick will NOT work!)
   
   Install
   -------
   1. Unzip.
-  2. Open codebase.php with a text editor and change values for 
-     $maxdegree, $themebackcolor, $border and $brdcolor
-  3. Upload folder thumb_rotate to the plugin folder of your gallery.
-  4. Make subfolder thumb_cache writable, this usually means CHMOD to 755 or 777.
-  5. Install via plugin manager.
+  2. Upload folder thumb_rotate to the plugin folder of your gallery.
+  3. Make subfolder thumb_cache writable, this usually means CHMOD to 755 or 777.
+  4. Install via plugin manager.
 
   Compatibility
   -------------
   This plugin is currently not compatible with
   - SEF_URL plugin
   - EnlargeIt!
+
+
+  Changelog
+  ---------
+  0.2 to 0.3:
+  	- added config section
+  	- internationalization
+  	- added icons
+  
+  Todo
+  -------------
+  - sanitization of URL parameters in thumb_rotate.php for security reasons
+  - add fallback option in flash as discussed in announcement thread
+  - granular cache control, maybe move cache into the folder /albums/edit, as that
+    folder is writable in the first place
+  - add a preview to config page
+  - perform a test during install to check if the cache folder is actually writable
