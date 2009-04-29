@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Thumb Rotate $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Thumb Rotate
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -13,7 +13,7 @@
 
 /************************************
   This file generates rotated images.
-  It takes these parameters:
+  It accepts these parameters:
   img - path to an image
   deg - degree of rotation 0-360
         (random if not set)
@@ -22,54 +22,56 @@
   brd - size of border (0-10)
   brdcol - border color in hex format
            (ffffff if not set)
+  path - coppermine config variable fullpath
+  		 (usually "albums/") 
 *************************************/
 
-
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
     // get image file
-    if (!isset($_GET['img'])) exit();
+    if (!isset($_GET['img'])) {
+    	exit();
+    }
     $image = '../../'.$_GET['img'];
     
     
     // get degrees of rotation, if not set, random (0°-9°, 350°-359°)
-    if (isset($_GET['deg']))
-    {
-      $degrees=$_GET['deg'];
-    }
-    else 
-    {
+    if (isset($_GET['deg']) && $_GET['deg'] == (int)$_GET['deg'] && $_GET['deg'] >= 0 && $_GET['deg'] <= 20) {
+      $degrees = $_GET['deg'];
+    } else {
       $degrees = rand(0,19);
-      if ($degrees > 9) $degrees += 340;
+      if ($degrees > 9) {
+      	$degrees += 340;
+      }
     }
     
     // get background color; if not set, use light gray
-    if (isset($_GET['bg']))
-    {
+    if (isset($_GET['bg'])) {
       $backcolor=$_GET['bg'];
-    }
-    else 
-    {
-      $backcolor='efefef';
+    } else {
+      $backcolor='EFEFEF';
     }
 
     // get border size; if not set, set to 10
-    if (isset($_GET['brd']))
-    {
+    if (isset($_GET['brd'])) {
       $brd=$_GET['brd'];
-    }
-    else 
-    {
+    } else {
       $brd = 10;
     }
     
     // get border color; if not set, use white
-    if (isset($_GET['brdcol']))
-    {
+    if (isset($_GET['brdcol'])) {
       $brdcol=$_GET['brdcol'];
+    } else {
+      $brdcol='FFFFFF';
     }
-    else 
-    {
-      $brdcol='ffffff';
+    
+    // get path to cache folder
+    if (isset($_GET['path'])) {
+      $fullpath = $_GET['path'];
+    } else {
+      $fullpath = 'albums'; // Set to default if empty
     }
+    $fullpath .= '/edit/thumb_rotate_cache/';
     
     // split background color
     $bg1 = hexdec(substr($backcolor,0,2));
@@ -86,12 +88,9 @@
     header('Content-type: image/png');
     
     // create source image from existing thumb file
-    if (substr($image,-4) == '.png') 
-    {
+    if (substr($image,-4) == '.png'){
       $source = imagecreatefrompng($image);
-    }
-    else
-    {
+    } else {
       $source = imagecreatefromjpeg($image);
     }
     
@@ -99,23 +98,22 @@
     $sourcex = imagesx($source);
     $sourcey = imagesy($source);
     
-    // create destination image 2px bigger than source+brd*2
-    $finalimg = imagecreatetruecolor($sourcex+$brd*2+2,$sourcey+$brd*2+2);
+    // create destination image 8px bigger than source+brd*2
+    $finalimg = imagecreatetruecolor($sourcex+$brd*2+8,$sourcey+$brd*2+8);
     
     // make image transparent
     //imagealphablending($finalimg,true);
     $fin_bg = imagecolorallocate($finalimg, $bg1, $bg2, $bg3);
-    imagefilledrectangle($finalimg,0,0,$sourcex+$brd*2+2,$sourcey+$brd*2+2,$fin_bg);
+    imagefilledrectangle($finalimg,0,0,$sourcex+$brd*2+8,$sourcey+$brd*2+8,$fin_bg);
 
     // create border
-    if ($brd)
-    {
+    if ($brd) {
       $bordercolor = imagecolorallocate($finalimg, $bc1, $bc2, $bc3);
-      imagefilledrectangle($finalimg,1,1,$sourcex+$brd*2,$sourcey+$brd*2,$bordercolor);
+      imagefilledrectangle($finalimg,4,4,$sourcex+$brd*2+4,$sourcey+$brd*2+4,$bordercolor);
     }
 
     // copy source into finalimg
-    imagecopy($finalimg,$source,$brd+1,$brd+1,0,0,$sourcex,$sourcey);
+    imagecopy($finalimg,$source,$brd+4,$brd+4,0,0,$sourcex,$sourcey);
     
     // rotate image
     $rotate = imagerotate($finalimg, $degrees, $fin_bg);
@@ -125,9 +123,9 @@
     
     // deliver png and save to cache
     imagepng($rotate);
-    imagepng($rotate, './thumb_cache/'.str_replace('/','_',$_GET['img']).$backcolor.$brdcol.$brd.'.png');
+    imagepng($rotate, '../../' . $fullpath . str_replace('/','_',$_GET['img']).$backcolor.$brdcol.$brd.'.png');
     
-    // room up
+    // clean up
     imagedestroy($rotate);
     imagedestroy($source);
     imagedestroy($finalimg);

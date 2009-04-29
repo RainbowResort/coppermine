@@ -29,25 +29,29 @@
   3. Make subfolder thumb_cache writable, this usually means CHMOD to 755 or 777.
   4. Install via plugin manager.
 
-  Compatibility
-  -------------
-  This plugin is currently not compatible with
-  - SEF_URL plugin
-  - EnlargeIt!
-
 
   Changelog
   ---------
   0.2 to 0.3:
-  	- added config section
-  	- internationalization
-  	- added icons
+    - added config section
+    - internationalization
+    - added icons
+
+  0.3 to 0.4:
+    - better optics
+    - fixed broken anti-aliasing
+    
+  0.4 to 0.5
+    - removed image from plugin root that was added in error (resides in sub-folder "images")
+    - improved version checking during install for GD version to avoid text in version string spoiling the result
+    - changed cache path from folder within plugin path into sub-folder within edit folder, which should be writable out of the box
+    - added display of amount of cached files 
+    - added option to empty cache 
+    - added farbtastic plugin (http://acko.net/dev/farbtastic)
+    - added test to installer to check if cache folder is writable
   
   Todo
   -------------
   - sanitization of URL parameters in thumb_rotate.php for security reasons
   - add fallback option in flash as discussed in announcement thread
-  - granular cache control, maybe move cache into the folder /albums/edit, as that
-    folder is writable in the first place
   - add a preview to config page
-  - perform a test during install to check if the cache folder is actually writable

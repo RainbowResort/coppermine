@@ -2,6 +2,10 @@
 function thumb_rotate_initialize() {
 	global $CONFIG, $lang_plugin_thumb_rotate, $thumb_rotate_icon_array;
 	$superCage = Inspekt::makeSuperCage();
+	if (GALLERY_ADMIN_MODE) {
+		global $JS;
+		$JS['includes'][] = 'plugins/thumb_rotate/js/farbtastic.js';
+	}
 
 	require "./plugins/thumb_rotate/lang/english.php";
 	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/thumb_rotate/lang/{$CONFIG['lang']}.php")) {
