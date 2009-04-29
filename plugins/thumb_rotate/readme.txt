@@ -49,6 +49,10 @@
     - added option to empty cache 
     - added farbtastic plugin (http://acko.net/dev/farbtastic)
     - added test to installer to check if cache folder is writable
+    
+  0.5 to 0.6
+    - added permission check to config screen
+    - fixed permissions of cache folder
   
   Todo
   -------------

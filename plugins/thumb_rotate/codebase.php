@@ -79,8 +79,8 @@ function thumb_rotate_install() {
 	// Create the super cage
 	$superCage = Inspekt::makeSuperCage();
 	// Create the cache folder
-    is_dir(dirname($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/')) || mkdir_recursive(dirname($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/'), $CONFIG['default_dir_mode']);
-    $result = is_dir($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/') || @mkdir($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/', $CONFIG['default_dir_mode']);
+    is_dir(dirname($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/')) || mkdir_recursive(dirname($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/'), octdec($CONFIG['default_dir_mode']));
+    $result = is_dir($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/') || @mkdir($CONFIG['fullpath'] . 'edit/thumb_rotate_cache/', octdec($CONFIG['default_dir_mode']));
 
 	$thumb_rotate_installation = 1;
 	require 'include/sql_parse.php';
@@ -139,8 +139,11 @@ function thumb_rotate_empty_cache($action = 'delete'){
 
 // Configure function: displays the configuration form
 function thumb_rotate_configure() {
-    global $CONFIG, $thisplugin, $lang_plugin_thumb_rotate, $lang_common, $thumb_rotate_icon_array, $thumb_rotate_installation;
+    global $CONFIG, $thisplugin, $lang_plugin_thumb_rotate, $lang_common, $thumb_rotate_icon_array, $lang_errors, $thumb_rotate_installation;
     $superCage = Inspekt::makeSuperCage();
+    if (!GALLERY_ADMIN_MODE) {
+    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    }
     // Populate the form fields and run the queries for the submit form
     $config_changes_counter = 0;
     // maxrotation
