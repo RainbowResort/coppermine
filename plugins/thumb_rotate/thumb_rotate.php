@@ -26,7 +26,7 @@
   		 (usually "albums/") 
 *************************************/
 
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
     // get image file
     if (!isset($_GET['img'])) {
     	exit();
@@ -98,22 +98,22 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
     $sourcex = imagesx($source);
     $sourcey = imagesy($source);
     
-    // create destination image 8px bigger than source+brd*2
-    $finalimg = imagecreatetruecolor($sourcex+$brd*2+8,$sourcey+$brd*2+8);
+    // create destination image 6px bigger than source+brd*2 to make anti aliasing work
+    $finalimg = imagecreatetruecolor($sourcex+$brd*2+6,$sourcey+$brd*2+6);
     
     // make image transparent
     //imagealphablending($finalimg,true);
     $fin_bg = imagecolorallocate($finalimg, $bg1, $bg2, $bg3);
-    imagefilledrectangle($finalimg,0,0,$sourcex+$brd*2+8,$sourcey+$brd*2+8,$fin_bg);
+    imagefilledrectangle($finalimg,0,0,$sourcex+$brd*2+6,$sourcey+$brd*2+6,$fin_bg);
 
     // create border
     if ($brd) {
       $bordercolor = imagecolorallocate($finalimg, $bc1, $bc2, $bc3);
-      imagefilledrectangle($finalimg,4,4,$sourcex+$brd*2+4,$sourcey+$brd*2+4,$bordercolor);
+      imagefilledrectangle($finalimg,3,3,$sourcex+$brd*2+3,$sourcey+$brd*2+3,$bordercolor);
     }
 
     // copy source into finalimg
-    imagecopy($finalimg,$source,$brd+4,$brd+4,0,0,$sourcex,$sourcey);
+    imagecopy($finalimg,$source,$brd+3,$brd+3,0,0,$sourcex,$sourcey);
     
     // rotate image
     $rotate = imagerotate($finalimg, $degrees, $fin_bg);
