@@ -53,6 +53,9 @@
   0.5 to 0.6
     - added permission check to config screen
     - fixed permissions of cache folder
+
+  0.6 to 0.7
+    - fixed security leak
   
   Todo
   -------------

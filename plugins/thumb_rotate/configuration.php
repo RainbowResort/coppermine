@@ -12,7 +12,7 @@ $author = sprintf($lang_plugin_thumb_rotate['author'],
 	'<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>',
 	'<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Steven Wittens</a>');
 	
-$version = '0.6';
+$version = '0.7';
 
 $resources_warning = sprintf($lang_plugin_thumb_rotate['resources_warning'], '<a href="'.rtrim($CONFIG['site_url'], '/') . '/' . $CONFIG['fullpath'] . 'edit/thumb_rotate_cache/"><tt>'.rtrim($CONFIG['site_url'], '/') . '/' . $CONFIG['fullpath'] . 'edit/thumb_rotate_cache/</tt></a>');
 

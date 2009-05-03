@@ -23,56 +23,46 @@
   brdcol - border color in hex format
            (ffffff if not set)
   path - coppermine config variable fullpath
-  		 (usually "albums/") 
+       (usually "albums/") 
 *************************************/
 
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
-    // get image file
-    if (!isset($_GET['img'])) {
-    	exit();
-    }
-    $image = '../../'.$_GET['img'];
-    
-    
-    // get degrees of rotation, if not set, random (0°-9°, 350°-359°)
-    if (isset($_GET['deg']) && $_GET['deg'] == (int)$_GET['deg'] && $_GET['deg'] >= 0 && $_GET['deg'] <= 20) {
-      $degrees = $_GET['deg'];
-    } else {
-      $degrees = rand(0,19);
-      if ($degrees > 9) {
-      	$degrees += 340;
-      }
-    }
-    
-    // get background color; if not set, use light gray
-    if (isset($_GET['bg'])) {
-      $backcolor=$_GET['bg'];
-    } else {
-      $backcolor='EFEFEF';
-    }
+define('IN_COPPERMINE', true);
+include_once('include/init.inc.php');
 
-    // get border size; if not set, set to 10
-    if (isset($_GET['brd'])) {
-      $brd=$_GET['brd'];
-    } else {
-      $brd = 10;
-    }
-    
-    // get border color; if not set, use white
-    if (isset($_GET['brdcol'])) {
-      $brdcol=$_GET['brdcol'];
-    } else {
-      $brdcol='FFFFFF';
-    }
-    
+
+// get parameters out of URL
+$thumbrot_cage = Inspekt::makeGetCage();
+$pid = $thumbrot_cage->getInt('pid');
+$degrees = $thumbrot_cage->getInt('deg');
+
+
+
+//get_meta_album_set in functions.inc.php will populate the $ALBUM_SET instead; matches $META_ALBUM_SET.
+get_meta_album_set($cat,$ALBUM_SET);
+$META_ALBUM_SET = $ALBUM_SET;
+
+// Retrieve data for the current picture
+    $result = cpg_db_query("SELECT aid from {$CONFIG['TABLE_PICTURES']} WHERE pid='$pid' $ALBUM_SET LIMIT 1");
+    if (mysql_num_rows($result) == 0) cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
+    $row = mysql_fetch_array($result);
+    $album = $row['aid'];
+    $pic_data = get_pic_data($album, $pic_count, $album_name, -1, -1, false);
+    for($pos = 0; $pic_data[$pos]['pid'] != $pid && $pos < $pic_count; $pos++);
+    $pic_data = get_pic_data($album, $pic_count, $album_name, $pos, 1, false);
+    $CURRENT_PIC_DATA = $pic_data[0];
+    $image = $CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CONFIG['thumb_pfx'].$CURRENT_PIC_DATA['filename']; 
+
+    // Get settings out of CONFIG table
+    $backcolor = ltrim($CONFIG['plugin_thumb_rotate_bgcolor'], '#');
+    $brd = $CONFIG['plugin_thumb_rotate_borderwidth'];
+    $brdcol = ltrim($CONFIG['plugin_thumb_rotate_bordercolor'], '#');
+
+
+
     // get path to cache folder
-    if (isset($_GET['path'])) {
-      $fullpath = $_GET['path'];
-    } else {
-      $fullpath = 'albums'; // Set to default if empty
-    }
-    $fullpath .= '/edit/thumb_rotate_cache/';
-    
+    $fullpath = $CONFIG['fullpath'];
+    $fullpath .= 'edit/thumb_rotate_cache/';
+
     // split background color
     $bg1 = hexdec(substr($backcolor,0,2));
     $bg2 = hexdec(substr($backcolor,2,2));
@@ -123,7 +113,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
     
     // deliver png and save to cache
     imagepng($rotate);
-    imagepng($rotate, '../../' . $fullpath . str_replace('/','_',$_GET['img']).$backcolor.$brdcol.$brd.'.png');
+    imagepng($rotate, $fullpath . str_replace('/','_',$image).'.png');
     
     // clean up
     imagedestroy($rotate);
