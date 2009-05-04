@@ -53,12 +53,30 @@
   0.5 to 0.6
     - added permission check to config screen
     - fixed permissions of cache folder
-
+  
   0.6 to 0.7
-    - fixed security leak
+    - added hidden config option for rotated thumb prefix
+    
+  0.7 to 1.0
+    - dropped usage of separate file: entire code now resides in codebase.php
+    - fixed security issue: plugin can no longer be abused to retrieve content
+    - removed cache folder - caching happens within the regular coppermine folder structure
+    - added db table to store the cache records
+    - take care of files that the GD lib can not handle (e.g. custom thumbs or generic ones)
   
   Todo
   -------------
-  - sanitization of URL parameters in thumb_rotate.php for security reasons
+  - add option to preserve settings on uninstall
   - add fallback option in flash as discussed in announcement thread
   - add a preview to config page
+  - convert the cache delete routine to work with larger galleries as well (similar to the technique used in admin tools)
+  - fix/test generation of rotated thumbs for all meta albums
+  - apply for the film strip as well
+  - re-add the stats (number of cached files) to the config screen
+  - add button that allows the cache to be flushed without changing the config
+  - collapse color pickers by default
+  
+  Known Issues
+  ------------
+  - Currently doesn't work for the lastup meta album
+  - If the function imagerotate is not present, the fallback function will look distorted because of lacking support for transparency

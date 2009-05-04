@@ -12,12 +12,10 @@ $author = sprintf($lang_plugin_thumb_rotate['author'],
 	'<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>',
 	'<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Steven Wittens</a>');
 	
-$version = '0.7';
-
-$resources_warning = sprintf($lang_plugin_thumb_rotate['resources_warning'], '<a href="'.rtrim($CONFIG['site_url'], '/') . '/' . $CONFIG['fullpath'] . 'edit/thumb_rotate_cache/"><tt>'.rtrim($CONFIG['site_url'], '/') . '/' . $CONFIG['fullpath'] . 'edit/thumb_rotate_cache/</tt></a>');
+$version = '1.0';
 
 $extra_info = <<<EOT
-	{$resources_warning}<br />
+	{$lang_plugin_thumb_rotate['resources_warning']}<br />
     <a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['config']}{$lang_plugin_thumb_rotate['config']}</a>&nbsp;
     <a href="http://forum.coppermine-gallery.net/index.php/topic,57468.0.html" title="&laquo;{$lang_plugin_thumb_rotate['config_name']}&raquo; - {$lang_plugin_thumb_rotate['announcement_thread']}" class="admin_menu">{$thumb_rotate_icon_array['announcement']}{$lang_plugin_thumb_rotate['announcement_thread']}</a>
 EOT;
@@ -25,7 +23,7 @@ EOT;
 $install_info = <<<EOT
    <a href="javascript:;" onclick="MM_openBrWindow('plugins/thumb_rotate/images/screenshot.jpg','','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=750,height=650')"><img src="plugins/thumb_rotate/images/thumb_screenshot.jpg" border="0" width="128" height="85" alt="" align="right" style="padding-left:10px;" /></a>
    {$lang_plugin_thumb_rotate['minimum requirements_summary']}<br />
-   {$resources_warning}<br />
+   {$lang_plugin_thumb_rotate['resources_warning']}<br />
    <a href="http://forum.coppermine-gallery.net/index.php/topic,57468.0.html" title="&laquo;{$lang_plugin_thumb_rotate['config_name']}&raquo; - {$lang_plugin_thumb_rotate['announcement_thread']}" class="admin_menu">{$thumb_rotate_icon_array['announcement']}{$lang_plugin_thumb_rotate['announcement_thread']}</a>
 EOT;
 ?>
