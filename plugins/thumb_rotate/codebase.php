@@ -15,6 +15,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $thisplugin->add_action('page_start','thumb_rotate_initialize');
 $thisplugin->add_action('plugin_install','thumb_rotate_install');
 $thisplugin->add_action('plugin_uninstall','thumb_rotate_uninstall');
+$thisplugin->add_action('plugin_cleanup','thumb_rotate_cleanup');
 $thisplugin->add_action('plugin_configure','thumb_rotate_configure');
 $thisplugin->add_filter('theme_display_thumbnails_params','thumb_rotate_thumb_display');
 
@@ -28,13 +29,17 @@ function thumb_rotate_thumb_display($params) {
     $pid = $link_target_param_array['pid'];
     $pos = $link_target_param_array['pos'];
     $album = $link_target_param_array['album'];
-    //unset($link_target_param_array);
+    unset($link_target_param_array);
     if (!$album) {
     	// Try to extract the album from the URL param
     	if ($superCage->get->keyExists('album') == TRUE) {
     		$album = $superCage->get->getAlnum('album');
     	}
     }
+
+	if (is_int($album) != TRUE) {
+		unset($album);
+	}
     // Extract the needed information about the individual pic using the built-in methods of coppermine (code taken from displayimage.php)
 	if ($pos < 0 && !$pid) {
 		$pid = -$pos;
@@ -48,6 +53,7 @@ function thumb_rotate_thumb_display($params) {
         mysql_free_result($result);
         $album = $row['aid'];
     }
+
     if (!$pos) {
     	$pos = get_pic_pos($album, $pid);
     }
@@ -80,7 +86,6 @@ function thumb_rotate_thumb_display($params) {
     }
     if ($rotate_image_create_file == 1) {
     	$created_image_path = thumb_rotate_image_create($CURRENT_PIC_DATA);
-    	// todo: perform some more checks on the file type first before actually trying to create a rotated thumb
     }
     if ($rotate_image_create_dbrecord == 1) {
     	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath` ) VALUES ('{$pid}', '{$created_image_path}');");
@@ -89,6 +94,7 @@ function thumb_rotate_thumb_display($params) {
     // Finally, let's manipulate the thumbnail HTML
     if (file_exists($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png')){
     	$params['{THUMB}'] = str_replace($CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'], $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+		$params['{THUMB}'] = str_replace('class="image"', 'class="image" style="border:none;"', $params['{THUMB}']); // Remove border CSS
     } 
     return $params;
 }
@@ -99,11 +105,21 @@ function thumb_rotate_install() {
 	$superCage = Inspekt::makeSuperCage();
 	$thumb_rotate_installation = 1;
 	require 'include/sql_parse.php';
-	$CONFIG['plugin_thumb_rotate_maxrotation'] = 15;
-	$CONFIG['plugin_thumb_rotate_bgcolor'] = '#EFEFEF';
-	$CONFIG['plugin_thumb_rotate_borderwidth'] = 10;
-	$CONFIG['plugin_thumb_rotate_bordercolor'] = '#FFFFFF';
-	$CONFIG['plugin_thumb_rotate_thumb_pfx'] = 'rotate_';
+	if (!$CONFIG['plugin_thumb_rotate_maxrotation']) {
+		$CONFIG['plugin_thumb_rotate_maxrotation'] = 15;
+	}
+	if (!$CONFIG['plugin_thumb_rotate_bgcolor']) {
+		$CONFIG['plugin_thumb_rotate_bgcolor'] = '#EFEFEF';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_borderwidth']) {
+		$CONFIG['plugin_thumb_rotate_borderwidth'] = 10;
+	}
+	if (!$CONFIG['plugin_thumb_rotate_bordercolor']) {
+		$CONFIG['plugin_thumb_rotate_bordercolor'] = '#FFFFFF';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_thumb_pfx']) {
+		$CONFIG['plugin_thumb_rotate_thumb_pfx'] = 'rotate_';
+	}
     // Perform the database changes
     $db_schema = $thisplugin->fullpath . '/schema.sql';
     $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
@@ -126,19 +142,74 @@ function thumb_rotate_install() {
 function thumb_rotate_uninstall() {
 	global $CONFIG;
 	$superCage = Inspekt::makeSuperCage();
-	thumb_rotate_empty_cache();
+	if (!$superCage->post->keyExists('submit')) {
+		return 1;
+	}
+	if ($superCage->post->keyExists('cache') && $superCage->post->getInt('cache') == 1) {
+		thumb_rotate_empty_cache();
+		cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate");
+	}
 	// Drop the database records
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_maxrotation'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bgcolor'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_borderwidth'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bordercolor'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_thumb_pfx'");
-	cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate");
-	
+	if ($superCage->post->keyExists('drop') && $superCage->post->getInt('drop') == 1) {
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_maxrotation'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bgcolor'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_borderwidth'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bordercolor'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_thumb_pfx'");
+	}
 	return true;
 }
 
-function thumb_rotate_empty_cache($action = 'delete'){
+// Ask if we want to drop the table
+function thumb_rotate_cleanup($action) {
+    global $CONFIG, $lang_plugin_thumb_rotate, $lang_common, $thumb_rotate_icon_array;
+	// Initialize language and icons
+	require_once './plugins/thumb_rotate/init.inc.php';
+	$thumb_rotate_init_array = thumb_rotate_initialize();
+	$lang_plugin_thumb_rotate = $thumb_rotate_init_array['language']; 
+	$thumb_rotate_icon_array = $thumb_rotate_init_array['icon'];
+    $superCage = Inspekt::makeSuperCage();
+    $cleanup = $superCage->server->getEscaped('REQUEST_URI');
+    if ($action===1) {
+    echo <<< EOT
+    <form action="{$cleanup}" method="post">
+EOT;
+    starttable('100%', '', 2);
+    echo <<< EOT
+            <tr>
+                <td class="tableb">
+                    {$lang_plugin_thumb_rotate['config']}
+                </td>
+                <td class="tableb">
+                    <input type="checkbox" class="checkbox" name="drop" id="drop_yes" value="1" />
+                    <label for="drop_yes" class="clickable_option">{$lang_plugin_thumb_rotate['remove_settings']}</label>
+                </td>
+            </tr>
+			<tr>
+                <td class="tableb tableb_alternate">
+                    {$lang_plugin_thumb_rotate['cache']}
+                </td>
+                <td class="tableb tableb_alternate">
+                    <input type="checkbox" name="cache" id="cache" class="checkbox" value="1" checked="checked" />
+					<label for="cache" class="clickable_option">{$lang_plugin_thumb_rotate['empty_cache']}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="tablef">
+				</td>
+				<td class="tablef">
+                    <button type="submit" class="button" name="submit" value="{$lang_common['go']}">{$thumb_rotate_icon_array['ok']}{$lang_common['go']}</button>
+                </td>
+            </tr>
+EOT;
+	endtable();
+    echo <<< EOT
+    </form>
+EOT;
+    }
+}
+
+function thumb_rotate_empty_cache(){
 	global $CONFIG;
 	$loopCounter = 0;
 	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate");
@@ -235,7 +306,7 @@ function thumb_rotate_configure() {
                         <td valign="top" class="tableb">
                         	{$lang_plugin_thumb_rotate['minimum_requirements']}
                         </td>
-                        <td valign="top" class="tableb" colspan="2">
+                        <td valign="top" class="tableb">
 EOT;
 		$my_php_version = substr(phpversion(),0,strpos(phpversion(), '-'));
 		if ($my_php_version == '') {
@@ -287,7 +358,37 @@ EOT;
                         </td>
                     </tr>
 EOT;
-	} 
+	} else {
+		// Stuff that should not be displayed during initial install, but only after the plugin is already running
+		// Populate the cache stats
+		$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate");
+		list($cached_files) = mysql_fetch_row($result);
+		mysql_free_result($result);
+		$result = cpg_db_query("SELECT filepath FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ORDER BY RAND() LIMIT 0,1");
+		$row = mysql_fetch_assoc($result);
+		$preview = '<img src="' . $CONFIG['fullpath'] . $row['filepath'] . '" border="0" class="image" style="border:none;" alt="" />';
+		mysql_free_result($result);
+		$cached_files = sprintf($lang_plugin_thumb_rotate['cache_size'], '<strong>'.$cached_files.'</strong>');
+		$install_section = <<< EOT
+                    <tr>
+                        <td valign="top" class="tableb">
+                        	{$lang_plugin_thumb_rotate['cache']}
+                        </td>
+                        <td valign="top" class="tableb">
+							{$cached_files} <a href="index.php?file=thumb_rotate/empty_cache" class="admin_menu">{$thumb_rotate_icon_array['cancel']}{$lang_plugin_thumb_rotate['empty_cache']}</a>
+                        </td>
+                    </tr>
+					<tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                        	{$lang_plugin_thumb_rotate['preview']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+							{$preview}
+                        </td>
+                    </tr>
+EOT;
+	}
+	
 	// Start the actual output
     echo <<< EOT
     		<style type="text/css" media="screen">
@@ -334,13 +435,13 @@ EOT;
             <form action="{$_SERVER['REQUEST_URI']}" method="post" name="thumb_rotate_config" id="thumb_rotate_config">
 EOT;
 
-    starttable('100%', $thumb_rotate_icon_array['config'] . $lang_plugin_thumb_rotate['config'], 3);
+    starttable('100%', $thumb_rotate_icon_array['config'] . $lang_plugin_thumb_rotate['config'], 2);
     echo <<< EOT
                     <tr>
                         <td valign="top" class="tableb">
                             {$lang_plugin_thumb_rotate['option_maxrotation']}
                         </td>
-                        <td valign="top" class="tableb" colspan="2">
+                        <td valign="top" class="tableb">
                         	<select name="plugin_thumb_rotate_maxrotation" id="plugin_thumb_rotate_maxrotation" size="1" class="listbox">
 {$option_output['plugin_thumb_rotate_maxrotation']}
                         	</select> &deg;
@@ -351,17 +452,16 @@ EOT;
                             {$lang_plugin_thumb_rotate['option_bgcolor']}
                         </td>
                         <td valign="top" class="tableb tableb_alternate">
-                        	<input type="text" name="plugin_thumb_rotate_bgcolor" id="plugin_thumb_rotate_bgcolor" class="textinput" size="7" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bgcolor']}" style="text-transform:uppercase;" />
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate">
-                        	<div id="colorpicker_bgcolor"></div>
+								<input type="text" name="plugin_thumb_rotate_bgcolor" id="plugin_thumb_rotate_bgcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bgcolor']}" style="text-transform:uppercase;" />
+							<span class="detail_head_collapsed">{$lang_plugin_thumb_rotate['toggle_color_picker']}</span>
+							<div id="colorpicker_bgcolor" class="detail_body"></div>
                         </td>
                     </tr>
                     <tr>
                         <td valign="top" class="tableb">
                             {$lang_plugin_thumb_rotate['option_borderwidth']}
                         </td>
-                        <td valign="top" class="tableb" colspan="2">
+                        <td valign="top" class="tableb">
                         	<input type="text" name="plugin_thumb_rotate_borderwidth" id="plugin_thumb_rotate_borderwidth" class="textinput" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_borderwidth']}" /> ({$lang_plugin_thumb_rotate['in_pixels']})
                         </td>
                     </tr>
@@ -370,18 +470,16 @@ EOT;
                             {$lang_plugin_thumb_rotate['option_bordercolor']}
                         </td>
                         <td valign="top" class="tableb tableb_alternate">
-                        	<input type="text" name="plugin_thumb_rotate_bordercolor" id="plugin_thumb_rotate_bordercolor" class="textinput" size="7" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bordercolor']}" style="text-transform:uppercase;" />
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate">
-                        	<div id="colorpicker_bordercolor"></div>
+                        	<input type="text" name="plugin_thumb_rotate_bordercolor" id="plugin_thumb_rotate_bordercolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bordercolor']}" style="text-transform:uppercase;" />
+							<span class="detail_head_collapsed">{$lang_plugin_thumb_rotate['toggle_color_picker']}</span>
+							<div id="colorpicker_bordercolor" class="detail_body"></div>
                         </td>
                     </tr>
                     {$install_section}
                     <tr>
                         <td valign="middle" class="tablef">
-                        	
                         </td>
-                        <td valign="middle" class="tablef" colspan="2">
+                        <td valign="middle" class="tablef">
                             <button type="submit" class="button" name="submit" value="{$lang_common['ok']}">{$thumb_rotate_icon_array['ok']}{$lang_common['ok']}</button>
                         </td>
                     </tr>
@@ -476,17 +574,30 @@ function thumb_rotate_html2rgb($color) {
 }
 
 function thumb_rotate_image_create($CURRENT_PIC_DATA) {
-	global $CONFIG;
+	global $CONFIG, $gd_extension_array, $THEME_DIR;
 	$bg_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bgcolor']);// split background color
 	$bc_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bordercolor']);// split background color
 	
 	// create source image from existing thumb file
-	$image = $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'];
+	if (in_array($CURRENT_PIC_DATA['extension'], $gd_extension_array)) {
+		$image = $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'];
+	} else { // None of the regular image file types
+		if (is_readable($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.jpg') == TRUE) { // Is there a custom thumbnail available?
+		$image = $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.jpg';
+		} else { // use one of the generic thumbnails
+			if (file_exists($THEME_DIR . 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png')) {
+				$image = $THEME_DIR . 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png';
+			} elseif ('images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png') {
+				$image = 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png';
+			}
+		}
+	}
 	if (substr($image,-4) == '.png'){
-	  $source = imagecreatefrompng($image);
+		$source = imagecreatefrompng($image);
 	} elseif(substr($image,-4) == '.gif') {
+		$source = imagecreatefromgif($image);
 	} else {
-	  $source = imagecreatefromjpeg($image);
+		$source = imagecreatefromjpeg($image);
 	}
 	
 	// get width / height of source image
@@ -494,7 +605,15 @@ function thumb_rotate_image_create($CURRENT_PIC_DATA) {
 	$sourcey = imagesy($source);
 	
 	// create destination image 6px bigger than source+brd*2 to make anti aliasing work
-	$finalimg = imagecreatetruecolor($sourcex+$CONFIG['plugin_thumb_rotate_borderwidth']*2+6,$sourcey+$CONFIG['plugin_thumb_rotate_borderwidth']*2+6);
+	$finalimg = imagecreatetruecolor(
+	                                 $sourcex + 
+	                                 $CONFIG['plugin_thumb_rotate_borderwidth'] * 2 
+	                                 +6
+	                                 , 
+	                                 $sourcey +
+	                                 $CONFIG['plugin_thumb_rotate_borderwidth'] * 2
+	                                 +6
+	                                 );
 	
 	// make image transparent
 	//imagealphablending($finalimg,true);

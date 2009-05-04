@@ -21,4 +21,11 @@ $lang_plugin_thumb_rotate['author'] = 'Erzeugt durch %s, diverse Verbesserungen 
 $lang_plugin_thumb_rotate['announcement_thread'] = 'Ankündigungs-Thread';
 $lang_plugin_thumb_rotate['changes_saved'] = 'Deine Änderungen wurden gespeichert';
 $lang_plugin_thumb_rotate['no_changes'] = 'Es gab keine Änderungen oder die eingegebenen Änderungen waren ungültig';
+$lang_plugin_thumb_rotate['toggle_color_picker'] = 'Farbwähler ein/aus';
+$lang_plugin_thumb_rotate['cache'] = 'Zwischenspeicher (Cache)';
+$lang_plugin_thumb_rotate['empty_cache'] = 'Cache löschen';
+$lang_plugin_thumb_rotate['cache_size'] = 'Zwischengespeicherte Dateien: %s';
+$lang_plugin_thumb_rotate['wait'] = 'Bitte warten, es müssen noch %s Einträge bearbeitet werden.';
+$lang_plugin_thumb_rotate['preview'] = 'Vorschau';
+$lang_plugin_thumb_rotate['remove_settings'] = 'Einstellungen des Plugins aus der Datenbank löschen?';
 ?>

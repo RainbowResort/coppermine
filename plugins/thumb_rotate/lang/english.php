@@ -21,4 +21,12 @@ $lang_plugin_thumb_rotate['author'] = 'Created by %s, various improvements by %s
 $lang_plugin_thumb_rotate['announcement_thread'] = 'Announcement thread';
 $lang_plugin_thumb_rotate['changes_saved'] = 'Your changes have been saved';
 $lang_plugin_thumb_rotate['no_changes'] = 'There have been no changes or the values you entered where invalid';
+$lang_plugin_thumb_rotate['toggle_color_picker'] = 'Show/hide color picker';
+$lang_plugin_thumb_rotate['cache'] = 'Cache';
+$lang_plugin_thumb_rotate['empty_cache'] = 'Empty cache';
+$lang_plugin_thumb_rotate['cache_size'] = 'Cached files: %s';
+$lang_plugin_thumb_rotate['wait'] = 'Please wait, there are %s more records to process.';
+$lang_plugin_thumb_rotate['preview'] = 'Preview';
+$lang_plugin_thumb_rotate['remove_settings'] = 'Remove the plugin settings from the database?';
+
 ?>

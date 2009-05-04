@@ -64,19 +64,25 @@
     - added db table to store the cache records
     - take care of files that the GD lib can not handle (e.g. custom thumbs or generic ones)
   
+  1.0 to 1.1
+	- added style command to make sure that there is no interfering border for the CSS class .image
+	- re-added the stats (number of cached files) to the config screen
+	- added button to manually clear the cache
+	- added expand/collapse toggles for the color pickers
+	- added option to preserve settings on uninstall
+	- added a preview to config page
+	- fixed generation of rotated thumbnails for all meta albums except 'lastalb'
+	- added empty_cache page that allows emptying the cache for a large number of files
+	
+  
   Todo
   -------------
-  - add option to preserve settings on uninstall
   - add fallback option in flash as discussed in announcement thread
-  - add a preview to config page
-  - convert the cache delete routine to work with larger galleries as well (similar to the technique used in admin tools)
-  - fix/test generation of rotated thumbs for all meta albums
   - apply for the film strip as well
-  - re-add the stats (number of cached files) to the config screen
-  - add button that allows the cache to be flushed without changing the config
-  - collapse color pickers by default
+  - apply for the album thumbs as well
+  - add a check that makes sure to process only the files it can process
   
   Known Issues
   ------------
-  - Currently doesn't work for the lastup meta album
+  - Currently doesn't work for the lastalb meta album - please turn that off in coppermine's config
   - If the function imagerotate is not present, the fallback function will look distorted because of lacking support for transparency

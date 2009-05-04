@@ -1,7 +1,8 @@
 <?php
 function thumb_rotate_initialize() {
-	global $CONFIG, $lang_plugin_thumb_rotate, $thumb_rotate_icon_array;
+	global $CONFIG, $lang_plugin_thumb_rotate, $thumb_rotate_icon_array, $gd_extension_array;
 	$superCage = Inspekt::makeSuperCage();
+	$gd_extension_array = array('jpg', 'jpeg', 'gif', 'png');
 	if (GALLERY_ADMIN_MODE) {
 		global $JS;
 		$JS['includes'][] = 'plugins/thumb_rotate/js/farbtastic.js';
@@ -26,7 +27,8 @@ function thumb_rotate_initialize() {
 		$thumb_rotate_icon_array['config_menu'] = '';
 	}
 	$thumb_rotate_icon_array['plugin_manager'] = cpg_fetch_icon('plugin_mgr', 2);
-	$thumb_rotate_icon_array['ok'] = cpg_fetch_icon('ok', 1);
+	$thumb_rotate_icon_array['ok'] = cpg_fetch_icon('ok', 2);
+	$thumb_rotate_icon_array['cancel'] = cpg_fetch_icon('cancel', 2);
 	$return['language'] = $lang_plugin_thumb_rotate;
 	$return['icon'] = $thumb_rotate_icon_array;
 	return $return;
