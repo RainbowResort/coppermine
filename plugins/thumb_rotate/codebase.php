@@ -21,6 +21,10 @@ $thisplugin->add_filter('theme_display_thumbnails_params','thumb_rotate_thumb_di
 
 function thumb_rotate_thumb_display($params) {
     global $CONFIG;
+    if ($CONFIG['plugin_thumb_rotate_admin_only'] == 1 && !GALLERY_ADMIN_MODE) {
+    	return $params;
+    }
+    $gd_extension_array = array('jpg', 'jpeg', 'gif', 'png');
     // Create the super cage	$superCage = Inspekt::makeSuperCage();
     // Extract the needed information from the thumbnail params array
     $link_target_array = parse_url(str_replace('&amp;', '&', $params['{LINK_TGT}']));
@@ -62,6 +66,7 @@ function thumb_rotate_thumb_display($params) {
 	$CURRENT_PIC_DATA['extension'] = ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.');
 	$CURRENT_PIC_DATA['filename_without_extension'] = str_replace('.' . $CURRENT_PIC_DATA['extension'], '', $CURRENT_PIC_DATA['filename']);
 	// End Extract - we now have all needed data concerning the individual pic
+
 	// Let's determine if the file is cached already
 	$rotate_image_create_file = 0;
     $rotate_image_create_dbrecord = 0;
@@ -84,18 +89,40 @@ function thumb_rotate_thumb_display($params) {
     	mysql_free_result($result);
     	// There IS a cached record in the database --- end
     }
+	// Apply the delay --- start
+	if ($CONFIG['plugin_thumb_rotate_timelimit'] > 0) {
+		if ((time() - $CONFIG['plugin_thumb_rotate_timestamp']) > $CONFIG['plugin_thumb_rotate_timelimit']) {
+			// The time stamp difference is greater than the set config parameter, so we can proceed with thumbnail creation
+		} else {
+			// The time stamp difference is smaller - don't process the thumb to save resources
+			$rotate_image_create_file = 0;
+			$rotate_image_create_dbrecord = 0;
+		}
+	}
+	// Apply the delay --- end
     if ($rotate_image_create_file == 1) {
     	$created_image_path = thumb_rotate_image_create($CURRENT_PIC_DATA);
+    	if ($CONFIG['plugin_thumb_rotate_timelimit'] > 0) {
+    		// Write the current time stamp to the db
+    		$time = time();
+    		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$time}' WHERE name='plugin_thumb_rotate_timestamp'");
+    	}
     }
-    if ($rotate_image_create_dbrecord == 1) {
+    if ($rotate_image_create_dbrecord == 1 && $created_image_path != '') {
     	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath` ) VALUES ('{$pid}', '{$created_image_path}');");
     }
     
     // Finally, let's manipulate the thumbnail HTML
     if (file_exists($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png')){
-    	$params['{THUMB}'] = str_replace($CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'], $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    	if (in_array($CURRENT_PIC_DATA['extension'], $gd_extension_array)) {
+    		$params['{THUMB}'] = str_replace($CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'], $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    	} else {
+    		$params['{THUMB}'] = str_replace($THEME_DIR . 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    		$params['{THUMB}'] = str_replace('images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    	}
 		$params['{THUMB}'] = str_replace('class="image"', 'class="image" style="border:none;"', $params['{THUMB}']); // Remove border CSS
-    } 
+		//$params['{THUMB}'] .= date('Y-m-d H:i:s',time()) . '|'. date('Y-m-d H:i:s',$CONFIG['plugin_thumb_rotate_timestamp']) . '|' . (time() - $CONFIG['plugin_thumb_rotate_timestamp']);
+    }
     return $params;
 }
 
@@ -105,6 +132,9 @@ function thumb_rotate_install() {
 	$superCage = Inspekt::makeSuperCage();
 	$thumb_rotate_installation = 1;
 	require 'include/sql_parse.php';
+	if (!$CONFIG['plugin_thumb_rotate_type']) {
+		$CONFIG['plugin_thumb_rotate_type'] = 'rotate';
+	}
 	if (!$CONFIG['plugin_thumb_rotate_maxrotation']) {
 		$CONFIG['plugin_thumb_rotate_maxrotation'] = 15;
 	}
@@ -119,6 +149,15 @@ function thumb_rotate_install() {
 	}
 	if (!$CONFIG['plugin_thumb_rotate_thumb_pfx']) {
 		$CONFIG['plugin_thumb_rotate_thumb_pfx'] = 'rotate_';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_timestamp']) {
+		$CONFIG['plugin_thumb_rotate_timestamp'] = time();
+	}
+	if (!$CONFIG['plugin_thumb_rotate_timelimit']) {
+		$CONFIG['plugin_thumb_rotate_timelimit'] = '0';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_admin_only']) {
+		$CONFIG['plugin_thumb_rotate_admin_only'] = '0';
 	}
     // Perform the database changes
     $db_schema = $thisplugin->fullpath . '/schema.sql';
@@ -151,11 +190,15 @@ function thumb_rotate_uninstall() {
 	}
 	// Drop the database records
 	if ($superCage->post->keyExists('drop') && $superCage->post->getInt('drop') == 1) {
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_type'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_maxrotation'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bgcolor'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_borderwidth'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bordercolor'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_thumb_pfx'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_timestamp'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_timelimit'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_admin_only'");
 	}
 	return true;
 }
@@ -230,6 +273,24 @@ function thumb_rotate_configure() {
     }
     // Populate the form fields and run the queries for the submit form
     $config_changes_counter = 0;
+	$dump_cache = 0;
+    // type
+    $thumb_rotate_type_allowed = array('rotate', 'rounded'); // Only what is specified in this array will be allowed to be submit
+    if ($superCage->post->keyExists('plugin_thumb_rotate_type') == TRUE && in_array($superCage->post->getAlpha('plugin_thumb_rotate_type'), $thumb_rotate_type_allowed) == TRUE && $superCage->post->getAlpha('plugin_thumb_rotate_type') != $CONFIG['plugin_thumb_rotate_type']) {
+    	$CONFIG['plugin_thumb_rotate_type'] = $superCage->post->getAlpha('plugin_thumb_rotate_type');
+    	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_type']}' WHERE name='plugin_thumb_rotate_type'";
+    	cpg_db_query($query);
+    	$config_changes_counter++;
+    	$dump_cache++;
+    }
+    if ($CONFIG['plugin_thumb_rotate_type'] == 'rounded') {
+    	$option_output['plugin_thumb_rotate_type_rotate'] = '';
+    	$option_output['plugin_thumb_rotate_type_rounded'] = 'checked="checked"';
+    } else { // default is "rotate"
+    	$option_output['plugin_thumb_rotate_type_rotate'] = 'checked="checked"';
+    	$option_output['plugin_thumb_rotate_type_rounded'] = '';
+    }
+    
     // maxrotation
     if ($superCage->post->keyExists('plugin_thumb_rotate_maxrotation') == TRUE) {
         if ($superCage->post->getInt('plugin_thumb_rotate_maxrotation') >= 0 && $superCage->post->getInt('plugin_thumb_rotate_maxrotation') <= 20 && $CONFIG['plugin_thumb_rotate_maxrotation'] != $superCage->post->getInt('plugin_thumb_rotate_maxrotation')) {
@@ -237,15 +298,8 @@ function thumb_rotate_configure() {
             $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_maxrotation']}' WHERE name='plugin_thumb_rotate_maxrotation'";
             cpg_db_query($query);
             $config_changes_counter++;
+			$dump_cache++;
         }
-    }
-    $option_output['plugin_thumb_rotate_maxrotation'] = '';
-    for ($i = 0; $i <= 20; $i++) {
-    	$option_output['plugin_thumb_rotate_maxrotation'] .= '                            	<option value="' . $i . '"';
-    	if (trim($CONFIG['plugin_thumb_rotate_maxrotation']) == trim($i)) {
-    		$option_output['plugin_thumb_rotate_maxrotation'] .= ' selected="selected"';
-    	}
-    	$option_output['plugin_thumb_rotate_maxrotation'] .= '>' . $i . '</option>'."\r\n";
     }
 
     // bgcolor
@@ -258,6 +312,7 @@ function thumb_rotate_configure() {
 	            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_bgcolor']}' WHERE name='plugin_thumb_rotate_bgcolor'";
 	            cpg_db_query($query);
 	            $config_changes_counter++;
+				$dump_cache++;
 	        }
         }
     }
@@ -269,6 +324,7 @@ function thumb_rotate_configure() {
             $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_borderwidth']}' WHERE name='plugin_thumb_rotate_borderwidth'";
             cpg_db_query($query);
             $config_changes_counter++;
+			$dump_cache++;
         }
     }
     
@@ -282,15 +338,49 @@ function thumb_rotate_configure() {
 	            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_bordercolor']}' WHERE name='plugin_thumb_rotate_bordercolor'";
 	            cpg_db_query($query);
 	            $config_changes_counter++;
+				$dump_cache++;
 	        }
         }
     }
     
+    // admin-only toggle
+     if ($superCage->post->keyExists('plugin_thumb_rotate_admin_only') == TRUE && $superCage->post->getInt('plugin_thumb_rotate_admin_only') == 1) {
+     	$temp = 1;
+     } elseif($superCage->post->keyExists('submit') == TRUE) {
+     	$temp = 0;
+     } else {
+     	$temp = $CONFIG['plugin_thumb_rotate_admin_only'];
+     }
+    if ($CONFIG['plugin_thumb_rotate_admin_only'] != $temp) {
+        $CONFIG['plugin_thumb_rotate_admin_only'] = $temp;
+        $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_admin_only']}' WHERE name='plugin_thumb_rotate_admin_only'";
+        cpg_db_query($query);
+        $config_changes_counter++;
+    }
+    if ($CONFIG['plugin_thumb_rotate_admin_only'] == 1) {
+    	$option_output['plugin_thumb_rotate_admin_only'] = 'checked="checked"';
+    } else {
+    	$option_output['plugin_thumb_rotate_admin_only'] = '';
+    }
+    
+    // delay (timelimit)
+    if ($superCage->post->keyExists('plugin_thumb_rotate_timelimit') == TRUE) {
+        if ($superCage->post->getInt('plugin_thumb_rotate_timelimit') >= 0 && $superCage->post->getInt('plugin_thumb_rotate_timelimit') <= 9 && $CONFIG['plugin_thumb_rotate_timelimit'] != $superCage->post->getInt('plugin_thumb_rotate_timelimit')) {
+            $CONFIG['plugin_thumb_rotate_timelimit'] = $superCage->post->getInt('plugin_thumb_rotate_timelimit');
+            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_timelimit']}' WHERE name='plugin_thumb_rotate_timelimit'";
+            cpg_db_query($query);
+            $config_changes_counter++;
+        }
+    }
+    
+    // Form submit?
     if ($superCage->post->keyExists('submit') == TRUE) {
     	if ($config_changes_counter > 0) {
     		$additional_submit_information = '<div class="cpg_message_success">' . $lang_plugin_thumb_rotate['changes_saved'] . '</div>';
 			// a config change has been submit, so let's delete the cache
-			thumb_rotate_empty_cache();
+			if ($dump_cache > 0) {
+				thumb_rotate_empty_cache();
+			}
     	} else {
     		$additional_submit_information = '<div class="cpg_message_validation">' . $lang_plugin_thumb_rotate['no_changes'] . '</div>';
     	}
@@ -364,18 +454,32 @@ EOT;
 		$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate");
 		list($cached_files) = mysql_fetch_row($result);
 		mysql_free_result($result);
+		$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']}");
+		list($image_files_total) = mysql_fetch_row($result);
+		mysql_free_result($result);
 		$result = cpg_db_query("SELECT filepath FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ORDER BY RAND() LIMIT 0,1");
 		$row = mysql_fetch_assoc($result);
-		$preview = '<img src="' . $CONFIG['fullpath'] . $row['filepath'] . '" border="0" class="image" style="border:none;" alt="" />';
+		if ($row['filepath'] != '') {
+			$preview = '<img src="' . $CONFIG['fullpath'] . $row['filepath'] . '" border="0" class="image" style="border:none;" alt="" />';
+		} else {
+			$preview = $lang_plugin_thumb_rotate['no_preview_available'];
+		}
 		mysql_free_result($result);
-		$cached_files = sprintf($lang_plugin_thumb_rotate['cache_size'], '<strong>'.$cached_files.'</strong>');
+		$cached_files_output = sprintf($lang_plugin_thumb_rotate['cache_size'], '<strong>'.$cached_files.'</strong>', $image_files_total). '<br />&nbsp;<br />';
+		if ($cached_files != 0) {
+			$cached_files_output .= ' <a href="index.php?file=thumb_rotate/empty_cache" class="admin_menu">' . $thumb_rotate_icon_array['cancel'] . $lang_plugin_thumb_rotate['empty_cache'] . '</a>';
+		} 
+		if ($cached_files < $image_files_total) {
+			$cached_files_output .= ' <a href="index.php?file=thumb_rotate/batch_fill" class="admin_menu">' . $thumb_rotate_icon_array['batch'] . $lang_plugin_thumb_rotate['batch_fill'] . '</a>';
+		} 
+		
 		$install_section = <<< EOT
                     <tr>
                         <td valign="top" class="tableb">
                         	{$lang_plugin_thumb_rotate['cache']}
                         </td>
                         <td valign="top" class="tableb">
-							{$cached_files} <a href="index.php?file=thumb_rotate/empty_cache" class="admin_menu">{$thumb_rotate_icon_array['cancel']}{$lang_plugin_thumb_rotate['empty_cache']}</a>
+							{$cached_files_output}
                         </td>
                     </tr>
 					<tr>
@@ -424,12 +528,44 @@ EOT;
 				  overflow: hidden; 
 				  background: url(plugins/thumb_rotate/images/marker.png) no-repeat;
 				}
-
+				INPUT.spin-button {
+					padding-right:20px;					/* Padding pevents text from covering the up/dn img. Works better in Firefox but also causes textbox to widen by 20px. Arrows can go wonky in IE when text is too long. Perhaps it could be fixed with script that monitored the horiz-scroll position? */
+					background-repeat:no-repeat;		/* Warning: Img may disappear in Firefox if you use 'background-attachment:fixed' ! */
+					background-position:100% 0%;
+					background-image:url(plugins/thumb_rotate/images/spinbtn_updn_2.gif);
+				}
+				
+				INPUT.spin-button.up {					/* Change button img when mouse is over the UP-arrow */
+					cursor:pointer;
+					background-position:100% -18px;		/* 18px matches height of 2 visible buttons */
+				}
+				INPUT.spin-button.down {				/* Change button img when mouse is over the DOWN-arrow */
+					cursor:pointer;
+					background-position:100% -36px;		/* 36px matches height of 2x2 visible buttons */
+				}
     		</style>
     		<script type="text/javascript">
+				var plugin_thumb_rotate_maxrotation_options = {
+					min: 0,						// Set lower limit.
+					max: 20,					// Set upper limit.
+					step: 1,					// Set increment size.
+				}
+				var plugin_thumb_rotate_borderwidth_options = {
+					min: 0,						// Set lower limit.
+					max: 99,					// Set upper limit.
+					step: 1,					// Set increment size.
+				}
+				var plugin_thumb_rotate_timelimit_options = {
+					min: 0,						// Set lower limit.
+					max: 9,					// Set upper limit.
+					step: 1,					// Set increment size.
+				}
 				$(document).ready(function() {
 				    $('#colorpicker_bgcolor').farbtastic('#plugin_thumb_rotate_bgcolor');
 				    $('#colorpicker_bordercolor').farbtastic('#plugin_thumb_rotate_bordercolor');
+				    $("#plugin_thumb_rotate_maxrotation").SpinButton(plugin_thumb_rotate_maxrotation_options);
+				    $("#plugin_thumb_rotate_borderwidth").SpinButton(plugin_thumb_rotate_borderwidth_options);
+				    $("#plugin_thumb_rotate_timelimit").SpinButton(plugin_thumb_rotate_timelimit_options);
 				});
     		</script>
             <form action="{$_SERVER['REQUEST_URI']}" method="post" name="thumb_rotate_config" id="thumb_rotate_config">
@@ -438,13 +574,23 @@ EOT;
     starttable('100%', $thumb_rotate_icon_array['config'] . $lang_plugin_thumb_rotate['config'], 2);
     echo <<< EOT
                     <tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_thumb_rotate['option_type']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+                        	<input type="radio" name="plugin_thumb_rotate_type" id="plugin_thumb_rotate_type_rotate" class="radio" value="rotate" {$option_output['plugin_thumb_rotate_type_rotate']} />
+                        	<label for="plugin_thumb_rotate_type_rotate" class="clickable_option">{$lang_plugin_thumb_rotate['option_type_rotate']}</label>
+                        	&nbsp;
+                        	<input type="radio" name="plugin_thumb_rotate_type" id="plugin_thumb_rotate_type_rounded" class="radio" value="rounded" {$option_output['plugin_thumb_rotate_type_rounded']} disabled="disabled" />
+                        	<label for="plugin_thumb_rotate_type_rounded" class="clickable_option">{$lang_plugin_thumb_rotate['option_type_rounded_corners']}</label>
+                        </td>
+                    </tr>
+                    <tr>
                         <td valign="top" class="tableb">
                             {$lang_plugin_thumb_rotate['option_maxrotation']}
                         </td>
                         <td valign="top" class="tableb">
-                        	<select name="plugin_thumb_rotate_maxrotation" id="plugin_thumb_rotate_maxrotation" size="1" class="listbox">
-{$option_output['plugin_thumb_rotate_maxrotation']}
-                        	</select> &deg;
+                        	<input type="text" name="plugin_thumb_rotate_maxrotation" id="plugin_thumb_rotate_maxrotation" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_maxrotation']}" /> &deg;
                         </td>
                     </tr>
                     <tr>
@@ -462,7 +608,7 @@ EOT;
                             {$lang_plugin_thumb_rotate['option_borderwidth']}
                         </td>
                         <td valign="top" class="tableb">
-                        	<input type="text" name="plugin_thumb_rotate_borderwidth" id="plugin_thumb_rotate_borderwidth" class="textinput" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_borderwidth']}" /> ({$lang_plugin_thumb_rotate['in_pixels']})
+                        	<input type="text" name="plugin_thumb_rotate_borderwidth" id="plugin_thumb_rotate_borderwidth" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_borderwidth']}" /> {$lang_plugin_thumb_rotate['pixels']} ({$lang_plugin_thumb_rotate['zero_to_disable']})
                         </td>
                     </tr>
                     <tr>
@@ -473,6 +619,23 @@ EOT;
                         	<input type="text" name="plugin_thumb_rotate_bordercolor" id="plugin_thumb_rotate_bordercolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bordercolor']}" style="text-transform:uppercase;" />
 							<span class="detail_head_collapsed">{$lang_plugin_thumb_rotate['toggle_color_picker']}</span>
 							<div id="colorpicker_bordercolor" class="detail_body"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_thumb_rotate['option_admin_only']}
+                        </td>
+                        <td valign="top" class="tableb">
+                        	<input type="checkbox" name="plugin_thumb_rotate_admin_only" id="plugin_thumb_rotate_admin_only" class="checkbox" value="1" {$option_output['plugin_thumb_rotate_admin_only']} /> 
+                        	<label for="plugin_thumb_rotate_admin_only">({$lang_plugin_thumb_rotate['option_admin_only_explain']})</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_thumb_rotate['option_timelimit']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+                        	<input type="text" name="plugin_thumb_rotate_timelimit" id="plugin_thumb_rotate_timelimit" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_thumb_rotate_timelimit']}" /> {$lang_plugin_thumb_rotate['seconds']} ({$lang_plugin_thumb_rotate['zero_to_disable']})
                         </td>
                     </tr>
                     {$install_section}

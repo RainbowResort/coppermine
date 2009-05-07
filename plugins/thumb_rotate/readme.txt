@@ -24,11 +24,58 @@
   
   Install
   -------
-  1. Unzip.
+  Installation works exactly as suggested in the coppermine documentation.
+  1. Unzip on your client.
   2. Upload folder thumb_rotate to the plugin folder of your gallery.
-  3. Make subfolder thumb_cache writable, this usually means CHMOD to 755 or 777.
-  4. Install via plugin manager.
+  3. Install via plugin manager.
+  
+  Uninstall
+  ---------
+  Un-Installation works exactly as suggested in the coppermine documentation.
+  1. Uninstall via plugin manager.
 
+  Upgrading
+  ---------
+  To upgrade this plugin do not just overwrite.
+  Instead:
+  1. Uninstall first (using the plugin manager). It's safe to keep the settings and cache.
+  2. Replace the plugin files
+  3. Install (using the plugin manager) 
+  
+  Configuration
+  -------------
+  The plugin comes with a configuration panel that you can access by clicking on the 
+  corresponding config link from within the plugin manager screen. 
+  To access the config screen manually, go to 
+  http://yoursite.tld/your_coppermine_folder/index.php?file=thumb_rotate/index
+  
+  The config options should be pretty self-explanatory.
+  Just make sure to set up your config as needed before populating a large gallery with
+  rotated thumbnails: each time you modify a config option that has an impact on the rotated
+  thumbnail files, the entire cache will be deleted and needs to be built from scratch.
+  
+  Caching
+  -------
+  The plugin populates the cache (i.e. creates rotated images) as your site's visitors access
+  your gallery: each time the browser of your visitor requests a set of thumbnails, the plugin
+  checks if those particular thumbnails already exist in the cache. If they are not already
+  cached, they will be created during run-time and stored (cached).
+  The storage happens in the same folder structure your coppermine files reside in: if a particular
+  picture that resides in your gallery is located at 
+  http://yoursite.tld/your_coppermine_folder/albums/userpics/10003/my_image.jpg, this plugin will create
+  a rotated thumbnail and store that within the same folder under the name rotate_my_image.png.
+  You don't have to worry about the location of the cached files - the plugin takes care of that.
+  However, for those with limited resources, a few extra options have been added: in the plugin's 
+  config screen, you can make the plugin admin-only to allow you to build the cache in advance
+  over a longer period (using the cache batch-fill process) before finally displaying the rotated
+  thumbnails to your site visitors.
+  Another option to make the impact of the resources-consumption of this plugin less dramatical is
+  the delay setting: you can specify the number of seconds to pass between the creation of a cache
+  file. In batch-fill mode, the script will create one rotated thumbnail, wait for the time span
+  specified and then continue with the next file. In "regular" mode (when the rotated thumbnails
+  get created when they are requested by the visitor's browser), the script will create one
+  rotated thumbnail per page and no more - the rest of the thumbnails that haven't been rotated
+  yet will be sent to the visitor's browser without rotation effect.
 
   Changelog
   ---------
@@ -73,6 +120,18 @@
 	- added a preview to config page
 	- fixed generation of rotated thumbnails for all meta albums except 'lastalb'
 	- added empty_cache page that allows emptying the cache for a large number of files
+	- added a check that makes sure to process only the file types it can process
+	
+  1.1 to 1.2
+  	- added explanation why there's no preview when cache is empty
+  	- removed 'empty cache' button if the cache is already empty
+  	- added total stats
+  	- fixed broken display of generic thumbs
+  	- added a toggle that makes rotation admin-only to allow preparation of rotation in advance
+  	- added a delay field to config that allows to reduce the resources consumption of the plugin
+  	- added routine to batch-fill the cache in a slow manner for decreased workload
+  	- added icon for batch-fill
+  	- added spinbutton control to text fields	
 	
   
   Todo
@@ -80,7 +139,10 @@
   - add fallback option in flash as discussed in announcement thread
   - apply for the film strip as well
   - apply for the album thumbs as well
-  - add a check that makes sure to process only the files it can process
+  - add other optional thumbnail improvements (like rounded corners or similar)
+  - add help text to config screen
+  - add a routine to batch-fill to prevent an endless loop.
+  
   
   Known Issues
   ------------

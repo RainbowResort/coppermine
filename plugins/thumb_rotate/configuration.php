@@ -10,9 +10,10 @@ $description = $lang_plugin_thumb_rotate['config_description'] . '<br />' . $lan
 $author = sprintf($lang_plugin_thumb_rotate['author'],
 	'<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>',
 	'<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>',
-	'<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Steven Wittens</a>');
+	'<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Steven Wittens</a>',
+	'<a href="http://www.softwareunity.com/jquery/JQuerySpinBtn/" rel="external" class="external">George Adamson</a>');
 	
-$version = '1.1';
+$version = '1.2';
 
 $extra_info = <<<EOT
 	{$lang_plugin_thumb_rotate['resources_warning']}<br />

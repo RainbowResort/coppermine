@@ -42,7 +42,9 @@ foreach ($delete_array as $key => $value) {
 	} else {
 		$cellstyle = 'tableb tableb_alternate';
 	}
-	$delete = cpg_folder_file_delete($CONFIG['fullpath'] . $value);
+	if (is_file($CONFIG['fullpath'] . $value)) {
+		$delete = cpg_folder_file_delete($CONFIG['fullpath'] . $value);
+	}
 	$result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate WHERE `pid` = {$key}");
 	echo '<div class="'.$cellstyle.'">';
 	if (file_exists($CONFIG['fullpath'] . $value)){
