@@ -26,6 +26,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $thisplugin->add_action('plugin_install','flv_player_install');
 $thisplugin->add_action('plugin_uninstall','flv_player_uninstall');
+$thisplugin->add_action('plugin_cleanup','flv_player_cleanup');
 
 $thisplugin->add_filter('html_other_media','flv_player_other_media');
 
@@ -45,14 +46,51 @@ function flv_player_install() {
 
 
 function flv_player_uninstall() {
-    global $CONFIG;
-    $allowed_mov_types = str_replace('/flv', '', $CONFIG['allowed_mov_types']);
-    $allowed_mov_types = str_replace('flv/', '', $allowed_mov_types);
-    $allowed_mov_types = str_replace('flv', '', $allowed_mov_types);
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$allowed_mov_types' WHERE name = 'allowed_mov_types'");
-    cpg_db_query("DELETE FROM {$CONFIG['TABLE_FILETYPES']} WHERE extension = 'flv'");
+    $superCage = Inspekt::makeSuperCage();
 
-    return true;
+    if (!$superCage->post->keyExists('drop')) {
+        return 1;
+    }
+
+    if ($superCage->post->getInt('drop') == 1) {
+        global $CONFIG;
+        $allowed_mov_types = str_replace('/flv', '', $CONFIG['allowed_mov_types']);
+        $allowed_mov_types = str_replace('flv/', '', $allowed_mov_types);
+        $allowed_mov_types = str_replace('flv', '', $allowed_mov_types);
+        cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$allowed_mov_types' WHERE name = 'allowed_mov_types'");
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_FILETYPES']} WHERE extension = 'flv'");
+
+        return true;
+    }
+}
+
+
+function flv_player_cleanup($action) {
+    $superCage = Inspekt::makeSuperCage();
+    $cleanup = $superCage->server->getEscaped('REQUEST_URI');
+    if ($action == 1) {
+        global $lang_common;
+        echo <<< EOT
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="tableb">
+                        Playback of existing flv files won't work anymore!
+                    </td>
+                    <td class="tableb">
+                        <form action="pluginmgr.php" method="post">
+                            <input type="submit" name="submit" value="{$lang_common['back']}" class="button" />
+                        </form>
+                    </td>
+                    <td class="tableb">
+                        <form action="{$cleanup}" method="post">
+                            <input type="hidden" name="drop" value="1" />
+                            <input type="submit" name="submit" value="{$lang_common['continue']}" class="button" />
+                        </form>
+                    </td>
+                </tr>
+            </table>
+EOT;
+    }
 }
 
 

@@ -24,8 +24,8 @@
 
 $name='Keyboard Navigation';
 $description='Previous/next picture via keyboard arrows';
-$author = $lang_plugin_bbcode_control['author'].' <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.1.1';
+$author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
+$version = '1.1.2';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>

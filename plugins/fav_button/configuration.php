@@ -24,8 +24,8 @@
 
 $name='Favorite Button';
 $description='Adds a button to the navigation menu to easily add/remove pictures to/from your favorites';
-$author = $lang_plugin_bbcode_control['author'].' <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0.0';
+$author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
+$version = '1.0.1';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
