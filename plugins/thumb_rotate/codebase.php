@@ -25,7 +25,8 @@ function thumb_rotate_thumb_display($params) {
     	return $params;
     }
     $gd_extension_array = array('jpg', 'jpeg', 'gif', 'png');
-    // Create the super cage	$superCage = Inspekt::makeSuperCage();
+    // Create the super cage
+	$superCage = Inspekt::makeSuperCage();
     // Extract the needed information from the thumbnail params array
     $link_target_array = parse_url(str_replace('&amp;', '&', $params['{LINK_TGT}']));
     parse_str($link_target_array['query'], $link_target_param_array);
@@ -65,6 +66,16 @@ function thumb_rotate_thumb_display($params) {
 	$CURRENT_PIC_DATA = $pic_data[0];
 	$CURRENT_PIC_DATA['extension'] = ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.');
 	$CURRENT_PIC_DATA['filename_without_extension'] = str_replace('.' . $CURRENT_PIC_DATA['extension'], '', $CURRENT_PIC_DATA['filename']);
+	if ($CONFIG['thumb_use'] == 'any' || $CONFIG['thumb_use'] == 'ex') {
+		$CURRENT_PIC_DATA['maxthumb'] = max($CONFIG['thumb_width'], $CONFIG['thumb_height']);
+	} elseif ($CONFIG['thumb_use'] == 'ht') {
+		$CURRENT_PIC_DATA['maxthumb'] = $CONFIG['thumb_height'];
+	} else {
+		$CURRENT_PIC_DATA['maxthumb'] = $CONFIG['thumb_width'];
+	}
+	$thumb_size = compute_img_size($CURRENT_PIC_DATA['pwidth'], $CURRENT_PIC_DATA['pheight'], $CURRENT_PIC_DATA['maxthumb']);
+	$CURRENT_PIC_DATA['twidth'] = $thumb_size['width'];
+	$CURRENT_PIC_DATA['theight'] = $thumb_size['height'];
 	// End Extract - we now have all needed data concerning the individual pic
 
 	// Let's determine if the file is cached already
@@ -101,28 +112,34 @@ function thumb_rotate_thumb_display($params) {
 	}
 	// Apply the delay --- end
     if ($rotate_image_create_file == 1) {
-    	$created_image_path = thumb_rotate_image_create($CURRENT_PIC_DATA);
+    	$created_image_array = thumb_rotate_image_create($CURRENT_PIC_DATA);
     	if ($CONFIG['plugin_thumb_rotate_timelimit'] > 0) {
     		// Write the current time stamp to the db
     		$time = time();
     		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$time}' WHERE name='plugin_thumb_rotate_timestamp'");
     	}
     }
-    if ($rotate_image_create_dbrecord == 1 && $created_image_path != '') {
-    	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath` ) VALUES ('{$pid}', '{$created_image_path}');");
+    if ($rotate_image_create_dbrecord == 1 && $created_image_array['path'] != '') {
+    	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath`, `width`, `height` ) VALUES ('{$pid}', '{$created_image_array['path']}', '{$created_image_array['width']}', '{$created_image_array['height']}');");
+    }
+    if (!isset($created_image_array)) {
+    	$created_image_array['width'] = $row['width'];
+    	$created_image_array['height'] = $row['height'];
     }
     
     // Finally, let's manipulate the thumbnail HTML
-    if (file_exists($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png')){
-    	if (in_array($CURRENT_PIC_DATA['extension'], $gd_extension_array)) {
-    		$params['{THUMB}'] = str_replace($CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'], $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    if (file_exists($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.'.$CONFIG['plugin_thumb_rotate_filetype'])){
+    	if (in_array(strtolower($CURRENT_PIC_DATA['extension']), $gd_extension_array)) {
+    		$params['{THUMB}'] = str_replace($CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'], $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.'.$CONFIG['plugin_thumb_rotate_filetype'], $params['{THUMB}']);
+    		$params['{THUMB}'] = str_replace('width="'.$thumb_size['width'].'"', 'width="'.$created_image_array['width'].'"', $params['{THUMB}']); // Replace the existing width attributes
+    		$params['{THUMB}'] = str_replace('height="'.$thumb_size['height'].'"', 'height="'.$created_image_array['height'].'"', $params['{THUMB}']); // Replace the existing height attributes
     	} else {
-    		$params['{THUMB}'] = str_replace($THEME_DIR . 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
-    		$params['{THUMB}'] = str_replace('images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png', $params['{THUMB}']);
+    		$params['{THUMB}'] = str_replace($THEME_DIR . 'images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.'.$CONFIG['plugin_thumb_rotate_filetype'], $params['{THUMB}']);
+    		$params['{THUMB}'] = str_replace('images/thumbs/thumb_'.$CURRENT_PIC_DATA['extension'].'.png', $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.'.$CONFIG['plugin_thumb_rotate_filetype'], $params['{THUMB}']);
     	}
 		$params['{THUMB}'] = str_replace('class="image"', 'class="image" style="border:none;"', $params['{THUMB}']); // Remove border CSS
-		//$params['{THUMB}'] .= date('Y-m-d H:i:s',time()) . '|'. date('Y-m-d H:i:s',$CONFIG['plugin_thumb_rotate_timestamp']) . '|' . (time() - $CONFIG['plugin_thumb_rotate_timestamp']);
     }
+    //$params['{THUMB}'] .= $created_image_array['height'];
     return $params;
 }
 
@@ -132,8 +149,8 @@ function thumb_rotate_install() {
 	$superCage = Inspekt::makeSuperCage();
 	$thumb_rotate_installation = 1;
 	require 'include/sql_parse.php';
-	if (!$CONFIG['plugin_thumb_rotate_type']) {
-		$CONFIG['plugin_thumb_rotate_type'] = 'rotate';
+	if (!$CONFIG['plugin_thumb_rotate_radius']) {
+		$CONFIG['plugin_thumb_rotate_radius'] = '20';
 	}
 	if (!$CONFIG['plugin_thumb_rotate_maxrotation']) {
 		$CONFIG['plugin_thumb_rotate_maxrotation'] = 15;
@@ -158,6 +175,12 @@ function thumb_rotate_install() {
 	}
 	if (!$CONFIG['plugin_thumb_rotate_admin_only']) {
 		$CONFIG['plugin_thumb_rotate_admin_only'] = '0';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_filetype']) {
+		$CONFIG['plugin_thumb_rotate_filetype'] = 'png';
+	}
+	if (!$CONFIG['plugin_thumb_rotate_rotation_method']) {
+		$CONFIG['plugin_thumb_rotate_rotation_method'] = 'random';
 	}
     // Perform the database changes
     $db_schema = $thisplugin->fullpath . '/schema.sql';
@@ -190,7 +213,7 @@ function thumb_rotate_uninstall() {
 	}
 	// Drop the database records
 	if ($superCage->post->keyExists('drop') && $superCage->post->getInt('drop') == 1) {
-		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_type'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_radius'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_maxrotation'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_bgcolor'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_borderwidth'");
@@ -199,6 +222,8 @@ function thumb_rotate_uninstall() {
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_timestamp'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_timelimit'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_admin_only'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_filetype'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_thumb_rotate_rotation_method'");
 	}
 	return true;
 }
@@ -266,34 +291,37 @@ function thumb_rotate_empty_cache(){
 
 // Configure function: displays the configuration form
 function thumb_rotate_configure() {
-    global $CONFIG, $thisplugin, $lang_plugin_thumb_rotate, $lang_common, $thumb_rotate_icon_array, $lang_errors, $thumb_rotate_installation;
+    global $CONFIG, $thisplugin, $lang_plugin_thumb_rotate, $lang_common, $thumb_rotate_icon_array, $lang_errors, $thumb_rotate_installation, $imagerotate_exist;
     $superCage = Inspekt::makeSuperCage();
     if (!GALLERY_ADMIN_MODE) {
     	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
+	if ($CONFIG['thumb_use'] == 'any' || $CONFIG['thumb_use'] == 'ex') {
+		$max_radius = floor( max($CONFIG['thumb_width'], $CONFIG['thumb_height']) /2);
+	} elseif ($CONFIG['thumb_use'] == 'ht') {
+		$max_radius = floor($CONFIG['thumb_height'] / 2);
+	} else {
+		$max_radius = floor($CONFIG['thumb_width'] / 2);
+	}
     // Populate the form fields and run the queries for the submit form
     $config_changes_counter = 0;
 	$dump_cache = 0;
-    // type
-    $thumb_rotate_type_allowed = array('rotate', 'rounded'); // Only what is specified in this array will be allowed to be submit
-    if ($superCage->post->keyExists('plugin_thumb_rotate_type') == TRUE && in_array($superCage->post->getAlpha('plugin_thumb_rotate_type'), $thumb_rotate_type_allowed) == TRUE && $superCage->post->getAlpha('plugin_thumb_rotate_type') != $CONFIG['plugin_thumb_rotate_type']) {
-    	$CONFIG['plugin_thumb_rotate_type'] = $superCage->post->getAlpha('plugin_thumb_rotate_type');
-    	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_type']}' WHERE name='plugin_thumb_rotate_type'";
-    	cpg_db_query($query);
-    	$config_changes_counter++;
-    	$dump_cache++;
+	
+    // Radius
+	if ($superCage->post->keyExists('plugin_thumb_rotate_radius') == TRUE) {
+        if ($superCage->post->getInt('plugin_thumb_rotate_radius') >= 0 && $superCage->post->getInt('plugin_thumb_rotate_radius') <= $max_radius && $CONFIG['plugin_thumb_rotate_radius'] != $superCage->post->getInt('plugin_thumb_rotate_radius')) {
+            $CONFIG['plugin_thumb_rotate_radius'] = $superCage->post->getInt('plugin_thumb_rotate_radius');
+            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_radius']}' WHERE name='plugin_thumb_rotate_radius'";
+            cpg_db_query($query);
+            $config_changes_counter++;
+			$dump_cache++;
+        }
     }
-    if ($CONFIG['plugin_thumb_rotate_type'] == 'rounded') {
-    	$option_output['plugin_thumb_rotate_type_rotate'] = '';
-    	$option_output['plugin_thumb_rotate_type_rounded'] = 'checked="checked"';
-    } else { // default is "rotate"
-    	$option_output['plugin_thumb_rotate_type_rotate'] = 'checked="checked"';
-    	$option_output['plugin_thumb_rotate_type_rounded'] = '';
-    }
+
     
     // maxrotation
     if ($superCage->post->keyExists('plugin_thumb_rotate_maxrotation') == TRUE) {
-        if ($superCage->post->getInt('plugin_thumb_rotate_maxrotation') >= 0 && $superCage->post->getInt('plugin_thumb_rotate_maxrotation') <= 20 && $CONFIG['plugin_thumb_rotate_maxrotation'] != $superCage->post->getInt('plugin_thumb_rotate_maxrotation')) {
+        if ($superCage->post->getInt('plugin_thumb_rotate_maxrotation') >= 0 && $superCage->post->getInt('plugin_thumb_rotate_maxrotation') < 360 && $CONFIG['plugin_thumb_rotate_maxrotation'] != $superCage->post->getInt('plugin_thumb_rotate_maxrotation')) {
             $CONFIG['plugin_thumb_rotate_maxrotation'] = $superCage->post->getInt('plugin_thumb_rotate_maxrotation');
             $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_maxrotation']}' WHERE name='plugin_thumb_rotate_maxrotation'";
             cpg_db_query($query);
@@ -373,6 +401,40 @@ function thumb_rotate_configure() {
         }
     }
     
+    // File type
+    $thumb_rotate_extension_allowed = array('png', 'jpg'); // Only what is specified in this array will be allowed to be submit
+    if ($superCage->post->keyExists('plugin_thumb_rotate_filetype') == TRUE && in_array($superCage->post->getAlpha('plugin_thumb_rotate_filetype'), $thumb_rotate_extension_allowed) == TRUE && $superCage->post->getAlpha('plugin_thumb_rotate_filetype') != $CONFIG['plugin_thumb_rotate_filetype']) {
+    	$CONFIG['plugin_thumb_rotate_filetype'] = $superCage->post->getAlpha('plugin_thumb_rotate_filetype');
+    	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_filetype']}' WHERE name='plugin_thumb_rotate_filetype'";
+    	cpg_db_query($query);
+    	$config_changes_counter++;
+    	$dump_cache++;
+    }
+    if ($CONFIG['plugin_thumb_rotate_filetype'] == 'jpg') {
+    	$option_output['plugin_thumb_rotate_filetype_png'] = '';
+    	$option_output['plugin_thumb_rotate_filetype_jpg'] = 'checked="checked"';
+    } else { // default is "png"
+    	$option_output['plugin_thumb_rotate_filetype_png'] = 'checked="checked"';
+    	$option_output['plugin_thumb_rotate_filetype_jpg'] = '';
+    }
+	
+	// Rotation method
+    $thumb_rotate_rotation_method_allowed = array('random', 'fixed'); // Only what is specified in this array will be allowed to be submit
+    if ($superCage->post->keyExists('plugin_thumb_rotate_rotation_method') == TRUE && in_array($superCage->post->getAlpha('plugin_thumb_rotate_rotation_method'), $thumb_rotate_rotation_method_allowed) == TRUE && $superCage->post->getAlpha('plugin_thumb_rotate_rotation_method') != $CONFIG['plugin_thumb_rotate_rotation_method']) {
+    	$CONFIG['plugin_thumb_rotate_rotation_method'] = $superCage->post->getAlpha('plugin_thumb_rotate_rotation_method');
+    	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_thumb_rotate_rotation_method']}' WHERE name='plugin_thumb_rotate_rotation_method'";
+    	cpg_db_query($query);
+    	$config_changes_counter++;
+    	$dump_cache++;
+    }
+    if ($CONFIG['plugin_thumb_rotate_rotation_method'] == 'fixed') {
+    	$option_output['plugin_thumb_rotate_rotation_method_random'] = '';
+    	$option_output['plugin_thumb_rotate_rotation_method_fixed'] = 'checked="checked"';
+    } else { // default is "random"
+    	$option_output['plugin_thumb_rotate_rotation_method_random'] = 'checked="checked"';
+    	$option_output['plugin_thumb_rotate_rotation_method_fixed'] = '';
+    }
+    
     // Form submit?
     if ($superCage->post->keyExists('submit') == TRUE) {
     	if ($config_changes_counter > 0) {
@@ -417,9 +479,8 @@ EOT;
              		$install_section .= '<div class="cpg_message_success">' . sprintf($lang_plugin_thumb_rotate['minimum_requirements_ok'], 'GD', '<strong>'.$my_gd_version.'</strong>') . '</div>';
              		$gd_ok = 1;
 					// Check the needed image manipulation function imagerotate that doesn't exist in all flavors of PHP
-					if (!function_exists('imagerotate')) {
+					if ($imagerotate_exist != 1) {
 						$install_section .= '<div class="cpg_message_validation">' . $lang_plugin_thumb_rotate['minimum_requirements_imagerotate'] . '</div>';
-						$imagerotate_missing = 1;
 					}
              	} else {
              		$install_section .= '<div class="cpg_message_error">' . sprintf($lang_plugin_thumb_rotate['minimum_requirements_low'], 'GD', '<strong>'.$my_gd_version.'</strong>') . '</div>';
@@ -434,14 +495,14 @@ EOT;
 			$gd_ok = 0;
 		}
 
-		if ($gd_ok == 1 && $php_ok == 1 && $imagerotate_missing != 1) {
+		if ($gd_ok == 1 && $php_ok == 1 && $imagerotate_exist == 1) {
 			$install_section .= <<< EOT
 				<input type="hidden" name="thumb_rotate_continue_anyway" id="thumb_rotate_continue_anyway" value="1" />
 EOT;
 		} else {
 			$install_section .= <<< EOT
 				<input type="checkbox" name="thumb_rotate_continue_anyway" id="thumb_rotate_continue_anyway" class="checkbox" value="1" />
-				{$lang_plugin_thumb_rotate['continue_anyway']}?
+				<label for="thumb_rotate_continue_anyway">{$lang_plugin_thumb_rotate['continue_anyway']}</label>
 EOT;
 		}
 		$install_section .= <<< EOT
@@ -528,71 +589,22 @@ EOT;
 				  overflow: hidden; 
 				  background: url(plugins/thumb_rotate/images/marker.png) no-repeat;
 				}
-				INPUT.spin-button {
-					padding-right:20px;					/* Padding pevents text from covering the up/dn img. Works better in Firefox but also causes textbox to widen by 20px. Arrows can go wonky in IE when text is too long. Perhaps it could be fixed with script that monitored the horiz-scroll position? */
-					background-repeat:no-repeat;		/* Warning: Img may disappear in Firefox if you use 'background-attachment:fixed' ! */
-					background-position:100% 0%;
-					background-image:url(plugins/thumb_rotate/images/spinbtn_updn_2.gif);
-				}
-				
-				INPUT.spin-button.up {					/* Change button img when mouse is over the UP-arrow */
-					cursor:pointer;
-					background-position:100% -18px;		/* 18px matches height of 2 visible buttons */
-				}
-				INPUT.spin-button.down {				/* Change button img when mouse is over the DOWN-arrow */
-					cursor:pointer;
-					background-position:100% -36px;		/* 36px matches height of 2x2 visible buttons */
-				}
     		</style>
     		<script type="text/javascript">
-				var plugin_thumb_rotate_maxrotation_options = {
-					min: 0,						// Set lower limit.
-					max: 20,					// Set upper limit.
-					step: 1,					// Set increment size.
-				}
-				var plugin_thumb_rotate_borderwidth_options = {
-					min: 0,						// Set lower limit.
-					max: 99,					// Set upper limit.
-					step: 1,					// Set increment size.
-				}
-				var plugin_thumb_rotate_timelimit_options = {
-					min: 0,						// Set lower limit.
-					max: 9,					// Set upper limit.
-					step: 1,					// Set increment size.
-				}
 				$(document).ready(function() {
 				    $('#colorpicker_bgcolor').farbtastic('#plugin_thumb_rotate_bgcolor');
 				    $('#colorpicker_bordercolor').farbtastic('#plugin_thumb_rotate_bordercolor');
-				    $("#plugin_thumb_rotate_maxrotation").SpinButton(plugin_thumb_rotate_maxrotation_options);
-				    $("#plugin_thumb_rotate_borderwidth").SpinButton(plugin_thumb_rotate_borderwidth_options);
-				    $("#plugin_thumb_rotate_timelimit").SpinButton(plugin_thumb_rotate_timelimit_options);
+					$("#plugin_thumb_rotate_radius").SpinButton({min: 0,max: {$max_radius}});
+				    $("#plugin_thumb_rotate_maxrotation").SpinButton({min: 0,max: 359});
+				    $("#plugin_thumb_rotate_borderwidth").SpinButton({min: 0,max: 99});
+				    $("#plugin_thumb_rotate_timelimit").SpinButton({min: 0,max: 9});
 				});
     		</script>
-            <form action="{$_SERVER['REQUEST_URI']}" method="post" name="thumb_rotate_config" id="thumb_rotate_config">
+            <form action="" method="post" name="thumb_rotate_config" id="thumb_rotate_config">
 EOT;
 
     starttable('100%', $thumb_rotate_icon_array['config'] . $lang_plugin_thumb_rotate['config'], 2);
     echo <<< EOT
-                    <tr>
-                        <td valign="top" class="tableb tableb_alternate">
-                            {$lang_plugin_thumb_rotate['option_type']}
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate">
-                        	<input type="radio" name="plugin_thumb_rotate_type" id="plugin_thumb_rotate_type_rotate" class="radio" value="rotate" {$option_output['plugin_thumb_rotate_type_rotate']} />
-                        	<label for="plugin_thumb_rotate_type_rotate" class="clickable_option">{$lang_plugin_thumb_rotate['option_type_rotate']}</label>
-                        	&nbsp;
-                        	<input type="radio" name="plugin_thumb_rotate_type" id="plugin_thumb_rotate_type_rounded" class="radio" value="rounded" {$option_output['plugin_thumb_rotate_type_rounded']} disabled="disabled" />
-                        	<label for="plugin_thumb_rotate_type_rounded" class="clickable_option">{$lang_plugin_thumb_rotate['option_type_rounded_corners']}</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" class="tableb">
-                            {$lang_plugin_thumb_rotate['option_maxrotation']}
-                        </td>
-                        <td valign="top" class="tableb">
-                        	<input type="text" name="plugin_thumb_rotate_maxrotation" id="plugin_thumb_rotate_maxrotation" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_maxrotation']}" /> &deg;
-                        </td>
-                    </tr>
                     <tr>
                         <td valign="top" class="tableb tableb_alternate">
                             {$lang_plugin_thumb_rotate['option_bgcolor']}
@@ -603,39 +615,72 @@ EOT;
 							<div id="colorpicker_bgcolor" class="detail_body"></div>
                         </td>
                     </tr>
-                    <tr>
+					<tr>
                         <td valign="top" class="tableb">
-                            {$lang_plugin_thumb_rotate['option_borderwidth']}
+                            {$lang_plugin_thumb_rotate['option_border']}
                         </td>
                         <td valign="top" class="tableb">
-                        	<input type="text" name="plugin_thumb_rotate_borderwidth" id="plugin_thumb_rotate_borderwidth" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_borderwidth']}" /> {$lang_plugin_thumb_rotate['pixels']} ({$lang_plugin_thumb_rotate['zero_to_disable']})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" class="tableb tableb_alternate">
-                            {$lang_plugin_thumb_rotate['option_bordercolor']}
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate">
-                        	<input type="text" name="plugin_thumb_rotate_bordercolor" id="plugin_thumb_rotate_bordercolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bordercolor']}" style="text-transform:uppercase;" />
+                        	{$lang_plugin_thumb_rotate['option_borderwidth']}: <input type="text" name="plugin_thumb_rotate_borderwidth" id="plugin_thumb_rotate_borderwidth" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_thumb_rotate_borderwidth']}" /> {$lang_plugin_thumb_rotate['pixels']} ({$lang_plugin_thumb_rotate['zero_to_disable']})
+							<br />&nbsp;<br />
+							{$lang_plugin_thumb_rotate['option_bordercolor']}
+							<input type="text" name="plugin_thumb_rotate_bordercolor" id="plugin_thumb_rotate_bordercolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_thumb_rotate_bordercolor']}" style="text-transform:uppercase;" />
 							<span class="detail_head_collapsed">{$lang_plugin_thumb_rotate['toggle_color_picker']}</span>
 							<div id="colorpicker_bordercolor" class="detail_body"></div>
                         </td>
                     </tr>
+					<tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_thumb_rotate['option_rounded_corners']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+							{$lang_plugin_thumb_rotate['option_rounded_corners_radius']}:
+							<input type="text" name="plugin_thumb_rotate_radius" id="plugin_thumb_rotate_radius" size="2" maxlength="2" class="textinput spin-button" value="{$CONFIG['plugin_thumb_rotate_radius']}"  />
+							{$lang_plugin_thumb_rotate['pixels']}
+							({$lang_plugin_thumb_rotate['zero_to_disable']})
+                        </td>
+                    </tr>
                     <tr>
                         <td valign="top" class="tableb">
-                            {$lang_plugin_thumb_rotate['option_admin_only']}
+                            {$lang_plugin_thumb_rotate['option_rotation']}
                         </td>
                         <td valign="top" class="tableb">
+                        	{$lang_plugin_thumb_rotate['option_rotation_method']}:
+							<input type="radio" name="plugin_thumb_rotate_rotation_method" id="plugin_thumb_rotate_rotation_method_random" class="checkbox" value="random" {$option_output['plugin_thumb_rotate_rotation_method_random']} /> 
+                        	<label for="plugin_thumb_rotate_rotation_method_random">{$lang_plugin_thumb_rotate['option_rotation_method_random']}</label>
+                        	&nbsp;
+                        	<input type="radio" name="plugin_thumb_rotate_rotation_method" id="plugin_thumb_rotate_rotation_method_fixed" class="checkbox" value="fixed" {$option_output['plugin_thumb_rotate_rotation_method_fixed']} /> 
+                        	<label for="plugin_thumb_rotate_rotation_method_fixed">{$lang_plugin_thumb_rotate['option_rotation_method_fixed']}</label>
+							<br />&nbsp;<br />
+							{$lang_plugin_thumb_rotate['option_maxrotation']}: <input type="text" name="plugin_thumb_rotate_maxrotation" id="plugin_thumb_rotate_maxrotation" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_thumb_rotate_maxrotation']}" /> &deg;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_thumb_rotate['option_admin_only']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
                         	<input type="checkbox" name="plugin_thumb_rotate_admin_only" id="plugin_thumb_rotate_admin_only" class="checkbox" value="1" {$option_output['plugin_thumb_rotate_admin_only']} /> 
                         	<label for="plugin_thumb_rotate_admin_only">({$lang_plugin_thumb_rotate['option_admin_only_explain']})</label>
                         </td>
                     </tr>
                     <tr>
-                        <td valign="top" class="tableb tableb_alternate">
+                        <td valign="top" class="tableb">
                             {$lang_plugin_thumb_rotate['option_timelimit']}
                         </td>
-                        <td valign="top" class="tableb tableb_alternate">
+                        <td valign="top" class="tableb">
                         	<input type="text" name="plugin_thumb_rotate_timelimit" id="plugin_thumb_rotate_timelimit" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_thumb_rotate_timelimit']}" /> {$lang_plugin_thumb_rotate['seconds']} ({$lang_plugin_thumb_rotate['zero_to_disable']})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_thumb_rotate['option_filetype']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+                        	<input type="radio" name="plugin_thumb_rotate_filetype" id="plugin_thumb_rotate_filetype_png" class="checkbox" value="png" {$option_output['plugin_thumb_rotate_filetype_png']} /> 
+                        	<label for="plugin_thumb_rotate_filetype_png">PNG ({$lang_plugin_thumb_rotate['option_filetype_png_explain']})</label>
+                        	<br />
+                        	<input type="radio" name="plugin_thumb_rotate_filetype" id="plugin_thumb_rotate_filetype_jpg" class="checkbox" value="jpg" {$option_output['plugin_thumb_rotate_filetype_jpg']} /> 
+                        	<label for="plugin_thumb_rotate_filetype_jpg">JPG ({$lang_plugin_thumb_rotate['option_filetype_jpg_explain']})</label>
                         </td>
                     </tr>
                     {$install_section}
@@ -659,66 +704,169 @@ EOT;
 if (!function_exists('imagerotate')) {
 	// The function imagerotate doesn't exist in all flavors of PHP (it doesn't exist in regular Ubuntu packages for example), so we'll provide an alternative.
 	// Details can be found on the documentation page for imagerotate.
-	function imagerotate($src_img, $angle, $bgcolor) {
-	    global $CONFIG;
-	    // convert degrees to radians
-	    $angle = $angle + 180;
-	    $angle = deg2rad($angle);
-	  
-	    $src_x = imagesx($src_img);
-	    $src_y = imagesy($src_img);
-	  
-	    $center_x = floor($src_x/2);
-	    $center_y = floor($src_y/2);
-	  
-	    $rotate = imagecreatetruecolor($src_x, $src_y);
-	    imagealphablending($rotate, false);
-	    imagesavealpha($rotate, true);
-	
-	    $cosangle = cos($angle);
-	    $sinangle = sin($angle);
-	  
-	    for ($y = 0; $y < $src_y; $y++) {
-	      for ($x = 0; $x < $src_x; $x++) {
-	    // rotate...
-	    $old_x = (($center_x-$x) * $cosangle + ($center_y-$y) * $sinangle)
-	      + $center_x;
-	    $old_y = (($center_y-$y) * $cosangle - ($center_x-$x) * $sinangle)
-	      + $center_y;
-	  
-	    if ( $old_x >= 0 && $old_x < $src_x
-	         && $old_y >= 0 && $old_y < $src_y ) {
-	      if ($bicubic == true) {
-	        $sY  = $old_y + 1;
-	        $siY  = $old_y;
-	        $siY2 = $old_y - 1;
-	        $sX  = $old_x + 1;
-	        $siX  = $old_x;
-	        $siX2 = $old_x - 1;
-	      
-	        $c1 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY2));
-	        $c2 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY));
-	        $c3 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY2));
-	        $c4 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY));
-	      
-	        $r = ($c1['red']  + $c2['red']  + $c3['red']  + $c4['red']  ) << 14;
-	        $g = ($c1['green'] + $c2['green'] + $c3['green'] + $c4['green']) << 6;
-	        $b = ($c1['blue']  + $c2['blue']  + $c3['blue']  + $c4['blue'] ) >> 2;
-	        $a = ($c1['alpha']  + $c2['alpha']  + $c3['alpha']  + $c4['alpha'] ) >> 2;
-	        $color = imagecolorallocatealpha($src_img, $r,$g,$b,$a);
-	      } else {
-	        $color = imagecolorat($src_img, $old_x, $old_y);
-	      }
-	    } else {
-	          // this line sets the background colour
-	      $bgcolor_array = thumb_rotate_html2rgb($bgcolor);
-	      $color = imagecolorallocatealpha($src_img, $bgcolor_array[0], $bgcolor_array[1], $bgcolor_array[2]);
-	    }
-	    imagesetpixel($rotate, $x, $y, $color);
-	      }
-	    }
-	    return $rotate;
+	$imagerotate_exist = 0;
+	function imagerotate(&$srcImg, $angle, $transparentColor = null) {
+		global $CONFIG;
+		// Try to determine the path to ImageMagick
+		foreach ( array( $CONFIG['impath'], '/usr/bin', '/usr/local/bin', '/opt/local/bin', '/sw/bin' ) as $path ) {
+			if ( file_exists( $path . '/convert' ) ) {
+				$imagick = $path . '/convert';
+				if ( $path == '/opt/local/bin' ) {
+					$imagick = 'DYLD_LIBRARY_PATH="" ' . $imagick; // some kind of conflict with MacPorts and MAMP
+				}
+				break;
+			}
+		}
+		if ( isset( $imagick ) ) {
+			// ImageMagick appears to exist, so let's use that
+			$angle_im = 360-$angle; // GD rotates CCW, imagick rotates CW
+			$file1 = '/tmp/imagick_' . rand( 10000,99999 ) . '.png';
+			$file2 = '/tmp/imagick_' . rand( 10000,99999 ) . '.png';
+			if ( @imagepng( $source_image, $file1 ) ) {
+				exec( $imagick . ' -rotate ' . $angle_im . ' ' . $file1 . ' ' . $file2 );
+				if ( file_exists( $file2 ) ) {
+					$new_image = imagecreatefrompng( $file2 );
+					unlink( $file1 );
+					unlink( $file2 );
+					return $new_image;
+				} 
+			}
+		} // End ImageMagick Workaround
+		$srcw = imagesx($srcImg);
+		$srch = imagesy($srcImg);
+	   
+		if($angle == 0) return $srcImg;
+	   
+		// Convert the angle to radians
+		$pi = 3.141592654;
+		$theta = $angle * $pi / 180;
+	   
+		// Get the origin (center) of the image
+		$originx = $srcw / 2;
+		$originy = $srch / 2;
+	   
+		// The pixels array for the new image
+		$pixels = array();
+		$minx = 0;
+		$maxx = 0;
+		$miny = 0;
+		$maxy = 0;
+		$dstw = 0;
+		$dsth = 0;
+	   
+		// Loop through every pixel and transform it
+		for($x=0;$x<$srcw;$x++) {
+			for($y=0;$y<$srch;$y++) {
+				list($x1, $y1) = translateCoordinate($originx, $originy, $x, $y, false);
+			   
+				$theta1 = 0;
+				$noTranslate = false;
+			   
+				// Determine the angle of original point
+				if($x1 > 0 && $y1 > 0) {
+					// Quadrant 1
+					$theta1 = atan($y1/$x1);
+				} elseif($x1 < 0 && $y1 > 0) {
+					// Quadrant 2
+					$theta1 = $pi - atan($y1/abs($x1));
+				} elseif($x1 < 0 && $y1 < 0) {
+					// Quadrant 3
+					$theta1 = $pi + atan($y1/$x1);
+				} elseif($x1 > 0 && $y1 < 0) {
+					// Quadrant 4
+					$theta1 = 2 * $pi - atan(abs($y1)/$x1);
+				} elseif($x1 == 0 && $y1 > 0) {
+					$theta1 = $pi / 2;
+				} elseif($x1 == 0 && $y1 < 0) {
+					$theta1 = 3 * $pi / 2;
+				} elseif($x1 > 0 && $y1 == 0) {
+					$theta1 = 0;
+				} elseif($x1 < 0 && $y1 == 0) {
+					$theta1 = $pi;
+				} else {
+					// Only case left should be $x1 == 0 && $y1 == 0
+					$noTranslate = true;
+				}
+			   
+				// Translate the position
+				if(!$noTranslate) {
+					// Calculate the new angle
+					$theta2 = $theta1 + $theta;
+				   
+					// Make sure theta2 is in between 0 - 2pi
+					while($theta2 < 0) $theta2 += 2 * $pi;
+					while($theta2 > (2 * $pi)) $theta2 -= 2 * $pi;
+				   
+					$radius = sqrt($x1*$x1 + $y1*$y1);
+				   
+					$x2 = ($radius * cos($theta2));
+					$y2 = ($radius * sin($theta2));
+				} else {
+					$x2 = $x1;
+					$y2 = $y1;
+				}
+			   
+				// Store the pixel color
+				$pixels[] = array($x2, $y2, imagecolorat($srcImg, $x, $y));
+			   
+				// Check our boundaries
+				if($x2 > $maxx) $maxx = $x2;
+				if($x2 < $minx) $minx = $x2;
+				if($y2 > $maxy) $maxy = $y2;
+				if($y2 < $miny) $miny = $y2;
+			}
+		}
+	   
+		// Determine the new image size
+		$dstw = $maxx - $minx + 1;
+		$dsth = $maxy - $miny + 1;
+	   
+		// Create our new image
+		$dstImg = imagecreatetruecolor($dstw, $dsth);
+	   
+		// Fill the background with our transparent color
+		if($transparentColor == null) $transparentColor = imagecolorallocate($dstImg, 1, 2, 3);
+		imagecolortransparent($dstImg, $transparentColor);
+		imagefilledrectangle($dstImg, 0, 0, $dstw + 1, $dsth + 1, $transparentColor);
+	   
+		// Get the new origin
+		$neworiginx = -$minx;
+		$neworiginy = -$miny;
+	   
+		// Fill in the pixels
+		foreach($pixels as $data) {
+			list($x, $y, $color) = $data;
+			list($newx, $newy) = translateCoordinate($neworiginx, $neworiginy, $x, $y);
+			imagesetpixel($dstImg, $newx, $newy, $color);
+		}
+	   
+		return $dstImg;
 	}
+   
+	/**
+	 * Translates from mathematical coordinate system to computer coordinate system using
+	 * origin coordinates from the computer system or visa versa
+	 *
+	 * @param int $originx
+	 * @param int $originy
+	 * @param int $x
+	 * @param int $y
+	 * @param bool $toComp
+	 * @return array(int $x, int $y)
+	 */
+	function translateCoordinate($originx, $originy, $x, $y, $toComp=true) {
+		if($toComp) {
+			$newx = $originx + $x;
+			$newy = $originy - $y;
+		} else {
+			$newx = $x - $originx;
+			$newy = $originy - $y;
+		}
+	   
+		return array($newx, $newy);
+	}
+} else {
+	$imagerotate_exist = 1;
 }
 
 function thumb_rotate_html2rgb($color) {
@@ -738,11 +886,13 @@ function thumb_rotate_html2rgb($color) {
 
 function thumb_rotate_image_create($CURRENT_PIC_DATA) {
 	global $CONFIG, $gd_extension_array, $THEME_DIR;
-	$bg_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bgcolor']);// split background color
-	$bc_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bordercolor']);// split background color
+	// Initialize some variables
+	$background_color_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bgcolor']);// split background color
+	$border_color_array = thumb_rotate_html2rgb($CONFIG['plugin_thumb_rotate_bordercolor']);// split border color
+	$transparent_border_width = 3;
 	
 	// create source image from existing thumb file
-	if (in_array($CURRENT_PIC_DATA['extension'], $gd_extension_array)) {
+	if (in_array(strtolower($CURRENT_PIC_DATA['extension']), $gd_extension_array)) {
 		$image = $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename'];
 	} else { // None of the regular image file types
 		if (is_readable($CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.jpg') == TRUE) { // Is there a custom thumbnail available?
@@ -755,69 +905,152 @@ function thumb_rotate_image_create($CURRENT_PIC_DATA) {
 			}
 		}
 	}
-	if (substr($image,-4) == '.png'){
+	
+	$extension = ltrim(substr($image, strrpos($image, '.')), '.');
+	if (strtolower($extension) == 'png'){
 		$source = imagecreatefrompng($image);
-	} elseif(substr($image,-4) == '.gif') {
+	} elseif (strtolower($extension) == 'gif') {
 		$source = imagecreatefromgif($image);
-	} else {
+	} elseif(strtolower($extension) == 'jpg' || strtolower($extension) == 'jpeg') {
 		$source = imagecreatefromjpeg($image);
+	} else {
+		return;
 	}
-	
 	// get width / height of source image
-	$sourcex = imagesx($source);
-	$sourcey = imagesy($source);
+	$source_array['width'] = imagesx($source);
+	$source_array['height'] = imagesy($source);
 	
-	// create destination image 6px bigger than source+brd*2 to make anti aliasing work
-	$finalimg = imagecreatetruecolor(
-	                                 $sourcex + 
-	                                 $CONFIG['plugin_thumb_rotate_borderwidth'] * 2 
-	                                 +6
-	                                 , 
-	                                 $sourcey +
-	                                 $CONFIG['plugin_thumb_rotate_borderwidth'] * 2
-	                                 +6
-	                                 );
-	
-	// make image transparent
-	//imagealphablending($finalimg,true);
-	$fin_bg = imagecolorallocate($finalimg, $bg_array[0], $bg_array[1], $bg_array[2]);
-	imagefilledrectangle($finalimg,0,0,$sourcex+$CONFIG['plugin_thumb_rotate_borderwidth']*2+6,$sourcey+$CONFIG['plugin_thumb_rotate_borderwidth']*2+6,$fin_bg);
-	
-	// create border
-	if ($CONFIG['plugin_thumb_rotate_borderwidth']) {
-	  $bordercolor = imagecolorallocate($finalimg, $bc_array[0], $bc_array[1], $bc_array[2]);
-	  imagefilledrectangle($finalimg,3,3,$sourcex+$CONFIG['plugin_thumb_rotate_borderwidth']*2+3,$sourcey+$CONFIG['plugin_thumb_rotate_borderwidth']*2+3,$bordercolor);
+	// Find a color that doesn't exist in the source
+	$palette = imagecreatetruecolor($source_array['width'], $source_array['height']); 
+	$bordercolor = imagecolorallocate($palette, $border_color_array[0], $border_color_array[1], $border_color_array[2]);
+	$found = FALSE;
+	// Try the background color first first
+	$r = $background_color_array[0];
+	$g = $background_color_array[1];
+	$b = $background_color_array[2];
+	while($found == FALSE) {
+		if(imagecolorexact($source, $r, $g, $b) != (-1) && ($r != $border_color_array[0] && $g != $border_color_array[1] && $b != $border_color_array[2])) {
+			$transparent_color = imagecolorallocate($palette, $r, $g, $b);
+			$found = TRUE; 
+		}
+		$r = rand(0, 255);
+		$g = rand(0, 255);
+		$b = rand(0, 255);
 	}
+	if ($CONFIG['plugin_thumb_rotate_radius'] > 0) { // Process rounded corners for inner image --- start
+		// Enable antialias for this image
+		if (function_exists('imageantialias')) {
+			imageantialias($source, TRUE);
+		}
+		if ($CONFIG['plugin_thumb_rotate_borderwidth'] > 0) {
+			$fill_color = $bordercolor;
+		} else {
+			$fill_color = $transparent_color;
+		}
+		// Top left
+		imagearc($source, $CONFIG['plugin_thumb_rotate_radius'] - 1, $CONFIG['plugin_thumb_rotate_radius']-1, $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 180, 270, $fill_color);
+		imagefilltoborder($source, 0, 0, $fill_color, $fill_color);
+		// Top right
+		imagearc($source, $source_array['width']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']-1, $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 270, 0, $fill_color);
+		// Problem appears to lie in the line below
+		imagefilltoborder($source, $source_array['width'], 0, $fill_color, $fill_color);
+		// Bottom left
+		imagearc($source, $CONFIG['plugin_thumb_rotate_radius']-1, $source_array['height']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 90, 180, $fill_color);
+		imagefilltoborder($source, 0, $source_array['height'], $fill_color, $fill_color);
+		// Bottom right
+		imagearc($source, $source_array['width']-$CONFIG['plugin_thumb_rotate_radius'], $source_array['height']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 0, 90, $fill_color);
+		imagefilltoborder($source, $source_array['width'], $source_array['height'], $fill_color, $fill_color);
+	} // Process rounded corners for inner image --- end
 	
-	// copy source into finalimg
-	imagecopy($finalimg,$source,$CONFIG['plugin_thumb_rotate_borderwidth']+3,$CONFIG['plugin_thumb_rotate_borderwidth']+3,0,0,$sourcex,$sourcey);
+	if ($CONFIG['plugin_thumb_rotate_borderwidth'] > 0) { // Apply the border --- start
+		$processed_image = imagecreatetruecolor($source_array['width'] + ($CONFIG['plugin_thumb_rotate_borderwidth'] * 2), $source_array['height'] + ($CONFIG['plugin_thumb_rotate_borderwidth']  * 2) );
+		imagefilledrectangle($processed_image,
+							 0,
+							 0,
+							 $source_array['width'] + ($CONFIG['plugin_thumb_rotate_borderwidth']  * 2),
+							 $source_array['height'] + ($CONFIG['plugin_thumb_rotate_borderwidth']  * 2) ,
+							 $bordercolor
+							 );
+		
+		// copy source into finalimg
+		imagecopy($processed_image,
+				  $source,
+				  $CONFIG['plugin_thumb_rotate_borderwidth'],
+				  $CONFIG['plugin_thumb_rotate_borderwidth'],
+				  0,
+				  0,
+				  $source_array['width'],
+				  $source_array['height']
+				  );
+				  
+		$processed_array['width'] = imagesx($processed_image);
+		$processed_array['height'] = imagesy($processed_image);
+		if ($CONFIG['plugin_thumb_rotate_radius'] > 0) { // Process rounded corners for outer image --- start
+			// Enable antialias for this image
+			if (function_exists('imageantialias')) {
+				imageantialias($processed_image, TRUE);
+			}
+			// Top left
+			imagearc($processed_image, $CONFIG['plugin_thumb_rotate_radius'] - 1, $CONFIG['plugin_thumb_rotate_radius']-1, $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 180, 270, $transparent_color);
+			imagefilltoborder($processed_image, 0, 0, $transparent_color, $transparent_color);
+			// Top right
+			imagearc($processed_image, $processed_array['width']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']-1, $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 270, 0, $transparent_color);
+			imagefilltoborder($processed_image, $processed_array['width'], 0, $transparent_color, $transparent_color);
+			// Bottom left
+			imagearc($processed_image, $CONFIG['plugin_thumb_rotate_radius']-1, $processed_array['height']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 90, 180, $transparent_color);
+			imagefilltoborder($processed_image, 0, $processed_array['height'], $transparent_color, $transparent_color);
+			// Bottom right
+			imagearc($processed_image, $processed_array['width']-$CONFIG['plugin_thumb_rotate_radius'], $processed_array['height']-$CONFIG['plugin_thumb_rotate_radius'], $CONFIG['plugin_thumb_rotate_radius']*2, $CONFIG['plugin_thumb_rotate_radius']*2, 0, 90, $transparent_color);
+			imagefilltoborder($processed_image, $processed_array['width'], $processed_array['height'], $transparent_color, $transparent_color);
+		} // Process rounded corners for outer image --- end
+	} else { // Apply the border --- end
+		$processed_image = $source;
+		$processed_array['width'] = imagesx($processed_image);
+		$processed_array['height'] = imagesy($processed_image);
+	}
 	
 	// Determine the level of rotation
-
-    $degrees = rand(0,$CONFIG['plugin_thumb_rotate_maxrotation']*2);
+    if ($CONFIG['plugin_thumb_rotate_rotation_method'] == 'random') {
+	$degrees = rand(0, $CONFIG['plugin_thumb_rotate_maxrotation'] * 2);
     if ($degrees > $CONFIG['plugin_thumb_rotate_maxrotation']) {
     	$degrees = $degrees + 359 - $CONFIG['plugin_thumb_rotate_maxrotation']*2;
     }
+	} else {
+		$degrees = 360 - $CONFIG['plugin_thumb_rotate_maxrotation'];
+	}
 	
 	// rotate image
-	$rotate = imagerotate($finalimg, $degrees, $fin_bg);
-	
+	if ($CONFIG['plugin_thumb_rotate_maxrotation'] > 0) {
+		$rotate = imagerotate($processed_image, $degrees, $transparent_color);
+	} else {
+		$rotate = $processed_image;
+	}
+	$rotate_array['width'] = imagesx($rotate);
+	$rotate_array['height'] = imagesy($rotate);	
 
 	// set transparency
-	imagecolortransparent($rotate, $fin_bg);
+	imagecolortransparent($rotate, $transparent_color);
 	
-	// deliver png and save to cache
-	$result = imagepng($rotate, $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png');
+	// deliver rotated file and save to cache
+	if ($CONFIG['plugin_thumb_rotate_filetype'] == 'jpg') {
+		$result = imagejpeg($rotate, $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.jpg', $CONFIG['jpeg_qual']);
+	} else {
+		$result = imagepng($rotate, $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png');
+	}
 	if ($result) {
-		$return = $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.png';
+		$return = array(
+		                'path' => $CURRENT_PIC_DATA['filepath'] . $CONFIG['plugin_thumb_rotate_thumb_pfx'] . $CURRENT_PIC_DATA['filename_without_extension'] . '.'.$CONFIG['plugin_thumb_rotate_filetype'], 
+		                'width' => $rotate_array['width'], 
+		                'height' => $rotate_array['height']
+		                );
 	} else {
 		$return = '';
 	}
 	
 	// clean up
-	imagedestroy($rotate);
 	imagedestroy($source);
-	imagedestroy($finalimg);
+	imagedestroy($rotate);
+	imagedestroy($processed_image);
 	return $return;
 }
 ?>

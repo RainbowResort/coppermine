@@ -33,10 +33,10 @@ $CURRENT_PIC_DATA = mysql_fetch_assoc($result);
 $CURRENT_PIC_DATA['extension'] = ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.');
 $CURRENT_PIC_DATA['filename_without_extension'] = str_replace('.' . $CURRENT_PIC_DATA['extension'], '', $CURRENT_PIC_DATA['filename']);
 if ($remaining_files > 0) {
-	$created_image_path = thumb_rotate_image_create($CURRENT_PIC_DATA);
+	$created_image_array = thumb_rotate_image_create($CURRENT_PIC_DATA);
 }
-if ($created_image_path != '') {
-	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath` ) VALUES ('{$CURRENT_PIC_DATA['pid']}', '{$created_image_path}');");
+if ($created_image_array['path'] != '') {
+	$result = cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_PREFIX']}plugin_thumb_rotate ( `pid` , `filepath`, `width`, `height` ) VALUES ('{$CURRENT_PIC_DATA['pid']}', '{$created_image_array['path']}', '{$created_image_array['width']}', '{$created_image_array['height']}');");
 	$remaining_files--;
 }
 $remaining_output = theme_display_bar($remaining_files,$image_files_total,600,'', '', sprintf($lang_plugin_thumb_rotate['x_files_remaining'], '/' . $image_files_total,'red','green'));
@@ -54,7 +54,7 @@ if ($remaining_files > 0) {
 	echo <<< EOT
 	<tr>
 		<td class="tableb" rowspan="8" style="width:30%;height:{$max_dimension}">
-			<img src="{$CONFIG['fullpath']}{$created_image_path}" border="0" class="image" style="border:none" alt="" />
+			<img src="{$CONFIG['fullpath']}{$created_image_array['path']}" border="0" width="{$created_image_array['width']}" height="{$created_image_array['height']}" class="image" style="border:none" alt="" />
 		</td>
 		<td class="tableh2" colspan="2">
 			{$lang_common['information']}
@@ -130,7 +130,7 @@ EOT;
 	<tr>
 		<td class="tablef" colspan="3">
 			{$lang_common['done']}
-			<a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['config']}{$lang_plugin_thumb_rotate['config']}</a>
+			<a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['ok']}{$lang_common['ok']}</a>
 		</td>
 	</tr>
 EOT;

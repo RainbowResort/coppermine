@@ -133,13 +133,29 @@
   	- added icon for batch-fill
   	- added spinbutton control to text fields	
 	
+  1.2 to 2.0
+	- removed the spinbutton JS that went into the core instead
+	- re-added check to plugin install for existence of imagerotate function
+	- added width and height fields to database
+	- added replacement of width and height attributes for rotated thumbs
+	
+  2.0 to 2.1
+	- added support for rounded corners
+	- re-wrote function thumb_rotate_image_create from scratch
+	- added rounding angle field
+	- added fallback to ImageMagick if imagerotate function doesn't exist (on debian systems)
+	
+  2.1 to 2.2	
+	- removed type toggle
+	- improved performance by disabling image manipulation steps if corresponding option is set to zero
+	- added fixed rotation option
   
   Todo
   -------------
   - add fallback option in flash as discussed in announcement thread
   - apply for the film strip as well
   - apply for the album thumbs as well
-  - add other optional thumbnail improvements (like rounded corners or similar)
+  - add other drop shadow support
   - add help text to config screen
   - add a routine to batch-fill to prevent an endless loop.
   

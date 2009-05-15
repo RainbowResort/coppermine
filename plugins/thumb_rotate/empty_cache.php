@@ -17,7 +17,7 @@ if ($cached_files_total > $records_processed_per_pageload) {
 	$message_output = <<< EOT
 	<strong>{$lang_common['done']}</strong>
 	<br />&nbsp;<br />
-	<a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['config']}{$lang_plugin_thumb_rotate['config']}</a>
+	<a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['ok']}{$lang_common['ok']}</a>
 EOT;
 }
 

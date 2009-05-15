@@ -6,7 +6,7 @@ function thumb_rotate_initialize() {
 	if (GALLERY_ADMIN_MODE) {
 		global $JS;
 		$JS['includes'][] = 'plugins/thumb_rotate/js/farbtastic.js';
-		$JS['includes'][] = 'plugins/thumb_rotate/js/spin_button.js';
+		$JS['includes'][] = 'js/jquery.spinbutton.js';
 	}
 
 	require "./plugins/thumb_rotate/lang/english.php";
