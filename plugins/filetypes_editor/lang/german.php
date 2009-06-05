@@ -15,6 +15,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $lang_plugin_filetypes_editor['plugin_name'] = 'Dateitypen-Editor';
 $lang_plugin_filetypes_editor['plugin_description'] = 'Ein Plugin, das einfachen Zugriff auf die Dateitypen-Tabelle ermöglicht';
 $lang_plugin_filetypes_editor['plugin_description_detail'] = 'Hilfreich zur Verknüpfungen von MIME-Typen mit bestimmten Playern oder um Datei-Erweiterungen in Coppermine aufzunehmen, die nicht von Haus aus unterstützt werden.';
+$lang_plugin_filetypes_editor['plugin_extra'] = 'Dieses Plugin erzeugt einen zusätzlichen Eintrag am Ende des Admin-Menüs namens "Dateitypen bearbeiten". Klicke diesen Menüpunkt an, um das Plugin tatsächlich zu benutzen oder klicke auf den nachfolgenden Link:';
 $lang_plugin_filetypes_editor['announcement_thread'] = 'Ankündigungs-Beitrag';
 $lang_plugin_filetypes_editor['config_title'] = 'Bearbeite Dateitypen und Player-Verknüpfungen';
 $lang_plugin_filetypes_editor['config_name'] = 'Dateitypen bearbeiten';

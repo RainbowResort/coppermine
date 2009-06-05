@@ -22,7 +22,8 @@ $author = sprintf($lang_plugin_filetypes_editor['author'],
                   '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
 $version = '2.0';
 $extra_info = <<<EOT
-    <a href="index.php?file=filetypes_editor/editor" class="admin_menu">{$filetypes_editor_icon_array['filetype']}{$lang_plugin_filetypes_editor['config_name']}</a>&nbsp;
+    {$lang_plugin_filetypes_editor['plugin_extra']}
+    <a href="index.php?file=filetypes_editor/editor" class="admin_menu">{$filetypes_editor_icon_array['filetype']}{$lang_plugin_filetypes_editor['config_name']}</a><br />
     <a href="http://forum.coppermine-gallery.net/index.php/topic,59917.0.html" title="&laquo;{$lang_plugin_filetypes_editor['plugin_name']}&raquo; - {$lang_plugin_filetypes_editor['announcement_thread']}" class="admin_menu">{$filetypes_editor_icon_array['announcement']}{$lang_plugin_filetypes_editor['announcement_thread']}</a>
 EOT;
 

@@ -15,6 +15,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $lang_plugin_filetypes_editor['plugin_name'] = 'Filetypes editor';
 $lang_plugin_filetypes_editor['plugin_description'] = 'A plugin to allow easy access to the filetypes table';
 $lang_plugin_filetypes_editor['plugin_description_detail'] = 'Usefull to associate MIME types with particular players or to add support for particular file extensions that coppermine doesn\'t support out of the box.';
+$lang_plugin_filetypes_editor['plugin_extra'] = 'This plugin creates a new button at the end of your admin menu called "Filetypes editor".  Click this button to actually make use of this plugin or click the following button:';
 $lang_plugin_filetypes_editor['announcement_thread'] = 'Announcement thread';
 $lang_plugin_filetypes_editor['config_title'] = 'Edit the file types and player correlation';
 $lang_plugin_filetypes_editor['config_name'] = 'Filetypes editor';
