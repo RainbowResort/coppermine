@@ -1,0 +1,30 @@
+**************************
+  Plugin "Filetypes Editor"
+  *************************
+  Copyright (c) Nibbler
+  For Coppermine Photo Gallery cpg1.5.x
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+
+**********************************************
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2009-06-05 [A] Added German translation {GauGau}
+2009-06-05 [A] Added i18n {GauGau}
+2009-06-05 [A] Added row alternation {GauGau}
+2009-06-05 [A] Added cancel button {GauGau}
+2009-06-05 [A] Added icons {GauGau}
+2009-06-05 [A] Counted version up {GauGau}
+2009-06-05 [M] Ported to be used with cpg1.5.x (replacing reference to globals with inspektified expressions) {GauGau}
