@@ -308,7 +308,7 @@ function buttons_add_comment($template_add_your_comment) {
                                             </tr>
                                         </table>
                                 </td>';
-    $template_add_your_comment = str_replace('<td width="100%" class="tableh2_compact">{ADD_YOUR_COMMENT}{HELP_ICON}</td>', $new_html_add_comment , $template_add_your_comment);
+    $template_add_your_comment = str_replace('<td width="100%" class="tableh2">{ADD_YOUR_COMMENT}{HELP_ICON}</td>', $new_html_add_comment , $template_add_your_comment);
 
     return $template_add_your_comment;
 }
