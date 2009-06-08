@@ -21,6 +21,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-06-06 [B] Fixed problems when editing file types that were not allowed in config {Nibbler}
 2009-06-05 [A] Added German translation {GauGau}
 2009-06-05 [A] Added i18n {GauGau}
 2009-06-05 [A] Added row alternation {GauGau}

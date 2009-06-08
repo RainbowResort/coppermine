@@ -31,7 +31,10 @@ if ($superCage->get->keyExists('update') == TRUE || $superCage->post->keyExists(
 
 if ($superCage->get->keyExists('ext') == TRUE){
 	$get_ext = $superCage->get->getAlnum('ext');
-	$filedata = cpg_get_type($get_ext);
+	$sql = "SELECT * FROM {$CONFIG['TABLE_FILETYPES']} WHERE extension = '$get_ext'";
+	$result = cpg_db_query($sql);
+	$filedata = mysql_fetch_assoc($result);
+	mysql_free_result($result);
 	$add_update = $lang_plugin_filetypes_editor['update'];
 	$add_icon = $filetypes_editor_icon_array['ok'];
 } else {
