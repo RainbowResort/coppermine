@@ -40,5 +40,7 @@ $lang_plugin_filetypes_editor['wmp'] = 'Windows Media Player';
 $lang_plugin_filetypes_editor['qt'] = 'Apple QuickTime';
 $lang_plugin_filetypes_editor['rmp'] = 'Real Media Player';
 $lang_plugin_filetypes_editor['swf'] = 'Flash';
+$lang_plugin_filetypes_editor['htmlaudio'] = 'HTML5 audio tag';
+$lang_plugin_filetypes_editor['htmlvideo'] = 'HTML5 video tag';
 $lang_plugin_filetypes_editor['author'] = 'Created by %s, modded by %s';
 ?>

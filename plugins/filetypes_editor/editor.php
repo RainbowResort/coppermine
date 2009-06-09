@@ -24,7 +24,9 @@ $player_types = array(''    => $lang_plugin_filetypes_editor['no_player'],
 					  'WMP' => $lang_plugin_filetypes_editor['wmp'],
 					  'SWF' => $lang_plugin_filetypes_editor['swf'],
 					  'QT'  => $lang_plugin_filetypes_editor['qt'],
-					  'RMP' => $lang_plugin_filetypes_editor['rmp']
+					  'RMP' => $lang_plugin_filetypes_editor['rmp'],
+					  'HTMLA' => $lang_plugin_filetypes_editor['htmlaudio'],
+					  'HTMLV' => $lang_plugin_filetypes_editor['htmlvideo'],
 					  );
 										
 if ($superCage->get->keyExists('update') == TRUE || $superCage->post->keyExists('update') == TRUE || $superCage->get->keyExists('ext') == TRUE){
