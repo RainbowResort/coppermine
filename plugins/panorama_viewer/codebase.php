@@ -25,20 +25,33 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 if (defined('DISPLAYIMAGE_PHP')) {
-	$thisplugin->add_filter('html_image_reduced_overlay','panorama_viewer_image');
-	$thisplugin->add_filter('html_image_reduced','panorama_viewer_image');
-	$thisplugin->add_filter('html_image_overlay','panorama_viewer_image');
-	$thisplugin->add_filter('html_image','panorama_viewer_image');
-	
-	function panorama_viewer_image($pic_html) {
-		$pic_html = "<div style=\"width:100%; overflow:auto;\">".$pic_html."</div>";
-		$pic_html = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\">".$pic_html."</td></tr></table>";
-		return $pic_html;
-	}	
+	$superCage = Inspekt::makeSuperCage();
+	if ($superCage->get->keyExists('slideshow')) {
+		$thisplugin->add_filter('page_html','panorama_viewer_page_html_slideshow');
+
+		function panorama_viewer_page_html_slideshow($html) {
+			$panorama_start = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\"><div style=\"width:100%; overflow:hidden;\">";
+			$panorama_end = "</div></td></tr></table>";
+
+			$html = preg_replace("/(<img id=\"showImage\".*\/>)/Uis", $panorama_start."\\1".$panorama_end, $html);
+			return $html;
+		}
+	} else {
+		$thisplugin->add_filter('html_image_reduced_overlay','panorama_viewer_image');
+		$thisplugin->add_filter('html_image_reduced','panorama_viewer_image');
+		$thisplugin->add_filter('html_image_overlay','panorama_viewer_image');
+		$thisplugin->add_filter('html_image','panorama_viewer_image');
+
+		function panorama_viewer_image($pic_html) {
+			$pic_html = "<div style=\"width:100%; overflow:auto;\">".$pic_html."</div>";
+			$pic_html = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\">".$pic_html."</td></tr></table>";
+			return $pic_html;
+		}
+	}
 } else {
-	$thisplugin->add_filter('page_html','panorama_viewer_page_html');
+	$thisplugin->add_filter('page_html','panorama_viewer_page_html_thumb');
 	
-	function panorama_viewer_page_html($html) {
+	function panorama_viewer_page_html_thumb($html) {
 		global $CONFIG;
 		$fullpath = str_replace("/", "\/", $CONFIG['fullpath']);
 		$panorama_start = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\"><div style=\"width:100%; overflow:hidden;\">";
@@ -48,5 +61,6 @@ if (defined('DISPLAYIMAGE_PHP')) {
 		return $html;
 	}
 }
+
 
 ?>
