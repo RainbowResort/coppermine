@@ -187,7 +187,11 @@ function new_bbcodes($text) {
     $text = preg_replace("/\[size=([1-9][\d]?p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.*)\[\/size\]/Usi", "<span style=\"font-size:\\1\">\\2</span>", $text);
 
     // insert youtube video
-    $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", "<embed type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" width=\"640\" height=\"385\" src=\"http://www.youtube.com/v/\\2&hl=de&fs=1\" />", $text);
+    $youtube_embed_code_replacement  = "<object type=\"application/x-shockwave-flash\" width=\"640\" height=\"385\" data=\"http://www.youtube.com/v/\\2&hl=de&fs=1\">";
+    $youtube_embed_code_replacement .= "<param name=\"movie\" value=\"http://www.youtube.com/v/\\2&hl=de&fs=1\" />";
+    $youtube_embed_code_replacement .= "<param name=\"allowfullscreen\" value=\"true\" />";
+    $youtube_embed_code_replacement .= "</object>";
+    $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
 
     // insert quote
     $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<blockquote class=\"tablef\">&laquo;\\1&raquo; <br /> &ldquo;\\2&rdquo;</blockquote>", $text);

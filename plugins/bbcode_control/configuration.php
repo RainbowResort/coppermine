@@ -31,7 +31,7 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bb
 }
 
 $name = 'BBCode Control';
-$version = '1.1.5';
+$version = '1.1.6';
 $description = <<< EOT
 <ul>
     <li>{$lang_plugin_bbcode_control['description_new_codes']}</li>
