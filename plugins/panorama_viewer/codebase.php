@@ -43,7 +43,14 @@ if (defined('DISPLAYIMAGE_PHP')) {
 		$thisplugin->add_filter('html_image','panorama_viewer_image');
 
 		function panorama_viewer_image($pic_html) {
-			$pic_html = "<div style=\"width:100%; overflow:auto;\">".$pic_html."</div>";
+            global $CURRENT_PIC_DATA;
+            if ($CURRENT_PIC_DATA['mode'] == 'normal') {
+                global $CONFIG;
+                $imagesize = getimagesize($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CONFIG['normal_pfx'].$CURRENT_PIC_DATA['filename']);
+                $imagesize = $imagesize[1] + 10;
+                $div_style_height = " height:{$imagesize}px;";
+            }
+            $pic_html = "<div style=\"overflow:auto; width:100%;{$div_style_height}\">".$pic_html."</div>";
 			$pic_html = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\">".$pic_html."</td></tr></table>";
 			return $pic_html;
 		}
@@ -53,10 +60,9 @@ if (defined('DISPLAYIMAGE_PHP')) {
 	
 	function panorama_viewer_page_html_thumb($html) {
 		global $CONFIG;
-		$fullpath = str_replace("/", "\/", $CONFIG['fullpath']);
 		$panorama_start = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\"><div style=\"width:100%; overflow:hidden;\">";
 		$panorama_end = "</div></td></tr></table>";
-		$pattern = "/(<a href=\"displayimage.*<img src=\"{$fullpath}.*\/{$CONFIG['thumb_pfx']}.*<\/a>)/Uis";
+		$pattern = "/(<a href=\"displayimage.*<img src=\".*\/{$CONFIG['thumb_pfx']}.*<\/a>)/Uis";
 		$html = preg_replace($pattern, $panorama_start."\\1".$panorama_end, $html);
 		return $html;
 	}
