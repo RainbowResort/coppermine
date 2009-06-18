@@ -1,0 +1,33 @@
+**************************
+  Plugin "External Edit"
+  *************************
+  Copyright (c) Joachim Müller
+  For Coppermine Photo Gallery cpg1.5.x
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+
+**********************************************
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2009-06-18 [M] Release of plugin version 2.3 {GauGau}
+2009-06-18 [B] Fixed broken link to reference image {GauGau}
+2009-06-17 [A] First public release (v2.2) {GauGau}
+2009-06-17 [A] Added German translation {GauGau}
+2009-06-17 [A] Added database-driven token checks {GauGau}
+2009-06-15 [M] Complete re-design - building on the API of Fotoflexer.com instead of Aviary.com. Features below this line do not apply. {GauGau}
+2009-06-13 [A] Added support for bitmaps as well as vectors (svg) {GauGau}
+2009-06-12 [A] Added icons {GauGau}
+2009-06-11 [A] Created config screen to allow adding the API key {GauGau}
+2009-06-10 [M] Created initial draft (v1.0) using the API for aviary.com {GauGau}
