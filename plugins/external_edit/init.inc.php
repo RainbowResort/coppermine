@@ -19,7 +19,7 @@ function external_edit_init() {
 	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/external_edit/lang/{$CONFIG['lang']}.php")) {
 	    require "./plugins/external_edit/lang/{$CONFIG['lang']}.php";
 	}
-	if ($CONFIG['enable_menu_icons'] == 2) {
+	if ($CONFIG['enable_menu_icons'] > 0) {
 		$external_edit_icon_array['announcement'] = '<img src="./plugins/external_edit/images/icons/announcement.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$external_edit_icon_array['fotoflexer'] = '<img src="./plugins/external_edit/images/icons/fotoflexer.png" width="16" height="16" border="0" alt="" class="icon" />';
 		 
