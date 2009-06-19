@@ -23,10 +23,28 @@
 **********************************************/
 
 $name = 'Embed External Videos';
-$description = 'Upload videos from youtube etc. to your gallery';
+$description = 'Upload videos from video file hosters (YouTube, Google, Yahoo!, ...) to your gallery';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0.0';
-$extra_info = $install_info = <<<EOT
+$version = '1.1.0';
+
+$extra_info = <<<EOT
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="admin_menu">
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,60195.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td class="admin_menu">
+                <a href="index.php?file=embed_external_videos/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
+            </td>
+        </tr>
+    </table>
+EOT;
+
+
+$install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="admin_menu">

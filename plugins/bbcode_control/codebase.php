@@ -132,7 +132,7 @@ function bbcode_control_config_button($admin_menu){
     }
 
     if ($CONFIG['enable_menu_icons'] > 0) {
-        $bbcode_config_icon = '<img src="plugins/bbcode_control/images/bbcode.png" border="0" border="0" border="0" alt="" width="16" height="16" class="icon" />';
+        $bbcode_config_icon = '<img src="plugins/bbcode_control/images/bbcode.png" border="0" alt="" width="16" height="16" class="icon" />';
     } else {
         $bbcode_config_icon = '';
     }

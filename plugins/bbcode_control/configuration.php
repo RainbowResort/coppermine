@@ -44,40 +44,37 @@ $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 
 $extra_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td class="admin_menu">
-            <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
-        </td>
-        <td>
-            &nbsp;
-        </td>
-        <td class="admin_menu">
-            <a href="index.php?file=bbcode_control/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
-        </td>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
+        <tr>
+            <td class="admin_menu">
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td class="admin_menu">
+                <a href="index.php?file=bbcode_control/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
+            </td>
+        </tr>
     </table>
 EOT;
 
 $install_info=<<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td>
-            {$lang_plugin_bbcode_control['install_info']}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            &nbsp;
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" class="admin_menu" rel="external" class="external">Announcement thread for <strong>BBCode Control</strong> plugin</a>
-        </td>
-    </tr>
+        <tr>
+            <td>
+                {$lang_plugin_bbcode_control['install_info']}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+            </td>
+        </tr>
     </table>
 EOT;
 ?>
