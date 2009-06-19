@@ -59,9 +59,11 @@ function embed_external_videos_get_hoster() {
         'yahoo' => 'Yahoo! Video',
         'metacafe' => 'Metacafe',
         'google' => 'Google Video',
+        'myspace' => 'Myspace Video',
     );
+    asort($hoster);
 
-    return $hoster;    
+    return $hoster;
 }
 
 
@@ -226,7 +228,31 @@ function embed_external_videos_other_media($pic_html) {
         break;
 
 
-    //MySpace Video
+        case 'myspace':
+            $file_content = file_get_contents($CURRENT_PIC_DATA['url']);
+            $check_result = preg_match("/http:\/\/vids.myspace.com\/index.cfm\?fuseaction=vids.individual&videoid=([0-9]+)/", $file_content, $video_id);
+
+            if ($check_result == "1" ) {
+                $pheight = embed_external_videos_get_width_height($CURRENT_PIC_DATA['pid'], 'pheight');
+                $pwidth = embed_external_videos_get_width_height($CURRENT_PIC_DATA['pid'], 'pwidth');
+                if (pwidth == 0 || $pheight == 0) {
+                    $pwidth = 640;
+                    $pheight = 400;
+                }
+                $movie = "http://mediaservices.myspace.com/services/media/embed.aspx/m={$video_id[1]}";
+                $new_html  = "<object type=\"{$CURRENT_PIC_DATA['mime']}\" width=\"{$pwidth}\" height=\"{$pheight}\" data=\"{$movie}\">";
+                $new_html .= "<param name=\"movie\" value=\"{$movie}\" />";
+                $new_html .= "<param name=\"allowfullscreen\" value=\"true\" />";
+                $new_html .= "</object>";                         
+            } else {
+                $new_html = "Error: no valid Myspace video id";
+            }
+            $search = '(<object.*</object>)';
+            $pic_html = preg_replace($search, $new_html, $pic_html);
+            
+            return $pic_html;
+        break;
+
 
 /*
     2do
