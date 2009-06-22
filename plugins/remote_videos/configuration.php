@@ -17,15 +17,15 @@
   $Date$
 **********************************************/
 /*********************************************
-  Coppermine Plugin - Embed External Videos
+  Coppermine Plugin - Remote Videos
   ********************************************
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
-$name = 'Embed External Videos';
-$description = 'Upload videos from video file hosters (YouTube, Google, Yahoo!, ...) to your gallery';
+$name = 'Remote Videos';
+$description = 'Upload videos from video file hosters to your gallery (YouTube, Google, Yahoo!, ...)';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.1.0';
+$version = '1.2.0';
 
 $extra_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
@@ -37,7 +37,7 @@ $extra_info = <<<EOT
                 &nbsp;
             </td>
             <td class="admin_menu">
-                <a href="index.php?file=embed_external_videos/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
+                <a href="index.php?file=remote_videos/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
             </td>
         </tr>
     </table>
