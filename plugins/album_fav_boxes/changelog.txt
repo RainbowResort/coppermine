@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-06-23 [M] Counted version up to 2.1 {GauGau}
+2009-06-23 [A] Added German language file {GauGau}
 2009-06-22 [M] Release of version 2.0 of the plugin {GauGau}
 2009-06-22 [A] Output messages for user feedback about successfull operations {GauGau}
 2009-06-22 [M] Counted version status up to reflect adaption for cpg1.5.x {GauGau}
