@@ -31,7 +31,7 @@ $thisplugin->add_filter('file_data','custom_thumb_file_data');
 function custom_thumb_page_start() {
 	global $CONFIG, $lang_errors;
 	$superCage = Inspekt::makeSuperCage();
-    
+
 	if ($superCage->get->keyExists('custom_thumb_pid')) {
 		$pid = $superCage->get->getInt('custom_thumb_pid');
 		$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = p.aid WHERE p.pid = '$pid' LIMIT 1");
@@ -64,8 +64,8 @@ function custom_thumb_page_start() {
                 load_template();
                 cpg_die(ERROR, 'Only images', __FILE__, __LINE__);
             }
-            
-			header("Location: {$CONFIG['site_url']}displayimage.php?pos=-$pid");
+
+			header("Location: {$CONFIG['site_url']}displayimage.php?pid=$pid");
 			die();
 		} else {
 			load_template();
@@ -75,7 +75,7 @@ function custom_thumb_page_start() {
 			echo <<< EOT
                 <tr>
                 	<td class="tableb" valign="top">
-                		Browse: 
+                		Browse:
                 	</td>
                 	<td class="tableb" valign="top">
                 		<input type="file" name="fileupload" size="40" class="listbox" />
@@ -98,7 +98,7 @@ EOT;
 
 function custom_thumb_file_data($data) {
 	global $CONFIG, $CURRENT_ALBUM_DATA;
-	
+
 	if ((USER_ADMIN_MODE && $CURRENT_ALBUM_DATA['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $data['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE) {
         $custom_thumb_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/file_approval.png" border="0" width="16" height="16" class="icon" /> ' : '';
 		$data['menu'] .= " <a href=\"?custom_thumb_pid={$data['pid']}\" class=\"admin_menu\">{$custom_thumb_menu_icon}Custom thumbnail</a>";
