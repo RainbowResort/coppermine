@@ -17,7 +17,7 @@
   $Date$
 **********************************************/
 /*********************************************
-  Coppermine Plugin - Embed External Videos
+  Coppermine Plugin - Remote Videos
   ********************************************
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
@@ -26,13 +26,13 @@ if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
-pageheader("Embed External Videos - ".$lang_gallery_admin_menu['admin_lnk']);
+pageheader("Remote Videos - ".$lang_gallery_admin_menu['admin_lnk']);
 $superCage = Inspekt::makeSuperCage();
 global $lang_common;
 
 
 if ($superCage->post->keyExists('submit')) {
-    foreach(embed_external_videos_get_hoster() as $filetype => $value) {
+    foreach(remote_videos_get_hoster() as $filetype => $value) {
         global $CONFIG;
         if ($superCage->post->getInt($filetype) == 1) {
             if (strpos($CONFIG['allowed_mov_types'], $filetype) === FALSE) {
@@ -63,7 +63,7 @@ if ($superCage->post->keyExists('submit')) {
 
 
 echo "<form action=\"index.php?file=".$superCage->get->getRaw(file)."\" method=\"post\">";
-starttable("100%", "Embed External Videos - ".$lang_gallery_admin_menu['admin_lnk'], 3);
+starttable("100%", "Remote Videos - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 echo "
     <tr>
         <td class=\"tableb\" width=\"200\">
@@ -78,7 +78,7 @@ echo "
     </tr>
 ";
 
-foreach(embed_external_videos_get_hoster() as $key => $value) {
+foreach(remote_videos_get_hoster() as $key => $value) {
     global $CONFIG;
     $checked = strpos($CONFIG['allowed_mov_types'], $key) ? "checked=\"checked\" " : "";
     echo "

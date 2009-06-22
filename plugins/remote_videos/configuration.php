@@ -25,7 +25,7 @@
 $name = 'Remote Videos';
 $description = 'Upload videos from video file hosters to your gallery (YouTube, Google, Yahoo!, ...)';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.2.0';
+$version = '1.2.1';
 
 $extra_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
