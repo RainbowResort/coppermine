@@ -1,0 +1,46 @@
+************************
+Coppermine Photo Gallery
+************************
+Copyright (c) 2003-2009 Coppermine Dev Team
+v1.1 originally written by Gregory DEMAR
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 3
+as published by the Free Software Foundation.
+********************************************
+
+$HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/CHANGELOG.txt $
+$Revision: 6199 $
+$Author: gaugau $
+$Date: 2009-06-18 19:37:47 +0200 (Do, 18 Jun 2009) $
+*********************************************
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2009-06-22 [M] Release of version 2.0 of the plugin {GauGau}
+2009-06-22 [A] Output messages for user feedback about successfull operations {GauGau}
+2009-06-22 [M] Counted version status up to reflect adaption for cpg1.5.x {GauGau}
+2009-06-22 [A] Added status text for files that already reside in the favorites {GauGau}
+2009-06-22 [A] Added icon support {GauGau}
+2009-06-22 [C] Applied clickable labels for checkboxes {GauGau}
+2009-06-22 [O] Redirecting to index after clearing of favorites {GauGau}
+2009-06-22 [A] Moved language definition into separate file {GauGau}
+2009-06-22 [M] Applied core changes for function theme_display_thumbnails that the plugin is interfering with {GauGau}
+2009-06-22 [M] Inspektification to make the code work with cpg1.5.x {GauGau}
+---------- [B] v 1.2.5 - Favpics fix (rebase to 1.4.12 theme.php)
+---------- [B] v 1.2.4 - CPG 1.4.12 compatiblity fix
+---------- [B] v 1.2.3 - Fixed co-existance issue with other plugins
+---------- [A] v 1.2.2 - Only display 'add to lightbox' under pics not already there
+---------- [B] v 1.2.1 - Fixed error when adding from search results
+---------- [A] v 1.2 - Added into search results, easier customization of lang strings, added class to checkboxes
+---------- [A] v 1.1 - Added lightbox removal feature
+---------- [B] v 1.01 - Fixed installer bug
+---------- [M] v 1.0 - Original version
