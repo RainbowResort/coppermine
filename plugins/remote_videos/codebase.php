@@ -31,7 +31,7 @@ $thisplugin->add_filter('html_other_media','remote_videos_other_media');
 
 function remote_videos_install() {
     global $CONFIG;
-    cpg_db_query("ALTER TABLE {$CONFIG['TABLE_FILETYPES']} MODIFY extension CHAR(11)");
+    cpg_db_query("ALTER TABLE {$CONFIG['TABLE_FILETYPES']} MODIFY extension CHAR(12)");
 
     return true;
 }
@@ -53,16 +53,23 @@ function remote_videos_uninstall() {
 
 function remote_videos_get_hoster() {
     $hoster = array(
-        'youtube'     => 'YouTube',
-        'myvideo'     => 'MyVideo',
-        'vimeo'       => 'Vimeo',
-        'yahoo'       => 'Yahoo! Video',
-        'metacafe'    => 'Metacafe',
-        'google'      => 'Google Video',
-        'myspace'     => 'Myspace Video',
-        'sevenload'   => 'SevenLoad.de',
-        'clipfish'    => 'ClipFish',
-        'dailymotion' => 'Dailymotion',
+        'youtube'      => 'YouTube',
+        'myvideo'      => 'MyVideo',
+        'vimeo'        => 'Vimeo',
+        'yahoo'        => 'Yahoo! Video',
+        'metacafe'     => 'Metacafe',
+        'google'       => 'Google Video',
+        'myspace'      => 'Myspace Video',
+        'sevenload'    => 'SevenLoad',
+        'clipfish'     => 'ClipFish',
+        'dailymotion'  => 'Dailymotion',
+        'gametrailers' => 'GameTrailers',
+        'megavideo'    => 'MegaVideo',
+        'spike'        => 'Spike',
+        'current'      => 'Current',
+        'collegehumor' => 'College Humor',
+        'stickam'      => 'Stickam',
+        'revver'       => 'Revver',
     );
     asort($hoster);
 
@@ -208,7 +215,79 @@ function remote_videos_other_media($pic_html) {
             );
             return remote_videos_html_replace($params, $pic_html);
         break;
-        
+
+        case 'gametrailers':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.gametrailers.com\/video\/.*\/([0-9]+)/',
+                'default_width'  => 480,
+                'default_height' => 392,
+                'player'         => 'http://www.gametrailers.com/remote_wrap.php?mid={MATCH_1}',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'megavideo':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.megavideo.com\/\?v=([A-Z0-9]{8})/',
+                'default_width'  => 640,
+                'default_height' => 480,
+                'player'         => 'http://www.megavideo.com/v/{MATCH_1}',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'spike':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.spike.com\/video\/.*\/([0-9]+)/',
+                'default_width'  => 640,
+                'default_height' => 384,
+                'player'         => 'http://www.spike.com/efp',
+                'extra_params'   => '<param name="flashVars" value="flvbaseclip={MATCH_1}" />',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'current':
+            $params = array(
+                'search_pattern' => '/http:\/\/current.com\/items\/([0-9]+)_.*/',
+                'default_width'  => 560,
+                'default_height' => 420,
+                'player'         => 'http://current.com/e/{MATCH_1}',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'collegehumor':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.collegehumor.com\/video:([0-9]+)/',
+                'default_width'  => 640,
+                'default_height' => 360,
+                'player'         => 'http://www.collegehumor.com/moogaloop/moogaloop.swf?clip_id={MATCH_1}',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'stickam':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.stickam.com\/viewMedia.do\?mId=([0-9]+)/',
+                'default_width'  => 448,
+                'default_height' => 336,
+                'player'         => 'http://player.stickam.com/flashVarMediaPlayer/{MATCH_1}',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
+        case 'revver':
+            $params = array(
+                'search_pattern' => '/http:\/\/www.revver.com\/video\/([0-9]+)\/.*/',
+                'default_width'  => 480,
+                'default_height' => 392,
+                'player'         => 'http://flash.revver.com/player/1.0/player.swf',
+                'extra_params'   => '<param name="flashVars" value="mediaId={MATCH_1}" />',
+            );
+            return remote_videos_html_replace($params, $pic_html);
+        break;
+
 
 
 /*
@@ -223,25 +302,18 @@ function remote_videos_other_media($pic_html) {
         break;
 
     2do
-    * 6.cn
-    * Apple trailers
-    * Blip.tv
-    * GameTrailers
-    * MegaVideo
-    * MyShows
-    * iFilm (now Spike)
-    * Break
-    * Jumpcut
-    * Current TV
-    * Revver
-    * College Humor
-    * Stickam
-    * FreeVideoBlog (now Vidiac)
-    * StreetFire
-    * DropShots
-    * Bofunk
-    * Virb.com
-    * TED.com
+    * 6.cn -- derivation not possible -> need to enter parts from provided embed code
+    * Apple trailers -- no embed code provided
+    * Blip.tv -- derivation not possible -> need to enter parts from provided embed code
+    * MyShows -- derivation not possible -> need to enter parts from provided embed code
+    * Break -- derivation not possible -> need to enter parts from provided embed code
+    * Jumpcut -- As of June 15, 2009 the Jumpcut.com site has been officially closed.
+    * FreeVideoBlog (now Vidiac) -- derivation not possible -> need to enter parts from provided embed code
+    * StreetFire -- derivation not possible -> need to enter parts from provided embed code
+    * DropShots -- no embed code provided
+    * Bofunk -- derivation not possible -> need to enter parts from provided embed code
+    * Virb.com -- derivation not possible -> need to enter parts from provided embed code
+    * TED.com -- no embed code provided
 
 */    
             

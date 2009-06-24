@@ -62,7 +62,7 @@ if ($superCage->post->keyExists('submit')) {
 }
 
 
-echo "<form action=\"index.php?file=".$superCage->get->getRaw(file)."\" method=\"post\">";
+echo "<form action=\"index.php?file=".$superCage->get->getRaw(file)."\" method=\"post\" name=\"custform\">";
 starttable("100%", "Remote Videos - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 echo "
     <tr>
@@ -95,6 +95,31 @@ foreach(remote_videos_get_hoster() as $key => $value) {
         </tr>
     ";
 }
+
+echo "
+    <script type=\"text/javascript\">
+    function selectall(el)
+    {
+        var checked = el.checked;
+        var elements = el.form.elements;
+        for(var i = 0; i < elements.length;i++)
+            if(elements[i].type.toLowerCase() == 'checkbox') elements[i].checked = checked;
+    }
+    </script>
+
+    <tr>
+        <td class=\"tableb\" width=\"200\">
+            
+        </td>
+        <td class=\"tableb\" width=\"200\">
+            &nbsp;
+        </td>
+        <td class=\"tableb\">
+            <input type=\"checkbox\" class=\"checkbox\" name=\"selectall\" onclick=\"window.selectall(this);\"> <i>select all</i>
+        </td>
+    </tr>
+";
+
 
 endtable();
 
