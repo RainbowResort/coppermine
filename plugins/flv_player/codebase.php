@@ -110,8 +110,8 @@ function flv_player_other_media($pic_html) {
 
         $search = '(<object.*</object>)';
 
-	    $new_html  = "<object type=\"{$CURRENT_PIC_DATA['mime']}\" width=\"{$CURRENT_PIC_DATA['pwidth']}\" height=\"{$CURRENT_PIC_DATA['pheight']}\" data=\"plugins/flv_player/player.swf?file=$file&image=$thumb&autostart=$autostart\">";
-	    $new_html .= "<param name=\"movie\" value=\"plugins/flv_player/player.swf?file=$file&image=$thumb&autostart=$autostart\" />";
+        $new_html  = "<object type=\"{$CURRENT_PIC_DATA['mime']}\" width=\"{$CURRENT_PIC_DATA['pwidth']}\" height=\"{$CURRENT_PIC_DATA['pheight']}\" data=\"plugins/flv_player/player.swf?file=$file&image=$thumb&autostart=$autostart\">";
+        $new_html .= "<param name=\"movie\" value=\"plugins/flv_player/player.swf?file=$file&image=$thumb&autostart=$autostart\" />";
         $new_html .= "<param name=\"allowfullscreen\" value=\"true\" />";
         $new_html .= "</object>";
 
