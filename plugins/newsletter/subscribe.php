@@ -10,10 +10,10 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/albmgr.php $
-  $Revision: 6131 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-06-10 08:42:56 +0200 (Mi, 10 Jun 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
@@ -25,11 +25,62 @@ $display_submit_button = 0;
 $subscriber_email_warning = '';
 $USER_DATA = array_merge($USER_DATA, $cpg_udb->get_user_infos(USER_ID));
 
+if (USER_ID) { // Populate the user's profile
+    // Let's query the subscriptions table to see if there already is a record for the user
+    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions
+                            WHERE user_id='{$USER_DATA['user_id']}'
+                            LIMIT 1");
+    $loopCounter = 0;
+    $existing_subscription_array = array();
+    while ($row = mysql_fetch_assoc($result)) {
+        $existing_subscription_array = $row;
+    }
+    if (mysql_num_rows($result) == 1) {
+        $existing_subscription_array['subscription_exists'] = 1;
+    } else {
+        $existing_subscription_array['subscription_exists'] = 0;
+    }
+    $existing_subscription_array['category_list'] = explode(',', $existing_subscription_array['category_list']);
+    mysql_free_result($result);
+}
+
+if (USER_ID || $CONFIG['plugin_newsletter_guest_subscriptions'] == '1') { 
+    // Run the query for available categories
+    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories");
+    $loopCounter = 0;
+    $newsletter_categories_db = array();
+    while ($row = mysql_fetch_assoc($result)) {
+        $newsletter_categories_db[$loopCounter]['category_id']           = $row['category_id'];
+        $newsletter_categories_db[$loopCounter]['name']                  = $row['name'];
+        $newsletter_categories_db[$loopCounter]['description']           = $row['description'];
+        $newsletter_categories_db[$loopCounter]['open_for_subscription'] = $row['open_for_subscription'];
+        $newsletter_categories_db[$loopCounter]['public_view']           = $row['public_view'];
+        $newsletter_categories_db[$loopCounter]['frequency_year']        = $row['frequency_year'];
+        $newsletter_categories_db[$loopCounter]['subscription_count']    = $row['subscription_count'];
+        $loopCounter++;
+    }
+}
+/*
 if ($superCage->post->keyExists('submit')) {
     //Check if the form token is valid
     if(!checkFormToken()){
         cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
     }
+	$submit_subscription_array = $superCage->post->keyExists('subscribe');
+	print_r($superCage->post->getInt('subscribe'));
+	if (USER_ID) {
+		// Loop through all categories
+		foreach ($newsletter_categories_db as $category_loop => $category) {
+			//echo $category['category_id'];
+			if (in_array($category['category_id'], $submit_subscription_array) == TRUE) { // Existing record?
+				echo '!';
+			}
+			if (in_array($category['category_id'], $existing_subscription_array['category_list']) == TRUE) { // Existing record?
+				//echo '!';
+			}
+			echo '<br />';
+		}
+	}
 	if ($superCage->post->keyExists('subscriber_email') == TRUE) {
         $temp = $superCage->post->getRaw('subscriber_email'); // Usually, we would not use that method, but we'll sanitize later.
 		if (preg_match('#^([a-zA-Z0-9]((\.|\-|\_){0,1}[a-zA-Z0-9]){0,})@([a-zA-Z]((\.|\-){0,1}[a-zA-Z0-9]){0,})\.([a-zA-Z]{2,4})$#i', $temp)) {
@@ -40,13 +91,12 @@ if ($superCage->post->keyExists('submit')) {
 		}
 	}
 }
-
+*/
 
 
 pageheader($lang_plugin_newsletter['newsletter-subscription']);
 
 echo <<< EOT
-    <h1>Work in progress - the form currently doesn't do anything yet</h1>
     <form action="" method="post" name="newsletter_subscribe" id="newsletter_subscribe">
 EOT;
 starttable('100%', $lang_plugin_newsletter['newsletter-subscription'], 3, 'cpg_zebra');
@@ -71,7 +121,7 @@ if (USER_ID) {
             {$lang_plugin_newsletter['your_name']}:
         </td>
         <td colspan="2">
-            <input type="text" name="subscriber_name" id="subscriber_name" class="textinput" size="30" maxlength="100" value="{$USER_DATA['user_name']}" disabled="disabled" readonly="readonly" />
+            <input type="text" name="subscriber_name" id="subscriber_name" class="textinput" size="40" maxlength="100" value="{$USER_DATA['user_name']}" disabled="disabled" readonly="readonly" title="{$lang_plugin_newsletter['your_cant_edit_this_field']}"  />
         </td>
     </tr>
 	<tr>
@@ -79,31 +129,13 @@ if (USER_ID) {
             {$lang_plugin_newsletter['your_email']}:
         </td>
         <td>
-            <input type="text" name="user_email" id="user_email" class="textinput" size="30" maxlength="100" value="{$USER_DATA['user_email']}" disabled="disabled" readonly="readonly" />
+            <input type="text" name="user_email" id="user_email" class="textinput" size="40" maxlength="100" value="{$USER_DATA['user_email']}" disabled="disabled" readonly="readonly" title="{$lang_plugin_newsletter['your_cant_edit_this_field']}" />
         </td>
 		<td>
 			{$subscriber_email_warning}
 		</td>
     </tr>
 EOT;
-    // Let's query the subscriptions table to see if there already is a record for the user
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions
-                            WHERE user_id='{$USER_DATA['user_id']}'
-                            LIMIT 1");
-    $loopCounter = 0;
-    $existing_subscription_array = array();
-    while ($row = mysql_fetch_assoc($result)) {
-        $existing_subscription_array = $row;
-    }
-    if (mysql_num_rows($result) == 1) {
-        $existing_subscription_array['subscription_exists'] = 1;
-    } else {
-        $existing_subscription_array['subscription_exists'] = 0;
-    }
-    $existing_subscription_array['category_list'] = explode(',', $existing_subscription_array['category_list']);
-    mysql_free_result($result);
-   
-
     // We have a registered user here --- end
 } else {
     // We have a guest --- start
@@ -155,45 +187,34 @@ EOT;
 
 // Display the list of categories to subscribe --- start
 if (USER_ID || $CONFIG['plugin_newsletter_guest_subscriptions'] == '1') { 
-    // Run the query for available categories
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories");
-    $loopCounter = 0;
-    $newsletter_categories_db = array();
-    while ($row = mysql_fetch_assoc($result)) {
-        $newsletter_categories_db[$loopCounter]['category_id']           = $row['category_id'];
-        $newsletter_categories_db[$loopCounter]['name']                  = $row['name'];
-        $newsletter_categories_db[$loopCounter]['description']           = $row['description'];
-        $newsletter_categories_db[$loopCounter]['open_for_subscription'] = $row['open_for_subscription'];
-        $newsletter_categories_db[$loopCounter]['public_view']           = $row['public_view'];
-        $newsletter_categories_db[$loopCounter]['frequency_year']        = $row['frequency_year'];
-        $newsletter_categories_db[$loopCounter]['subscription_count']    = $row['subscription_count'];
-        $loopCounter++;
-    }
     $loopCounter = 0;
     $category_output = '';
     foreach ($newsletter_categories_db as $category_loop => $category) {
-        if ($category['open_for_subscription'] == 'YES' || 
-            $category['public_view'] == 'YES' || 
-            GALLERY_ADMIN_MODE) {
+        if ($category['open_for_subscription'] == 'YES' || $category['public_view'] == 'YES' || GALLERY_ADMIN_MODE) {
             if ($loopCounter == 0) {
-                $leftcol_output = $lang_plugin_newsletter['subscribe_to'];
+                $leftcol_output = $lang_plugin_newsletter['subscribe_to'] . ': ';
             } else {
                 $leftcol_output = '';
             }
-            if ($category['open_for_subscription'] == 'YES' || 
-            GALLERY_ADMIN_MODE) {
-                $checkbox_output = '<input type="checkbox" name="subscribe[]" id="subscribe'.$loopCounter.'" value="'.$category['category_id'].'" class="checkbox" />';
+			if (in_array($category['category_id'], $existing_subscription_array['category_list']) == TRUE) {
+				$checkbox_checked ='checked="checked"';
+			} else {
+				$checkbox_checked ='';
+			}
+            if ($category['open_for_subscription'] == 'YES' || GALLERY_ADMIN_MODE) {
+                $checkbox_output = '<input type="checkbox" name="subscribe[]" id="subscribe'.$loopCounter.'" value="'.$category['category_id'].'" class="checkbox" ' . $checkbox_checked . ' />';
             } else {
                 $checkbox_output = '<input type="checkbox" name="subscribe[]" value="" class="checkbox" disabled="disabled" readonly="readonly" />';
             }
-            if ($category['public_view'] == 'YES' || 
-            GALLERY_ADMIN_MODE) {
+            if ($category['public_view'] == 'YES' || GALLERY_ADMIN_MODE) {
                 $name_output = '<a href="index.php?file=newsletter/archive&amp;cat=' . $category['category_id'] . '" title="' . $lang_plugin_newsletter['browse_archived_mailings'] . '">' . $category['name'] . '</a>';
             } else {
-                $name_output = $category['name'];
+                $name_output = '<label for="subscribe'.$loopCounter.'" class="clickable_option">' .
+				                $category['name'] . 
+								'</label>';
             } 
             if ($category['description'] != '') {
-                $description_output = '<br /><label for="subscribe'.$loopCounter.'" class="album_stat clickalble_option" style="padding-left:30px">' . $category['description'] . '</label>';
+                $description_output = '<br /><label for="subscribe'.$loopCounter.'" class="album_stat clickable_option" style="padding-left:30px">' . $category['description'] . '</label>';
             } else {
                 $description_output = '';
             }

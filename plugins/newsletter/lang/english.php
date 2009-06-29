@@ -10,10 +10,10 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/albmgr.php $
-  $Revision: 6131 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-06-10 08:42:56 +0200 (Mi, 10 Jun 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 $lang_plugin_newsletter['config_name'] = 'Newsletter';
@@ -59,6 +59,7 @@ $lang_plugin_newsletter['alternatively_register_to subscribe'] = 'As an alternat
 $lang_plugin_newsletter['register_to subscribe'] = 'To subscribe you need to %sregister%s a user account and then subscribe as registered user.';
 $lang_plugin_newsletter['pluginmgr_lnk'] = 'Plugin Manager';
 $lang_plugin_newsletter['email_address_invalid'] = 'Invalid email address';
+$lang_plugin_newsletter['your_cant_edit_this_field'] = 'You can\'t edit the content of this field here, as it was taken from your profile. Edit your profile instead if you want to see this field\'s content changed.';
 $lang_plugin_newsletter['email_from_profile'] = 'Email address taken from your %sprofile%s.';
 $lang_plugin_newsletter['category_list'] = 'Newsletter category list';
 $lang_plugin_newsletter['frequency_once_year'] = 'Once every year';
@@ -87,4 +88,5 @@ $lang_plugin_newsletter['subscribe_to'] = 'Subscribe to';
 $lang_plugin_newsletter['subscribe'] = 'Subscribe';
 $lang_plugin_newsletter['no_newsletter_to_subscribe_to'] = 'There are currently no newsletter that you could subscribe to.';
 $lang_plugin_newsletter['browse_archived_mailings'] = 'Browse archived mailings';
+$lang_plugin_newsletter['archive'] = 'Newsletter archive';
 ?>

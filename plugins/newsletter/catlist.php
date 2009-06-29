@@ -10,10 +10,10 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/albmgr.php $
-  $Revision: 6131 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-06-10 08:42:56 +0200 (Mi, 10 Jun 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');

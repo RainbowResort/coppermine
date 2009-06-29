@@ -8,11 +8,10 @@ This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.1
-$HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/CHANGELOG.txt $
-$Revision: 6199 $
-$Author: gaugau $
-$Date: 2009-06-18 19:37:47 +0200 (Do, 18 Jun 2009) $
+$HeadURL$
+$Revision$
+$Author$
+$Date$
 *********************************************
 
 Changelog
@@ -26,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-06-29 [M] Added SVN header data {GauGau}
 2009-06-29 [A] Added plugin to SVN repository {GauGau}
 2009-06-29 [A] Added admin menu items {GauGau}
 2009-06-28 [A] Added form token check {GauGau}
