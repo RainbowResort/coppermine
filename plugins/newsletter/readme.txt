@@ -25,6 +25,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-06-30 [A] Added more icons {GauGau}
+2009-06-30 [B] Added subscribe feature for registered users that wasn't working yet {GauGau}
+2009-06-30 [B] Hide menu link if visitor isn't allowed to subscribe in the first place {GauGau}
 2009-06-29 [M] Added SVN header data {GauGau}
 2009-06-29 [A] Added plugin to SVN repository {GauGau}
 2009-06-29 [A] Added admin menu items {GauGau}
@@ -46,8 +49,6 @@ Todo
 ====
 * All emails contain an unsubscribe link at the bottom
 * Config: allow guest subscriptions? If yes: guests need to opt in, so we'll need a corresponding toggle in the subscriptions table
-* Config: newsletter frequency (to display to users when they sign up), per newsletter category
-* Config: simple or advanced (one newsletter per site or several of them)
 * Config: mails to send per page refresh
 * Subscribe token in template (parsing!)?
 * Display on registration page
@@ -56,3 +57,5 @@ Todo
 * Add a toggle to the unsubscribe page that checks if the plugin is installed in the first place. If it isn't, disaply a generic message.
 * Populate subscriber stats on catlist from subscribers table instead of the
 * Add confirmation JS dialog for category deleting
+* Add a check to all files if the plugin is installed in the first place or if an ex-subscriber is accessing the link in error
+* Config changes entered during plugin install are not being taken into account

@@ -4,7 +4,7 @@ INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_fr
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_from_name', 'ADMIN_USERNAME');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_mails_per_page', '1');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_admin_menu_links', '1');
-INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_visitor_menu_links', '1');
+INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_visitor_menu_links', '2');
 
 
 CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_subscriptions` (
@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_subscriptions` (
   UNIQUE KEY user_id (user_id),
   UNIQUE KEY subscriber_email (subscriber_email)
 ) TYPE=MyISAM COMMENT='Contains the subscribers of the newsletters';
-
-INSERT IGNORE INTO CPG_plugin_newsletter_subscriptions ( `user_id`, `subscriber_active` , `subscriber_name`, `subscriber_email`, `category_list` ) VALUES ('1', 'YES', 'gaugau', 'tester@example.com', '1,4,5,77,23456');
 
 CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_categories` (
   category_id int(11) NOT NULL auto_increment,

@@ -13,12 +13,16 @@ function newsletter_initialize() {
 	if ($CONFIG['enable_menu_icons'] == 2) {
 		$newsletter_icon_array['config'] = '<img src="./plugins/newsletter/images/icons/config.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['announcement'] = '<img src="./plugins/newsletter/images/icons/announcement.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['newsletter'] = '<img src="./plugins/newsletter/images/icons/newsletter.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['catlist'] = '<img src="./plugins/newsletter/images/icons/catlist.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['subscribe'] = '<img src="./plugins/newsletter/images/icons/subscribe.png" width="16" height="16" border="0" alt="" class="icon" />';
 	} else {
 		$newsletter_icon_array['config'] = '';
 		$newsletter_icon_array['announcement'] = '';
+		$newsletter_icon_array['newsletter'] = '';
+		$newsletter_icon_array['catlist'] = '';
+		$newsletter_icon_array['subscribe'] = '';
 	}
-	$newsletter_icon_array['newsletter'] = cpg_fetch_icon('news_show', 2);
-	$newsletter_icon_array['catlist'] = cpg_fetch_icon('news_show', 1);
 	$newsletter_icon_array['plugin_manager'] = cpg_fetch_icon('plugin_mgr', 2);
 	$newsletter_icon_array['ok'] = cpg_fetch_icon('ok', 2);
 	$newsletter_icon_array['cancel'] = cpg_fetch_icon('cancel', 2);

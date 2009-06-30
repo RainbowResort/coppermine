@@ -157,7 +157,7 @@ if ($message != '') {
 EOT;
 }
 
-starttable('100%', $lang_plugin_newsletter['category_list'], $columns_total, 'cpg_zebra');
+starttable('100%', $newsletter_icon_array['catlist'] . $lang_plugin_newsletter['category_list'], $columns_total, 'cpg_zebra');
 $loopCounter = 1;
 $frequency_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_newsletter['frequency']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_newsletter['frequency_explanation']))), 470, 245);
 $open_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_newsletter['open']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_newsletter['open_explanation']))), 470, 245);

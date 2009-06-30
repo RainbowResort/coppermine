@@ -23,9 +23,11 @@ $lang_plugin_newsletter = $newsletter_init_array['language'];
 $newsletter_icon_array = $newsletter_init_array['icon'];
 $display_submit_button = 0;
 $subscriber_email_warning = '';
+$message = '';
 $USER_DATA = array_merge($USER_DATA, $cpg_udb->get_user_infos(USER_ID));
 
 if (USER_ID) { // Populate the user's profile
+    $message = sprintf($lang_plugin_newsletter['welcome_x'], $USER_DATA['user_name']) . '<br />' . $LINEBREAK;
     // Let's query the subscriptions table to see if there already is a record for the user
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions
                             WHERE user_id='{$USER_DATA['user_id']}'
@@ -37,11 +39,16 @@ if (USER_ID) { // Populate the user's profile
     }
     if (mysql_num_rows($result) == 1) {
         $existing_subscription_array['subscription_exists'] = 1;
+        $message .= $lang_plugin_newsletter['edit_your_subscription']; 
     } else {
         $existing_subscription_array['subscription_exists'] = 0;
+        $message .= $lang_plugin_newsletter['subscribe'];
     }
-    $existing_subscription_array['category_list'] = explode(',', $existing_subscription_array['category_list']);
+    $existing_subscription_array['category_array'] = explode(',', $existing_subscription_array['category_list']);
     mysql_free_result($result);
+    if ($USER_DATA['user_email'] == '') {
+        $message = '<div class="cpg_message_error">' . $lang_plugin_newsletter['no_email_in_profile'] . '</div>';
+    }
 }
 
 if (USER_ID || $CONFIG['plugin_newsletter_guest_subscriptions'] == '1') { 
@@ -60,38 +67,78 @@ if (USER_ID || $CONFIG['plugin_newsletter_guest_subscriptions'] == '1') {
         $loopCounter++;
     }
 }
-/*
+
 if ($superCage->post->keyExists('submit')) {
     //Check if the form token is valid
     if(!checkFormToken()){
         cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
     }
-	$submit_subscription_array = $superCage->post->keyExists('subscribe');
-	print_r($superCage->post->getInt('subscribe'));
+	// Let's loop through the list of categories first that the visitor has submit
+	// and filter out those that he's not allowed to subscribe to or that no longer exist
+	$submit_subscription_array = $superCage->post->getInt('subscribe');
+	$write_to_db_category_list = '';
+	foreach ($newsletter_categories_db as $category) {
+	    if (in_array($category['category_id'], $submit_subscription_array) == TRUE && $category['open_for_subscription'] == 'YES')  { // Existing record?
+	        $write_to_db_category_list .= $category['category_id'] . ',';
+	    }
+	}
+	$write_to_db_category_list = rtrim($write_to_db_category_list, ','); // trim the ending coma
 	if (USER_ID) {
-		// Loop through all categories
-		foreach ($newsletter_categories_db as $category_loop => $category) {
-			//echo $category['category_id'];
-			if (in_array($category['category_id'], $submit_subscription_array) == TRUE) { // Existing record?
-				echo '!';
-			}
-			if (in_array($category['category_id'], $existing_subscription_array['category_list']) == TRUE) { // Existing record?
-				//echo '!';
-			}
-			echo '<br />';
-		}
-	}
-	if ($superCage->post->keyExists('subscriber_email') == TRUE) {
-        $temp = $superCage->post->getRaw('subscriber_email'); // Usually, we would not use that method, but we'll sanitize later.
-		if (preg_match('#^([a-zA-Z0-9]((\.|\-|\_){0,1}[a-zA-Z0-9]){0,})@([a-zA-Z]((\.|\-){0,1}[a-zA-Z0-9]){0,})\.([a-zA-Z]{2,4})$#i', $temp)) {
-	        // The email Address is OK
-			$subscriber_email_warning = '';
-        } else {
-			$subscriber_email_warning = $lang_plugin_newsletter['email_address_invalid'];
-		}
-	}
+        $query = '';
+        // There are two possibilities: new record or update existing record
+        if ($existing_subscription_array['subscription_exists'] == 1) {
+            // We have a returning user. 
+            if ($USER_DATA['user_name']    != $existing_subscription_array['subscriber_name'] ||
+                $USER_DATA['user_email']   != $existing_subscription_array['subscriber_email'] ||
+                $write_to_db_category_list != $existing_subscription_array['category_list']) { // Has there been an actual change
+                $query = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
+                          SET subscriber_name='{$USER_DATA['user_name']}',
+                              subscriber_email='{$USER_DATA['user_email']}',
+                              category_list='{$write_to_db_category_list}'
+                          WHERE user_id='{$USER_DATA['user_id']}'";
+                $existing_subscription_array['category_list'] = $write_to_db_category_list;
+                $existing_subscription_array['category_array'] = explode(',', $existing_subscription_array['category_list']);
+                if ($write_to_db_category_list != '') {
+                    $message = '<div class="cpg_message_success">' . $lang_plugin_newsletter['sbuscription_updated'] . '</div>';
+                } else {
+                    $message = '<div class="cpg_message_success">' . $lang_plugin_newsletter['you_have_unsubscribed'] . '</div>';
+                }
+            } else { // There have been no changes, so there's no need to run a query
+                $message = '<div class="cpg_message_info">' . $lang_plugin_newsletter['no_update_needed'] . '</div>';
+            }
+        } else { // New subscription
+            $time = time();
+            $query = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
+                      SET user_id='{$USER_DATA['user_id']}',
+                          subscriber_active='YES',
+                          subscriber_name='{$USER_DATA['user_name']}',
+                          subscriber_regdate=NOW(),
+                          subscriber_email='{$USER_DATA['user_email']}',
+                          category_list='{$write_to_db_category_list}'";
+            $existing_subscription_array['category_list'] = $write_to_db_category_list;
+            $existing_subscription_array['category_array'] = explode(',', $existing_subscription_array['category_list']);
+            if ($write_to_db_category_list != '') {
+                $message = '<div class="cpg_message_success">' . $lang_plugin_newsletter['successfully_subscribed'] . '</div>';
+            } else {
+                $message = '<div class="cpg_message_validation">' . $lang_plugin_newsletter['at_least_one_category_needed'] . '</div>';
+            }
+        }
+        if ($query != '') {
+            cpg_db_query($query);
+        }
+	} else { // guest --- start
+    	if ($superCage->post->keyExists('subscriber_email') == TRUE) {
+            $temp = $superCage->post->getRaw('subscriber_email'); // Usually, we would not use that method, but we'll sanitize later.
+    		if (preg_match('#^([a-zA-Z0-9]((\.|\-|\_){0,1}[a-zA-Z0-9]){0,})@([a-zA-Z]((\.|\-){0,1}[a-zA-Z0-9]){0,})\.([a-zA-Z]{2,4})$#i', $temp)) {
+    	        // The email Address is OK
+    			$subscriber_email_warning = '';
+            } else {
+    			$subscriber_email_warning = $lang_plugin_newsletter['email_address_invalid'];
+    		}
+    	}
+	} // guest --- end
 }
-*/
+
 
 
 pageheader($lang_plugin_newsletter['newsletter-subscription']);
@@ -99,11 +146,10 @@ pageheader($lang_plugin_newsletter['newsletter-subscription']);
 echo <<< EOT
     <form action="" method="post" name="newsletter_subscribe" id="newsletter_subscribe">
 EOT;
-starttable('100%', $lang_plugin_newsletter['newsletter-subscription'], 3, 'cpg_zebra');
+starttable('100%', $newsletter_icon_array['subscribe'] . $lang_plugin_newsletter['newsletter-subscription'], 3, 'cpg_zebra');
 if (USER_ID) {
     // We have a registered user here --- start
 	$display_submit_button++;
-	$welcome_text = sprintf($lang_plugin_newsletter['welcome_x'], $USER_DATA['user_name']);
 	if ($CONFIG['allow_email_change'] != '0' || $CONFIG['bridge_enable'] != '0' || GALLERY_ADMIN_MODE) {
 		$subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '<a href="profile.php?op=edit_profile">', '</a>');
 	} else {
@@ -112,8 +158,8 @@ if (USER_ID) {
 	$subscriber_email_warning = '<span class="album_stat">' . $subscriber_email_warning . '</span>';
     echo <<< EOT
     <tr>
-        <td colspan="3">
-			{$welcome_text}
+        <td colspan="3" class="tableh2">
+			{$message}
         </td>
     </tr>
     <tr>
@@ -196,7 +242,7 @@ if (USER_ID || $CONFIG['plugin_newsletter_guest_subscriptions'] == '1') {
             } else {
                 $leftcol_output = '';
             }
-			if (in_array($category['category_id'], $existing_subscription_array['category_list']) == TRUE) {
+			if (in_array($category['category_id'], $existing_subscription_array['category_array']) == TRUE) {
 				$checkbox_checked ='checked="checked"';
 			} else {
 				$checkbox_checked ='';
