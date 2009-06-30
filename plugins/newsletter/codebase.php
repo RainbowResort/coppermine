@@ -36,21 +36,6 @@ function newsletter_install() {
 	$superCage = Inspekt::makeSuperCage();
 	$newsletter_installation = 1;
 	require 'include/sql_parse.php';
-	// Set the plugin config defaults
-	$plugin_config_defaults = array(
-	                                'plugin_newsletter_guest_subscriptions' => '0',
-	                                'plugin_newsletter_salutation_for_guests' => 'Dear subscriber,',
-	                                'plugin_newsletter_from_email' => $CONFIG['gallery_admin_email'],
-	                                'plugin_newsletter_from_name' => $USER_DATA['user_name'],
-	                                'plugin_newsletter_mails_per_page' => '1',
-	                                'plugin_newsletter_admin_menu_links' => '1',
-	                                'plugin_newsletter_visitor_menu_links' => '1',
-	                                );
-	foreach ($plugin_config_defaults as $key => $value) {
-	    if (!$CONFIG[$key]) {
-	        $CONFIG[$key] = $value;
-	    }
-	}
 	
     // Perform the database changes
     $db_schema = $thisplugin->fullpath . '/schema.sql';
@@ -64,7 +49,24 @@ function newsletter_install() {
     foreach($sql_query as $q) {
     	cpg_db_query($q);
     }
+	// Set the plugin config defaults
+	$plugin_config_defaults = array(
+	                                'plugin_newsletter_guest_subscriptions' => '0',
+	                                'plugin_newsletter_salutation_for_guests' => 'Dear subscriber,',
+	                                'plugin_newsletter_from_email' => $CONFIG['gallery_admin_email'],
+	                                'plugin_newsletter_from_name' => $USER_DATA['user_name'],
+	                                'plugin_newsletter_mails_per_page' => '1',
+	                                'plugin_newsletter_admin_menu_links' => '1',
+	                                'plugin_newsletter_visitor_menu_links' => '2',
+	                                );
+	foreach ($plugin_config_defaults as $key => $value) {
+	    if (!$CONFIG[$key]) {
+	        $CONFIG[$key] = $value;
+	    }
+	}
+	
 	if ($superCage->post->keyExists('submit')) {
+		newsletter_configuration_submit();
 		return true;
 	} else {
 		return 1;
@@ -247,6 +249,12 @@ function newsletter_admin_menu_button($admin_menu) {
 	    $new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/catlist"';
 	    $new_button .= ' >';
 	    $new_button .= $newsletter_icon_array['catlist'] . $lang_plugin_newsletter['category_list'] . '</a></div>';
+		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/mailing"';
+	    $new_button .= ' >';
+	    $new_button .= $newsletter_icon_array['mailing'] . $lang_plugin_newsletter['create_mailing'] . '</a></div>';
+		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/archive"';
+	    $new_button .= ' title="'.$lang_plugin_newsletter['browse_archived_mailings'].'">';
+	    $new_button .= $newsletter_icon_array['archive'] . $lang_plugin_newsletter['archive'] . '</a></div>';
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
 	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
     }
@@ -274,15 +282,14 @@ function newsletter_menu_button($menu) {
     return $menu;
 }
 
-// Configure function: displays the configuration form
-function newsletter_configure() {
-    global $CONFIG, $thisplugin, $lang_plugin_newsletter, $lang_common, $newsletter_icon_array, $lang_errors, $newsletter_installation;
-    $superCage = Inspekt::makeSuperCage();
+function newsletter_configuration_submit() {
+	global $CONFIG;
+	$superCage = Inspekt::makeSuperCage();
+	// Populate the form fields and run the queries for the submit form
+    $config_changes_counter = 0;
     if (!GALLERY_ADMIN_MODE) {
     	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
-    // Populate the form fields and run the queries for the submit form
-    $config_changes_counter = 0;
 	
 	// plugin_newsletter_guest_subscriptions
     if ($superCage->post->keyExists('plugin_newsletter_guest_subscriptions') == TRUE && ($superCage->post->getInt('plugin_newsletter_guest_subscriptions') == '0'  || $superCage->post->getInt('plugin_newsletter_guest_subscriptions') == '1') ) {
@@ -293,14 +300,7 @@ function newsletter_configure() {
         	$config_changes_counter++;
     	}
     }
-    if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '1') {
-    	$option_output['plugin_newsletter_guest_subscriptions_yes'] = 'checked="checked"';
-    	$option_output['plugin_newsletter_guest_subscriptions_no'] = '';
-    } else { // 
-    	$option_output['plugin_newsletter_guest_subscriptions_yes'] = '';
-    	$option_output['plugin_newsletter_guest_subscriptions_no'] = 'checked="checked"';
-    }
-    
+	
     // plugin_newsletter_salutation_for_guests
     if ($superCage->post->keyExists('plugin_newsletter_salutation_for_guests') == TRUE) {
         if ($CONFIG['plugin_newsletter_salutation_for_guests'] != $superCage->post->getRaw('plugin_newsletter_salutation_for_guests')) {
@@ -320,7 +320,6 @@ function newsletter_configure() {
 	            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_newsletter_from_email']}' WHERE name='plugin_newsletter_from_email'";
 	            cpg_db_query($query);
 	            $config_changes_counter++;
-				$dump_cache++;
 	        }
         }
     }
@@ -354,14 +353,7 @@ function newsletter_configure() {
         	$config_changes_counter++;
     	}
     }
-    if ($CONFIG['plugin_newsletter_admin_menu_links'] == '1') {
-    	$option_output['plugin_newsletter_admin_menu_links_yes'] = 'checked="checked"';
-    	$option_output['plugin_newsletter_admin_menu_links_no'] = '';
-    } else { // 
-    	$option_output['plugin_newsletter_admin_menu_links_yes'] = '';
-    	$option_output['plugin_newsletter_admin_menu_links_no'] = 'checked="checked"';
-    }
-    
+	
     // plugin_newsletter_visitor_menu_links
     if ($superCage->post->keyExists('plugin_newsletter_visitor_menu_links') == TRUE && ($superCage->post->getInt('plugin_newsletter_visitor_menu_links') == '0'  || $superCage->post->getInt('plugin_newsletter_visitor_menu_links') == '1' || $superCage->post->getInt('plugin_newsletter_visitor_menu_links') == '2') ) {
         if ($superCage->post->getInt('plugin_newsletter_visitor_menu_links') != $CONFIG['plugin_newsletter_visitor_menu_links']) {
@@ -371,6 +363,50 @@ function newsletter_configure() {
         	$config_changes_counter++;
     	}
     }
+	
+	return $config_changes_counter;
+}
+
+// Configure function: displays the configuration form
+function newsletter_configure() {
+    global $CONFIG, $thisplugin, $lang_plugin_newsletter, $lang_common, $newsletter_icon_array, $lang_errors, $newsletter_installation;
+    $superCage = Inspekt::makeSuperCage();
+    if (!GALLERY_ADMIN_MODE) {
+    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    }
+    
+    // Form submit?
+    if ($superCage->post->keyExists('submit') == TRUE) {
+        //Check if the form token is valid
+        if(!checkFormToken()){
+            cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+        }
+		$config_changes_counter = newsletter_configuration_submit();
+    	if ($config_changes_counter > 0) {
+    		$additional_submit_information = '<div class="cpg_message_success">' . $lang_plugin_newsletter['changes_saved'] . '</div>';
+    	} else {
+    		$additional_submit_information = '<div class="cpg_message_validation">' . $lang_plugin_newsletter['no_changes'] . '</div>';
+    	}
+    }
+	
+    // Set the option output stuff 
+	if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '1') {
+    	$option_output['plugin_newsletter_guest_subscriptions_yes'] = 'checked="checked"';
+    	$option_output['plugin_newsletter_guest_subscriptions_no'] = '';
+    } else { // 
+    	$option_output['plugin_newsletter_guest_subscriptions_yes'] = '';
+    	$option_output['plugin_newsletter_guest_subscriptions_no'] = 'checked="checked"';
+    }
+    
+
+    if ($CONFIG['plugin_newsletter_admin_menu_links'] == '1') {
+    	$option_output['plugin_newsletter_admin_menu_links_yes'] = 'checked="checked"';
+    	$option_output['plugin_newsletter_admin_menu_links_no'] = '';
+    } else { // 
+    	$option_output['plugin_newsletter_admin_menu_links_yes'] = '';
+    	$option_output['plugin_newsletter_admin_menu_links_no'] = 'checked="checked"';
+    }
+    
     if ($CONFIG['plugin_newsletter_visitor_menu_links'] == '1') {
     	$option_output['plugin_newsletter_visitor_menu_links_sys'] = 'checked="checked"';
     	$option_output['plugin_newsletter_visitor_menu_links_sub'] = '';
@@ -383,19 +419,6 @@ function newsletter_configure() {
     	$option_output['plugin_newsletter_visitor_menu_links_sys'] = '';
     	$option_output['plugin_newsletter_visitor_menu_links_sub'] = '';
     	$option_output['plugin_newsletter_visitor_menu_links_no'] = 'checked="checked"';
-    }
-    
-    // Form submit?
-    if ($superCage->post->keyExists('submit') == TRUE) {
-        //Check if the form token is valid
-        if(!checkFormToken()){
-            cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
-        }
-    	if ($config_changes_counter > 0) {
-    		$additional_submit_information = '<div class="cpg_message_success">' . $lang_plugin_newsletter['changes_saved'] . '</div>';
-    	} else {
-    		$additional_submit_information = '<div class="cpg_message_validation">' . $lang_plugin_newsletter['no_changes'] . '</div>';
-    	}
     }
 
 	// Create the table row that is displayed during initial install
@@ -421,7 +444,7 @@ EOT;
                             {$lang_plugin_newsletter['allow_guest_subscriptions']}
                         </td>
                         <td valign="top" class="tableb">
-							<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_guest_subscriptions_yes']} /> 
+							<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_guest_subscriptions_yes']} disabled="disabled" readonly="readonly" /> 
                         	<label for="plugin_newsletter_guest_subscriptions_yes">{$lang_common['yes']}</label>
                         	&nbsp;
                         	<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_no" class="checkbox" value="0" {$option_output['plugin_newsletter_guest_subscriptions_no']} /> 
@@ -433,7 +456,7 @@ EOT;
                             {$lang_plugin_newsletter['salutation_for_guests']}
                         </td>
                         <td valign="top" class="tableb tableb_alternate">
-							<input type="text" name="plugin_newsletter_salutation_for_guests" id="plugin_newsletter_salutation_for_guests" class="textinput" size="30" maxlength="100" value="{$CONFIG['plugin_newsletter_salutation_for_guests']}" />
+							<input type="text" name="plugin_newsletter_salutation_for_guests" id="plugin_newsletter_salutation_for_guests" class="textinput" size="30" maxlength="100" value="{$CONFIG['plugin_newsletter_salutation_for_guests']}" disabled="disabled" readonly="readonly" />
                         </td>
                     </tr>
 					<tr>

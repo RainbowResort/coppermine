@@ -38,7 +38,8 @@ INSERT IGNORE INTO CPG_plugin_newsletter_categories ( `category_id`, `name` , `o
 
 CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_mailings` (
   mailing_id int(11) NOT NULL auto_increment,
-  subject varchar(25) NOT NULL default '',
+  subject varchar(100) NOT NULL default '',
+  salutation varchar(100) NOT NULL default '',
   body text NOT NULL,
   date_sent datetime NOT NULL default '0000-00-00 00:00:00',
   category_id int(11) NOT NULL,

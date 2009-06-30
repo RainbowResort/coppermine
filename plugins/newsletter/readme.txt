@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-06-30 [A] Added mailing page {GauGau}
+2009-06-30 [B] Fixed bug with config changes entered during plugin install not being taken into account by moving the queries into a separate function {GauGau}
 2009-06-30 [A] Added more icons {GauGau}
 2009-06-30 [B] Added subscribe feature for registered users that wasn't working yet {GauGau}
 2009-06-30 [B] Hide menu link if visitor isn't allowed to subscribe in the first place {GauGau}
@@ -58,4 +60,3 @@ Todo
 * Populate subscriber stats on catlist from subscribers table instead of the
 * Add confirmation JS dialog for category deleting
 * Add a check to all files if the plugin is installed in the first place or if an ex-subscriber is accessing the link in error
-* Config changes entered during plugin install are not being taken into account

@@ -16,12 +16,20 @@ function newsletter_initialize() {
 		$newsletter_icon_array['newsletter'] = '<img src="./plugins/newsletter/images/icons/newsletter.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['catlist'] = '<img src="./plugins/newsletter/images/icons/catlist.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['subscribe'] = '<img src="./plugins/newsletter/images/icons/subscribe.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['mailing'] = '<img src="./plugins/newsletter/images/icons/mailing.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['archive'] = '<img src="./plugins/newsletter/images/icons/archive.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['locked'] = '<img src="./plugins/newsletter/images/icons/locked.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['unlocked'] = '<img src="./plugins/newsletter/images/icons/unlocked.png" width="16" height="16" border="0" alt="" class="icon" />';
 	} else {
 		$newsletter_icon_array['config'] = '';
 		$newsletter_icon_array['announcement'] = '';
 		$newsletter_icon_array['newsletter'] = '';
 		$newsletter_icon_array['catlist'] = '';
 		$newsletter_icon_array['subscribe'] = '';
+		$newsletter_icon_array['mailing'] = '';
+		$newsletter_icon_array['archive'] = '';
+		$newsletter_icon_array['locked'] = '<img src="./plugins/newsletter/images/icons/locked.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['unlocked'] = '<img src="./plugins/newsletter/images/icons/unlocked.png" width="16" height="16" border="0" alt="" class="icon" />';
 	}
 	$newsletter_icon_array['plugin_manager'] = cpg_fetch_icon('plugin_mgr', 2);
 	$newsletter_icon_array['ok'] = cpg_fetch_icon('ok', 2);
@@ -29,6 +37,8 @@ function newsletter_initialize() {
 	$newsletter_icon_array['edit'] = cpg_fetch_icon('edit', 0);
 	$newsletter_icon_array['delete'] = cpg_fetch_icon('delete', 0);
 	$newsletter_icon_array['add'] = cpg_fetch_icon('add', 2);
+	$newsletter_icon_array['visible'] = cpg_fetch_icon('online', 0);
+	$newsletter_icon_array['invisible'] = cpg_fetch_icon('offline', 0);
 	$return['language'] = $lang_plugin_newsletter;
 	$return['icon'] = $newsletter_icon_array;
 	return $return;
@@ -75,5 +85,20 @@ function newsletter_frequency_options($highlighted = '0') {
 	    $return .= '>' . $value . '</option>' . $LINEBREAK;
 	}
 	return $return;
+}
+
+function newsletter_install_check() {
+	global $CPG_PLUGINS, $lang_plugin_newsletter;
+	$hit = 0;
+	foreach ($CPG_PLUGINS as $installed_plugins) {
+		if ($installed_plugins->path == 'newsletter') {
+			$hit++;
+		}
+	}
+	if ($hit != 0) {
+		return;
+	} else {
+		cpgRedirectPage('index.php', $lang_plugin_newsletter['outdated_link'], $lang_plugin_newsletter['outdated_link_explain'], 0, 'error');
+	}
 }
 ?>

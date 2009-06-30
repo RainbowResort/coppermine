@@ -18,6 +18,7 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 // Initialize language and iconsrequire_once './plugins/newsletter/init.inc.php';
+newsletter_install_check();
 $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
@@ -78,7 +79,7 @@ if ($superCage->post->keyExists('submit')) {
 	$submit_subscription_array = $superCage->post->getInt('subscribe');
 	$write_to_db_category_list = '';
 	foreach ($newsletter_categories_db as $category) {
-	    if (in_array($category['category_id'], $submit_subscription_array) == TRUE && $category['open_for_subscription'] == 'YES')  { // Existing record?
+	    if (in_array($category['category_id'], $submit_subscription_array) == TRUE && ($category['open_for_subscription'] == 'YES' || GALLERY_ADMIN_MODE))  { // Existing record?
 	        $write_to_db_category_list .= $category['category_id'] . ',';
 	    }
 	}
@@ -154,6 +155,13 @@ if (USER_ID) {
 		$subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '<a href="profile.php?op=edit_profile">', '</a>');
 	} else {
 		$subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '', '');
+	}
+	if ($USER_DATA['user_email'] != $existing_subscription_array['subscriber_email']) { // Update email record if profile email differs from plugin db record
+		$existing_subscription_array['subscriber_email'] = $USER_DATA['user_email'];
+		$query = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
+				  SET subscriber_email='{$USER_DATA['user_email']}' 
+				  WHERE user_id='{$USER_DATA['user_id']}'";
+		cpg_db_query($query);
 	}
 	$subscriber_email_warning = '<span class="album_stat">' . $subscriber_email_warning . '</span>';
     echo <<< EOT
