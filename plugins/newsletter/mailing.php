@@ -105,6 +105,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	} else {
 		$publicly_viewable = '<span title="'.$lang_plugin_newsletter['not_viewable_explanation'].'">'.$newsletter_icon_array['invisible'].'</span>';
 	}
+	$frequency = count(newsletter_mailing_frequency($row['category_id']));
 	echo <<< EOT
 				<tr>
 					<td valign="top">
@@ -121,7 +122,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 						{$publicly_viewable}
 					</td>
 					<td valign="top">
-						<span class="album_stat">Frequency stats here</span>
+						<span class="album_stat">{$frequency}</span>
 					</td>
 					<td valign="top">
 						<span class="album_stat">Number of subscriptions here</span>
@@ -135,6 +136,7 @@ echo <<< EOT
 	</tr>
 EOT;
 endtable();
+
 pagefooter();
 die;
 ?>

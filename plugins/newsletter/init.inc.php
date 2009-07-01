@@ -101,4 +101,19 @@ function newsletter_install_check() {
 		cpgRedirectPage('index.php', $lang_plugin_newsletter['outdated_link'], $lang_plugin_newsletter['outdated_link_explain'], 0, 'error');
 	}
 }
+
+function newsletter_mailing_frequency($category_id) {
+    global $CONFIG;
+    // Get all mailings form the specified category
+    $result = cpg_db_query("SELECT date_sent FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings
+                            WHERE category_id='{$category_id}'");
+    $loopCounter = 0;
+    $newsletter_mailings_date = array();
+    while ($row = mysql_fetch_assoc($result)) {
+        $newsletter_mailings_date[] = $row['date_sent'];
+        $loopCounter++;
+    }
+    mysql_free_result($result);
+    return $newsletter_mailings_date;
+}
 ?>
