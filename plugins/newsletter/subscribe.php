@@ -113,7 +113,7 @@ if ($superCage->post->keyExists('submit')) {
                       SET user_id='{$USER_DATA['user_id']}',
                           subscriber_active='YES',
                           subscriber_name='{$USER_DATA['user_name']}',
-                          subscriber_regdate=NOW(),
+                          subscriber_regdate='" . time() . "',
                           subscriber_email='{$USER_DATA['user_email']}',
                           category_list='{$write_to_db_category_list}'";
             $existing_subscription_array['category_list'] = $write_to_db_category_list;

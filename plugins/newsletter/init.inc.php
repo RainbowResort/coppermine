@@ -116,4 +116,28 @@ function newsletter_mailing_frequency($category_id) {
     mysql_free_result($result);
     return $newsletter_mailings_date;
 }
+
+function newsletter_mailing_stats($category_id) {
+	global $CONFIG;
+	$mailing_dates = newsletter_mailing_frequency($category_id);
+	if (count($mailing_dates) < 2) { // We don't have enough data for stats
+		$mailings_per_year = count($mailing_dates);
+	} else {
+		$max_id = count($mailing_dates) - 1;
+		$mailing_dates_temp = $mailing_dates;
+		$mailing_dates_temp[count($mailing_dates)] = $mailing_dates_temp[$max_id];
+		$difference_days =  round(abs($mailing_dates[$max_id] - $mailing_dates[0])/86400);
+		foreach ($mailing_dates as $key => $value) {
+			$total_days += abs($mailing_dates_temp[($key+1)] - $mailing_dates_temp[$key])/86400;
+		}
+		$average_number_of_days_between_mailings = $total_days/count($mailing_dates);
+		$mailings_per_year = 360/$average_number_of_days_between_mailings;
+	}
+	$result = cpg_db_query("SELECT frequency_year FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories
+                            WHERE category_id='{$category_id}' LIMIT 1");
+	list($category_frequency) = mysql_fetch_row($result);
+	mysql_free_result($result);
+	$return = array($mailings_per_year, $category_frequency);
+	return $return;
+}
 ?>

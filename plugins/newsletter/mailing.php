@@ -105,7 +105,18 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	} else {
 		$publicly_viewable = '<span title="'.$lang_plugin_newsletter['not_viewable_explanation'].'">'.$newsletter_icon_array['invisible'].'</span>';
 	}
-	$frequency = count(newsletter_mailing_frequency($row['category_id']));
+	$frequency = newsletter_mailing_stats($row['category_id']);
+	$color_array = array(0 => '#FF0000', 20 => '#EA3102', 40 => '#D56904', 60 => '#CA8405', 80 => '#B9AE08', 100 => '#ACCF09', 120 => '#A5E40B', 140 => '#ACCF09', 160 => '#B9AE08', 180 => '#CA8405', 200 => '#D56904', 220 => '#EA3102', 240 => '#FF0000');
+	$match_percentage = round(100*$frequency[0]/$frequency[1]);
+	foreach ($color_array as $key => $value) {
+		if ($match_percentage >= $key) {
+			$match_color = $value;
+		}
+	}
+	if ($match_percentage > 200) {
+		$match_percentage = 200;
+	}
+	$frequency_output = theme_display_bar(round($frequency[0]),$frequency[1],$match_percentage,'', '', '/'.$frequency[1],$match_color,'');
 	echo <<< EOT
 				<tr>
 					<td valign="top">
@@ -122,7 +133,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 						{$publicly_viewable}
 					</td>
 					<td valign="top">
-						<span class="album_stat">{$frequency}</span>
+						<span class="album_stat">{$frequency_output}</span>
 					</td>
 					<td valign="top">
 						<span class="album_stat">Number of subscriptions here</span>
@@ -136,7 +147,6 @@ echo <<< EOT
 	</tr>
 EOT;
 endtable();
-
 pagefooter();
 die;
 ?>
