@@ -47,6 +47,8 @@ $lang_plugin_newsletter['administration_links'] = 'Display newsletter admin link
 $lang_plugin_newsletter['display_newsletter_in_menu_for_visitor'] = 'Display newsletter in menu for the regular visitor?';
 $lang_plugin_newsletter['in_sys_menu'] = 'in Sys-Menu';
 $lang_plugin_newsletter['in_sub_menu'] = 'in Sub-Menu';
+$lang_plugin_newsletter['link_to_newsletter_index_page'] = 'link to newsletter index page';
+$lang_plugin_newsletter['several_links_control'] = 'several links to each newsletter control';
 $lang_plugin_newsletter['changes_saved'] = 'Your changes have been saved';
 $lang_plugin_newsletter['no_changes'] = 'There have been no changes or the values you entered where invalid';
 $lang_plugin_newsletter['submit_to_install'] = 'Submit this form to install the plugin';
@@ -119,5 +121,10 @@ $lang_plugin_newsletter['x_mailings'] = '%s mailings';
 $lang_plugin_newsletter['you_need_to_select_a_category'] = 'You need to select a category!';
 $lang_plugin_newsletter['you_need_at_least_one_category'] = 'You need at least one category!';
 $lang_plugin_newsletter['create_category'] = 'Create category';
+$lang_plugin_newsletter['several_ways_to_browse_archive'] = 'There are several ways to browse the archive.';
+$lang_plugin_newsletter['choose_method'] = 'Choose a method:';
+$lang_plugin_newsletter['browse_by_category'] = 'Browse by category';
+$lang_plugin_newsletter['browse_by_date'] = 'Browse by date';
+$lang_plugin_newsletter['search_the_archive'] = 'Search the archive';
 
 ?>

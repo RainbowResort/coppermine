@@ -21,12 +21,156 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
-$display_submit_button = 0;
-$subscriber_email_warning = '';
 $USER_DATA = array_merge($USER_DATA, $cpg_udb->get_user_infos(USER_ID));
+$category = '';
+$mailing = '';
+if (in_array('js/jquery.treeview.min.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'js/jquery.treeview.min.js';
+}
+if (in_array('plugins/newsletter/js/archive.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'plugins/newsletter/js/archive.js';
+}
 
-pageheader($lang_plugin_newsletter['archive']);
-echo 'Nothing here yet...';
+// Sanitize URL parameters
+if ($superCage->get->keyExists('category')) {
+$category = $superCage->get->getInt('category');
+}
+if ($superCage->get->keyExists('mailing')) {
+$mailing = $superCage->get->getInt('mailing');
+}
+
+
+function browse_by_category_output() {
+	global $CONFIG, $LINEBREAK, $lang_date;
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories");
+	$loopCounter = 0;
+	$newsletter_categories_db = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$newsletter_categories_db[$loopCounter]['category_id']           = $row['category_id'];
+		$newsletter_categories_db[$loopCounter]['name']                  = $row['name'];
+		$newsletter_categories_db[$loopCounter]['description']           = $row['description'];
+		$newsletter_categories_db[$loopCounter]['open_for_subscription'] = $row['open_for_subscription'];
+		$newsletter_categories_db[$loopCounter]['public_view']           = $row['public_view'];
+		$newsletter_categories_db[$loopCounter]['frequency_year']        = $row['frequency_year'];
+		$newsletter_categories_db[$loopCounter]['subscription_count']    = $row['subscription_count'];
+		$loopCounter++;
+	}
+	mysql_free_result($result);
+	$return = <<< EOT
+	{$CONFIG['gallery_name']} {$lang_plugin_newsletter['archive']}
+	<ul id="archive_by_category" class="treeview">
+EOT;
+	foreach ($newsletter_categories_db as $category_loop => $cat_row) {
+		if ($cat_row['public_view'] == 'YES' || GALLERY_ADMIN_MODE) { // It's allowed to display that category
+			$return .= '		<li>';
+			$return .= '<a href="index.php?file=newsletter/archive&amp;category=' . $cat_row['category_id'] . '">';
+			$return .= $cat_row['name'];
+			$return .= '</a>';
+			$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings WHERE category_id='{$cat_row['category_id']}'");
+			if (mysql_num_rows($result)) {
+				$return .= $LINEBREAK . '			<ul>'. $LINEBREAK;
+			}
+			while ($row = mysql_fetch_assoc($result)) {
+				$return .= '				<li>' . $LINEBREAK;
+				$return .= '				<a href="index.php?file=newsletter/archive&amp;mailing=' . $row['mailing_id'] . '">';
+				$return .= $row['subject'] .'</a> (';
+				$return .= localised_date($row['date_sent'], $lang_date['comment']);
+				$return .= ')';
+				$return .= $LINEBREAK;
+				$return .= '				</li>' . $LINEBREAK;
+			}
+			if (mysql_num_rows($result)) {
+				$return .= $LINEBREAK . '			</ul>'. $LINEBREAK;
+			}
+			mysql_free_result($result);
+			$return .= '		</li>' . $LINEBREAK;
+		}
+	}
+	$return .= <<< EOT
+	</ul>
+EOT;
+	return $return;
+}
+
+function browse_by_date_output() {
+	global $CONFIG, $LINEBREAK, $lang_date;
+	$result = cpg_db_query("SELECT category_id,name,public_view  FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories");
+	$newsletter_categories_public_view = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$newsletter_categories_public_view[$row['category_id']] = $row['public_view'];
+		$newsletter_categories_name[$row['category_id']] = $row['name'];
+	}
+	mysql_free_result($result);
+	unset($row);
+	
+	$return = <<< EOT
+	{$CONFIG['gallery_name']} {$lang_plugin_newsletter['archive']}
+EOT;
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings ORDER BY date_sent");
+	if (mysql_num_rows($result)) {
+		$return .= $LINEBREAK . '		<ul id="archive_by_date" class="treeview">'. $LINEBREAK;
+	}
+	while ($row = mysql_fetch_assoc($result)) {
+		if ($newsletter_categories_public_view[$row['category_id']] == 'YES' || GALLERY_ADMIN_MODE) {
+			$return .= '			<li>' . $LINEBREAK;
+			$return .= '			<a href="index.php?file=newsletter/archive&amp;mailing=' . $row['mailing_id'] . '">';
+			$return .= $row['subject'] .'</a> (';
+			$return .= localised_date($row['date_sent'], $lang_date['comment']);
+			$return .= ')';
+			$return .= $LINEBREAK;
+			$return .= '			</li>' . $LINEBREAK;
+		}
+	}
+	if (mysql_num_rows($result)) {
+		$return .= $LINEBREAK . '		</ul>'. $LINEBREAK;
+	}
+	mysql_free_result($result);
+	return $return;
+}
+
+pageheader($lang_plugin_newsletter['archive'], '<link rel="stylesheet" href="css/treeview.css" type="text/css" />');
+starttable('100%', $newsletter_icon_array['archive'] . $lang_plugin_newsletter['archive'], 3);
+if ($category != '') {
+	// The visitor has chosen to browse by category
+	echo 'Not implemented yet';
+} elseif($mailing != '') {
+	// Display an individual mailing
+	echo 'Not implemented yet';
+} else { // Basic selection screen if there are absolutely no $_GET data that make sense
+	$browse_by_category_output = browse_by_category_output();
+	$browse_by_date_output = browse_by_date_output();
+	echo <<< EOT
+	<tr>
+		<td valign="top" colspan="3" class="tableh2">
+			{$lang_plugin_newsletter['choose_method']}
+		</td>
+	</tr>
+	<tr>
+		<th class="tableb" style="width:33%">
+			{$lang_plugin_newsletter['browse_by_category']}
+		</th>
+		<th class="tableb tableb_alternate" style="width:33%">
+			{$lang_plugin_newsletter['browse_by_date']}
+		</th>
+		<th class="tableb" style="width:33%">
+			{$lang_plugin_newsletter['search_the_archive']}
+		</th>
+	</tr>
+	<tr>
+		<td class="tableb" valign="top">
+			{$browse_by_category_output}
+		</td>
+		<td class="tableb tableb_alternate" valign="top">
+			{$browse_by_date_output}
+		</td>
+		<td class="tableb" valign="top">
+			search form not implemented yet
+		</td>
+
+	</tr>
+EOT;
+}
+endtable();
 pagefooter();
 die;
 ?>

@@ -2,9 +2,12 @@
 function newsletter_initialize() {
 	global $CONFIG, $JS, $lang_plugin_newsletter, $newsletter_icon_array;
 	$superCage = Inspekt::makeSuperCage();
-	
-	$JS['includes'][] = 'js/jquery.spinbutton.js';
-	$JS['includes'][] = 'plugins/newsletter/js/script.js';
+	if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
+		$JS['includes'][] = 'js/jquery.spinbutton.js';
+	}
+	if (in_array('plugins/newsletter/js/script.js', $JS['includes']) != TRUE) {
+		$JS['includes'][] = 'plugins/newsletter/js/script.js';
+	}
 	
 	require "./plugins/newsletter/lang/english.php";
 	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/newsletter/lang/{$CONFIG['lang']}.php")) {

@@ -237,9 +237,8 @@ EOT;
 
 function newsletter_admin_menu_button($admin_menu) {
     global $CONFIG;
-    if ($CONFIG['plugin_newsletter_admin_menu_links'] == 1) {
-    	// Initialize language and icons
-    	require_once './plugins/newsletter/init.inc.php';
+    if ($CONFIG['plugin_newsletter_admin_menu_links'] == '2') {
+    	require_once './plugins/newsletter/init.inc.php'; // Initialize language and icons
     	$newsletter_init_array = newsletter_initialize();
     	$lang_plugin_newsletter = $newsletter_init_array['language']; 
     	$newsletter_icon_array = $newsletter_init_array['icon'];
@@ -254,7 +253,16 @@ function newsletter_admin_menu_button($admin_menu) {
 	    $new_button .= $newsletter_icon_array['archive'] . $lang_plugin_newsletter['archive'] . '</a></div>';
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
 	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
-    }
+    } elseif($CONFIG['plugin_newsletter_admin_menu_links'] == '1') {
+    	require_once './plugins/newsletter/init.inc.php'; // Initialize language and icons
+    	$newsletter_init_array = newsletter_initialize();
+    	$lang_plugin_newsletter = $newsletter_init_array['language']; 
+    	$newsletter_icon_array = $newsletter_init_array['icon'];
+	    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/index">';
+	    $new_button .= $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'] . '</a></div>';
+	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
+	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
+	}
     return $admin_menu;
 }
 
@@ -342,7 +350,7 @@ function newsletter_configuration_submit() {
     }
     
     // plugin_newsletter_admin_menu_links
-    if ($superCage->post->keyExists('plugin_newsletter_admin_menu_links') == TRUE && ($superCage->post->getInt('plugin_newsletter_admin_menu_links') == '0'  || $superCage->post->getInt('plugin_newsletter_admin_menu_links') == '1') ) {
+    if ($superCage->post->keyExists('plugin_newsletter_admin_menu_links') == TRUE && ($superCage->post->getInt('plugin_newsletter_admin_menu_links') == '0'  || $superCage->post->getInt('plugin_newsletter_admin_menu_links') == '1' || $superCage->post->getInt('plugin_newsletter_admin_menu_links') == '2') ) {
         if ($superCage->post->getInt('plugin_newsletter_admin_menu_links') != $CONFIG['plugin_newsletter_admin_menu_links']) {
         	$CONFIG['plugin_newsletter_admin_menu_links'] = $superCage->post->getInt('plugin_newsletter_admin_menu_links');
         	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_newsletter_admin_menu_links']}' WHERE name='plugin_newsletter_admin_menu_links'";
@@ -397,12 +405,18 @@ function newsletter_configure() {
     
 
     if ($CONFIG['plugin_newsletter_admin_menu_links'] == '1') {
-    	$option_output['plugin_newsletter_admin_menu_links_yes'] = 'checked="checked"';
+    	$option_output['plugin_newsletter_admin_menu_links_all'] = '';
+		$option_output['plugin_newsletter_admin_menu_links_single'] = 'checked="checked"';
     	$option_output['plugin_newsletter_admin_menu_links_no'] = '';
-    } else { // 
-    	$option_output['plugin_newsletter_admin_menu_links_yes'] = '';
+    } elseif ($CONFIG['plugin_newsletter_admin_menu_links'] == '2') { // 
+    	$option_output['plugin_newsletter_admin_menu_links_all'] = 'checked="checked"';
+		$option_output['plugin_newsletter_admin_menu_links_single'] = '';
+    	$option_output['plugin_newsletter_admin_menu_links_no'] = '';
+    } else {
+    	$option_output['plugin_newsletter_admin_menu_links_all'] = '';
+		$option_output['plugin_newsletter_admin_menu_links_single'] = '';
     	$option_output['plugin_newsletter_admin_menu_links_no'] = 'checked="checked"';
-    }
+	}
     
     if ($CONFIG['plugin_newsletter_visitor_menu_links'] == '1') {
     	$option_output['plugin_newsletter_visitor_menu_links_sys'] = 'checked="checked"';
@@ -488,8 +502,11 @@ EOT;
 							<input type="radio" name="plugin_newsletter_admin_menu_links" id="plugin_newsletter_admin_menu_links_no" class="checkbox" value="0" {$option_output['plugin_newsletter_admin_menu_links_no']} /> 
                         	<label for="plugin_newsletter_admin_menu_links_no">{$lang_common['no']}</label>
                         	&nbsp;
-                        	<input type="radio" name="plugin_newsletter_admin_menu_links" id="plugin_newsletter_admin_menu_links_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_admin_menu_links_yes']} /> 
-                        	<label for="plugin_newsletter_admin_menu_links_yes">{$lang_common['yes']}</label>
+                        	<input type="radio" name="plugin_newsletter_admin_menu_links" id="plugin_newsletter_admin_menu_links_single" class="checkbox" value="1" {$option_output['plugin_newsletter_admin_menu_links_single']} /> 
+                        	<label for="plugin_newsletter_admin_menu_links_single">{$lang_common['yes']}: {$lang_plugin_newsletter['link_to_newsletter_index_page']}</label>
+							&nbsp;
+                        	<input type="radio" name="plugin_newsletter_admin_menu_links" id="plugin_newsletter_admin_menu_links_all" class="checkbox" value="2" {$option_output['plugin_newsletter_admin_menu_links_all']} /> 
+                        	<label for="plugin_newsletter_admin_menu_links_all">{$lang_common['yes']}: {$lang_plugin_newsletter['several_links_control']}</label>
                         </td>
                     </tr>
                     <tr>

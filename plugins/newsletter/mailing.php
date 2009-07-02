@@ -142,7 +142,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	} else {
 		$open_for_subscription = '<span title="'.$lang_plugin_newsletter['closed_explanation'].'">'.$newsletter_icon_array['locked'].'</span>';
 	}
-	if ($row['open_for_subscription'] == 'YES') {
+	if ($row['public_view'] == 'YES') {
 		$publicly_viewable = '<span title="'.$lang_plugin_newsletter['viewable_explanation'].'">'.$newsletter_icon_array['visible'].'</span>';
 	} else {
 		$publicly_viewable = '<span title="'.$lang_plugin_newsletter['not_viewable_explanation'].'">'.$newsletter_icon_array['invisible'].'</span>';
