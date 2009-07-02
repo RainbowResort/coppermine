@@ -112,5 +112,12 @@ $lang_plugin_newsletter['body'] = 'Body';
 $lang_plugin_newsletter['default_body'] = 'You\'re receiving this email because you have subscribed to it at %s. Thanks for reading.';
 $lang_plugin_newsletter['unsubscribe_text'] = 'To unsubscribe from future mailings, click on the following link:';
 $lang_plugin_newsletter['category'] = 'Category';
+$lang_plugin_newsletter['one_subscription'] = '1 subscription';
+$lang_plugin_newsletter['x_subscriptions'] = '%s subscriptions';
+$lang_plugin_newsletter['one_mailing'] = '1 mailing';
+$lang_plugin_newsletter['x_mailings'] = '%s mailings';
+$lang_plugin_newsletter['you_need_to_select_a_category'] = 'You need to select a category!';
+$lang_plugin_newsletter['you_need_at_least_one_category'] = 'You need at least one category!';
+$lang_plugin_newsletter['create_category'] = 'Create category';
 
 ?>

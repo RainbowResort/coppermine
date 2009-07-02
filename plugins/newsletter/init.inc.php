@@ -140,4 +140,22 @@ function newsletter_mailing_stats($category_id) {
 	$return = array($mailings_per_year, $category_frequency);
 	return $return;
 }
+
+function newsletter_subscriptions_per_category($category_id) {
+    global $CONFIG;
+    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$category_id},category_list) > 0 LIMIT 1");
+    list($subscription_total) = mysql_fetch_row($result);
+    mysql_free_result($result);
+    return $subscription_total;
+}
+
+function newsletter_mailings_per_category($category_id) {
+    global $CONFIG;
+    $query = "SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings
+                WHERE category_id='{$category_id}'";
+    $result = cpg_db_query($query);
+    list($mailings_count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+    return $mailings_count;
+}
 ?>

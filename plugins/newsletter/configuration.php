@@ -10,12 +10,14 @@ $description = $lang_plugin_newsletter['config_description'] . '<br />' . $lang_
 $author = sprintf($lang_plugin_newsletter['author'],
 	'<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
 	
-$version = '0.8';
+$version = '0.9';
 
 $extra_info = <<<EOT
     <a href="index.php?file=newsletter/admin" class="admin_menu">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>&nbsp;
-    <a href="index.php?file=newsletter/catlist" class="admin_menu">{$newsletter_icon_array['catlist']}{$lang_plugin_newsletter['category_list']}</a>&nbsp;
+    <a href="index.php?file=newsletter/catlist" class="admin_menu">{$newsletter_icon_array['catlist']}{$lang_plugin_newsletter['newsletter_categories']}</a>&nbsp;
     <a href="index.php?file=newsletter/subscribe" class="admin_menu">{$newsletter_icon_array['subscribe']}{$lang_plugin_newsletter['subscribe']}</a>&nbsp;
+    <a href="index.php?file=newsletter/mailing" class="admin_menu">{$newsletter_icon_array['mailing']}{$lang_plugin_newsletter['create_mailing']}</a>&nbsp;
+    <a href="index.php?file=newsletter/archive" class="admin_menu" title="{$lang_plugin_newsletter['browse_archived_mailings']}">{$newsletter_icon_array['archive']}{$lang_plugin_newsletter['archive']}</a>&nbsp;
     <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>&nbsp;
 EOT;
 

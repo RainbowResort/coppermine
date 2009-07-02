@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_categories` (
   open_for_subscription enum('YES','NO') NOT NULL default 'NO',
   public_view enum('YES','NO') NOT NULL default 'NO',
   frequency_year INT( 10 ) NOT NULL default 360,
-  subscription_count int(11) NOT NULL default 0,
   PRIMARY KEY  (category_id)
 ) TYPE=MyISAM COMMENT='Contains the categories of newsletters';
 

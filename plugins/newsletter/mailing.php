@@ -21,6 +21,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
+$message = '';
 
 if (!GALLERY_ADMIN_MODE) {
 	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
@@ -43,24 +44,65 @@ mysql_free_result($result);
 
 // Populate the form defaults
 if ($superCage->post->keyExists('salutation')) {
-	$salutation_text = $superCage->post->getRaw('salutation');
+	$salutation_text = $superCage->post->getEscaped('salutation');
 } else {
 	$salutation_text = $lang_plugin_newsletter['default_salutation'];
 }
 if ($superCage->post->keyExists('subject')) {
-	$subject_text = $superCage->post->getRaw('subject');
+	$subject_text = $superCage->post->getEscaped('subject');
 } else {
 	$subject_text = sprintf($lang_plugin_newsletter['default_subject'], $CONFIG['gallery_name'], localised_date(time(), $lang_date['lastcom']));
 }
 if ($superCage->post->keyExists('body')) {
-	$body_text = $superCage->post->getRaw('body');
+	$body_text = $superCage->post->getEscaped('body');
 } else {
 	$body_text = sprintf($lang_plugin_newsletter['default_body'], $CONFIG['gallery_name']);
 }
 $salutation_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_newsletter['salutation']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_newsletter['salutation_explain']))), 470, 245);
 
+if ($superCage->post->keyExists('submit')) { // The form has been submit
+    //Check if the form token is valid
+    if(!checkFormToken()){
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+    if ($superCage->post->keyExists('category')) {
+        // Populate the database and go to the send screen
+        $query = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings 
+                  SET subject='{$superCage->post->getRaw('subject')}',
+                      salutation='{$superCage->post->getRaw('salutation')}',
+                      body='{$superCage->post->getRaw('body')}',
+                      date_sent='" . time() . "',
+                      category_id='{$superCage->post->getInt('category')}',
+                      completed=0";
+        cpg_db_query($query);
+        echo 'Work in progress. At this stage, we need to perform the redirect.';
+        die;
+    } else {
+        $message = <<< EOT
+        <div class="cpg_message_error">
+            {$lang_plugin_newsletter['you_need_to_select_a_category']}
+        </div>
+EOT;
+    }
+}
+
+
+
+
 pageheader($lang_plugin_newsletter['create_mailing']);
+echo <<< EOT
+    <form action="" method="post" name="newsletter_catlist" id="newsletter_catlist">
+EOT;
 starttable('100%', $newsletter_icon_array['mailing'] . $lang_plugin_newsletter['create_mailing'], 2);
+if ($message != '') {
+    echo <<< EOT
+    <tr>
+        <td colspan="3">
+            {$message}
+        </td>
+    </tr>
+EOT;
+}
 echo <<< EOT
 	<tr>
 		<td class="tableb">
@@ -117,6 +159,18 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 		$match_percentage = 200;
 	}
 	$frequency_output = theme_display_bar(round($frequency[0]),$frequency[1],$match_percentage,'', '', '/'.$frequency[1],$match_color,'');
+	$number_of_subscriptions = newsletter_subscriptions_per_category($row['category_id']);
+	if ($number_of_subscriptions == 1) {
+	    $number_of_subscriptions = $lang_plugin_newsletter['one_subscription'];
+	} else {
+	    $number_of_subscriptions = sprintf($lang_plugin_newsletter['x_subscriptions'], $number_of_subscriptions);
+	}
+	$mailings_count = newsletter_mailings_per_category($row['category_id']);
+	if ($mailings_count == 1) {
+	    $mailings_count = $lang_plugin_newsletter['one_mailing'];
+	} else {
+	    $mailings_count = sprintf($lang_plugin_newsletter['x_mailings'], $mailings_count);
+	}
 	echo <<< EOT
 				<tr>
 					<td valign="top">
@@ -133,20 +187,51 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 						{$publicly_viewable}
 					</td>
 					<td valign="top">
+						<span class="album_stat">{$mailings_count}</span>
+					</td>
+					<td valign="top" width="220">
 						<span class="album_stat">{$frequency_output}</span>
 					</td>
 					<td valign="top">
-						<span class="album_stat">Number of subscriptions here</span>
+						<span class="album_stat">{$number_of_subscriptions}</span>
 					</td>
 				</tr>
 EOT;
+    $loopCounter++;
 }
+
+list($timestamp, $form_token) = getFormToken();
 echo <<< EOT
 			</table>
 		</td>
 	</tr>
 EOT;
+if ($loopCounter == 0) {
+    // There is no category available yet. Let's send the user to the category creation screen first
+    echo <<< EOT
+    <tr>
+        <td colspan="3" class="tableb">
+            <div class="cpg_message_error">
+                {$lang_plugin_newsletter['you_need_at_least_one_category']}&nbsp;
+                <a href="index.php?file=newsletter/catlist" class="admin_menu admin">{$newsletter_icon_array['catlist']}{$lang_plugin_newsletter['create_category']}</a>
+            </div>
+        </td>
+    </tr>
+EOT;
+}
+echo <<< EOT
+    <tr>
+        <td class="tablef" colspan="3">
+            <input type="hidden" name="form_token" value="{$form_token}" />
+            <input type="hidden" name="timestamp" value="{$timestamp}" />
+            <button type="submit" class="button" name="submit" id="submit" value="{$lang_common['ok']}">{$newsletter_icon_array['ok']}{$lang_common['ok']}</button>
+        </td>
+    </tr>
+EOT;
 endtable();
+echo <<< EOT
+</form>
+EOT;
 pagefooter();
 die;
 ?>

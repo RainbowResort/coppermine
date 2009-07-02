@@ -243,14 +243,11 @@ function newsletter_admin_menu_button($admin_menu) {
     	$newsletter_init_array = newsletter_initialize();
     	$lang_plugin_newsletter = $newsletter_init_array['language']; 
     	$newsletter_icon_array = $newsletter_init_array['icon'];
-	    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/admin"';
-	    $new_button .= ' >';
+	    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/admin">';
 	    $new_button .= $newsletter_icon_array['config'] . $lang_plugin_newsletter['config'] . '</a></div>';
-	    $new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/catlist"';
-	    $new_button .= ' >';
-	    $new_button .= $newsletter_icon_array['catlist'] . $lang_plugin_newsletter['category_list'] . '</a></div>';
-		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/mailing"';
-	    $new_button .= ' >';
+	    $new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/catlist">';
+	    $new_button .= $newsletter_icon_array['catlist'] . $lang_plugin_newsletter['newsletter_categories'] . '</a></div>';
+		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/mailing">';
 	    $new_button .= $newsletter_icon_array['mailing'] . $lang_plugin_newsletter['create_mailing'] . '</a></div>';
 		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/archive"';
 	    $new_button .= ' title="'.$lang_plugin_newsletter['browse_archived_mailings'].'">';

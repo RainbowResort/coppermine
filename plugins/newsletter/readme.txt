@@ -25,6 +25,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-07-02 [A] Finished mailing form {GauGau}
+2009-07-02 [A] Added subscription stats {GauGau}
+2009-07-01 [A] Added frequency stats {GauGau}
 2009-06-30 [A] Added mailing page {GauGau}
 2009-06-30 [B] Fixed bug with config changes entered during plugin install not being taken into account by moving the queries into a separate function {GauGau}
 2009-06-30 [A] Added more icons {GauGau}
