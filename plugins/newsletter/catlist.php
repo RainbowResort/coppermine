@@ -44,12 +44,11 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 mysql_free_result($result);
 
-if ($superCage->post->keyExists('submit')) {
+if ($superCage->post->keyExists('submit')) { // The form has been submit
     //Check if the form token is valid
     if(!checkFormToken()){
         cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
     }
-    // The form has been submit
     // Build the arrays that hold the submit data using getRaw - we'll have to sanitize that later, but basically we rely on the fact that this page is admin-only
     $submit_cat_id                = $superCage->post->getInt('cat_id');
     $submit_name                  = cpgSanitizeUserTextInput($superCage->post->getEscaped('name'));
@@ -125,8 +124,7 @@ if ($superCage->post->keyExists('submit')) {
                               description='{$submit_description[$cat_key]}',
                               open_for_subscription='{$submit_open_for_subscription[$cat_key]}',
                               public_view='{$submit_publicly_viewable[$cat_key]}',
-                              frequency_year='{$submit_frequency_year[$cat_key]}',
-                              subscription_count=0";
+                              frequency_year='{$submit_frequency_year[$cat_key]}'";
                 cpg_db_query($query);
                 // Populate the categories array
         	    $newsletter_categories_db[$loopCounter]['name'] = $submit_name[$cat_key];
@@ -204,12 +202,8 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	    $publicly_viewable = '';
 	}
 	// Get the number of mailings for this category
-    $query = "SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings
-                WHERE category_id='{$row['category_id']}'";
-    $result = cpg_db_query($query);
-    list($mailings_count) = mysql_fetch_row($result);
-    mysql_free_result($result);
-
+    $mailings_count = newsletter_mailings_per_category($row['category_id']);
+    $number_of_subscriptions = newsletter_subscriptions_per_category($row['category_id']);
 	$newsletter_frequency_options = newsletter_frequency_options($row['frequency_year']);
 	echo <<< EOT
 	<tr>
@@ -238,7 +232,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 		    {$mailings_count}
 		</td>
 		<td align="right">
-		    {$row['subscription_count']}
+		    {$number_of_subscriptions}
 		</td>
 	</tr>
 EOT;
@@ -290,6 +284,9 @@ echo <<< EOT
 EOT;
 
 endtable();
+echo <<< EOT
+</form>
+EOT;
 pagefooter();
 die;
 ?>
