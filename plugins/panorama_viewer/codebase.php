@@ -56,7 +56,7 @@ if (defined('DISPLAYIMAGE_PHP')) {
             return $pic_html;
         }
     }
-} else {
+} elseif (defined('INDEX_PHP')) {
     $thisplugin->add_filter('page_html','panorama_viewer_page_html_thumb');
     
     function panorama_viewer_page_html_thumb($html) {
