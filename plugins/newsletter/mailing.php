@@ -178,9 +178,14 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	$frequency_output = theme_display_bar(round($frequency[0]),$frequency[1],$match_percentage,'', '', '/'.$frequency[1],$match_color,'');
 	$number_of_subscriptions = newsletter_subscriptions_per_category($row['category_id']);
 	if ($number_of_subscriptions == 1) {
-	    $number_of_subscriptions = $lang_plugin_newsletter['one_subscription'];
+	    $number_of_subscriptions_string = $lang_plugin_newsletter['one_subscription'];
 	} else {
-	    $number_of_subscriptions = sprintf($lang_plugin_newsletter['x_subscriptions'], $number_of_subscriptions);
+	    $number_of_subscriptions_string = sprintf($lang_plugin_newsletter['x_subscriptions'], $number_of_subscriptions);
+	}
+	if ($number_of_subscriptions == 0) {
+		$category_option_output = 'disabled="disabled" readonly="readonly"';
+	} else {
+		$category_option_output = '';
 	}
 	$mailings_count = newsletter_mailings_per_category($row['category_id']);
 	if ($mailings_count == 1) {
@@ -191,7 +196,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	echo <<< EOT
 				<tr>
 					<td valign="top">
-						<input type="radio" name="category" id="category{$row['category_id']}" class="radio" value="{$row['category_id']}" />
+						<input type="radio" name="category" id="category{$row['category_id']}" class="radio" value="{$row['category_id']}" {$category_option_output} />
 						<label for="category{$row['category_id']}" class="clickable_option">{$row['name']}</label>
 					</td>
 					<td valign="top">
@@ -210,7 +215,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 						<span class="album_stat">{$frequency_output}</span>
 					</td>
 					<td valign="top">
-						<span class="album_stat">{$number_of_subscriptions}</span>
+						<span class="album_stat">{$number_of_subscriptions_string}</span>
 					</td>
 				</tr>
 EOT;

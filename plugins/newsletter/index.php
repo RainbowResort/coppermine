@@ -22,7 +22,7 @@ $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
 
-if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0') {
+if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0' && USER_ID == 0) {
 	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
@@ -40,6 +40,10 @@ echo <<< EOT
 				</li>
 EOT;
 if (GALLERY_ADMIN_MODE) {
+	// Get the number of records to process
+	$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue");
+	list($remaining_records_count) = mysql_fetch_row($result);
+	mysql_free_result($result);
 	echo <<< EOT
 				<li style="list-style-type:none">
 					<a href="index.php?file=newsletter/admin">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>
@@ -57,6 +61,13 @@ if (GALLERY_ADMIN_MODE) {
 					<a href="index.php?file=newsletter/mailing">{$newsletter_icon_array['plugin_manager']}{$lang_plugin_newsletter['pluginmgr_lnk']}</a>
 				</li>
 EOT;
+	if ($remaining_records_count > 0) {
+		echo <<< EOT
+				<li style="list-style-type:none">
+					<a href="index.php?file=newsletter/send">{$newsletter_icon_array['send']}{$lang_plugin_newsletter['send_mailings']}</a>
+				</li>
+EOT;
+	}
 }
 echo <<< EOT
 			</ul>

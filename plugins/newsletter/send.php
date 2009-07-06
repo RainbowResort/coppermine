@@ -68,8 +68,23 @@ if ($remaining_records_count == 0) {
 }
 
 pageheader($lang_plugin_newsletter['send_mailings'], $redirector);
-$explanation = sprintf($lang_plugin_newsletter['send_mailings_explain'], '<a href="index.php?file=newsletter/admin">', '</a>', $CONFIG['plugin_newsletter_mails_per_page']);
-starttable('100%', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['send_mailings'], 1);
+if ($CONFIG['plugin_newsletter_mails_per_page'] == '1') {
+	$mails_per_page = $lang_plugin_newsletter['one_email'];
+} else {
+	$mails_per_page = sprintf($lang_plugin_newsletter['x_emails'], $CONFIG['plugin_newsletter_mails_per_page']);
+}
+if ($CONFIG['plugin_newsletter_page_refresh_delay'] == '1') {
+	$page_refresh_delay = $lang_plugin_newsletter['second'];
+} elseif($CONFIG['plugin_newsletter_page_refresh_delay'] == '60') {
+	$page_refresh_delay = $lang_plugin_newsletter['minute'];
+} elseif($CONFIG['plugin_newsletter_page_refresh_delay'] > '60' && ($CONFIG['plugin_newsletter_page_refresh_delay']/60 == floor($CONFIG['plugin_newsletter_page_refresh_delay']/60))) {
+	$page_refresh_delay = sprintf($lang_plugin_newsletter['x_minutes'], $CONFIG['plugin_newsletter_page_refresh_delay']/60);
+} else {
+	$page_refresh_delay = sprintf($lang_plugin_newsletter['x_seconds'], $CONFIG['plugin_newsletter_page_refresh_delay']);
+}
+
+$explanation = sprintf($lang_plugin_newsletter['send_mailings_explain'], '<a href="index.php?file=newsletter/admin">', '</a>', $mails_per_page, $page_refresh_delay);
+starttable('100%', $newsletter_icon_array['send'] . $lang_plugin_newsletter['send_mailings'], 1);
 echo <<< EOT
     <tr>
         <td class="tableb">

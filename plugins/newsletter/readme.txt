@@ -25,6 +25,12 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-07-06 [A] Added clickable mailing stats on the catlist screen that lead to the archive {GauGau}
+2009-07-06 [A] Added admin option to configure other's subscriptions {GauGau}
+2009-07-06 [A] Added confirmation JS dialog for category deleting {GauGau}
+2009-07-06 [A] Added link to send page {GauGau}
+2009-07-06 [A] Disabled categories that nobody has subscribed to yet {GauGau}
+2009-07-06 [A] Added search icon {GauGau}
 2009-07-06 [A] Added sending mechanism to all pages {GauGau}
 2009-07-05 [A] Added actual sending page {GauGau}
 2009-07-02 [A] Added archive page {GauGau}
@@ -63,11 +69,7 @@ Todo
 * Display on registration page
 * Display on my_profile page
 * Display on user manager
-* Add a toggle to the unsubscribe page that checks if the plugin is installed in the first place. If it isn't, disaply a generic message.
-* Populate subscriber stats on catlist from subscribers table instead of the
-* Add confirmation JS dialog for category deleting
+* Add a toggle to the unsubscribe page that checks if the plugin is installed in the first place. If it isn't, display a generic message.
 * Add a check to all files if the plugin is installed in the first place or if an ex-subscriber is accessing the link in error
-* Add a die on all public pages if plugin_newsletter_guest_subscriptions == 0
-* Allow admin to edit subscription of others (subscribe.php accepting an URl parameter that refers to the user to edit)
 * Sanitize all input fields against special chars and escape them
 * Browse by date: create branches by year and month

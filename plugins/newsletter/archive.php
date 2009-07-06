@@ -22,7 +22,7 @@ $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
 
-if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0') {
+if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0' && USER_ID == 0) {
 	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
@@ -236,7 +236,7 @@ EOT;
 			{$lang_plugin_newsletter['browse_by_date']}
 		</th>
 		<th class="tableb" style="width:33%">
-			{$lang_plugin_newsletter['search_the_archive']}
+			{$newsletter_icon_array['search']}{$lang_plugin_newsletter['search_the_archive']}
 		</th>
 	</tr>
 	<tr>

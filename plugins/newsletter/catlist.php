@@ -209,7 +209,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 	<tr>
 		<td align="center">
 			<input type="hidden" name="cat_id[{$loopCounter}]" value="{$row['category_id']}" />
-			<input type="checkbox" name="delete[{$loopCounter}]" id="delete{$loopCounter}" value="1" class="checkbox" />
+			<input type="checkbox" name="delete[{$loopCounter}]" id="delete{$loopCounter}" value="1" class="checkbox" onclick="if (this.checked) return confirm('{$lang_plugin_newsletter['category_delete_confirmation']}');" />
 		</td>
 		<td>
 			<input type="text" name="name[{$loopCounter}]" id="name{$loopCounter}" class="textinput" size="20" maxlength="100" value="{$row['name']}" />
@@ -229,7 +229,7 @@ foreach ($newsletter_categories_db as $category_loop => $row) {
 			</select>
 		</td>
 		<td align="right">
-		    {$mailings_count}
+		    <a href="index.php?file=newsletter/archive&amp;category={$row['category_id']}" title="{$lang_plugin_newsletter['browse_archived_mailings']}">{$mailings_count}</a>
 		</td>
 		<td align="right">
 		    {$number_of_subscriptions}

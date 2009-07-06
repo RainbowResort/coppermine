@@ -243,6 +243,9 @@ function newsletter_admin_menu_button($admin_menu) {
     global $CONFIG;
     if ($CONFIG['plugin_newsletter_admin_menu_links'] == '2') {
     	require_once './plugins/newsletter/init.inc.php'; // Initialize language and icons
+		$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue");
+		list($remaining_records_count) = mysql_fetch_row($result);
+		mysql_free_result($result);
     	$newsletter_init_array = newsletter_initialize();
     	$lang_plugin_newsletter = $newsletter_init_array['language']; 
     	$newsletter_icon_array = $newsletter_init_array['icon'];
@@ -255,6 +258,10 @@ function newsletter_admin_menu_button($admin_menu) {
 		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/archive"';
 	    $new_button .= ' title="'.$lang_plugin_newsletter['browse_archived_mailings'].'">';
 	    $new_button .= $newsletter_icon_array['archive'] . $lang_plugin_newsletter['archive'] . '</a></div>';
+		if ($remaining_records_count > 0) {
+			$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/send">';
+			$new_button .= $newsletter_icon_array['send'] . $lang_plugin_newsletter['send_mailings'] . '</a></div>';
+		}
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
 	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
     } elseif($CONFIG['plugin_newsletter_admin_menu_links'] == '1') {
@@ -513,7 +520,7 @@ EOT;
                             {$lang_plugin_newsletter['page_refresh_delay']}
                         </td>
                         <td valign="top" class="tableb tableb_alternate">
-								<input type="text" name="plugin_newsletter_page_refresh_delay" id="plugin_newsletter_page_refresh_delay" class="textinput spin-button" size="4" maxlength="4" value="{$CONFIG['plugin_newsletter_page_refresh_delay']}" />
+								<input type="text" name="plugin_newsletter_page_refresh_delay" id="plugin_newsletter_page_refresh_delay" class="textinput spin-button" size="4" maxlength="4" value="{$CONFIG['plugin_newsletter_page_refresh_delay']}" /> {$lang_plugin_newsletter['seconds']}
                         </td>
                     </tr>
                     <tr>
@@ -570,7 +577,7 @@ function newsletter_mailqueue() {
     if (defined('CPG_PLUGIN_NEWSLETTER_MAILQUEUE')) {
         return;
     }
-    global $CONFIG, $lang_plugin_newsletter;
+    global $CONFIG, $lang_plugin_newsletter, $newsletter_icon_array;
     require_once('include/mailer.inc.php');
     $output_array = array();
     $query = ("SELECT * 
@@ -601,17 +608,17 @@ function newsletter_mailqueue() {
         $mailing_message_plain .= ' ' . $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe';
         $mailing_message_html = $mailing_message_plain; // Edit later!
         if (!cpg_mail($mailqueue['subscriber_email'], $mailqueue['subject'], $mailing_message_html, 'text/plain', $CONFIG['plugin_newsletter_from_name'], $CONFIG['plugin_newsletter_from_email'], $mailing_message_plain)) { // sending the email has failed --- start
-            $output_array[] = '<span class="important">' . $newsletter_icon_array['failure'] . sprintf($lang_plugin_newsletter['sending_email_failed'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'">'.$mailqueue['subject'].'</a>', $mailqueue['subscriber_email']) . '</span>';
+            $output_array[] = '<span class="important">' . $newsletter_icon_array['failure'] . sprintf($lang_plugin_newsletter['sending_email_failed'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'">'.$mailqueue['subject'].'</a>', '<a href="index.php?file=newsletter/subscribe&amp;subscriber='.$mailqueue['subscriber_id'].'">' . $mailqueue['subscriber_email'] . '</a>') . '</span>';
             cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue SET attempts = attempts + 1 WHERE queue_id={$mailqueue['queue_id']}");
             if ($CONFIG['log_mode'] != CPG_NO_LOGGING) {
-                log_write("Sending an email using the newsletter plugin failed (recipient email: {$mailqueue['subscriber_email']}, recipient ID: {$mailqueue['subscriber_id']}, Mailing ID: {$mailqueue['mailing_id']})", CPG_MAIL_LOG);
+                log_write("Sending an email using the newsletter plugin failed (recipient email: {$mailqueue['subscriber_email']}, subscriber ID: {$mailqueue['subscriber_id']}, Mailing ID: {$mailqueue['mailing_id']}, Attempt: {$mailqueue['attempts']})", CPG_MAIL_LOG);
             }
         } else {  // sending the email has failed --- end // sending the email has been successfull --- start
-            $output_array[] = $newsletter_icon_array['success'] . sprintf($lang_plugin_newsletter['sending_email_failed'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'>'.$mailqueue['subject'].'</a>', $mailqueue['subscriber_email']);
+            $output_array[] = $newsletter_icon_array['success'] . sprintf($lang_plugin_newsletter['sending_email_succeeded'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'>'.$mailqueue['subject'].'</a>', '<a href="index.php?file=newsletter/subscribe&amp;subscriber='.$mailqueue['subscriber_id'].'">' . $mailqueue['subscriber_email'] . '</a>');
             $processed_records_counter++;
             cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE queue_id={$mailqueue['queue_id']}");
             if ($CONFIG['log_mode'] == CPG_LOG_ALL) {
-                log_write("Sending email from newsletter plugin successful (recipient email: {$mailqueue['subscriber_email']}, recipient ID: {$mailqueue['subscriber_id']}, Mailing ID: {$mailqueue['mailing_id']})", CPG_MAIL_LOG);
+                log_write("Sending email from newsletter plugin successful (recipient email: {$mailqueue['subscriber_email']}, subscriber ID: {$mailqueue['subscriber_id']}, Mailing ID: {$mailqueue['mailing_id']})", CPG_MAIL_LOG);
             }
         } // sending the email has been successfull --- end
     }

@@ -23,6 +23,9 @@ function newsletter_initialize() {
 		$newsletter_icon_array['archive'] = '<img src="./plugins/newsletter/images/icons/archive.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['locked'] = '<img src="./plugins/newsletter/images/icons/locked.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['unlocked'] = '<img src="./plugins/newsletter/images/icons/unlocked.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['search'] = '<img src="./plugins/newsletter/images/icons/search.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['send'] = '<img src="./plugins/newsletter/images/icons/send.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['queue'] = '<img src="./plugins/newsletter/images/icons/delete.png" width="16" height="16" border="0" alt="" class="icon" />';
 	} else {
 		$newsletter_icon_array['config'] = '';
 		$newsletter_icon_array['announcement'] = '';
@@ -33,6 +36,9 @@ function newsletter_initialize() {
 		$newsletter_icon_array['archive'] = '';
 		$newsletter_icon_array['locked'] = '<img src="./plugins/newsletter/images/icons/locked.png" width="16" height="16" border="0" alt="" class="icon" />';
 		$newsletter_icon_array['unlocked'] = '<img src="./plugins/newsletter/images/icons/unlocked.png" width="16" height="16" border="0" alt="" class="icon" />';
+		$newsletter_icon_array['search'] = '';
+		$newsletter_icon_array['send'] = '';
+		$newsletter_icon_array['queue'] = '';
 	}
 	$newsletter_icon_array['plugin_manager'] = cpg_fetch_icon('plugin_mgr', 2);
 	$newsletter_icon_array['ok'] = cpg_fetch_icon('ok', 2);
