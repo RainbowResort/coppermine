@@ -126,5 +126,17 @@ $lang_plugin_newsletter['choose_method'] = 'Choose a method:';
 $lang_plugin_newsletter['browse_by_category'] = 'Browse by category';
 $lang_plugin_newsletter['browse_by_date'] = 'Browse by date';
 $lang_plugin_newsletter['search_the_archive'] = 'Search the archive';
-
+$lang_plugin_newsletter['date_sent'] = 'Date sent';
+$lang_plugin_newsletter['recipients'] = 'Recipients';
+$lang_plugin_newsletter['mailing_created'] = 'Mailing created';
+$lang_plugin_newsletter['sending_email_failed'] = 'Sending mailing %s to %s failed';
+$lang_plugin_newsletter['sending_email_succeeded'] = 'Sending mailing %s to %s succeeded';
+$lang_plugin_newsletter['send_mailings'] = 'Send mailings';
+$lang_plugin_newsletter['send_mailings_explain'] = 'On this page, the mailings are actually being sent. The number of emails sent simultaneously depends on what you have set up for "mails per page" on the plugin\'s %sconfig screen%s. Alternatively, you can leave this page completely and do something else. Each time your gallery get\'s visited, %s emails will be processed from the mailing queue.';
+$lang_plugin_newsletter['remaining_queued_mailings'] = 'Remaining queued mailings: %s';
+$lang_plugin_newsletter['remaining_time'] = 'Remaining time: %s';
+$lang_plugin_newsletter['all_queued_mailings_processed'] = 'All queued mailings have been processed.';
+$lang_plugin_newsletter['page_refresh_delay'] = 'Page refresh delay';
+$lang_plugin_newsletter['seconds'] = 'Seconds';
+$lang_plugin_newsletter['timed_out_mailings'] = 'Timed-out mailings: %s';
 ?>

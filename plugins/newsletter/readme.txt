@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-07-06 [A] Added sending mechanism to all pages {GauGau}
+2009-07-05 [A] Added actual sending page {GauGau}
 2009-07-02 [A] Added archive page {GauGau}
 2009-07-02 [A] Added index page {GauGau}
 2009-07-02 [A] Added option to have admin menu link point only to index page {GauGau}
@@ -57,7 +59,6 @@ Todo
 ====
 * All emails contain an unsubscribe link at the bottom
 * Config: allow guest subscriptions? If yes: guests need to opt in, so we'll need a corresponding toggle in the subscriptions table
-* Config: mails to send per page refresh
 * Subscribe token in template (parsing!)?
 * Display on registration page
 * Display on my_profile page
@@ -67,3 +68,6 @@ Todo
 * Add confirmation JS dialog for category deleting
 * Add a check to all files if the plugin is installed in the first place or if an ex-subscriber is accessing the link in error
 * Add a die on all public pages if plugin_newsletter_guest_subscriptions == 0
+* Allow admin to edit subscription of others (subscribe.php accepting an URl parameter that refers to the user to edit)
+* Sanitize all input fields against special chars and escape them
+* Browse by date: create branches by year and month

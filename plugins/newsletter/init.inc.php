@@ -36,6 +36,8 @@ function newsletter_initialize() {
 	}
 	$newsletter_icon_array['plugin_manager'] = cpg_fetch_icon('plugin_mgr', 2);
 	$newsletter_icon_array['ok'] = cpg_fetch_icon('ok', 2);
+	$newsletter_icon_array['success'] = cpg_fetch_icon('ok', 0);
+	$newsletter_icon_array['failure'] = cpg_fetch_icon('cancel', 0);
 	$newsletter_icon_array['cancel'] = cpg_fetch_icon('cancel', 2);
 	$newsletter_icon_array['edit'] = cpg_fetch_icon('edit', 0);
 	$newsletter_icon_array['delete'] = cpg_fetch_icon('delete', 0);
@@ -44,6 +46,9 @@ function newsletter_initialize() {
 	$newsletter_icon_array['invisible'] = cpg_fetch_icon('offline', 0);
 	$return['language'] = $lang_plugin_newsletter;
 	$return['icon'] = $newsletter_icon_array;
+	if (function_exists('newsletter_mailqueue') && $superCage->get->getRaw('file') != 'newsletter/send') {
+	    newsletter_mailqueue();
+	}
 	return $return;
 }
 

@@ -22,6 +22,10 @@ $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
 $newsletter_icon_array = $newsletter_init_array['icon'];
 
+if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0') {
+	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+}
+
 pageheader($lang_plugin_newsletter['config_name']);
 starttable('100%', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'], 1);
 echo <<< EOT

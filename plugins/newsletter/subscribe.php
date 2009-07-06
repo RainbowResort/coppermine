@@ -25,6 +25,11 @@ $newsletter_icon_array = $newsletter_init_array['icon'];
 $display_submit_button = 0;
 $subscriber_email_warning = '';
 $message = '';
+
+if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0') {
+	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+}
+
 $USER_DATA = array_merge($USER_DATA, $cpg_udb->get_user_infos(USER_ID));
 
 if (USER_ID) { // Populate the user's profile

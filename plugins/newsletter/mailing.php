@@ -66,17 +66,34 @@ if ($superCage->post->keyExists('submit')) { // The form has been submit
         cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
     }
     if ($superCage->post->keyExists('category')) {
-        // Populate the database and go to the send screen
-        $query = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings 
-                  SET subject='{$superCage->post->getRaw('subject')}',
-                      salutation='{$superCage->post->getRaw('salutation')}',
-                      body='{$superCage->post->getRaw('body')}',
-                      date_sent='" . time() . "',
-                      category_id='{$superCage->post->getInt('category')}',
-                      completed=0";
-        cpg_db_query($query);
-        echo 'Work in progress. At this stage, we need to perform the redirect.';
-        die;
+        // Populate the database variables
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$superCage->post->getInt('category')},category_list) > 0");
+        $loopCounter = 0;
+        while ($row = mysql_fetch_assoc($result)) {
+            $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_id']     = $row['subscriber_id'];
+            $newsletter_subscriptions_by_cat[$loopCounter]['user_id']           = $row['user_id'];
+            $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_active'] = $row['subscriber_active'];
+            $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_name']   = $row['subscriber_name'];
+            $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_email']  = $row['subscriber_email'];
+            $loopCounter++;
+        }
+        mysql_free_result($result);
+        // Write the mailing record
+        cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings 
+                      SET subject='{$superCage->post->getRaw('subject')}',
+                          salutation='{$superCage->post->getRaw('salutation')}',
+                          body='{$superCage->post->getRaw('body')}',
+                          date_sent='" . time() . "',
+                          category_id='{$superCage->post->getInt('category')}',
+                          completed=0,
+                          recipients='{$loopCounter}'");
+        $mailing_id = mysql_insert_id();
+        // Write the queue
+        $loopCounter = 0;
+        foreach ($newsletter_subscriptions_by_cat as $subscription_key => $subscription_value) {
+            cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue (`mailing_id`, `subscriber_id`, `time`) VALUES ('{$mailing_id}', '{$subscription_value['subscriber_id']}', '" . time() . "')");
+        }
+        cpgRedirectPage('index.php?file=newsletter/send', $lang_common['information'], $lang_plugin_newsletter['mailing_created']);
     } else {
         $message = <<< EOT
         <div class="cpg_message_error">
