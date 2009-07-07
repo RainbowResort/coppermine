@@ -159,4 +159,7 @@ $lang_plugin_newsletter['reloading'] = 'Reloading';
 $lang_plugin_newsletter['retries'] = 'Retries';
 $lang_plugin_newsletter['retries_explain'] = 'Number of times the script will attempt to re-send an email if sending fails before timing out';
 $lang_plugin_newsletter['x_open_mailings'] = '%s newsletter mailings need to be processed.';
+$lang_plugin_newsletter['submit_to_uninstall'] = 'The plugin isn\'t uninstalled yet. Submit the form to actually uninstall the plugin.';
+$lang_plugin_newsletter['menu'] = 'Menu';
+$lang_plugin_newsletter['statistics'] = 'Statistics';
 ?>

@@ -172,4 +172,14 @@ function newsletter_mailings_per_category($category_id) {
     mysql_free_result($result);
     return $mailings_count;
 }
+
+function newsletter_mailings_to_process() {
+	global $CONFIG;
+    // Get the number of records to process
+    $max_attempts = $CONFIG['plugin_newsletter_retries']+1;
+    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts <= {$max_attempts}");
+    list($remaining_records_count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+	return $remaining_records_count;
+}
 ?>

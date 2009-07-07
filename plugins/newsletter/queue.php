@@ -55,7 +55,7 @@ $query = ("SELECT *
 		   INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
 		   AS subscriptions
 		   ON subscriptions.subscriber_id = queue.subscriber_id
-		   WHERE queue.attempts > {$CONFIG['plugin_newsletter_mails_per_page']}
+		   WHERE queue.attempts > {$CONFIG['plugin_newsletter_retries']}
 		   ORDER BY queue.attempts,queue.time");
 $result = cpg_db_query($query);
 $mailqueue_array = cpg_db_fetch_rowset($result);

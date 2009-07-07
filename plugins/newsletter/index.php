@@ -27,9 +27,12 @@ if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0' && USER_ID == 0) {
 }
 
 pageheader($lang_plugin_newsletter['config_name']);
-starttable('100%', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'], 1);
+starttable('100%', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'], 2);
 echo <<< EOT
 	<tr>
+		<td class="tableb" valign="top">
+			{$lang_plugin_newsletter['menu']}
+		</td>
 		<td class="tableb">
 			<ul style="list-style-type:none">
 				<li style="list-style-type:none">
@@ -44,7 +47,13 @@ if (GALLERY_ADMIN_MODE) {
 	$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue");
 	list($remaining_records_count) = mysql_fetch_row($result);
 	mysql_free_result($result);
+	$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE ATTEMPTS > {$CONFIG['plugin_newsletter_retries']}");
+	list($timedout_records_count) = mysql_fetch_row($result);
+	mysql_free_result($result);
 	echo <<< EOT
+				<li style="list-style-type:none">
+					<hr />
+				</li>
 				<li style="list-style-type:none">
 					<a href="index.php?file=newsletter/admin">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>
 				</li>
@@ -68,9 +77,23 @@ EOT;
 				</li>
 EOT;
 	}
+	if ($timedout_records_count > 0) {
+		echo <<< EOT
+				<li style="list-style-type:none">
+					<a href="index.php?file=newsletter/queue">{$newsletter_icon_array['queue']}{$lang_plugin_newsletter['queue']}</a>
+				</li>
+EOT;
+	}
 }
 echo <<< EOT
 			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td class="tableb tableb_alternate" valign="top">
+			{$lang_plugin_newsletter['statistics']}
+		</td>
+		<td class="tableb tableb_alternate" valign="top">
 		</td>
 	</tr>
 EOT;

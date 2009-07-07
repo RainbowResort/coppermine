@@ -233,6 +233,13 @@ EOT;
 				    {$lang_plugin_newsletter['drop_table_warning']}<br />
                 </td>
             </tr>
+			<tr>
+				<td class="tablef" colspan="2">
+					<div class="cpg_message_info">
+						{$lang_plugin_newsletter['submit_to_uninstall']}
+					</div>
+				</td>
+			</tr>
 EOT;
 	    endtable();
 		foreach ($hidden_array as $value) {
@@ -275,7 +282,12 @@ function newsletter_admin_menu_button($admin_menu) {
     	$lang_plugin_newsletter = $newsletter_init_array['language']; 
     	$newsletter_icon_array = $newsletter_init_array['icon'];
 	    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/index">';
-	    $new_button .= $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'] . '</a></div>';
+	    $new_button .= $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['config_name'];
+		$remaining_records_count = newsletter_mailings_to_process();
+		if ($remaining_records_count > 0) {
+			$new_button .= ' (<span title="' . sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count) . '">'.$remaining_records_count.'</span>)';
+		}
+		$new_button .= '</a></div>';
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
 	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
 	}
@@ -666,21 +678,15 @@ function newsletter_mailqueue() {
 
 
 function newsletter_header($html) {
-    global $CONFIG;
     require_once './plugins/newsletter/init.inc.php';
     $newsletter_init_array = newsletter_initialize();
     $lang_plugin_newsletter = $newsletter_init_array['language']; 
     $newsletter_icon_array = $newsletter_init_array['icon'];
     
-    // Get the number of records to process
-    $max_attempts = $CONFIG['plugin_newsletter_retries']+1;
-    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts <= {$max_attempts}");
-    list($remaining_records_count) = mysql_fetch_row($result);
-    mysql_free_result($result);
-    $return = '';
+    $remaining_records_count = newsletter_mailings_to_process();
     if ($remaining_records_count > 0) {
         $return .= sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count);
-    } 
+    }
     $return .= $html;
     return $return;
 }

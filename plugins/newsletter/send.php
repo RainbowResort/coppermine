@@ -47,10 +47,9 @@ $output_array = newsletter_mailqueue();
 $processed_records_counter = $processed_records_counter + count($output_array);
 
 // Get the number of records to process
-$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts <= {$CONFIG['plugin_newsletter_mails_per_page']}");
-list($remaining_records_count) = mysql_fetch_row($result);
-mysql_free_result($result);
-$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts > {$CONFIG['plugin_newsletter_mails_per_page']}");
+$remaining_records_count = newsletter_mailings_to_process();
+$max_attempts = $CONFIG['plugin_newsletter_retries']+1;
+$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts > {$max_attempts}");
 list($failed_records_count) = mysql_fetch_row($result);
 mysql_free_result($result);
 if ($failed_records_count > 0) {
@@ -79,14 +78,15 @@ EOT;
         </td>
     </tr>
 EOT;
+	set_js_var('page_refresh_delay', $CONFIG['plugin_newsletter_page_refresh_delay']);
+	set_js_var('reloading', strtoupper($lang_plugin_newsletter['reloading']));
+	set_js_var('reload_url', 'index.php?file=newsletter/send&time='.$timestamp_start.'&counter='.$processed_records_counter);
+	if (in_array('plugins/newsletter/js/jquery.countdown.js', $JS['includes']) != TRUE) {
+		$JS['includes'][] = 'plugins/newsletter/js/jquery.countdown.js';
+	}
 }
 
-set_js_var('page_refresh_delay', $CONFIG['plugin_newsletter_page_refresh_delay']);
-set_js_var('reloading', strtoupper($lang_plugin_newsletter['reloading']));
-set_js_var('reload_url', 'index.php?file=newsletter/send&time='.$timestamp_start.'&counter='.$processed_records_counter);
-if (in_array('plugins/newsletter/js/jquery.countdown.js', $JS['includes']) != TRUE) {
-	$JS['includes'][] = 'plugins/newsletter/js/jquery.countdown.js';
-}
+
 
 pageheader($lang_plugin_newsletter['send_mailings'], $redirector);
 if ($CONFIG['plugin_newsletter_mails_per_page'] == '1') {
