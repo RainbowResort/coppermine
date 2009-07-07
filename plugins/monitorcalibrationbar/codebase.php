@@ -19,7 +19,7 @@ function monitor_calibration_bar_underneath_intermediate($html) {
     if ($CONFIG['plugin_moncalb_how'] == 2) {
         $html .= monitor_calibration_bar_display_bar($CONFIG['picture_width']);
     } elseif ($CONFIG['plugin_moncalb_how'] == 3) {
-    	$html .= '<a href="index.php?file=monitorcalibrationbar/index&amp;action=display" title="'.$lang_plugin_moncalb['config_name'].'" rel="nofolow">'.$moncal_icon_array['calibration'] . $lang_plugin_moncalb['menu'].'</a>';
+    	$html .= '<a href="index.php?file=monitorcalibrationbar/index&amp;action=display" title="'.$lang_plugin_moncalb['config_name'].'" rel="nofollow">'.$moncal_icon_array['calibration'] . $lang_plugin_moncalb['menu'].'</a>';
     }
     return $html;
 }
@@ -30,7 +30,7 @@ function monitor_calibration_bar_picinfo($html) {
     if ($CONFIG['plugin_moncalb_how'] == 0) {
         $html[$lang_plugin_moncalb['picinfo_heading']] = monitor_calibration_bar_display_bar('100%');
     } elseif ($CONFIG['plugin_moncalb_how'] == 1) {
-    	$html[$lang_plugin_moncalb['picinfo_heading']] = '<a href="index.php?file=monitorcalibrationbar/index&amp;action=display" title="'.$lang_plugin_moncalb['config_name'].'" rel="nofolow">'. $moncal_icon_array['calibration'] . $lang_plugin_moncalb['menu'].'</a>';
+    	$html[$lang_plugin_moncalb['picinfo_heading']] = '<a href="index.php?file=monitorcalibrationbar/index&amp;action=display" title="'.$lang_plugin_moncalb['config_name'].'" rel="nofollow">'. $moncal_icon_array['calibration'] . $lang_plugin_moncalb['menu'].'</a>';
     }
     return $html;
 }
@@ -309,7 +309,7 @@ function monitor_calibration_bar_sub_button($menu) {
         $new_button[0][2] = 'index.php?file=monitorcalibrationbar/index&amp;action=display';
         $new_button[0][3] = 'monitor_calibration';
         $new_button[0][4] = $template_sys_menu_spacer;
-        $new_button[0][5] = 'rel="nofolow"';
+        $new_button[0][5] = 'rel="nofollow"';
 
         array_splice($menu, count($menu)-1, 0, $new_button);
     }
