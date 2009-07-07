@@ -31,6 +31,9 @@ if (USER_ID != 0 || $CONFIG['plugin_newsletter_guest_subscriptions'] != '0') {
         $thisplugin->add_filter('sub_menu','newsletter_menu_button');
     }
 }
+if (GALLERY_ADMIN_MODE && $CONFIG['plugin_newsletter_admin_menu_links'] == 0) {
+    $thisplugin->add_filter('gallery_header','newsletter_header');
+}
 
 function newsletter_install() {
     global $CONFIG, $newsletter_installation, $thisplugin, $USER_DATA, $lang_plugin_newsletter;
@@ -61,6 +64,7 @@ function newsletter_install() {
 	                                'plugin_newsletter_page_refresh_delay' => '10',
 	                                'plugin_newsletter_admin_menu_links' => '1',
 	                                'plugin_newsletter_visitor_menu_links' => '2',
+	                                'plugin_newsletter_retries' => '2',
 	                                );
 	foreach ($plugin_config_defaults as $key => $value) {
 	    if (!$CONFIG[$key]) {
@@ -92,6 +96,7 @@ function newsletter_uninstall() {
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_page_refresh_delay'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_admin_menu_links'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_visitor_menu_links'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_retries'");
 	}
 	if ($superCage->post->keyExists('drop_subscribers') && $superCage->post->getInt('drop_subscribers') == 1) {
 		cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions");
@@ -370,6 +375,16 @@ function newsletter_configuration_submit() {
         }
     }
     
+    // plugin_newsletter_retries
+    if ($superCage->post->keyExists('plugin_newsletter_retries') == TRUE) {
+        if ($superCage->post->getInt('plugin_newsletter_retries') >= 0 && $superCage->post->getInt('plugin_newsletter_retries') <= 10 && $CONFIG['plugin_newsletter_retries'] != $superCage->post->getInt('plugin_newsletter_retries')) {
+            $CONFIG['plugin_newsletter_retries'] = $superCage->post->getInt('plugin_newsletter_retries');
+            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_newsletter_retries']}' WHERE name='plugin_newsletter_retries'";
+            cpg_db_query($query);
+            $config_changes_counter++;
+        }
+    }
+    
     // plugin_newsletter_admin_menu_links
     if ($superCage->post->keyExists('plugin_newsletter_admin_menu_links') == TRUE && ($superCage->post->getInt('plugin_newsletter_admin_menu_links') == '0'  || $superCage->post->getInt('plugin_newsletter_admin_menu_links') == '1' || $superCage->post->getInt('plugin_newsletter_admin_menu_links') == '2') ) {
         if ($superCage->post->getInt('plugin_newsletter_admin_menu_links') != $CONFIG['plugin_newsletter_admin_menu_links']) {
@@ -525,9 +540,17 @@ EOT;
                     </tr>
                     <tr>
                         <td valign="top" class="tableb">
-                            {$lang_plugin_newsletter['administration_links']}
+                            {$lang_plugin_newsletter['retries']}
                         </td>
                         <td valign="top" class="tableb">
+								<input type="text" name="plugin_newsletter_retries" id="plugin_newsletter_retries" class="textinput spin-button" size="4" maxlength="3" value="{$CONFIG['plugin_newsletter_retries']}" /> ({$lang_plugin_newsletter['retries_explain']})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$lang_plugin_newsletter['administration_links']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
 							<input type="radio" name="plugin_newsletter_admin_menu_links" id="plugin_newsletter_admin_menu_links_no" class="checkbox" value="0" {$option_output['plugin_newsletter_admin_menu_links_no']} /> 
                         	<label for="plugin_newsletter_admin_menu_links_no">{$lang_common['no']}</label>
                         	&nbsp;
@@ -539,10 +562,10 @@ EOT;
                         </td>
                     </tr>
                     <tr>
-                        <td valign="top" class="tableb tableb_alternate">
+                        <td valign="top" class="tableb">
                             {$lang_plugin_newsletter['display_newsletter_in_menu_for_visitor']}
                         </td>
-                        <td valign="top" class="tableb tableb_alternate">
+                        <td valign="top" class="tableb">
 							<input type="radio" name="plugin_newsletter_visitor_menu_links" id="plugin_newsletter_visitor_menu_links_no" class="checkbox" value="0" {$option_output['plugin_newsletter_visitor_menu_links_no']} /> 
                         	<label for="plugin_newsletter_visitor_menu_links_no">{$lang_common['no']}</label>
                         	&nbsp;
@@ -589,7 +612,7 @@ function newsletter_mailqueue() {
                INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
                AS subscriptions
                ON subscriptions.subscriber_id = queue.subscriber_id
-               WHERE queue.attempts <= 10
+               WHERE queue.attempts <= {$CONFIG['plugin_newsletter_mails_per_page']}
                ORDER BY queue.attempts,queue.time 
                LIMIT {$CONFIG['plugin_newsletter_mails_per_page']}");
     $result = cpg_db_query($query);
@@ -602,13 +625,28 @@ function newsletter_mailqueue() {
         } else { // Registered user
             $mailing_message_plain = str_replace('{USERNAME}', $mailqueue['subscriber_name'], $mailqueue['salutation']) . $LINEBREAK;
         }
-        $mailing_message_plain .= $mailqueue['body'] . $LINEBREAK. $LINEBREAK;
+        $mailqueue['body'] = str_replace("\r\n", '{LINEBREAK}', $mailqueue['body']);
+        $mailqueue['body'] = str_replace("\n\r", '{LINEBREAK}', $mailqueue['body']);
+        $mailqueue['body'] = str_replace("\n", '{LINEBREAK}', $mailqueue['body']);
+        $mailqueue['body'] = str_replace("\r", '{LINEBREAK}', $mailqueue['body']);
+        $mailqueue['body'] = str_replace('{LINEBREAK}', $LINEBREAK, $mailqueue['body']);
+        $mailing_message_plain .= $mailqueue['body'] . $LINEBREAK . $LINEBREAK;
+        $file = 'template.html';
+        $file_handle = fopen($file, 'r');
+        $mailing_message_html = fread($file_handle, filesize($file));
+        fclose($file_handle);
+        $mailing_message_html = str_replace('{MESSAGE}', str_replace($LINEBREAK, '<br />' . $LINEBREAK, $mailing_message_plain), $mailing_message_html);
         // Add the unsubscribe link at the bottom
         $mailing_message_plain .= $lang_plugin_newsletter['unsubscribe_text'];
         $mailing_message_plain .= ' ' . $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe';
-        $mailing_message_html = $mailing_message_plain; // Edit later!
+        $mailing_message_html = str_replace('{TITLE}', $mailqueue['subject'], $mailing_message_html);
+        $mailing_message_html = str_replace('{HEADING}', $mailqueue['subject'], $mailing_message_html);
+        $mailing_message_html = str_replace('{UNSUBSCRIBE_TGT}', $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe', $mailing_message_html);
+        $mailing_message_html = str_replace('{UNSUBSCRIBE_LNK}', $lang_plugin_newsletter['unsubscribe_html'], $mailing_message_html);
+        
+        
         if (!cpg_mail($mailqueue['subscriber_email'], $mailqueue['subject'], $mailing_message_html, 'text/plain', $CONFIG['plugin_newsletter_from_name'], $CONFIG['plugin_newsletter_from_email'], $mailing_message_plain)) { // sending the email has failed --- start
-            $output_array[] = '<span class="important">' . $newsletter_icon_array['failure'] . sprintf($lang_plugin_newsletter['sending_email_failed'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'">'.$mailqueue['subject'].'</a>', '<a href="index.php?file=newsletter/subscribe&amp;subscriber='.$mailqueue['subscriber_id'].'">' . $mailqueue['subscriber_email'] . '</a>') . '</span>';
+            $output_array[] = '<span class="important">' . $newsletter_icon_array['failure'] . sprintf($lang_plugin_newsletter['sending_email_failed'], '<a href="index.php?file=newsletter/archive&amp;mailing="'.$mailqueue['mailing_id'].'">'.$mailqueue['subject'].'</a>', '<a href="index.php?file=newsletter/subscribe&amp;subscriber='.$mailqueue['subscriber_id'].'">' . $mailqueue['subscriber_email'] . '</a>', $mailqueue['attempts'] + 1) . '</span>';
             cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue SET attempts = attempts + 1 WHERE queue_id={$mailqueue['queue_id']}");
             if ($CONFIG['log_mode'] != CPG_NO_LOGGING) {
                 log_write("Sending an email using the newsletter plugin failed (recipient email: {$mailqueue['subscriber_email']}, subscriber ID: {$mailqueue['subscriber_id']}, Mailing ID: {$mailqueue['mailing_id']}, Attempt: {$mailqueue['attempts']})", CPG_MAIL_LOG);
@@ -624,5 +662,26 @@ function newsletter_mailqueue() {
     }
     define('CPG_PLUGIN_NEWSLETTER_MAILQUEUE', true);
     return $output_array;
+}
+
+
+function newsletter_header($html) {
+    global $CONFIG;
+    require_once './plugins/newsletter/init.inc.php';
+    $newsletter_init_array = newsletter_initialize();
+    $lang_plugin_newsletter = $newsletter_init_array['language']; 
+    $newsletter_icon_array = $newsletter_init_array['icon'];
+    
+    // Get the number of records to process
+    $max_attempts = $CONFIG['plugin_newsletter_retries']+1;
+    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts <= {$max_attempts}");
+    list($remaining_records_count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+    $return = '';
+    if ($remaining_records_count > 0) {
+        $return .= sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count);
+    } 
+    $return .= $html;
+    return $return;
 }
 ?>

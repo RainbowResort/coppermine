@@ -25,6 +25,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-07-07 [A] Added option to specify number of retries {GauGau}
+2009-07-07 [A] Added status output for admin {GauGau}
+2009-07-07 [A] Added broken mailings screen {GauGau}
+2009-07-07 [A] Added HTML mail template {GauGau}
+2009-07-07 [A] Added countdown script on send screen {GauGau}
 2009-07-06 [A] Added clickable mailing stats on the catlist screen that lead to the archive {GauGau}
 2009-07-06 [A] Added admin option to configure other's subscriptions {GauGau}
 2009-07-06 [A] Added confirmation JS dialog for category deleting {GauGau}
@@ -73,3 +78,4 @@ Todo
 * Add a check to all files if the plugin is installed in the first place or if an ex-subscriber is accessing the link in error
 * Sanitize all input fields against special chars and escape them
 * Browse by date: create branches by year and month
+* check all boxes on broken queue screen

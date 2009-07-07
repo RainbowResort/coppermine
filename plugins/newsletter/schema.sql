@@ -6,6 +6,7 @@ INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_ma
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_page_refresh_delay', '10');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_admin_menu_links', '1');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_visitor_menu_links', '2');
+INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_retries', '2');
 
 
 CREATE TABLE IF NOT EXISTS `CPG_plugin_newsletter_subscriptions` (
