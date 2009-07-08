@@ -52,9 +52,6 @@ function newsletter_initialize() {
 	$newsletter_icon_array['invisible'] = cpg_fetch_icon('offline', 0);
 	$return['language'] = $lang_plugin_newsletter;
 	$return['icon'] = $newsletter_icon_array;
-	if (function_exists('newsletter_mailqueue') && $superCage->get->getRaw('file') != 'newsletter/send') {
-	    newsletter_mailqueue();
-	}
 	return $return;
 }
 
@@ -181,5 +178,37 @@ function newsletter_mailings_to_process() {
     list($remaining_records_count) = mysql_fetch_row($result);
     mysql_free_result($result);
 	return $remaining_records_count;
+}
+
+function newsletter_timed_out_mailings() {
+	global $CONFIG;
+    // Get the number of records to process
+    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue WHERE attempts > {$CONFIG['plugin_newsletter_retries']}");
+    list($timed_out_records_count) = mysql_fetch_row($result);
+    mysql_free_result($result);
+	return $timed_out_records_count;
+}
+
+function newsletter_text2html($subject, $salutation, $body) {
+    global $CONFIG, $LINEBREAK, $lang_plugin_newsletter;
+    // Make sure that there is no mixture of linebreaks
+    $body = str_replace("\r\n", '{LINEBREAK}', $body);
+    $body = str_replace("\n\r", '{LINEBREAK}', $body);
+    $body = str_replace("\n", '{LINEBREAK}', $body);
+    $body = str_replace("\r", '{LINEBREAK}', $body);
+    $body = str_replace('{LINEBREAK}', $LINEBREAK, $body);
+    // Parse the HTML template
+    $file = 'template.html';
+    $file_handle = fopen($file, 'r');
+    $html = fread($file_handle, filesize($file));
+    fclose($file_handle);
+    $html = str_replace('{MESSAGE}', str_replace($LINEBREAK, '<br />' . $LINEBREAK, $body), $html);
+    // Add the unsubscribe link at the bottom
+    $html = str_replace('{TITLE}', $subject, $html);
+    $html = str_replace('{HEADING}', $subject, $html);
+    $html = str_replace('{SALUTATION}', $salutation, $html);
+    $html = str_replace('{UNSUBSCRIBE_TGT}', $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe', $html);
+    $html = str_replace('{UNSUBSCRIBE_LNK}', $lang_plugin_newsletter['unsubscribe_html'], $html);
+    return $html;
 }
 ?>

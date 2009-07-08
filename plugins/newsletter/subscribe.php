@@ -25,9 +25,23 @@ $newsletter_icon_array = $newsletter_init_array['icon'];
 $display_submit_button = 0;
 $subscriber_email_warning = '';
 $message = '';
+$registration_message = '';
 
 if ($CONFIG['plugin_newsletter_guest_subscriptions'] == '0' && USER_ID == 0) {
 	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+}
+
+if ($superCage->get->keyExists('action')) {
+    if ($superCage->get->getAlpha('action') == 'mailsent') {
+        pageheader($lang_plugin_newsletter['newsletter-subscription']);
+            echo <<< EOT
+            <div class="cpg_message_info">
+                {$lang_plugin_newsletter['mail_sent']}
+            </div>
+EOT;
+        pagefooter();
+        die;
+    }
 }
 
 if ($superCage->get->keyExists('subscriber') && $superCage->get->getInt('subscriber') > 0 && GALLERY_ADMIN_MODE && $superCage->get->getInt('subscriber') != USER_ID) {
@@ -45,7 +59,9 @@ if ($superCage->get->keyExists('subscriber') && $superCage->get->getInt('subscri
 	}
 	$subscriber_data = $USER_DATA;
 }
-$subscriber_data = array_merge($subscriber_data, $cpg_udb->get_user_infos($subscriber_id));
+if (USER_ID) {
+    $subscriber_data = array_merge($subscriber_data, $cpg_udb->get_user_infos($subscriber_id));
+}
 
 if ($subscriber_id != 0) { // Populate the user's profile
     if ($subscriber_id == USER_ID) {
@@ -155,12 +171,39 @@ if ($superCage->post->keyExists('submit')) {
         }
 	} else { // guest --- start
     	if ($superCage->post->keyExists('subscriber_email') == TRUE) {
-            $temp = $superCage->post->getRaw('subscriber_email'); // Usually, we would not use that method, but we'll sanitize later.
-    		if (preg_match('#^([a-zA-Z0-9]((\.|\-|\_){0,1}[a-zA-Z0-9]){0,})@([a-zA-Z]((\.|\-){0,1}[a-zA-Z0-9]){0,})\.([a-zA-Z]{2,4})$#i', $temp)) {
-    	        // The email Address is OK
+            $submit_email_address = $superCage->post->getRaw('subscriber_email'); // Usually, we would not use that method, but we'll sanitize later.
+    		if (preg_match('#^([a-zA-Z0-9]((\.|\-|\_){0,1}[a-zA-Z0-9]){0,})@([a-zA-Z]((\.|\-){0,1}[a-zA-Z0-9]){0,})\.([a-zA-Z]{2,4})$#i', $submit_email_address)) {
+    	        // The email Address is valid --- start
     			$subscriber_email_warning = '';
+    			// Does the email address exist?
+    		    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions
+                                        WHERE subscriber_email='{$submit_email_address}'
+                                        LIMIT 1");
+                list($existing_subscription_array) = mysql_fetch_row($result);
+                mysql_free_result($result);
+                if (count($existing_subscription_array) == 0) { // The submit email address doesn't exist in the db --- start
+                    // Perform a look up in the user db of coppermine to see if the email address belongs to a registered user who hasn't subscribed so far
+                    // Perform a category check
+                    // Write the registration into the database
+                    // Send the verification email
+                    // Tell the subscriber to check his email
+                } else { // The submit email address doesn't exist in the db --- end // There already is a record for the submit email address --- start
+                    if ($existing_subscription_array['user_id'] != 0) {
+                        $registration_message = '<div class="cpg_message_error">' . sprintf($lang_plugin_newsletter['email_address_belongs_to_registered_subscriber'], '<a href="login.php?referer=index.php%3Ffile%3Dnewsletter%2Fsubscribe">', '</a>') . '</div>';
+                    } else {
+                        $registration_message = sprintf($lang_plugin_newsletter['subscription_exists_for_email_address'], $submit_email_address, '<a href="index.php?file=newsletter/subscribe&amp;action=mailsent">', '</a>');
+                         $message_plain = $lang_plugin_newsletter['click_to_edit_subscription'];
+                         $message_plain .= 'Edit later';
+                         $message_html = newsletter_text2html($lang_plugin_newsletter['newsletter_subscription_authentification'], $CONFIG['plugin_newsletter_salutation_for_guests'], $message_plain);
+                         cpg_mail($submit_email_address, $lang_plugin_newsletter['newsletter_subscription_authentification'], $message_html, 'text/plain', $CONFIG['plugin_newsletter_from_name'], $CONFIG['plugin_newsletter_from_email'], $message_plain);
+                         if ($CONFIG['log_mode'] != CPG_NO_LOGGING) {
+                             log_write("Newsletter plugin: {$submit_email_address} requested an authentification email from the subscribe page", CPG_MAIL_LOG);
+                         }
+                    }
+                } // There already is a record for the submit email address --- end
+                // The email Address is valid --- end
             } else {
-    			$subscriber_email_warning = $lang_plugin_newsletter['email_address_invalid'];
+    			$subscriber_email_warning = '<div class="cpg_message_validation">' . $lang_plugin_newsletter['email_address_invalid'] . '</div>';
     		}
     	}
 	} // guest --- end
@@ -178,7 +221,11 @@ if ($subscriber_id != 0) {
     // We have a registered user here --- start
 	$display_submit_button++;
 	if ($CONFIG['allow_email_change'] != '0' || $CONFIG['bridge_enable'] != '0' || GALLERY_ADMIN_MODE) {
-		$subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '<a href="profile.php?op=edit_profile">', '</a>');
+		if ($subscriber_id == USER_ID) {
+		    $subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_your_profile'], '<a href="profile.php?op=edit_profile">', '</a>');
+		} else {
+		    $subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '<a href="profile.php?uid='.$subscriber_id.'">', '</a>');
+		}
 	} else {
 		$subscriber_email_warning = sprintf($lang_plugin_newsletter['email_from_profile'], '', '');
 	}
@@ -228,7 +275,9 @@ EOT;
     // We have a guest --- start
     if ($CONFIG['plugin_newsletter_guest_subscriptions'] != '0') {
         // The guest is allowed to subscribe as well, so let's display the form fields for the email address
-        $registration_message = sprintf($lang_plugin_newsletter['alternatively_register_to subscribe'], '<a href="register">', '</a>');
+        if ($registration_message == '') {
+            $registration_message = sprintf($lang_plugin_newsletter['alternatively_register_to subscribe'], '<a href="register">', '</a>');
+        }
 		if ($superCage->post->keyExists('subscriber_email') == TRUE) {
 			$subscriber_email_value = $superCage->post->getRaw('subscriber_email');
 		} else {
@@ -250,7 +299,9 @@ EOT;
 EOT;
     } else {
         // The guest is not allowed to subscribe
-        $registration_message = sprintf($lang_plugin_newsletter['register_to subscribe'], '<a href="register">', '</a>');
+        if ($registration_message == '') {
+            $registration_message = sprintf($lang_plugin_newsletter['register_to subscribe'], '<a href="register">', '</a>');
+        }
         echo <<< EOT
     <tr>
         <td colspan="3">

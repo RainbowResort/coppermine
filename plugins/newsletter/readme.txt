@@ -25,6 +25,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-07-08 [A] Added queue stat output to admin menu {GauGau}
+2009-07-08 [M] Re-enabled guest subscription in config {GauGau}
+2009-07-08 [O] Moved sending of emails from the initialization routine into a function of it's own {GauGau}
+2009-07-08 [B] Fixed wrong link to profile on subscriptions page {GauGau}
 2009-07-07 [A] Added option to specify number of retries {GauGau}
 2009-07-07 [A] Added status output for admin {GauGau}
 2009-07-07 [A] Added broken mailings screen {GauGau}

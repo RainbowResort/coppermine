@@ -63,7 +63,7 @@ if ($processed_records_counter != 0) {
     $remaining_time = '<br />' . sprintf($lang_plugin_newsletter['remaining_time'], date('i:s', $remaining_timestamp));
 }
 if ($remaining_records_count == 0) {
-    $remaining_queued_mailings = $lang_plugin_newsletter['all_queued_mailings_processed'];
+    $remaining_queued_mailings = '<div class="cpg_message_success">' . $lang_plugin_newsletter['all_queued_mailings_processed'] . '</div>';
     $remaining_time = '';
     $redirector = '';
     $countdown = '';

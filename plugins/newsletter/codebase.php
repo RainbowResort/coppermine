@@ -24,6 +24,8 @@ $thisplugin->add_action('plugin_uninstall','newsletter_uninstall');
 $thisplugin->add_action('plugin_cleanup','newsletter_cleanup');
 $thisplugin->add_action('plugin_configure','newsletter_configure');
 $thisplugin->add_filter('admin_menu','newsletter_admin_menu_button');
+$thisplugin->add_action('gallery_footer','newsletter_footer');
+
 if (USER_ID != 0 || $CONFIG['plugin_newsletter_guest_subscriptions'] != '0') {
     if ($CONFIG['plugin_newsletter_visitor_menu_links'] == 1) {
         $thisplugin->add_filter('sys_menu','newsletter_menu_button');
@@ -255,9 +257,6 @@ function newsletter_admin_menu_button($admin_menu) {
     global $CONFIG;
     if ($CONFIG['plugin_newsletter_admin_menu_links'] == '2') {
     	require_once './plugins/newsletter/init.inc.php'; // Initialize language and icons
-		$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_queue");
-		list($remaining_records_count) = mysql_fetch_row($result);
-		mysql_free_result($result);
     	$newsletter_init_array = newsletter_initialize();
     	$lang_plugin_newsletter = $newsletter_init_array['language']; 
     	$newsletter_icon_array = $newsletter_init_array['icon'];
@@ -270,9 +269,19 @@ function newsletter_admin_menu_button($admin_menu) {
 		$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/archive"';
 	    $new_button .= ' title="'.$lang_plugin_newsletter['browse_archived_mailings'].'">';
 	    $new_button .= $newsletter_icon_array['archive'] . $lang_plugin_newsletter['archive'] . '</a></div>';
+		$remaining_records_count = newsletter_mailings_to_process();
 		if ($remaining_records_count > 0) {
 			$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/send">';
-			$new_button .= $newsletter_icon_array['send'] . $lang_plugin_newsletter['send_mailings'] . '</a></div>';
+			$new_button .= $newsletter_icon_array['send'] . $lang_plugin_newsletter['send_mailings'];
+			$new_button .= ' (<span title="' . sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count) . '">'.$remaining_records_count.'</span>)';
+			$new_button .= '</a></div>';
+		}
+		$timed_out_records_count = newsletter_timed_out_mailings();
+		if ($timed_out_records_count > 0) {
+			$new_button .= '<div class="admin_menu admin_float"><a href="index.php?file=newsletter/queue">';
+			$new_button .= $newsletter_icon_array['queue'] . $lang_plugin_newsletter['queue'];
+			$new_button .= ' (<span title="' . sprintf($lang_plugin_newsletter['timed_out_mailings'], $timed_out_records_count) . '">'.$timed_out_records_count.'</span>)';
+			$new_button .= '</a></div>';
 		}
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
 	    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
@@ -286,6 +295,10 @@ function newsletter_admin_menu_button($admin_menu) {
 		$remaining_records_count = newsletter_mailings_to_process();
 		if ($remaining_records_count > 0) {
 			$new_button .= ' (<span title="' . sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count) . '">'.$remaining_records_count.'</span>)';
+		}
+		$timed_out_records_count = newsletter_timed_out_mailings();
+		if ($timed_out_records_count > 0) {
+			$new_button .= ' [<span title="' . sprintf($lang_plugin_newsletter['timed_out_mailings'], $timed_out_records_count) . '">'.$timed_out_records_count.'</span>]';
 		}
 		$new_button .= '</a></div>';
 	    $look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
@@ -503,7 +516,7 @@ EOT;
                             {$lang_plugin_newsletter['allow_guest_subscriptions']}
                         </td>
                         <td valign="top" class="tableb">
-							<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_guest_subscriptions_yes']} disabled="disabled" readonly="readonly" /> 
+							<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_guest_subscriptions_yes']} /> 
                         	<label for="plugin_newsletter_guest_subscriptions_yes">{$lang_common['yes']}</label>
                         	&nbsp;
                         	<input type="radio" name="plugin_newsletter_guest_subscriptions" id="plugin_newsletter_guest_subscriptions_no" class="checkbox" value="0" {$option_output['plugin_newsletter_guest_subscriptions_no']} /> 
@@ -515,7 +528,7 @@ EOT;
                             {$lang_plugin_newsletter['salutation_for_guests']}
                         </td>
                         <td valign="top" class="tableb tableb_alternate">
-							<input type="text" name="plugin_newsletter_salutation_for_guests" id="plugin_newsletter_salutation_for_guests" class="textinput" size="30" maxlength="100" value="{$CONFIG['plugin_newsletter_salutation_for_guests']}" disabled="disabled" readonly="readonly" />
+							<input type="text" name="plugin_newsletter_salutation_for_guests" id="plugin_newsletter_salutation_for_guests" class="textinput" size="30" maxlength="100" value="{$CONFIG['plugin_newsletter_salutation_for_guests']}" />
                         </td>
                     </tr>
 					<tr>
@@ -633,28 +646,15 @@ function newsletter_mailqueue() {
 
     foreach ($mailqueue_array as $mailqueue) {
         if ($mailqueue['user_id'] == '') { // Guest
-            $mailing_message_plain = $CONFIG['plugin_newsletter_salutation_for_guests'] . $LINEBREAK;
+            $salutation = $CONFIG['plugin_newsletter_salutation_for_guests'];
         } else { // Registered user
-            $mailing_message_plain = str_replace('{USERNAME}', $mailqueue['subscriber_name'], $mailqueue['salutation']) . $LINEBREAK;
+            $salutation = str_replace('{USERNAME}', $mailqueue['subscriber_name'], $mailqueue['salutation']);
         }
-        $mailqueue['body'] = str_replace("\r\n", '{LINEBREAK}', $mailqueue['body']);
-        $mailqueue['body'] = str_replace("\n\r", '{LINEBREAK}', $mailqueue['body']);
-        $mailqueue['body'] = str_replace("\n", '{LINEBREAK}', $mailqueue['body']);
-        $mailqueue['body'] = str_replace("\r", '{LINEBREAK}', $mailqueue['body']);
-        $mailqueue['body'] = str_replace('{LINEBREAK}', $LINEBREAK, $mailqueue['body']);
-        $mailing_message_plain .= $mailqueue['body'] . $LINEBREAK . $LINEBREAK;
-        $file = 'template.html';
-        $file_handle = fopen($file, 'r');
-        $mailing_message_html = fread($file_handle, filesize($file));
-        fclose($file_handle);
-        $mailing_message_html = str_replace('{MESSAGE}', str_replace($LINEBREAK, '<br />' . $LINEBREAK, $mailing_message_plain), $mailing_message_html);
+        $mailing_message_plain = $salutation .$LINEBREAK. $mailqueue['body'] . $LINEBREAK . $LINEBREAK;
         // Add the unsubscribe link at the bottom
         $mailing_message_plain .= $lang_plugin_newsletter['unsubscribe_text'];
         $mailing_message_plain .= ' ' . $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe';
-        $mailing_message_html = str_replace('{TITLE}', $mailqueue['subject'], $mailing_message_html);
-        $mailing_message_html = str_replace('{HEADING}', $mailqueue['subject'], $mailing_message_html);
-        $mailing_message_html = str_replace('{UNSUBSCRIBE_TGT}', $CONFIG['site_url'] . 'index.php?file=newsletter/unsubscribe', $mailing_message_html);
-        $mailing_message_html = str_replace('{UNSUBSCRIBE_LNK}', $lang_plugin_newsletter['unsubscribe_html'], $mailing_message_html);
+        $mailing_message_html = newsletter_text2html($mailqueue['subject'], $salutation, $mailqueue['body']);
         
         
         if (!cpg_mail($mailqueue['subscriber_email'], $mailqueue['subject'], $mailing_message_html, 'text/plain', $CONFIG['plugin_newsletter_from_name'], $CONFIG['plugin_newsletter_from_email'], $mailing_message_plain)) { // sending the email has failed --- start
@@ -685,9 +685,22 @@ function newsletter_header($html) {
     
     $remaining_records_count = newsletter_mailings_to_process();
     if ($remaining_records_count > 0) {
-        $return .= sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count);
+        $return .= '<a href="index.php?file=newsletter/send">'. sprintf($lang_plugin_newsletter['x_open_mailings'], $remaining_records_count).'</a>';
     }
+	$timed_out_records_count = newsletter_timed_out_mailings();
+	if ($timed_out_records_count > 0) {
+		$return .= ' <a href="index.php?file=newsletter/queue">'. sprintf($lang_plugin_newsletter['timed_out_mailings'], $timed_out_records_count).'</a>';
+	}
     $return .= $html;
     return $return;
 }
+
+function newsletter_footer($html) {
+	$superCage = Inspekt::makeSuperCage();
+	if (function_exists('newsletter_mailqueue') && $superCage->get->getRaw('file') != 'newsletter/send') {
+	    newsletter_mailqueue(); // Trigger the sending of emails at the end of the page
+	}
+	return $html;
+}
+
 ?>
