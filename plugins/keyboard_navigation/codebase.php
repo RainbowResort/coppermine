@@ -36,8 +36,12 @@ function keyboard_navigation($template_img_navbar) {
             $('.navmenu_pic img[src*=thumb]').parent().attr('id', 'thumb');
             $('.navmenu_pic img[src*=prev]').parent().attr({id: 'prev', accesskey: 'p'});
             $('.navmenu_pic img[src*=next]').parent().attr({id: 'next', accesskey: 'n'});
-            $('.textinput').blur(function () {sthhasfocus = false;});
             $('.textinput').focus(function () {sthhasfocus = true;});
+            $('.textinput').blur(function () {sthhasfocus = false;});
+            $('select').focus(function () {sthhasfocus = true;});
+            $('select').blur(function () {sthhasfocus = false;});
+            $('div').click(function () {sthhasfocus = false;});
+            $('table').click(function () {sthhasfocus = false;});
         });
 
         $(document).keydown(function(e) {
