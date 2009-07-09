@@ -1,25 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
+/******************************
+  Coppermine Plugin - Atom Feed
+  *****************************
+  Copyright (c) 2009 eenemeenemuu
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - Atom Feed
-  ********************************************
-  Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
