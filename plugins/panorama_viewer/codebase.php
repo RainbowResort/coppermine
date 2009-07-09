@@ -51,7 +51,7 @@ if (defined('DISPLAYIMAGE_PHP')) {
                 $imagesize = getimagesize($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CONFIG['normal_pfx'].$CURRENT_PIC_DATA['filename']);
                 $div_height = $imagesize[1] + $div_height_extra_pixel;
             }
-            $pic_html = "<div style=\"overflow:auto; width:100%; height:{$div_height}px\">".$pic_html."</div>";
+            $pic_html = "<div style=\"overflow:auto; width:100%; height:{$div_height}px;\">".$pic_html."</div>";
             $pic_html = "<table width=\"100%\" style=\"table-layout:fixed;\"><tr><td width=\"100%\" align=\"center\">".$pic_html."</td></tr></table>";
             return $pic_html;
         }

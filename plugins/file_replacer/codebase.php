@@ -91,7 +91,7 @@ function file_replacer_page_start() {
                     $resize_method = $CONFIG['thumb_use'] == "ex" ? "any" : $CONFIG['thumb_use'];
 
                     if (max($imagesize[0], $imagesize[1]) > $CONFIG['picture_width'] && $CONFIG['make_intermediate']) {
-                        if ($CONFIG['enable_watermark'] == '1' && $CONFIG['which_files_to_watermark'] == 'both' || $CONFIG['which_files_to_watermark'] == 'resized') {
+                        if ($CONFIG['enable_watermark'] == '1' && ($CONFIG['which_files_to_watermark'] == 'both' || $CONFIG['which_files_to_watermark'] == 'resized')) {
                             if (($result = resize_image($work_image, $normal, $CONFIG['picture_width'], $CONFIG['thumb_method'], $resize_method, "true")) !== true) {
                                 return $result;
                             }
@@ -109,7 +109,7 @@ function file_replacer_page_start() {
                         $max_size_size = max($imagesize[0], $imagesize[1]);
                     }
 
-                    if ($CONFIG['enable_watermark'] == '1' && $CONFIG['which_files_to_watermark'] == 'both' || $CONFIG['which_files_to_watermark'] == 'original') {
+                    if ($CONFIG['enable_watermark'] == '1' && ($CONFIG['which_files_to_watermark'] == 'both' || $CONFIG['which_files_to_watermark'] == 'original')) {
                         if (($result = resize_image($work_image, $image, $max_size_size, $CONFIG['thumb_method'], $resize_method, 'true')) !== true) {
                             return $result;
                         }
