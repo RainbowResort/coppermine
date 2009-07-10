@@ -180,6 +180,8 @@ function video2flash_ffmpeg_add_file_data($pic_data) {
         if ($tmpFlv) {
             // move it to the final location
             rename($tmpFlv, $flv);
+            // Add the fileszie of flv to total filesize
+            $pic_data['total_filesize'] += filesize($flv);
         }
         $imagesize = getimagesize($videoThumb);
         if ($videoThumb) {
@@ -187,7 +189,10 @@ function video2flash_ffmpeg_add_file_data($pic_data) {
                 // If resize fails then we are not doing anything as the file is already uploaded and if no video thumb is created then nothing should be done.
             } else {
                 // Also create a normal size image to show as a preview in flash player
-                resize_image($videoThumb, $normal, $CONFIG['video2flash_ffmpeg_player_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+                if (resize_image($videoThumb, $normal, $CONFIG['video2flash_ffmpeg_player_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use'])) {
+                    // Add the filesize of normal to the total filesize
+                    $pic_data['total_filesize'] += filesize($normal);
+                }
                 $pic_data['pwidth'] = $imagesize[0];
                 $pic_data['pheight'] = $imagesize[1];
                 $pic_data['total_filesize'] += filesize($thumb);
