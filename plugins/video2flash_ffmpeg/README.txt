@@ -45,3 +45,9 @@ Support
 -------
 Plugin support is only available on coppermine support forums - http://forum.coppermine-gallery.net/index.php/topic,60539.0.html
 Please do not email me asking for support.
+
+
+CHANGELOG
+----------
+v1.0
+[2009-07-10] Release of v1.0
