@@ -25,6 +25,8 @@ $thisplugin->add_action('plugin_cleanup','newsletter_cleanup');
 $thisplugin->add_action('plugin_configure','newsletter_configure');
 $thisplugin->add_filter('admin_menu','newsletter_admin_menu_button');
 $thisplugin->add_action('gallery_footer','newsletter_footer');
+$thisplugin->add_filter('register_form_create','newsletter_registration_form');
+$thisplugin->add_filter('register_form_submit','newsletter_registration_submit');
 
 if (USER_ID != 0 || $CONFIG['plugin_newsletter_guest_subscriptions'] != '0') {
     if ($CONFIG['plugin_newsletter_visitor_menu_links'] == 1) {
@@ -701,6 +703,25 @@ function newsletter_footer($html) {
 	    newsletter_mailqueue(); // Trigger the sending of emails at the end of the page
 	}
 	return $html;
+}
+
+function newsletter_registration_form($form_data) {
+	global $CONFIG, $lang_plugin_newsletter, $newsletter_icon_array;
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories WHERE open_for_subscription = 'YES'");
+    $rowset = cpg_db_fetch_rowset($result);
+    mysql_free_result($result);
+	foreach ($rowset as $category) {
+		if ($category['description'] != '') {
+			$form_data[] = array('checkbox', 'newsletter_' . $category['category_id'], $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2');
+		} else {
+			$form_data[] = array('checkbox', 'newsletter_' . $category['category_id'], $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2');
+		}
+		
+	}
+	return $form_data;
+}
+
+function newsletter_registration_submit() {
 }
 
 ?>
