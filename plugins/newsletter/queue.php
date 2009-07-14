@@ -56,6 +56,7 @@ $query = ("SELECT *
 		   AS subscriptions
 		   ON subscriptions.subscriber_id = queue.subscriber_id
 		   WHERE queue.attempts > {$CONFIG['plugin_newsletter_retries']}
+		   AND subscriptions.subscriber_active = 'YES'
 		   ORDER BY queue.attempts,queue.time");
 $result = cpg_db_query($query);
 $mailqueue_array = cpg_db_fetch_rowset($result);

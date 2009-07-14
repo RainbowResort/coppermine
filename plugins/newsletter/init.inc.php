@@ -154,7 +154,10 @@ function newsletter_mailing_stats($category_id) {
 
 function newsletter_subscriptions_per_category($category_id) {
     global $CONFIG;
-    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$category_id},category_list) > 0 LIMIT 1");
+    if (!$category_id) {
+        return;
+    }
+    $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$category_id},category_list) > 0 AND subscriber_active = 'YES' LIMIT 1");
     list($subscription_total) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $subscription_total;

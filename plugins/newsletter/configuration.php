@@ -10,7 +10,7 @@ $description = $lang_plugin_newsletter['config_description'] . '<br />' . $lang_
 $author = sprintf($lang_plugin_newsletter['author'],
 	'<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
 	
-$version = '0.14';
+$version = '0.15';
 
 $extra_info = <<<EOT
     <a href="index.php?file=newsletter/admin" class="admin_menu">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>&nbsp;
@@ -23,6 +23,6 @@ EOT;
 
 $install_info = <<<EOT
    <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>
-   This plugin is still in alpha stage and currently doesn't do anything particularly usefull yet. Most importantly: it doesn't send emails yet. As the plugin is still in a very early stage, please don't ask questions yet.
+   As the plugin is still in a very early stage, please don't ask questions yet.
 EOT;
 ?>

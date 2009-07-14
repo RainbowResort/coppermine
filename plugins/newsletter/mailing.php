@@ -67,7 +67,7 @@ if ($superCage->post->keyExists('submit')) { // The form has been submit
     }
     if ($superCage->post->keyExists('category')) {
         // Populate the database variables
-        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$superCage->post->getInt('category')},category_list) > 0");
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$superCage->post->getInt('category')},category_list) > 0 AND subscriber_active = 'YES'");
         $loopCounter = 0;
         while ($row = mysql_fetch_assoc($result)) {
             $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_id']     = $row['subscriber_id'];

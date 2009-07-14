@@ -27,6 +27,9 @@ $thisplugin->add_filter('admin_menu','newsletter_admin_menu_button');
 $thisplugin->add_action('gallery_footer','newsletter_footer');
 $thisplugin->add_filter('register_form_create','newsletter_registration_form');
 $thisplugin->add_filter('register_form_submit','newsletter_registration_submit');
+$thisplugin->add_filter('register_user_activation','newsletter_registration_activation');
+$thisplugin->add_filter('profile_add_data','newsletter_profile');
+$thisplugin->add_filter('usermgr_form_list','newsletter_form_list');
 
 if (USER_ID != 0 || $CONFIG['plugin_newsletter_guest_subscriptions'] != '0') {
     if ($CONFIG['plugin_newsletter_visitor_menu_links'] == 1) {
@@ -710,18 +713,78 @@ function newsletter_registration_form($form_data) {
 	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories WHERE open_for_subscription = 'YES'");
     $rowset = cpg_db_fetch_rowset($result);
     mysql_free_result($result);
+    $loopCounter = 0;
 	foreach ($rowset as $category) {
 		if ($category['description'] != '') {
-			$form_data[] = array('checkbox', 'newsletter_' . $category['category_id'], $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2');
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2');
 		} else {
-			$form_data[] = array('checkbox', 'newsletter_' . $category['category_id'], $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2');
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2');
 		}
+		$loopCounter++;
 		
 	}
 	return $form_data;
 }
 
-function newsletter_registration_submit() {
+function newsletter_registration_submit($user_array) {
+    global $CONFIG;
+    $superCage = Inspekt::makeSuperCage();
+    if ($superCage->post->keyExists('newsletter')) {
+        $checkbox_array = $superCage->post->getRaw('newsletter');
+        $list = '';
+        foreach ($checkbox_array as $checkbox) {
+                $list .= (int)$checkbox . ',';
+        }
+        $list = rtrim($list, ',');
+        if ($list != '') {
+            // Run the query
+            $query = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions 
+                      SET user_id='{$user_array['user_id']}',
+                          subscriber_active='{$user_array['user_active']}',
+                          subscriber_name='{$user_array['user_name']}',
+                          subscriber_regdate='" . time() . "',
+                          subscriber_email='{$user_array['user_email']}',
+                          category_list='{$list}'";
+            $result = cpg_db_query($query);
+        }
+    }
 }
 
+function newsletter_registration_activation($act_key) {
+    global $CONFIG;
+    $result = cpg_db_query("SELECT user_id FROM {$CONFIG['TABLE_USERS']} WHERE user_actkey = '$act_key' LIMIT 1");
+    list($user_id) = mysql_fetch_row($result);
+    mysql_free_result($result);
+    $query = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions SET subscriber_active='YES' WHERE user_id='$user_id'";
+    cpg_db_query($query);
+}
+
+function newsletter_profile($profile_data) {
+    //print_r($profile_data);
+}
+
+function newsletter_form_list($data) {
+	global $CONFIG, $lang_plugin_newsletter, $newsletter_icon_array;
+	$form_data = $data[0];
+	$user_id = $data[1];
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_categories");
+    $category_array = cpg_db_fetch_rowset($result);
+    mysql_free_result($result);
+    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions
+                            WHERE user_id='{$user_id}'
+                            LIMIT 1");
+    list($user_subscription) = mysql_fetch_row($result);
+	mysql_free_result($result);
+	$loopCounter = 0;
+	foreach ($rowset as $category) {
+		if ($category['description'] != '') {
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2');
+		} else {
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2');
+		}
+		$loopCounter++;
+		
+	}
+	return $form_data;
+}
 ?>
