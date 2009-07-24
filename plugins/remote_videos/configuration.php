@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -52,6 +52,7 @@ $install_info = <<<EOT
             </td>
         </tr>
     </table>
+    <strong>Please consider your country's law, if you are liable when embedding content.</strong>
 EOT;
 
 ?>

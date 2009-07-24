@@ -17,20 +17,20 @@
   $Date$
 **********************************************/
 /*********************************************
-  Coppermine Plugin - Favorite Button
+  Coppermine Plugin - Atom Feed
   ********************************************
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
-$name='Favorite Button';
-$description='Adds a button to the navigation menu to easily add/remove pictures to/from your favorites';
+$name = 'Atom Feed';
+$description = 'Provide atom feeds for various meta albums and forum plugin';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 $version = '1.0';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="admin_menu">
-                <a href="http://forum.coppermine-gallery.net/index.php/topic,57565.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,60495.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
             </td>
         </tr>
     </table>

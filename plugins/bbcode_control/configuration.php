@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -31,7 +31,7 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bb
 }
 
 $name = 'BBCode Control';
-$version = '1.1.6';
+$version = '1.0';
 $description = <<< EOT
 <ul>
     <li>{$lang_plugin_bbcode_control['description_new_codes']}</li>

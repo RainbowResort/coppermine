@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -25,7 +25,7 @@
 $name = 'File Replacer';
 $description = 'Allows files to be replaced by a replacement file';
 $author = 'Created by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=941" rel="external" class="external">Nibbler</a> for cpg1.4.x - ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0.1';
+$version = '1.0';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>

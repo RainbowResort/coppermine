@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -25,7 +25,7 @@
 $name = 'Custom Thumbnail';
 $description = 'Upload custom thumbnails for pictures and files';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0.0';
+$version = '1.0';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
