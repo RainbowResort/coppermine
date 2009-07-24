@@ -25,7 +25,7 @@
 $name = 'Panorama Viewer';
 $description = 'Simple panorama image viewer';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '0.3';
+$version = '1.0';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
