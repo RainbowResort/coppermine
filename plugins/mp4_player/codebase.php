@@ -108,14 +108,10 @@ function mp4_player_other_media($pic_html) {
             $autostart = "false";
         }
 
-        $search = '(<object.*</object>)';
-
-        $new_html  = "<object type=\"{$CURRENT_PIC_DATA['mime']}\" width=\"{$CURRENT_PIC_DATA['pwidth']}\" height=\"{$CURRENT_PIC_DATA['pheight']}\" data=\"plugins/mp4_player/player.swf?file=$file&image=$thumb&autostart=$autostart\">";
-        $new_html .= "<param name=\"movie\" value=\"plugins/mp4_player/player.swf?file=$file&image=$thumb&autostart=$autostart\" />";
-        $new_html .= "<param name=\"allowfullscreen\" value=\"true\" />";
-        $new_html .= "</object>";
-
-        $pic_html = preg_replace($search, $new_html, $pic_html);
+        $pic_html  = "<object type=\"{$CURRENT_PIC_DATA['mime']}\" width=\"{$CURRENT_PIC_DATA['pwidth']}\" height=\"{$CURRENT_PIC_DATA['pheight']}\" data=\"plugins/mp4_player/player.swf?file=$file&image=$thumb&autostart=$autostart\">";
+        $pic_html .= "<param name=\"movie\" value=\"plugins/mp4_player/player.swf?file=$file&image=$thumb&autostart=$autostart\" />";
+        $pic_html .= "<param name=\"allowfullscreen\" value=\"true\" />";
+        $pic_html .= "</object>";
     }
     return $pic_html;
 }
