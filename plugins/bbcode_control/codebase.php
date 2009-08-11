@@ -170,7 +170,7 @@ function new_bbcodes($text) {
         preg_match('/[^.]+\.[^.]+$/', $host, $matches);
         $domain = isset($matches[0]) ? $matches[0] : $host;
 
-        $text = preg_replace("/\[img\](.*)$domain(.*)\[\/img\]/Uis", "[img_local]\\1$domain\\2[/img_local]", $text);
+        $text = preg_replace("/\[img\]([^\[img\]]*)$domain(.*)\[\/img\]/Uis", "[img_local]\\1$domain\\2[/img_local]", $text);
         $text = preg_replace("/\[img\](.*)\[\/img\]/Uis", "<a href=\"\\1\" rel=\"external\"><img src=\"plugins/bbcode_control/images/warning.png\" border=\"0\" alt=\"No bandwidth theft\" height=\"100\" title=\"{$lang_plugin_bbcode_control['save_bandwidth']}\" /></a>", $text);
         $text = str_replace("[img_local]", "[img]", $text);
         $text = str_replace("[/img_local]", "[/img]", $text);
