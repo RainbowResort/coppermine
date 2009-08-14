@@ -43,6 +43,12 @@ function file_replacer_page_start() {
         }
 
 		if ($superCage->files->keyExists('fileupload') && $row) {
+            if (!checkFormToken()) {
+                load_template();
+                global $lang_errors;
+                cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+            }
+
             $fileupload = $superCage->files->getRaw('fileupload');
             
             if ($fileupload['error']) {
@@ -149,27 +155,27 @@ function file_replacer_page_start() {
 			
 			
 		} else {
-	
 			load_template();
 			pageheader('File replacer');
 			echo '<form method="post" enctype="multipart/form-data">';
 			starttable('60%', 'Upload replacement file', 2);
-		
+            list($timestamp, $form_token) = getFormToken();
 			echo <<< EOT
-<tr>
-	<td class="tableb" valign="top">
-		Browse: 
-	</td>
-	<td class="tableb" valign="top">
-		<input type="file" name="fileupload" size="40" class="listbox" />
-	</td>
-</tr>
-<tr>
-	<td align="center" colspan="2" class="tablef">
-		<input type="submit" name="commit" class="button" value="Upload"/>
-	</td>
-</tr>
-
+                <tr>
+                	<td class="tableb" valign="top">
+                		Browse: 
+                	</td>
+                	<td class="tableb" valign="top">
+                		<input type="file" name="fileupload" size="40" class="listbox" />
+                	</td>
+                </tr>
+                <tr>
+                	<td align="center" colspan="2" class="tablef">
+                        <input type="hidden" name="form_token" value="{$form_token}" />
+                        <input type="hidden" name="timestamp" value="{$timestamp}" />
+                		<input type="submit" name="commit" class="button" value="Upload"/>
+                	</td>
+                </tr>
 EOT;
 			endtable();
 			echo '</form>';

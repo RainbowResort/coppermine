@@ -43,6 +43,12 @@ function custom_thumb_page_start() {
         }
 
         if ($superCage->files->keyExists('fileupload') && $row) {
+            if (!checkFormToken()) {
+                load_template();
+                global $lang_errors;
+                cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+            }
+
             $fileupload = $superCage->files->getRaw('fileupload');
 
             if ($fileupload['error']) {
@@ -72,6 +78,7 @@ function custom_thumb_page_start() {
             pageheader('Custom Thumbnail');
             echo '<form method="post" enctype="multipart/form-data">';
             starttable('60%', 'Upload custom thumbnail', 2);
+            list($timestamp, $form_token) = getFormToken();
             echo <<< EOT
                 <tr>
                     <td class="tableb" valign="top">
@@ -83,6 +90,8 @@ function custom_thumb_page_start() {
                 </tr>
                 <tr>
                     <td align="center" colspan="2" class="tablef">
+                        <input type="hidden" name="form_token" value="{$form_token}" />
+                        <input type="hidden" name="timestamp" value="{$timestamp}" />
                         <input type="submit" name="commit" class="button" value="Upload"/>
                     </td>
                 </tr>

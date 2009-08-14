@@ -32,6 +32,11 @@ global $lang_common;
 
 
 if ($superCage->post->keyExists('submit')) {
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+
     foreach(remote_videos_get_hoster() as $filetype => $value) {
         global $CONFIG;
         if ($superCage->post->getInt($filetype) == 1) {
@@ -62,7 +67,7 @@ if ($superCage->post->keyExists('submit')) {
 }
 
 
-echo "<form action=\"index.php?file=".$superCage->get->getRaw(file)."\" method=\"post\" name=\"custform\">";
+echo "<form action=\"index.php?file=remote_videos/admin\" method=\"post\" name=\"custform\">";
 starttable("100%", "Remote Videos - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 echo "
     <tr>
@@ -123,6 +128,9 @@ echo "
 
 endtable();
 
+list($timestamp, $form_token) = getFormToken();
+echo "<input type=\"hidden\" name=\"form_token\" value=\"{$form_token}\" />";
+echo "<input type=\"hidden\" name=\"timestamp\" value=\"{$timestamp}\" />";
 echo "<input type=\"submit\" value=\"{$lang_common['apply_changes']}\" name=\"submit\" class=\"button\" /> ";
 echo "<input type=\"reset\" value=\"reset\" name=\"reset\" class=\"button\" /> </form>";
 pagefooter();

@@ -39,6 +39,10 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bb
 
 
 if ($superCage->post->keyExists('submit')) {
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
     $bbcode_tags = get_bbcode_tags('available');
     foreach ($bbcode_tags as $tag) {
         if ($superCage->post->keyExists('show_'.$tag)) {
@@ -88,7 +92,7 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     $bbcode_process[$tag] = $row['value'];
 }
 
-echo "<form action=\"index.php?file=".$superCage->get->getRaw(file)."\" method=\"post\">";
+echo "<form action=\"index.php?file=bbcode_control/admin\" method=\"post\">";
 
 starttable("100%", "BBCode Control - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 
@@ -218,6 +222,9 @@ echo <<<EOT
 EOT;
 endtable();
 
+list($timestamp, $form_token) = getFormToken();
+echo "<input type=\"hidden\" name=\"form_token\" value=\"{$form_token}\" />";
+echo "<input type=\"hidden\" name=\"timestamp\" value=\"{$timestamp}\" />";
 echo "<input type=\"submit\" value=\"{$lang_common['apply_changes']}\" name=\"submit\" class=\"button\" /> ";
 echo "<input type=\"reset\" value=\"reset\" name=\"reset\" class=\"button\" /> </form>";
 pagefooter();

@@ -270,6 +270,11 @@ function annotate_uninstall() {
         return 1;
     }
 
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+
     if ($superCage->post->getInt('drop') == 1) {
         global $CONFIG;
         cpg_db_query("DROP TABLE `{$CONFIG['TABLE_PREFIX']}notes`");
@@ -284,27 +289,30 @@ function annotate_cleanup($action) {
     $superCage = Inspekt::makeSuperCage();
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
-    echo <<< EOT
-    <form action="{$cleanup}" method="post">
-        <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="tableb">
-                    Do you want to remove all annotations from the database?
-                </td>
-                <td class="tableb">
-                    <input type="radio" name="drop" id="drop_yes" value="1" checked="checked" />
-                    <label for="drop_yes" class="clickable_option">{$lang_common['yes']}</label>
-                </td>
-                <td class="tableb">
-                    <input type="radio" name="drop" id="drop_no"  value="0" />
-                    <label for="drop_no" class="clickable_option">{$lang_common['no']}</label>
-                </td>
-                <td class="tableb">
-                    <input type="submit" name="submit" value="{$lang_common['go']}" class="button" />
-                </td>
-            </tr>
-        </table>
-    </form>
+        list($timestamp, $form_token) = getFormToken();
+        echo <<< EOT
+            <form action="{$cleanup}" method="post">
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td class="tableb">
+                            Do you want to remove all annotations from the database?
+                        </td>
+                        <td class="tableb">
+                            <input type="radio" name="drop" id="drop_yes" value="1" checked="checked" />
+                            <label for="drop_yes" class="clickable_option">{$lang_common['yes']}</label>
+                        </td>
+                        <td class="tableb">
+                            <input type="radio" name="drop" id="drop_no"  value="0" />
+                            <label for="drop_no" class="clickable_option">{$lang_common['no']}</label>
+                        </td>
+                        <td class="tableb">
+                            <input type="hidden" name="form_token" value="{$form_token}" />
+                            <input type="hidden" name="timestamp" value="{$timestamp}" />
+                            <input type="submit" name="submit" value="{$lang_common['go']}" class="button" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
 EOT;
     }
 }

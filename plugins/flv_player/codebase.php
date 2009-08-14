@@ -52,6 +52,11 @@ function flv_player_uninstall() {
         return 1;
     }
 
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+
     if ($superCage->post->getInt('drop') == 1) {
         global $CONFIG;
         $allowed_mov_types = str_replace('/flv', '', $CONFIG['allowed_mov_types']);
@@ -70,6 +75,7 @@ function flv_player_cleanup($action) {
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
         global $lang_common;
+        list($timestamp, $form_token) = getFormToken();
         echo <<< EOT
             <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
@@ -84,6 +90,8 @@ function flv_player_cleanup($action) {
                     <td class="tableb">
                         <form action="{$cleanup}" method="post">
                             <input type="hidden" name="drop" value="1" />
+                            <input type="hidden" name="form_token" value="{$form_token}" />
+                            <input type="hidden" name="timestamp" value="{$timestamp}" />
                             <input type="submit" name="submit" value="{$lang_common['continue']}" class="button" />
                         </form>
                     </td>
