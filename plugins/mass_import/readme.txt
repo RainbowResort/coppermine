@@ -10,10 +10,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/CPGMassImport/configuration.php $
-  $Revision: 6477 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-18 09:13:18 +0200 (Di, 18. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************
 
 Changelog
