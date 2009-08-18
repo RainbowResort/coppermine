@@ -21,6 +21,7 @@ define('ADDPIC_PHP', true);
 
 
 require_once('include/picmgmt.inc.php');
+$scriptname = 'index.php?file=mass_import/import';
 
 if (!GALLERY_ADMIN_MODE) die('Access denied');
 
@@ -31,11 +32,23 @@ register_shutdown_function('reload');
 $db_query_wrapper = 'cpg_db_query';
 
 $icon_array['ok']  = cpg_fetch_icon('ok', 1);
+$output_array['row_start'] = <<< EOT
+	<tr>
+		<td>
+EOT;
+$output_array['row_end'] = <<< EOT
+		</td>
+	</tr>
+EOT;
+$output_array['row_separator'] = <<< EOT
+		</td>
+		<td>
+EOT;
 
 function dir_parse($path)
 {
     global $CONFIG;
-    $blockdirs=array('.','..','CVS','.SVN',str_replace('/','',$CONFIG['userpics']),'edit','_vti_cnf');
+    $blockdirs=array('.','..','CVS','.svn',str_replace('/','',$CONFIG['userpics']),'edit','_vti_cnf');
 	if ($dir = opendir($path))
 	{
 		$thisdir = array();
@@ -179,18 +192,18 @@ function createcategory($parent, $name)
 
 function createalbum($category, $title)
 {
-	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import;
+	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import, $output_array;
 	
 	$sql = "SELECT aid " . "FROM {$CONFIG['TABLE_ALBUMS']} " . "WHERE title='" . addslashes($title) . "' AND category=" . (INT)$category . " LIMIT 1";
     $result = $db_query_wrapper($sql);
 
     if (mysql_num_rows($result)) {
-		echo $lang_plugin_mass_import['album_exists']." : $title<br />";
+		echo $output_array['row_start'] . $lang_plugin_mass_import['album_exists'] . ': ' . $output_array['row_separator'] . $title. $output_array['row_end'];
 		$row = mysql_fetch_row($result);
 		$aid = $row[0];
 	} else {
 		$db_query_wrapper("INSERT INTO {$CONFIG['TABLE_ALBUMS']} (category, title, pos) VALUES ('".(INT)$category."', '" . addslashes($title) . "', '10000')");
-		echo $lang_plugin_mass_import['album_create']." : $title<br/>";
+		echo $output_array['row_start'] . $lang_plugin_mass_import['album_create'].': ' . $output_array['row_separator'] . $title . $output_array['row_end'];
 		$aid = mysql_insert_id();
 	}
 	flush();
@@ -242,7 +255,7 @@ function addpic($aid, $pic_file)
 
 function reload()
 {
-	global $filelist, $counter, $lang_plugin_mass_import, $lang_continue;
+	global $filelist, $counter, $lang_plugin_mass_import, $lang_continue, $output_array;
 	// Create the super cage
 	$superCage = Inspekt::makeSuperCage();
 	
@@ -264,7 +277,11 @@ function reload()
 	    $auto = '';
 	}
 	//$auto = (isset($_POST['auto']) && $_POST['auto']) ? 'checked = "checked"' : '';
-	$counter = $counter ? "$counter ".$lang_plugin_mass_import['files_added'] : $lang_plugin_mass_import['structure_created'];
+	if ($counter != 0) {
+		$counter = sprintf($lang_plugin_mass_import['files_added'], $counter);
+	} else {
+		$counter = $lang_plugin_mass_import['structure_created'];
+	}
 	if ($superCage->post->keyExists('directory')) {
 	    $directory = $superCage->post->getRaw('directory'); // We rely on the fact that only the admin can run this page
 	} else {
@@ -284,22 +301,35 @@ function reload()
 	}
 	//$hardlimit = isset($_POST['hardlimit'])  ? $_POST['hardlimit'] : '0';
 	$js = ($superCage->post->keyExists('auto') && $remaining) ? '<script type="text/javascript"> onload = document.form.submit();</script>' : ''; 
-	$scriptname = 'index.php?file=mass_import/import';
+	//$scriptname = 'index.php?file=mass_import/import';
 	
-	if (!connection_aborted()) echo <<< EOT
-	</br>
-	$counter, $remaining {$lang_plugin_mass_import['files_to_add']}.<br />
-	<form name="form" method="POST" action="$scriptname">
+	if (!connection_aborted()) {
+	echo $output_array['row_start'] . $counter . $output_array['row_separator'] . sprintf($lang_plugin_mass_import['files_to_add'], $remaining) . $output_array['row_end'];
+	echo <<< EOT
+	{$output_array['row_start']}
 		<input name="filelist" type="hidden" value="$filelist">
 		<input type="hidden" name="directory" value="$directory">	
-		{$lang_plugin_mass_import['sleep']}: <input type="text" name="sleep" value="$sleep">
-		{$lang_plugin_mass_import['hardlimit']}: <input type="text" name="hardlimit" value="$hardlimit">
+		{$lang_plugin_mass_import['sleep']}:
+		{$output_array['row_separator']}	
+		<input type="text" name="sleep" value="$sleep">
+		{$output_array['row_end']}
+		{$output_array['row_start']}
+		{$lang_plugin_mass_import['hardlimit']}: 
+		{$output_array['row_separator']}	
+		<input type="text" name="hardlimit" value="$hardlimit">
+		{$output_array['row_end']}
+		{$output_array['row_start']}
+		{$lang_plugin_mass_import['autorun']}: 
+		{$output_array['row_separator']}	
+		<input type="checkbox" name="auto" value="1" $auto>
+		{$output_array['row_end']}
+		{$output_array['row_start']}
 		<input type="submit" value="$lang_continue" />
-		{$lang_plugin_mass_import['autorun']}: <input type="checkbox" name="auto" value="1" $auto>
-	</form>
+		{$output_array['row_separator']}
+		{$output_array['row_end']}
 
 EOT;
-pagefooter();
+	}
 echo $js;
 }
 	
@@ -314,7 +344,11 @@ function countup($array)
 }
 
 pageheader($lang_plugin_mass_import['name']);
+echo <<< EOT
+<form name="form" method="POST" action="$scriptname">
+EOT;
 $post_directory = $superCage->post->getRaw('directory');
+
 
 if ($superCage->post->keyExists('filelist')){
 	$filelist = unserialize(base64_decode($superCage->post->getRaw('filelist'))); // We rely on the fact that only the admin can use this page in the first place
@@ -324,39 +358,40 @@ if ($superCage->post->keyExists('filelist')){
 
 } elseif ($superCage->post->keyExists('start')) {
 
+	starttable('100%', $lang_plugin_mass_import['name'], 2, 'cpg_zebra');
 	$data = dir_parse('./' . $CONFIG['fullpath'] . trim($post_directory));
 
 	if (!$superCage->post->keyExists('directory')) {
-        echo $lang_plugin_mass_import['root_use'].'<br />';
+        echo $output_array['row_start'] . $lang_plugin_mass_import['root_use']. $output_array['row_separator'] . $output_array['row_end'];
         $parent=0;
     } else {
         $sql = "SELECT cid " . "FROM {$CONFIG['TABLE_CATEGORIES']} " . "WHERE parent='0' AND name='" . $post_directory . "' " . "LIMIT 1";
     	$result = $db_query_wrapper($sql);
         if (mysql_num_rows($result)) {
-			echo $lang_plugin_mass_import['root_exists']." : " . $post_directory . "<br />";
+			echo $output_array['row_start'] . $lang_plugin_mass_import['root_exists'].": " . $output_array['row_separator'] . $post_directory . $output_array['row_end'];
 			$row = mysql_fetch_row($result);
 			$cid = $row[0];
 		} else {
 			$db_query_wrapper("INSERT INTO {$CONFIG['TABLE_CATEGORIES']} (pos, parent, name) VALUES ('10000', '0', '{$post_directory}')");
-			echo $lang_plugin_mass_import['root_create'].'<br />';
+			echo $output_array['row_start'] . $lang_plugin_mass_import['root_create'] . $output_array['row_separator'] . $output_array['row_end'];
 			$cid = mysql_insert_id();
 		}
 	}
 
 	$path = ( trim($post_directory) == "" ) ? rtrim($CONFIG['fullpath'],"/") : $CONFIG['fullpath'] . trim($post_directory);
 
-	echo $lang_plugin_mass_import['path'].": " . $path . "</br>";
+	echo $output_array['row_start'] . $lang_plugin_mass_import['path'].": " . $output_array['row_separator'] . $path . $output_array['row_end'];
 
 	createstructure($data, $cid, './' . $path);
 
 	cleanupfilelist();
+	endtable();
 
 } else {
 
-	$scriptname = 'index.php?file=mass_import/import';
+	//$scriptname = 'index.php?file=mass_import/import';
 		echo <<< EOT
 	
-    <form method="POST" action="$scriptname">
 EOT;
 	
 	starttable('100%', $lang_plugin_mass_import['name'],2,'cpg_zebra');
@@ -403,9 +438,9 @@ EOT;
 
 EOT;
 endtable();
+}
 echo <<< EOT
     </form>
 EOT;
-}
-
+pagefooter();
 ?>

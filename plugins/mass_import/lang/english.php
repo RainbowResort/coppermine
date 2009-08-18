@@ -49,8 +49,8 @@ $lang_plugin_mass_import['pics_indb'] = 'Pictures in the database';
 $lang_plugin_mass_import['pics_afterfilter'] = 'After filtering';
 $lang_plugin_mass_import['pics_to_add'] = 'pictures will be added';
 $lang_plugin_mass_import['structure_created'] = 'structure created';
-$lang_plugin_mass_import['files_added'] = 'files added';
-$lang_plugin_mass_import['files_to_add'] = 'files to add';
+$lang_plugin_mass_import['files_added'] = '%s files added';
+$lang_plugin_mass_import['files_to_add'] = '%s files to add';
 $lang_plugin_mass_import['path'] = 'Path';
 
 ?>
