@@ -27,7 +27,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-08-18 [B] Inspectified form (work in progress) {GauGau}
+2009-08-19 [A] Added menu icons {GauGau}
+2009-08-19 [C] Converted admin menu entry function for cpg1.5.x {GauGau}
+2009-08-18 [B] Inspectified form {GauGau}
 2009-08-18 [C] Spiced up form {GauGau}
 2009-08-18 [M] Added SVN header {GauGau}
 2009-08-18 [M] Renamed plugin folder from CPGMassImport to mass_import to respect naming conventions {GauGau}
@@ -35,7 +37,5 @@ Changelog
 
 Todo
 ====
-* Inspectify
 * Add German language file
 * Add spinbutton to form
-* Add icon in menu and add right after batch-add

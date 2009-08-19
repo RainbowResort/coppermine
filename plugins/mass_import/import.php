@@ -23,7 +23,9 @@ define('ADDPIC_PHP', true);
 require_once('include/picmgmt.inc.php');
 $scriptname = 'index.php?file=mass_import/import';
 
-if (!GALLERY_ADMIN_MODE) die('Access denied');
+if (!GALLERY_ADMIN_MODE) {
+    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+}
 
 
 
@@ -31,7 +33,6 @@ register_shutdown_function('reload');
 
 $db_query_wrapper = 'cpg_db_query';
 
-$icon_array['ok']  = cpg_fetch_icon('ok', 1);
 $output_array['row_start'] = <<< EOT
 	<tr>
 		<td>
@@ -124,7 +125,7 @@ function createstructure($data, $parent, $path)
 }
 
 function cleanupfilelist() {
-	global $filelist, $CONFIG, $db_query_wrapper, $lang_plugin_mass_import;
+	global $filelist, $CONFIG, $db_query_wrapper, $lang_plugin_mass_import, $output_array;
 
 	$sql = "SELECT aid, CONCAT('./" . addslashes($CONFIG['fullpath']) . "',filepath,filename) As filepath FROM {$CONFIG['TABLE_PICTURES']} ORDER BY filepath";
     $result = $db_query_wrapper($sql);
@@ -133,12 +134,12 @@ function cleanupfilelist() {
 	}
 	flush();
 
-	echo count($filelist) ." ". $lang_plugin_mass_import['pics_found'] . "<br />";
-	echo count($arr) ." ". $lang_plugin_mass_import['pics_indb'] . "<br />";
+	echo $output_array['row_start'] . $lang_plugin_mass_import['pics_found'] . ': ' . $output_array['row_separator'] . count($filelist) . $output_array['row_end'];
+	echo $output_array['row_start'] . $lang_plugin_mass_import['pics_indb'] . ': ' . $output_array['row_separator'] . count($arr) . $output_array['row_end'];
 	if (is_array($arr)) {
 	   $filelist = array_diff_assoc($filelist,$arr);
 	}
-	echo $lang_plugin_mass_import['pics_afterfilter']. " " . count($filelist) . " ". $lang_plugin_mass_import['pics_to_add'] ."<br />";
+	echo $output_array['row_start'] . $lang_plugin_mass_import['pics_afterfilter'] . ': ' . $output_array['row_separator'] . count($filelist) . $output_array['row_end'];
 	//var_dump($filelist); //debug
 }
 
@@ -153,7 +154,6 @@ function populatealbums()
 	} else {
 	    $lim = getrandmax();
 	}
-	//$lim = $_POST['hardlimit'] > 0 ? $_POST['hardlimit'] : getrandmax();
 		
 	foreach ($filelist as $filename => $aid)
 	{
@@ -171,18 +171,18 @@ function populatealbums()
 
 function createcategory($parent, $name)
 {
-	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import;
+	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import, $output_array;
 
 	$sql = "SELECT cid " . "FROM {$CONFIG['TABLE_CATEGORIES']} " . "WHERE name='" . addslashes($name) . "' AND parent=" . (INT)$parent . " LIMIT 1";
     $result = $db_query_wrapper($sql);
 
     if (mysql_num_rows($result)) {
-		echo $lang_plugin_mass_import['cat_exists']." : $name<br />";
+		echo $output_array['row_start'] . $lang_plugin_mass_import['cat_exists'] . ': ' . $output_array['row_separator'] . $name. $output_array['row_end'];
 		$row = mysql_fetch_row($result);
 		$cid = $row[0];
 	} else {
 		$db_query_wrapper("INSERT INTO {$CONFIG['TABLE_CATEGORIES']} (pos, parent, name) VALUES ('10000', '$parent', '" . addslashes($name) . "')");
-		echo $lang_plugin_mass_import['cat_create'].": $name<br/>";
+		echo $output_array['row_start'] . $lang_plugin_mass_import['cat_create'] . ': ' . $output_array['row_separator'] . $name. $output_array['row_end'];
 		$cid = mysql_insert_id();
 	}
 	flush();
@@ -212,7 +212,7 @@ function createalbum($category, $title)
 
 function addpic($aid, $pic_file)
 {
-	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import;
+	global $CONFIG, $db_query_wrapper, $lang_plugin_mass_import, $output_array, $mass_import_icon_array;
 	
 	$pic_file = str_replace('./' . $CONFIG['fullpath'], '', $pic_file);
 	
@@ -233,7 +233,7 @@ function addpic($aid, $pic_file)
 	
 	$extra = strstr($pic_file, $sane_name) ? '' : " (as $sane_name)";
 	if (mysql_num_rows($result)) {
-		echo $lang_plugin_mass_import['picture']." '$pic_file' ".$lang_plugin_mass_import['already']."$extra<br />";
+		echo $output_array['row_start'] . $mass_import_icon_array['cancel'] . $lang_plugin_mass_import['file_already_in_database'] . ': ' . $output_array['row_separator'] . $pic_file . $output_array['row_end'];
 	} else {
 		while (($sane_name != $file_name) && file_exists("./" . $CONFIG['fullpath'] . $dir_name . $sane_name))
 		{
@@ -245,9 +245,9 @@ function addpic($aid, $pic_file)
 		rename($source, "./" . $CONFIG['fullpath'] . $dir_name . $sane_name);
 	
 		if (add_picture($aid, $dir_name, $sane_name, $file_name)) {
-			echo $lang_plugin_mass_import['picture']." '$pic_file' ".$lang_plugin_mass_import['added']."$extra<br />"; 
+			echo $output_array['row_start'] . $mass_import_icon_array['ok'] . $lang_plugin_mass_import['file_added_to_database'] . ': ' . $output_array['row_separator'] . $pic_file . $output_array['row_end']; 
 		} else {
-			echo $lang_plugin_mass_import['picture']." '$pic_file' ".$lang_plugin_mass_import['failed']."$extra<br />"; 
+			echo $output_array['row_start'] . $mass_import_icon_array['stop'] . $lang_plugin_mass_import['failed_to_add_file_to_database'] . ': ' . $output_array['row_separator'] . $pic_file . $output_array['row_end']; 
 		}
 	}
 	flush();
@@ -255,7 +255,7 @@ function addpic($aid, $pic_file)
 
 function reload()
 {
-	global $filelist, $counter, $lang_plugin_mass_import, $lang_continue, $output_array;
+	global $filelist, $counter, $lang_plugin_mass_import, $output_array, $lang_common, $mass_import_icon_array;
 	// Create the super cage
 	$superCage = Inspekt::makeSuperCage();
 	
@@ -276,61 +276,63 @@ function reload()
 	} else {
 	    $auto = '';
 	}
-	//$auto = (isset($_POST['auto']) && $_POST['auto']) ? 'checked = "checked"' : '';
 	if ($counter != 0) {
-		$counter = sprintf($lang_plugin_mass_import['files_added'], $counter);
+		$counter = $output_array['row_start'] . $lang_plugin_mass_import['files_added']. ': ' . $output_array['row_separator'] . $counter . $output_array['row_end'];
 	} else {
-		$counter = $lang_plugin_mass_import['structure_created'];
+		$counter = $output_array['row_start'] . $lang_plugin_mass_import['structure_created'] . $output_array['row_separator'] . $output_array['row_end'];
 	}
 	if ($superCage->post->keyExists('directory')) {
 	    $directory = $superCage->post->getRaw('directory'); // We rely on the fact that only the admin can run this page
 	} else {
 	    $directory = '';
 	}
-	//$directory = isset($_POST['directory'])  ? $_POST['directory'] : '';
 	if ($superCage->post->keyExists('sleep')) {
 	    $sleep = $superCage->post->getInt('sleep');
 	} else {
 	    $sleep = '1000';
 	}
-	//$sleep = isset($_POST['sleep'])  ? $_POST['sleep'] : '1000';
 	if ($superCage->post->keyExists('hardlimit')) {
 	    $hardlimit = $superCage->post->getInt('hardlimit');
 	} else {
 	    $hardlimit = '0';
 	}
-	//$hardlimit = isset($_POST['hardlimit'])  ? $_POST['hardlimit'] : '0';
 	$js = ($superCage->post->keyExists('auto') && $remaining) ? '<script type="text/javascript"> onload = document.form.submit();</script>' : ''; 
 	//$scriptname = 'index.php?file=mass_import/import';
 	
 	if (!connection_aborted()) {
-	echo $output_array['row_start'] . $counter . $output_array['row_separator'] . sprintf($lang_plugin_mass_import['files_to_add'], $remaining) . $output_array['row_end'];
+	echo $counter;
+	echo $output_array['row_start'] . $lang_plugin_mass_import['files_to_add'] . ': ' . $output_array['row_separator'] . $remaining . $output_array['row_end'];
 	echo <<< EOT
 	{$output_array['row_start']}
-		<input name="filelist" type="hidden" value="$filelist">
-		<input type="hidden" name="directory" value="$directory">	
-		{$lang_plugin_mass_import['sleep']}:
+		<input name="filelist" type="hidden" value="$filelist" />
+		<input type="hidden" name="directory" value="$directory" />	
+		{$lang_plugin_mass_import['sleep_desc']}:
 		{$output_array['row_separator']}	
-		<input type="text" name="sleep" value="$sleep">
+		<input type="text" name="sleep" id="sleep" value="{$sleep}" size="5" maxlength="5" class="textinput" /> ({$lang_plugin_mass_import['in_milliseconds']})
 		{$output_array['row_end']}
 		{$output_array['row_start']}
-		{$lang_plugin_mass_import['hardlimit']}: 
+		{$lang_plugin_mass_import['hardlimit_desc']}: 
 		{$output_array['row_separator']}	
-		<input type="text" name="hardlimit" value="$hardlimit">
+		<input type="text" name="hardlimit" id="hardlimit" value="{$hardlimit}" size="4" maxlength="5" class="textinput" />
 		{$output_array['row_end']}
 		{$output_array['row_start']}
-		{$lang_plugin_mass_import['autorun']}: 
+		<label for="auto" class="clickable_option">{$lang_plugin_mass_import['autorun_desc']}</label>: 
 		{$output_array['row_separator']}	
-		<input type="checkbox" name="auto" value="1" $auto>
+		<input type="checkbox" name="auto" id="auto" value="1" class="checkbox" $auto />
 		{$output_array['row_end']}
 		{$output_array['row_start']}
-		<input type="submit" value="$lang_continue" />
+		<button type="submit" class="button" name="continue" value="{$lang_common['continue']}">{$mass_import_icon_array['continue']}{$lang_common['continue']}</button>
 		{$output_array['row_separator']}
 		{$output_array['row_end']}
 
 EOT;
 	}
 echo $js;
+endtable();
+echo <<< EOT
+    </form>
+EOT;
+pagefooter();
 }
 	
 function countup($array)
@@ -347,18 +349,18 @@ pageheader($lang_plugin_mass_import['name']);
 echo <<< EOT
 <form name="form" method="POST" action="$scriptname">
 EOT;
+starttable('100%', $mass_import_icon_array['table'] . $lang_plugin_mass_import['name'], 2, 'cpg_zebra');
 $post_directory = $superCage->post->getRaw('directory');
 
 
 if ($superCage->post->keyExists('filelist')){
 	$filelist = unserialize(base64_decode($superCage->post->getRaw('filelist'))); // We rely on the fact that only the admin can use this page in the first place
 	$counter = 0;
-	echo '<br />';
+	//echo '<br />';
 	populatealbums();
 
 } elseif ($superCage->post->keyExists('start')) {
 
-	starttable('100%', $lang_plugin_mass_import['name'], 2, 'cpg_zebra');
 	$data = dir_parse('./' . $CONFIG['fullpath'] . trim($post_directory));
 
 	if (!$superCage->post->keyExists('directory')) {
@@ -385,7 +387,7 @@ if ($superCage->post->keyExists('filelist')){
 	createstructure($data, $cid, './' . $path);
 
 	cleanupfilelist();
-	endtable();
+	
 
 } else {
 
@@ -394,7 +396,6 @@ if ($superCage->post->keyExists('filelist')){
 	
 EOT;
 	
-	starttable('100%', $lang_plugin_mass_import['name'],2,'cpg_zebra');
 
 	echo <<< EOT
 	<tr>
@@ -410,7 +411,8 @@ EOT;
 	        {$lang_plugin_mass_import['sleep_desc']}:
 	    </td>
 	    <td>
-	        <input type="text" name="sleep" id="sleep" value="1000" size="5" maxlength="5" class="textinput" />
+	        <input type="text" name="sleep" id="sleep" value="1000" size="5" maxlength="5" class="textinput" /> 
+	        ({$lang_plugin_mass_import['in_milliseconds']})
 	    </td>
 	</tr>
 	<tr>
@@ -431,16 +433,12 @@ EOT;
 	</tr>
 	<tr>
 	    <td colspan="2" class="tablef">
-	        <button type="submit" class="button" name="start" value="{$lang_common['go']}">{$icon_array['ok']}{$lang_common['go']}</button>
+	        <button type="submit" class="button" name="start" value="{$lang_common['go']}">{$mass_import_icon_array['continue']}{$lang_common['go']}</button>
 	    </td>
 	</tr>
 
 
 EOT;
-endtable();
 }
-echo <<< EOT
-    </form>
-EOT;
-pagefooter();
+
 ?>

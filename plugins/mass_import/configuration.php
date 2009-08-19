@@ -24,5 +24,12 @@ $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=15025">Flux</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=23938">Paul Van Rompay</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '3.0';
+$version = '3.1';
+$extra_info = <<<EOT
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">Announcement thread</a>&nbsp;
+    <a href="index.php?file=mass_import/import" class="admin_menu">Mass Import</a>
+EOT;
+$install_info = <<<EOT
+    The mass import works similarly to the batch-add process, but it allows you to add an entire structure of folders, subfolders and files to be added in one go. The plugin will create categories and albums that correspond to the folder names. It will then loop though the files in the structure and batch-add them to the database and create the resized images.<br />Use this plugin as well if you have issues with the regular batch-add process consuming too many resources.<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">Announcement thread</a>&nbsp;
+EOT;
 ?>
