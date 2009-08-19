@@ -17,6 +17,10 @@
   $Date$
 **********************************************/
 
+if (!defined('IN_COPPERMINE')) {
+	die('Not in Coppermine...');
+}
+
 $name = 'Mass Import';
 $description = 'Mass Import gives the admin the ability to import large numbers of pictures organized by directory structure.';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=941">Nibbler</a>, ';
@@ -24,7 +28,8 @@ $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=15025">Flux</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=23938">Paul Van Rompay</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '3.1';
+$version = '3.2';
+
 $extra_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">Announcement thread</a>&nbsp;
     <a href="index.php?file=mass_import/import" class="admin_menu">Mass Import</a>

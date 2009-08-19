@@ -27,15 +27,17 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-08-19 [A] Addeded spin button {GauGau}
+2009-08-19 [A] Addeded German language file {GauGau}
 2009-08-19 [A] Added menu icons {GauGau}
 2009-08-19 [C] Converted admin menu entry function for cpg1.5.x {GauGau}
 2009-08-18 [B] Inspectified form {GauGau}
 2009-08-18 [C] Spiced up form {GauGau}
 2009-08-18 [M] Added SVN header {GauGau}
 2009-08-18 [M] Renamed plugin folder from CPGMassImport to mass_import to respect naming conventions {GauGau}
+2009-08-18 [M] Increased plugin version count from 2.0 to 3.0 to reflect the in-depth changes {GauGau}
 
 
 Todo
 ====
-* Add German language file
-* Add spinbutton to form
+

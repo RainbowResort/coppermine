@@ -20,7 +20,11 @@ define('IN_COPPERMINE', true);
 define('ADDPIC_PHP', true);
 
 
-require_once('include/picmgmt.inc.php');
+require_once 'include/picmgmt.inc.php';
+require_once './plugins/mass_import/init.inc.php';
+$mass_import_init_array = mass_import_initialize();
+$lang_plugin_mass_import = $mass_import_init_array['language']; 
+$mass_import_icon_array = $mass_import_init_array['icon'];
 $scriptname = 'index.php?file=mass_import/import';
 
 if (!GALLERY_ADMIN_MODE) {
@@ -308,12 +312,12 @@ function reload()
 		<input type="hidden" name="directory" value="$directory" />	
 		{$lang_plugin_mass_import['sleep_desc']}:
 		{$output_array['row_separator']}	
-		<input type="text" name="sleep" id="sleep" value="{$sleep}" size="5" maxlength="5" class="textinput" /> ({$lang_plugin_mass_import['in_milliseconds']})
+		<input type="text" name="sleep" id="sleep" value="{$sleep}" size="5" maxlength="5" class="textinput spin-button" /> ({$lang_plugin_mass_import['in_milliseconds']})
 		{$output_array['row_end']}
 		{$output_array['row_start']}
 		{$lang_plugin_mass_import['hardlimit_desc']}: 
 		{$output_array['row_separator']}	
-		<input type="text" name="hardlimit" id="hardlimit" value="{$hardlimit}" size="4" maxlength="5" class="textinput" />
+		<input type="text" name="hardlimit" id="hardlimit" value="{$hardlimit}" size="3" maxlength="3" class="textinput spin-button" />
 		{$output_array['row_end']}
 		{$output_array['row_start']}
 		<label for="auto" class="clickable_option">{$lang_plugin_mass_import['autorun_desc']}</label>: 
@@ -411,7 +415,7 @@ EOT;
 	        {$lang_plugin_mass_import['sleep_desc']}:
 	    </td>
 	    <td>
-	        <input type="text" name="sleep" id="sleep" value="1000" size="5" maxlength="5" class="textinput" /> 
+	        <input type="text" name="sleep" id="sleep" value="1000" size="5" maxlength="5" class="textinput spin-button" /> 
 	        ({$lang_plugin_mass_import['in_milliseconds']})
 	    </td>
 	</tr>
@@ -428,7 +432,7 @@ EOT;
 	        {$lang_plugin_mass_import['hardlimit_desc']}:
 	    </td>
 	    <td>
-	        <input type="text" name="hardlimit" id="hardlimit" value="10" size="4" maxlength="5" class="textinput" />
+	        <input type="text" name="hardlimit" id="hardlimit" value="10" size="3" maxlength="3" class="textinput spin-button" />
 	    </td>
 	</tr>
 	<tr>
