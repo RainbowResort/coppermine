@@ -316,3 +316,98 @@ function annotate_cleanup($action) {
 EOT;
     }
 }
+
+
+
+
+
+//// New meta album
+
+// Meta album titles
+$thisplugin->add_action('page_start','annotate_meta_album_titles_page_start');
+function annotate_meta_album_titles_page_start() {
+    global $lang_meta_album_names;
+
+    $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations';
+}
+
+
+// Meta album get_pic_pos
+$thisplugin->add_filter('get_pic_pos_custom_meta_album','annotate_get_pic_pos');
+function annotate_get_pic_pos($album) {
+    global $CONFIG, $pid;
+
+    switch($album) {
+        case 'lastnotes':
+            $query = "SELECT update_time FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
+            $result = cpg_db_query($query);
+            $update_time = mysql_result($result, 0);
+            mysql_free_result($result);            
+
+            $query = "SELECT COUNT(DISTINCT n.pid) 
+                FROM {$CONFIG['TABLE_PREFIX']}notes n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} a on a.aid = p.aid 
+                $RESTRICTEDWHERE
+                AND approved = 'YES'
+                AND n.update_time > $update_time";
+
+                $result = cpg_db_query($query);
+
+                list($pos) = mysql_fetch_row($result);
+                mysql_free_result($result);
+
+            return $pos;
+            break;
+        
+        default: 
+            return FALSE;
+        
+    }
+}
+
+
+// New meta albums
+$thisplugin->add_filter('meta_album', 'annotate_meta_album');
+function annotate_meta_album($meta) {
+    global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE;
+
+    switch ($meta['album']) {
+        case 'lastnotes': // Last Annotations
+            $album_name = cpg_fetch_icon('user_mgr', 2)." Pictures with latest annotations";
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
+
+            $query = "SELECT DISTINCT n.pid FROM {$CONFIG['TABLE_PREFIX']}notes n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON n.pid = p.pid INNER JOIN {$CONFIG['TABLE_ALBUMS']} a on a.aid = p.aid $RESTRICTEDWHERE";
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
+
+            $query = "SELECT *, update_time as msg_date
+                      FROM {$CONFIG['TABLE_PICTURES']} p
+                      INNER JOIN {$CONFIG['TABLE_PREFIX']}notes n1
+                      ON p.pid = n1.pid 
+                      INNER JOIN {$CONFIG['TABLE_ALBUMS']} a 
+                      ON a.aid = p.aid 
+                      $RESTRICTEDWHERE AND n1.update_time IN (SELECT MAX(n2.update_time) FROM {$CONFIG['TABLE_PREFIX']}notes n2 WHERE n1.pid = n2.pid GROUP BY n2.pid)
+                      GROUP BY n1.pid ORDER BY n1.update_time DESC {$meta['limit']}";
+
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset, array('msg_date'));
+        break;
+
+        default: 
+            return $album;
+    }
+    
+    $meta['album_name'] = $album_name;
+    $meta['count'] = $count;
+    $meta['rowset'] = $rowset;
+
+    return $meta;
+}
+
