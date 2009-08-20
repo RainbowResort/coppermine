@@ -401,7 +401,7 @@ function annotate_meta_album($meta) {
         break;
 
         default: 
-            return $album;
+            return $meta;
     }
     
     $meta['album_name'] = $album_name;
