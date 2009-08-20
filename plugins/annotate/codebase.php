@@ -333,7 +333,7 @@ function annotate_meta_album_titles_page_start() {
 
 
 // Meta album get_pic_pos
-$thisplugin->add_filter('get_pic_pos_custom_meta_album','annotate_get_pic_pos');
+$thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 function annotate_get_pic_pos($album) {
     global $CONFIG, $pid;
 
