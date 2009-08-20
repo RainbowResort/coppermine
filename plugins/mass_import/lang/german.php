@@ -21,8 +21,8 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
-$lang_plugin_mass_import['name'] = 'Mass Import'; // Display Name
-$lang_plugin_mass_import['admin_title'] = 'Massen-Import'; // Title of the button on the gallery admin menu
+$lang_plugin_mass_import['name'] = 'Mass Import';
+$lang_plugin_mass_import['admin_title'] = 'Massen-Import';
 $lang_plugin_mass_import['description'] = 'Das Plugin Massen-Import ermöglicht dem Admin, eine große Anzahl von Dateien aus einer bestehenden Ordner-Struktur zur Galerie hinzuzufügen.';
 $lang_plugin_mass_import['subdir_desc'] = 'Unterverzeichnis von "albums" oder leer';
 $lang_plugin_mass_import['sleep_desc'] = 'Pause zwischen den einzelnen Import-Schritten';
@@ -47,5 +47,7 @@ $lang_plugin_mass_import['structure_created'] = 'Struktur erzeugt';
 $lang_plugin_mass_import['files_added'] = 'Dateien hinzugefügt';
 $lang_plugin_mass_import['files_to_add'] = 'Zu verarbeitende Dateien';
 $lang_plugin_mass_import['path'] = 'Pfad';
+$lang_plugin_mass_import['announcement_thread'] = 'Ankündigungs-Thread';
+$lang_plugin_mass_import['install_info'] = 'Der Massen-Import funktioniert ähnlich wie das Batch-Hinzufügen, es ermöglicht aber die verarbeitung einer ganzen Ordnerstruktur mit Unterordnern und Dateien in einem Durchgang. Das Plugin erzeugt Kategorien und Alben entsprechend der Verzeichnisnamen innerhalb der Ordnerstruktur und durchläuft dann diese Struktur und fügt die gefundenen Dateien der Datenbank hinzu und erzeugt Thumbnails und Bilder in Zwischengröße.<br />Dieses Plugin ist ebenfalls empfehlenswert, falls der normale Batch-Hinzufügen-Vorgang zu viele Ressourcen verbraucht und der Webhost deswegen aktiv wird.';
 
 ?>

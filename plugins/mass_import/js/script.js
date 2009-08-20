@@ -17,6 +17,6 @@
 **********************************************/
 
 $(document).ready(function() {
-	$('#sleep').SpinButton({min: 0,max: 99999});
-	$('#hardlimit').SpinButton({min: 1,max: 100});
+	$('#sleep').SpinButton({min: 0, max: 90000, step: 100});
+	$('#hardlimit').SpinButton({min: 1, max: 100});
 });

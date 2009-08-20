@@ -21,20 +21,26 @@ if (!defined('IN_COPPERMINE')) {
 	die('Not in Coppermine...');
 }
 
-$name = 'Mass Import';
-$description = 'Mass Import gives the admin the ability to import large numbers of pictures organized by directory structure.';
+require_once './plugins/mass_import/init.inc.php';
+$mass_import_init_array = mass_import_initialize();
+$lang_plugin_mass_import = $mass_import_init_array['language']; 
+$mass_import_icon_array = $mass_import_init_array['icon'];
+
+$name = $lang_plugin_mass_import['name'];
+$description = $lang_plugin_mass_import['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=941">Nibbler</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=10059">Donnoman</a> (<a href="http://cpg-contrib.org">cpg-contrib.org</a>), ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=15025">Flux</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=23938">Paul Van Rompay</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '3.2';
+$version = '3.3';
 
 $extra_info = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">Announcement thread</a>&nbsp;
-    <a href="index.php?file=mass_import/import" class="admin_menu">Mass Import</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>&nbsp;
+    <a href="index.php?file=mass_import/import" class="admin_menu" title="{$lang_plugin_mass_import['description']}">{$mass_import_icon_array['menu']}{$lang_plugin_mass_import['admin_title']}</a>
 EOT;
 $install_info = <<<EOT
-    The mass import works similarly to the batch-add process, but it allows you to add an entire structure of folders, subfolders and files to be added in one go. The plugin will create categories and albums that correspond to the folder names. It will then loop though the files in the structure and batch-add them to the database and create the resized images.<br />Use this plugin as well if you have issues with the regular batch-add process consuming too many resources.<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">Announcement thread</a>&nbsp;
+    <a href="javascript:;" onclick="MM_openBrWindow('plugins/mass_import/images/screenshot.png','','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=661,height=330')"><img src="plugins/mass_import/images/thumb_screenshot.png" border="0" width="128" height="64" alt="" align="right" style="padding-left:10px;" /></a>
+    {$lang_plugin_mass_import['install_info']}<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>
 EOT;
 ?>

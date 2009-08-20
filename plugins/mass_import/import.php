@@ -19,7 +19,6 @@
 define('IN_COPPERMINE', true);
 define('ADDPIC_PHP', true);
 
-
 require_once 'include/picmgmt.inc.php';
 require_once './plugins/mass_import/init.inc.php';
 $mass_import_init_array = mass_import_initialize();
@@ -30,8 +29,6 @@ $scriptname = 'index.php?file=mass_import/import';
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
-
-
 
 register_shutdown_function('reload');
 
@@ -54,15 +51,11 @@ function dir_parse($path)
 {
     global $CONFIG;
     $blockdirs=array('.','..','CVS','.svn',str_replace('/','',$CONFIG['userpics']),'edit','_vti_cnf');
-	if ($dir = opendir($path))
-	{
+	if ($dir = opendir($path)) {
 		$thisdir = array();
-		while (false !== ($file = readdir($dir)))
-		{
-			if  (!in_array($file,$blockdirs))
-			{
-				if (is_dir("$path/$file"))
-				{
+		while (false !== ($file = readdir($dir))) {
+			if  (!in_array($file,$blockdirs)) {
+				if (is_dir("$path/$file")) {
 					$thisdir[$file] = dir_parse("$path/$file");
 				} else {
 					$thisdir[] = $file;
@@ -73,52 +66,40 @@ function dir_parse($path)
 	}
 }
 
-function createstructure($data, $parent, $path)
-{
+function createstructure($data, $parent, $path) {
 	global $CONFIG, $filelist;
-	
 	$i = 0;
-	
 	$names = array_keys($data);
-
 	$cat_names = array();
-
-	foreach ($data as $set)
-	{
-		if (is_array($set)) $cat_names[] = $names[$i];
+	foreach ($data as $set) {
+		if (is_array($set)) {
+		    $cat_names[] = $names[$i];
+		}
 		$i++;
 	}
-
 	$i = 0;
-	
-	foreach ($cat_names as $name)
-	{
+	foreach ($cat_names as $name) {
 		unset($aid);
-		
 		$base = true;
-
-		foreach ($data[$name] as $lower)
-		{
+		foreach ($data[$name] as $lower) {
 			if (is_array($lower)){
 				$base = false;
 				break;
 			}
 		}
-		
 		if ($base){
 			$directory = $name;
 		} else {
 			$parent2 = createcategory($parent, $name);
 			$directory = $data[$name];
 		}
-		
-		if (is_array($directory))
-		{
+		if (is_array($directory)) {
 			createstructure($directory, $parent2, "$path/$name");
 		} else {
-			if (!isset($aid)) $aid = createalbum($parent, $name);
+			if (!isset($aid)) {
+			    $aid = createalbum($parent, $name);
+			}
 			$contents = dir_parse("$path/$name");
-			
 			foreach ($contents as $file) {
 				if (strncmp($file,$CONFIG['thumb_pfx'],strlen($CONFIG['thumb_pfx'])) != 0  &&  strncmp($file,$CONFIG['normal_pfx'],strlen($CONFIG['normal_pfx'])) != 0 &&  strncmp($file,'orig_',strlen('orig_')) != 0 && strncmp($file,'mini_',strlen('mini_')) != 0 && strpos('Thumbs.db',$file) === false ) {  
 					$filelist["$path/$name/$file"] = $aid;
@@ -301,7 +282,6 @@ function reload()
 	    $hardlimit = '0';
 	}
 	$js = ($superCage->post->keyExists('auto') && $remaining) ? '<script type="text/javascript"> onload = document.form.submit();</script>' : ''; 
-	//$scriptname = 'index.php?file=mass_import/import';
 	
 	if (!connection_aborted()) {
 	echo $counter;
@@ -394,12 +374,6 @@ if ($superCage->post->keyExists('filelist')){
 	
 
 } else {
-
-	//$scriptname = 'index.php?file=mass_import/import';
-		echo <<< EOT
-	
-EOT;
-	
 
 	echo <<< EOT
 	<tr>

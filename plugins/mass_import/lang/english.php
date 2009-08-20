@@ -47,5 +47,7 @@ $lang_plugin_mass_import['structure_created'] = 'Structure created';
 $lang_plugin_mass_import['files_added'] = 'Files added';
 $lang_plugin_mass_import['files_to_add'] = 'Files to process';
 $lang_plugin_mass_import['path'] = 'Path';
+$lang_plugin_mass_import['announcement_thread'] = 'Announcement thread';
+$lang_plugin_mass_import['install_info'] = 'The mass import works similarly to the batch-add process, but it allows you to add an entire structure of folders, subfolders and files to be added in one go. The plugin will create categories and albums that correspond to the folder names. It will then loop though the files in the structure and batch-add them to the database and create the resized images.<br />Use this plugin as well if you have issues with the regular batch-add process consuming too many resources.';
 
 ?>

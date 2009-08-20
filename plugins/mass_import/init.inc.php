@@ -38,8 +38,10 @@ function mass_import_initialize() {
 	
 	if ($CONFIG['enable_menu_icons'] >= 1) {
 	    $mass_import_icon_array['menu'] = '<img src="./plugins/mass_import/images/icons/mass_import.png" border="0" width="16" height="16" alt="" class="icon" />';
+	    $mass_import_icon_array['announcement'] = '<img src="./plugins/mass_import/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
 	} else {
 	    $mass_import_icon_array['menu'] = '';
+	    $mass_import_icon_array['announcement'] = '';
 	}
 	if ($CONFIG['enable_menu_icons'] == 2) {
 	    $mass_import_icon_array['table'] = '<img src="./plugins/mass_import/images/icons/mass_import.png" border="0" width="16" height="16" alt="" class="icon" />';
