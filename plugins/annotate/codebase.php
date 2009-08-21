@@ -323,12 +323,33 @@ EOT;
 
 //// New meta album
 
-// Meta album titles
-$thisplugin->add_action('page_start','annotate_meta_album_titles_page_start');
-function annotate_meta_album_titles_page_start() {
+// Meta album titles, delete orphans
+$thisplugin->add_action('page_start','annotate_page_start');
+function annotate_page_start() {
     global $lang_meta_album_names;
 
     $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations';
+
+    $superCage = Inspekt::makeSuperCage();
+    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
+        global $CONFIG;
+        load_template();
+        pageheader("Delete orphans");
+
+        $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']}");
+        $pids = array();
+        while ($row = mysql_fetch_row($result)) {
+            $pids[] = $row[0];
+        }
+        $pids = implode(",", $pids);
+
+        $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
+        list($count) = mysql_fetch_row($result);
+        $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
+        echo "Orphaned entries deleted: ".$count;
+
+        exit;
+    }
 }
 
 
@@ -361,7 +382,7 @@ function annotate_get_pic_pos($album) {
             break;
         
         default: 
-            return FALSE;
+            return $album;
         
     }
 }

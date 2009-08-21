@@ -25,12 +25,27 @@
 $name='Picture Annotation';
 $description='Add text annotations to your images';
 $author = 'Created by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=941" rel="external" class="external">Nibbler</a> for cpg1.4.x - ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.3';
-$extra_info = $install_info = <<<EOT
+$version = '1.4';
+$install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="admin_menu">
                 <a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+            </td>
+        </tr>
+    </table>
+EOT;
+$extra_info = <<<EOT
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="admin_menu">
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+            </td>
+            <td class="admin_menu">
+                &nbsp;
+            </td>
+            <td class="admin_menu">
+                <a href="index.php?plugin=annotate&delete_orphans">Delete orphaned entries</a>
             </td>
         </tr>
     </table>
