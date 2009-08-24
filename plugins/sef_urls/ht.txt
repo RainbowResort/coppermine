@@ -1,0 +1,81 @@
+##  ********************************************
+##  Coppermine Photo Gallery
+##  ************************
+##  Copyright (c) 2003-2007 Coppermine Dev Team
+##  v1.1 originaly written by Gregory DEMAR
+##
+##  This program is free software; you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation; either version 2 of the License, or
+##  (at your option) any later version.
+##  ********************************************
+##  Coppermine version: 1.5.0
+##  $Source$
+##  $Revision: 3405 $
+##  $Author: gaugau $
+##  $Date: 2006-12-27 10:06:19 +0100 (Mi, 27 Dez 2006) $
+##  ********************************************
+
+Options FollowSymLinks SymLinksIfOwnerMatch
+
+RewriteEngine on
+
+#  Uncomment the following line if your webserver's
+#  URL is not directly related to physical file paths.
+#  Update "YOUR_COPPERMINE_ROOT" (just / for root)
+
+#RewriteBase /YOUR_COPPERMINE_ROOT
+
+#
+# Rewrite index urls
+#
+RewriteRule index-([0-9]*)\.html(.*) index.php?cat=$1$2 [NC]
+
+RewriteRule index-([0-9]*)-page-([0-9]*)\.html(.*) index.php?cat=$1&page=$2$3 [NC]
+
+#
+# Rewrite thumbnail urls
+#
+RewriteRule thumbnails-lastupby-([0-9]+)\.html(.*) thumbnails.php?album=lastupby&uid=$1$2 [NC]
+
+RewriteRule thumbnails-lastcomby-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&uid=$1$2 [NC]
+
+RewriteRule thumbnails-lastupby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbnails.php?album=lastupby&cat=$1&uid=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-lastcomby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&cat=$1&uid=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2$3 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)-sort-([a-z]*)\.html(.*) thumbnails.php?album=$1&page=$2&sort=$3$4 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&page=$2$3 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-([0-9a-z]*)\.html(.*) thumbnails.php?album=$1$2 [NC]
+
+RewriteRule thumbnails-search-(.*)\.html(.*) thumbnails.php?album=search&search=$1$2 [NC]
+
+
+#
+# Rewrite displayimage urls
+#
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3$4 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2$3 [NC]
+
+RewriteRule displayimage-([0-9]+)\.html(.*) displayimage.php?pid=$1$2 [NC]
+
+RewriteRule slideshow-([0-9]+)-([\-]?[0-9]+)-([0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2&slideshow=$3$4 [NC]
+
+RewriteRule slideshow-([a-z]+)-([\-]?[0-9]+)-([0-9]+)-([0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&slideshow=$4$5 [NC]
+
+#
+# Rewrite users' profiles
+#
+RewriteRule profile-([0-9]+)\.html(.*) profile.php?uid=$1$2 [NC]
+
+#
+# Rewrite Rate this file
+#
+RewriteRule ratepic-([0-9]+)-([0-5])\.html(.*) ratepic.php?pic=$1&rate=$2$3 [NC]
