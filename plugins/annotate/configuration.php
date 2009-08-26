@@ -41,7 +41,7 @@ $extra_info = <<<EOT
             <td class="admin_menu">
                 <a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
             </td>
-            <td class="admin_menu">
+            <td>
                 &nbsp;
             </td>
             <td class="admin_menu">
