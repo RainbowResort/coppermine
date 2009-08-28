@@ -1,35 +1,28 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.8
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
   $Author: donnoman $
   $Date: 2005/12/08 05:46:49 $
 **********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-2007/07/19
-**********************************************/
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
-$lang_plugin_FileMove = array(
-  'display_name'    => 'FileMove',			// Display Name
+$lang_plugin_file_move = array(
+  'display_name'    => 'File Move',			// Display Name
   'config_title'    => 'تنظیمات پلاگین',			// Title of the button on the gallery config menu
-  'config_button'   => 'FileMove',				// Label of the button on the gallery config menu
+  'config_button'   => 'File Move',				// Label of the button on the gallery config menu
   'install_note'    => 'برای تنظیم پلاگین از دکمه اضافه شده به منوی مدیریت استفاده کنید.',	// Note about configuring plugin
   'install_click'   => 'برای نصب بر روی دکمه کلیک کنید.',	// Message to install plugin
-  'version'         => 'Ver 1.1', // Curent plugin version
   'folder_name'     => 'پوشه را که میخواهید جابجا کنید انتخاب کنید.',
   'folder_ar'				=> 'پوشه مقصد را انتخاب کنید.',
   'some_files'			=> 'جابجا کردن فایل',

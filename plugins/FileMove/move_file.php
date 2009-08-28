@@ -1,29 +1,23 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.8
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
   $Author: donnoman $
   $Date: 2005/12/08 05:46:49 $
 **********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-2007/07/19
-**********************************************/
 
 require('./include/init.inc.php');
-require('plugins/FileMove/include/init.inc.php');
-require ('plugins/FileMove/include/function.inc.php');
+require('plugins/file_move/include/init.inc.php');
+require ('plugins/file_move/include/function.inc.php');
 global $CONFIG;
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 if($lang_text_dir=='ltr') {
@@ -35,15 +29,15 @@ if($lang_text_dir=='ltr') {
 }
 //Définition des variables
 session_start();
-$DRep=$_GET['RepD']."/";
-$ARep=path_name($_GET['dfolder'])."/";
+$DRep = $superCage->get->getRaw('RepD') . "/";
+$ARep=path_name($superCage->get->getRaw('dfolder'))."/";
 $file_name=$_SESSION['filename'];
 echo "filename:".implode(", ",$_SESSION['filename']);
 //affichagede l'entête
-pageheader($lang_plugin_FileMove['display_name']);
-starttable('100%', $lang_plugin_FileMove['display_name'].' - '.$lang_plugin_FileMove['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);
+pageheader($lang_plugin_file_move['display_name']);
+starttable('100%', $lang_plugin_file_move['display_name'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);
 echo "<tr><td>";
-$title=$lang_plugin_FileMove['transfer_file'].$lang_plugin_FileMove['folder2']."<b>".$DRep."</b>".$lang_plugin_FileMove['to'].$lang_plugin_FileMove['folder2']."<b>".$ARep."</b>";
+$title=$lang_plugin_file_move['transfer_file'].$lang_plugin_file_move['folder2']."<b>".$DRep."</b>".$lang_plugin_file_move['to'].$lang_plugin_file_move['folder2']."<b>".$ARep."</b>";
 starttable('100%',$title);
 //Traitement de la base de donnée
 $c=0;
@@ -69,7 +63,7 @@ while($row=mysql_fetch_array($result))
 }
 unset($_SESSION['filename']);
 echo "</td></tr>";
-echo "<tr><td align='center'><b>{$c} {$lang_plugin_FileMove['traitement']}</b><a href='index.php'<input type='button' name='ok'value='{$lang_plugin_FileMove['continue']}'></a></td></tr>";
+echo "<tr><td align='center'><b>{$c} {$lang_plugin_file_move['traitement']}</b><a href='index.php'<input type='button' name='ok'value='{$lang_plugin_file_move['continue']}'></a></td></tr>";
 endtable();
 echo "</td></tr>";
 endtable();

@@ -1,20 +1,19 @@
-/**************************************************
-  FileMove Plugin for Coppermine Photo Gallery
-  *************************************************
-  By Frantz inspired from a wish from Sanlogik
-  *************************************************
-    *************************************************
+*******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
+
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-  *************************************************
-  Coppermine version: 1.4.13
-  $Source:  $
-  $Revision: 1.0 $
-  $Author: Frantz $
-  $Date: 2007/10/14 21:50:15 $
-***************************************************
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+  ********************************************
+  Coppermine version: 1.5.x
+  $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
+  $Revision: 1.3 $
+  $Author: donnoman $
+  $Date: 2005/12/08 05:46:49 $
+**********************************************
+
 What is this:/Qu'est ce que c'est:
 ----------
 This plugin allow you to reorder the folder where are all your pictures (generally the album folder)
@@ -24,27 +23,31 @@ You have two options:
 The files are transfered (normal, thumbnails, intermediars) and the database is updated
 Caution this plugin doesn't create nex folders. If you will have new folders into your album foldern you must create them by FTP.
 It will have no changes in your albums, This is only managed the storage folder.
-Plugin also avaible in English and French.
+Plugin is avaible in English, French, Dutch, Italian, Persian, Spanish and German.
 Feel free to translate the lang/english.php language file to your own language.
-
-Ce plugin permets de gérer le répertoire ou sont stockées les images (généralement le répertoire albums).
-Vous disposez de deux options:
-	*déplacement de l'ensemble du contenu d'un répertoire vers un autre:	
-	*déplacement de cetains fichiers d'un répertoire vers un autre répertoire.
-les fichiers sont déplacés (images normales, vignettes, images intermédiaires) et la base de donnée est mise à jour.
-Bien entendu celà ne change rien à vos albums. Il ne s'agit que de la gestion du répertoire de stockage
-le plugin est disponible en français et en anglais, n'hésitez pas à le traduire
 
 
 INSTALL/INSTALLATION
 -------
 
-* Unpack the archive and upload the "FileMove" directory structure to your Coppermine gallery's plugins folder.
+* Unpack the archive and upload the "file_move" directory structure to your Coppermine gallery's plugins folder.
 * Login as an admin, go to config, then "Manage Plugins"
-* Find the "FileMove" entry in the available plugins and click install.
+* Find the "file_move" entry in the available plugins and click install.
 * A new menu button is now added in the admin menu.
 
-*Décompressez l'archive et uploadez le dossier "FileMove" dans le répertoire "plugins" de votre galerie Coppermine.
-*Identifiez vous en tant qu'administrateur, allez à l'onglet "config", puis "configurez les plugins"
-*Trouvez le plugin "FileMove" dans les plugins disponibles et cliquez sur l'icone d'install
-*Un nouveau boutton est ajouté au menu administrateur. 
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2009-08-28 [M] Added SVN properties {GauGau}
+2009-08-28 [A] Added German language file {GauGau}
+2009-08-28 [M] Inspectification of plugin {GauGau}
+2009-08-28 [M] Renamed folder for compliance with naming scheme {GauGau}

@@ -1,36 +1,29 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.8
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
   $Author: donnoman $
   $Date: 2005/12/08 05:46:49 $
 **********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-2007/07/19
-**********************************************/
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
-$lang_plugin_FileMove = array(
-  'display_name'    => 'FileMove',			// Display Name
-  'config_title'    => 'Configure FileMove',			// Title of the button on the gallery config menu
-  'config_button'   => 'FileMove',				// Label of the button on the gallery config menu
+$lang_plugin_file_move = array(
+  'display_name'    => 'File Move',			// Display Name
+  'config_title'    => 'Configure file_move',			// Title of the button on the gallery config menu
+  'config_button'   => 'File Move',				// Label of the button on the gallery config menu
   'install_note'    => 'Configure plugin using button on Admin toolbar.',	// Note about configuring plugin
   'install_click'   => 'Click button to install plugin.',	// Message to install plugin
-  'version'         => 'Ver 1.1', // Curent plugin version
-  'folder_name'     => 'Select the folder you will move',
+  'folder_name'     => 'Select the folder you want to move',
   'folder_ar'				=> 'Select destination folder',
   'some_files'			=> 'Move SOME files',
   'choix'						=>'Choice of the operation',

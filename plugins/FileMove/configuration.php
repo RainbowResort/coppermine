@@ -1,28 +1,22 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.9
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
-  $Author: Frantz $
-  $Date: 2007/07/19 05:46:49 $
-**********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-Version 1.0
+  $Author: donnoman $
+  $Date: 2005/12/08 05:46:49 $
 **********************************************/
 
-$name='FileMove';
-$description='Choose files or a folder to move and modify the database according';
-$author='Frantz';
-$version='1.1';
+$name='File Move';
+$description='Choose files or a folder to move: the plugin will perform the move and adjust the data in the database accordingly';
+$author='François Keller';
+$version='1.2';
 ?>

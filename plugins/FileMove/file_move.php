@@ -1,28 +1,22 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.8
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
   $Author: donnoman $
   $Date: 2005/12/08 05:46:49 $
 **********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-2007/09/22
-**********************************************/
 require('./include/init.inc.php');
-require('plugins/FileMove/include/init.inc.php');
-require ('plugins/FileMove/include/function.inc.php');
+require('plugins/file_move/include/init.inc.php');
+require ('plugins/file_move/include/function.inc.php');
 global $CONFIG,$titre,$Drep;
 session_start();
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
@@ -34,39 +28,39 @@ if($lang_text_dir=='ltr') {
 	$direction="rtl";
 }
 //Définition des variables
-if(isset($_GET['dfolder'])){
-	$dfolder=$_GET['dfolder'];
+if($superCage->get->keyExists('dfolder')){
+	$dfolder = $superCage->get->getEscaped('dfolder');
 }
-if(isset($_GET['selection'])){
-	$selection=$_GET['selection'];
+if($superCage->get->keyExists('selection')){
+	$selection = $superCage->get->getEscaped('selection');
 }
-if(isset($_GET['selection1'])){
-	$selection1=$_GET['selection1'];
+if($superCage->get->keyExists('selection1')){
+	$selection = $superCage->get->getEscaped('selection1');
 }
 
 
-$titre=$lang_plugin_FileMove['folder_ar'];
+$titre=$lang_plugin_file_move['folder_ar'];
 		
 $Drep=path_name($dfolder);
 //affichagede l'entête
-pageheader($lang_plugin_FileMove['display_name']);
-if (!empty($_POST['file_name']))
+pageheader($lang_plugin_file_move['display_name']);
+if ($superCage->post->keyExists('file_name') && $superCage->post->getRaw('file_name') != '')
 {
 	$directory="./".$CONFIG['fullpath'];
 	$Drep=path_name($dfolder);
 	$selection = "ok";
 	starttable('100%',$titre);
-	echo "<tr><td class='tableh2'align='left'>{$lang_plugin_FileMove['DFolder']}<b>{$Drep}</b></td></tr>";
-	echo "<tr><td class='tableh2'align='left'>{$lang_plugin_FileMove['confirm_files']}</td></tr>";
+	echo "<tr><td class='tableh2'align='left'>{$lang_plugin_file_move['DFolder']}<b>{$Drep}</b></td></tr>";
+	echo "<tr><td class='tableh2'align='left'>{$lang_plugin_file_move['confirm_files']}</td></tr>";
 	echo "<tr><td class='tableh2'>";
-	$filename=$_POST['file_name'];
-	$_SESSION['filename']=$filename;
+	$filename = $superCage->post->getRaw('file_name');
+	$_SESSION['filename'] = $filename;
 	foreach($filename as $n => $name)
 	{
 		echo $name."&nbsp;&nbsp;";
 	}
 	echo "</td></tr>";
-	echo "<tr><td class='tableh1' align='center'><b>{$lang_plugin_FileMove['folder_ar']}</b></td></tr>";
+	echo "<tr><td class='tableh1' align='center'><b>{$lang_plugin_file_move['folder_ar']}</b></td></tr>";
 	//choix du répertoire d'arrivée
 	echo "<tr><td>";
 	list_dir($directory,1,$dfolder,$selection,$selection1,$Drep);
@@ -75,16 +69,16 @@ if (!empty($_POST['file_name']))
 }
 else
 {
-	starttable('100%', $lang_plugin_FileMove['display_name'].' - '.$lang_plugin_FileMove['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);
+	starttable('100%', $lang_plugin_file_move['display_name'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);
 	//affichage du contenu du répertoire
 	echo "<tr><td>";
 	$nb=2;//Change this value according the column number you will display
-	starttable('100%',$lang_plugin_FileMove['DFolder'].$Drep,$nb);
+	starttable('100%',$lang_plugin_file_move['DFolder'].$Drep,$nb);
 	echo "<form name='file' action='' method='post'>";
 	echo "<tr>";
 	file_dir($dfolder,$nb);
 	echo "<input type='hidden' name='dfolder' value='{$dfolder}'";
-	echo "<tr><td align='center' colspan='{$nb}'<input type='Submit' value='{$lang_plugin_FileMove['valid']}'></td></tr>";
+	echo "<tr><td align='center' colspan='{$nb}'<input type='Submit' value='{$lang_plugin_file_move['valid']}'></td></tr>";
 	echo "</tr></form>";
 	endtable();
 	echo "</td></tr>";

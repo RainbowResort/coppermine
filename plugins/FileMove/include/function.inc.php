@@ -1,30 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
+/******************************
+  Coppermine Plugin "File Move"
+  *****************************
+  Copyright (c) 2003-2009 François Keller
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
   ********************************************
-  Coppermine version: 1.4.8
+  Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
   $Revision: 1.3 $
   $Author: donnoman $
   $Date: 2005/12/08 05:46:49 $
 **********************************************/
-/**********************************************
-Modified by Frantz for FileMove plugin
-2007/07/19
-**********************************************/
-/*********************************************
-*extension($file)
-*fonction d'attribution d'une icone pour chaque type de fichiers
-$file:nom du fichier
-*********************************************/
 function extension($file)
 {
         
@@ -32,7 +21,7 @@ function extension($file)
     ############### Folder
     if ( $file == "folder" )
     {
-        $icon  = "<IMG SRC='plugins/FileMove/images/folder.gif' alt='Dossier' border='0' width='15' ";
+        $icon  = "<IMG SRC='plugins/file_move/images/folder.gif' alt='Dossier' border='0' width='15' ";
         $icon .= "height='13' hspace='3' vspace='3'>";
         ############### Image
     }
@@ -40,13 +29,13 @@ function extension($file)
              (!strcasecmp($ext, ".png")) || (!strcasecmp($ext, ".bmp")) || 
              (!strcasecmp($ext, ".jpeg")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/image1.gif' alt='Image' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/image1.gif' alt='Image' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Textfile
     }
     else if (!strcasecmp($ext, ".txt"))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/text.gif' alt='Text' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/text.gif' alt='Text' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Audiofile
     }
@@ -55,7 +44,7 @@ function extension($file)
              (!strcasecmp($ext, ".vqf")) || (!strcasecmp($ext, ".midi")) || 
              (!strcasecmp($ext, ".mid")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/sound.gif' alt='Audio' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/sound.gif' alt='Audio' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Webscript
     }
@@ -66,63 +55,63 @@ function extension($file)
              (!strcasecmp($ext, ".cgi")) || (!strcasecmp($ext, ".shtml")) || 
              (!strcasecmp($ext, ".pl")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/html.gif' alt='Web program' border='0' ";
+        $icon = "<IMG SRC='plugins/file_move/images/html.gif' alt='Web program' border='0' ";
         $icon .= "width='15' height='15' hspace='3' vspace='2'>";
         ############### Apache Webserver security settings
     }
     else if (!strcasecmp($ext, ".htaccess"))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/security.gif' alt='Apache Webserver security ";
+        $icon = "<IMG SRC='plugins/file_move/images/security.gif' alt='Apache Webserver security ";
         $icon .= "settings' border='0' width='15' height='16' hspace='3' vspace='2'>";
         ############### Web page
     }
     else if ((!strcasecmp($ext, ".html")) || (!strcasecmp($ext, ".htm")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/html.gif' alt='Web page' border='0' width='15' ";
+        $icon = "<IMG SRC='plugins/file_move/images/html.gif' alt='Web page' border='0' width='15' ";
         $icon .= "height='15' hspace='3' vspace='2'>";
         ############### WAP page
     }
     else if (!strcasecmp($ext, ".wml"))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/html.gif' alt='WAP page' border='0' ";
+        $icon = "<IMG SRC='plugins/file_move/images/html.gif' alt='WAP page' border='0' ";
         $icon .= "width='15' height='15' hspace='3' vspace='2'>";
         ############### Compressed file
     }
     else if ((!strcasecmp($ext, ".zip")) || (!strcasecmp($ext, ".tar")) || 
              (!strcasecmp($ext, ".rar")) || (!strcasecmp($ext, ".gz")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/zip.gif' alt='Compressed file' border='0' ";
+        $icon = "<IMG SRC='plugins/file_move/images/zip.gif' alt='Compressed file' border='0' ";
         $icon .= "width='15' height='15' hspace='3' vspace='2'>";
         ############### PowerPoint file
     }
     else if ((!strcasecmp($ext, ".ppt")) || (!strcasecmp($ext, ".pps")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/ppt.gif' alt='PowerPoint file' border='0' ";
+        $icon = "<IMG SRC='plugins/file_move/images/ppt.gif' alt='PowerPoint file' border='0' ";
         $icon .= "width='16' height='16' hspace='3' vspace='2'>";
         ############### PDF file
     }
     else if ((!strcasecmp($ext, ".pdf")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/pdf.gif' alt='PDF file' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/pdf.gif' alt='PDF file' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Word file
     }
     else if ((!strcasecmp($ext, ".doc")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/doc.gif' alt='Word file' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/doc.gif' alt='Word file' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Excel file
     }
     else if ((!strcasecmp($ext, ".xls")) || (!strcasecmp($ext, ".xl")) || 
              (!strcasecmp($ext, ".tab")))
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/xls.gif' alt='Excel file' border='0' width='16' ";
+        $icon = "<IMG SRC='plugins/file_move/images/xls.gif' alt='Excel file' border='0' width='16' ";
         $icon .= "height='16' hspace='3' vspace='2'>";
         ############### Unknown
     }
     else
     {
-        $icon = "<IMG SRC='plugins/FileMove/images/unknown.gif' alt='Unknown filetype' border='0' ";
+        $icon = "<IMG SRC='plugins/file_move/images/unknown.gif' alt='Unknown filetype' border='0' ";
         $icon .= "width='16' height='16' hspace='3' vspace='2'>";
     }
     
@@ -174,7 +163,7 @@ function indent($max)
 *****************************************/
 function list_dir ($path,$step,$dfolder,$selection,$selection1,$Drep)
 {	
-	global $num,$lang_plugin_FileMove,$filename;
+	global $num,$lang_plugin_file_move,$filename;
 	
 	if ($selection1=="ok"){
 		$select="oui";
@@ -198,31 +187,31 @@ function list_dir ($path,$step,$dfolder,$selection,$selection1,$Drep)
                     		echo extension("folder")."{$file}<br>";
                     	}
                     	if ($nb==1){
-                    		echo extension("folder")."{$file}({$nb} {$lang_plugin_FileMove['file']})<br>";
+                    		echo extension("folder")."{$file}({$nb} {$lang_plugin_file_move['file']})<br>";
                     	}
                     	if ($nb > 1){
-                    		echo extension("folder")."{$file}({$nb} {$lang_plugin_FileMove['files']})<br>";
+                    		echo extension("folder")."{$file}({$nb} {$lang_plugin_file_move['files']})<br>";
                     	}
                     }else{
                     	if ($nb==0){
                     		if (!$filename){
-                    			echo extension("folder")."<a href='index.php?file=FileMove/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}</a><br>";
+                    			echo extension("folder")."<a href='index.php?file=file_move/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}</a><br>";
                     		}else{
-                    			echo extension("folder")."<a href='index.php?file=FileMove/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}</a><br>";
+                    			echo extension("folder")."<a href='index.php?file=file_move/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}</a><br>";
                     		}
                     	}
                     	if ($nb==1){
                     		if (!$filename){
-                    			echo extension("folder")."<a href='index.php?file=FileMove/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_FileMove['file']})</a><br>";
+                    			echo extension("folder")."<a href='index.php?file=file_move/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_file_move['file']})</a><br>";
                     		}else{
-                    			echo extension("folder")."<a href='index.php?file=FileMove/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_FileMove['file']})</a><br>";
+                    			echo extension("folder")."<a href='index.php?file=file_move/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_file_move['file']})</a><br>";
                     		}
                     	}
                     	if ($nb > 1){
                     		if (!$filename){
-                    			echo extension("folder")."<a href='index.php?file=FileMove/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_FileMove['files']})</a><br>";
+                    			echo extension("folder")."<a href='index.php?file=file_move/plugin_config&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_file_move['files']})</a><br>";
                   			}else{
-                  				echo extension("folder")."<a href='index.php?file=FileMove/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_FileMove['files']})</a><br>";
+                  				echo extension("folder")."<a href='index.php?file=file_move/move_file&dfolder=$folder_name&selection=$select&RepD=$Drep'>{$file}({$nb} {$lang_plugin_file_move['files']})</a><br>";
                   			}
                   		}
                   	}
@@ -242,7 +231,7 @@ function list_dir ($path,$step,$dfolder,$selection,$selection1,$Drep)
 *********************************/
 function file_dir($dfolder,$nb)
 {
-	global $num,$lang_plugin_FileMove,$CONFIG;
+	global $num,$lang_plugin_file_move,$CONFIG;
 	$n=0;
 	if ($dir = @opendir($dfolder))
     {
@@ -289,16 +278,16 @@ function path_name($dfolder)
 *********************************/
 function action_select($dfolder,$selection)
 {
-	global $lang_plugin_FileMove,$selection,$Drep;
+	global $lang_plugin_file_move,$selection,$Drep;
 	$Drep=path_name($dfolder);	
-	starttable('100%',$lang_plugin_FileMove['choix'],2);
+	starttable('100%',$lang_plugin_file_move['choix'],2);
 $menu_action=<<<EOT
-	<tr><td class="tableh2" align="left"><b>{$lang_plugin_FileMove['choix2']}</b></td>
-	<td class="tableh2" align="right">{$lang_plugin_FileMove['DFolder']}<b>{$Drep}</b></td></tr>		
+	<tr><td class="tableh2" align="left"><b>{$lang_plugin_file_move['choix2']}</b></td>
+	<td class="tableh2" align="right">{$lang_plugin_file_move['DFolder']}<b>{$Drep}</b></td></tr>		
 	<tr><td colspan="2" align="center">
-	<a href="index.php?file=FileMove/plugin_config&dfolder=$dfolder&selection1=ok&selection=ok"><input type="button" name="all" value="{$lang_plugin_FileMove['folder']}"></a>
-	<a href="index.php?file=FileMove/file_move&dfolder=$dfolder"><input type="button" name="some" value="{$lang_plugin_FileMove['some_files']}"></a>
-	<a href="index.php?file=FileMove/plugin_config"><input type="button" name="back" value="{$lang_plugin_FileMove['back']}"></a>
+	<a href="index.php?file=file_move/plugin_config&dfolder=$dfolder&selection1=ok&selection=ok"><input type="button" name="all" value="{$lang_plugin_file_move['folder']}"></a>
+	<a href="index.php?file=file_move/file_move&dfolder=$dfolder"><input type="button" name="some" value="{$lang_plugin_file_move['some_files']}"></a>
+	<a href="index.php?file=file_move/plugin_config"><input type="button" name="back" value="{$lang_plugin_file_move['back']}"></a>
 	</td></tr>
 EOT;
 echo $menu_action;
@@ -312,14 +301,14 @@ endtable();
 ***********************************/
 function confirm_choix($RepD,$Arep)
 {
-global $lang_plugin_FileMove;
-starttable('100%',$lang_plugin_FileMove['confirm']);
+global $lang_plugin_file_move;
+starttable('100%',$lang_plugin_file_move['confirm']);
 $confirm=<<<EOT
-	<tr><td align="center">{$lang_plugin_FileMove['confirm_titre']}</td></tr>
-	<tr><td align="center">{$lang_plugin_FileMove['DFolder']}<b>{$RepD}</b>&nbsp;&nbsp;<img align="top" src="./plugins/FileMove/images/arrow.gif">&nbsp;&nbsp; {$lang_plugin_FileMove['AFolder']}<b>{$Arep}</b> </td></tr>
+	<tr><td align="center">{$lang_plugin_file_move['confirm_titre']}</td></tr>
+	<tr><td align="center">{$lang_plugin_file_move['DFolder']}<b>{$RepD}</b>&nbsp;&nbsp;<img align="top" src="./plugins/file_move/images/arrow.gif">&nbsp;&nbsp; {$lang_plugin_file_move['AFolder']}<b>{$Arep}</b> </td></tr>
 	<tr><td align="center">
-	<a href="index.php?file=FileMove/move_folder&Drep=$RepD&Arep=$Arep"><input type="button" name="ok"value="{$lang_plugin_FileMove['valid']}"></a>
-	<a href="index.php?file=FileMove/plugin_config"><input type="button" name="ok"value="{$lang_plugin_FileMove['back']}"></a>
+	<a href="index.php?file=file_move/move_folder&Drep=$RepD&Arep=$Arep"><input type="button" name="ok"value="{$lang_plugin_file_move['valid']}"></a>
+	<a href="index.php?file=file_move/plugin_config"><input type="button" name="ok"value="{$lang_plugin_file_move['back']}"></a>
 	</td></tr>
 EOT;
 echo $confirm;
