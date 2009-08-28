@@ -10,9 +10,9 @@
   ********************************************
   Coppermine version: 1.5.x
   $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
-  $Revision: 1.3 $
-  $Author: donnoman $
-  $Date: 2005/12/08 05:46:49 $
+  $Revision$
+  $Author$
+  $Date$
 **********************************************/
 
 $name='File Move';
