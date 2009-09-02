@@ -40,8 +40,8 @@ function keyboard_navigation($template_img_navbar) {
             $('.textinput').blur(function () {sthhasfocus = false;});
             $('select').focus(function () {sthhasfocus = true;});
             $('select').blur(function () {sthhasfocus = false;});
-            $('div').focus(function () {sthhasfocus = false;});
-            $('table').focus(function () {sthhasfocus = false;});
+            $('div').click(function () {sthhasfocus = false;});
+            $('table').click(function () {sthhasfocus = false;});
         });
 
         $(document).keydown(function(e) {
