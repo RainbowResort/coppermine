@@ -65,6 +65,8 @@ function annotate_file_data($CURRENT_PIC_DATA){
 
 		$html =& $CURRENT_PIC_DATA['html'];
 
+        $html = str_replace("<img ", "<img style=\"padding:0px\" ", $html);
+
         if (function_exists(panorama_viewer_image)) {
             $search = "/(<table.*style=\"table-layout:fixed.*<div style=\"overflow:auto.*>)(.*)(<\/div><\/td><\/tr><\/table>)/Uis";
             preg_match($search, $html, $panorama_viewer_matches);
