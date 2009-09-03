@@ -194,9 +194,10 @@ function new_bbcodes($text) {
     $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
 
     // insert quote
-    $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<blockquote class=\"tablef\">&laquo;\\1&raquo; <br /> &ldquo;\\2&rdquo;</blockquote>", $text);
-    $text = str_replace("[quote]", "<blockquote class=\"tablef\">&ldquo;", $text);
-    $text = str_replace("[/quote]", "&rdquo;</blockquote>", $text);
+    $style = "style=\"background-image:url(plugins/bbcode_control/images/quote_show.png); background-repeat:no-repeat; background-position:top right; padding-right:40px;\"";
+    $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<fieldset $style><legend>\\1</legend>\\2</fieldset>", $text);
+    $text = str_replace("[quote]", "<fieldset $style>", $text);
+    $text = str_replace("[/quote]", "</fieldset>", $text);
 
     // horizontal line
     $text = str_replace("[hr]", "<hr />", $text);
