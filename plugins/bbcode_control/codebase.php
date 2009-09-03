@@ -147,23 +147,23 @@ function bbcode_control_config_button($admin_menu){
 
 function new_bbcodes($text) {
     // replace disabled bbcode tags with ""
-    $bbcode_tags = get_bbcode_tags('disabled');
-    foreach ($bbcode_tags as $tag) {
+    $bbcode_tags_disabled = get_bbcode_tags('disabled');
+    foreach ($bbcode_tags_disabled as $tag) {
         $text = str_replace("[$tag]", "", $text);
         $text = preg_replace("/\[$tag=(.*)]/Uis", "", $text);
         $text = str_replace("[/$tag]", "", $text);
     }
 
-    // language detection
-    global $CONFIG, $enabled_languages_array;
-    $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
-    include('plugins/bbcode_control/lang/english.php');
-    if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bbcode_control/lang/'.$lang.'.php')) {
-        include('plugins/bbcode_control/lang/'.$lang.'.php');
-    }
-
     // images on same domain only
     if ($CONFIG['bbcode_control_tag_img_localhost_only'] == 1) {
+        // language detection
+        global $CONFIG, $enabled_languages_array;
+        $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
+        include('plugins/bbcode_control/lang/english.php');
+        if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bbcode_control/lang/'.$lang.'.php')) {
+            include('plugins/bbcode_control/lang/'.$lang.'.php');
+        }
+
         // get host name from URL
         preg_match('@^(?:http://)?([^/]+)@i', $CONFIG['ecards_more_pic_target'], $matches);
         $host = $matches[1];
@@ -184,27 +184,37 @@ function new_bbcodes($text) {
     }
 
     // change font size
-    $text = preg_replace("/\[size=([1-9][\d]?p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.*)\[\/size\]/Usi", "<span style=\"font-size:\\1\">\\2</span>", $text);
+    if (!in_array('size', $bbcode_tags_disabled)) {
+        $text = preg_replace("/\[size=([1-9][\d]?p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.*)\[\/size\]/Usi", "<span style=\"font-size:\\1\">\\2</span>", $text);
+    }
 
     // insert youtube video
-    $youtube_embed_code_replacement  = "<object type=\"application/x-shockwave-flash\" width=\"640\" height=\"385\" data=\"http://www.youtube.com/v/\\2&hl=de&fs=1\">";
-    $youtube_embed_code_replacement .= "<param name=\"movie\" value=\"http://www.youtube.com/v/\\2&hl=de&fs=1\" />";
-    $youtube_embed_code_replacement .= "<param name=\"allowfullscreen\" value=\"true\" />";
-    $youtube_embed_code_replacement .= "</object>";
-    $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
+    if (!in_array('youtube', $bbcode_tags_disabled)) {
+        $youtube_embed_code_replacement  = "<object type=\"application/x-shockwave-flash\" width=\"640\" height=\"385\" data=\"http://www.youtube.com/v/\\2&hl=de&fs=1\">";
+        $youtube_embed_code_replacement .= "<param name=\"movie\" value=\"http://www.youtube.com/v/\\2&hl=de&fs=1\" />";
+        $youtube_embed_code_replacement .= "<param name=\"allowfullscreen\" value=\"true\" />";
+        $youtube_embed_code_replacement .= "</object>";
+        $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
+    }
 
     // insert quote
-    $style = "style=\"background-image:url(plugins/bbcode_control/images/quote_show.png); background-repeat:no-repeat; background-position:top right; padding-right:40px;\"";
-    $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<fieldset $style><legend>\\1</legend>\\2</fieldset>", $text);
-    $text = str_replace("[quote]", "<fieldset $style>", $text);
-    $text = str_replace("[/quote]", "</fieldset>", $text);
+    if (!in_array('quote', $bbcode_tags_disabled)) {
+        $style = "style=\"background-image:url(plugins/bbcode_control/images/quote_show.png); background-repeat:no-repeat; background-position:top right; padding-right:40px;\"";
+        $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<fieldset $style><legend>\\1</legend>\\2</fieldset>", $text);
+        $text = str_replace("[quote]", "<fieldset $style>", $text);
+        $text = str_replace("[/quote]", "</fieldset>", $text);
+    }
 
     // horizontal line
-    $text = str_replace("[hr]", "<hr />", $text);
+    if (!in_array('hr', $bbcode_tags_disabled)) {
+        $text = str_replace("[hr]", "<hr />", $text);
+    }
 
     // tele type font
-    $text = str_replace("[tt]", "<tt>", $text);
-    $text = str_replace("[/tt]", "</tt>", $text);
+    if (!in_array('tt', $bbcode_tags_disabled)) {
+        $text = str_replace("[tt]", "<tt>", $text);
+        $text = str_replace("[/tt]", "</tt>", $text);
+    }
 
     return $text;
 }
