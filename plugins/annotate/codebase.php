@@ -360,32 +360,28 @@ $thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 function annotate_get_pic_pos($album) {
     global $CONFIG, $pid, $RESTRICTEDWHERE;
 
-    switch($album) {
-        case 'lastnotes':
-            $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
+    if ($album === 'lastnotes') {
+        $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
+        $result = cpg_db_query($query);
+        $nid = mysql_result($result, 0);
+        mysql_free_result($result);            
+
+        $query = "SELECT COUNT(DISTINCT n.pid) 
+            FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+            INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
+            $RESTRICTEDWHERE
+            AND approved = 'YES'
+            AND n.nid > $nid";
+
             $result = cpg_db_query($query);
-            $nid = mysql_result($result, 0);
-            mysql_free_result($result);            
 
-            $query = "SELECT COUNT(DISTINCT n.pid) 
-                FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
-                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
-                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
-                $RESTRICTEDWHERE
-                AND approved = 'YES'
-                AND n.nid > $nid";
+            list($pos) = mysql_fetch_row($result);
+            mysql_free_result($result);
 
-                $result = cpg_db_query($query);
-
-                list($pos) = mysql_fetch_row($result);
-                mysql_free_result($result);
-
-            return $pos;
-            break;
-        
-        default: 
-            return $album;
-        
+        return $pos;
+    } else {
+        return $album;
     }
 }
 
@@ -395,41 +391,38 @@ $thisplugin->add_filter('meta_album', 'annotate_meta_album');
 function annotate_meta_album($meta) {
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE;
 
-    switch ($meta['album']) {
-        case 'lastnotes': // Last Annotations
-            $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt markierte Bilder";
-            if ($CURRENT_CAT_NAME) {
-                $album_name .= " - $CURRENT_CAT_NAME";
-            }
+    if ($meta['album'] === 'lastnotes') {
+        $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt markierte Bilder";
+        if ($CURRENT_CAT_NAME) {
+            $album_name .= " - $CURRENT_CAT_NAME";
+        }
 
-            $query = "SELECT DISTINCT n.pid 
-                FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
-                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
-                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
-                $RESTRICTEDWHERE";
+        $query = "SELECT DISTINCT n.pid 
+            FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+            INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+            $RESTRICTEDWHERE";
 
-            $result = cpg_db_query($query);
-            $count = mysql_num_rows($result);
-            mysql_free_result($result);
+        $result = cpg_db_query($query);
+        $count = mysql_num_rows($result);
+        mysql_free_result($result);
 
-            $query = "SELECT *
-                FROM {$CONFIG['TABLE_PICTURES']} AS p
-                INNER JOIN {$CONFIG['TABLE_PREFIX']}notes AS n1 ON p.pid = n1.pid 
-                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
-                $RESTRICTEDWHERE 
-                AND approved = 'YES'
-                AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}notes AS n2 WHERE n1.pid = n2.pid)
-                ORDER BY n1.nid DESC {$meta['limit']}";
+        $query = "SELECT *
+            FROM {$CONFIG['TABLE_PICTURES']} AS p
+            INNER JOIN {$CONFIG['TABLE_PREFIX']}notes AS n1 ON p.pid = n1.pid 
+            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+            $RESTRICTEDWHERE 
+            AND approved = 'YES'
+            AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}notes AS n2 WHERE n1.pid = n2.pid)
+            ORDER BY n1.nid DESC {$meta['limit']}";
 
-            $result = cpg_db_query($query);
-            $rowset = cpg_db_fetch_rowset($result);
-            mysql_free_result($result);
+        $result = cpg_db_query($query);
+        $rowset = cpg_db_fetch_rowset($result);
+        mysql_free_result($result);
 
-            build_caption($rowset, array('msg_date'));
-        break;
-
-        default: 
-            return $meta;
+        build_caption($rowset, array('msg_date'));
+    } else {
+        return $meta;
     }
     
     $meta['album_name'] = $album_name;
