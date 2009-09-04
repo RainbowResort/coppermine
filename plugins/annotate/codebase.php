@@ -358,22 +358,22 @@ function annotate_page_start() {
 // Meta album get_pic_pos
 $thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 function annotate_get_pic_pos($album) {
-    global $CONFIG, $pid;
+    global $CONFIG, $pid, $RESTRICTEDWHERE;
 
     switch($album) {
         case 'lastnotes':
-            $query = "SELECT update_time FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
+            $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
             $result = cpg_db_query($query);
-            $update_time = mysql_result($result, 0);
+            $nid = mysql_result($result, 0);
             mysql_free_result($result);            
 
             $query = "SELECT COUNT(DISTINCT n.pid) 
-                FROM {$CONFIG['TABLE_PREFIX']}notes n 
-                INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON n.pid = p.pid 
-                INNER JOIN {$CONFIG['TABLE_ALBUMS']} a on a.aid = p.aid 
+                FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
                 $RESTRICTEDWHERE
                 AND approved = 'YES'
-                AND n.update_time > $update_time";
+                AND n.nid > $nid";
 
                 $result = cpg_db_query($query);
 
@@ -397,24 +397,29 @@ function annotate_meta_album($meta) {
 
     switch ($meta['album']) {
         case 'lastnotes': // Last Annotations
-            $album_name = cpg_fetch_icon('user_mgr', 2)." Pictures with latest annotations";
+            $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt markierte Bilder";
             if ($CURRENT_CAT_NAME) {
                 $album_name .= " - $CURRENT_CAT_NAME";
             }
 
-            $query = "SELECT DISTINCT n.pid FROM {$CONFIG['TABLE_PREFIX']}notes n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON n.pid = p.pid INNER JOIN {$CONFIG['TABLE_ALBUMS']} a on a.aid = p.aid $RESTRICTEDWHERE";
+            $query = "SELECT DISTINCT n.pid 
+                FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE";
+
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT *, update_time as msg_date
-                      FROM {$CONFIG['TABLE_PICTURES']} p
-                      INNER JOIN {$CONFIG['TABLE_PREFIX']}notes n1
-                      ON p.pid = n1.pid 
-                      INNER JOIN {$CONFIG['TABLE_ALBUMS']} a 
-                      ON a.aid = p.aid 
-                      $RESTRICTEDWHERE AND n1.update_time IN (SELECT MAX(n2.update_time) FROM {$CONFIG['TABLE_PREFIX']}notes n2 WHERE n1.pid = n2.pid GROUP BY n2.pid)
-                      GROUP BY n1.pid ORDER BY n1.update_time DESC {$meta['limit']}";
+            $query = "SELECT *
+                FROM {$CONFIG['TABLE_PICTURES']} AS p
+                INNER JOIN {$CONFIG['TABLE_PREFIX']}notes AS n1 ON p.pid = n1.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}notes AS n2 WHERE n1.pid = n2.pid)
+                ORDER BY n1.nid DESC {$meta['limit']}";
 
             $result = cpg_db_query($query);
             $rowset = cpg_db_fetch_rowset($result);
