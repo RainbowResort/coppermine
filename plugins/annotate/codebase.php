@@ -49,6 +49,12 @@ function annotate_file_data($CURRENT_PIC_DATA){
 	
 	if (is_image($CURRENT_PIC_DATA['filename'])){
 
+        if (function_exists(panorama_viewer_is_360_degree_panorama)) {
+            if (panorama_viewer_is_360_degree_panorama()) {
+                return $CURRENT_PIC_DATA;
+            }
+        }
+
 		$sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$CURRENT_PIC_DATA['pid']}";
 		$result = cpg_db_query($sql);
 		
