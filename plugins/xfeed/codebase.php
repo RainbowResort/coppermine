@@ -20,7 +20,7 @@ if (!defined('IN_COPPERMINE')) {
 $thisplugin->add_filter('gallery_header','xfd_rss_button');
 
 // Add page start action for admin button.
-$thisplugin->add_filter('sub_menu','xfd_add_config_button');
+$thisplugin->add_filter('admin_menu','xfd_add_config_button');
 
 // Add filter for page head
 $thisplugin->add_filter('page_meta','xfd_head');
@@ -39,7 +39,7 @@ require('./plugins/xfeed/include/load_xfdset.php');
 
 
 // rss button
-function xfd_rss_button()
+function xfd_rss_button($template_header)
 {
     global $XFDSET,$lang_xfeeds,$CONFIG, $album;
 
@@ -48,7 +48,7 @@ function xfd_rss_button()
     //require('./plugins/xfeed/include/init.inc.php');
 
     if (!$XFDSET['xfd_rss_button']) {
-        return;
+        return $template_header;
     }
 
     $xfd_feed = "index.php?file=xfeed/xfeed";
@@ -84,7 +84,7 @@ function xfd_rss_button()
 
     if ($XFDSET['xfd_standard'] == 1) {
         $html .= "	<optgroup label=\"".$lang_xfeeds['xfd_fe_atom']."\">
-        <option value=\"".$CONFIG[ecards_more_pic_target].$xfd_feed."&type=atom\">".$lang_xfeeds['xfd_fe_local_atom']."</option>
+        <option value=\"".$CONFIG[ecards_more_pic_target].$xfd_feed."&amp;type=atom\">".$lang_xfeeds['xfd_fe_local_atom']."</option>
         </optgroup>
         ";
     }
@@ -145,7 +145,7 @@ function xfd_rss_button()
     <!-- END XFeeds Plugin -->
     ";
 
-    return $html;
+    return $template_header.$html;
 }
 
 
@@ -231,9 +231,9 @@ function xfd_head()
     }
 
     $header .= "    <link rel=\"alternate\" type=\"application/rss+xml\" title=\"".$CONFIG['gallery_name']." - RSS\" href=\"".$CONFIG['ecards_more_pic_target'].$xfd_feed."\" />
-    <link rel=\"alternate\" type=\"application/atom+xml\" title=\"".$CONFIG['gallery_name']." - Atom\" href=\"".$CONFIG['ecards_more_pic_target'].$xfd_feed."&type=atom\" />
+    <link rel=\"alternate\" type=\"application/atom+xml\" title=\"".$CONFIG['gallery_name']." - Atom\" href=\"".$CONFIG['ecards_more_pic_target'].$xfd_feed."&amp;type=atom\" />
     $extra_header
-    <style>
+    <style type=\"text/css\">
         .xfeeds{background-image: url(./plugins/xfeed/images/xfeeds_".$color.".png);}
     </style>
     <link rel=\"stylesheet\" href=\"plugins/xfeed/css/xfeeds.css\" type=\"text/css\" />
@@ -244,25 +244,21 @@ function xfd_head()
 }
 
 // add config button
-function xfd_add_config_button($menu)
+function xfd_add_config_button($admin_menu)
 {
-    global $template_sub_menu_spacer;
-    if (!GALLERY_ADMIN_MODE) {
-        return $menu;
+    global $CONFIG;
+
+    if ($CONFIG['enable_menu_icons'] > 0) {
+        $xfeed_config_icon = '<img src="plugins/xfeed/images/xfeeds_admin_menu.png" border="0" alt="" width="16" height="16" class="icon" />';
+    } else {
+        $xfeed_config_icon = '';
     }
 
-    $new_button = array();
-    $new_button[0][0] = 'XFeeds';
-    $new_button[0][1] = 'XFeeds Settings';
-    $new_button[0][2] = 'index.php?file=xfeed/plugin_config';
-    $new_button[0][3] = 'class_name';
-    $new_button[0][4] = $template_sub_menu_spacer;
-    $new_button[0][5] = 'rel="nofolow"';
-
-    // Add the link array to the existing array correctly and return the modified menu
-    array_splice($menu, count($menu)-1, 0, $new_button);
-
-    return $menu;
+    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=xfeed/plugin_config" title="XFeeds Settings">'.$xfeed_config_icon.'XFeeds</a></div>';
+    $look_for = '<!-- END export -->';
+    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu); 
+    
+    return $admin_menu;
 }
 
 // Install
