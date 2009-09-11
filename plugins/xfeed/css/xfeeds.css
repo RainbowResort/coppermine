@@ -1,0 +1,28 @@
+.xfeeds{
+	padding: 2px;
+	display: -moz-inline-box;
+	display: inline-block;
+	width: 100px;
+	height: 20px;
+	overflow: hidden;
+	margin: 0;
+	background-repeat: no-repeat;
+}
+
+.xfeeds select{
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	filter:alpha(opacity=0);
+}
+
+.xfeeds option img{
+	border: 0;
+	margin: 2px;
+}
+
+* html .xfeeds{
+	width:auto;
+	background:none;
+}
