@@ -505,10 +505,10 @@ EOT;
                                     {$lang_plugin_social_bookmarks['service_name']}
                                 </th>
                                 <th valign="top" class="tableh1">
-                                    {$lang_plugin_social_bookmarks['languages']}
+                                    {$lang_plugin_social_bookmarks['relevance']}
                                 </th>
                                 <th valign="top" class="tableh1">
-                                    {$lang_plugin_social_bookmarks['relevance']}
+                                    {$lang_plugin_social_bookmarks['languages']}
                                 </th>
                             </tr>
 EOT;
@@ -567,15 +567,12 @@ EOT;
             $option_output['service'] = '';
         }
         $relevance = '';
-        if ($row['relevance'] < 0 || $row['relevance'] > 10) {
+        if ($row['relevance'] < 1 || $row['relevance'] > 10) {
             $row['relevance'] = 0;
         }
-        if (defined('THEME_HAS_RATING_GRAPHICS')) {
-            $location= $THEME_DIR;
-        } else {
-            $location= '';
+        if ($row['relevance'] != 0) {
+            $relevance = theme_display_bar($row['relevance'], 10, 100, 'lightsteelblue', '', '', 'lightsteelblue', '');
         }
-        $relevance = str_repeat('<img src="'.$location.'images/rate_full.gif" border="0" width="13" height="14" alt="" />',$row['relevance']) . str_repeat('<img src="'.$location.'images/rate_empty.gif" border="0" width="13" height="14" alt="" />',10 - $row['relevance']);
         echo <<< EOT
                             <tr>
                                 <td valign="top" align="center" class="tableb">
@@ -588,12 +585,12 @@ EOT;
                                     </a>
                                 </td>
                                 <td valign="top" class="tableb">
+                                    <span title="{$row['relevance']}">{$relevance}</span>
+                                </td>
+                                <td valign="top" class="tableb">
                                     <span class="album_stat">
                                         {$languageFlagString}
                                     </span>
-                                </td>
-                                <td valign="top" class="tableb">
-                                    <span title="{$row['relevance']}">{$relevance}</span>
                                 </td>
                             </tr>
 EOT;
@@ -825,11 +822,12 @@ function social_bookmarks_menu_button($menu) {
 function social_bookmarks_display() {
     global $CONFIG, $LINEBREAK, $lang_plugin_social_bookmarks;
     $return = array();
-    $return[3] = '<div id="social_bookmarks" style="border:1px solid green;">';
-    $return[0] = '<span id="social_bookmarks_label" style="border:1px solid pink;">';
+    $return[3]  = '<div id="social_bookmarks" style="border:1px solid green;">';
+    $return[4]  = '</div>';
+    $return[0]  = '<span id="social_bookmarks_label" style="">';
     $return[0] .= $lang_plugin_social_bookmarks['menu_name'];
-    $return[0] .= '</div>';
-    $return[0] .= '<div id="social_bookmarks_content" style="border:1px solid blue;display:none">';
+    $return[0] .= '</span>';
+    $return[0] .= '<div id="social_bookmarks_content" style="display:none;">';
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services WHERE service_active='YES'");
     while ($row = mysql_fetch_assoc($result)) {
         $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
@@ -844,8 +842,7 @@ function social_bookmarks_display() {
         $return[0] .= '</a>';
         $return[0] .= $LINEBREAK;
     }
-    $return[0] .= '</span>';
-    $return[3] .= '</div>';
+    $return[0] .= '</div>';
     $return[1] = $lang_plugin_social_bookmarks['menu_title'];
     $return[2] = 'index.php?file=social_bookmarks/index';
     return $return;
