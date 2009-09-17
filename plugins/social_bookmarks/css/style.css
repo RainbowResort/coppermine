@@ -1,0 +1,43 @@
+/********************************************
+  social_bookmarks plugin for cpg1.5.x
+  *******************************************
+  Copyright (c) 2003-2009 Coppermine Dev Team
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+
+  ********************************************
+  Coppermine version: 1.5.x
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/social_bookmarks/codebase.php $
+  $Revision: 6497 $
+  $LastChangedBy: gaugau $
+  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+**********************************************/
+
+#social_bookmarks_wrapper {
+    position:relative;
+    display:inline-block;
+    width:auto;
+}
+
+#social_bookmarks_content {
+    position:absolute; 
+    top:15px;
+    left:0px;
+    z-index:4;
+    display:none;
+    border:1px solid lightsteelblue;
+    background-color:white;
+    margin:0px;
+    padding:5px;
+}
+
+ul.social_bookmarks_content {
+    list-style-type:none;
+}
+
+li.social_bookmarks_content {
+    list-style-type:none;
+}
+

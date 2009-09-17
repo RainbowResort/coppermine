@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-09-17 [A] Added containers to menu {GauGau}
+2009-09-17 [A] Added three services {GauGau}
 2009-09-16 [A] Changed order of columns on config screen {GauGau}
 2009-09-16 [A] Changed rating image to bar graph {GauGau}
 2009-09-16 [A] Added relevance records {GauGau}

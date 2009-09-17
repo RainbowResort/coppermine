@@ -26,9 +26,15 @@ function social_bookmarks_initialize() {
 	if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
 		$JS['includes'][] = 'js/jquery.spinbutton.js';
 	}
-	if (in_array('plugins/social_bookmarks/js/script.js', $JS['includes']) != TRUE) {
-		$JS['includes'][] = 'plugins/social_bookmarks/js/script.js';
-	}
+	$JS['includes'][] = 'plugins/social_bookmarks/js/script.js';
+	
+    // define some vars that need to exist in JS
+    set_js_var('bookmarks_visibility', $CONFIG['plugin_social_bookmarks_visibility']);
+    if ($CONFIG['plugin_social_bookmarks_favorites'] != '0') {
+        set_js_var('lang_add_to_favorites', $lang_plugin_social_bookmarks['add_to_favorites']);
+    }
+    set_js_var('bookmarks_content', social_bookmarks_content());
+   
 	
 	require_once "./plugins/social_bookmarks/lang/english.php";
 	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/social_bookmarks/lang/{$CONFIG['lang']}.php")) {

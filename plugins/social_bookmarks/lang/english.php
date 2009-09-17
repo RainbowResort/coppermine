@@ -81,6 +81,6 @@ $lang_plugin_social_bookmarks['changes_saved'] = 'Your changes have been saved';
 $lang_plugin_social_bookmarks['no_changes'] = 'There have been no changes or the values you entered where invalid';
 $lang_plugin_social_bookmarks['submit_to_install'] = 'Submit this form to install the plugin';
 // Configuration --- end
-//$lang_plugin_social_bookmarks[''] = '';
+$lang_plugin_social_bookmarks['no_service_activated'] = 'No social bookmark service is activated';
 
 ?>
