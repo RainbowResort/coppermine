@@ -30,37 +30,37 @@ $superCage = Inspekt::makeSuperCage();
 
 if ($superCage->post->keyExists('add')){
 
-	$pid = $superCage->post->getInt('add');
-	$nid = $superCage->post->getInt('nid');
-	$posx = $superCage->post->getInt('posx');
-	$posy = $superCage->post->getInt('posy');
-	$width = $superCage->post->getInt('width');
-	$height = $superCage->post->getInt('height');
-	$note = addslashes(urldecode($superCage->post->getRaw('note')));
+    $pid = $superCage->post->getInt('add');
+    $nid = $superCage->post->getInt('nid');
+    $posx = $superCage->post->getInt('posx');
+    $posy = $superCage->post->getInt('posy');
+    $width = $superCage->post->getInt('width');
+    $height = $superCage->post->getInt('height');
+    $note = addslashes(urldecode($superCage->post->getRaw('note')));
 
-	if ($nid){
-	
-		$sql = "UPDATE {$CONFIG['TABLE_PREFIX']}notes SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";	
-		if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
-		cpg_db_query($sql);
-		die("$nid");
+    if ($nid){
+    
+        $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}notes SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";
+        if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
+        cpg_db_query($sql);
+        die("$nid");
 
-	} else {
-		$sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}notes (pid, posx, posy, width, height, note, user_id) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ")";	
-		cpg_db_query($sql);
-		$nid = mysql_insert_id($CONFIG['LINK_ID']);
-		die("$nid");
-	}
+    } else {
+        $sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}notes (pid, posx, posy, width, height, note, user_id) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ")";
+        cpg_db_query($sql);
+        $nid = mysql_insert_id($CONFIG['LINK_ID']);
+        die("$nid");
+    }
 
 } elseif ($superCage->post->keyExists('remove')){
 
-	$nid = $superCage->post->getInt('remove');
+    $nid = $superCage->post->getInt('remove');
 
-	$sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE nid = $nid";
-	if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
-	
-	cpg_db_query($sql);
-	die("$nid");
+    $sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE nid = $nid";
+    if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
+    
+    cpg_db_query($sql);
+    die("$nid");
 }
 
 die("0");

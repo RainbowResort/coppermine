@@ -83,7 +83,7 @@ function xfd_rss_button($template_header)
     ";
 
     if ($XFDSET['xfd_standard'] == 1) {
-        $html .= "	<optgroup label=\"".$lang_xfeeds['xfd_fe_atom']."\">
+        $html .= " <optgroup label=\"".$lang_xfeeds['xfd_fe_atom']."\">
         <option value=\"".$CONFIG[ecards_more_pic_target].$xfd_feed."&amp;type=atom\">".$lang_xfeeds['xfd_fe_local_atom']."</option>
         </optgroup>
         ";
@@ -94,37 +94,37 @@ function xfd_rss_button($template_header)
         $XFDSET['xfd_lines'] == 1 || $XFDSET['xfd_aol'] == 1 ||
         $XFDSET['xfd_feedburn'] == 1 || $XFDSET['xfd_google'] == 1) {
 
-        $html .= "	<optgroup label=\"".$lang_xfeeds['xfd_fe_rss']."\">\n";
+        $html .= " <optgroup label=\"".$lang_xfeeds['xfd_fe_rss']."\">\n";
 
         if ($XFDSET['xfd_standard'] == 1) {
-            $html .= "	<option value=\"".$CONFIG[ecards_more_pic_target].$xfd_feed."\">".$lang_xfeeds['xfd_fe_standard']."</option>\n";
+            $html .= " <option value=\"".$CONFIG[ecards_more_pic_target].$xfd_feed."\">".$lang_xfeeds['xfd_fe_standard']."</option>\n";
         }
 
         if ($XFDSET['xfd_google'] == 1) {
-            $html .= "	<option value=\"http://fusion.google.com/add?feedurl=http%3A//".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_google']."</option>\n";
+            $html .= " <option value=\"http://fusion.google.com/add?feedurl=http%3A//".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_google']."</option>\n";
         }
 
         if ($XFDSET['xfd_yahoo'] == 1) {
-            $html .= "	<option value=\"http://us.rd.yahoo.com/my/atm/".$xfeed_author."/".$xfeed_title_enc."http%3A//".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_yahoo']."</option>\n";
+            $html .= " <option value=\"http://us.rd.yahoo.com/my/atm/".$xfeed_author."/".$xfeed_title_enc."http%3A//".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_yahoo']."</option>\n";
         }
 
         if ($XFDSET['xfd_msn'] == 1) {
-            $html .= "	<option value=\"http://my.msn.com/addtomymsn.armx?id=rss&amp;ut=http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_msn']."</option>\n";
+            $html .= " <option value=\"http://my.msn.com/addtomymsn.armx?id=rss&amp;ut=http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_msn']."</option>\n";
         }
 
         if ($XFDSET['xfd_lines'] == 1) {
-            $html .= "	<option value=\"http://www.bloglines.com/sub/http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_lines']."</option>\n";
+            $html .= " <option value=\"http://www.bloglines.com/sub/http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_lines']."</option>\n";
         }
 
         if ($XFDSET['xfd_aol'] == 1) {
-            $html .= "	<option value=\"http://feeds.my.aol.com/add.jsp?url=http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_aol']."</option>\n";
+            $html .= " <option value=\"http://feeds.my.aol.com/add.jsp?url=http://".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_aol']."</option>\n";
         }
 
         if ($XFDSET['xfd_feedburn'] == 1) {
-            $html .= "	<option value=\"http://feeds.feedburner.com/".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_feedburn']."</option>\n";
+            $html .= " <option value=\"http://feeds.feedburner.com/".$xfeed_loc."\">".$lang_xfeeds['xfd_fe_feedburn']."</option>\n";
         }
 
-        $html .= "	</optgroup>\n";
+        $html .= " </optgroup>\n";
     }
 
     $customRSSOpt = $customRSS = '';

@@ -32,17 +32,17 @@ function file_replacer_page_start() {
     global $CONFIG, $lang_errors;
     $superCage = Inspekt::makeSuperCage();
 
-	if ($superCage->get->keyExists('replacer_pid')) {
-		$pid = $superCage->get->getInt('replacer_pid');
-		$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = p.aid WHERE p.pid = '$pid' LIMIT 1");
-		$row = mysql_fetch_assoc($result);
+    if ($superCage->get->keyExists('replacer_pid')) {
+        $pid = $superCage->get->getInt('replacer_pid');
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = p.aid WHERE p.pid = '$pid' LIMIT 1");
+        $row = mysql_fetch_assoc($result);
 
         if (!((USER_ADMIN_MODE && $row['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $row['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE)) {
             load_template();
             cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
         }
 
-		if ($superCage->files->keyExists('fileupload') && $row) {
+        if ($superCage->files->keyExists('fileupload') && $row) {
             if (!checkFormToken()) {
                 load_template();
                 global $lang_errors;
@@ -56,18 +56,18 @@ function file_replacer_page_start() {
                 cpg_die(ERROR, 'Upload error '.$fileupload['error'], __FILE__, __LINE__);
             }
 
-			$image = $CONFIG['fullpath'] . $row['filepath'] . $row['filename'];
-			$normal = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['normal_pfx'] . $row['filename'];
-			$thumb = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['thumb_pfx'] . $row['filename'];
-		    $orig = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['orig_pfx'] . $row['filename'];
-			$work_image = $image;
+            $image = $CONFIG['fullpath'] . $row['filepath'] . $row['filename'];
+            $normal = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['normal_pfx'] . $row['filename'];
+            $thumb = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['thumb_pfx'] . $row['filename'];
+            $orig = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['orig_pfx'] . $row['filename'];
+            $work_image = $image;
 
             move_uploaded_file($fileupload['tmp_name'], $image);
             chmod($image, octdec($CONFIG['default_file_mode']));
 
-			if (is_known_filetype($image)) {
+            if (is_known_filetype($image)) {
 
-				if (is_image($image)) {
+                if (is_image($image)) {
                     require('include/picmgmt.inc.php');
                     if ($CONFIG['enable_watermark'] == '1' && ($CONFIG['which_files_to_watermark'] == 'both' || $CONFIG['which_files_to_watermark'] == 'original'))  {
                     // if copy of full_sized doesn't exist and if watermark enabled and if fullsized pic watermark=true -> then we need a backup
@@ -127,73 +127,73 @@ function file_replacer_page_start() {
                         //$imagesize = getimagesize($image);
                     }
                     list($width, $height) = getimagesize($image);
-				} else {
-					$width = 0;
-					$height = 0;
-				}
+                } else {
+                    $width = 0;
+                    $height = 0;
+                }
 
-				$image_filesize = filesize($image);
+                $image_filesize = filesize($image);
                 $total_filesize = is_image($filename) ? ($image_filesize + (file_exists($normal) ? filesize($normal) : 0) + filesize($thumb)) : ($image_filesize);
     
-				cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET filesize = '$image_filesize', total_filesize = '$total_filesize', pwidth = '$width', pheight = '$height' WHERE pid = '$pid' LIMIT 1");
+                cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET filesize = '$image_filesize', total_filesize = '$total_filesize', pwidth = '$width', pheight = '$height' WHERE pid = '$pid' LIMIT 1");
 
                 if ($CONFIG['read_exif_data']) {
                     include("include/exif_php.inc.php");
                     exif_parse_file($image);
                 }
-	
-				$CONFIG['site_url'] = rtrim($CONFIG['site_url'], '/');
-			} else {
-	            if (is_image($image)) {
-	                @unlink($normal);
-	                @unlink($thumb);
-	            }	
-				@unlink($image);
-			}
-			header("Location: {$CONFIG['site_url']}/displayimage.php?pid=$pid");
-			die();
-			
-			
-		} else {
-			load_template();
-			pageheader('File replacer');
-			echo '<form method="post" enctype="multipart/form-data">';
-			starttable('60%', 'Upload replacement file', 2);
+    
+                $CONFIG['site_url'] = rtrim($CONFIG['site_url'], '/');
+            } else {
+                if (is_image($image)) {
+                    @unlink($normal);
+                    @unlink($thumb);
+                }
+                @unlink($image);
+            }
+            header("Location: {$CONFIG['site_url']}/displayimage.php?pid=$pid");
+            die();
+            
+            
+        } else {
+            load_template();
+            pageheader('File replacer');
+            echo '<form method="post" enctype="multipart/form-data">';
+            starttable('60%', 'Upload replacement file', 2);
             list($timestamp, $form_token) = getFormToken();
-			echo <<< EOT
+            echo <<< EOT
                 <tr>
-                	<td class="tableb" valign="top">
-                		Browse: 
-                	</td>
-                	<td class="tableb" valign="top">
-                		<input type="file" name="fileupload" size="40" class="listbox" />
-                	</td>
+                    <td class="tableb" valign="top">
+                        Browse: 
+                    </td>
+                    <td class="tableb" valign="top">
+                        <input type="file" name="fileupload" size="40" class="listbox" />
+                    </td>
                 </tr>
                 <tr>
-                	<td align="center" colspan="2" class="tablef">
+                    <td align="center" colspan="2" class="tablef">
                         <input type="hidden" name="form_token" value="{$form_token}" />
                         <input type="hidden" name="timestamp" value="{$timestamp}" />
-                		<input type="submit" name="commit" class="button" value="Upload"/>
-                	</td>
+                        <input type="submit" name="commit" class="button" value="Upload"/>
+                    </td>
                 </tr>
 EOT;
-			endtable();
-			echo '</form>';
-			pagefooter();
-			exit;
-		}
-	}
+            endtable();
+            echo '</form>';
+            pagefooter();
+            exit;
+        }
+    }
 }
 
 
 function file_replacer_file_data($data) {
-	global $CONFIG, $CURRENT_ALBUM_DATA;
+    global $CONFIG, $CURRENT_ALBUM_DATA;
 
-	if ((USER_ADMIN_MODE && $CURRENT_ALBUM_DATA['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $data['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE) {
+    if ((USER_ADMIN_MODE && $CURRENT_ALBUM_DATA['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $data['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE) {
         $file_replacer_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/alb_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
         $data['menu'] .= " <a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}Replace file</a>";
-	}
-	return $data;
+    }
+    return $data;
 }
 
 ?>

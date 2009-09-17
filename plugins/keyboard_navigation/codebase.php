@@ -36,7 +36,7 @@ function keyboard_navigation($template_img_navbar) {
             $('.navmenu_pic img[src*=thumb]').parent().attr('id', 'thumb');
             $('.navmenu_pic img[src*=prev]').parent().attr({id: 'prev', accesskey: 'p'});
             $('.navmenu_pic img[src*=next]').parent().attr({id: 'next', accesskey: 'n'});
-			$('.textinput').focus(function () {sthhasfocus = true;});
+            $('.textinput').focus(function () {sthhasfocus = true;});
             $('.textinput').blur(function () {sthhasfocus = false;});
             $('select').focus(function () {sthhasfocus = true;});
             $('select').blur(function () {sthhasfocus = false;});
@@ -47,23 +47,23 @@ function keyboard_navigation($template_img_navbar) {
         $(document).keydown(function(e) {
             if (!e) {
                 e = window.event;
-			}
+            }
             if (e.which) {
                 kcode = e.which;
-			} else if (e.keyCode) {
+            } else if (e.keyCode) {
                 kcode = e.keyCode;
-			}
+            }
 
             if (sthhasfocus != true) {
                 if(kcode == 37 && $('#prev').attr('title') != '') {
                     window.location = $('#prev').attr('href');
-				}
+                }
                 if(kcode == 39 && $('#next').attr('title') != '') {
                     window.location = $('#next').attr('href');
-				}
+                }
                 if(kcode == 38) {
                     window.location = $('#thumb').attr('href');
-				}
+                }
                 if(kcode == 40) {
                     blocking('picinfo','yes', 'block');
                     return false;
