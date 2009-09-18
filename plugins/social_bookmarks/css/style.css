@@ -27,17 +27,32 @@
     left:0px;
     z-index:4;
     display:none;
-    border:1px solid lightsteelblue;
-    background-color:white;
+    background-color:none;
     margin:0px;
-    padding:5px;
-}
-
-ul.social_bookmarks_content {
-    list-style-type:none;
+    padding:0px;
 }
 
 li.social_bookmarks_content {
     list-style-type:none;
+    list-style-position:inside;
+    margin-left:0px;
+    padding-left:0px;
+    white-space:nowrap;
+    text-align:left;
 }
 
+ul.social_bookmarks_content {
+    margin:0px;
+    padding:0px;
+}
+
+td.social_bookmarks_content {
+    white-space:nowrap;
+    width:auto;
+    overflow:auto;
+    text-align:left;
+}
+
+#social_bookmarks_close {
+    cursor:pointer;
+}

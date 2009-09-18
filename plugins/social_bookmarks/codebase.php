@@ -354,7 +354,7 @@ EOT;
                         <td valign="top" class="tableb" colspan="2">
                             <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_always_visible" class="radio" value="0" {$option_output['plugin_social_bookmarks_visibility_always_visible']} /> 
                         	<label for="plugin_social_bookmarks_visibility_always_visible" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['always_visible']}
+                        	    {$lang_plugin_social_bookmarks['always_visible']} ({$lang_plugin_social_bookmarks['not_recommended']})
                         	</label>
                             <br />
                             <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_expand_on_click" class="radio" value="1" {$option_output['plugin_social_bookmarks_visibility_expand_on_click']} /> 
@@ -807,7 +807,7 @@ function social_bookmarks_menu_button($menu) {
     $new_button = array();
     $new_button[0][0] = $lang_plugin_social_bookmarks['menu_name'];
     $new_button[0][1] = $lang_plugin_social_bookmarks['menu_title'];
-    $new_button[0][2] = 'JavaScript:void(0);';
+    $new_button[0][2] = 'index.php?file=social_bookmarks/index';
     $new_button[0][3] = 'social_bookmarks';
     if ($CONFIG['plugin_social_bookmarks_position'] == 2) {
         $new_button[0][4] = $template_sys_menu_spacer;
@@ -820,56 +820,6 @@ function social_bookmarks_menu_button($menu) {
     }
     array_splice($menu, count($menu)-1, 0, $new_button);
     return $menu;
-}
-
-function social_bookmarks_content() {
-    global $CONFIG, $LINEBREAK, $lang_plugin_social_bookmarks;
-    $return = '';
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services WHERE service_active='YES'");
-    $loopCounter = 0;
-    $return_array = array();
-    while ($row = mysql_fetch_assoc($result)) {
-        $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
-        $row['service_url'] = str_replace('{t}', urlencode($CONFIG['gallery_name']) , $row['service_url']);
-        $return_array[$loopCounter] = '';
-        $return_array[$loopCounter] .= '<a href="'.$row['service_url'].'" rel="external" rel="nofollow" title="'.$row['service_name_full'].'">';
-        if ($CONFIG['plugin_social_bookmarks_layout'] == 1 || $CONFIG['plugin_social_bookmarks_layout'] == 2) {
-            $return_array[$loopCounter] .= '<img src="plugins/social_bookmarks/images/services/'.$row['icon_filename'].'" border="0" width="16" height="16" alt="" align="left" class="icon" />';
-        }
-        if ($CONFIG['plugin_social_bookmarks_layout'] == 0 || $CONFIG['plugin_social_bookmarks_layout'] == 1) {
-            $return_array[$loopCounter] .= $row['service_name_short'];
-        }
-        $return_array[$loopCounter] .= '</a>';
-        $loopCounter++;
-    }
-    if ($loopCounter == 0) {  // Nothing to return, as no service has been enabled in config
-        if (!GALLERY_ADMIN_MODE) {
-            return;
-        } else {
-            return $lang_plugin_social_bookmarks['no_service_activated']; 
-        }
-    }
-    if ($CONFIG['plugin_social_bookmarks_columns'] == 1) {
-        $return_start = '<ul class="social_bookmarks_content">';
-        $return_end   = '</ul>';
-        $record_start = '<li class="social_bookmarks_content">';
-        $record_end   = '</li>';
-    } else {
-        $return_start = '<ul>';
-        $return_end   = '</ul>';
-        $record_start = '<li>';
-        $record_end   = '</li>';
-    }
-    $return .= $return_start . $LINEBREAK;
-    $loopCounter = 0;
-    foreach ($return_array as $service_record) {
-        $return .=  $record_start .$service_record. $record_end. $LINEBREAK;
-        $loopCounter++;
-    }
-    $return .= $return_end . $LINEBREAK;
-    // Add a closing link
-    //'<table border="0"><tr><td>content</td><td style="text-align:right;vertical-align:top">close</td></tr></table>'
-    return $return;
 }
 
 function social_bookmarks_page_meta($var) {

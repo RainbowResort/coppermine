@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-09-17 [A] Added column feature {GauGau}
+2009-09-18 [A] Added greybox effect {GauGau}
 2009-09-17 [A] Added containers to menu {GauGau}
 2009-09-17 [A] Added three services {GauGau}
 2009-09-16 [A] Changed order of columns on config screen {GauGau}
@@ -53,3 +55,4 @@ Todo:
 * Button to add more services
 Add filters to services config
 Add sorting to services config
+Add option to specify offset of services block

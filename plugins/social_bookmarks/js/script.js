@@ -20,17 +20,42 @@ $(document).ready(function() {
 	//$("#plugin_social_bookmarks_layout_icons_only:checked").
     $('#social_bookmarks_menu_link').wrap('<div id="social_bookmarks_wrapper"></div>');
     $('#social_bookmarks_menu_link').after('<div id="social_bookmarks_content"></div>');
-    $('#social_bookmarks_content').append(js_vars.bookmarks_content);
+    if (js_vars.bookmarks_greyout != '1' ) {
+        $('#social_bookmarks_content').append(js_vars.bookmarks_content);
+    }
     //$("#social_bookmarks_menu_link").append(js_vars.bookmarks_visibility);
     if (js_vars.bookmarks_visibility == '0' ) {
 	    $('#social_bookmarks_content').show();
 	}
-   $('#social_bookmarks_menu_link').click(function(event){
-       event.preventDefault();
-       if (js_vars.bookmarks_visibility == '1' ) {
-           $('#social_bookmarks_content').toggle();
-       }
-   });
+	if (js_vars.bookmarks_layout != '2' ) {
+	    $('td.social_bookmarks_content').css('min-width','100px');
+	}
+    $('#social_bookmarks_menu_link').click(function(event){
+        event.preventDefault();
+        if (js_vars.bookmarks_visibility == '1') {
+            if (js_vars.bookmarks_greyout == '1' ) {
+                $("a.social_bookmarks_menu_link").click(function(){
+                    var t = this.title || $(this).text();
+                    GB_show(t,this.href,400,300);
+                    return false;
+                });
+            } else {
+                $('#social_bookmarks_content').toggle();
+            }       
+        }
+    });
+    $('#social_bookmarks_menu_link').mouseover(function(){
+        if (js_vars.bookmarks_visibility == '2' ) {
+            if (js_vars.bookmarks_greyout == '1' ) {
+                var t = this.title || $(this).text();
+                GB_show(t,this.href,400,300);
+                return false;
+            } else {
+                $('#social_bookmarks_content').show();
+            }       
+        }
+    });
+    $('#social_bookmarks_close').click(function(event){
+        $('#social_bookmarks_content').hide();
+    });
 });
-
-
