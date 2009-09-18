@@ -10,10 +10,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mass_import/codebase.php $
-  $Revision: 6497 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) {
@@ -359,7 +359,7 @@ EOT;
                             <br />
                             <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_expand_on_click" class="radio" value="1" {$option_output['plugin_social_bookmarks_visibility_expand_on_click']} /> 
                             <label for="plugin_social_bookmarks_visibility_expand_on_click" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['expand_on_click']}
+                        	    {$lang_plugin_social_bookmarks['expand_on_click']} ({$lang_plugin_social_bookmarks['recommended']})
                         	</label>
                             <br />   
                             <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_expand_on_mouseover" class="radio" value="2" {$option_output['plugin_social_bookmarks_visibility_expand_on_mouseover']} /> 
@@ -367,7 +367,7 @@ EOT;
                         	    {$lang_plugin_social_bookmarks['expand_on_mouseover']}
                         	</label>
                             <br />
-                            <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_display_popup" class="radio" value="3" {$option_output['plugin_social_bookmarks_visibility_display_popup']} /> 
+                            <input type="radio" name="plugin_social_bookmarks_visibility" id="plugin_social_bookmarks_visibility_display_popup" class="radio" value="3" {$option_output['plugin_social_bookmarks_visibility_display_popup']} disabled="disabled" /> 
                         	<label for="plugin_social_bookmarks_visibility_display_popup" class="clickable_option">
                         	    {$lang_plugin_social_bookmarks['display_popup']}
                         	</label>
@@ -403,7 +403,7 @@ EOT;
                             <br />   
                             <input type="radio" name="plugin_social_bookmarks_layout" id="plugin_social_bookmarks_layout_icons_only" class="radio" value="2" {$option_output['plugin_social_bookmarks_layout_icons_only']} />
                         	<label for="plugin_social_bookmarks_layout_icons_only" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['icons_only']}
+                        	    {$lang_plugin_social_bookmarks['icons_only']} ({$lang_plugin_social_bookmarks['recommended']})
                         	</label>
                         </td>
                     </tr>
@@ -442,7 +442,7 @@ EOT;
                         <td valign="top" class="tableb tableb_alternate" colspan="2">
                             <input type="checkbox" name="plugin_social_bookmarks_recommend" id="plugin_social_bookmarks_recommend" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_recommend']} disabled="disabled" /> 
                         	<label for="plugin_social_bookmarks_recommend" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['recommend_this_page_explain1']}
+                        	    {$lang_plugin_social_bookmarks['recommend_this_page_explain1']} ({$lang_plugin_social_bookmarks['not_recommended']})
                         	</label>
                         </td>
                     </tr>
@@ -466,9 +466,9 @@ EOT;
                             </label>
                         </td>
                         <td valign="top" class="tableb" colspan="2">
-                            <input type="checkbox" name="plugin_social_bookmarks_smart_language" id="plugin_social_bookmarks_smart_language" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_smart_language']} disabled="disabled" /> 
+                            <input type="checkbox" name="plugin_social_bookmarks_smart_language" id="plugin_social_bookmarks_smart_language" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_smart_language']} /> 
                         	<label for="plugin_social_bookmarks_smart_language" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['smart_language_explain1']}
+                        	    {$lang_plugin_social_bookmarks['smart_language_explain1']} ({$lang_plugin_social_bookmarks['recommended']})
                         	</label>
                         </td>
                     </tr>
@@ -505,6 +505,9 @@ EOT;
                                 <th valign="top" class="tableh1">
                                     {$lang_plugin_social_bookmarks['service_name']}
                                 </th>
+								<th valign="top" class="tableh1">
+                                    {$lang_plugin_social_bookmarks['link']}
+                                </th>
                                 <th valign="top" class="tableh1">
                                     {$lang_plugin_social_bookmarks['relevance']}
                                 </th>
@@ -527,46 +530,21 @@ EOT;
         $languageFlagString = '';
 
         foreach ($service_language as $countryLanguage) {
-            if ($countryLanguage == 'br') {
-                $languageFlagString .= '<img src="images/flags/br.png" border="0" width="16" height="11" alt="" title="Brazilian Portuguese" /> ';
-            } elseif ($countryLanguage == 'cn') {
-                $languageFlagString .= '<img src="images/flags/cn.png" border="0" width="16" height="11" alt="" title="Chinese" /> ';
-            } elseif ($countryLanguage == 'de') {
-                $languageFlagString .= '<img src="images/flags/de.png" border="0" width="16" height="11" alt="" title="German" /> ';
-            } elseif ($countryLanguage == 'en') {
-                $languageFlagString .= '<img src="images/flags/us.png" border="0" width="16" height="11" alt="" title="English" /> ';
-            } elseif ($countryLanguage == 'es') {
-                $languageFlagString .= '<img src="images/flags/es.png" border="0" width="16" height="11" alt="" title="Spanish" /> ';
-            } elseif ($countryLanguage == 'fr') {
-                $languageFlagString .= '<img src="images/flags/fr.png" border="0" width="16" height="11" alt="" title="French" /> ';
-            } elseif ($countryLanguage == 'hr') {
-                $languageFlagString .= '<img src="images/flags/hr.png" border="0" width="16" height="11" alt="" title="Kroatian" /> ';
-            } elseif ($countryLanguage == 'it') {
-                $languageFlagString .= '<img src="images/flags/it.png" border="0" width="16" height="11" alt="" title="Italian" /> ';
-            } elseif ($countryLanguage == 'jp') {
-                $languageFlagString .= '<img src="images/flags/jp.png" border="0" width="16" height="11" alt="" title="Japanese" /> ';
-            } elseif ($countryLanguage == 'kr') {
-                $languageFlagString .= '<img src="images/flags/kr.png" border="0" width="16" height="11" alt="" title="Korean" /> ';
-            } elseif ($countryLanguage == 'lt') {
-                $languageFlagString .= '<img src="images/flags/lt.png" border="0" width="16" height="11" alt="" title="Lithuanian" /> ';
-            } elseif ($countryLanguage == 'nl') {
-                $languageFlagString .= '<img src="images/flags/nl.png" border="0" width="16" height="11" alt="" title="Dutch" /> ';
-            } elseif ($countryLanguage == 'ir') {
-                $languageFlagString .= '<img src="images/flags/ir.png" border="0" width="16" height="11" alt="" title="Persian" /> ';
-            } elseif ($countryLanguage == 'ru') {
-                $languageFlagString .= '<img src="images/flags/ru.png" border="0" width="16" height="11" alt="" title="Russian" /> ';
-            } elseif ($countryLanguage == 'tr') {
-                $languageFlagString .= '<img src="images/flags/tr.png" border="0" width="16" height="11" alt="" title="Turkish" /> ';
-            } elseif ($countryLanguage == 'multi') {
-                $languageFlagString .= '<img src="images/flags/babelfish.png" border="0" width="16" height="11" alt="" title="Language-independant" /> ';
-            } 
-            
+            if ($countryLanguage == 'en') {
+				$countryLanguage = 'us';
+			}
+			if (is_file('images/flags/' . $countryLanguage . '.png') == TRUE) {
+				$languageFlagString .= '<img src="images/flags/'.$countryLanguage.'.png" border="0" width="16" height="11" alt="" title="'.$lang_plugin_social_bookmarks[$countryLanguage].'" /> ';
+			} elseif ($countryLanguage == 'multi') {
+				$languageFlagString .= cpg_fetch_icon('babelfish', 0, $lang_plugin_social_bookmarks[$countryLanguage]);
+			}
         }
         if ($row['service_active'] == 'YES') {
             $option_output['service'] = 'checked="checked"';
         } else {
             $option_output['service'] = '';
         }
+		$link_title = sprintf($lang_plugin_social_bookmarks['go_to_servicename'], $row['service_name_full']);
         $relevance = '';
         if ($row['relevance'] < 1 || $row['relevance'] > 10) {
             $row['relevance'] = 0;
@@ -580,9 +558,14 @@ EOT;
                                     <input type="checkbox" class="checkbox" name="service_active[{$row['service_id']}]" id="service_active_{$row['service_id']}" value="1" {$option_output['service']} />
                                 </td>
                                 <td valign="top" class="tableb">
-                                    <a href="{$row['service_url']}" rel="external" class="external">
+                                    <label for="service_active_{$row['service_id']}" class="clickable_option">
                                     {$service_icon}
                                     {$row['service_name_full']}
+                                    </label>
+                                </td>
+								<td valign="top" class="tableb">
+                                    <a href="{$row['service_url']}" rel="external">
+                                    <img src="images/link.gif" border="0" width="16" height="16" alt="" title="{$link_title}" />
                                     </a>
                                 </td>
                                 <td valign="top" class="tableb">
@@ -729,7 +712,7 @@ function social_bookmarks_configuration_submit() {
         	$config_changes_counter++;    
     }
     
-    // plugin_social_bookmarks_smart_language (radio)
+    // plugin_social_bookmarks_smart_language (checkbox)
     if ($superCage->post->keyExists('plugin_social_bookmarks_smart_language') == TRUE && $superCage->post->getInt('plugin_social_bookmarks_smart_language') == '1' ) {
         if ($superCage->post->getInt('plugin_social_bookmarks_smart_language') != $CONFIG['plugin_social_bookmarks_smart_language']) {
         	$CONFIG['plugin_social_bookmarks_smart_language'] = $superCage->post->getInt('plugin_social_bookmarks_smart_language');
@@ -823,8 +806,16 @@ function social_bookmarks_menu_button($menu) {
 }
 
 function social_bookmarks_page_meta($var) {
-	global $LINEBREAK;
+	global $CONFIG, $JS, $lang_plugin_social_bookmarks, $LINEBREAK;
     $var = '<link rel="stylesheet" href="plugins/social_bookmarks/css/style.css" type="text/css" />' . $LINEBREAK . $var;
+    // define some vars that need to exist in JS
+    set_js_var('bookmarks_visibility', $CONFIG['plugin_social_bookmarks_visibility']);
+    set_js_var('bookmarks_layout', $CONFIG['plugin_social_bookmarks_layout']);
+    set_js_var('bookmarks_greyout', $CONFIG['plugin_social_bookmarks_greyout']);
+    if ($CONFIG['plugin_social_bookmarks_favorites'] != '0') {
+        set_js_var('lang_add_to_favorites', $lang_plugin_social_bookmarks['add_to_favorites']);
+    }
+    set_js_var('bookmarks_content', social_bookmarks_content());
     return $var;
 }
 ?>

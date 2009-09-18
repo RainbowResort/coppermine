@@ -9,10 +9,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mass_import/codebase.php $
-  $Revision: 6497 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 $(document).ready(function() {
@@ -59,3 +59,14 @@ $(document).ready(function() {
         $('#social_bookmarks_content').hide();
     });
 });
+
+/* Add the current page as a favourite in the browser.
+   @param  url    (string) the URL to bookmark
+   @param  title  (string) the title to bookmark */
+function add_to_favorites(url,title) {
+	if ($.browser.msie) {
+		window.external.addFavorite(url, title);
+	} else {
+		alert(this._defaults.manualBookmark);
+	}
+}

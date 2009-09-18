@@ -10,10 +10,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mass_import/codebase.php $
-  $Revision: 6497 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) {

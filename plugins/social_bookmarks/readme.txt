@@ -9,10 +9,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mass_import/codebase.php $
-  $Revision: 6497 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 Changelog
@@ -26,7 +26,15 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-09-17 [A] Added column feature {GauGau}
+2009-09-18 [M] Added SVN header properties {GauGau}
+2009-09-18 [M] Counted plugin version up to v1.4 {GauGau}
+2009-09-18 [M] Added recommendation page {GauGau}
+2009-09-18 [A] Partially implemented favorites icon {GauGau}
+2009-09-18 [A] Converted service names on config screen into labels for the checkbox {GauGau}
+2009-09-18 [A] Added separate link column on config screen {GauGau}
+2009-09-18 [A] Added smart language feature {GauGau}
+2009-09-18 [A] Added various services {GauGau}
+2009-09-18 [A] Added column feature {GauGau}
 2009-09-18 [A] Added greybox effect {GauGau}
 2009-09-17 [A] Added containers to menu {GauGau}
 2009-09-17 [A] Added three services {GauGau}
@@ -49,10 +57,9 @@ Todo:
     Aim
 -----
 * Add select all/ unselect all button to config
-* Convert rating stars in relevance into bar
-* Convert service names into labels for the checkbox
-* Add separate link token
 * Button to add more services
 Add filters to services config
 Add sorting to services config
 Add option to specify offset of services block
+Add alternating rows in config
+Make config screen collapsible

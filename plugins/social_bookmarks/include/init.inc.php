@@ -10,10 +10,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/social_bookmarks/codebase.php $
-  $Revision: 6497 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-08-19 18:54:16 +0200 (Mi, 19. Aug 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) {
@@ -29,15 +29,6 @@ function social_bookmarks_initialize() {
 	if (in_array('plugins/social_bookmarks/js/script.js', $JS['includes']) != TRUE) {
 	    $JS['includes'][] = 'plugins/social_bookmarks/js/script.js';
 	}
-	
-    // define some vars that need to exist in JS
-    set_js_var('bookmarks_visibility', $CONFIG['plugin_social_bookmarks_visibility']);
-    set_js_var('bookmarks_layout', $CONFIG['plugin_social_bookmarks_layout']);
-    set_js_var('bookmarks_greyout', $CONFIG['plugin_social_bookmarks_greyout']);
-    if ($CONFIG['plugin_social_bookmarks_favorites'] != '0') {
-        set_js_var('lang_add_to_favorites', $lang_plugin_social_bookmarks['add_to_favorites']);
-    }
-    set_js_var('bookmarks_content', social_bookmarks_content());
 	
 	require_once "./plugins/social_bookmarks/lang/english.php";
 	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/social_bookmarks/lang/{$CONFIG['lang']}.php")) {
@@ -62,25 +53,49 @@ function social_bookmarks_initialize() {
 }
 
 function social_bookmarks_content() {
-    global $CONFIG, $LINEBREAK, $lang_plugin_social_bookmarks, $lang_common;
+    global $CONFIG, $LINEBREAK, $USER, $lang_plugin_social_bookmarks, $lang_common;
     $return = '';
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services WHERE service_active='YES'");
     $loopCounter = 0;
     $return_array = array();
+	if ($CONFIG['plugin_social_bookmarks_smart_language'] == '1') { 
+		// Determine the visistor's language
+		$result = cpg_db_query("SELECT flag, abbr FROM {$CONFIG['TABLE_LANGUAGE']} WHERE lang_id='{$USER['lang']}' LIMIT 1");
+        list($user_flag, $user_abbr) = mysql_fetch_row($result);
+        mysql_free_result($result);
+		if ($user_abbr != '') {
+			$user_flag = $user_abbr;
+		}
+	}
+	// Query the services
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services WHERE service_active='YES'");
     while ($row = mysql_fetch_assoc($result)) {
         $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
         $row['service_url'] = str_replace('{t}', urlencode($CONFIG['gallery_name']) , $row['service_url']);
-        $return_array[$loopCounter] = '';
-        $return_array[$loopCounter] .= '<a href="'.$row['service_url'].'" rel="external" rel="nofollow" title="'.$row['service_name_full'].'">';
-        if ($CONFIG['plugin_social_bookmarks_layout'] == 1 || $CONFIG['plugin_social_bookmarks_layout'] == 2) {
-            $return_array[$loopCounter] .= '<img src="plugins/social_bookmarks/images/services/'.$row['icon_filename'].'" border="0" width="16" height="16" alt="" align="left" class="icon" />';
-        }
-        if ($CONFIG['plugin_social_bookmarks_layout'] == 0 || $CONFIG['plugin_social_bookmarks_layout'] == 1) {
-            $return_array[$loopCounter] .= $row['service_name_short'];
-        }
-        $return_array[$loopCounter] .= '</a>';
+		unset($service_language);
+        $service_language = explode('|', $row['service_lang']);
+        if ($CONFIG['plugin_social_bookmarks_smart_language'] != '1' || (in_array($user_flag, $service_language) == TRUE || in_array('multi', $service_language) == TRUE)) {
+			$return_array[$loopCounter] = '';
+			$return_array[$loopCounter] .= '<a href="'.$row['service_url'].'" rel="external nofollow" title="'.$row['service_name_full'].'">';
+			if ($CONFIG['plugin_social_bookmarks_layout'] == 1 || $CONFIG['plugin_social_bookmarks_layout'] == 2) {
+				$return_array[$loopCounter] .= '<img src="plugins/social_bookmarks/images/services/'.$row['icon_filename'].'" border="0" width="16" height="16" alt="" align="left" class="icon" />';
+			}
+			if ($CONFIG['plugin_social_bookmarks_layout'] == 0 || $CONFIG['plugin_social_bookmarks_layout'] == 1) {
+				$return_array[$loopCounter] .= $row['service_name_short'];
+			}
+			$return_array[$loopCounter] .= '</a>';
+		}
         $loopCounter++;
     }
+	// Add the link to favorites if applicable
+	if ($CONFIG['plugin_social_bookmarks_favorites'] == 1) {
+		$return_array[$loopCounter] .= '<a href="JavaScript:void();" id="social_bookmark_favorites_link" rel="nofollow" title="'.$lang_plugin_social_bookmarks['add_to_favorites'].'"><img src="plugins/social_bookmarks/images/services/favorites.png" alt="" class="icon" align="left" border="0" height="16" width="16" /></a>';
+		$loopCounter++;
+	}
+	// Add the link to the recommendation page
+	if ($CONFIG['plugin_social_bookmarks_recommend'] == 1) {
+		$return_array[$loopCounter] .= '<a href="index.php?file=social_bookmarks/recommend" id="social_bookmark_recommend_link" rel="nofollow" title="'.$lang_plugin_social_bookmarks['recommend_this_page'].'"><img src="plugins/social_bookmarks/images/services/email.png" alt="" class="icon" align="left" border="0" height="16" width="16" /></a>';
+		$loopCounter++;
+	}
     $total_records = $loopCounter;
     if ($total_records == 0) {  // Nothing to return, as no service has been enabled in config
         if (!GALLERY_ADMIN_MODE) {
@@ -131,8 +146,6 @@ function social_bookmarks_content() {
         $return .= '</tr>' . $LINEBREAK;
     }
     $return .= $return_end . $LINEBREAK;
-    // Add a closing link
-    //'<table border="0"><tr><td>content</td><td style="text-align:right;vertical-align:top">close</td></tr></table>'
     return $return;
 }
 ?>

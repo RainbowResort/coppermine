@@ -24,9 +24,8 @@ require_once './plugins/social_bookmarks/include/init.inc.php';
 $social_bookmarks_init_array = social_bookmarks_initialize();
 $lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
 $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
-// Configuration
-pageheader($lang_plugin_social_bookmarks['config']);
-social_bookmarks_configure();
+pageheader('Under construction');
+echo 'Feature not implemented yet. Beta stage, you know... ;-)';
 pagefooter();
 die;
 ?>
