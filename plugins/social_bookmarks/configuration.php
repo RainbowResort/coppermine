@@ -26,9 +26,9 @@ $lang_plugin_social_bookmarks = $social_bookmarks_init_array['language'];
 $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
 
 $name = $lang_plugin_social_bookmarks['name'];
-$description = $lang_plugin_social_bookmarks['description'].'<br /><strong>Warning: this plugin is currently in beta stage, i.e. it does not fully work.</strong>';
+$description = $lang_plugin_social_bookmarks['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '1.4';
+$version = '1.5';
 
 $install_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>&nbsp;

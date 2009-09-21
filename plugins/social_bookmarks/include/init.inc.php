@@ -37,16 +37,21 @@ function social_bookmarks_initialize() {
 	
 	if ($CONFIG['enable_menu_icons'] >= 1) {
 	    $social_bookmarks_icon_array['announcement'] = '<img src="./plugins/social_bookmarks/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
+	    $social_bookmarks_icon_array['configure'] = '<img src="./plugins/social_bookmarks/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';
+	    $social_bookmarks_icon_array['menu'] = '<img src="./plugins/social_bookmarks/images/icons/social_bookmarks.png" border="0" width="16" height="16" alt="" class="icon" />';
 	} else {
 	    $social_bookmarks_icon_array['announcement'] = '';
+	    $social_bookmarks_icon_array['configure'] = '';
+	    $social_bookmarks_icon_array['menu'] = '';
 	}
 	if ($CONFIG['enable_menu_icons'] == 2) {
+	    $social_bookmarks_icon_array['page'] = '<img src="./plugins/social_bookmarks/images/icons/social_bookmarks.png" border="0" width="16" height="16" alt="" class="icon" />';
 	} else {
+	    $social_bookmarks_icon_array['page'] = '';
 	}
 	$social_bookmarks_icon_array['ok'] = cpg_fetch_icon('ok', 0);
 	$social_bookmarks_icon_array['cancel'] = cpg_fetch_icon('cancel', 0);
 	$social_bookmarks_icon_array['stop'] = cpg_fetch_icon('stop', 0);
-	$social_bookmarks_icon_array['configure'] = cpg_fetch_icon('config', 1);
 	$return['language'] = $lang_plugin_social_bookmarks;
 	$return['icon'] = $social_bookmarks_icon_array;
 	return $return;
@@ -86,16 +91,6 @@ function social_bookmarks_content() {
 		}
         $loopCounter++;
     }
-	// Add the link to favorites if applicable
-	if ($CONFIG['plugin_social_bookmarks_favorites'] == 1) {
-		$return_array[$loopCounter] .= '<a href="JavaScript:void();" id="social_bookmark_favorites_link" rel="nofollow" title="'.$lang_plugin_social_bookmarks['add_to_favorites'].'"><img src="plugins/social_bookmarks/images/services/favorites.png" alt="" class="icon" align="left" border="0" height="16" width="16" /></a>';
-		$loopCounter++;
-	}
-	// Add the link to the recommendation page
-	if ($CONFIG['plugin_social_bookmarks_recommend'] == 1) {
-		$return_array[$loopCounter] .= '<a href="index.php?file=social_bookmarks/recommend" id="social_bookmark_recommend_link" rel="nofollow" title="'.$lang_plugin_social_bookmarks['recommend_this_page'].'"><img src="plugins/social_bookmarks/images/services/email.png" alt="" class="icon" align="left" border="0" height="16" width="16" /></a>';
-		$loopCounter++;
-	}
     $total_records = $loopCounter;
     if ($total_records == 0) {  // Nothing to return, as no service has been enabled in config
         if (!GALLERY_ADMIN_MODE) {
@@ -104,7 +99,6 @@ function social_bookmarks_content() {
             return $lang_plugin_social_bookmarks['no_service_activated']; 
         }
     }
-    // Add favorites
     // Define HTML output wrappers
     if ($CONFIG['plugin_social_bookmarks_columns'] == 1) {
         $return_start = '<ul class="social_bookmarks_content">';

@@ -56,3 +56,8 @@ td.social_bookmarks_content {
 #social_bookmarks_close {
     cursor:pointer;
 }
+
+.social_bookmarks_relevance {
+    border:1px solid lightsteelblue;
+    display:inline-block;
+}

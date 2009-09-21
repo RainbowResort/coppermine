@@ -33,6 +33,8 @@ if ($CONFIG['plugin_social_bookmarks_position'] == 2) {
     $thisplugin->add_filter('sub_menu','social_bookmarks_menu_button');
 }
 $thisplugin->add_filter('page_meta','social_bookmarks_page_meta');
+$thisplugin->add_filter('plugin_block','social_bookmarks_mainpage');
+
 
 function social_bookmarks_install() {
     global $CONFIG, $social_bookmarks_installation, $thisplugin, $USER_DATA, $lang_plugin_social_bookmarks;
@@ -57,9 +59,6 @@ function social_bookmarks_install() {
 	                                'plugin_social_bookmarks_greyout' => '0',
 	                                'plugin_social_bookmarks_layout' => '2',
 	                                'plugin_social_bookmarks_columns' => '5',
-	                                'plugin_social_bookmarks_favorites' => '0',
-	                                'plugin_social_bookmarks_recommend' => '0',
-	                                'plugin_social_bookmarks_captcha' => '1',
 	                                'plugin_social_bookmarks_smart_language' => '1',
 	                                'plugin_social_bookmarks_admin_menu' => '0',
 	                                );
@@ -90,9 +89,6 @@ function social_bookmarks_uninstall() {
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_greyout'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_layout'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_columns'");
-		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_favorites'");
-		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_recommend'");
-		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_captcha'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_smart_language'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_social_bookmarks_admin_menu'");
 	}
@@ -241,24 +237,6 @@ function social_bookmarks_configure() {
     	$option_output['plugin_social_bookmarks_layout_icons_only']    = 'checked="checked"';
     }
     
-    if ($CONFIG['plugin_social_bookmarks_favorites'] == '0') {
-        $option_output['plugin_social_bookmarks_favorites']   = '';
-    }  else {
-        $option_output['plugin_social_bookmarks_favorites']   = 'checked="checked"';
-    }
-    
-    if ($CONFIG['plugin_social_bookmarks_recommend'] == '0') {
-        $option_output['plugin_social_bookmarks_recommend']   = '';
-    }  else {
-        $option_output['plugin_social_bookmarks_recommend']   = 'checked="checked"';
-    }
-    
-    if ($CONFIG['plugin_social_bookmarks_captcha'] == '0') {
-        $option_output['plugin_social_bookmarks_captcha']   = '';
-    }  else {
-        $option_output['plugin_social_bookmarks_captcha']   = 'checked="checked"';
-    }
-    
     if ($CONFIG['plugin_social_bookmarks_smart_language'] == '0') {
         $option_output['plugin_social_bookmarks_smart_language']   = '';
     }  else {
@@ -310,7 +288,7 @@ EOT;
                     </tr>
                     <tr>
                           <td valign="top" class="tableb">
-                            <input type="radio" name="plugin_social_bookmarks_position" id="plugin_social_bookmarks_position_content_of_main_page" class="radio" value="1" {$option_output['plugin_social_bookmarks_position_content_of_main_page']} disabled="disabled" /> 
+                            <input type="radio" name="plugin_social_bookmarks_position" id="plugin_social_bookmarks_position_content_of_main_page" class="radio" value="1" {$option_output['plugin_social_bookmarks_position_content_of_main_page']} /> 
                         </td>
                         <td valign="top" class="tableb">
                         	<label for="plugin_social_bookmarks_position_content_of_main_page" class="clickable_option">
@@ -422,45 +400,6 @@ EOT;
                     </tr>
                     <tr>
                         <td valign="top" class="tableb">
-                            <label for="plugin_social_bookmarks_favorites" class="clickable_option">
-                                {$lang_plugin_social_bookmarks['add_to_favorites']}
-                            </label>
-                        </td>
-                        <td valign="top" class="tableb" colspan="2">
-                            <input type="checkbox" name="plugin_social_bookmarks_favorites" id="plugin_social_bookmarks_favorites" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_favorites']} disabled="disabled" /> 
-                        	<label for="plugin_social_bookmarks_favorites" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['add_to_favorites_explain1']}
-                        	</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" class="tableb tableb_alternate" rowspan="2">
-                            <label for="plugin_social_bookmarks_recommend" class="clickable_option">
-                                {$lang_plugin_social_bookmarks['recommend_this_page']}
-                            </label>
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate" colspan="2">
-                            <input type="checkbox" name="plugin_social_bookmarks_recommend" id="plugin_social_bookmarks_recommend" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_recommend']} disabled="disabled" /> 
-                        	<label for="plugin_social_bookmarks_recommend" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['recommend_this_page_explain1']} ({$lang_plugin_social_bookmarks['not_recommended']})
-                        	</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" class="tableb tableb_alternate">
-                        </td>
-                        <td valign="top" class="tableb tableb_alternate">
-                            <input type="checkbox" name="plugin_social_bookmarks_captcha" id="plugin_social_bookmarks_captcha" class="checkbox" value="1" {$option_output['plugin_social_bookmarks_captcha']} disabled="disabled" /> 
-                        	<label for="plugin_social_bookmarks_captcha" class="clickable_option">
-                        	    {$lang_plugin_social_bookmarks['require_captcha']}<br />
-                        	    <span class="album_stat">
-                        	        ({$lang_plugin_social_bookmarks['recommend_this_page_explain2']})
-                        	    </span>
-                        	</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" class="tableb">
                             <label for="plugin_social_bookmarks_smart_language" class="clickable_option">
                                 {$lang_plugin_social_bookmarks['smart_language']}
                             </label>
@@ -517,11 +456,17 @@ EOT;
                             </tr>
 EOT;
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services");
+    $loopCounter = 0;
     while ($row = mysql_fetch_assoc($result)) {
         if ($row['icon_filename'] != '' && file_exists('plugins/social_bookmarks/images/services/'.$row['icon_filename']) == TRUE) {
             $service_icon = '<img src="plugins/social_bookmarks/images/services/'.$row['icon_filename'].'" border="0" width="16" height="16" alt="" align="left" class="icon" />';
         } else {
             $service_icon = '<img src="images/spacer.gif" border="0" width="16" height="16" alt="" align="left" class="icon" />';
+        }
+        if ($loopCounter/2 == floor($loopCounter/2)) {
+            $tableCellStyle = 'tableb tableb_alternate';
+        } else {
+            $tableCellStyle = 'tableb';
         }
         $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
         $row['service_url'] = str_replace('{t}', urlencode($CONFIG['gallery_name']) , $row['service_url']);
@@ -550,28 +495,29 @@ EOT;
             $row['relevance'] = 0;
         }
         if ($row['relevance'] != 0) {
-            $relevance = theme_display_bar($row['relevance'], 10, 100, 'lightsteelblue', '', '', 'lightsteelblue', '');
+            $relevance = theme_display_bar($row['relevance'], 10, 150, 'lightsteelblue', '', '', 'lightsteelblue', '');
         }
+        $loopCounter++;
         echo <<< EOT
                             <tr>
-                                <td valign="top" align="center" class="tableb">
+                                <td valign="top" align="center" class="{$tableCellStyle}">
                                     <input type="checkbox" class="checkbox" name="service_active[{$row['service_id']}]" id="service_active_{$row['service_id']}" value="1" {$option_output['service']} />
                                 </td>
-                                <td valign="top" class="tableb">
+                                <td valign="top" class="{$tableCellStyle}">
                                     <label for="service_active_{$row['service_id']}" class="clickable_option">
                                     {$service_icon}
                                     {$row['service_name_full']}
                                     </label>
                                 </td>
-								<td valign="top" class="tableb">
+								<td valign="top" class="{$tableCellStyle}">
                                     <a href="{$row['service_url']}" rel="external">
                                     <img src="images/link.gif" border="0" width="16" height="16" alt="" title="{$link_title}" />
                                     </a>
                                 </td>
-                                <td valign="top" class="tableb">
-                                    <span title="{$row['relevance']}">{$relevance}</span>
+                                <td valign="top" class="{$tableCellStyle}">
+                                    <div title="{$lang_plugin_social_bookmarks['relevance']}: {$row['relevance']}" class="social_bookmarks_relevance">{$relevance}</div>
                                 </td>
-                                <td valign="top" class="tableb">
+                                <td valign="top" class="{$tableCellStyle}">
                                     <span class="album_stat">
                                         {$languageFlagString}
                                     </span>
@@ -667,51 +613,6 @@ function social_bookmarks_configuration_submit() {
         }
     }
 	
-    // plugin_social_bookmarks_favorites (radio)
-    if ($superCage->post->keyExists('plugin_social_bookmarks_favorites') == TRUE && $superCage->post->getInt('plugin_social_bookmarks_favorites') == '1' ) {
-        if ($superCage->post->getInt('plugin_social_bookmarks_favorites') != $CONFIG['plugin_social_bookmarks_favorites']) {
-        	$CONFIG['plugin_social_bookmarks_favorites'] = $superCage->post->getInt('plugin_social_bookmarks_favorites');
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_favorites']}' WHERE name='plugin_social_bookmarks_favorites'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;
-    	}
-    } elseif ($superCage->post->keyExists('plugin_social_bookmarks_favorites') != TRUE && $CONFIG['plugin_social_bookmarks_favorites'] != '0') {
-        	$CONFIG['plugin_social_bookmarks_favorites'] = '0';
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_favorites']}' WHERE name='plugin_social_bookmarks_favorites'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;    
-    }
-    
-    // plugin_social_bookmarks_recommend (radio)
-    if ($superCage->post->keyExists('plugin_social_bookmarks_recommend') == TRUE && $superCage->post->getInt('plugin_social_bookmarks_recommend') == '1' ) {
-        if ($superCage->post->getInt('plugin_social_bookmarks_recommend') != $CONFIG['plugin_social_bookmarks_recommend']) {
-        	$CONFIG['plugin_social_bookmarks_recommend'] = $superCage->post->getInt('plugin_social_bookmarks_recommend');
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_recommend']}' WHERE name='plugin_social_bookmarks_recommend'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;
-    	}
-    } elseif ($superCage->post->keyExists('plugin_social_bookmarks_recommend') != TRUE && $CONFIG['plugin_social_bookmarks_recommend'] != '0') {
-        	$CONFIG['plugin_social_bookmarks_recommend'] = '0';
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_recommend']}' WHERE name='plugin_social_bookmarks_recommend'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;    
-    }
-    
-    // plugin_social_bookmarks_captcha (radio)
-    if ($superCage->post->keyExists('plugin_social_bookmarks_captcha') == TRUE && $superCage->post->getInt('plugin_social_bookmarks_captcha') == '1' ) {
-        if ($superCage->post->getInt('plugin_social_bookmarks_captcha') != $CONFIG['plugin_social_bookmarks_captcha']) {
-        	$CONFIG['plugin_social_bookmarks_captcha'] = $superCage->post->getInt('plugin_social_bookmarks_captcha');
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_captcha']}' WHERE name='plugin_social_bookmarks_captcha'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;
-    	}
-    } elseif ($superCage->post->keyExists('plugin_social_bookmarks_captcha') != TRUE && $CONFIG['plugin_social_bookmarks_captcha'] != '0') {
-        	$CONFIG['plugin_social_bookmarks_captcha'] = '0';
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_social_bookmarks_captcha']}' WHERE name='plugin_social_bookmarks_captcha'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;    
-    }
-    
     // plugin_social_bookmarks_smart_language (checkbox)
     if ($superCage->post->keyExists('plugin_social_bookmarks_smart_language') == TRUE && $superCage->post->getInt('plugin_social_bookmarks_smart_language') == '1' ) {
         if ($superCage->post->getInt('plugin_social_bookmarks_smart_language') != $CONFIG['plugin_social_bookmarks_smart_language']) {
@@ -797,7 +698,7 @@ function social_bookmarks_menu_button($menu) {
     } elseif ($CONFIG['plugin_social_bookmarks_position'] == 3) {
         $new_button[0][4] = $template_sub_menu_spacer;
     } 
-    $new_button[0][5] = 'id ="social_bookmarks_menu_link" rel="nofollow"'; // Additional parameters for the <a href>-tag
+    $new_button[0][5] = 'id="social_bookmarks_menu_link" rel="nofollow"'; // Additional parameters for the <a href>-tag
     if ($CONFIG['plugin_social_bookmarks_greyout'] && $CONFIG['plugin_social_bookmarks_visibility'] != '0') {
         $new_button[0][5] .= ' class="greybox"';
     }
@@ -807,15 +708,42 @@ function social_bookmarks_menu_button($menu) {
 
 function social_bookmarks_page_meta($var) {
 	global $CONFIG, $JS, $lang_plugin_social_bookmarks, $LINEBREAK;
+	require_once './plugins/social_bookmarks/include/init.inc.php';
     $var = '<link rel="stylesheet" href="plugins/social_bookmarks/css/style.css" type="text/css" />' . $LINEBREAK . $var;
-    // define some vars that need to exist in JS
-    set_js_var('bookmarks_visibility', $CONFIG['plugin_social_bookmarks_visibility']);
-    set_js_var('bookmarks_layout', $CONFIG['plugin_social_bookmarks_layout']);
-    set_js_var('bookmarks_greyout', $CONFIG['plugin_social_bookmarks_greyout']);
-    if ($CONFIG['plugin_social_bookmarks_favorites'] != '0') {
-        set_js_var('lang_add_to_favorites', $lang_plugin_social_bookmarks['add_to_favorites']);
+    if ($CONFIG['plugin_social_bookmarks_position'] == '2' || $CONFIG['plugin_social_bookmarks_position'] == '3') {
+        // define some vars that need to exist in JS
+        set_js_var('bookmarks_position', $CONFIG['plugin_social_bookmarks_position']);
+        set_js_var('bookmarks_visibility', $CONFIG['plugin_social_bookmarks_visibility']);
+        set_js_var('bookmarks_layout', $CONFIG['plugin_social_bookmarks_layout']);
+        set_js_var('bookmarks_greyout', $CONFIG['plugin_social_bookmarks_greyout']);
+        set_js_var('bookmarks_content', social_bookmarks_content());
     }
-    set_js_var('bookmarks_content', social_bookmarks_content());
     return $var;
+}
+
+function social_bookmarks_mainpage() {
+    global $CONFIG, $matches, $lang_plugin_social_bookmarks, $social_bookmarks_icon_array;
+    if($matches[1] != 'socialbookmarks') {
+        return $matches;
+    }
+    if ($CONFIG['plugin_social_bookmarks_position'] != 1) {
+        return;
+    }
+    if ($CONFIG['plugin_social_bookmarks_greyout'] && $CONFIG['plugin_social_bookmarks_visibility'] != '0') {
+        $css_class = ' class="greybox"';
+    } else {
+        $css_class = '';
+    }
+    starttable("100%", $social_bookmarks_icon_array['page'] . $lang_plugin_social_bookmarks['menu_name']);
+    $main_output = social_bookmarks_content();
+    // Visibility options need to be applied!
+    echo <<< EOT
+    <tr>
+        <td class="tableb">
+            {$main_output}
+        </td>
+    </tr>
+EOT;
+    endtable();
 }
 ?>

@@ -20,9 +20,6 @@ INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks
 INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_greyout', '0');
 INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_layout', '2');
 INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_columns', '5');
-INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_favorites', '0');
-INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_recommend', '0');
-INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_captcha', 1);
 INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_smart_language', 1);
 INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_social_bookmarks_admin_menu', '0');
 
@@ -192,6 +189,9 @@ INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `
 INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('Gwar', 'Gwar', 'http://www.gwar.pl/DodajGwar.html?u={u}', 'pl', 'gwar.png', 1);
 INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('rec6', 'rec6', 'http://rec6.via6.com/link.php?url={u}&={t}', 'br', 'rec6.png', 1);
 INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('InternetMedia', 'InternetMedia', 'http://www.internetmedia.hu/submit.php?url={u}', 'hu', 'internetmedia.hu.png', 1);
+INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('Twine', 'Twine', 'http://www.twine.com/bookmark/basic?u={u}', 'en', 'twackle.gif', 1);
+INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('Twackle', 'Twackle', 'http://www.twackle.com/chicklet?site={u}', 'en', 'twine.gif', 1);
+INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('Aim', 'Aim', 'http://share.aim.com/share/?url={u}&amp;title={t}', 'en', 'aim.gif', 1);
 ## INSERT IGNORE INTO CPG_plugin_social_bookmarks_services (`service_name_short`, `service_name_full`, `service_url`, `service_lang`, `icon_filename`, `relevance`) VALUES ('', '', '', '', '.png', 1);
 
 

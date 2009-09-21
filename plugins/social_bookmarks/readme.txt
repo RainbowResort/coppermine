@@ -26,6 +26,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-09-21 [A] Added various services {GauGau}
+2009-09-21 [A] Added alternating rows in config {GauGau}
+2009-09-21 [M] Removed planned add-to-favorites feature {GauGau}
+2009-09-21 [M] Removed planned recommendation feature {GauGau}
 2009-09-18 [M] Added SVN header properties {GauGau}
 2009-09-18 [M] Counted plugin version up to v1.4 {GauGau}
 2009-09-18 [M] Added recommendation page {GauGau}
@@ -47,19 +51,11 @@ Todo:
 =====
 * Table editor that allows new records to be added
 * Db-field relevance (page-rank) 0-10
-* Additional services:
-    wordpress
-    buzz up
-    Blogger
-    TypePad
-    Twine
-    Twackle
-    Aim
------
 * Add select all/ unselect all button to config
 * Button to add more services
 Add filters to services config
 Add sorting to services config
 Add option to specify offset of services block
-Add alternating rows in config
 Make config screen collapsible
+Remove upper and left black bar from some service icons
+Add transparency for some icons

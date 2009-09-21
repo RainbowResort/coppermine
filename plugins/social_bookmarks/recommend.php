@@ -25,7 +25,7 @@ $social_bookmarks_init_array = social_bookmarks_initialize();
 $lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
 $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
 pageheader('Under construction');
-echo 'Feature not implemented yet. Beta stage, you know... ;-)';
+echo theme_display_bar($row['relevance'], 10, 100, 'lightsteelblue', '', '', 'lightsteelblue', '');
 pagefooter();
 die;
 ?>
