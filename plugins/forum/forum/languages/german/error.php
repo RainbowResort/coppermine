@@ -2,9 +2,9 @@
 
 $lang = Array(
     // default
-    'access_denied'   => 'Du hast kein Recht diese Seite zu betrachten.',
-    'perm_denied'     => 'Du hast kein Recht diese Operation auszufüren.',
-    'param_missing'   => 'Das Script wurde ohne den/die erforderlichen Parameter aufgerufen.',
+    'access_denied'   => 'Du hast kein Recht, diese Seite anzusehen.',
+    'perm_denied'     => 'Du hast nicht das Recht, diese Operation auszuführen.',
+    'param_missing'   => 'Das Skript wurde ohne den/die erforderlichen Parameter aufgerufen.',
     'fr_not_install'  => 'Simple Forum Plugin wurde noch nicht installiert.',
     'missing_method'  => 'Fehlende Methoe "%s" in Klasse "%s".',
     'missing_class'   => 'Fehlende Klasse "%s".',

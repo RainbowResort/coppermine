@@ -13,7 +13,7 @@ class topic_controller extends Controller {
             cpg_die(ERROR, Lang::item('error.wrong_topic_id'), __FILE__, __LINE__);
         }
         if (!$authorizer->can_access_topic($vars['topic_id'])) {
-            cpg_die(ERROR, Lang::item('error.perm_denied'), __FILE__, __LINE__);
+            cpg_die(ERROR, Lang::item('error.access_denied'), __FILE__, __LINE__);
         }
         $this->forum->add_view($vars['topic_id']);
         $vars['nagavitor'] = $this->forum->get_nagavitor();
