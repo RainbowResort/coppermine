@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-09-21 [A] Changed link from generic gallery URL to individual page {GauGau}
+2009-09-21 [A] Cleaned up folder structure of plugin {GauGau}
 2009-09-21 [A] Added various services {GauGau}
 2009-09-21 [A] Added alternating rows in config {GauGau}
 2009-09-21 [M] Removed planned add-to-favorites feature {GauGau}

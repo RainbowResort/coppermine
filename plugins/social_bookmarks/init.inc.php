@@ -26,8 +26,8 @@ function social_bookmarks_initialize() {
 	if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
 		$JS['includes'][] = 'js/jquery.spinbutton.js';
 	}
-	if (in_array('plugins/social_bookmarks/js/script.js', $JS['includes']) != TRUE) {
-	    $JS['includes'][] = 'plugins/social_bookmarks/js/script.js';
+	if (in_array('plugins/social_bookmarks/script.js', $JS['includes']) != TRUE) {
+	    $JS['includes'][] = 'plugins/social_bookmarks/script.js';
 	}
 	
 	require_once "./plugins/social_bookmarks/lang/english.php";
@@ -58,7 +58,7 @@ function social_bookmarks_initialize() {
 }
 
 function social_bookmarks_content() {
-    global $CONFIG, $LINEBREAK, $USER, $lang_plugin_social_bookmarks, $lang_common;
+    global $CONFIG, $LINEBREAK, $USER, $lang_plugin_social_bookmarks, $lang_common, $socialBookmarks_title;
     $return = '';
     $loopCounter = 0;
     $return_array = array();
@@ -74,8 +74,8 @@ function social_bookmarks_content() {
 	// Query the services
 	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_social_bookmarks_services WHERE service_active='YES'");
     while ($row = mysql_fetch_assoc($result)) {
-        $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
-        $row['service_url'] = str_replace('{t}', urlencode($CONFIG['gallery_name']) , $row['service_url']);
+        $row['service_url'] = str_replace('{u}', urlencode(social_bookmarks_pagelink()) , $row['service_url']);
+        $row['service_url'] = str_replace('{t}', urlencode($socialBookmarks_title) , $row['service_url']);
 		unset($service_language);
         $service_language = explode('|', $row['service_lang']);
         if ($CONFIG['plugin_social_bookmarks_smart_language'] != '1' || (in_array($user_flag, $service_language) == TRUE || in_array('multi', $service_language) == TRUE)) {
@@ -110,12 +110,17 @@ function social_bookmarks_content() {
             $return .= '<div style="text-align:right;"><img src="images/icons/close.png" border="0" width="16" height="16" alt="" title="'.$lang_common['close'].'" id="social_bookmarks_close" /></div>';
         }
     } else {
-        $return_start = '<table class="maintable">' . $LINEBREAK . '<tbody>';
+        if ($CONFIG['plugin_social_bookmarks_position'] == '2' || $CONFIG['plugin_social_bookmarks_position'] == '3') {
+			$return_start = '<table class="maintable" width="100%">' . $LINEBREAK . '<tbody>';
+		} else {
+			$return_start = '<table class="maintable">' . $LINEBREAK . '<tbody>';
+		}
+		$return_start = '<table class="maintable">' . $LINEBREAK . '<tbody>';
         $return_end   = '</tbody>' . $LINEBREAK . '</table>';
         $record_start = '<td class="social_bookmarks_content">';
         $record_end   = '</td>';
         // Add a close header
-        if ($CONFIG['plugin_social_bookmarks_greyout'] != '1' && $CONFIG['plugin_social_bookmarks_visibility'] == '2') {
+        if ($CONFIG['plugin_social_bookmarks_greyout'] != '1' && $CONFIG['plugin_social_bookmarks_visibility'] == '2' && ($CONFIG['plugin_social_bookmarks_position'] == '2' || $CONFIG['plugin_social_bookmarks_position'] == '3')) {
             $return_start .= '<tr><td class="tableh1" style="text-align:right;" colspan="'.$CONFIG['plugin_social_bookmarks_columns'].'"><img src="images/icons/close.png" border="0" width="16" height="16" alt="" title="'.$lang_common['close'].'" id="social_bookmarks_close" /></td></tr>';
         }
     }
@@ -141,5 +146,36 @@ function social_bookmarks_content() {
     }
     $return .= $return_end . $LINEBREAK;
     return $return;
+}
+
+function social_bookmarks_pagelink() {
+	global $CONFIG, $CPG_PHP_SELF;
+	$allowed_filenames =      array('contact.php', 
+	                                'displayecard.php', 
+							        'displayimage.php', 
+							        'displayreport.php', 
+							        'ecard.php', 
+							        'export.php',
+							        'index.php',
+							        'login.php',
+							        'register.php',
+									'report_file.php',
+							        'upload.php',
+							        'xp_publish.php',
+							   );
+	$forbidden_parameters =   array('message_id',
+	                                'form_token',
+									'timestamp',
+									'user_id',
+									'referer',
+									'lang',
+									'theme',
+									 );
+	if (in_array($CPG_PHP_SELF, $allowed_filenames) == TRUE) {
+		$return = $CONFIG['site_url'] . rtrim(cpgGetScriptNameParams($forbidden_parameters), '&');
+	} else {
+		$return = $CONFIG['site_url'] . 'index.php';
+	}
+	return $return;
 }
 ?>

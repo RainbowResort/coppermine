@@ -20,7 +20,7 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
-require_once './plugins/social_bookmarks/include/init.inc.php';
+require_once './plugins/social_bookmarks/init.inc.php';
 $social_bookmarks_init_array = social_bookmarks_initialize();
 $lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
 $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
@@ -28,7 +28,7 @@ $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
 $name = $lang_plugin_social_bookmarks['name'];
 $description = $lang_plugin_social_bookmarks['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '1.5';
+$version = '1.6';
 
 $install_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>&nbsp;

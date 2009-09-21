@@ -22,6 +22,7 @@ if (!defined('IN_COPPERMINE')) {
 
 // Set up the plugin actions and filters
 //$thisplugin->add_action('page_start','social_bookmarks_initialize');
+$thisplugin->add_filter('theme_pageheader_params','social_bookmarks_title_get');
 $thisplugin->add_action('plugin_install','social_bookmarks_install');
 $thisplugin->add_action('plugin_uninstall','social_bookmarks_uninstall');
 $thisplugin->add_action('plugin_cleanup','social_bookmarks_cleanup');
@@ -34,6 +35,7 @@ if ($CONFIG['plugin_social_bookmarks_position'] == 2) {
 }
 $thisplugin->add_filter('page_meta','social_bookmarks_page_meta');
 $thisplugin->add_filter('plugin_block','social_bookmarks_mainpage');
+$thisplugin->add_filter('template_html','social_bookmarks_template');
 
 
 function social_bookmarks_install() {
@@ -44,7 +46,7 @@ function social_bookmarks_install() {
 	require 'include/sql_parse.php';
 	
     // Perform the database changes
-    $db_schema = $thisplugin->fullpath . '/sql/schema.sql';
+    $db_schema = $thisplugin->fullpath . '/schema.sql';
     $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
     $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
     $sql_query = remove_remarks($sql_query);
@@ -102,7 +104,7 @@ function social_bookmarks_uninstall() {
 function social_bookmarks_cleanup($action) {
     global $CONFIG, $LINEBREAK, $lang_plugin_social_bookmarks, $lang_common, $social_bookmarks_icon_array;
 	// Initialize language and icons
-	require_once './plugins/social_bookmarks/include/init.inc.php';
+	require_once './plugins/social_bookmarks/init.inc.php';
 	$social_bookmarks_init_array = social_bookmarks_initialize();
 	$lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
 	$social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
@@ -152,7 +154,7 @@ EOT;
 
 // Configure function: displays the configuration form
 function social_bookmarks_configure() {
-    global $CONFIG, $THEME_DIR, $thisplugin, $lang_plugin_social_bookmarks, $lang_common, $social_bookmarks_icon_array, $lang_errors, $social_bookmarks_installation;
+    global $CONFIG, $THEME_DIR, $thisplugin, $lang_plugin_social_bookmarks, $lang_common, $social_bookmarks_icon_array, $lang_errors, $social_bookmarks_installation, $socialBookmarks_title;
     $superCage = Inspekt::makeSuperCage();
     if (!GALLERY_ADMIN_MODE) {
     	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
@@ -274,7 +276,7 @@ EOT;
                             {$lang_plugin_social_bookmarks['position_of_button']}
                         </td>
                         <td valign="top" class="tableb">
-                            <input type="radio" name="plugin_social_bookmarks_position" id="plugin_social_bookmarks_position_placeholder_token" class="radio" value="0" {$option_output['plugin_social_bookmarks_position_placeholder_token']} disabled="disabled" /> 
+                            <input type="radio" name="plugin_social_bookmarks_position" id="plugin_social_bookmarks_position_placeholder_token" class="radio" value="0" {$option_output['plugin_social_bookmarks_position_placeholder_token']} /> 
                         </td>
                         <td valign="top" class="tableb">
                         	<label for="plugin_social_bookmarks_position_placeholder_token" class="clickable_option">
@@ -468,8 +470,8 @@ EOT;
         } else {
             $tableCellStyle = 'tableb';
         }
-        $row['service_url'] = str_replace('{u}', urlencode($CONFIG['site_url']) , $row['service_url']);
-        $row['service_url'] = str_replace('{t}', urlencode($CONFIG['gallery_name']) , $row['service_url']);
+        $row['service_url'] = str_replace('{u}', urlencode(social_bookmarks_pagelink()) , $row['service_url']);
+        $row['service_url'] = str_replace('{t}', urlencode($socialBookmarks_title) , $row['service_url']);
         unset($service_language);
         $service_language = explode('|', $row['service_lang']);
         $languageFlagString = '';
@@ -671,7 +673,7 @@ function social_bookmarks_admin_menu_button($admin_menu){
     global $CONFIG;
     if ($CONFIG['plugin_social_bookmarks_admin_menu'] == 1) {
     	// Initialize language and icons
-    	require_once './plugins/social_bookmarks/include/init.inc.php';
+    	require_once './plugins/social_bookmarks/init.inc.php';
     	$social_bookmarks_init_array = social_bookmarks_initialize();
     	$lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
     	$social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
@@ -685,7 +687,7 @@ function social_bookmarks_admin_menu_button($admin_menu){
 function social_bookmarks_menu_button($menu) {
     global $CONFIG, $LINEBREAK, $lang_plugin_social_bookmarks, $template_sys_menu_spacer, $template_sub_menu_spacer;
 	// Initialize language and icons
-	require_once './plugins/social_bookmarks/include/init.inc.php';
+	require_once './plugins/social_bookmarks/init.inc.php';
 	$social_bookmarks_init_array = social_bookmarks_initialize();
 	$lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
     $new_button = array();
@@ -708,8 +710,8 @@ function social_bookmarks_menu_button($menu) {
 
 function social_bookmarks_page_meta($var) {
 	global $CONFIG, $JS, $lang_plugin_social_bookmarks, $LINEBREAK;
-	require_once './plugins/social_bookmarks/include/init.inc.php';
-    $var = '<link rel="stylesheet" href="plugins/social_bookmarks/css/style.css" type="text/css" />' . $LINEBREAK . $var;
+	require_once './plugins/social_bookmarks/init.inc.php';
+    $var = '<link rel="stylesheet" href="plugins/social_bookmarks/style.css" type="text/css" />' . $LINEBREAK . $var;
     if ($CONFIG['plugin_social_bookmarks_position'] == '2' || $CONFIG['plugin_social_bookmarks_position'] == '3') {
         // define some vars that need to exist in JS
         set_js_var('bookmarks_position', $CONFIG['plugin_social_bookmarks_position']);
@@ -721,29 +723,80 @@ function social_bookmarks_page_meta($var) {
     return $var;
 }
 
+function social_bookmarks_title_get($template_vars) {
+	global $socialBookmarks_title;
+	$socialBookmarks_title = $template_vars['{TITLE}'];
+	return $template_vars;
+}
+
 function social_bookmarks_mainpage() {
-    global $CONFIG, $matches, $lang_plugin_social_bookmarks, $social_bookmarks_icon_array;
-    if($matches[1] != 'socialbookmarks') {
+    global $CONFIG, $matches, $lang_plugin_social_bookmarks, $social_bookmarks_icon_array, $LINEBREAK;
+    if ($CONFIG['plugin_social_bookmarks_position'] != 1) { // If the plugin config option hasn't been enabled, return without actually outputting anything
+        return $matches;
+    }	
+	// If there is no record "socialbookmarks" for the coppermine config option "the content of the mainpage", let's add it to the very start
+	$contentOfTheMainpage_array = explode('/',$CONFIG['main_page_layout']);
+	if (in_array('socialbookmarks', $contentOfTheMainpage_array) != TRUE && 1==2){
+		$CONFIG['main_page_layout'] = 'socialbookmarks/' . $CONFIG['main_page_layout'];
+		$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['main_page_layout']}' WHERE name='main_page_layout'";
+        cpg_db_query($query);
+	}
+	
+	if($matches[1] != 'socialbookmarks') {
         return $matches;
     }
-    if ($CONFIG['plugin_social_bookmarks_position'] != 1) {
-        return;
-    }
+	echo social_bookmarks_block();
+}
+
+function social_bookmarks_template($template) {
+    global $CONFIG;
+	$gallery_pos = strpos($template, '{SOCIAL_BOOKMARKS}');
+    if ($gallery_pos) {
+        if ($CONFIG['plugin_social_bookmarks_position'] != '0') {
+			$template    = str_replace('{SOCIAL_BOOKMARKS}', '', $template); // Remove the token from the output if the corresponding plugin config option hasn't been enabled
+		} else {
+			$template    = str_replace('{SOCIAL_BOOKMARKS}', social_bookmarks_block(), $template);
+		}
+    } else { // There's no placeholder token {SOCIAL_BOOKMARKS} inside $template
+		if ($CONFIG['plugin_social_bookmarks_position'] != '0') {
+			return $template;
+		} else {
+			$template = str_replace('{GALLERY}', social_bookmarks_block() . '{GALLERY}', $template);
+		}
+	}
+	return $template;
+}
+
+function social_bookmarks_block() {
+	global $CONFIG, $lang_plugin_social_bookmarks, $social_bookmarks_icon_array, $LINEBREAK;
+	// Initialize language and icons
+	require_once './plugins/social_bookmarks/init.inc.php';
+	$social_bookmarks_init_array = social_bookmarks_initialize();
+	$lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
+	$social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
+	// Echo everything into a buffer
+	ob_start();
+   
     if ($CONFIG['plugin_social_bookmarks_greyout'] && $CONFIG['plugin_social_bookmarks_visibility'] != '0') {
         $css_class = ' class="greybox"';
     } else {
         $css_class = '';
     }
-    starttable("100%", $social_bookmarks_icon_array['page'] . $lang_plugin_social_bookmarks['menu_name']);
+	$clickable_table_header = $social_bookmarks_icon_array['page'] . $lang_plugin_social_bookmarks['menu_name'];
+    starttable("100%", $clickable_table_header);
     $main_output = social_bookmarks_content();
     // Visibility options need to be applied!
     echo <<< EOT
     <tr>
         <td class="tableb">
-            {$main_output}
+			{$main_output}
         </td>
     </tr>
 EOT;
     endtable();
+	echo '<br />' . $LINEBREAK;
+	$return = ob_get_contents();
+	ob_end_clean();
+	return $return;
 }
 ?>

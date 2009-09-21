@@ -20,7 +20,7 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 // Initialize language and icons
-require_once './plugins/social_bookmarks/include/init.inc.php';
+require_once './plugins/social_bookmarks/init.inc.php';
 $social_bookmarks_init_array = social_bookmarks_initialize();
 $lang_plugin_social_bookmarks = $social_bookmarks_init_array['language']; 
 $social_bookmarks_icon_array = $social_bookmarks_init_array['icon'];
