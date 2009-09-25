@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - XFeeds $VERSION$=1.3
+  Coppermine 1.5.x Plugin - XFeeds 
   *************************************************
   Copyright (c) 2008 lee (www.mininoteuser.com)
   Plugin for CPG 1.4 created by Lee
@@ -18,7 +18,7 @@ $lang_xfeeds = array(
 'display_name' => 'CPG Xfeed PlugIn',
 'update_success' => 'Values have been updated successfully',
 'main_title' => 'CPG Xfeed PlugIn',
-'version' => 'v1.5',
+'version' => 'v1.7',
 'pluginmanager' => 'Plugin Manager',
 'xfd_yes' => 'yes',
 'xfd_no' => 'no',
@@ -59,4 +59,5 @@ $lang_xfeeds = array(
 'xfd_feed_items' => 'Number of items in feed',
 'xx_s_gallery' => '%s\'s Gallery',
 );
+
 ?>

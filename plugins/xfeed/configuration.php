@@ -21,7 +21,7 @@
 $name = 'XFeeds';
 $description = 'XFeeds - RSS for Coppermine 1.5';
 $author = '<a href="http://www.adityamooley.net">Aditya Mooley</a>';
-$version = '1.6';
+$version = '1.7';
 $extra_info = <<<EOT
 <table border="0" cellspacing="0" cellpadding="0">
     <tr>
