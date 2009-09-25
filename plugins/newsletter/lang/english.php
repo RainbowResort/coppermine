@@ -168,4 +168,9 @@ $lang_plugin_newsletter['subscription_exists_for_email_address'] = 'There alread
 $lang_plugin_newsletter['mail_sent'] = 'An email has been sent to your account. Please check your inbox.';
 $lang_plugin_newsletter['newsletter_subscription_authentification'] = 'Newsletter subscription authentification';
 $lang_plugin_newsletter['click_to_edit_subscription'] = 'To edit your subscription, click on the following link:';
+$lang_plugin_newsletter['default_on_register'] = 'Per default subscribe to all newsletters on registration';
+$lang_plugin_newsletter['opt_in'] = 'opt-in';
+$lang_plugin_newsletter['opt_out'] = 'opt-out';
+$lang_plugin_newsletter['recommended'] = 'recommended';
+$lang_plugin_newsletter['not_recommended'] = 'not recommended';
 ?>

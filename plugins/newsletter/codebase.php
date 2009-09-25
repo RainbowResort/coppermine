@@ -72,6 +72,7 @@ function newsletter_install() {
 	                                'plugin_newsletter_admin_menu_links' => '1',
 	                                'plugin_newsletter_visitor_menu_links' => '2',
 	                                'plugin_newsletter_retries' => '2',
+									'plugin_newsletter_default_on_register' => '0',
 	                                );
 	foreach ($plugin_config_defaults as $key => $value) {
 	    if (!$CONFIG[$key]) {
@@ -104,6 +105,7 @@ function newsletter_uninstall() {
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_admin_menu_links'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_visitor_menu_links'");
 		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_retries'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_newsletter_default_on_register'");
 	}
 	if ($superCage->post->keyExists('drop_subscribers') && $superCage->post->getInt('drop_subscribers') == 1) {
 		cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions");
@@ -435,6 +437,16 @@ function newsletter_configuration_submit() {
     	}
     }
 	
+	// plugin_newsletter_default_on_register
+    if ($superCage->post->keyExists('plugin_newsletter_default_on_register') == TRUE && ($superCage->post->getInt('plugin_newsletter_default_on_register') == '0'  || $superCage->post->getInt('plugin_newsletter_default_on_register') == '1') ) {
+        if ($superCage->post->getInt('plugin_newsletter_default_on_register') != $CONFIG['plugin_newsletter_default_on_register']) {
+        	$CONFIG['plugin_newsletter_default_on_register'] = $superCage->post->getInt('plugin_newsletter_default_on_register');
+        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_newsletter_default_on_register']}' WHERE name='plugin_newsletter_default_on_register'";
+        	cpg_db_query($query);
+        	$config_changes_counter++;
+    	}
+    }
+	
 	return $config_changes_counter;
 }
 
@@ -496,6 +508,14 @@ function newsletter_configure() {
     	$option_output['plugin_newsletter_visitor_menu_links_sys'] = '';
     	$option_output['plugin_newsletter_visitor_menu_links_sub'] = '';
     	$option_output['plugin_newsletter_visitor_menu_links_no'] = 'checked="checked"';
+    }
+	
+	if ($CONFIG['plugin_newsletter_default_on_register'] == '1') {
+    	$option_output['plugin_newsletter_default_on_register_yes'] = 'checked="checked"';
+    	$option_output['plugin_newsletter_default_on_register_no'] = '';
+    } else { // 
+    	$option_output['plugin_newsletter_default_on_register_yes'] = '';
+    	$option_output['plugin_newsletter_default_on_register_no'] = 'checked="checked"';
     }
 
 	// Create the table row that is displayed during initial install
@@ -606,6 +626,18 @@ EOT;
                         	<label for="plugin_newsletter_visitor_menu_links_sub">{$lang_common['yes']}: {$lang_plugin_newsletter['in_sub_menu']}</label>
                         </td>
                     </tr>
+					<tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_newsletter['default_on_register']}
+                        </td>
+                        <td valign="top" class="tableb">
+							<input type="radio" name="plugin_newsletter_default_on_register" id="plugin_newsletter_default_on_register_no" class="checkbox" value="0" {$option_output['plugin_newsletter_default_on_register_no']} /> 
+                        	<label for="plugin_newsletter_default_on_register_no">{$lang_common['no']} ({$lang_plugin_newsletter['opt_in']}, {$lang_plugin_newsletter['recommended']})</label>
+							&nbsp;
+							<input type="radio" name="plugin_newsletter_default_on_register" id="plugin_newsletter_default_on_register_yes" class="checkbox" value="1" {$option_output['plugin_newsletter_default_on_register_yes']} /> 
+                        	<label for="plugin_newsletter_default_on_register_yes">{$lang_common['yes']} ({$lang_plugin_newsletter['opt_out']}, {$lang_plugin_newsletter['not_recommended']})</label>
+                        </td>
+                    </tr>
                     {$install_section}
                     <tr>
                         <td valign="middle" class="tablef">
@@ -714,11 +746,16 @@ function newsletter_registration_form($form_data) {
     $rowset = cpg_db_fetch_rowset($result);
     mysql_free_result($result);
     $loopCounter = 0;
+	if ($CONFIG['plugin_newsletter_default_on_register'] == '1') {
+		$defaultOnRegister = 'checked="checked"';
+	} else {
+		$defaultOnRegister = '';
+	}
 	foreach ($rowset as $category) {
 		if ($category['description'] != '') {
-			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2');
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name']. ' ('.$category['description'].')', $category['category_id'], '2', $defaultOnRegister);
 		} else {
-			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2');
+			$form_data[] = array('checkbox', 'newsletter['.$loopCounter.']', $newsletter_icon_array['newsletter'] . $lang_plugin_newsletter['subscribe_to_newsletter'], $category['name'], $category['category_id'], '2', $defaultOnRegister);
 		}
 		$loopCounter++;
 		
@@ -760,7 +797,7 @@ function newsletter_registration_activation($act_key) {
 }
 
 function newsletter_profile($profile_data) {
-    //print_r($profile_data);
+    print_r($profile_data);
 }
 
 function newsletter_form_list($data) {
