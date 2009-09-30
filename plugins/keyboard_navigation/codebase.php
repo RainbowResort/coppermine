@@ -33,42 +33,33 @@ function keyboard_navigation($template_img_navbar) {
     <script type="text/javascript">
         var sthhasfocus;
         $(document).ready(function() {
-            $('.navmenu_pic img[src*=thumb]').parent().attr('id', 'thumb');
-            $('.navmenu_pic img[src*=prev]').parent().attr({id: 'prev', accesskey: 'p'});
-            $('.navmenu_pic img[src*=next]').parent().attr({id: 'next', accesskey: 'n'});
-            $('.textinput').focus(function () {sthhasfocus = true;});
-            $('.textinput').blur(function () {sthhasfocus = false;});
-            $('select').focus(function () {sthhasfocus = true;});
-            $('select').blur(function () {sthhasfocus = false;});
-            $('div').focus(function () {sthhasfocus = false;});
-            $('table').focus(function () {sthhasfocus = false;});
-        });
-
-        $(document).keydown(function(e) {
-            if (!e) {
-                e = window.event;
-            }
-            if (e.which) {
-                kcode = e.which;
-            } else if (e.keyCode) {
-                kcode = e.keyCode;
-            }
-
-            if (sthhasfocus != true) {
-                if(kcode == 37 && $('#prev').attr('title') != '') {
-                    window.location = $('#prev').attr('href');
+            $('.textinput').focus(function () {sthhasfocus = true;}).blur(function () {sthhasfocus = false;});
+            $('select').focus(function () {sthhasfocus = true;}).blur(function () {sthhasfocus = false;});
+            $(document).keydown(function(e) {
+                if (!e) {
+                    e = window.event;
                 }
-                if(kcode == 39 && $('#next').attr('title') != '') {
-                    window.location = $('#next').attr('href');
+                if (e.which) {
+                    kcode = e.which;
+                } else if (e.keyCode) {
+                    kcode = e.keyCode;
                 }
-                if(kcode == 38) {
-                    window.location = $('#thumb').attr('href');
+                if (sthhasfocus != true) {
+                    if(kcode == 37 && $('#prev').attr('title') != '') {
+                        window.location = $('.navmenu_pic img[src*=prev]').parent().attr('href');
+                    }
+                    if(kcode == 39 && $('#next').attr('title') != '') {
+                        window.location = $('.navmenu_pic img[src*=next]').parent().attr('href');
+                    }
+                    if(kcode == 38) {
+                        window.location = $('.navmenu_pic img[src*=thumb]').parent().attr('href');
+                    }
+                    if(kcode == 40) {
+                        blocking('picinfo','yes', 'block');
+                        return false;
+                    }
                 }
-                if(kcode == 40) {
-                    blocking('picinfo','yes', 'block');
-                    return false;
-                }
-            }
+            });
         });
     </script>
 EOT;
