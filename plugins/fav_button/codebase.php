@@ -48,7 +48,7 @@ function fav_button($template_img_navbar) {
         </td>
     ';
 
-    $template_img_navbar = str_replace("<!-- BEGIN nav_prev -->", $fav_button."<!-- BEGIN nav_prev -->", $template_img_navbar);
+    $template_img_navbar = str_replace("<!-- BEGIN nav_start -->", $fav_button."<!-- BEGIN nav_start -->", $template_img_navbar);
 
     return $template_img_navbar;
 }
