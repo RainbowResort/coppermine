@@ -22,15 +22,15 @@
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
-$name='Picture preloader';
-$description='Preloads previous/next pictures of current one.';
+$name='Image preloader';
+$description='Preloads images while viewing an intermediate picture.';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 $version = '1.0';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="admin_menu">
-                <a href="http://forum.coppermine-gallery.net/index.php/topic,57471.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
+                <a href="http://forum.coppermine-gallery.net/index.php/topic,62035.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
             </td>
         </tr>
     </table>
