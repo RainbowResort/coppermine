@@ -24,21 +24,14 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$urls = $superCage->get->getRaw('urls');
-$urls = explode(" ", $urls);
-foreach($urls as $url) {
-    preg_match('/pid=([0-9]+)/', $url, $match);
-    if(is_numeric($match[1]) && !in_array($match[1], $pids)) {
-        $pids[] = $match[1];
-    }
-}
-$pids_string = implode(", ", $pids);
+preg_match_all('/pid=([0-9]+)/', $superCage->get->getRaw('urls'), $matches);
+$pids = implode(", ", array_unique($matches[1]));
 
-$result = cpg_db_query("SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid IN ($pids_string)");
+$result = cpg_db_query("SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid IN ($pids)");
 while($row = mysql_fetch_assoc($result)) {
     if (is_image($row['filename'])) {
         $normal_pfx = file_exists($CONFIG['fullpath'].$row['filepath'].$CONFIG['normal_pfx'].$row['filename']) ? $CONFIG['normal_pfx'] : "";
-        $preload .= "<br /><img src=".$CONFIG['fullpath'].$row['filepath'].$normal_pfx.$row['filename']." />";
+        $preload .= "<img src=".$CONFIG['fullpath'].$row['filepath'].$normal_pfx.$row['filename']." /> ";
     }
 }
 

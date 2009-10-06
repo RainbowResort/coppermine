@@ -49,7 +49,7 @@ EOT;
     <script type="text/javascript">
         $(window).load(function() {
             var urls = '';
-            $('a:not([href*={$data['pid']}])[href*=pid]').each( function (i) { urls += $(this).attr('href') + ' '; });
+            $('a:not([href*={$data['pid']}])[href*=pid]').each( function (i) { urls += $(this).attr('href'); });
             $.get('index.php?file=preload/ajax', {urls:urls}, function(data) { $('#preload_container').html($('#preload_container').html() + data); });
         });
     </script>
