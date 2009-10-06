@@ -27,17 +27,11 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $urls = $superCage->get->getRaw('urls');
 $urls = explode(" ", $urls);
 foreach($urls as $url) {
-    preg_match('/\?(.+)$/', $url, $params);
-    $params = explode("&", $params[1]);
-    foreach($params as $param) {
-        $temp = explode("=", $param);
-        if ($temp[0] == "pid") {
-            $pid = explode("#", $temp[1]);
-            $pids[] = $pid[0];
-        }
+    preg_match('/pid=([0-9]+)/', $url, $match);
+    if(is_numeric($match[1]) && !in_array($match[1], $pids)) {
+        $pids[] = $match[1];
     }
 }
-$pids = array_unique($pids);
 $pids_string = implode(", ", $pids);
 
 $result = cpg_db_query("SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid IN ($pids_string)");
