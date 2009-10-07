@@ -48,7 +48,9 @@ function fav_button($template_img_navbar) {
         </td>
     ';
 
-    $template_img_navbar = str_replace("<!-- BEGIN nav_start -->", $fav_button."<!-- BEGIN nav_start -->", $template_img_navbar);
+    $search = substr_count($template_img_navbar, "<!-- BEGIN nav_start -->") > 0 ? "<!-- BEGIN nav_start -->" : "<!-- BEGIN nav_prev -->";
+
+    $template_img_navbar = str_replace($search, $fav_button.$search, $template_img_navbar);
 
     return $template_img_navbar;
 }
