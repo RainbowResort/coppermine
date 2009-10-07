@@ -17,15 +17,15 @@
   $Date$
 **********************************************/
 /*********************************************
-  Coppermine Plugin - Preload
+  Coppermine Plugin - Image Preloader
   ********************************************
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
-$name='Image preloader';
+$name='Image Preloader';
 $description='Preloads images while viewing an intermediate picture.';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0';
+$version = '1.1';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
