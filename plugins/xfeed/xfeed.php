@@ -25,7 +25,6 @@ require_once('./plugins/xfeed/include/init.inc.php');
 define('CPG15', version_compare(COPPERMINE_VERSION, "1.5.0", ">="));
 define('PHP5', version_compare(phpversion(), "5", ">="));
 $base = rtrim($CONFIG['ecards_more_pic_target'], '/');
-$albumpath = "$base/" . $CONFIG['fullpath'];
 $gallery_name = $CONFIG['gallery_name'];
 
 function lmdate($timestamp)
@@ -92,7 +91,7 @@ if ($superCage->get->keyExists('album')) {
  * MAIN CODE
  */
 $feedtype = $superCage->get->keyExists('type') ? $superCage->get->getEscaped('type') : '';
-header("Content-type: text/xml; charset=utf-8");
+header("Content-type: text/xml; charset={$CONFIG['charset']}");
 if ($feedtype == "atom"){
     atom10();
 } else {
@@ -101,7 +100,7 @@ if ($feedtype == "atom"){
 
 // Create RSS
 function rss20() {
-    global $CONFIG, $result, $base, $gallery_name, $albumpath, $pic_data, $album, $album_name, $CURRENT_CAT_NAME;
+    global $CONFIG, $result, $base, $gallery_name, $pic_data, $album, $album_name, $CURRENT_CAT_NAME;
 
     $superCage = Inspekt::makeSuperCage();
 
@@ -120,7 +119,7 @@ function rss20() {
         $title = ' | '. strip_tags($album_name);
     }
 
-    print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    print "<?xml version=\"1.0\" encoding=\"{$CONFIG['charset']}\"?>\n";
     print "<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">";
     print "<channel>\n";
     print "<title>{$gallery_name}{$title}</title>\n";
@@ -138,14 +137,18 @@ function rss20() {
         print "\t\t<dc:creator>{$row['owner_name']}</dc:creator>\n";
         print "\t\t<pubDate>" . lmdate($row['ctime']) . "</pubDate>\n";
         print "\t\t<description>";
-        echo  htmlentities("<p><img src=\"$albumpath{$row['filepath']}" . "thumb_{$row['filename']}\" alt=\"\" /></p>");
+        echo  htmlentities("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>");
         echo  htmlentities("<p>{$row['caption']}&nbsp;</p>");
         echo  htmlentities("<p>{$row['keywords']}</p>");
 
         if (isset($row['msg_body']) && !empty($row['msg_body'])) {
             // We have comment for the photo. Must be lastcom metaalbum feed. Display the comment
-            echo  htmlentities("<p><b>Comment:</b>(<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
-            echo  htmlentities("<p>{$row['msg_body']}&nbsp;</p>");
+            echo  htmlentities("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
+            if ($CONFIG['enable_smilies']) {
+                include_once("include/smilies.inc.php");
+                $row['msg_body'] = process_smilies($row['msg_body']);
+            }
+            echo  htmlentities("<p>".bb_decode($row['msg_body'])."&nbsp;</p>");
         }
 
         print "</description>\n";
@@ -158,7 +161,7 @@ function rss20() {
 }
 
 function atom10() {
-    global $result, $base, $gallery_name, $albumpath, $CURRENT_CAT_NAME, $album, $album_name, $pic_data;
+    global $CONFIG, $result, $base, $gallery_name, $CURRENT_CAT_NAME, $album, $album_name, $pic_data;
 
     $superCage = Inspekt::makeSuperCage();
 
@@ -171,11 +174,11 @@ function atom10() {
         $title = ' | '. strip_tags($album_name);
     }
 
-    print "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    print "<?xml version=\"1.0\" encoding=\"{$CONFIG['charset']}\"?>\n";
     print "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n";
     print "<title>$gallery_name{$title}</title>\n";
     print "<link href=\"$base\" />\n";
-    print "<updated>"  . rfc3339date(time()) . "</updated>\n";
+    print "<updated>" . rfc3339date(time()) . "</updated>\n";
     print "<author><name>Admin</name></author>\n";
     print "<id>$base/</id>\n";
     print "<generator uri=\"http://coppermine-gallery.net/\" version=\"1.0\">Coppermine Atom Aggregator</generator>\n";
@@ -189,12 +192,18 @@ function atom10() {
         print "\t\t<id>$base/displayimage.php?pid={$row['pid']}</id>\n";
         print "\t\t<updated>" . rfc3339date($row['ctime']) . "</updated>\n";
         print "\t\t<content type=\"html\">\n";
-        echo  htmlentities("<p><img src=\"$albumpath{$row['filepath']}" . "thumb_{$row['filename']}\" alt=\"\" /> </p><p>{$row['caption']}&nbsp;</p><p>{$row['keywords']}</p>");
+        echo  htmlentities("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>");
+        echo  htmlentities("<p>{$row['caption']}&nbsp;</p>");
+        echo  htmlentities("<p>{$row['keywords']}</p>");
 
         if (isset($row['msg_body']) && !empty($row['msg_body'])) {
             // We have comment for the photo. Must be lastcom metaalbum feed. Display the comment
-            echo  htmlentities("<p><b>Comment:</b>(<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
-            echo  htmlentities("<p>{$row['msg_body']}&nbsp;</p>");
+            echo  htmlentities("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
+            if ($CONFIG['enable_smilies']) {
+                include_once("include/smilies.inc.php");
+                $row['msg_body'] = process_smilies($row['msg_body']);
+            }
+            echo  htmlentities("<p>".bb_decode($row['msg_body'])."&nbsp;</p>");
         }
 
         print "\n\t\t</content>\n";
