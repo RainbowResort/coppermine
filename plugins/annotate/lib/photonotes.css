@@ -62,18 +62,8 @@ container-inactive container-active
 	z-index:5000;
 }
 
-.fn-note-text {
-	background-color: #FFEECC;
-	border: 1px solid #000000;
-	padding: 5px;
-	-moz-border-radius: 7px; /* Non-standard */
-}
-
 .fn-note-edit-text {
-	background-color: #FFEECC;
 	border: 1px solid #000000;
-	padding: 5px;
-	-moz-border-radius: 7px; /* Non-standard */
 }
 
 .fn-note-edit {
@@ -81,71 +71,12 @@ container-inactive container-active
 }
 
 .fn-note-edit TEXTAREA {
-	background-color:#FFEECC;
 	border:0;
 	overflow:visible;
 	margin-bottom:10px;
 	padding:0;
 	width:180px;
-	font-size: 10pt;
 	margin:0;
-}
-
-.Butt {
-	font: bold 12px Arial, Helvetica, sans-serif; 
-	color: #FFFFFF; 
-	background: #0063DC; 
-	border-top-width: 1px; 
-	border-right-width: 1px; 
-	border-bottom-width: 1px; 
-	border-left-width: 1px; 
-	border-top-style: solid; 
-	border-right-style: solid; 
-	border-bottom-style: solid; 
-	border-left-style: solid; 
-	border-top-color: #7CBAFF; 
-	border-right-color: #2854A7; 
-	border-bottom-color: #2854A7; 
-	border-left-color: #7CBAFF; 
-	margin-right:4px;
-	margin-top:5px;
-}
-
-.CancelButt { 
-	color: #000000; 
-	background: #d9d9d5; 
-	border-top-width: 1px; 
-	border-right-width: 1px; 
-	border-bottom-width: 1px; 
-	border-left-width: 1px; 
-	border-top-style: solid; 
-	border-right-style: solid; 
-	border-bottom-style: solid; 
-	border-left-style: solid; 
-	border-top-color: #fff; 
-	border-right-color: #b6aeb3; 
-	border-bottom-color: #b6aeb3; 
-	border-left-color: #fff; 
-	font: 12px Arial, Helvetica, sans-serif; 
-	margin-right:4px;	
-}
-
-.DeleteButt { 
-    color: #000000; 
-    background: #DCE0E6; 
-    border-top-width: 1px; 
-    border-right-width: 1px; 
-    border-bottom-width: 1px; 
-    border-left-width: 1px; 
-    border-top-style: solid; 
-    border-right-style: solid; 
-    border-bottom-style: solid; 
-    border-left-style: solid; 
-    border-top-color: #F5F6F7; 
-    border-right-color: #BFB7BC; 
-    border-bottom-color: #BFB7BC; 
-    border-left-color: #F5F6F7; 
-    font: 12px Arial, Helvetica, sans-serif; 
 }
 
 /* Note drag/resize UI */

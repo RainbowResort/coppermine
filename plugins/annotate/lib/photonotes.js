@@ -17,7 +17,7 @@
 
 /*
 Copyright (c) 2006 Dusty Davidson - http://www.dustyd.net
-(portions Copyright (c) 2005 Angus Turnbull http://www.twinhelix.come)
+(portions Copyright (c) 2005 Angus Turnbull http://www.twinhelix.com)
 
 Permission is hereby granted, free of charge, to any person obtaining 
 a copy of this software and associated documentation files (the "Software"), 
@@ -117,18 +117,6 @@ PhotoNoteContainer.prototype.EnableAllNotes = function()
     for (var i = 0;i<this.notes.length;i++)
         this.notes[i].EnableNote();
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*********************************************************/
 /*** Photo Note ******************************************/
@@ -370,7 +358,8 @@ PhotoNote.prototype.CreateElements = function()
     noteArea.className = 'fn-note';
     
     var titleArea = document.createElement('div');
-    titleArea.className = 'fn-note-text';
+    //titleArea.className = 'fn-note-text';
+	titleArea.className = 'tableh1';
     var t = document.createTextNode(this.text);
     titleArea.appendChild(t);
     noteArea.appendChild(titleArea);
@@ -390,7 +379,7 @@ PhotoNote.prototype.CreateElements = function()
     var buttonsDiv = document.createElement('div');
     var newButtonOK = document.createElement('input');
     newButtonOK.type='button';
-    newButtonOK.className = 'Butt';
+    newButtonOK.className = 'button';
     newButtonOK.value = js_vars.lang_annotate_save;
     newButtonOK.onclick = function() {
             
@@ -425,7 +414,7 @@ PhotoNote.prototype.CreateElements = function()
     
     var newButtonCancel = document.createElement('input');
     newButtonCancel.type='button';
-    newButtonCancel.className = 'CancelButt';
+    newButtonCancel.className = 'button';
     newButtonCancel.value = js_vars.lang_annotate_cancel;
     newButtonCancel.onclick = function() {
             currentNote.Cancel();            
@@ -435,7 +424,7 @@ PhotoNote.prototype.CreateElements = function()
 
     var newButtonDelete = document.createElement('input');
     newButtonDelete.type='button';
-    newButtonDelete.className = 'CancelButt';
+    newButtonDelete.className = 'button';
     newButtonDelete.value = js_vars.lang_annotate_delete;
     newButtonDelete.onclick = function() {
             
@@ -590,16 +579,8 @@ PhotoNoteRect.prototype.toString = function()
     return 'left: ' + this.left + ', top: ' + this.top + ', width: ' + this.width + ', height: ' + this.height;
 }
 
-
-
-
-
-
-
-
-
 // *** Common API Code ***
-// (c) 2005 Angus Turnbull http://www.twinhelix.come
+// (c) 2005 Angus Turnbull http://www.twinhelix.com
 
 var aeOL = [];
 function addEvent(o, n, f, l)
@@ -683,13 +664,8 @@ Array.prototype.remove = function (element) {
 	return result;
 };
 
-
-
-
-
-
 // *** Drag and Resize Library Code ***
-// (c) 2005 Angus Turnbull http://www.twinhelix.come
+// (c) 2005 Angus Turnbull http://www.twinhelix.com
 
 
 function DragResize(myName, config)
