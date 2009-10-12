@@ -1,26 +1,20 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
+/**************************************************
+  Picture Annotation (annotate) plugin for cpg1.5.x
+  *************************************************
+  Copyright (c) 2003-2009 Coppermine Dev Team
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
   as published by the Free Software Foundation.
 
-  ********************************************
+  *************************************************
   Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - Picture Annotation
-  ********************************************
-  Created by Nibbler for cpg1.4.x - ported to cpg1.5.x by eenemeenemuu 
-**********************************************/
+**************************************************/
 
 if (!defined('IN_COPPERMINE')) die("0");
 

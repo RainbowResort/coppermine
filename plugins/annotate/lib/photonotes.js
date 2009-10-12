@@ -1,3 +1,20 @@
+/**************************************************
+  Picture Annotation (annotate) plugin for cpg1.5.x
+  *************************************************
+  Copyright (c) 2003-2009 Coppermine Dev Team
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+
+  *************************************************
+  Coppermine version: 1.5.x
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**************************************************/
+
 /*
 Copyright (c) 2006 Dusty Davidson - http://www.dustyd.net
 (portions Copyright (c) 2005 Angus Turnbull http://www.twinhelix.come)
@@ -374,7 +391,7 @@ PhotoNote.prototype.CreateElements = function()
     var newButtonOK = document.createElement('input');
     newButtonOK.type='button';
     newButtonOK.className = 'Butt';
-    newButtonOK.value='SAVE';
+    newButtonOK.value = js_vars.lang_annotate_save;
     newButtonOK.onclick = function() {
             
             
@@ -392,13 +409,13 @@ PhotoNote.prototype.CreateElements = function()
                 }
                 else
                 {
-                    alert("error saving note");
+                    alert(js_vars.lang_annotate_error_saving_note);
                     currentNote.Cancel();                        
                 }
             }
             else
             {
-                alert("onsave must be implemented in order to *actually* save");
+                alert(js_vars.lang_annotate_onsave_not_implemented);
                 currentNote.Cancel();                        
             }
         
@@ -409,7 +426,7 @@ PhotoNote.prototype.CreateElements = function()
     var newButtonCancel = document.createElement('input');
     newButtonCancel.type='button';
     newButtonCancel.className = 'CancelButt';
-    newButtonCancel.value='CANCEL';
+    newButtonCancel.value = js_vars.lang_annotate_cancel;
     newButtonCancel.onclick = function() {
             currentNote.Cancel();            
             
@@ -419,7 +436,7 @@ PhotoNote.prototype.CreateElements = function()
     var newButtonDelete = document.createElement('input');
     newButtonDelete.type='button';
     newButtonDelete.className = 'CancelButt';
-    newButtonDelete.value='DELETE';
+    newButtonDelete.value = js_vars.lang_annotate_delete;
     newButtonDelete.onclick = function() {
             
             if(currentNote.ondelete) 
@@ -431,12 +448,12 @@ PhotoNote.prototype.CreateElements = function()
                 }
                 else
                 {
-                    alert("error deleting note");
+                    alert(js_vars.lang_annotate_error_saving_note);
                 }
             }
             else
             {
-                alert("ondelete must be implemented in order to *actually* delete");
+                alert(js_vars.lang_annotate_onsave_not_implemented);
             }
         };
     buttonsDiv.appendChild(newButtonDelete);

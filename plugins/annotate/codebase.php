@@ -1,26 +1,20 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
+/**************************************************
+  Picture Annotation (annotate) plugin for cpg1.5.x
+  *************************************************
+  Copyright (c) 2003-2009 Coppermine Dev Team
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
   as published by the Free Software Foundation.
 
-  ********************************************
+  *************************************************
   Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - Picture Annotation
-  ********************************************
-  Created by Nibbler for cpg1.4.x - ported to cpg1.5.x by eenemeenemuu 
-**********************************************/
+**************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
@@ -28,34 +22,50 @@ if (defined('DISPLAYIMAGE_PHP')) {
     $thisplugin->add_filter('page_meta','annotate_meta');
     $thisplugin->add_filter('file_data','annotate_file_data');
 }
-
 $thisplugin->add_action('plugin_install','annotate_install');
 $thisplugin->add_action('plugin_uninstall','annotate_uninstall');
 $thisplugin->add_action('plugin_cleanup','annotate_cleanup');
+$thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 
-function annotate_meta(){
-
-    $meta  = "\n" . '<script src="plugins/annotate/lib/httpreq.js" type="text/javascript"></script>';
-    $meta .= "\n" . '<script src="plugins/annotate/lib/photonotes.js" type="text/javascript"></script>';
-    $meta .= "\n" . '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
-    $meta .= "\n";
-
+function annotate_meta($meta){
+    global $JS, $lang_common, $lang_plugin_annotate;
+    require_once './plugins/annotate/init.inc.php';
+    $annotate_init_array = annotate_initialize();
+	$lang_plugin_annotate = $annotate_init_array['language'];
+	if (in_array('plugins/annotate/lib/httpreq.js', $JS['includes']) != TRUE) {
+		$JS['includes'][] = 'plugins/annotate/lib/httpreq.js';
+	}
+	if (in_array('plugins/annotate/lib/photonotes.js', $JS['includes']) != TRUE) {
+		$JS['includes'][] = 'plugins/annotate/lib/photonotes.js';
+	}
+    set_js_var('lang_annotate_save', $lang_plugin_annotate['save']);
+    set_js_var('lang_annotate_cancel', $lang_plugin_annotate['cancel']);
+    set_js_var('lang_annotate_delete', $lang_common['delete']);
+    set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
+    set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
+    $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
 
-function annotate_file_data($CURRENT_PIC_DATA){
+function annotate_file_data($data){
+    global $CONFIG, $lang_plugin_annotate;
+    // This is the place where the permissions section needs to reside later 
+    if (USER_ID) {
+        $data['menu'] .= ' <a href="#" class="admin_menu" title="'.$lang_plugin_annotate['plugin_name'].'" onclick="return addnote();">';
+    	$data['menu'] .= $annotate_icon_array['annotate'];
+    	$data['menu'] .= $lang_plugin_annotate['annotate'];
+    	$data['menu'] .= '</a>';
+    }
 
-    global $CONFIG;
-    
-    if (is_image($CURRENT_PIC_DATA['filename'])){
+    if (is_image($data['filename'])){
 
         if (function_exists(panorama_viewer_is_360_degree_panorama)) {
             if (panorama_viewer_is_360_degree_panorama()) {
-                return $CURRENT_PIC_DATA;
+                return $data;
             }
         }
 
-        $sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$CURRENT_PIC_DATA['pid']}";
+        $sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$data['pid']}";
         $result = cpg_db_query($sql);
         
         $notes = array();
@@ -69,7 +79,7 @@ function annotate_file_data($CURRENT_PIC_DATA){
     
         $jsarray = arrayToJS4($notes, 'annotations');
 
-        $html =& $CURRENT_PIC_DATA['html'];
+        $html =& $data['html'];
 
         $html = str_replace("<img ", "<img style=\"padding:0px\" ", $html);
 
@@ -79,9 +89,9 @@ function annotate_file_data($CURRENT_PIC_DATA){
             $html = preg_replace($search, "\\2", $html);
         }
 
-        $container_width = $CURRENT_PIC_DATA['pwidth'];
-        if ($CURRENT_PIC_DATA['mode'] == 'normal') {
-            $imagesize = getimagesize($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CONFIG['normal_pfx'].$CURRENT_PIC_DATA['filename']);
+        $container_width = $data['pwidth'];
+        if ($data['mode'] == 'normal') {
+            $imagesize = getimagesize($CONFIG['fullpath'].$data['filepath'].$CONFIG['normal_pfx'].$data['filename']);
             $container_width = $imagesize[0];
         }
         $container_width += 4;
@@ -92,20 +102,6 @@ function annotate_file_data($CURRENT_PIC_DATA){
             $html = $panorama_viewer_matches[1].$html.$panorama_viewer_matches[3];
         }
 
-        if (USER_ID){
-            
-        $html .= <<< EOT
-        
-        <div style="clear: both; padding-top: 20px">
-            <form action="" method="post">
-                <input type="submit" class="button" name="addname" value="Annotate" onclick="return addnote()" />
-            </form>
-        </div>
-
-EOT;
-
-        }
-        
         $user_id  = USER_ID;
         $admin = GALLERY_ADMIN_MODE ? 'true' : 'false';
         
@@ -163,7 +159,7 @@ function addnote(){
 
 function ajax_save(note){
 
-    var data = 'add=' + {$CURRENT_PIC_DATA['pid']} + '&nid=' + note.nid + '&posx=' + note.rect.left + '&posy=' + note.rect.top + '&width=' + note.rect.width + '&height=' + note.rect.height + '&note=' + encodeURI(note.text);
+    var data = 'add=' + {$data['pid']} + '&nid=' + note.nid + '&posx=' + note.rect.left + '&posy=' + note.rect.top + '&width=' + note.rect.width + '&height=' + note.rect.height + '&note=' + encodeURI(note.text);
 
     annotate_request(data, note);
 
@@ -186,7 +182,7 @@ EOT;
 
     }
 
-    return $CURRENT_PIC_DATA;
+    return $data;
 }
 
 // Based on code by Rob Williams
@@ -362,7 +358,6 @@ function annotate_page_start() {
 
 
 // Meta album get_pic_pos
-$thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 function annotate_get_pic_pos($album) {
     global $CONFIG, $pid, $RESTRICTEDWHERE;
 
@@ -438,3 +433,4 @@ function annotate_meta_album($meta) {
     return $meta;
 }
 
+?>

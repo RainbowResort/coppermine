@@ -1,4 +1,19 @@
+/**************************************************
+  Picture Annotation (annotate) plugin for cpg1.5.x
+  *************************************************
+  Copyright (c) 2003-2009 Coppermine Dev Team
 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 3
+  as published by the Free Software Foundation.
+
+  *************************************************
+  Coppermine version: 1.5.x
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**************************************************/
 
 /*
 The overall container: always has class="fn-container", and also one of:
@@ -6,35 +21,29 @@ container-inactive container-active
 */
 
 .fn-container {
- position: relative;
+    position: relative;
 }
 
 .fn-container img {
- border-width: 0;
+    border-width: 0;
 }
 
-.fn-area 
-{
-	position: absolute;
-	border:none;
-	border: 0px solid #D4D82D;
-	margin:1px;
+.fn-area {
+    position: absolute;
+    border:none;
+    border: 0px solid #D4D82D;
+    margin:1px;
 }
 
-.fn-area-blackborder
-{
+.fn-area-blackborder {
 	border: 1px solid #000;
 }
 
-.fn-area-whiteborder
-{
+.fn-area-whiteborder {
 	border: 1px solid #FFF;	
 }
 
-
-
-.fn-area-inner
-{
+.fn-area-inner {
 	border: 1px solid #000000;
 	background-color:#FFF;
 	filter:alpha(opacity=0);
@@ -44,8 +53,7 @@ container-inactive container-active
 	cursor: pointer;
 }
 
-.fn-note 
-{
+.fn-note {
 	position: absolute;
 	max-width: 200px;
 	padding: 5px;
@@ -54,28 +62,25 @@ container-inactive container-active
 	z-index:5000;
 }
 
-.fn-note-text
-{
+.fn-note-text {
 	background-color: #FFEECC;
 	border: 1px solid #000000;
 	padding: 5px;
 	-moz-border-radius: 7px; /* Non-standard */
 }
 
-.fn-note-edit-text
-{
+.fn-note-edit-text {
 	background-color: #FFEECC;
 	border: 1px solid #000000;
 	padding: 5px;
 	-moz-border-radius: 7px; /* Non-standard */
 }
-.fn-note-edit
-{
+
+.fn-note-edit {
 	display:none;
 }
 
-.fn-note-edit TEXTAREA
-{
+.fn-note-edit TEXTAREA {
 	background-color:#FFEECC;
 	border:0;
 	overflow:visible;
@@ -86,9 +91,7 @@ container-inactive container-active
 	margin:0;
 }
 
-
-.Butt 
-{
+.Butt {
 	font: bold 12px Arial, Helvetica, sans-serif; 
 	color: #FFFFFF; 
 	background: #0063DC; 
@@ -104,13 +107,11 @@ container-inactive container-active
 	border-right-color: #2854A7; 
 	border-bottom-color: #2854A7; 
 	border-left-color: #7CBAFF; 
-
 	margin-right:4px;
 	margin-top:5px;
-
 }
-.CancelButt 
-{ 
+
+.CancelButt { 
 	color: #000000; 
 	background: #d9d9d5; 
 	border-top-width: 1px; 
@@ -126,69 +127,84 @@ container-inactive container-active
 	border-bottom-color: #b6aeb3; 
 	border-left-color: #fff; 
 	font: 12px Arial, Helvetica, sans-serif; 
-
 	margin-right:4px;	
 }
-.DeleteButt { color: #000000; background: #DCE0E6; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: #F5F6F7; border-right-color: #BFB7BC; border-bottom-color: #BFB7BC; border-left-color: #F5F6F7; font: 12px Arial, Helvetica, sans-serif; }
 
-
+.DeleteButt { 
+    color: #000000; 
+    background: #DCE0E6; 
+    border-top-width: 1px; 
+    border-right-width: 1px; 
+    border-bottom-width: 1px; 
+    border-left-width: 1px; 
+    border-top-style: solid; 
+    border-right-style: solid; 
+    border-bottom-style: solid; 
+    border-left-style: solid; 
+    border-top-color: #F5F6F7; 
+    border-right-color: #BFB7BC; 
+    border-bottom-color: #BFB7BC; 
+    border-left-color: #F5F6F7; 
+    font: 12px Arial, Helvetica, sans-serif; 
+}
 
 /* Note drag/resize UI */
 
 .dragresize {
- position: absolute;
- width: 5px;
- height: 5px;
- font-size: 1px;
- background: white;
- border: 1px solid black;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    font-size: 1px;
+    background: white;
+    border: 1px solid black;
 }
 
 .dragresize-tl {
- top: -8px;
- left: -8px;
- cursor: nw-resize;
+    top: -8px;
+    left: -8px;
+    cursor: nw-resize;
 }
 .dragresize-tm {
- top: -8px;
- left: 50%;
- margin-left: -4px;
- cursor: n-resize;
+    top: -8px;
+    left: 50%;
+    margin-left: -4px;
+    cursor: n-resize;
 }
 .dragresize-tr {
- top: -8px;
- right: -8px;
- cursor: ne-resize;
+    top: -8px;
+    right: -8px;
+    cursor: ne-resize;
 }
 
 .dragresize-ml {
- top: 50%;
- margin-top: -4px;
- left: -8px;
- cursor: w-resize;
+    top: 50%;
+    margin-top: -4px;
+    left: -8px;
+    cursor: w-resize;
 }
+
 .dragresize-mr {
- top: 50%;
- margin-top: -4px;
- right: -8px;
- cursor: e-resize;
+    top: 50%;
+    margin-top: -4px;
+    right: -8px;
+    cursor: e-resize;
 }
 
 .dragresize-bl {
- bottom: -8px;
- left: -8px;
- cursor: sw-resize;
+    bottom: -8px;
+    left: -8px;
+    cursor: sw-resize;
 }
 .dragresize-bm {
- bottom: -8px;
- left: 50%;
- margin-left: -4px;
- cursor: s-resize;
+    bottom: -8px;
+    left: 50%;
+    margin-left: -4px;
+    cursor: s-resize;
 }
 .dragresize-br {
- bottom: -8px;
- right: -8px;
- cursor: se-resize;
+    bottom: -8px;
+    right: -8px;
+    cursor: se-resize;
 }
 
 
