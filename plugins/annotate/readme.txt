@@ -38,6 +38,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-10-12 [M] Counted plugin version up to v2.0 {GauGau}
+2009-10-12 [A] Added icons {GauGau}
+2009-10-12 [A] Added i18n of plugin manager section {GauGau}
 2009-10-12 [M] Counted plugin version up to v1.8 {GauGau}
 2009-10-12 [A] Moved annotation button into buttons section {GauGau}
 2009-10-12 [C] Moved JS includes down for safer fallback {GauGau}
@@ -55,4 +58,7 @@ Portions of the JavaScript library also by Angus Turnbull
 
 Todo:
 =====
+Move embedded JS into separate file
+Re-use existing button styles and drop CSS overhead
+Add config page
 Implement permission system

@@ -16,7 +16,9 @@
   $Date$
 **************************************************/
 
-if (!defined('IN_COPPERMINE')) die("0");
+if (!defined('IN_COPPERMINE')) {
+    die('Not in Coppermine...');
+}
 
 if (!USER_ID) die('Access denied');
 

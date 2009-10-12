@@ -30,20 +30,18 @@ function annotate_initialize() {
 	if ($CONFIG['enable_menu_icons'] >= 1) {
 	    $annotate_icon_array['announcement'] = '<img src="./plugins/annotate/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
 	    $annotate_icon_array['configure'] = '<img src="./plugins/annotate/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';
-	    $annotate_icon_array['menu'] = '<img src="./plugins/annotate/images/icons/annotate.png" border="0" width="16" height="16" alt="" class="icon" />';
 	} else {
 	    $annotate_icon_array['announcement'] = '';
 	    $annotate_icon_array['configure'] = '';
-	    $annotate_icon_array['menu'] = '';
 	}
 	if ($CONFIG['enable_menu_icons'] == 2) {
-	    $annotate_icon_array['page'] = '<img src="./plugins/annotate/images/icons/annotate.png" border="0" width="16" height="16" alt="" class="icon" />';
+	    $annotate_icon_array['annotate'] = '<img src="./plugins/annotate/images/icons/annotate.png" border="0" width="16" height="16" alt="" class="icon" />';
 	} else {
-	    $annotate_icon_array['page'] = '';
+	    $annotate_icon_array['annotate'] = '';
 	}
-	$annotate_icon_array['ok'] = cpg_fetch_icon('ok', 0);
-	$annotate_icon_array['cancel'] = cpg_fetch_icon('cancel', 0);
-	$annotate_icon_array['stop'] = cpg_fetch_icon('stop', 0);
+	$annotate_icon_array['ok'] = cpg_fetch_icon('ok', 2, '', '', 'png', '1');
+	$annotate_icon_array['cancel'] = cpg_fetch_icon('cancel', 2, '', '', 'png', '1');
+	$annotate_icon_array['delete'] = cpg_fetch_icon('delete', 2, '', '', 'png', '1');
 	$return['language'] = $lang_plugin_annotate;
 	$return['icon'] = $annotate_icon_array;
 	return $return;

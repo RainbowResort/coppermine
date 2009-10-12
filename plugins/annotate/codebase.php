@@ -26,12 +26,14 @@ $thisplugin->add_action('plugin_install','annotate_install');
 $thisplugin->add_action('plugin_uninstall','annotate_uninstall');
 $thisplugin->add_action('plugin_cleanup','annotate_cleanup');
 $thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
+$thisplugin->add_filter('meta_album', 'annotate_meta_album');
 
 function annotate_meta($meta){
     global $JS, $lang_common, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
 	$lang_plugin_annotate = $annotate_init_array['language'];
+	$annotate_icon_array = $annotate_init_array['icon'];
 	if (in_array('plugins/annotate/lib/httpreq.js', $JS['includes']) != TRUE) {
 		$JS['includes'][] = 'plugins/annotate/lib/httpreq.js';
 	}
@@ -43,12 +45,15 @@ function annotate_meta($meta){
     set_js_var('lang_annotate_delete', $lang_common['delete']);
     set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
+	set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
+	set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
+	set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
 
 function annotate_file_data($data){
-    global $CONFIG, $lang_plugin_annotate;
+    global $CONFIG, $lang_plugin_annotate, $annotate_icon_array;
     // This is the place where the permissions section needs to reside later 
     if (USER_ID) {
         $data['menu'] .= ' <a href="#" class="admin_menu" title="'.$lang_plugin_annotate['plugin_name'].'" onclick="return addnote();">';
@@ -337,8 +342,12 @@ function annotate_page_start() {
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
         global $CONFIG;
+		require_once './plugins/annotate/init.inc.php';
+		$annotate_init_array = annotate_initialize();
+		$lang_plugin_annotate = $annotate_init_array['language'];
+		$annotate_icon_array = $annotate_init_array['icon'];
         load_template();
-        pageheader("Delete orphans");
+        pageheader($lang_plugin_annotate['delete_orphaned_entries']);
 
         $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']}");
         $pids = array();
@@ -350,8 +359,20 @@ function annotate_page_start() {
         $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
         list($count) = mysql_fetch_row($result);
         $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
-        echo "Orphaned entries deleted: ".$count;
-
+		if ($count == 1) {
+			$count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
+		} else {
+			$count_output = sprintf($lang_plugin_annotate['x_orphaned_entries_deleted'], $count);
+		}
+		starttable('-1', $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries']);
+		echo <<< EOT
+		<tr>
+			<td class="tableb">
+				{$count_output}
+			</td>
+		</tr>
+EOT;
+		endtable();
         exit;
     }
 }
@@ -388,12 +409,11 @@ function annotate_get_pic_pos($album) {
 
 
 // New meta albums
-$thisplugin->add_filter('meta_album', 'annotate_meta_album');
 function annotate_meta_album($meta) {
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE;
 
     if ($meta['album'] === 'lastnotes') {
-        $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt markierte Bilder";
+        $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt beschriftete Bilder";
         if ($CURRENT_CAT_NAME) {
             $album_name .= " - $CURRENT_CAT_NAME";
         }
