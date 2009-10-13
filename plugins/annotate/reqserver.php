@@ -36,13 +36,13 @@ if ($superCage->post->keyExists('add')){
 
     if ($nid){
     
-        $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}notes SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";
+        $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";
         if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
         cpg_db_query($sql);
         die("$nid");
 
     } else {
-        $sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}notes (pid, posx, posy, width, height, note, user_id) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ")";
+        $sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate (pid, posx, posy, width, height, note, user_id) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ")";
         cpg_db_query($sql);
         $nid = mysql_insert_id($CONFIG['LINK_ID']);
         die("$nid");
@@ -52,7 +52,7 @@ if ($superCage->post->keyExists('add')){
 
     $nid = $superCage->post->getInt('remove');
 
-    $sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE nid = $nid";
+    $sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE nid = $nid";
     if (!GALLERY_ADMIN_MODE) $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
     
     cpg_db_query($sql);

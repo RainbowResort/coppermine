@@ -39,9 +39,9 @@ function annotate_initialize() {
 	} else {
 	    $annotate_icon_array['annotate'] = '';
 	}
-	$annotate_icon_array['ok'] = cpg_fetch_icon('ok', 2, '', '', 'png', '1');
-	$annotate_icon_array['cancel'] = cpg_fetch_icon('cancel', 2, '', '', 'png', '1');
-	$annotate_icon_array['delete'] = cpg_fetch_icon('delete', 2, '', '', 'png', '1');
+	$annotate_icon_array['ok'] = cpg_fetch_icon('ok', 2);
+	$annotate_icon_array['cancel'] = cpg_fetch_icon('cancel', 2);
+	$annotate_icon_array['delete'] = cpg_fetch_icon('delete', 2);
 	$return['language'] = $lang_plugin_annotate;
 	$return['icon'] = $annotate_icon_array;
 	return $return;

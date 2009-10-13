@@ -38,6 +38,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-10-13 [A] Added config screen {GauGau}
+2009-10-13 [O] Dumped some of the extra stylesheets in favor of existing classes {GauGau}
+2009-10-13 [A] Added icons to buttons {GauGau}
+2009-10-13 [A] Converted <input>-buttons to "real" <button>s {GauGau}
 2009-10-12 [M] Counted plugin version up to v2.0 {GauGau}
 2009-10-12 [A] Added icons {GauGau}
 2009-10-12 [A] Added i18n of plugin manager section {GauGau}
@@ -59,6 +63,4 @@ Portions of the JavaScript library also by Angus Turnbull
 Todo:
 =====
 Move embedded JS into separate file
-Re-use existing button styles and drop CSS overhead
-Add config page
 Implement permission system

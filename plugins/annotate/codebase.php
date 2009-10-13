@@ -22,6 +22,8 @@ if (defined('DISPLAYIMAGE_PHP')) {
     $thisplugin->add_filter('page_meta','annotate_meta');
     $thisplugin->add_filter('file_data','annotate_file_data');
 }
+$thisplugin->add_action('plugin_configure','annotate_configure');
+$thisplugin->add_action('page_start','annotate_page_start');
 $thisplugin->add_action('plugin_install','annotate_install');
 $thisplugin->add_action('plugin_uninstall','annotate_uninstall');
 $thisplugin->add_action('plugin_cleanup','annotate_cleanup');
@@ -29,7 +31,7 @@ $thisplugin->add_filter('meta_album_get_pic_pos','annotate_get_pic_pos');
 $thisplugin->add_filter('meta_album', 'annotate_meta_album');
 
 function annotate_meta($meta){
-    global $JS, $lang_common, $lang_plugin_annotate;
+    global $JS, $CONFIG, $lang_common, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
 	$lang_plugin_annotate = $annotate_init_array['language'];
@@ -48,29 +50,38 @@ function annotate_meta($meta){
 	set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
 	set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
 	set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
+	set_js_var('config_annotate_permissions_guest', $CONFIG['plugin_annotate_permissions_guest']);
+	set_js_var('config_annotate_permissions_registered', $CONFIG['plugin_annotate_permissions_registered']);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
 
 function annotate_file_data($data){
-    global $CONFIG, $lang_plugin_annotate, $annotate_icon_array;
-    // This is the place where the permissions section needs to reside later 
-    if (USER_ID) {
-        $data['menu'] .= ' <a href="#" class="admin_menu" title="'.$lang_plugin_annotate['plugin_name'].'" onclick="return addnote();">';
-    	$data['menu'] .= $annotate_icon_array['annotate'];
-    	$data['menu'] .= $lang_plugin_annotate['annotate'];
-    	$data['menu'] .= '</a>';
+    global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array;
+    // Determine if the user is allowed to have that button
+    if ( (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] >= 2)
+         ||
+         GALLERY_ADMIN_MODE
+         ||
+         (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] >= 2)
+        ) {
+        $data['menu'] .= <<< EOT
+        <script type="text/javascript">
+            document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote();" rel="nofollow">');
+    	    document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
+    	    document.write('</a>');
+    	</script>
+EOT;
     }
 
     if (is_image($data['filename'])){
-
         if (function_exists(panorama_viewer_is_360_degree_panorama)) {
             if (panorama_viewer_is_360_degree_panorama()) {
                 return $data;
             }
         }
 
-        $sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = {$data['pid']}";
+        $sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid = {$data['pid']}";
         $result = cpg_db_query($sql);
         
         $notes = array();
@@ -151,35 +162,26 @@ addEvent(container, 'mouseover', function() {
     });
 
 function addnote(){
-
     var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
     newNote.onsave = function (note) { return ajax_save(note); };
     newNote.ondelete = function (note) { return ajax_delete(note); };
     notes.AddNote(newNote);
     newNote.Select();
     newNote.nid = 0;
-    
     return false;
 }
 
 function ajax_save(note){
-
     var data = 'add=' + {$data['pid']} + '&nid=' + note.nid + '&posx=' + note.rect.left + '&posy=' + note.rect.top + '&width=' + note.rect.width + '&height=' + note.rect.height + '&note=' + encodeURI(note.text);
-
     annotate_request(data, note);
-
     return true;
 }
 
 function ajax_delete(note){
-
     var data = 'remove=' + note.nid;
-
     annotate_request(data, note);
-
     return true;
 }
-
 </script>
 
     
@@ -193,15 +195,12 @@ EOT;
 // Based on code by Rob Williams
 //Convert a PHP array to a JavaScript one (rev. 4)
 function arrayToJS4($array, $baseName) {
-
+    global $LINEBREAK;
     $return = '';
-
    //Write out the initial array definition
-   $return .= ($baseName . " = new Array(); \r\n ");    
-
+   $return .= $baseName . ' = new Array();'.$LINEBREAK;    
    //Reset the array loop pointer
    reset ($array);
-
    //Use list() and each() to loop over each key/value
    //pair of the array
    while (list($key, $value) = each($array)) {
@@ -212,63 +211,70 @@ function arrayToJS4($array, $baseName) {
          //A string key, so output as a string
          $outKey = "['" . $key . "']";
       }
-      
       if (is_array($value)) {
          //The value is another array, so simply call
          //another instance of this function to handle it
          $return .= arrayToJS4($value, $baseName . $outKey);
       } else {
-
          //Output the key declaration
          $return .= ($baseName . $outKey . " = ");      
-
          //Now output the value
          if (is_numeric($value)){
-            $return .= ($value . "; \r\n ");
+            $return .= $value . ';'.$LINEBREAK;
          } else if (is_string($value)) {
             //Output as a string, as we did before       
-            $return .= ("'" . $value . "'; \r\n ");
+            $return .= "'" . $value . "';".$LINEBREAK;
          } else if ($value === false) {
             //Explicitly output false
-            $return .= ("false; \r\n ");
+            $return .= 'false;'.$LINEBREAK;
          } else if ($value === NULL) {
             //Explicitly output null
-            $return .= ("null; \r\n ");
+            $return .= 'null;'.$LINEBREAK;
          } else if ($value === true) {
             //Explicitly output true
-            $return .= ("true; \r\n ");
+            $return .= 'true;'.$LINEBREAK;
          } else {
             //Output the value directly otherwise
-            $return .= ($value . "; \r\n ");
+            $return .= $value . ';'.$LINEBREAK;
          }
       }
    }
-   
    return $return;
 }
 
 
 function annotate_install() {
     global $thisplugin, $CONFIG;
-
-    $sql = <<< EOT
-    
-CREATE TABLE IF NOT EXISTS `{$CONFIG['TABLE_PREFIX']}notes` (
-  `nid` smallint(5) unsigned NOT NULL auto_increment,
-  `pid` mediumint(8) unsigned NOT NULL,
-  `posx` smallint(5) unsigned NOT NULL,
-  `posy` smallint(5) unsigned NOT NULL,
-  `width` smallint(5) unsigned NOT NULL,
-  `height` smallint(5) unsigned NOT NULL,
-  `note` text NOT NULL,
-  `user_id` smallint(5) unsigned NOT NULL,
-  PRIMARY KEY  (`nid`),
-  KEY `pid` (`pid`)
-) TYPE=MyISAM ;
-
-EOT;
-
-    return cpg_db_query($sql);
+	// Create the super cage
+	$superCage = Inspekt::makeSuperCage();
+	$annotate_installation = 1;
+	require 'include/sql_parse.php';
+    // Perform the database changes
+    $db_schema = $thisplugin->fullpath . '/schema.sql';
+    $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
+    $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
+    $sql_query = remove_remarks($sql_query);
+    $sql_query = split_sql_file($sql_query, ';');
+    foreach($sql_query as $q) {
+    	cpg_db_query($q);
+    }
+	// Set the plugin config defaults
+	$plugin_config_defaults = array(
+	                                'plugin_annotate_permissions_guest' => '1',
+	                                'plugin_annotate_permissions_registered' => '2',
+	                                );
+	foreach ($plugin_config_defaults as $key => $value) {
+	    if (!$CONFIG[$key]) {
+	        $CONFIG[$key] = $value;
+	    }
+	}
+	
+	if ($superCage->post->keyExists('submit')) {
+		annotate_configuration_submit();
+		return true;
+	} else {
+		return 1;
+	}
 }
 
 
@@ -286,15 +292,18 @@ function annotate_uninstall() {
 
     if ($superCage->post->getInt('drop') == 1) {
         global $CONFIG;
-        cpg_db_query("DROP TABLE `{$CONFIG['TABLE_PREFIX']}notes`");
+        // Delete the plugin config records
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_guest'");
+		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_registered'");
+		// Drop the extra plugin table
+        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate");
     }
     return true;
 }
 
 
 function annotate_cleanup($action) {
-    global $CONFIG, $lang_common;
-
+    global $CONFIG, $lang_common, $lang_plugin_annotate;
     $superCage = Inspekt::makeSuperCage();
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
@@ -304,7 +313,7 @@ function annotate_cleanup($action) {
                 <table border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td class="tableb">
-                            Do you want to remove all annotations from the database?
+                            {$lang_plugin_annotate['prune_database']}
                         </td>
                         <td class="tableb">
                             <input type="radio" name="drop" id="drop_yes" value="1" checked="checked" />
@@ -333,7 +342,6 @@ EOT;
 //// New meta album
 
 // Meta album titles, delete orphans
-$thisplugin->add_action('page_start','annotate_page_start');
 function annotate_page_start() {
     global $lang_meta_album_names;
 
@@ -356,9 +364,9 @@ function annotate_page_start() {
         }
         $pids = implode(",", $pids);
 
-        $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
+        $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
         list($count) = mysql_fetch_row($result);
-        $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid NOT IN ($pids)");
+        $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
 		if ($count == 1) {
 			$count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
 		} else {
@@ -383,13 +391,13 @@ function annotate_get_pic_pos($album) {
     global $CONFIG, $pid, $RESTRICTEDWHERE;
 
     if ($album === 'lastnotes') {
-        $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}notes WHERE pid = $pid";
+        $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid = $pid";
         $result = cpg_db_query($query);
         $nid = mysql_result($result, 0);
         mysql_free_result($result);            
 
         $query = "SELECT COUNT(DISTINCT n.pid) 
-            FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
             INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
             INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
             $RESTRICTEDWHERE
@@ -410,16 +418,19 @@ function annotate_get_pic_pos($album) {
 
 // New meta albums
 function annotate_meta_album($meta) {
-    global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE;
-
+    global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE, $lang_plugin_annotate;
+    require_once './plugins/annotate/init.inc.php';
+    $annotate_init_array = annotate_initialize();
+	$lang_plugin_annotate = $annotate_init_array['language'];
+	$annotate_icon_array = $annotate_init_array['icon'];
     if ($meta['album'] === 'lastnotes') {
-        $album_name = cpg_fetch_icon('user_mgr', 2)." zuletzt beschriftete Bilder";
+        $album_name = $annotate_icon_array['annotate'] . ' ' . $lang_plugin_annotate['lastnotes'];
         if ($CURRENT_CAT_NAME) {
             $album_name .= " - $CURRENT_CAT_NAME";
         }
 
         $query = "SELECT DISTINCT n.pid 
-            FROM {$CONFIG['TABLE_PREFIX']}notes AS n 
+            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
             INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
             INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
             $RESTRICTEDWHERE";
@@ -430,11 +441,11 @@ function annotate_meta_album($meta) {
 
         $query = "SELECT *
             FROM {$CONFIG['TABLE_PICTURES']} AS p
-            INNER JOIN {$CONFIG['TABLE_PREFIX']}notes AS n1 ON p.pid = n1.pid 
+            INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n1 ON p.pid = n1.pid 
             INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
             $RESTRICTEDWHERE 
             AND approved = 'YES'
-            AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}notes AS n2 WHERE n1.pid = n2.pid)
+            AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n2 WHERE n1.pid = n2.pid)
             ORDER BY n1.nid DESC {$meta['limit']}";
 
         $result = cpg_db_query($query);
@@ -452,5 +463,212 @@ function annotate_meta_album($meta) {
 
     return $meta;
 }
+
+function annotate_configuration_submit() {
+	global $CONFIG, $lang_errors;
+	$superCage = Inspekt::makeSuperCage();
+	// Populate the form fields and run the queries for the submit form
+    $config_changes_counter = 0;
+    if (!GALLERY_ADMIN_MODE) {
+    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    }
+	
+    // plugin_annotate_permissions_guest (radio)
+    if ($superCage->post->keyExists('plugin_annotate_permissions_guest') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_guest') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_guest') <= '2') ) {
+        if ($superCage->post->getInt('plugin_annotate_permissions_guest') != $CONFIG['plugin_annotate_permissions_guest']) {
+        	$CONFIG['plugin_annotate_permissions_guest'] = $superCage->post->getInt('plugin_annotate_permissions_guest');
+        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_guest']}' WHERE name='plugin_annotate_permissions_guest'";
+        	cpg_db_query($query);
+        	$config_changes_counter++;
+    	}
+    }
+    
+    // plugin_annotate_permissions_registered (radio)
+    if ($superCage->post->keyExists('plugin_annotate_permissions_registered') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_registered') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_registered') <= '3') ) {
+        if ($superCage->post->getInt('plugin_annotate_permissions_registered') != $CONFIG['plugin_annotate_permissions_registered']) {
+        	$CONFIG['plugin_annotate_permissions_registered'] = $superCage->post->getInt('plugin_annotate_permissions_registered');
+        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_registered']}' WHERE name='plugin_annotate_permissions_registered'";
+        	cpg_db_query($query);
+        	$config_changes_counter++;
+    	}
+    }
+   
+	return $config_changes_counter;
+}
+
+function annotate_configure() {
+    global $CONFIG, $THEME_DIR, $thisplugin, $lang_plugin_annotate, $lang_common, $annotate_icon_array, $lang_errors, $annotate_installation, $annotate_title;
+    $superCage = Inspekt::makeSuperCage();
+    $additional_submit_information = '';
+    if (!GALLERY_ADMIN_MODE) {
+    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    }
+    
+    // Form submit?
+    if ($superCage->post->keyExists('submit') == TRUE) {
+        //Check if the form token is valid
+        if(!checkFormToken()){
+            cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+        }
+		$config_changes_counter = annotate_configuration_submit();
+    	if ($config_changes_counter > 0) {
+    		$additional_submit_information .= '<div class="cpg_message_success">' . $lang_plugin_annotate['changes_saved'] . '</div>';
+    	} else {
+    		$additional_submit_information .= '<div class="cpg_message_validation">' . $lang_plugin_annotate['no_changes'] . '</div>';
+    	}
+    }
+	
+    // Set the option output stuff 
+	if ($CONFIG['plugin_annotate_permissions_guest'] == '0') {
+    	$option_output['plugin_annotate_permissions_guest_0'] = 'checked="checked"';
+    	$option_output['plugin_annotate_permissions_guest_1'] = '';
+    	$option_output['plugin_annotate_permissions_guest_2'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '1') { // 
+    	$option_output['plugin_annotate_permissions_guest_0'] = '';
+    	$option_output['plugin_annotate_permissions_guest_1'] = 'checked="checked"';
+    	$option_output['plugin_annotate_permissions_guest_2'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '2') { // 
+    	$option_output['plugin_annotate_permissions_guest_0'] = '';
+    	$option_output['plugin_annotate_permissions_guest_1'] = '';
+    	$option_output['plugin_annotate_permissions_guest_2'] = 'checked="checked"';
+    }
+    
+	if ($CONFIG['plugin_annotate_permissions_registered'] == '0') {
+    	$option_output['plugin_annotate_permissions_registered_0'] = 'checked="checked"';
+    	$option_output['plugin_annotate_permissions_registered_1'] = '';
+    	$option_output['plugin_annotate_permissions_registered_2'] = '';
+    	$option_output['plugin_annotate_permissions_registered_3'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '1') { // 
+    	$option_output['plugin_annotate_permissions_registered_0'] = '';
+    	$option_output['plugin_annotate_permissions_registered_1'] = 'checked="checked"';
+    	$option_output['plugin_annotate_permissions_registered_2'] = '';
+    	$option_output['plugin_annotate_permissions_registered_3']       = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '2') { // 
+    	$option_output['plugin_annotate_permissions_registered_0'] = '';
+    	$option_output['plugin_annotate_permissions_registered_1'] = '';
+    	$option_output['plugin_annotate_permissions_registered_2'] = 'checked="checked"';
+    	$option_output['plugin_annotate_permissions_registered_3'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '3') { // 
+    	$option_output['plugin_annotate_permissions_registered_0'] = '';
+    	$option_output['plugin_annotate_permissions_registered_1'] = '';
+    	$option_output['plugin_annotate_permissions_registered_2'] = '';
+    	$option_output['plugin_annotate_permissions_registered_3'] = 'checked="checked"';
+    }
+    
+    // Check if guests have greater permissions than registered users    
+    if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
+        $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
+    }
+    
+
+	// Create the table row that is displayed during initial install
+	if ($annotate_installation == 1) {
+		$additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
+	}
+	
+	list($timestamp, $form_token) = getFormToken();
+	
+	// Start the actual output
+    echo <<< EOT
+            <form action="" method="post" name="annotate_config" id="annotate_config">
+EOT;
+
+    starttable('100%', $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'], 3);
+    echo <<< EOT
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['permissions']}
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['group']}
+                                    </th>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['no_access']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['read_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['read_write_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['read_write_delete_annotations']}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="left" class="tableb">
+                                        {$lang_plugin_annotate['guests']}
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_0" class="radio" value="0" {$option_output['plugin_annotate_permissions_guest_0']} />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_1" class="radio" value="1" {$option_output['plugin_annotate_permissions_guest_1']} />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_2" class="radio" value="2" {$option_output['plugin_annotate_permissions_guest_2']} disabled="disabled" />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_3" class="radio" value="" disabled="disabled" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="left" class="tableb tableb_alternate">
+                                        {$lang_plugin_annotate['registered_users']}
+                                    </td>
+                                    <td valign="top" align="center" class="tableb tableb_alternate">
+                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_0" class="radio" value="0" {$option_output['plugin_annotate_permissions_registered_0']} />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb tableb_alternate">
+                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_1" class="radio" value="1" {$option_output['plugin_annotate_permissions_registered_1']} />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb tableb_alternate">
+                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_2" class="radio" value="2" {$option_output['plugin_annotate_permissions_registered_2']} />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb tableb_alternate">
+                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_3" class="radio" value="3" {$option_output['plugin_annotate_permissions_registered_3']} />
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="left" class="tableb">
+                                        {$lang_plugin_annotate['administrators']}
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_0" class="radio" value="" disabled="disabled" />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_1" class="radio" value="" disabled="disabled" />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_2" class="radio" value="" disabled="disabled" />
+                                    </td>
+                                    <td valign="top" align="center" class="tableb">
+                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_3" class="radio" value="" checked="checked" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="cpg_message_error">Please note: permissions haven't been implemented yet, so whatever you specify on this screen won't be taken into account yet.</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" class="tablef">
+                        </td>
+                        <td valign="middle" class="tablef" colspan="2">
+                            <input type="hidden" name="form_token" value="{$form_token}" />
+                            <input type="hidden" name="timestamp" value="{$timestamp}" />
+                            <button type="submit" class="button" name="submit" value="{$lang_common['ok']}">{$annotate_icon_array['ok']}{$lang_common['ok']}</button>
+                        </td>
+                    </tr>
+EOT;
+    endtable();
+    echo <<< EOT
+            {$additional_submit_information}
+            </form>
+
+EOT;
+}
+
 
 ?>
