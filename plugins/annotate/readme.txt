@@ -38,6 +38,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-10-27 [A] Added registration promotion {GauGau}
+2009-10-27 [A] Added viewing permissions {GauGau}
+2009-10-27 [A] Added more icons {GauGau}
+2009-10-27 [B] Removed silly line in database schema that disabled more than one annotation per image. {GauGau}
+2009-10-27 [M] Counted plugin version up to v2.1 {GauGau}
 2009-10-13 [A] Added config screen {GauGau}
 2009-10-13 [O] Dumped some of the extra stylesheets in favor of existing classes {GauGau}
 2009-10-13 [A] Added icons to buttons {GauGau}
@@ -63,4 +68,5 @@ Portions of the JavaScript library also by Angus Turnbull
 Todo:
 =====
 Move embedded JS into separate file
-Implement permission system
+Implement permission system (partially done)
+Fix JS errors in IE

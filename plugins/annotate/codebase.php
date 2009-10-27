@@ -52,13 +52,24 @@ function annotate_meta($meta){
 	set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
 	set_js_var('config_annotate_permissions_guest', $CONFIG['plugin_annotate_permissions_guest']);
 	set_js_var('config_annotate_permissions_registered', $CONFIG['plugin_annotate_permissions_registered']);
+	if (GALLERY_ADMIN_MODE) {
+		set_js_var('visitor_annotate_permission_level', 3);
+		set_js_var('visitor_annotate_gallery_admin_mode', 'true');	
+	} elseif (USER_ID) {
+		set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_registered']);
+		set_js_var('visitor_annotate_gallery_admin_mode', 'false');
+	} else {
+		set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_guest']);
+		set_js_var('visitor_annotate_gallery_admin_mode', 'false');
+	}
+	set_js_var('visitor_annotate_user_id', USER_ID);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
 
 function annotate_file_data($data){
-    global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array;
-    // Determine if the user is allowed to have that button
+    global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array, $REFERER;
+    // Determine if the visitor is allowed to have that button
     if ( (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] >= 2)
          ||
          GALLERY_ADMIN_MODE
@@ -92,6 +103,31 @@ EOT;
         }
                 
         mysql_free_result($result);
+		$nr_notes = count($notes);
+		
+		// Visitor can view annotations in the first place?
+		if (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] == 0 && !GALLERY_ADMIN_MODE) {
+			// Stop processing the annotations any further
+			return $data;	
+		} elseif (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] == 0) {
+			if ($CONFIG['plugin_annotate_permissions_registered'] >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
+				// There are annotations, so let's promote them
+				if ($nr_notes == 1) {
+					$data['footer'] .= $lang_plugin_annotate['1_annotation_for_file'] . '<br />' . $LINEBREAK;
+				} elseif ($nr_notes > 1) {
+					$data['footer'] .= sprintf($lang_plugin_annotate['x_annotations_for_file'], $nr_notes) . '<br />' . $LINEBREAK;
+				}
+				$data['footer'] .=	sprintf(
+											$lang_plugin_annotate['registration_promotion'],
+											'<a href="login.php?referer='.$REFERER.'">',
+											'</a>',
+											'<a href="register.php?referer='.$REFERER.'">',
+											'</a>'
+											);			
+			}
+			// Stop processing the annotations any further
+			return $data;	
+		} 
     
         $jsarray = arrayToJS4($notes, 'annotations');
 
@@ -133,20 +169,15 @@ var container = document.getElementById('PhotoContainer');
 var notes = new PhotoNoteContainer(container);
 
 for (var n = 0; n < annotations.length; n++){
-    
     /* create a note */
     var size = new PhotoNoteRect(annotations[n].posx, annotations[n].posy, annotations[n].width, annotations[n].height);
     var note = new PhotoNote(annotations[n].note,'note' + n, size);
-    
     /* implement the save/delete functions */
     note.onsave = function (note) { return ajax_save(note); };
     note.ondelete = function (note) { return ajax_delete(note); };
-    
     /* assign the note id number */
     note.nid = annotations[n].nid;
-    
     if (!$admin && note.user_id != $user_id) note.editable = false;
-    
     /* add it to the container */
     notes.AddNote(note);
 }
@@ -162,7 +193,10 @@ addEvent(container, 'mouseover', function() {
     });
 
 function addnote(){
-    var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
+    if (js_vars.visitor_annotate_permission_level < 2) {
+		return false;
+	}
+	var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
     newNote.onsave = function (note) { return ajax_save(note); };
     newNote.ondelete = function (note) { return ajax_delete(note); };
     notes.AddNote(newNote);
@@ -586,16 +620,16 @@ EOT;
                                         {$lang_plugin_annotate['group']}
                                     </th>
                                     <th valign="top" align="left" class="tableh2">
-                                        {$lang_plugin_annotate['no_access']}
+                                        {$annotate_icon_array['permission_none']}{$lang_plugin_annotate['no_access']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
-                                        {$lang_plugin_annotate['read_annotations']}
+                                        {$annotate_icon_array['permission_read']}{$lang_plugin_annotate['read_annotations']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
-                                        {$lang_plugin_annotate['read_write_annotations']}
+                                        {$annotate_icon_array['permission_write']}{$lang_plugin_annotate['read_write_annotations']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
-                                        {$lang_plugin_annotate['read_write_delete_annotations']}
+                                    {$annotate_icon_array['permission_delete']}{$lang_plugin_annotate['read_write_delete_annotations']}
                                     </th>
                                 </tr>
                                 <tr>
@@ -629,7 +663,7 @@ EOT;
                                         <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_2" class="radio" value="2" {$option_output['plugin_annotate_permissions_registered_2']} />
                                     </td>
                                     <td valign="top" align="center" class="tableb tableb_alternate">
-                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_3" class="radio" value="3" {$option_output['plugin_annotate_permissions_registered_3']} />
+                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_3" class="radio" value="3" {$option_output['plugin_annotate_permissions_registered_3']} disabled="disabled" />
                                 </tr>
                                 <tr>
                                     <td valign="top" align="left" class="tableb">
@@ -649,7 +683,6 @@ EOT;
                                     </td>
                                 </tr>
                             </table>
-                            <div class="cpg_message_error">Please note: permissions haven't been implemented yet, so whatever you specify on this screen won't be taken into account yet.</div>
                         </td>
                     </tr>
                     <tr>

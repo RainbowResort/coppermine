@@ -36,12 +36,14 @@ $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_js'], '<a href=
 $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_i18n'], '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
 $author .= '</ul>';
 
-$version = '2.0';
+$version = '2.1';
 
 $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="admin_menu external">' . $annotate_icon_array['announcement'] . sprintf($lang_plugin_annotate['announcemen_thread'], $lang_plugin_annotate['plugin_name']) . '</a>';
-$extra_info = $install_info;
-$extra_info .= ' <a href="index.php?plugin=annotate&delete_orphans" class="admin_menu">' . $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries'] . '</a>';
-$extra_info .= ' <a href="index.php?file=annotate/admin" class="admin_menu">' . $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'] . '</a>';
+$extra_info .= '<a href="index.php?file=annotate/admin" class="admin_menu">' . $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'] . '</a> ';
+$extra_info .= '<a href="index.php?plugin=annotate&delete_orphans" class="admin_menu">' . $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries'] . '</a> ';
+$extra_info .= $install_info;
+
+
 
 
 ?>

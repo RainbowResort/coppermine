@@ -30,7 +30,7 @@ $lang_plugin_annotate['plugin_credit_i18n'] = 'Internationalisierung durch %s';
 $lang_plugin_annotate['submit_to_install'] = 'Sende das Formular ab, um das Plugin zu installieren';
 $lang_plugin_annotate['configure_plugin'] = 'Konfiguriere Bild-Beschriftungs Plugin';
 $lang_plugin_annotate['changes_saved'] = 'Deine Änderungen wurden gespeichert';
-$lang_plugin_annotate['no_changes'] = 'Es gab keine Änderungen oder Deine Änderungen waren ungültig';
+$lang_plugin_annotate['no_changes']] = 'Es gab keine Änderungen oder Deine Änderungen waren ungültig';
 $lang_plugin_annotate['guests_more_permissions_than_registered'] = 'Gästen mehr Rechte zu gewähren als registrierten Benutzern macht keinen Sinn. Überprüfe Deine Einstellungen!';
 $lang_plugin_annotate['prune_database'] = 'Wollen Sie alle Beschriftungen aus der Datenbank löschen?';
 $lang_plugin_annotate['announcemen_thread'] = 'Ankündigungs-Theme für %s-Plugin';
@@ -51,5 +51,7 @@ $lang_plugin_annotate['read_write_annotations'] = 'Beschriftungen lesen und schr
 $lang_plugin_annotate['read_write_delete_annotations'] = 'Beschriftungen lesen, schreiben und löschen';
 $lang_plugin_annotate['no_access'] = 'kein Zugriff';
 $lang_plugin_annotate['lastnotes'] = 'zuletzt beschriftete Bilder';
-
+$lang_plugin_annotate['x_annotations_for_file'] = 'Es sind %s Beschriftungen für diese Datei vorhanden.';
+$lang_plugin_annotate['1_annotation_for_file'] = 'Es ist eine Beschriftungen für diese Datei vorhanden.';
+$lang_plugin_annotate['registration_promotion'] = 'Du musst angemeldet sein, um Beschriftungen anzusehen. %sMelde Dich an%s wenn Du schon ein Benutzerkonto hast oder %sregistriere%s Dich kostenlos.'; // Do not translate the %s placeholders
 ?>
