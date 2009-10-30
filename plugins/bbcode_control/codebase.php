@@ -146,6 +146,8 @@ function bbcode_control_config_button($admin_menu){
 
 
 function new_bbcodes($text) {
+    global $CONFIG;
+
     // replace disabled bbcode tags with ""
     $bbcode_tags_disabled = get_bbcode_tags('disabled');
     foreach ($bbcode_tags_disabled as $tag) {
