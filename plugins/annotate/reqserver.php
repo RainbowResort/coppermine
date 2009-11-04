@@ -21,11 +21,11 @@ if (!defined('IN_COPPERMINE')) {
 }
 
 if (!USER_ID) {
-	die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
+    die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
 } elseif (!GALLERY_ADMIN_MODE) {
-	if ($CONFIG['plugin_annotate_permissions_registered'] < 2) {
-		die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
-	}
+    if ($CONFIG['plugin_annotate_permissions_registered'] < 2) {
+        die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
+    }
 } 
 
 $superCage = Inspekt::makeSuperCage();
@@ -41,8 +41,8 @@ if ($superCage->post->keyExists('add')){
     if ($nid){
         $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";
         if (!GALLERY_ADMIN_MODE) {
-			$sql .= " AND user_id = " . USER_ID . " LIMIT 1";
-		}
+            $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
+        }
         cpg_db_query($sql);
         die("$nid");
     } else {
@@ -55,8 +55,8 @@ if ($superCage->post->keyExists('add')){
     $nid = $superCage->post->getInt('remove');
     $sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE nid = $nid";
     if (!GALLERY_ADMIN_MODE) {
-		$sql .= " AND user_id = " . USER_ID . " LIMIT 1";
-	}
+        $sql .= " AND user_id = " . USER_ID . " LIMIT 1";
+    }
     cpg_db_query($sql);
     die("$nid");
 }

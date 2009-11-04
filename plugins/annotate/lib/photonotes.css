@@ -36,47 +36,47 @@ container-inactive container-active
 }
 
 .fn-area-blackborder {
-	border: 1px solid #000;
+    border: 1px solid #000;
 }
 
 .fn-area-whiteborder {
-	border: 1px solid #FFF;	
+    border: 1px solid #FFF;	
 }
 
 .fn-area-inner {
-	border: 1px solid #000000;
-	background-color:#FFF;
-	filter:alpha(opacity=0);
-	opacity:0;
-	-moz-opacity:0;
-	-khtml-opacity:0;
-	cursor: pointer;
+    border: 1px solid #000000;
+    background-color:#FFF;
+    filter:alpha(opacity=0);
+    opacity:0;
+    -moz-opacity:0;
+    -khtml-opacity:0;
+    cursor: pointer;
 }
 
 .fn-note {
-	position: absolute;
-	max-width: 200px;
-	padding: 5px;
-	display:none;
-	cursor:default;
-	z-index:5000;
+    position: absolute;
+    max-width: 200px;
+    padding: 5px;
+    display:none;
+    cursor:default;
+    z-index:5000;
 }
 
 .fn-note-edit-text {
-	border: 1px solid #000000;
+    border: 1px solid #000000;
 }
 
 .fn-note-edit {
-	display:none;
+    display:none;
 }
 
 .fn-note-edit TEXTAREA {
-	border:0;
-	overflow:visible;
-	margin-bottom:10px;
-	padding:0;
-	width:180px;
-	margin:0;
+    border:0;
+    overflow:visible;
+    margin-bottom:10px;
+    padding:0;
+    width:180px;
+    margin:0;
 }
 
 /* Note drag/resize UI */
@@ -137,6 +137,3 @@ container-inactive container-active
     right: -8px;
     cursor: se-resize;
 }
-
-
-

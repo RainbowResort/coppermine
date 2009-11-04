@@ -34,35 +34,35 @@ function annotate_meta($meta){
     global $JS, $CONFIG, $lang_common, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
-	$lang_plugin_annotate = $annotate_init_array['language'];
-	$annotate_icon_array = $annotate_init_array['icon'];
-	if (in_array('plugins/annotate/lib/httpreq.js', $JS['includes']) != TRUE) {
-		$JS['includes'][] = 'plugins/annotate/lib/httpreq.js';
-	}
-	if (in_array('plugins/annotate/lib/photonotes.js', $JS['includes']) != TRUE) {
-		$JS['includes'][] = 'plugins/annotate/lib/photonotes.js';
-	}
+    $lang_plugin_annotate = $annotate_init_array['language'];
+    $annotate_icon_array = $annotate_init_array['icon'];
+    if (in_array('plugins/annotate/lib/httpreq.js', $JS['includes']) != TRUE) {
+        $JS['includes'][] = 'plugins/annotate/lib/httpreq.js';
+    }
+    if (in_array('plugins/annotate/lib/photonotes.js', $JS['includes']) != TRUE) {
+        $JS['includes'][] = 'plugins/annotate/lib/photonotes.js';
+    }
     set_js_var('lang_annotate_save', $lang_plugin_annotate['save']);
     set_js_var('lang_annotate_cancel', $lang_plugin_annotate['cancel']);
     set_js_var('lang_annotate_delete', $lang_common['delete']);
     set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
-	set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
-	set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
-	set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
-	set_js_var('config_annotate_permissions_guest', $CONFIG['plugin_annotate_permissions_guest']);
-	set_js_var('config_annotate_permissions_registered', $CONFIG['plugin_annotate_permissions_registered']);
-	if (GALLERY_ADMIN_MODE) {
-		set_js_var('visitor_annotate_permission_level', 3);
-		set_js_var('visitor_annotate_gallery_admin_mode', 'true');	
-	} elseif (USER_ID) {
-		set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_registered']);
-		set_js_var('visitor_annotate_gallery_admin_mode', 'false');
-	} else {
-		set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_guest']);
-		set_js_var('visitor_annotate_gallery_admin_mode', 'false');
-	}
-	set_js_var('visitor_annotate_user_id', USER_ID);
+    set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
+    set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
+    set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
+    set_js_var('config_annotate_permissions_guest', $CONFIG['plugin_annotate_permissions_guest']);
+    set_js_var('config_annotate_permissions_registered', $CONFIG['plugin_annotate_permissions_registered']);
+    if (GALLERY_ADMIN_MODE) {
+        set_js_var('visitor_annotate_permission_level', 3);
+        set_js_var('visitor_annotate_gallery_admin_mode', 'true');	
+    } elseif (USER_ID) {
+        set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_registered']);
+        set_js_var('visitor_annotate_gallery_admin_mode', 'false');
+    } else {
+        set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_guest']);
+        set_js_var('visitor_annotate_gallery_admin_mode', 'false');
+    }
+    set_js_var('visitor_annotate_user_id', USER_ID);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
@@ -79,9 +79,9 @@ function annotate_file_data($data){
         $data['menu'] .= <<< EOT
         <script type="text/javascript">
             document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote();" rel="nofollow">');
-    	    document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
-    	    document.write('</a>');
-    	</script>
+            document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
+            document.write('</a>');
+        </script>
 EOT;
     }
 
@@ -103,31 +103,31 @@ EOT;
         }
                 
         mysql_free_result($result);
-		$nr_notes = count($notes);
-		
-		// Visitor can view annotations in the first place?
-		if (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] == 0 && !GALLERY_ADMIN_MODE) {
-			// Stop processing the annotations any further
-			return $data;	
-		} elseif (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] == 0) {
-			if ($CONFIG['plugin_annotate_permissions_registered'] >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
-				// There are annotations, so let's promote them
-				if ($nr_notes == 1) {
-					$data['footer'] .= $lang_plugin_annotate['1_annotation_for_file'] . '<br />' . $LINEBREAK;
-				} elseif ($nr_notes > 1) {
-					$data['footer'] .= sprintf($lang_plugin_annotate['x_annotations_for_file'], $nr_notes) . '<br />' . $LINEBREAK;
-				}
-				$data['footer'] .=	sprintf(
-											$lang_plugin_annotate['registration_promotion'],
-											'<a href="login.php?referer='.$REFERER.'">',
-											'</a>',
-											'<a href="register.php?referer='.$REFERER.'">',
-											'</a>'
-											);			
-			}
-			// Stop processing the annotations any further
-			return $data;	
-		} 
+        $nr_notes = count($notes);
+        
+        // Visitor can view annotations in the first place?
+        if (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] == 0 && !GALLERY_ADMIN_MODE) {
+            // Stop processing the annotations any further
+            return $data;
+        } elseif (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] == 0) {
+            if ($CONFIG['plugin_annotate_permissions_registered'] >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
+                // There are annotations, so let's promote them
+                if ($nr_notes == 1) {
+                    $data['footer'] .= $lang_plugin_annotate['1_annotation_for_file'] . '<br />' . $LINEBREAK;
+                } elseif ($nr_notes > 1) {
+                    $data['footer'] .= sprintf($lang_plugin_annotate['x_annotations_for_file'], $nr_notes) . '<br />' . $LINEBREAK;
+                }
+                $data['footer'] .= sprintf(
+                                            $lang_plugin_annotate['registration_promotion'],
+                                            '<a href="login.php?referer='.$REFERER.'">',
+                                            '</a>',
+                                            '<a href="register.php?referer='.$REFERER.'">',
+                                            '</a>'
+                                            );
+            }
+            // Stop processing the annotations any further
+            return $data;
+        } 
     
         $jsarray = arrayToJS4($notes, 'annotations');
 
@@ -194,9 +194,9 @@ addEvent(container, 'mouseover', function() {
 
 function addnote(){
     if (js_vars.visitor_annotate_permission_level < 2) {
-		return false;
-	}
-	var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
+        return false;
+    }
+    var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
     newNote.onsave = function (note) { return ajax_save(note); };
     newNote.ondelete = function (note) { return ajax_delete(note); };
     notes.AddNote(newNote);
@@ -279,10 +279,10 @@ function arrayToJS4($array, $baseName) {
 
 function annotate_install() {
     global $thisplugin, $CONFIG;
-	// Create the super cage
-	$superCage = Inspekt::makeSuperCage();
-	$annotate_installation = 1;
-	require 'include/sql_parse.php';
+    // Create the super cage
+    $superCage = Inspekt::makeSuperCage();
+    $annotate_installation = 1;
+    require 'include/sql_parse.php';
     // Perform the database changes
     $db_schema = $thisplugin->fullpath . '/schema.sql';
     $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
@@ -290,25 +290,25 @@ function annotate_install() {
     $sql_query = remove_remarks($sql_query);
     $sql_query = split_sql_file($sql_query, ';');
     foreach($sql_query as $q) {
-    	cpg_db_query($q);
+        cpg_db_query($q);
     }
-	// Set the plugin config defaults
-	$plugin_config_defaults = array(
-	                                'plugin_annotate_permissions_guest' => '1',
-	                                'plugin_annotate_permissions_registered' => '2',
-	                                );
-	foreach ($plugin_config_defaults as $key => $value) {
-	    if (!$CONFIG[$key]) {
-	        $CONFIG[$key] = $value;
-	    }
-	}
-	
-	if ($superCage->post->keyExists('submit')) {
-		annotate_configuration_submit();
-		return true;
-	} else {
-		return 1;
-	}
+    // Set the plugin config defaults
+    $plugin_config_defaults = array(
+                                    'plugin_annotate_permissions_guest' => '1',
+                                    'plugin_annotate_permissions_registered' => '2',
+                                    );
+    foreach ($plugin_config_defaults as $key => $value) {
+        if (!$CONFIG[$key]) {
+            $CONFIG[$key] = $value;
+        }
+    }
+    
+    if ($superCage->post->keyExists('submit')) {
+        annotate_configuration_submit();
+        return true;
+    } else {
+        return 1;
+    }
 }
 
 
@@ -328,8 +328,8 @@ function annotate_uninstall() {
         global $CONFIG;
         // Delete the plugin config records
         cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_guest'");
-		cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_registered'");
-		// Drop the extra plugin table
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_registered'");
+        // Drop the extra plugin table
         cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate");
     }
     return true;
@@ -384,10 +384,10 @@ function annotate_page_start() {
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
         global $CONFIG;
-		require_once './plugins/annotate/init.inc.php';
-		$annotate_init_array = annotate_initialize();
-		$lang_plugin_annotate = $annotate_init_array['language'];
-		$annotate_icon_array = $annotate_init_array['icon'];
+        require_once './plugins/annotate/init.inc.php';
+        $annotate_init_array = annotate_initialize();
+        $lang_plugin_annotate = $annotate_init_array['language'];
+        $annotate_icon_array = $annotate_init_array['icon'];
         load_template();
         pageheader($lang_plugin_annotate['delete_orphaned_entries']);
 
@@ -401,20 +401,20 @@ function annotate_page_start() {
         $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
         list($count) = mysql_fetch_row($result);
         $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
-		if ($count == 1) {
-			$count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
-		} else {
-			$count_output = sprintf($lang_plugin_annotate['x_orphaned_entries_deleted'], $count);
-		}
-		starttable('-1', $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries']);
-		echo <<< EOT
-		<tr>
-			<td class="tableb">
-				{$count_output}
-			</td>
-		</tr>
+        if ($count == 1) {
+            $count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
+        } else {
+            $count_output = sprintf($lang_plugin_annotate['x_orphaned_entries_deleted'], $count);
+        }
+        starttable('-1', $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries']);
+        echo <<< EOT
+        <tr>
+            <td class="tableb">
+                {$count_output}
+            </td>
+        </tr>
 EOT;
-		endtable();
+        endtable();
         exit;
     }
 }
@@ -455,8 +455,8 @@ function annotate_meta_album($meta) {
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
-	$lang_plugin_annotate = $annotate_init_array['language'];
-	$annotate_icon_array = $annotate_init_array['icon'];
+    $lang_plugin_annotate = $annotate_init_array['language'];
+    $annotate_icon_array = $annotate_init_array['icon'];
     if ($meta['album'] === 'lastnotes') {
         $album_name = $annotate_icon_array['annotate'] . ' ' . $lang_plugin_annotate['lastnotes'];
         if ($CURRENT_CAT_NAME) {
@@ -499,35 +499,35 @@ function annotate_meta_album($meta) {
 }
 
 function annotate_configuration_submit() {
-	global $CONFIG, $lang_errors;
-	$superCage = Inspekt::makeSuperCage();
-	// Populate the form fields and run the queries for the submit form
+    global $CONFIG, $lang_errors;
+    $superCage = Inspekt::makeSuperCage();
+    // Populate the form fields and run the queries for the submit form
     $config_changes_counter = 0;
     if (!GALLERY_ADMIN_MODE) {
-    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+        cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
-	
+    
     // plugin_annotate_permissions_guest (radio)
     if ($superCage->post->keyExists('plugin_annotate_permissions_guest') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_guest') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_guest') <= '2') ) {
         if ($superCage->post->getInt('plugin_annotate_permissions_guest') != $CONFIG['plugin_annotate_permissions_guest']) {
-        	$CONFIG['plugin_annotate_permissions_guest'] = $superCage->post->getInt('plugin_annotate_permissions_guest');
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_guest']}' WHERE name='plugin_annotate_permissions_guest'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;
-    	}
+            $CONFIG['plugin_annotate_permissions_guest'] = $superCage->post->getInt('plugin_annotate_permissions_guest');
+            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_guest']}' WHERE name='plugin_annotate_permissions_guest'";
+            cpg_db_query($query);
+            $config_changes_counter++;
+        }
     }
     
     // plugin_annotate_permissions_registered (radio)
     if ($superCage->post->keyExists('plugin_annotate_permissions_registered') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_registered') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_registered') <= '3') ) {
         if ($superCage->post->getInt('plugin_annotate_permissions_registered') != $CONFIG['plugin_annotate_permissions_registered']) {
-        	$CONFIG['plugin_annotate_permissions_registered'] = $superCage->post->getInt('plugin_annotate_permissions_registered');
-        	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_registered']}' WHERE name='plugin_annotate_permissions_registered'";
-        	cpg_db_query($query);
-        	$config_changes_counter++;
-    	}
+            $CONFIG['plugin_annotate_permissions_registered'] = $superCage->post->getInt('plugin_annotate_permissions_registered');
+            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_registered']}' WHERE name='plugin_annotate_permissions_registered'";
+            cpg_db_query($query);
+            $config_changes_counter++;
+        }
     }
    
-	return $config_changes_counter;
+    return $config_changes_counter;
 }
 
 function annotate_configure() {
@@ -535,7 +535,7 @@ function annotate_configure() {
     $superCage = Inspekt::makeSuperCage();
     $additional_submit_information = '';
     if (!GALLERY_ADMIN_MODE) {
-    	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+        cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
     
     // Form submit?
@@ -544,49 +544,49 @@ function annotate_configure() {
         if(!checkFormToken()){
             cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
         }
-		$config_changes_counter = annotate_configuration_submit();
-    	if ($config_changes_counter > 0) {
-    		$additional_submit_information .= '<div class="cpg_message_success">' . $lang_plugin_annotate['changes_saved'] . '</div>';
-    	} else {
-    		$additional_submit_information .= '<div class="cpg_message_validation">' . $lang_plugin_annotate['no_changes'] . '</div>';
-    	}
-    }
-	
-    // Set the option output stuff 
-	if ($CONFIG['plugin_annotate_permissions_guest'] == '0') {
-    	$option_output['plugin_annotate_permissions_guest_0'] = 'checked="checked"';
-    	$option_output['plugin_annotate_permissions_guest_1'] = '';
-    	$option_output['plugin_annotate_permissions_guest_2'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '1') { // 
-    	$option_output['plugin_annotate_permissions_guest_0'] = '';
-    	$option_output['plugin_annotate_permissions_guest_1'] = 'checked="checked"';
-    	$option_output['plugin_annotate_permissions_guest_2'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '2') { // 
-    	$option_output['plugin_annotate_permissions_guest_0'] = '';
-    	$option_output['plugin_annotate_permissions_guest_1'] = '';
-    	$option_output['plugin_annotate_permissions_guest_2'] = 'checked="checked"';
+        $config_changes_counter = annotate_configuration_submit();
+        if ($config_changes_counter > 0) {
+            $additional_submit_information .= '<div class="cpg_message_success">' . $lang_plugin_annotate['changes_saved'] . '</div>';
+        } else {
+            $additional_submit_information .= '<div class="cpg_message_validation">' . $lang_plugin_annotate['no_changes'] . '</div>';
+        }
     }
     
-	if ($CONFIG['plugin_annotate_permissions_registered'] == '0') {
-    	$option_output['plugin_annotate_permissions_registered_0'] = 'checked="checked"';
-    	$option_output['plugin_annotate_permissions_registered_1'] = '';
-    	$option_output['plugin_annotate_permissions_registered_2'] = '';
-    	$option_output['plugin_annotate_permissions_registered_3'] = '';
+    // Set the option output stuff 
+    if ($CONFIG['plugin_annotate_permissions_guest'] == '0') {
+        $option_output['plugin_annotate_permissions_guest_0'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_guest_1'] = '';
+        $option_output['plugin_annotate_permissions_guest_2'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '1') { // 
+        $option_output['plugin_annotate_permissions_guest_0'] = '';
+        $option_output['plugin_annotate_permissions_guest_1'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_guest_2'] = '';
+    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '2') { // 
+        $option_output['plugin_annotate_permissions_guest_0'] = '';
+        $option_output['plugin_annotate_permissions_guest_1'] = '';
+        $option_output['plugin_annotate_permissions_guest_2'] = 'checked="checked"';
+    }
+    
+    if ($CONFIG['plugin_annotate_permissions_registered'] == '0') {
+        $option_output['plugin_annotate_permissions_registered_0'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_registered_1'] = '';
+        $option_output['plugin_annotate_permissions_registered_2'] = '';
+        $option_output['plugin_annotate_permissions_registered_3'] = '';
     } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '1') { // 
-    	$option_output['plugin_annotate_permissions_registered_0'] = '';
-    	$option_output['plugin_annotate_permissions_registered_1'] = 'checked="checked"';
-    	$option_output['plugin_annotate_permissions_registered_2'] = '';
-    	$option_output['plugin_annotate_permissions_registered_3']       = '';
+        $option_output['plugin_annotate_permissions_registered_0'] = '';
+        $option_output['plugin_annotate_permissions_registered_1'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_registered_2'] = '';
+        $option_output['plugin_annotate_permissions_registered_3'] = '';
     } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '2') { // 
-    	$option_output['plugin_annotate_permissions_registered_0'] = '';
-    	$option_output['plugin_annotate_permissions_registered_1'] = '';
-    	$option_output['plugin_annotate_permissions_registered_2'] = 'checked="checked"';
-    	$option_output['plugin_annotate_permissions_registered_3'] = '';
+        $option_output['plugin_annotate_permissions_registered_0'] = '';
+        $option_output['plugin_annotate_permissions_registered_1'] = '';
+        $option_output['plugin_annotate_permissions_registered_2'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_registered_3'] = '';
     } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '3') { // 
-    	$option_output['plugin_annotate_permissions_registered_0'] = '';
-    	$option_output['plugin_annotate_permissions_registered_1'] = '';
-    	$option_output['plugin_annotate_permissions_registered_2'] = '';
-    	$option_output['plugin_annotate_permissions_registered_3'] = 'checked="checked"';
+        $option_output['plugin_annotate_permissions_registered_0'] = '';
+        $option_output['plugin_annotate_permissions_registered_1'] = '';
+        $option_output['plugin_annotate_permissions_registered_2'] = '';
+        $option_output['plugin_annotate_permissions_registered_3'] = 'checked="checked"';
     }
     
     // Check if guests have greater permissions than registered users    
@@ -595,14 +595,14 @@ function annotate_configure() {
     }
     
 
-	// Create the table row that is displayed during initial install
-	if ($annotate_installation == 1) {
-		$additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
-	}
-	
-	list($timestamp, $form_token) = getFormToken();
-	
-	// Start the actual output
+    // Create the table row that is displayed during initial install
+    if ($annotate_installation == 1) {
+        $additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
+    }
+    
+    list($timestamp, $form_token) = getFormToken();
+    
+    // Start the actual output
     echo <<< EOT
             <form action="" method="post" name="annotate_config" id="annotate_config">
 EOT;

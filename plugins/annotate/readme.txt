@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-04 [B] Typo in german language file {eenemeenemuu}
 2009-10-27 [A] Added registration promotion {GauGau}
 2009-10-27 [A] Added viewing permissions {GauGau}
 2009-10-27 [A] Added more icons {GauGau}
@@ -70,3 +71,5 @@ Todo:
 Move embedded JS into separate file
 Implement permission system (partially done)
 Fix JS errors in IE
+Rewrite permission system configuration and storage (i.e. new table) to enable detailed settings for different custom groups
+Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users {eenemeenemuu - I made a mod/fork and already have some of this code ready. I'll implement it soon}

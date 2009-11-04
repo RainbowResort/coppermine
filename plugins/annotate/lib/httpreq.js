@@ -29,19 +29,19 @@ function annotate_request(data, note){
         }
     }
 
-	httpRequest.onreadystatechange = function() { callback(httpRequest, note); };
+    httpRequest.onreadystatechange = function() { callback(httpRequest, note); };
     httpRequest.open('POST', 'index.php?file=annotate/reqserver', true);
     httpRequest.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
     httpRequest.send(data);
 
-	return true;
+    return true;
 }
 
 function callback(req, note){
 
     if (req.readyState == 4) {
         if (req.status == 200) {
-        	note.nid = req.responseText;
+            note.nid = req.responseText;
         }
     }
 }
