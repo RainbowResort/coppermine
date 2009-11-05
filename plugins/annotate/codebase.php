@@ -338,6 +338,9 @@ function annotate_uninstall() {
 
 function annotate_cleanup($action) {
     global $CONFIG, $lang_common, $lang_plugin_annotate;
+    require_once './plugins/annotate/init.inc.php';
+    $annotate_init_array = annotate_initialize();
+    $lang_plugin_annotate = $annotate_init_array['language'];
     $superCage = Inspekt::makeSuperCage();
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
