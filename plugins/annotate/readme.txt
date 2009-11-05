@@ -75,4 +75,5 @@ Implement permission system (partially done)
 Fix JS errors in IE
 Rewrite permission system configuration and storage (i.e. new table) to enable detailed settings for different custom groups
 Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users {eenemeenemuu - I made a mod/fork and already have some of this code ready. I'll implement it soon}
-On plugin install: use config options from database if exist from previous installation
+Bug: if group config options exists in database on plugin install, the new selections won't be taken into account
+Report to admin button for annotations

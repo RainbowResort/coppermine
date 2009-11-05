@@ -298,7 +298,7 @@ function annotate_install() {
     $sql_query = remove_remarks($sql_query);
     $sql_query = split_sql_file($sql_query, ';');
     foreach($sql_query as $q) {
-        cpg_db_query($q);
+        @mysql_query($q);
     }
     // Set the plugin config defaults
     $plugin_config_defaults = array(
