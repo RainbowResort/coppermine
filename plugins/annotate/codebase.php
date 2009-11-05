@@ -337,8 +337,9 @@ function annotate_uninstall() {
         // Delete the plugin config records
         cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_guest'");
         cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_registered'");
-        // Drop the extra plugin table
+        // Drop the extra plugin tables
         cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate");
+        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions");
     }
     return true;
 }
@@ -547,27 +548,29 @@ function annotate_configuration_submit() {
     if (!GALLERY_ADMIN_MODE) {
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
-    
-    // plugin_annotate_permissions_guest (radio)
-    if ($superCage->post->keyExists('plugin_annotate_permissions_guest') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_guest') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_guest') <= '2') ) {
-        if ($superCage->post->getInt('plugin_annotate_permissions_guest') != $CONFIG['plugin_annotate_permissions_guest']) {
-            $CONFIG['plugin_annotate_permissions_guest'] = $superCage->post->getInt('plugin_annotate_permissions_guest');
-            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_guest']}' WHERE name='plugin_annotate_permissions_guest'";
-            cpg_db_query($query);
-            $config_changes_counter++;
+
+    $result = cpg_db_query("SELECT group_id, permission FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions");
+    while($row = mysql_fetch_assoc($result)) {
+        $annotate_permissions[$row['group_id']] = $row['permission'];
+    }
+
+    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
+    while($row = mysql_fetch_assoc($result)) {
+        if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
+            $CONFIG['plugin_annotate_permissions_'.$row['group_id']] = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
+            if ($annotate_permissions[$row['group_id']] == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
+                continue;
+            }
+            elseif (is_numeric($annotate_permissions[$row['group_id']])) {
+                cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions SET permission = '{$CONFIG['plugin_annotate_permissions_'.$row['group_id']]}' WHERE group_id = {$row['group_id']}");
+                $config_changes_counter++;
+            } else {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions (group_id, permission) VALUES('{$row['group_id']}', '{$CONFIG['plugin_annotate_permissions_'.$row['group_id']]}')");
+                $config_changes_counter++;
+            }
         }
     }
-    
-    // plugin_annotate_permissions_registered (radio)
-    if ($superCage->post->keyExists('plugin_annotate_permissions_registered') == TRUE && ($superCage->post->getInt('plugin_annotate_permissions_registered') >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_registered') <= '3') ) {
-        if ($superCage->post->getInt('plugin_annotate_permissions_registered') != $CONFIG['plugin_annotate_permissions_registered']) {
-            $CONFIG['plugin_annotate_permissions_registered'] = $superCage->post->getInt('plugin_annotate_permissions_registered');
-            $query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_annotate_permissions_registered']}' WHERE name='plugin_annotate_permissions_registered'";
-            cpg_db_query($query);
-            $config_changes_counter++;
-        }
-    }
-   
+
     return $config_changes_counter;
 }
 
@@ -578,7 +581,7 @@ function annotate_configure() {
     if (!GALLERY_ADMIN_MODE) {
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
-    
+
     // Form submit?
     if ($superCage->post->keyExists('submit') == TRUE) {
         //Check if the form token is valid
@@ -592,45 +595,9 @@ function annotate_configure() {
             $additional_submit_information .= '<div class="cpg_message_validation">' . $lang_plugin_annotate['no_changes'] . '</div>';
         }
     }
-    
-    // Set the option output stuff 
-    if ($CONFIG['plugin_annotate_permissions_guest'] == '0') {
-        $option_output['plugin_annotate_permissions_guest_0'] = 'checked="checked"';
-        $option_output['plugin_annotate_permissions_guest_1'] = '';
-        $option_output['plugin_annotate_permissions_guest_2'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '1') { // 
-        $option_output['plugin_annotate_permissions_guest_0'] = '';
-        $option_output['plugin_annotate_permissions_guest_1'] = 'checked="checked"';
-        $option_output['plugin_annotate_permissions_guest_2'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_guest'] == '2') { // 
-        $option_output['plugin_annotate_permissions_guest_0'] = '';
-        $option_output['plugin_annotate_permissions_guest_1'] = '';
-        $option_output['plugin_annotate_permissions_guest_2'] = 'checked="checked"';
-    }
-    
-    if ($CONFIG['plugin_annotate_permissions_registered'] == '0') {
-        $option_output['plugin_annotate_permissions_registered_0'] = 'checked="checked"';
-        $option_output['plugin_annotate_permissions_registered_1'] = '';
-        $option_output['plugin_annotate_permissions_registered_2'] = '';
-        $option_output['plugin_annotate_permissions_registered_3'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '1') { // 
-        $option_output['plugin_annotate_permissions_registered_0'] = '';
-        $option_output['plugin_annotate_permissions_registered_1'] = 'checked="checked"';
-        $option_output['plugin_annotate_permissions_registered_2'] = '';
-        $option_output['plugin_annotate_permissions_registered_3'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '2') { // 
-        $option_output['plugin_annotate_permissions_registered_0'] = '';
-        $option_output['plugin_annotate_permissions_registered_1'] = '';
-        $option_output['plugin_annotate_permissions_registered_2'] = 'checked="checked"';
-        $option_output['plugin_annotate_permissions_registered_3'] = '';
-    } elseif ($CONFIG['plugin_annotate_permissions_registered'] == '3') { // 
-        $option_output['plugin_annotate_permissions_registered_0'] = '';
-        $option_output['plugin_annotate_permissions_registered_1'] = '';
-        $option_output['plugin_annotate_permissions_registered_2'] = '';
-        $option_output['plugin_annotate_permissions_registered_3'] = 'checked="checked"';
-    }
-    
-    // Check if guests have greater permissions than registered users    
+
+
+    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission storage change
     if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
         $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
     }
@@ -640,7 +607,36 @@ function annotate_configure() {
     if ($annotate_installation == 1) {
         $additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
     }
-    
+
+    // Fetch user groups
+    $usergroups = "";
+    $result = cpg_db_query("SELECT g.group_id, group_name, has_admin_access, permission FROM {$CONFIG['TABLE_USERGROUPS']} AS g LEFT JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions AS p ON g.group_id = p.group_id ORDER BY g.group_id ASC");
+    while($row = mysql_fetch_assoc($result)) {
+        if ($row['has_admin_access']) continue;
+        $usergroups .= <<< EOT
+            <tr>
+                <td valign="top" align="left" class="tableb">
+                    {$row['group_name']}
+                </td>
+EOT;
+        for ($i=0; $i < 4; $i++) {
+            if (!is_numeric($row['permission']) && $i == 0) {
+                $checked = "checked=\"checked\"";
+            } else {
+                $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+            }
+            $usergroups .= <<< EOT
+                <td valign="top" align="center" class="tableb">
+                    <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $disabled $checked />
+                </td>
+EOT;
+        }
+
+        $usergroups .= <<< EOT
+            </tr>
+EOT;
+    }
+
     list($timestamp, $form_token) = getFormToken();
     
     // Start the actual output
@@ -673,56 +669,7 @@ EOT;
                                     {$annotate_icon_array['permission_delete']}{$lang_plugin_annotate['read_write_delete_annotations']}
                                     </th>
                                 </tr>
-                                <tr>
-                                    <td valign="top" align="left" class="tableb">
-                                        {$lang_plugin_annotate['guests']}
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_0" class="radio" value="0" {$option_output['plugin_annotate_permissions_guest_0']} />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_1" class="radio" value="1" {$option_output['plugin_annotate_permissions_guest_1']} />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_2" class="radio" value="2" {$option_output['plugin_annotate_permissions_guest_2']} disabled="disabled" />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_guest" id="plugin_annotate_permissions_guest_3" class="radio" value="" disabled="disabled" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td valign="top" align="left" class="tableb tableb_alternate">
-                                        {$lang_plugin_annotate['registered_users']}
-                                    </td>
-                                    <td valign="top" align="center" class="tableb tableb_alternate">
-                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_0" class="radio" value="0" {$option_output['plugin_annotate_permissions_registered_0']} />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb tableb_alternate">
-                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_1" class="radio" value="1" {$option_output['plugin_annotate_permissions_registered_1']} />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb tableb_alternate">
-                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_2" class="radio" value="2" {$option_output['plugin_annotate_permissions_registered_2']} />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb tableb_alternate">
-                                        <input type="radio" name="plugin_annotate_permissions_registered" id="plugin_annotate_permissions_registered_3" class="radio" value="3" {$option_output['plugin_annotate_permissions_registered_3']} disabled="disabled" />
-                                </tr>
-                                <tr>
-                                    <td valign="top" align="left" class="tableb">
-                                        {$lang_plugin_annotate['administrators']}
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_0" class="radio" value="" disabled="disabled" />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_1" class="radio" value="" disabled="disabled" />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_2" class="radio" value="" disabled="disabled" />
-                                    </td>
-                                    <td valign="top" align="center" class="tableb">
-                                        <input type="radio" name="plugin_annotate_permissions_administrators" id="plugin_annotate_permissions_administrators_3" class="radio" value="" checked="checked" />
-                                    </td>
-                                </tr>
+                                $usergroups
                             </table>
                         </td>
                     </tr>

@@ -16,3 +16,9 @@
 ## ***************************************************
 
 ALTER TABLE `CPG_plugin_annotate` ADD user_time int(9) default NULL;
+
+CREATE TABLE IF NOT EXISTS `CPG_plugin_annotate_permissions` (
+  group_id smallint(5) unsigned NOT NULL,
+  permission smallint(5) unsigned NOT NULL default 0,
+  PRIMARY KEY  (group_id, permission)
+) TYPE=MyISAM  COMMENT='Contains the permission settings for the annotate plugin';

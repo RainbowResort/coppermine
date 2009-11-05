@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-05 [O] New permission system configuration (enable detailed settings for all user groups) {eenemeenemuu}
 2009-11-05 [A] Added timestamp and database update function {eenemeenemuu}
 2009-11-05 [B] Fixed language display on plugin uninstall {eenemeenemuu}
 2009-11-04 [B] Typo in german language file {eenemeenemuu}
@@ -73,7 +74,6 @@ Todo:
 Move embedded JS into separate file
 Implement permission system (partially done)
 Fix JS errors in IE
-Rewrite permission system configuration and storage (i.e. new table) to enable detailed settings for different custom groups
 Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users {eenemeenemuu - I made a mod/fork and already have some of this code ready. I'll implement it soon}
-Bug: if group config options exists in database on plugin install, the new selections won't be taken into account
-Report to admin button for annotations
+Reflect changes of permission system to all files
+Report to admin button for annotations?
