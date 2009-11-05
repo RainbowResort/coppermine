@@ -611,29 +611,50 @@ function annotate_configure() {
     $usergroups = "";
     $result = cpg_db_query("SELECT g.group_id, group_name, has_admin_access, permission FROM {$CONFIG['TABLE_USERGROUPS']} AS g LEFT JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions AS p ON g.group_id = p.group_id ORDER BY g.group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
-        if ($row['has_admin_access']) continue;
-        $usergroups .= <<< EOT
-            <tr>
-                <td valign="top" align="left" class="tableb">
-                    {$row['group_name']}
-                </td>
-EOT;
-        for ($i=0; $i < 4; $i++) {
-            if (!is_numeric($row['permission']) && $i == 0) {
-                $checked = "checked=\"checked\"";
-            } else {
-                $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
-            }
+        if ($row['has_admin_access'] == "1") {
             $usergroups .= <<< EOT
-                <td valign="top" align="center" class="tableb">
-                    <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $disabled $checked />
-                </td>
+                <tr>
+                    <td valign="top" align="left" class="tableb">
+                        {$row['group_name']}
+                    </td>
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" class="radio" disabled="disabled" />
+                    </td>
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" class="radio" disabled="disabled" />
+                    </td>
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" class="radio" disabled="disabled" />
+                    </td>
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" class="radio" checked="checked" />
+                    </td>
+                </tr>
+EOT;
+        } else {
+            $usergroups .= <<< EOT
+                <tr>
+                    <td valign="top" align="left" class="tableb">
+                        {$row['group_name']}
+                    </td>
+EOT;
+            for ($i=0; $i < 4; $i++) {
+                if (!is_numeric($row['permission']) && $i == 0) {
+                    $checked = "checked=\"checked\"";
+                } else {
+                    $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+                }
+                $usergroups .= <<< EOT
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $disabled $checked />
+                    </td>
+EOT;
+            }
+
+            $usergroups .= <<< EOT
+                </tr>
 EOT;
         }
-
-        $usergroups .= <<< EOT
-            </tr>
-EOT;
     }
 
     list($timestamp, $form_token) = getFormToken();
