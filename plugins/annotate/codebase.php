@@ -548,23 +548,18 @@ function annotate_configuration_submit() {
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
 
-    $result = cpg_db_query("SELECT group_id, permission FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions");
-    while($row = mysql_fetch_assoc($result)) {
-        $annotate_permissions[$row['group_id']] = $row['permission'];
-    }
-
     $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
     while($row = mysql_fetch_assoc($result)) {
         if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
-            $CONFIG['plugin_annotate_permissions_'.$row['group_id']] = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
-            if ($annotate_permissions[$row['group_id']] == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
+            $new_value = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
+            if ($new_value == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
                 continue;
             }
-            elseif (is_numeric($annotate_permissions[$row['group_id']])) {
-                cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions SET permission = '{$CONFIG['plugin_annotate_permissions_'.$row['group_id']]}' WHERE group_id = {$row['group_id']}");
+            elseif (is_numeric($CONFIG['plugin_annotate_permissions_'.$row['group_id']])) {
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_permissions_{$row['group_id']}'");
                 $config_changes_counter++;
             } else {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions (group_id, permission) VALUES('{$row['group_id']}', '{$CONFIG['plugin_annotate_permissions_'.$row['group_id']]}')");
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_permissions_{$row['group_id']}', '$new_value')");
                 $config_changes_counter++;
             }
         }
@@ -609,7 +604,7 @@ function annotate_configure() {
 
     // Fetch user groups
     $usergroups = "";
-    $result = cpg_db_query("SELECT g.group_id, group_name, has_admin_access, permission FROM {$CONFIG['TABLE_USERGROUPS']} AS g LEFT JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions AS p ON g.group_id = p.group_id ORDER BY g.group_id ASC");
+    $result = cpg_db_query("SELECT group_id, group_name, has_admin_access FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
         if ($row['has_admin_access'] == "1") {
             $usergroups .= <<< EOT
@@ -632,6 +627,7 @@ function annotate_configure() {
                 </tr>
 EOT;
         } else {
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_{$row['group_id']}'"),0);
             $usergroups .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
