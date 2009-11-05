@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-05 [A] Added timestamp and database update function {eenemeenemuu}
 2009-11-05 [B] Fixed language display on plugin uninstall {eenemeenemuu}
 2009-11-04 [B] Typo in german language file {eenemeenemuu}
 2009-10-27 [A] Added registration promotion {GauGau}

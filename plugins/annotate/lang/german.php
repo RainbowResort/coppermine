@@ -54,4 +54,6 @@ $lang_plugin_annotate['lastnotes'] = 'zuletzt beschriftete Bilder';
 $lang_plugin_annotate['x_annotations_for_file'] = 'Es sind %s Beschriftungen für diese Datei vorhanden.';
 $lang_plugin_annotate['1_annotation_for_file'] = 'Es ist eine Beschriftungen für diese Datei vorhanden.';
 $lang_plugin_annotate['registration_promotion'] = 'Du musst angemeldet sein, um Beschriftungen anzusehen. %sMelde Dich an%s wenn Du schon ein Benutzerkonto hast oder %sregistriere%s Dich kostenlos.'; // Do not translate the %s placeholders
+$lang_plugin_annotate['update_database'] = 'Datenbank aktualisieren';
+$lang_plugin_annotate['update_database_success'] = 'Datenbank erfolgreich aktualisiert';
 ?>

@@ -292,6 +292,14 @@ function annotate_install() {
     foreach($sql_query as $q) {
         cpg_db_query($q);
     }
+    $db_schema = $thisplugin->fullpath . '/update.sql';
+    $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
+    $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
+    $sql_query = remove_remarks($sql_query);
+    $sql_query = split_sql_file($sql_query, ';');
+    foreach($sql_query as $q) {
+        cpg_db_query($q);
+    }
     // Set the plugin config defaults
     $plugin_config_defaults = array(
                                     'plugin_annotate_permissions_guest' => '1',
@@ -414,6 +422,36 @@ function annotate_page_start() {
         <tr>
             <td class="tableb">
                 {$count_output}
+            </td>
+        </tr>
+EOT;
+        endtable();
+        exit;
+    }
+
+    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('update_database')) {
+        global $CONFIG;
+        require_once './plugins/annotate/init.inc.php';
+        $annotate_init_array = annotate_initialize();
+        $lang_plugin_annotate = $annotate_init_array['language'];
+        $annotate_icon_array = $annotate_init_array['icon'];
+        load_template();
+        pageheader($lang_plugin_annotate['update_database']);
+
+        require 'include/sql_parse.php';
+        $db_schema = './plugins/annotate/update.sql';
+        $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
+        $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
+        $sql_query = remove_remarks($sql_query);
+        $sql_query = split_sql_file($sql_query, ';');
+        foreach($sql_query as $q) {
+            @mysql_query($q);
+        }
+        starttable('-1', $annotate_icon_array['update_database'] . $lang_plugin_annotate['update_database']);
+        echo <<< EOT
+        <tr>
+            <td class="tableb">
+                {$lang_plugin_annotate['update_database_success']}
             </td>
         </tr>
 EOT;

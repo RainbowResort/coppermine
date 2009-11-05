@@ -38,6 +38,7 @@ if ($superCage->post->keyExists('add')){
     $width = $superCage->post->getInt('width');
     $height = $superCage->post->getInt('height');
     $note = addslashes(urldecode($superCage->post->getRaw('note')));
+    $time = time();
     if ($nid){
         $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";
         if (!GALLERY_ADMIN_MODE) {
@@ -46,7 +47,7 @@ if ($superCage->post->keyExists('add')){
         cpg_db_query($sql);
         die("$nid");
     } else {
-        $sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate (pid, posx, posy, width, height, note, user_id) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ")";
+        $sql = "INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate (pid, posx, posy, width, height, note, user_id, user_time) VALUES ($pid, $posx, $posy, $width, $height, '$note', " . USER_ID . ", '$time')";
         cpg_db_query($sql);
         $nid = mysql_insert_id($CONFIG['LINK_ID']);
         die("$nid");

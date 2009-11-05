@@ -54,4 +54,6 @@ $lang_plugin_annotate['lastnotes'] = 'Last annotated pictures';
 $lang_plugin_annotate['x_annotations_for_file'] = 'There are %s annotations for this file.';
 $lang_plugin_annotate['1_annotation_for_file'] = 'There is one annotation for this file.';
 $lang_plugin_annotate['registration_promotion'] = 'You need to be logged in to view annotations. %sLog in%s if you already have an account or %sregister%s for free.'; // Do not translate the %s placeholders
+$lang_plugin_annotate['update_database'] = 'Update database';
+$lang_plugin_annotate['update_database_success'] = 'Database update was successfully';
 ?>
