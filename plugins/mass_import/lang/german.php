@@ -23,16 +23,16 @@ if (!defined('IN_COPPERMINE')) {
 
 $lang_plugin_mass_import['name'] = 'Mass Import';
 $lang_plugin_mass_import['admin_title'] = 'Massen-Import';
-$lang_plugin_mass_import['description'] = 'Das Plugin Massen-Import ermöglicht dem Admin, eine große Anzahl von Dateien aus einer bestehenden Ordner-Struktur zur Galerie hinzuzufügen.';
+$lang_plugin_mass_import['description'] = 'Das Plugin Massen-Import ermÃ¶glicht dem Admin, eine groÃŸe Anzahl von Dateien aus einer bestehenden Ordner-Struktur zur Galerie hinzuzufÃ¼gen.';
 $lang_plugin_mass_import['subdir_desc'] = 'Unterverzeichnis von "albums" oder leer';
 $lang_plugin_mass_import['sleep_desc'] = 'Pause zwischen den einzelnen Import-Schritten';
 $lang_plugin_mass_import['in_milliseconds'] = 'in Millisekunden';
 $lang_plugin_mass_import['hardlimit_desc'] = 'Import-Dateien pro Durchgang';
 $lang_plugin_mass_import['autorun_desc'] = 'Unbeaufsichtigter Ablauf';
-$lang_plugin_mass_import['skipping'] = 'Überspringe Thumbnail und Bild in Zwischengröße';
+$lang_plugin_mass_import['skipping'] = 'Ãœberspringe Thumbnail und Bild in ZwischengrÃ¶ÃŸe';
 $lang_plugin_mass_import['file_already_in_database'] = 'Datei bereits in Datenbank vorhanden';
-$lang_plugin_mass_import['file_added_to_database'] = 'Datei zum Datenbestand hinzugefügt';
-$lang_plugin_mass_import['failed_to_add_file_to_database'] = 'Konnte Datei nicht zum Datenbestand hinzufügen';
+$lang_plugin_mass_import['file_added_to_database'] = 'Datei zum Datenbestand hinzugefÃ¼gt';
+$lang_plugin_mass_import['failed_to_add_file_to_database'] = 'Konnte Datei nicht zum Datenbestand hinzufÃ¼gen';
 $lang_plugin_mass_import['root_create'] = 'Wurzel-Kategorie erzeugt';
 $lang_plugin_mass_import['root_exists'] = 'Wurzel-Kategorie besteht bereits';
 $lang_plugin_mass_import['root_use'] = 'Verwende Wurzel-Kategorie';
@@ -42,12 +42,12 @@ $lang_plugin_mass_import['cat_exists'] = 'Kategorie besteht bereits';
 $lang_plugin_mass_import['cat_create'] = 'Kategorie wurde erzeugt';
 $lang_plugin_mass_import['pics_found'] = 'Dateien Gefunden';
 $lang_plugin_mass_import['pics_indb'] = 'Dateien im Bestand der Datenbank';
-$lang_plugin_mass_import['pics_afterfilter'] = 'Dateien, die nach der Filterung hinzugefügt werden müssen';
+$lang_plugin_mass_import['pics_afterfilter'] = 'Dateien, die nach der Filterung hinzugefÃ¼gt werden mÃ¼ssen';
 $lang_plugin_mass_import['structure_created'] = 'Struktur erzeugt';
-$lang_plugin_mass_import['files_added'] = 'Dateien hinzugefügt';
+$lang_plugin_mass_import['files_added'] = 'Dateien hinzugefÃ¼gt';
 $lang_plugin_mass_import['files_to_add'] = 'Zu verarbeitende Dateien';
 $lang_plugin_mass_import['path'] = 'Pfad';
-$lang_plugin_mass_import['announcement_thread'] = 'Ankündigungs-Thread';
-$lang_plugin_mass_import['install_info'] = 'Der Massen-Import funktioniert ähnlich wie das Batch-Hinzufügen, es ermöglicht aber die verarbeitung einer ganzen Ordnerstruktur mit Unterordnern und Dateien in einem Durchgang. Das Plugin erzeugt Kategorien und Alben entsprechend der Verzeichnisnamen innerhalb der Ordnerstruktur und durchläuft dann diese Struktur und fügt die gefundenen Dateien der Datenbank hinzu und erzeugt Thumbnails und Bilder in Zwischengröße.<br />Dieses Plugin ist ebenfalls empfehlenswert, falls der normale Batch-Hinzufügen-Vorgang zu viele Ressourcen verbraucht und der Webhost deswegen aktiv wird.';
+$lang_plugin_mass_import['announcement_thread'] = 'AnkÃ¼ndigungs-Thread';
+$lang_plugin_mass_import['install_info'] = 'Der Massen-Import funktioniert Ã¤hnlich wie das Batch-HinzufÃ¼gen, es ermÃ¶glicht aber die verarbeitung einer ganzen Ordnerstruktur mit Unterordnern und Dateien in einem Durchgang. Das Plugin erzeugt Kategorien und Alben entsprechend der Verzeichnisnamen innerhalb der Ordnerstruktur und durchlÃ¤uft dann diese Struktur und fÃ¼gt die gefundenen Dateien der Datenbank hinzu und erzeugt Thumbnails und Bilder in ZwischengrÃ¶ÃŸe.<br />Dieses Plugin ist ebenfalls empfehlenswert, falls der normale Batch-HinzufÃ¼gen-Vorgang zu viele Ressourcen verbraucht und der Webhost deswegen aktiv wird.';
 
 ?>
