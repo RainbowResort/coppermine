@@ -336,9 +336,8 @@ function annotate_uninstall() {
         global $CONFIG;
         // Delete the plugin config records
         cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_%'");
-        // Drop the extra plugin tables
+        // Drop the extra plugin table
         cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate");
-        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions");
     }
     return true;
 }
@@ -548,7 +547,7 @@ function annotate_configuration_submit() {
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
 
-    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
+    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']} WHERE has_admin_access != '1'");
     while($row = mysql_fetch_assoc($result)) {
         if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
             $new_value = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
