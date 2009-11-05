@@ -22,3 +22,6 @@ CREATE TABLE IF NOT EXISTS `CPG_plugin_annotate_permissions` (
   permission smallint(5) unsigned NOT NULL default 0,
   PRIMARY KEY  (group_id, permission)
 ) TYPE=MyISAM  COMMENT='Contains the permission settings for the annotate plugin';
+
+DELETE FROM CPG_config WHERE name LIKE 'plugin_annotate_permissions_guest';
+DELETE FROM CPG_config WHERE name LIKE 'plugin_annotate_permissions_registered';

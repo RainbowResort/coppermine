@@ -335,8 +335,7 @@ function annotate_uninstall() {
     if ($superCage->post->getInt('drop') == 1) {
         global $CONFIG;
         // Delete the plugin config records
-        cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_guest'");
-        cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_registered'");
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_%'");
         // Drop the extra plugin tables
         cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate");
         cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_annotate_permissions");
