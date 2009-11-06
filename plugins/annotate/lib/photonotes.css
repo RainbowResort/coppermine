@@ -70,12 +70,12 @@ container-inactive container-active
     display:none;
 }
 
-.fn-note-edit TEXTAREA {
+.fn-note-edit #fn-note-edit-text-textbox {
     border:0;
     overflow:visible;
     margin-bottom:10px;
-    padding:0;
-    width:180px;
+    padding:6px;
+    width:186px;
     margin:0;
 }
 

@@ -38,6 +38,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-06 [B] Replaced textarea with input field (annotations don't load if there are multi-line annotations) {eenemeenemuu}
+2009-11-06 [C] Moved textarea from bottom to right {eenemeenemuu}
 2009-11-06 [A] List existing annotations of the currently viewed album for easier/faster annotation {eenemeenemuu}
 2009-11-06 [A] View all pictures of the same annotation {eenemeenemuu}
 2009-11-06 [A] New permission system configuration (enable detailed settings for all user groups) {eenemeenemuu}
@@ -75,9 +77,10 @@ Todo:
 =====
 Move embedded JS into separate file
 Implement permission system (partially done)
+Bug (feature?): Users cannot edit/delete their own annotations (maybe config toggle?)
 Fix JS errors in IE
-Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users {eenemeenemuu - I made a mod/fork and already have some of this code ready. I'll implement it soon}
-Bug: Users cannot edit/delete their own annotations
-Add mysql_free_result() to new queries
+Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users
+Add new config option: Show 'List existing annotations of the currently viewed album' to usergroups xyz
+Add new config option: Show 'View all pictures of the same annotation' to usergroups xyz
 Report to admin button for annotations?
-Avoid getRaw()
+Test in bridging mode (especially configuration and permission level detection)

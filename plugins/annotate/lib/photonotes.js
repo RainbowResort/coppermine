@@ -368,7 +368,8 @@ PhotoNote.prototype.CreateElements = function()
     var editAreaText = document.createElement('div');
     editAreaText.className = 'fn-note-edit-text';
     
-    var newTextbox = document.createElement('textarea');
+    var newTextbox = document.createElement('input');
+    newTextbox.id = 'fn-note-edit-text-textbox';
     newTextbox.value = this.text;
     
     editAreaText.appendChild(newTextbox);
@@ -523,22 +524,22 @@ PhotoNote.prototype.PositionNote = function()
     this.gui.ElementRect.style.top  = this.rect.top + 'px';
     this.gui.ElementRect.style.width  = this.rect.width + 'px';
     this.gui.ElementRect.style.height  = this.rect.height + 'px';
-    
+
     // black border
     this.gui.ElementRect.firstChild.style.width  = parseInt(this.gui.ElementRect.style.width) - 2 + 'px';
-    this.gui.ElementRect.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 2 + 'px';        
+    this.gui.ElementRect.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 2 + 'px';
     
     // white border
     this.gui.ElementRect.firstChild.firstChild.style.width  = parseInt(this.gui.ElementRect.style.width) - 4 + 'px';
-    this.gui.ElementRect.firstChild.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 4 + 'px';        
+    this.gui.ElementRect.firstChild.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 4 + 'px';
 
     // inner box
     this.gui.ElementRect.firstChild.firstChild.firstChild.style.width  = parseInt(this.gui.ElementRect.style.width) - 6 + 'px';
-    this.gui.ElementRect.firstChild.firstChild.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 6 + 'px';        
- 
-    this.gui.ElementNote.style.left  = this.rect.left + this.XOffset + 'px';
-    this.gui.ElementNote.style.top  = this.rect.top + this.YOffset + this.rect.height + 'px';
-   
+    this.gui.ElementRect.firstChild.firstChild.firstChild.style.height  = parseInt(this.gui.ElementRect.style.height) - 6 + 'px';
+
+    this.gui.ElementNote.style.left  = this.rect.left + this.YOffset + this.rect.width + 'px';
+    this.gui.ElementNote.style.top  = this.rect.top - 4 + 'px';
+
 }
 
 

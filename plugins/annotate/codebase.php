@@ -68,7 +68,7 @@ function annotate_file_data($data){
     if (annotate_get_permission_level() >= 2) {
         $data['menu'] .= <<< EOT
         <script type="text/javascript">
-            document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote();" rel="nofollow">');
+            document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
             document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
             document.write('</a>');
         </script>
@@ -100,7 +100,9 @@ EOT;
             // Stop processing the annotations any further
             return $data;
         } elseif (!USER_ID && annotate_get_permission_level() == 0) {
-            $max_permission_level = mysql_result(cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_permissions_%'"),0);
+            $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_permissions_%'");
+            $max_permission_level = mysql_result($result, 0);
+            mysql_free_result($result);
             if ($max_permission_level >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
                 // There are annotations, so let's promote them
                 if ($nr_notes == 1) {
@@ -166,6 +168,7 @@ EOT;
                 $btns_person .= "</div>";
                 $html = $btns_person.$html;
             }
+            mysql_free_result($result);
         }
 
         // list annotations from the currently viewed picture // TODO - add config option to toggle display
@@ -429,10 +432,13 @@ function annotate_page_start() {
             $pids[] = $row[0];
         }
         $pids = implode(",", $pids);
+        mysql_free_result($result);
 
         $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
         list($count) = mysql_fetch_row($result);
-        $result = cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
+        mysql_free_result($result);
+        
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
         if ($count == 1) {
             $count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
         } else {
@@ -511,7 +517,7 @@ function annotate_get_pic_pos($album) {
 
         case 'shownotes':
             $superCage = Inspekt::makeSuperCage();
-            $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+            $note = $superCage->get->keyExists('note') ? $superCage->get->getEscaped('note') : $superCage->cookie->getEscaped($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
 
             $query = "SELECT DISTINCT p.pid 
@@ -585,7 +591,7 @@ function annotate_meta_album($meta) {
 
         case 'shownotes':
             $superCage = Inspekt::makeSuperCage();
-            $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+            $note = $superCage->get->keyExists('note') ? $superCage->get->getEscaped('note') : $superCage->cookie->getEscaped($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
 
             $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '$note'";
@@ -642,6 +648,7 @@ function annotate_configuration_submit() {
             }
         }
     }
+    mysql_free_result($result);
 
     return $config_changes_counter;
 }
@@ -728,6 +735,7 @@ EOT;
 EOT;
         }
     }
+    mysql_free_result($result);
 
     list($timestamp, $form_token) = getFormToken();
     
@@ -787,7 +795,9 @@ EOT;
 function annotate_get_permission_level() {
     global $CONFIG;
 
-    $user = mysql_fetch_assoc(cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID));
+    $result = cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID);
+    $user = mysql_fetch_assoc($result);
+    mysql_free_result($result);
     if ($user['user_group_list'] != "") {
         $user_group_list = explode(",", $user['user_group_list']);
     }
@@ -797,7 +807,9 @@ function annotate_get_permission_level() {
         $user_group_list[$i] = "name = 'plugin_annotate_permissions_{$user_group_list[$i]}'";
     }
 
-    $permission_level = mysql_result(cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $user_group_list)),0);
+    $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $user_group_list));
+    $permission_level = mysql_result($result, 0);
+    mysql_free_result($result);
     $permission_level = $permission_level > 0 ? $permission_level : 0;
     $permission_level = GALLERY_ADMIN_MODE ? 3 : $permission_level;
 
