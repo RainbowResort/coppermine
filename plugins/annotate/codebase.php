@@ -52,10 +52,8 @@ function annotate_meta($meta){
     set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
     if (GALLERY_ADMIN_MODE) {
         set_js_var('visitor_annotate_permission_level', 3);
-        set_js_var('visitor_annotate_gallery_admin_mode', 'true');
     } else {
         set_js_var('visitor_annotate_permission_level', annotate_get_permission_level());
-        set_js_var('visitor_annotate_gallery_admin_mode', 'false');
     }
     set_js_var('visitor_annotate_user_id', USER_ID);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
@@ -188,8 +186,8 @@ EOT;
             $html .= $on_this_pic_div;
         }
 
-        $user_id  = USER_ID;
-        $admin = GALLERY_ADMIN_MODE ? 'true' : 'false';
+        $permission_level = annotate_get_permission_level();
+        $user_id = USER_ID;
         
         $html .= <<< EOT
         
@@ -211,7 +209,7 @@ for (var n = 0; n < annotations.length; n++){
     note.ondelete = function (note) { return ajax_delete(note); };
     /* assign the note id number */
     note.nid = annotations[n].nid;
-    if (!$admin && note.user_id != $user_id) note.editable = false;
+    if ($permission_level < 3 && annotations[n].user_id != $user_id) note.editable = false;
     /* add it to the container */
     notes.AddNote(note);
 }
@@ -812,6 +810,8 @@ function annotate_get_permission_level() {
     mysql_free_result($result);
     $permission_level = $permission_level > 0 ? $permission_level : 0;
     $permission_level = GALLERY_ADMIN_MODE ? 3 : $permission_level;
+
+    // TODO if visitor = guest: detect guest group and set permission level
 
     return $permission_level;
 }

@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-06 [B] Fixed bug 'users cannot edit/delete their own annotations' {eenemeenemuu}
 2009-11-06 [B] Replaced textarea with input field (annotations don't load if there are multi-line annotations) {eenemeenemuu}
 2009-11-06 [C] Moved textarea from bottom to right {eenemeenemuu}
 2009-11-06 [A] List existing annotations of the currently viewed album for easier/faster annotation {eenemeenemuu}
@@ -77,7 +78,6 @@ Todo:
 =====
 Move embedded JS into separate file
 Implement permission system (partially done)
-Bug (feature?): Users cannot edit/delete their own annotations (maybe config toggle?)
 Fix JS errors in IE
 Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users
 Add new config option: Show 'List existing annotations of the currently viewed album' to usergroups xyz
