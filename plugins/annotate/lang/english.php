@@ -56,4 +56,7 @@ $lang_plugin_annotate['1_annotation_for_file'] = 'There is one annotation for th
 $lang_plugin_annotate['registration_promotion'] = 'You need to be logged in to view annotations. %sLog in%s if you already have an account or %sregister%s for free.'; // Do not translate the %s placeholders
 $lang_plugin_annotate['update_database'] = 'Update database';
 $lang_plugin_annotate['update_database_success'] = 'Database update was successfully';
+$lang_plugin_annotate['on_this_pic'] = 'On this picture';
+$lang_plugin_annotate['all_pics_of'] = 'Show all pictures of';
+$lang_plugin_annotate['rapid_annotation'] = 'Rapid annotation';
 ?>

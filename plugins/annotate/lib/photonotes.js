@@ -224,10 +224,10 @@ PhotoNote.prototype.DisableNote = function ()
 /* nibbler */
 PhotoNote.prototype.EnableNote = function ()
 {
-	if (this.editable)
-	{
-		this.dragresize.enabled=true;
-	}
+    if (this.editable)
+    {
+        this.dragresize.enabled=true;
+    }
 }
 
 PhotoNote.prototype.HideNoteText = function ()
@@ -286,7 +286,6 @@ PhotoNote.prototype.SetEditable = function(editable)
 
 PhotoNote.prototype.HighlightTextbox = function ()
 {
-    // get the textarea and select the text...
     if(this.gui.EditArea.style.display=='block')
     {
         var textfield = this.gui.TextBox;
@@ -294,7 +293,6 @@ PhotoNote.prototype.HighlightTextbox = function ()
                 try
                 {
                     textfield.focus();
-                    textfield.select();
                 }
                 catch(e) {}
             }, 200);
@@ -359,7 +357,7 @@ PhotoNote.prototype.CreateElements = function()
     
     var titleArea = document.createElement('div');
     //titleArea.className = 'fn-note-text';
-	titleArea.className = 'tableh1';
+    titleArea.className = 'tableh1';
     var t = document.createTextNode(this.text);
     titleArea.appendChild(t);
     noteArea.appendChild(titleArea);
@@ -387,9 +385,9 @@ PhotoNote.prototype.CreateElements = function()
             
             if(currentNote.onsave) 
             {
-            	/* nibbler */
-				currentNote.text = currentNote.gui.TextBox.value;
-            	 
+                /* nibbler */
+                currentNote.text = currentNote.gui.TextBox.value;
+                
                 var res = currentNote.onsave(currentNote);
                 if(res > 0)
                 {
@@ -650,21 +648,21 @@ Array.prototype.clear = function () {
 };
 
 Array.prototype.remove = function (element) {
-	var result = false;
-	var array = [];
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] == element) {
-			result = true;
-		} else {
-			array.push(this[i]);
-		}
-	}
-	this.clear();
-	for (var i = 0; i < array.length; i++) {
-		this.push(array[i]);
-	}
-	array = null;
-	return result;
+    var result = false;
+    var array = [];
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == element) {
+            result = true;
+        } else {
+            array.push(this[i]);
+        }
+    }
+    this.clear();
+    for (var i = 0; i < array.length; i++) {
+        this.push(array[i]);
+    }
+    array = null;
+    return result;
 };
 
 // *** Drag and Resize Library Code ***

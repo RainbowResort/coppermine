@@ -145,6 +145,46 @@ EOT;
             $html = $panorama_viewer_matches[1].$html.$panorama_viewer_matches[3];
         }
 
+        $superCage = Inspekt::MakeSuperCage();
+
+        // list existing annotations of the currently viewed album // TODO - add config option to toggle display
+        $btns_person = "";
+        if ($superCage->get->getInt('album')) {
+            $result = cpg_db_query("
+                SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} p
+                ON p.pid = n.pid
+                WHERE p.aid = {$superCage->get->getInt('album')}
+                ORDER BY note
+            ");
+
+            if (mysql_num_rows($result)) {
+                $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
+                while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+                    $btns_person .= "<span onclick=\"return addnote('{$row[0]}')\" class=\"button\" style=\"cursor:pointer;\" title=\"{$row[0]} auf dem Bild markieren\">&nbsp;{$row[0]}&nbsp;</span> ";
+                }
+                $btns_person .= "</div>";
+                $html = $btns_person.$html;
+            }
+        }
+
+        // list annotations from the currently viewed picture // TODO - add config option to toggle display
+        if ($nr_notes > 0) {
+            $on_this_pic_array = array();
+            $n = 0;
+            foreach($notes as $value) {
+                $on_this_pic_array[] = "<a href=\"thumbnails.php?album=shownotes&amp;note={$value['note']}\" class=\"admin_menu\" title=\"{$lang_plugin_annotate['all_pics_of']} {$value['note']}\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">{$value['note']}</a> ";
+                $n++;
+            }
+            sort($on_this_pic_array);
+            $on_this_pic_div = "<div id=\"on_this_pic\" style=\"white-space:normal; cursor:default; padding-bottom:4px;\"> {$lang_plugin_annotate['on_this_pic']}: ";
+            foreach($on_this_pic_array as $value) {
+                $on_this_pic_div .= $value;
+            }
+            $on_this_pic_div .= "</div>";
+            $html .= $on_this_pic_div;
+        }
+
         $user_id  = USER_ID;
         $admin = GALLERY_ADMIN_MODE ? 'true' : 'false';
         
@@ -183,11 +223,11 @@ addEvent(container, 'mouseover', function() {
          notes.HideAllNotes();
     });
 
-function addnote(){
+function addnote(note_text){
     if (js_vars.visitor_annotate_permission_level < 2) {
         return false;
     }
-    var newNote = new PhotoNote('','note' + n,new PhotoNoteRect(10,10,50,50));
+    var newNote = new PhotoNote(note_text,'note' + n,new PhotoNoteRect(10,10,50,50));
     newNote.onsave = function (note) { return ajax_save(note); };
     newNote.ondelete = function (note) { return ajax_delete(note); };
     notes.AddNote(newNote);
@@ -370,7 +410,8 @@ EOT;
 function annotate_page_start() {
     global $lang_meta_album_names;
 
-    $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations';
+    $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations'; // TODO - i18n
+    $lang_meta_album_names['shownotes'] = 'Pictures of: ....'; // TODO - i18n
 
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
@@ -445,29 +486,83 @@ EOT;
 function annotate_get_pic_pos($album) {
     global $CONFIG, $pid, $RESTRICTEDWHERE;
 
-    if ($album === 'lastnotes') {
-        $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid = $pid";
-        $result = cpg_db_query($query);
-        $nid = mysql_result($result, 0);
-        mysql_free_result($result);            
-
-        $query = "SELECT COUNT(DISTINCT n.pid) 
-            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
-            INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
-            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
-            $RESTRICTEDWHERE
-            AND approved = 'YES'
-            AND n.nid > $nid";
-
+    switch ($album) {
+        case 'lastnotes':
+            $query = "SELECT MAX(nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid = $pid";
             $result = cpg_db_query($query);
+            $nid = mysql_result($result, 0);
+            mysql_free_result($result);            
 
-            list($pos) = mysql_fetch_row($result);
-            mysql_free_result($result);
+            $query = "SELECT COUNT(DISTINCT n.pid) 
+                FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r on r.aid = p.aid 
+                $RESTRICTEDWHERE
+                AND approved = 'YES'
+                AND n.nid > $nid";
 
-        return $pos;
-    } else {
-        return $album;
+                $result = cpg_db_query($query);
+
+                list($pos) = mysql_fetch_row($result);
+                mysql_free_result($result);
+
+            return $pos;
+            break;
+
+        case 'shownotes':
+            $superCage = Inspekt::makeSuperCage();
+            $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+            setcookie($CONFIG['cookie_name'].'note', $note);
+
+            $query = "SELECT DISTINCT p.pid 
+                FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid 
+                INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES' 
+                AND n.note = '$note' 
+                GROUP BY p.pid 
+                ORDER BY p.pid DESC";
+
+                $result = cpg_db_query($query);
+                $pos = 0;
+                while($row = mysql_fetch_assoc($result)) {
+                    if ($row['pid'] == $pid) {
+                        break;
+                    }
+                    $pos++;
+                }
+                mysql_free_result($result);
+
+            return $pos;
+            break;
+
+        default: 
+            return $album;
     }
+}
+
+
+function annotate_get_shownotes_values() {
+    global $CONFIG;
+    $superCage = Inspekt::makeSuperCage();
+
+    $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+    setcookie($CONFIG['cookie_name'].'note', $note);
+
+    $return['columns'] = "";
+    $return['tables'] = "{$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid";
+    $return['where'] = "";
+    $return['suffix'] = "";
+    $return['order'] = "p.pid";
+
+    if ($note != "") {
+        $return['columns'] .= ", COUNT(DISTINCT note) AS anzahl";
+        $return['tables'] .= " INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid";
+        $return['where'] .= "AND n.note = '$note'";
+        $return['suffix'] = "GROUP BY p.pid";
+    }
+
+    return $return;
 }
 
 
@@ -478,38 +573,65 @@ function annotate_meta_album($meta) {
     $annotate_init_array = annotate_initialize();
     $lang_plugin_annotate = $annotate_init_array['language'];
     $annotate_icon_array = $annotate_init_array['icon'];
-    if ($meta['album'] === 'lastnotes') {
-        $album_name = $annotate_icon_array['annotate'] . ' ' . $lang_plugin_annotate['lastnotes'];
-        if ($CURRENT_CAT_NAME) {
-            $album_name .= " - $CURRENT_CAT_NAME";
-        }
+    
+    switch ($meta['album']) {
+        case 'lastnotes':
+            $album_name = $annotate_icon_array['annotate'] . ' ' . $lang_plugin_annotate['lastnotes'];
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
 
-        $query = "SELECT DISTINCT n.pid 
-            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
-            INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
-            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
-            $RESTRICTEDWHERE";
+            $query = "SELECT DISTINCT n.pid 
+                FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE";
 
-        $result = cpg_db_query($query);
-        $count = mysql_num_rows($result);
-        mysql_free_result($result);
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
 
-        $query = "SELECT *
-            FROM {$CONFIG['TABLE_PICTURES']} AS p
-            INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n1 ON p.pid = n1.pid 
-            INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
-            $RESTRICTEDWHERE 
-            AND approved = 'YES'
-            AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n2 WHERE n1.pid = n2.pid)
-            ORDER BY n1.nid DESC {$meta['limit']}";
+            $query = "SELECT *
+                FROM {$CONFIG['TABLE_PICTURES']} AS p
+                INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n1 ON p.pid = n1.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n2 WHERE n1.pid = n2.pid)
+                ORDER BY n1.nid DESC {$meta['limit']}";
 
-        $result = cpg_db_query($query);
-        $rowset = cpg_db_fetch_rowset($result);
-        mysql_free_result($result);
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
 
-        build_caption($rowset, array('msg_date'));
-    } else {
-        return $meta;
+            build_caption($rowset, array('msg_date'));
+            break;
+
+        case 'shownotes':
+            $album_name = cpg_fetch_icon('search', 2)." Suchergebnisse"; // TODO - i18n
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
+
+            $superCage = Inspekt::makeSuperCage();
+            $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+            setcookie($CONFIG['cookie_name'].'note', $note);
+
+            $query = "SELECT p.pid FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid $RESTRICTEDWHERE AND approved = 'YES' AND n.note = '$note' GROUP BY p.pid";
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
+
+            $query = "SELECT p.*, r.title FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid $RESTRICTEDWHERE AND approved = 'YES' AND n.note = '$note' GROUP BY p.pid ORDER BY p.pid DESC {$meta['limit']}";
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset);
+            break;
+
+        default:
+            return $meta;
     }
     
     $meta['album_name'] = $album_name;
@@ -570,12 +692,10 @@ function annotate_configure() {
         }
     }
 
-
-    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect guests? Fixed group_id 3?
+    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect the guest group? Fixed group_id 3?
     if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
         $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
     }
-    
 
     // Create the table row that is displayed during initial install
     if ($annotate_installation == 1) {

@@ -38,6 +38,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-06 [A] List existing annotations of the currently viewed album for easier/faster annotation {eenemeenemuu}
+2009-11-06 [A] View all pictures of the same annotation {eenemeenemuu}
 2009-11-06 [A] New permission system configuration (enable detailed settings for all user groups) {eenemeenemuu}
 2009-11-05 [A] Added timestamp and database update function {eenemeenemuu}
 2009-11-05 [B] Fixed language display on plugin uninstall {eenemeenemuu}

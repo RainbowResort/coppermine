@@ -56,4 +56,7 @@ $lang_plugin_annotate['1_annotation_for_file'] = 'Es ist eine Beschriftungen fü
 $lang_plugin_annotate['registration_promotion'] = 'Du musst angemeldet sein, um Beschriftungen anzusehen. %sMelde Dich an%s wenn Du schon ein Benutzerkonto hast oder %sregistriere%s Dich kostenlos.'; // Do not translate the %s placeholders
 $lang_plugin_annotate['update_database'] = 'Datenbank aktualisieren';
 $lang_plugin_annotate['update_database_success'] = 'Datenbank erfolgreich aktualisiert';
+$lang_plugin_annotate['on_this_pic'] = 'Auf diesem Bild';
+$lang_plugin_annotate['all_pics_of'] = 'Zeige alle Bilder mit';
+$lang_plugin_annotate['rapid_annotation'] = 'Schnellbeschriftung';
 ?>
