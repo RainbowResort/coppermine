@@ -50,16 +50,11 @@ function annotate_meta($meta){
     set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
     set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
     set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
-    set_js_var('config_annotate_permissions_guest', $CONFIG['plugin_annotate_permissions_guest']);
-    set_js_var('config_annotate_permissions_registered', $CONFIG['plugin_annotate_permissions_registered']);
     if (GALLERY_ADMIN_MODE) {
         set_js_var('visitor_annotate_permission_level', 3);
-        set_js_var('visitor_annotate_gallery_admin_mode', 'true');	
-    } elseif (USER_ID) {
-        set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_registered']);
-        set_js_var('visitor_annotate_gallery_admin_mode', 'false');
+        set_js_var('visitor_annotate_gallery_admin_mode', 'true');
     } else {
-        set_js_var('visitor_annotate_permission_level', $CONFIG['plugin_annotate_permissions_guest']);
+        set_js_var('visitor_annotate_permission_level', annotate_get_permission_level());
         set_js_var('visitor_annotate_gallery_admin_mode', 'false');
     }
     set_js_var('visitor_annotate_user_id', USER_ID);
@@ -70,12 +65,7 @@ function annotate_meta($meta){
 function annotate_file_data($data){
     global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array, $REFERER;
     // Determine if the visitor is allowed to have that button
-    if ( (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] >= 2)
-         ||
-         GALLERY_ADMIN_MODE
-         ||
-         (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] >= 2)
-        ) {
+    if (annotate_get_permission_level() >= 2) {
         $data['menu'] .= <<< EOT
         <script type="text/javascript">
             document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote();" rel="nofollow">');
@@ -106,11 +96,12 @@ EOT;
         $nr_notes = count($notes);
         
         // Visitor can view annotations in the first place?
-        if (USER_ID && $CONFIG['plugin_annotate_permissions_registered'] == 0 && !GALLERY_ADMIN_MODE) {
+        if (USER_ID && annotate_get_permission_level() == 0) {
             // Stop processing the annotations any further
             return $data;
-        } elseif (!USER_ID && $CONFIG['plugin_annotate_permissions_guest'] == 0) {
-            if ($CONFIG['plugin_annotate_permissions_registered'] >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
+        } elseif (!USER_ID && annotate_get_permission_level() == 0) {
+            $max_permission_level = mysql_result(cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_permissions_%'"),0);
+            if ($max_permission_level >= 1 && $nr_notes > 0 && $CONFIG['allow_user_registration'] != 0) {
                 // There are annotations, so let's promote them
                 if ($nr_notes == 1) {
                     $data['footer'] .= $lang_plugin_annotate['1_annotation_for_file'] . '<br />' . $LINEBREAK;
@@ -300,17 +291,7 @@ function annotate_install() {
     foreach($sql_query as $q) {
         @mysql_query($q);
     }
-    // Set the plugin config defaults
-    $plugin_config_defaults = array(
-                                    'plugin_annotate_permissions_guest' => '1',
-                                    'plugin_annotate_permissions_registered' => '2',
-                                    );
-    foreach ($plugin_config_defaults as $key => $value) {
-        if (!$CONFIG[$key]) {
-            $CONFIG[$key] = $value;
-        }
-    }
-    
+
     if ($superCage->post->keyExists('submit')) {
         annotate_configuration_submit();
         return true;
@@ -549,9 +530,9 @@ function annotate_configuration_submit() {
 
     $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']} WHERE has_admin_access != '1'");
     while($row = mysql_fetch_assoc($result)) {
-        if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
+        if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
             $new_value = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
-            if ($new_value == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
+            if ($new_value === $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
                 continue;
             }
             elseif (is_numeric($CONFIG['plugin_annotate_permissions_'.$row['group_id']])) {
@@ -590,7 +571,7 @@ function annotate_configure() {
     }
 
 
-    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission storage change
+    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect guests? Fixed group_id 3?
     if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
         $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
     }
@@ -704,6 +685,27 @@ EOT;
             </form>
 
 EOT;
+}
+
+
+function annotate_get_permission_level() {
+    global $CONFIG;
+
+    $user = mysql_fetch_assoc(cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID));
+    if ($user['user_group_list'] != "") {
+        $user_group_list = explode(",", $user['user_group_list']);
+    }
+    $user_group_list[] = $user['user_group'];
+    
+    for($i=0; $i<count($user_group_list); $i++) {
+        $user_group_list[$i] = "name = 'plugin_annotate_permissions_{$user_group_list[$i]}'";
+    }
+
+    $permission_level = mysql_result(cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $user_group_list)),0);
+    $permission_level = $permission_level > 0 ? $permission_level : 0;
+    $permission_level = GALLERY_ADMIN_MODE ? 3 : $permission_level;
+
+    return $permission_level;
 }
 
 

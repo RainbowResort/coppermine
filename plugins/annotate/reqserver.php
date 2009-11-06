@@ -23,7 +23,7 @@ if (!defined('IN_COPPERMINE')) {
 if (!USER_ID) {
     die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
 } elseif (!GALLERY_ADMIN_MODE) {
-    if ($CONFIG['plugin_annotate_permissions_registered'] < 2) {
+    if (annotate_get_permission_level() < 2) {
         die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
     }
 } 

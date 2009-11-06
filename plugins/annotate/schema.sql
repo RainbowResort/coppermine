@@ -15,9 +15,6 @@
 ##  $Date: 2009-10-12 17:29:23 +0200 (Mo, 12. Okt 2009) $
 ## ***************************************************
 
-INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_annotate_permissions_guest', '1');
-INSERT IGNORE INTO CPG_config (`name`, `value`) VALUES ('plugin_annotate_permissions_registered', '2');
-
 CREATE TABLE IF NOT EXISTS `CPG_plugin_annotate` (
   nid smallint(5) unsigned NOT NULL auto_increment,
   pid mediumint(8) unsigned NOT NULL,
