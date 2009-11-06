@@ -51,6 +51,7 @@ $lang_plugin_annotate['read_write_annotations'] = 'Read and create annotations';
 $lang_plugin_annotate['read_write_delete_annotations'] = 'Read, create and delete annotations';
 $lang_plugin_annotate['no_access'] = 'No access';
 $lang_plugin_annotate['lastnotes'] = 'Last annotated pictures';
+$lang_plugin_annotate['shownotes'] = 'Pictures of';
 $lang_plugin_annotate['x_annotations_for_file'] = 'There are %s annotations for this file.';
 $lang_plugin_annotate['1_annotation_for_file'] = 'There is one annotation for this file.';
 $lang_plugin_annotate['registration_promotion'] = 'You need to be logged in to view annotations. %sLog in%s if you already have an account or %sregister%s for free.'; // Do not translate the %s placeholders

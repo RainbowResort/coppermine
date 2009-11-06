@@ -51,6 +51,7 @@ $lang_plugin_annotate['read_write_annotations'] = 'Beschriftungen lesen und schr
 $lang_plugin_annotate['read_write_delete_annotations'] = 'Beschriftungen lesen, schreiben und löschen';
 $lang_plugin_annotate['no_access'] = 'kein Zugriff';
 $lang_plugin_annotate['lastnotes'] = 'zuletzt beschriftete Bilder';
+$lang_plugin_annotate['shownotes'] = 'Bilder mit';
 $lang_plugin_annotate['x_annotations_for_file'] = 'Es sind %s Beschriftungen für diese Datei vorhanden.';
 $lang_plugin_annotate['1_annotation_for_file'] = 'Es ist eine Beschriftungen für diese Datei vorhanden.';
 $lang_plugin_annotate['registration_promotion'] = 'Du musst angemeldet sein, um Beschriftungen anzusehen. %sMelde Dich an%s wenn Du schon ein Benutzerkonto hast oder %sregistriere%s Dich kostenlos.'; // Do not translate the %s placeholders

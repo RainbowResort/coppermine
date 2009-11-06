@@ -411,7 +411,7 @@ function annotate_page_start() {
     global $lang_meta_album_names;
 
     $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations'; // TODO - i18n
-    $lang_meta_album_names['shownotes'] = 'Pictures of: ....'; // TODO - i18n
+    $lang_meta_album_names['shownotes'] = 'Pictures of \'....\''; // TODO - i18n
 
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
@@ -542,30 +542,6 @@ function annotate_get_pic_pos($album) {
 }
 
 
-function annotate_get_shownotes_values() {
-    global $CONFIG;
-    $superCage = Inspekt::makeSuperCage();
-
-    $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
-    setcookie($CONFIG['cookie_name'].'note', $note);
-
-    $return['columns'] = "";
-    $return['tables'] = "{$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid";
-    $return['where'] = "";
-    $return['suffix'] = "";
-    $return['order'] = "p.pid";
-
-    if ($note != "") {
-        $return['columns'] .= ", COUNT(DISTINCT note) AS anzahl";
-        $return['tables'] .= " INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid";
-        $return['where'] .= "AND n.note = '$note'";
-        $return['suffix'] = "GROUP BY p.pid";
-    }
-
-    return $return;
-}
-
-
 // New meta albums
 function annotate_meta_album($meta) {
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE, $lang_plugin_annotate;
@@ -608,14 +584,14 @@ function annotate_meta_album($meta) {
             break;
 
         case 'shownotes':
-            $album_name = cpg_fetch_icon('search', 2)." Suchergebnisse"; // TODO - i18n
-            if ($CURRENT_CAT_NAME) {
-                $album_name .= " - $CURRENT_CAT_NAME";
-            }
-
             $superCage = Inspekt::makeSuperCage();
             $note = $superCage->get->keyExists('note') ? trim(preg_replace("[\s+]", " ", $superCage->get->getRaw('note'))) : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
+
+            $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '$note'";
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
 
             $query = "SELECT p.pid FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid $RESTRICTEDWHERE AND approved = 'YES' AND n.note = '$note' GROUP BY p.pid";
             $result = cpg_db_query($query);

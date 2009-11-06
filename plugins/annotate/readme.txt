@@ -78,4 +78,6 @@ Implement permission system (partially done)
 Fix JS errors in IE
 Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users {eenemeenemuu - I made a mod/fork and already have some of this code ready. I'll implement it soon}
 Bug: Users cannot edit/delete their own annotations
+Add mysql_free_result() to new queries
 Report to admin button for annotations?
+Avoid getRaw()
