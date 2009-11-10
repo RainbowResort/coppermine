@@ -53,7 +53,7 @@ class View {
         include_once($viewPath);
         $fr_contents = ob_get_contents();
         ob_end_clean();
-        if (empty($fr_title) || !$fr_title) $fr_title = Config::item('fr_title');
+        if (empty($fr_title) || !$fr_title) $fr_title = $vars[nagavitor][0][1] . " - " . Config::item('fr_title');
         include_once($this->getMainPath());
     }
 }
