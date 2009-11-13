@@ -56,6 +56,7 @@ function annotate_meta($meta){
         set_js_var('visitor_annotate_permission_level', annotate_get_level('permissions'));
     }
     set_js_var('visitor_annotate_user_id', USER_ID);
+    set_js_var('annotate_notes_editable', annotate_notes_editable());
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
     return $meta;
 }
@@ -64,13 +65,43 @@ function annotate_file_data($data){
     global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array, $REFERER;
     // Determine if the visitor is allowed to have that button
     if (annotate_get_level('permissions') >= 2) {
-        $data['menu'] .= <<< EOT
-        <script type="text/javascript">
-            document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
-            document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
-            document.write('</a>');
-        </script>
+        if ($CONFIG['plugin_annotate_type'] > 0) { 
+            // free text
+            if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
+                $data['menu'] .= <<< EOT
+                <script type="text/javascript">
+                    document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
+                    document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
+                    document.write('</a>');
+                </script>
 EOT;
+            }
+
+            if ($CONFIG['plugin_annotate_type'] == 2 || $CONFIG['plugin_annotate_type'] == 3) {
+                $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
+                $result = mysql_query("SELECT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate GROUP BY note ORDER BY note ASC");
+                while ($row = mysql_fetch_row($result)) {
+                    $select_options .= "<option value=\"{$row[0]}\">{$row[0]}</option>";
+                }
+                $data['menu'] .= <<< EOT
+                <script type="text/javascript">
+                    document.write(' <select size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>');
+                </script>
+EOT;
+            }
+        } else { 
+            // user list
+            $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
+            $result = mysql_query("SELECT user_id, user_name FROM {$CONFIG['TABLE_USERS']} ORDER BY user_name ASC");
+            while ($row = mysql_fetch_assoc($result)) {
+                $select_options .= "<option value=\"{$row['user_name']}\">{$row['user_name']}</option>"; // TODO: save user_id in database; get user_name by id when displaying/editing annotations
+            }
+            $data['menu'] .= <<< EOT
+            <script type="text/javascript">
+                document.write(' <select size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>');
+            </script>
+EOT;
+        }
     }
 
     if (is_image($data['filename'])){
@@ -999,5 +1030,14 @@ function annotate_get_level($what) {
     return $level;
 }
 
+
+function annotate_notes_editable() {
+    global $CONFIG;
+    if ((GALLERY_ADMIN_MODE && $CONFIG['plugin_annotate_type'] != 0) || $CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 ?>

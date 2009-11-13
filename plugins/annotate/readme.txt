@@ -39,7 +39,7 @@ Changelog
 *********************************************
 
 2009-11-13 [A] Added configuration options for displaying buttons/links above/below pictures {eenemeenemuu}
-2009-11-13 [A] Added configuration option for annotation type {eenemeenemuu}
+2009-11-13 [A] Added configuration option for annotation type (free text, drop-down list) {eenemeenemuu}
 2009-11-06 [B] Fixed bug 'users cannot edit/delete their own annotations' {eenemeenemuu}
 2009-11-06 [B] Replaced textarea with input field (annotations don't load if there are multi-line annotations) {eenemeenemuu}
 2009-11-06 [C] Moved textarea from bottom to right {eenemeenemuu}
@@ -86,3 +86,4 @@ Test in bridging mode (especially configuration and permission level detection)
 Add import/convert button to copy annotations from old 'notes' table
 Disable annotation type option if there are annotations in the database (type 0 vs. type 1-3)
 Add permission check to meta albums
+Add annotation manager (batch rename, batch delete - partially done in eenemeenemuu's fork)

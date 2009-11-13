@@ -370,6 +370,9 @@ PhotoNote.prototype.CreateElements = function()
     
     var newTextbox = document.createElement('input');
     newTextbox.id = 'fn-note-edit-text-textbox';
+    if (!js_vars.annotate_notes_editable) {
+        newTextbox.disabled = true;
+    }
     newTextbox.value = this.text;
     
     editAreaText.appendChild(newTextbox);
