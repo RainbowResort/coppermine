@@ -80,8 +80,9 @@ Todo:
 Move embedded JS into separate file
 Implement permission system (partially done)
 Fix JS errors in IE
-Add new config option: free text annotation / drop down list of current free text annotations with possibility to create new one / drop down list of all users
 Add new config option: Show 'List existing annotations of the currently viewed album' to usergroups xyz
 Add new config option: Show 'View all pictures of the same annotation' to usergroups xyz
 Report to admin button for annotations?
 Test in bridging mode (especially configuration and permission level detection)
+Add import button
+Disable annotation type option if there are annotations in the database (type 0 vs. type 1-3)

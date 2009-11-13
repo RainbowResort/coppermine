@@ -723,7 +723,7 @@ EOT;
                         {$row['group_name']}
                     </td>
 EOT;
-            for ($i=0; $i < 4; $i++) {
+            for ($i=0; $i <= 3; $i++) {
                 if (!is_numeric($row['permission']) && $i == 0) {
                     $checked = "checked=\"checked\"";
                 } else {
@@ -745,7 +745,7 @@ EOT;
 
     // Build annotation type table row
     $annotation_type = "<tr>";
-    for ($i=0; $i < 4; $i++) {
+    for ($i=0; $i <= 3; $i++) {
         if (!is_numeric($CONFIG['plugin_annotate_type']) && $i == 0) {
             $checked = "checked=\"checked\"";
         } else {
@@ -802,17 +802,17 @@ EOT;
                         <td valign="top" class="tableb" colspan="2">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['drop_down_registered_users']}
+                                    </th>
                                     <th valign="top" align="left" class="tableh2">
                                         {$lang_plugin_annotate['free_text']}
-                                    </th>
-                                    <th valign="top" align="center" class="tableh2">
-                                        {$lang_plugin_annotate['free_text']} + {$lang_plugin_annotate['drop_down_existing_annotations']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
                                         {$lang_plugin_annotate['drop_down_existing_annotations']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
-                                        {$lang_plugin_annotate['drop_down_registered_users']}
+                                        {$lang_plugin_annotate['free_text']} + {$lang_plugin_annotate['drop_down_existing_annotations']}
                                     </th>
                                 </tr>
                                 $annotation_type

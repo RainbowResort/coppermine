@@ -20,4 +20,4 @@ ALTER TABLE `CPG_plugin_annotate` ADD user_time int(9) default NULL;
 DELETE FROM CPG_config WHERE name LIKE 'plugin_annotate_permissions_guest';
 DELETE FROM CPG_config WHERE name LIKE 'plugin_annotate_permissions_registered';
 
-INSERT INTO CPG_config (name, value) VALUES ('plugin_annotate_type', '0');
+INSERT INTO CPG_config (name, value) VALUES ('plugin_annotate_type', '1');
