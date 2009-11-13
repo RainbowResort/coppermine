@@ -64,4 +64,8 @@ $lang_plugin_annotate['annotation_type'] = 'Beschriftungsart';
 $lang_plugin_annotate['free_text'] = 'Freitext';
 $lang_plugin_annotate['drop_down_existing_annotations'] = 'Liste bereits bestehender Beschriftungen';
 $lang_plugin_annotate['drop_down_registered_users'] = 'Liste der registrierten Benutzer';
+$lang_plugin_annotate['display_notes'] = 'Zeige Buttons über dem Bild';
+$lang_plugin_annotate['display_notes_title'] = 'Zeige Buttons von bereits erstellten Beschriftungen im jeweiligen Album (zur leichteren/schnelleren Beschriftung)';
+$lang_plugin_annotate['display_links'] = 'Zeige Links unter dem Bild';
+$lang_plugin_annotate['display_links_title'] = 'Wenn man auf diese Links klickt, wird ein Meta-Album mit allen Bildern der jeweiligen Beschriftung angezeigt';
 ?>

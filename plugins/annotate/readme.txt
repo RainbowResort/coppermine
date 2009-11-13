@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-13 [A] Added configuration options for displaying buttons/links above/below pictures {eenemeenemuu}
 2009-11-13 [A] Added configuration option for annotation type {eenemeenemuu}
 2009-11-06 [B] Fixed bug 'users cannot edit/delete their own annotations' {eenemeenemuu}
 2009-11-06 [B] Replaced textarea with input field (annotations don't load if there are multi-line annotations) {eenemeenemuu}

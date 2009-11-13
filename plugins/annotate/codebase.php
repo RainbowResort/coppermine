@@ -147,30 +147,32 @@ EOT;
 
         $superCage = Inspekt::MakeSuperCage();
 
-        // list existing annotations of the currently viewed album // TODO - add config option to toggle display
+        // list existing annotations of the currently viewed album
         $btns_person = "";
-        if ($superCage->get->getInt('album')) {
-            $result = cpg_db_query("
-                SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
-                INNER JOIN {$CONFIG['TABLE_PICTURES']} p
-                ON p.pid = n.pid
-                WHERE p.aid = {$superCage->get->getInt('album')}
-                ORDER BY note
-            ");
+        if ($CONFIG['plugin_annotate_display_notes'] == 1) {
+            if ($superCage->get->getInt('album')) {
+                $result = cpg_db_query("
+                    SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
+                    INNER JOIN {$CONFIG['TABLE_PICTURES']} p
+                    ON p.pid = n.pid
+                    WHERE p.aid = {$superCage->get->getInt('album')}
+                    ORDER BY note
+                ");
 
-            if (mysql_num_rows($result)) {
-                $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
-                while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-                    $btns_person .= "<span onclick=\"return addnote('{$row[0]}')\" class=\"button\" style=\"cursor:pointer;\" title=\"{$row[0]} auf dem Bild markieren\">&nbsp;{$row[0]}&nbsp;</span> ";
+                if (mysql_num_rows($result)) {
+                    $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
+                    while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+                        $btns_person .= "<span onclick=\"return addnote('{$row[0]}')\" class=\"button\" style=\"cursor:pointer;\" title=\"{$row[0]} auf dem Bild markieren\">&nbsp;{$row[0]}&nbsp;</span> ";
+                    }
+                    $btns_person .= "</div>";
+                    $html = $btns_person.$html;
                 }
-                $btns_person .= "</div>";
-                $html = $btns_person.$html;
+                mysql_free_result($result);
             }
-            mysql_free_result($result);
         }
 
-        // list annotations from the currently viewed picture // TODO - add config option to toggle display
-        if ($nr_notes > 0) {
+        // list annotations from the currently viewed picture
+        if ($CONFIG['plugin_annotate_display_links'] == 1 && $nr_notes > 0) {
             $on_this_pic_array = array();
             $n = 0;
             foreach($notes as $value) {
@@ -656,6 +658,24 @@ function annotate_configuration_submit() {
         }
     }
 
+    if ($superCage->post->keyExists('plugin_annotate_display_notes') && $superCage->post->getInt('plugin_annotate_display_notes') >= '0'  && $superCage->post->getInt('plugin_annotate_display_notes') <= '1') {
+        $new_value = $superCage->post->getInt('plugin_annotate_display_notes');
+        if ($new_value != $CONFIG['plugin_annotate_display_notes']) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_notes'");
+            $CONFIG['plugin_annotate_display_notes'] = $new_value;
+            $config_changes_counter++;
+        }
+    }
+
+    if ($superCage->post->keyExists('plugin_annotate_display_links') && $superCage->post->getInt('plugin_annotate_display_links') >= '0'  && $superCage->post->getInt('plugin_annotate_display_links') <= '1') {
+        $new_value = $superCage->post->getInt('plugin_annotate_display_links');
+        if ($new_value != $CONFIG['plugin_annotate_display_links']) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_links'");
+            $CONFIG['plugin_annotate_display_links'] = $new_value;
+            $config_changes_counter++;
+        }
+    }
+
     return $config_changes_counter;
 }
 
@@ -681,7 +701,7 @@ function annotate_configure() {
         }
     }
 
-    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect the guest group? Fixed group_id 3?
+    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect the guest group? Fixed group_id 3? How does it work in bridged mode?
     if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
         $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
     }
@@ -691,7 +711,7 @@ function annotate_configure() {
         $additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
     }
 
-    // Fetch user groups
+    // Permission options
     $usergroups = "";
     $result = cpg_db_query("SELECT group_id, group_name, has_admin_access FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
@@ -735,32 +755,46 @@ EOT;
                     </td>
 EOT;
             }
-
             $usergroups .= <<< EOT
                 </tr>
 EOT;
+            
         }
     }
     mysql_free_result($result);
 
-    // Build annotation type table row
-    $annotation_type = "<tr>";
+    $annotation_type = "";
     for ($i=0; $i <= 3; $i++) {
-        if (!is_numeric($CONFIG['plugin_annotate_type']) && $i == 0) {
-            $checked = "checked=\"checked\"";
-        } else {
-            $checked = $CONFIG['plugin_annotate_type'] == $i ? "checked=\"checked\"" : "";
-        }
+        $checked = $CONFIG['plugin_annotate_type'] == $i ? "checked=\"checked\"" : "";
         $annotation_type .= <<< EOT
             <td valign="top" align="center" class="tableb">
                 <input type="radio" name="plugin_annotate_type" id="plugin_annotate_type_{$i}" class="radio" value="{$i}" $checked />
             </td>
 EOT;
     }
-    $annotation_type .= "</tr>";
+
+    $display_notes = "";
+    for ($i=0; $i <= 1; $i++) {
+        $checked = $CONFIG['plugin_annotate_display_notes'] == $i ? "checked=\"checked\"" : "";
+        $display_notes .= <<< EOT
+            <td valign="top" align="center" class="tableb">
+                <input type="radio" name="plugin_annotate_display_notes" id="plugin_annotate_display_notes_{$i}" class="radio" value="{$i}" $checked />
+            </td>
+EOT;
+    }
+
+    $display_links = "";
+    for ($i=0; $i <= 1; $i++) {
+        $checked = $CONFIG['plugin_annotate_display_links'] == $i ? "checked=\"checked\"" : "";
+        $display_links .= <<< EOT
+            <td valign="top" align="center" class="tableb">
+                <input type="radio" name="plugin_annotate_display_links" id="plugin_annotate_display_links_{$i}" class="radio" value="{$i}" $checked />
+            </td>
+EOT;
+    }
 
     list($timestamp, $form_token) = getFormToken();
-    
+
     // Start the actual output
     echo <<< EOT
             <form action="" method="post" name="annotate_config" id="annotate_config">
@@ -778,7 +812,7 @@ EOT;
                                     <th valign="top" align="left" class="tableh2">
                                         {$lang_plugin_annotate['group']}
                                     </th>
-                                    <th valign="top" align="left" class="tableh2">
+                                    <th valign="top" align="center" class="tableh2">
                                         {$annotate_icon_array['permission_none']}{$lang_plugin_annotate['no_access']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
@@ -805,7 +839,7 @@ EOT;
                                     <th valign="top" align="center" class="tableh2">
                                         {$lang_plugin_annotate['drop_down_registered_users']}
                                     </th>
-                                    <th valign="top" align="left" class="tableh2">
+                                    <th valign="top" align="center" class="tableh2">
                                         {$lang_plugin_annotate['free_text']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
@@ -815,7 +849,49 @@ EOT;
                                         {$lang_plugin_annotate['free_text']} + {$lang_plugin_annotate['drop_down_existing_annotations']}
                                     </th>
                                 </tr>
-                                $annotation_type
+                                <tr>
+                                    $annotation_type
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['display_notes']} <img src="./images/help.gif" border="0" title="{$lang_plugin_annotate['display_notes_title']}" />
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['no']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['yes']}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    $display_notes
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['display_links']} <img src="./images/help.gif" border="0" title="{$lang_plugin_annotate['display_links_title']}" />
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['no']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['yes']}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    $display_links
+                                </tr>
                             </table>
                         </td>
                     </tr>
