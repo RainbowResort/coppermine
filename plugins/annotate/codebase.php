@@ -149,7 +149,7 @@ EOT;
 
         // list existing annotations of the currently viewed album
         $btns_person = "";
-        if ($CONFIG['plugin_annotate_display_notes'] == 1 && annotate_get_level('permissions') >= 2) {
+        if (annotate_get_level('display_notes') == 1 && annotate_get_level('permissions') >= 2) {
             if ($superCage->get->getInt('album')) {
                 $result = cpg_db_query("
                     SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
@@ -171,8 +171,8 @@ EOT;
             }
         }
 
-        // list annotations from the currently viewed picture
-        if ($CONFIG['plugin_annotate_display_links'] == 1 && $nr_notes > 0) {
+        // list annotations from the currently viewed picture and generate link to meta album
+        if (annotate_get_level('display_links') == 1 && $nr_notes > 0) {
             $on_this_pic_array = array();
             $n = 0;
             foreach($notes as $value) {
@@ -632,6 +632,15 @@ function annotate_configuration_submit() {
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
 
+    if ($superCage->post->keyExists('plugin_annotate_type') && $superCage->post->getInt('plugin_annotate_type') >= '0'  && $superCage->post->getInt('plugin_annotate_type') <= '3') {
+        $new_value = $superCage->post->getInt('plugin_annotate_type');
+        if ($new_value != $CONFIG['plugin_annotate_type']) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_type'");
+            $CONFIG['plugin_annotate_type'] = $new_value;
+            $config_changes_counter++;
+        }
+    }
+
     $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']} WHERE has_admin_access != '1'");
     while($row = mysql_fetch_assoc($result)) {
         if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
@@ -649,32 +658,39 @@ function annotate_configuration_submit() {
     }
     mysql_free_result($result);
 
-    if ($superCage->post->keyExists('plugin_annotate_type') && $superCage->post->getInt('plugin_annotate_type') >= '0'  && $superCage->post->getInt('plugin_annotate_type') <= '3') {
-        $new_value = $superCage->post->getInt('plugin_annotate_type');
-        if ($new_value != $CONFIG['plugin_annotate_type']) {
-            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_type'");
-            $CONFIG['plugin_annotate_type'] = $new_value;
-            $config_changes_counter++;
+    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
+    while($row = mysql_fetch_assoc($result)) {
+        if ($superCage->post->keyExists('plugin_annotate_display_notes_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']) <= '1') {
+            $new_value = $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']);
+            if ($new_value == $CONFIG['plugin_annotate_display_notes_'.$row['group_id']]) {
+                continue;
+            } elseif (is_numeric($CONFIG['plugin_annotate_display_notes_'.$row['group_id']])) {
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_notes_{$row['group_id']}'");
+                $config_changes_counter++;
+            } else {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_display_notes_{$row['group_id']}', '$new_value')");
+                $config_changes_counter++;
+            }
         }
     }
+    mysql_free_result($result);
 
-    if ($superCage->post->keyExists('plugin_annotate_display_notes') && $superCage->post->getInt('plugin_annotate_display_notes') >= '0'  && $superCage->post->getInt('plugin_annotate_display_notes') <= '1') {
-        $new_value = $superCage->post->getInt('plugin_annotate_display_notes');
-        if ($new_value != $CONFIG['plugin_annotate_display_notes']) {
-            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_notes'");
-            $CONFIG['plugin_annotate_display_notes'] = $new_value;
-            $config_changes_counter++;
+    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
+    while($row = mysql_fetch_assoc($result)) {
+        if ($superCage->post->keyExists('plugin_annotate_display_links_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']) <= '1') {
+            $new_value = $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']);
+            if ($new_value == $CONFIG['plugin_annotate_display_links_'.$row['group_id']]) {
+                continue;
+            } elseif (is_numeric($CONFIG['plugin_annotate_display_links_'.$row['group_id']])) {
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_links_{$row['group_id']}'");
+                $config_changes_counter++;
+            } else {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_display_links_{$row['group_id']}', '$new_value')");
+                $config_changes_counter++;
+            }
         }
     }
-
-    if ($superCage->post->keyExists('plugin_annotate_display_links') && $superCage->post->getInt('plugin_annotate_display_links') >= '0'  && $superCage->post->getInt('plugin_annotate_display_links') <= '1') {
-        $new_value = $superCage->post->getInt('plugin_annotate_display_links');
-        if ($new_value != $CONFIG['plugin_annotate_display_links']) {
-            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_links'");
-            $CONFIG['plugin_annotate_display_links'] = $new_value;
-            $config_changes_counter++;
-        }
-    }
+    mysql_free_result($result);
 
     return $config_changes_counter;
 }
@@ -711,12 +727,21 @@ function annotate_configure() {
         $additional_submit_information .= '<div class="cpg_message_info">' . $lang_plugin_annotate['submit_to_install'] . '</div>';
     }
 
-    // Permission options
-    $usergroups = "";
+    $annotation_type = "";
+    for ($i=0; $i <= 3; $i++) {
+        $checked = $CONFIG['plugin_annotate_type'] == $i ? "checked=\"checked\"" : "";
+        $annotation_type .= <<< EOT
+            <td valign="top" align="center" class="tableb">
+                <input type="radio" name="plugin_annotate_type" id="plugin_annotate_type_{$i}" class="radio" value="{$i}" $checked />
+            </td>
+EOT;
+    }
+
+    $permissions = "";
     $result = cpg_db_query("SELECT group_id, group_name, has_admin_access FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
         if ($row['has_admin_access'] == "1") {
-            $usergroups .= <<< EOT
+            $permissions .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
                         {$row['group_name']}
@@ -737,7 +762,7 @@ function annotate_configure() {
 EOT;
         } else {
             $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_permissions_{$row['group_id']}'"),0);
-            $usergroups .= <<< EOT
+            $permissions .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
                         {$row['group_name']}
@@ -749,49 +774,74 @@ EOT;
                 } else {
                     $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
                 }
-                $usergroups .= <<< EOT
+                $permissions .= <<< EOT
                     <td valign="top" align="center" class="tableb">
                         <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
                     </td>
 EOT;
             }
-            $usergroups .= <<< EOT
+            $permissions .= <<< EOT
                 </tr>
 EOT;
-            
         }
     }
     mysql_free_result($result);
 
-    $annotation_type = "";
-    for ($i=0; $i <= 3; $i++) {
-        $checked = $CONFIG['plugin_annotate_type'] == $i ? "checked=\"checked\"" : "";
-        $annotation_type .= <<< EOT
-            <td valign="top" align="center" class="tableb">
-                <input type="radio" name="plugin_annotate_type" id="plugin_annotate_type_{$i}" class="radio" value="{$i}" $checked />
-            </td>
-EOT;
-    }
-
     $display_notes = "";
-    for ($i=0; $i <= 1; $i++) {
-        $checked = $CONFIG['plugin_annotate_display_notes'] == $i ? "checked=\"checked\"" : "";
-        $display_notes .= <<< EOT
-            <td valign="top" align="center" class="tableb">
-                <input type="radio" name="plugin_annotate_display_notes" id="plugin_annotate_display_notes_{$i}" class="radio" value="{$i}" $checked />
-            </td>
+    $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
+    while($row = mysql_fetch_assoc($result)) {
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_notes_{$row['group_id']}'"),0);
+            $display_notes .= <<< EOT
+                <tr>
+                    <td valign="top" align="left" class="tableb">
+                        {$row['group_name']}
+                    </td>
+EOT;
+            for ($i=0; $i <= 1; $i++) {
+                if (!is_numeric($row['permission']) && $i == 0) {
+                    $checked = "checked=\"checked\"";
+                } else {
+                    $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+                }
+                $display_notes .= <<< EOT
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" name="plugin_annotate_display_notes_{$row['group_id']}" id="plugin_annotate_display_notes_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
+                    </td>
+EOT;
+            }
+            $display_notes .= <<< EOT
+                </tr>
 EOT;
     }
+    mysql_free_result($result);
 
     $display_links = "";
-    for ($i=0; $i <= 1; $i++) {
-        $checked = $CONFIG['plugin_annotate_display_links'] == $i ? "checked=\"checked\"" : "";
-        $display_links .= <<< EOT
-            <td valign="top" align="center" class="tableb">
-                <input type="radio" name="plugin_annotate_display_links" id="plugin_annotate_display_links_{$i}" class="radio" value="{$i}" $checked />
-            </td>
+    $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
+    while($row = mysql_fetch_assoc($result)) {
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_links_{$row['group_id']}'"),0);
+            $display_links .= <<< EOT
+                <tr>
+                    <td valign="top" align="left" class="tableb">
+                        {$row['group_name']}
+                    </td>
+EOT;
+            for ($i=0; $i <= 1; $i++) {
+                if (!is_numeric($row['permission']) && $i == 0) {
+                    $checked = "checked=\"checked\"";
+                } else {
+                    $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+                }
+                $display_links .= <<< EOT
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" name="plugin_annotate_display_links_{$row['group_id']}" id="plugin_annotate_display_links_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
+                    </td>
+EOT;
+            }
+            $display_links .= <<< EOT
+                </tr>
 EOT;
     }
+    mysql_free_result($result);
 
     list($timestamp, $form_token) = getFormToken();
 
@@ -802,33 +852,6 @@ EOT;
 
     starttable('100%', $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'], 3);
     echo <<< EOT
-                    <tr>
-                        <td valign="top" class="tableb">
-                            {$lang_plugin_annotate['permissions']}
-                        </td>
-                        <td valign="top" class="tableb" colspan="2">
-                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                                <tr>
-                                    <th valign="top" align="left" class="tableh2">
-                                        {$lang_plugin_annotate['group']}
-                                    </th>
-                                    <th valign="top" align="center" class="tableh2">
-                                        {$annotate_icon_array['permission_none']}{$lang_plugin_annotate['no_access']}
-                                    </th>
-                                    <th valign="top" align="center" class="tableh2">
-                                        {$annotate_icon_array['permission_read']}{$lang_plugin_annotate['read_annotations']}
-                                    </th>
-                                    <th valign="top" align="center" class="tableh2">
-                                        {$annotate_icon_array['permission_write']}{$lang_plugin_annotate['read_write_annotations']}
-                                    </th>
-                                    <th valign="top" align="center" class="tableh2">
-                                    {$annotate_icon_array['permission_delete']}{$lang_plugin_annotate['read_write_delete_annotations']}
-                                    </th>
-                                </tr>
-                                $usergroups
-                            </table>
-                        </td>
-                    </tr>
                     <tr>
                         <td valign="top" class="tableb">
                             {$lang_plugin_annotate['annotation_type']}
@@ -857,11 +880,41 @@ EOT;
                     </tr>
                     <tr>
                         <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['permissions']}
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['group']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$annotate_icon_array['permission_none']}{$lang_plugin_annotate['no_access']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$annotate_icon_array['permission_read']}{$lang_plugin_annotate['read_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$annotate_icon_array['permission_write']}{$lang_plugin_annotate['read_write_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                    {$annotate_icon_array['permission_delete']}{$lang_plugin_annotate['read_write_delete_annotations']}
+                                    </th>
+                                </tr>
+                                $permissions
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
                             {$lang_plugin_annotate['display_notes']} <img src="./images/help.gif" border="0" title="{$lang_plugin_annotate['display_notes_title']}" />
                         </td>
                         <td valign="top" class="tableb" colspan="2">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['group']}
+                                    </th>
                                     <th valign="top" align="center" class="tableh2">
                                         {$lang_common['no']}
                                     </th>
@@ -882,6 +935,9 @@ EOT;
                         <td valign="top" class="tableb" colspan="2">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['group']}
+                                    </th>
                                     <th valign="top" align="center" class="tableh2">
                                         {$lang_common['no']}
                                     </th>
@@ -917,6 +973,10 @@ EOT;
 function annotate_get_level($what) {
     global $CONFIG;
 
+    if ($what == "permissions" && GALLERY_ADMIN_MODE) {
+        return 3;
+    }
+
     $result = cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID);
     $user = mysql_fetch_assoc($result);
     mysql_free_result($result);
@@ -932,8 +992,7 @@ function annotate_get_level($what) {
     $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $list));
     $level = mysql_result($result, 0);
     mysql_free_result($result);
-    $level = $permission_level > 0 ? $level : 0;
-    $level = GALLERY_ADMIN_MODE ? 3 : $level;
+    $level = $level > 0 ? $level : 0;
 
     // TODO if visitor = guest: detect guest group and set level
 
