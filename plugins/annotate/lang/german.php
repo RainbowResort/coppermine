@@ -33,7 +33,7 @@ $lang_plugin_annotate['changes_saved'] = 'Deine Änderungen wurden gespeichert';
 $lang_plugin_annotate['no_changes'] = 'Es gab keine Änderungen oder Deine Änderungen waren ungültig';
 $lang_plugin_annotate['guests_more_permissions_than_registered'] = 'Gästen mehr Rechte zu gewähren als registrierten Benutzern macht keinen Sinn. Überprüfe Deine Einstellungen!';
 $lang_plugin_annotate['prune_database'] = 'Wollen Sie alle Beschriftungen aus der Datenbank löschen?';
-$lang_plugin_annotate['announcemen_thread'] = 'Ankündigungs-Theme für %s-Plugin';
+$lang_plugin_annotate['announcement_thread'] = 'Ankündigungs-Thema für %s-Plugin';
 $lang_plugin_annotate['delete_orphaned_entries'] = 'Verwaiste Beschriftungen löschen';
 $lang_plugin_annotate['x_orphaned_entries_deleted'] = '%s verwaiste Einträge wurden gelöscht';
 $lang_plugin_annotate['1_orphaned_entry_deleted'] = '1 verwaister Eintrag wurde gelöscht';
@@ -60,4 +60,8 @@ $lang_plugin_annotate['update_database_success'] = 'Datenbank erfolgreich aktual
 $lang_plugin_annotate['on_this_pic'] = 'Auf diesem Bild';
 $lang_plugin_annotate['all_pics_of'] = 'Zeige alle Bilder mit';
 $lang_plugin_annotate['rapid_annotation'] = 'Schnellbeschriftung';
+$lang_plugin_annotate['annotation_type'] = 'Beschriftungsart';
+$lang_plugin_annotate['free_text'] = 'Freitext';
+$lang_plugin_annotate['drop_down_existing_annotations'] = 'Liste bereits bestehender Beschriftungen';
+$lang_plugin_annotate['drop_down_registered_users'] = 'Liste der registrierten Benutzer';
 ?>

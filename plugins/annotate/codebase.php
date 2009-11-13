@@ -634,10 +634,9 @@ function annotate_configuration_submit() {
     while($row = mysql_fetch_assoc($result)) {
         if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
             $new_value = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
-            if ($new_value === $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
+            if ($new_value == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
                 continue;
-            }
-            elseif (is_numeric($CONFIG['plugin_annotate_permissions_'.$row['group_id']])) {
+            } elseif (is_numeric($CONFIG['plugin_annotate_permissions_'.$row['group_id']])) {
                 cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_permissions_{$row['group_id']}'");
                 $config_changes_counter++;
             } else {
@@ -647,6 +646,15 @@ function annotate_configuration_submit() {
         }
     }
     mysql_free_result($result);
+
+    if ($superCage->post->keyExists('plugin_annotate_type') && $superCage->post->getInt('plugin_annotate_type') >= '0'  && $superCage->post->getInt('plugin_annotate_type') <= '3') {
+        $new_value = $superCage->post->getInt('plugin_annotate_type');
+        if ($new_value != $CONFIG['plugin_annotate_type']) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_type'");
+            $CONFIG['plugin_annotate_type'] = $new_value;
+            $config_changes_counter++;
+        }
+    }
 
     return $config_changes_counter;
 }
@@ -723,7 +731,7 @@ EOT;
                 }
                 $usergroups .= <<< EOT
                     <td valign="top" align="center" class="tableb">
-                        <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $disabled $checked />
+                        <input type="radio" name="plugin_annotate_permissions_{$row['group_id']}" id="plugin_annotate_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
                     </td>
 EOT;
             }
@@ -734,6 +742,22 @@ EOT;
         }
     }
     mysql_free_result($result);
+
+    // Build annotation type table row
+    $annotation_type = "<tr>";
+    for ($i=0; $i < 4; $i++) {
+        if (!is_numeric($CONFIG['plugin_annotate_type']) && $i == 0) {
+            $checked = "checked=\"checked\"";
+        } else {
+            $checked = $CONFIG['plugin_annotate_type'] == $i ? "checked=\"checked\"" : "";
+        }
+        $annotation_type .= <<< EOT
+            <td valign="top" align="center" class="tableb">
+                <input type="radio" name="plugin_annotate_type" id="plugin_annotate_type_{$i}" class="radio" value="{$i}" $checked />
+            </td>
+EOT;
+    }
+    $annotation_type .= "</tr>";
 
     list($timestamp, $form_token) = getFormToken();
     
@@ -768,6 +792,30 @@ EOT;
                                     </th>
                                 </tr>
                                 $usergroups
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['annotation_type']}
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['free_text']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['free_text']} + {$lang_plugin_annotate['drop_down_existing_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['drop_down_existing_annotations']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_plugin_annotate['drop_down_registered_users']}
+                                    </th>
+                                </tr>
+                                $annotation_type
                             </table>
                         </td>
                     </tr>

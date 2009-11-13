@@ -33,7 +33,7 @@ $lang_plugin_annotate['changes_saved'] = 'Your changes have been saved';
 $lang_plugin_annotate['no_changes'] = 'There have been no changes or the values you entered where invalid';
 $lang_plugin_annotate['guests_more_permissions_than_registered'] = 'Granting guests more permissions than registered users doesn\'t make sense. Please review your settings!';
 $lang_plugin_annotate['prune_database'] = 'Do you want to remove all annotations from the database?';
-$lang_plugin_annotate['announcemen_thread'] = 'Announcement thread for %s plugin';
+$lang_plugin_annotate['announcement_thread'] = 'Announcement thread for %s plugin';
 $lang_plugin_annotate['delete_orphaned_entries'] = 'Delete orphaned entries';
 $lang_plugin_annotate['x_orphaned_entries_deleted'] = '%s orphaned entries deleted';
 $lang_plugin_annotate['1_orphaned_entry_deleted'] = '1 orphaned entry deleted';
@@ -60,4 +60,8 @@ $lang_plugin_annotate['update_database_success'] = 'Database update was successf
 $lang_plugin_annotate['on_this_pic'] = 'On this picture';
 $lang_plugin_annotate['all_pics_of'] = 'Show all pictures of';
 $lang_plugin_annotate['rapid_annotation'] = 'Rapid annotation';
+$lang_plugin_annotate['annotation_type'] = 'Annotation type';
+$lang_plugin_annotate['free_text'] = 'Free text';
+$lang_plugin_annotate['drop_down_existing_annotations'] = 'Drop-down list of already existing annotations';
+$lang_plugin_annotate['drop_down_registered_users'] = 'Drop-down list of registered users';
 ?>
