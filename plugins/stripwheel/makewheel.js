@@ -18,11 +18,11 @@
               //alert(dir);
               if (delta > 0)
               {
-                if ($('#filmstrip_next').is(":visible")) $('#filmstrip_next').click();
+                if ($('#filmstrip_prev').is(":visible")) $('#filmstrip_prev').click();
               }
               else
               {
-                if ($('#filmstrip_prev').is(":visible")) $('#filmstrip_prev').click();
+                if ($('#filmstrip_next').is(":visible")) $('#filmstrip_next').click();
               }
               return false;
           });
