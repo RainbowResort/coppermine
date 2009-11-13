@@ -13,9 +13,6 @@
   jQuery(function($) {
     $(document).ready(function() {
       $('#filmstrip').bind('mousewheel', function(event, delta) {
-              var dir = delta > 0 ? 'Up' : 'Down',
-                  vel = Math.abs(delta);
-              //alert(dir);
               if (delta > 0)
               {
                 if ($('#filmstrip_prev').is(":visible")) $('#filmstrip_prev').click();
