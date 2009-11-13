@@ -79,11 +79,11 @@ Portions of the JavaScript library also by Angus Turnbull
 Todo:
 =====
 Move embedded JS into separate file
-Implement permission system (partially done)
+Implement permission system (done?)
 Fix JS errors in IE
-Add new config option: Show 'List existing annotations of the currently viewed album' to usergroups xyz
-Add new config option: Show 'View all pictures of the same annotation' to usergroups xyz
 Report to admin button for annotations?
 Test in bridging mode (especially configuration and permission level detection)
-Add import button
+Add import/convert button to copy annotations from old 'notes' table
 Disable annotation type option if there are annotations in the database (type 0 vs. type 1-3)
+Change config option: Show 'List existing annotations of the currently viewed album' to usergroups xyz (permission level detection function can be used to detect level)
+Change config option: Show 'View all pictures of the same annotation' to usergroups xyz (permission level detection function can be used to detect level)

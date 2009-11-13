@@ -53,7 +53,7 @@ function annotate_meta($meta){
     if (GALLERY_ADMIN_MODE) {
         set_js_var('visitor_annotate_permission_level', 3);
     } else {
-        set_js_var('visitor_annotate_permission_level', annotate_get_permission_level());
+        set_js_var('visitor_annotate_permission_level', annotate_get_level('permissions'));
     }
     set_js_var('visitor_annotate_user_id', USER_ID);
     $meta  .= '<link rel="stylesheet" href="plugins/annotate/lib/photonotes.css" type="text/css" />';
@@ -63,7 +63,7 @@ function annotate_meta($meta){
 function annotate_file_data($data){
     global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array, $REFERER;
     // Determine if the visitor is allowed to have that button
-    if (annotate_get_permission_level() >= 2) {
+    if (annotate_get_level('permissions') >= 2) {
         $data['menu'] .= <<< EOT
         <script type="text/javascript">
             document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
@@ -94,10 +94,10 @@ EOT;
         $nr_notes = count($notes);
         
         // Visitor can view annotations in the first place?
-        if (USER_ID && annotate_get_permission_level() == 0) {
+        if (USER_ID && annotate_get_level('permissions') == 0) {
             // Stop processing the annotations any further
             return $data;
-        } elseif (!USER_ID && annotate_get_permission_level() == 0) {
+        } elseif (!USER_ID && annotate_get_level('permissions') == 0) {
             $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_permissions_%'");
             $max_permission_level = mysql_result($result, 0);
             mysql_free_result($result);
@@ -149,7 +149,7 @@ EOT;
 
         // list existing annotations of the currently viewed album
         $btns_person = "";
-        if ($CONFIG['plugin_annotate_display_notes'] == 1) {
+        if ($CONFIG['plugin_annotate_display_notes'] == 1 && annotate_get_level('permissions') >= 2) {
             if ($superCage->get->getInt('album')) {
                 $result = cpg_db_query("
                     SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
@@ -188,7 +188,7 @@ EOT;
             $html .= $on_this_pic_div;
         }
 
-        $permission_level = annotate_get_permission_level();
+        $permission_level = annotate_get_level('permissions');
         $user_id = USER_ID;
         
         $html .= <<< EOT
@@ -914,7 +914,7 @@ EOT;
 }
 
 
-function annotate_get_permission_level() {
+function annotate_get_level($what) {
     global $CONFIG;
 
     $result = cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID);
@@ -926,18 +926,18 @@ function annotate_get_permission_level() {
     $user_group_list[] = $user['user_group'];
     
     for($i=0; $i<count($user_group_list); $i++) {
-        $user_group_list[$i] = "name = 'plugin_annotate_permissions_{$user_group_list[$i]}'";
+        $list[$i] = "name = 'plugin_annotate_{$what}_{$user_group_list[$i]}'";
     }
 
-    $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $user_group_list));
-    $permission_level = mysql_result($result, 0);
+    $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $list));
+    $level = mysql_result($result, 0);
     mysql_free_result($result);
-    $permission_level = $permission_level > 0 ? $permission_level : 0;
-    $permission_level = GALLERY_ADMIN_MODE ? 3 : $permission_level;
+    $level = $permission_level > 0 ? $level : 0;
+    $level = GALLERY_ADMIN_MODE ? 3 : $level;
 
-    // TODO if visitor = guest: detect guest group and set permission level
+    // TODO if visitor = guest: detect guest group and set level
 
-    return $permission_level;
+    return $level;
 }
 
 
