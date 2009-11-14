@@ -15,9 +15,9 @@
   
 $name='CompressHTML';
 $description='<p>THIS PLUGIN MUST BE THE LAST IN THE CHAIN! MOVE ALL WAY DOWNWARDS IN PLUGIN MANAGER!</p>';
-$author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
+$author='<a href="http://www.timos-welt.de"  rel="external" class="external">Timos-Welt</a>';
 $version='1.0';
 $install_info = "There's nothing to configure after installation. You may open codebase.php and comment out the marked line if this plugin breaks certain scripts. ";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,57545.0.html" rel="external" title="EnlargeIt! Support">CompressHTML Support</a></span>'
+$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,57545.0.html" rel="external" title="CompressHTML Support">CompressHTML Support</a></span>'
     . '<p>This plugin MUST be the last one in the chain! Move it all the way downwards in plugin manager. This plugin has no effect in admin mode, log off to see it working.</p>';
 ?>
