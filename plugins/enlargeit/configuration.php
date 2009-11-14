@@ -12,7 +12,7 @@
   
 $name='EnlargeIt!';
 $description='EnlargeIt! - AJAX GUI for Coppermine 1.5.x';
-$author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
+$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
 $version='0.4';
 $install_info = "You can configure the plugin after installation, use the button on the plugin manager. "
     . "If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.";
