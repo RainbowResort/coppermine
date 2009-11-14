@@ -12,7 +12,7 @@
 
 $name='Slider';
 $description='Shows a Javascript slider on album list page with EnlargeIt! integration';
-$author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
+$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
 $version='0.2';
 $install_info = "You can configure the plugin after installation, use the button on plugin manager page.";
 $extra_info = '<span class="admin_menu"><a href="index.php?file=slider/plugin_config" title="Configure Slider">Slider Configuration</a></span> '
