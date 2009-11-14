@@ -13,7 +13,7 @@
 
 $name='Mousewheel support for filmstrip';
 $description='If the visitor moves the mouse pointer above the filmstrip, he may use the mouse wheel to move one pic back/forward.';
-$author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
+$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
 $version='0.1';
 $install_info = "This plugin requires no configuration.";
 $extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,62454.0.html" rel="external" title="Mouse wheel for filmstrip support">Mouse wheel for filmstrip support</a></span>';
