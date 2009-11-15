@@ -165,7 +165,7 @@ require('./plugins/enlargeit/include/init.inc.php');
 
 EOS;
 
-    $enlargeit_headcode .= "<script type=\"text/javascript\">
+    $enlargeit_headcode .= "<script type=\"text/javascript\"><!--
     ";
     $enlargeit_headcode .= "enl_ani = ".$ENLARGEITSET['enl_ani'].";
     ";
@@ -363,7 +363,7 @@ EOS;
 ";
     $i = $i + 1;
     }    
-    $enlargeit_headcode .= "</script>
+    $enlargeit_headcode .= "//--></script>
 <!-- End EnlargeIt! Headcode -->
 ";
 
