@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************

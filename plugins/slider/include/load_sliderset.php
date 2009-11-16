@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -27,7 +27,7 @@ if ($slider_isinstalled) {
 
 
 
-$sliderresult = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}mod_slider");
+$sliderresult = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_slider");
 while ($sliderrow = mysql_fetch_array($sliderresult)) {
     $SLIDERSET=$sliderrow;
   }

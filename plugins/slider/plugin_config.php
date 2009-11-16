@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -13,7 +13,7 @@
 
 require_once('include/init.inc.php');
 require('./plugins/slider/include/init.inc.php');
-require('./plugins/slider/include/load_sliderset.php');
+
 
 $slider_superCage = Inspekt::makeSuperCage();
 
@@ -26,9 +26,10 @@ if($lang_text_dir=='ltr') {
   $align="right";
   $direction="rtl";
 }
+
+pageheader($lang_plugin_slider['display_name']);
 if ($slider_superCage->post->keyExists('update')) {
   $slider_width = $slider_superCage->post->getInt('slider_width');
-  $slider_height = $slider_superCage->post->getInt('slider_height');
   $slider_numberofpics = $slider_superCage->post->getInt('slider_numberofpics');
   $slider_speed = $slider_superCage->post->getInt('slider_speed');
   if ($enl_matches = $slider_superCage->post->getMatched('slider_bgcolor','/^[a-zA-Z0-9#]+$/'))
@@ -49,30 +50,23 @@ if ($slider_superCage->post->keyExists('update')) {
   
   // if someone types text into a number input field, set default value
   if($slider_width != strval(intval($slider_width))) $slider_width = 800;
-  if($slider_height != strval(intval($slider_height))) $slider_height = 55;
   if($slider_numberofpics != strval(intval($slider_numberofpics))) $slider_numberofpics = 15;
   if($slider_numberofpics < 8) $slider_numberofpics = 8;
   if($slider_speed != strval(intval($slider_speed))) $slider_speed = 1;
   if (($slider_speed > 10) || ($slider_speed < 1)) $slider_speed = 1;
   
-  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}mod_slider` SET slider_pictype=('$slider_pictype'), slider_autowidth=($slider_autowidth), slider_useenlarge=($slider_useenlarge), slider_album=('$slider_album'), slider_width=($slider_width), slider_height=($slider_height), slider_numberofpics=($slider_numberofpics), slider_speed=($slider_speed), slider_bgcolor=('$slider_bgcolor'), slider_skipportrait=($slider_skipportrait), slider_align=('$slider_align')";
+  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}plugin_slider` SET slider_pictype=('$slider_pictype'), slider_autowidth=($slider_autowidth), slider_useenlarge=($slider_useenlarge), slider_album=('$slider_album'), slider_width=($slider_width), slider_numberofpics=($slider_numberofpics), slider_speed=($slider_speed), slider_bgcolor=('$slider_bgcolor'), slider_skipportrait=($slider_skipportrait), slider_align=('$slider_align')";
   cpg_db_query($s); 
-    pageheader($lang_plugin_slider['display_name']);
-    msg_box($lang_plugin_slider['display_name'], $lang_plugin_slider['update_success'], $lang_common['continue'], 'pluginmgr.php');
-  pagefooter();
-        exit;
-
+  msg_box($lang_plugin_slider['display_name'], $lang_plugin_slider['update_success']);
 }
-pageheader($lang_plugin_slider['display_name']);
-?>
 
+require('./plugins/slider/include/load_sliderset.php');
 
-<?php
-starttable('100%', $lang_plugin_slider['main_title'].' - '.$lang_plugin_slider['version'].'<font size=1 color=red> by <a href="http://www.timos-welt.de">Timos-Welt</font>', 3);
+starttable('100%', $lang_plugin_slider['main_title'].' - Version '.str_replace('$VERSION$=','',$lang_plugin_slider['version']), 3);
 ?>
 
 <TR>
-  <TD class=tableh2 colSpan=3 onClick="show_section('section1')"><SPAN style="CURSOR: pointer"><IMG title="Config" height=9 alt="" src="images/descending.gif" width=9 border=0> <strong><?php echo $lang_plugin_slider['main_title']?></strong></SPAN> </TD>
+  <TD class=tableh2 colSpan=3><?php echo $lang_plugin_slider['main_title']?></TD>
 </TR>
 <TR>
   <td><form action="<?php $_SERVER['PHP_SELF']?>" method="post" name="slider_settings">
@@ -101,37 +95,39 @@ starttable('100%', $lang_plugin_slider['main_title'].' - '.$lang_plugin_slider['
           </td>
         </tr>
         <tr>
-        	<td align="right"><?php echo $lang_plugin_slider['slider_autowidth']?>&nbsp;&nbsp;</td>
-        	<td>
-        		  <select name="slider_autowidth" id="slider_autowidth">
-                 <option value="1" <?php if($SLIDERSET['slider_autowidth'] == 1) echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_yes']?></option>
-                 <option value="0" <?php if($SLIDERSET['slider_autowidth'] == 0) echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_no']?></option>
-              </select>
-          </td>
-        </tr>        
+          <td align="right">
+          	<?php echo $lang_plugin_slider['slider_autowidth']?>&nbsp;&nbsp;</td>
+          <td><input name="slider_autowidth" type="radio" value="1" <?php if($SLIDERSET['slider_autowidth']) echo 'checked="checked"';?> id="slider_autowidth"/>
+            <?php echo $lang_plugin_slider['slider_yes']?>
+            <input name="slider_autowidth" type="radio" value="0" <?php if(!$SLIDERSET['slider_autowidth']) echo 'checked="checked"';?> id="slider_autowidth"/>
+            <?php echo $lang_plugin_slider['slider_no']?> 
+        </tr>
         <tr>
-          <td width="50%" align="right">
-            <?php echo $lang_plugin_slider['slider_height']?>&nbsp;&nbsp;
-          </td>
-          <td width="50%">
-            <input id="slider_height" name="slider_height" type="int" value="<?php echo $SLIDERSET['slider_height']?>"> px
-          </td>
         </tr>
         <tr>
           <td width="50%" align="right">
-            <?php echo $lang_plugin_slider['slider_numberofpics']?> (8-30)&nbsp;&nbsp;
+            <?php echo $lang_plugin_slider['slider_numberofpics']?> (10-30)&nbsp;&nbsp;
           </td>
           <td width="50%">
-            <input id="slider_numberofpics" name="slider_numberofpics" type="int" value="<?php echo $SLIDERSET['slider_numberofpics']?>">
+          	<select name="slider_numberofpics" id="slider_numberofpics">
+          	<?php for($i = 10; $i < 31; $i++)
+          	{
+          	  echo '<option value="'.$i.'" ';
+          	  if($SLIDERSET['slider_numberofpics'] == $i) echo 'selected="selected" ';
+          	  echo '>'.$i.'</option>';
+          	} ?>
+          </select>
           </td>
         </tr>
         <tr>
-          <td width="50%" align="right">
-            <?php echo $lang_plugin_slider['slider_speed']?>&nbsp;(1-10)&nbsp;&nbsp;
-          </td>
-          <td width="50%">
-            <input id="slider_speed" name="slider_speed" type="int" value="<?php echo $SLIDERSET['slider_speed']?>">
-          </td>
+          <td align="right">
+          	<?php echo $lang_plugin_slider['slider_speed']?>&nbsp;&nbsp;</td>
+          <td><input name="slider_speed" type="radio" value="1" <?php if($SLIDERSET['slider_speed'] == 1) echo 'checked="checked"';?> id="slider_speed"/>
+            1
+            <input name="slider_speed" type="radio" value="2" <?php if($SLIDERSET['slider_speed'] == 2) echo 'checked="checked"';?> id="slider_speed"/>
+            2
+            <input name="slider_speed" type="radio" value="3" <?php if($SLIDERSET['slider_speed'] == 3) echo 'checked="checked"';?> id="slider_speed"/>
+            3
         </tr>
         <tr>
           <td width="50%" align="right">
@@ -149,34 +145,34 @@ starttable('100%', $lang_plugin_slider['main_title'].' - '.$lang_plugin_slider['
             <input name="slider_skipportrait" type="radio" value="0" <?php if(!$SLIDERSET['slider_skipportrait']) echo 'checked="checked"';?> id="slider_skipportrait"/>
             <?php echo $lang_plugin_slider['slider_no']?> 
         </tr>
+
         <tr>
-        	<td align="right"><?php echo $lang_plugin_slider['align']?>&nbsp;&nbsp;</td>
-        	<td>
-        		  <select name="slider_align" id="slider_align">
-                 <option value="left" <?php if($SLIDERSET['slider_align'] == 'left') echo 'selected="selected"';?>><?php echo $lang_plugin_slider['left']?></option>
-                 <option value="center" <?php if($SLIDERSET['slider_align'] == 'center') echo 'selected="selected"';?>><?php echo $lang_plugin_slider['center']?></option>
-                 <option value="right" <?php if($SLIDERSET['slider_align'] == 'right') echo 'selected="selected"';?>><?php echo $lang_plugin_slider['right']?></option>
-              </select>
-          </td>
+          <td align="right">
+          	<?php echo $lang_plugin_slider['align']?>&nbsp;&nbsp;</td>
+          <td><input name="slider_align" type="radio" value="left" <?php if($SLIDERSET['slider_align'] == 'left') echo 'checked="checked"';?> id="slider_align"/>
+            <?php echo $lang_plugin_slider['left']?>
+            <input name="slider_align" type="radio" value="center" <?php if($SLIDERSET['slider_align'] == 'center') echo 'checked="checked"';?> id="slider_align"/>
+            <?php echo $lang_plugin_slider['center']?> 
+            <input name="slider_align" type="radio" value="right" <?php if($SLIDERSET['slider_align'] == 'right') echo 'checked="checked"';?> id="slider_align"/>
+            <?php echo $lang_plugin_slider['right']?> 
         </tr>
         <tr>
-        	<td align="right"><?php echo $lang_plugin_slider['useenlarge']?>&nbsp;&nbsp;</td>
-        	<td>
-        		  <select name="slider_useenlarge" id="slider_useenlarge">
-                 <option value="1" <?php if($SLIDERSET['slider_useenlarge'] == 1) echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_yes']?></option>
-                 <option value="0" <?php if($SLIDERSET['slider_useenlarge'] == 0) echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_no']?></option>
-              </select>
-          </td>
-        </tr>        
+          <td align="right">
+          	<?php echo $lang_plugin_slider['useenlarge']?>&nbsp;&nbsp;</td>
+          <td><input name="slider_useenlarge" type="radio" value="1" <?php if($SLIDERSET['slider_useenlarge']) echo 'checked="checked"';?> id="slider_useenlarge"/>
+            <?php echo $lang_plugin_slider['slider_yes']?>
+            <input name="slider_useenlarge" type="radio" value="0" <?php if(!$SLIDERSET['slider_useenlarge']) echo 'checked="checked"';?> id="slider_useenlarge"/>
+            <?php echo $lang_plugin_slider['slider_no']?> 
+        </tr>
+
         <tr>
-        	<td align="right"><?php echo $lang_plugin_slider['pictype']?>&nbsp;&nbsp;</td>
-        	<td>
-        		  <select name="slider_pictype" id="slider_pictype">
-                 <option value="normal" <?php if($SLIDERSET['slider_pictype'] == 'normal') echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_normalsize']?></option>
-                 <option value="fullsize" <?php if($SLIDERSET['slider_pictype'] == 'fullsize') echo 'selected="selected"';?>><?php echo $lang_plugin_slider['slider_fullsize']?></option>
-              </select>
-          </td>
-        </tr>    
+          <td align="right">
+          	<?php echo $lang_plugin_slider['pictype']?>&nbsp;&nbsp;</td>
+          <td><input name="slider_pictype" type="radio" value="normal" <?php if($SLIDERSET['slider_pictype'] == 'normal') echo 'checked="checked"';?> id="slider_pictype"/>
+            <?php echo $lang_plugin_slider['slider_normalsize']?>
+            <input name="slider_pictype" type="radio" value="fullsize" <?php if($SLIDERSET['slider_pictype'] == 'fullsize') echo 'checked="checked"';?> id="slider_pictype"/>
+            <?php echo $lang_plugin_slider['slider_fullsize']?> 
+        </tr>
         <tr>
           <td>&nbsp;</td>
           <td>

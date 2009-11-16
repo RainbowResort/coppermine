@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -25,7 +25,7 @@ $thisplugin->add_filter('plugin_block','slider_mainpage');
 // Add filter for page head
 $thisplugin->add_filter('page_meta','slider_head');
 
-global $SLIDERSET;
+global $SLIDERSET,$lang_plugin_slider;
 require ('./plugins/slider/include/init.inc.php');
 require ('./plugins/slider/include/load_sliderset.php');
 
@@ -34,10 +34,13 @@ require ('./plugins/slider/include/load_sliderset.php');
 // include some stuff in page header
 function slider_head()
 {        
-global $template_header, $CONFIG;
+global $template_header, $lang_plugin_slider, $CONFIG;
     
-    $slider_headcode = <<<EOS
-<!-- Begin Slider Headcode -->
+    $slider_headcode = "
+<!-- Start Slider ".$lang_plugin_slider['version']." Headcode -->";
+    
+    $slider_headcode .= <<<EOS
+
 <script type="text/javascript" src="plugins/slider/slider.js"></script>
 <style type="text/css">
   .sliderimg { cursor: pointer; }
@@ -46,27 +49,27 @@ global $template_header, $CONFIG;
 
 EOS;
 
- if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP')) $template_header = str_replace('{META}','{META}'.$slider_headcode,$template_header);
+// only insert stuff if we're on album list page
+ if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP')) 
+ { 
+ 	 $template_header = str_replace('{META}','{META}'.$slider_headcode,$template_header);
+ }
 
 }
 
 
 function slider_mainpage($matches)
 {
-	if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP'))
-	{ 
+  // only insert stuff if we're on album list page
+  if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP'))
+  { 
         global $CONFIG,$lang_plugin_slider,$FORBIDDEN_SET,$SLIDERSET,$lang_meta_album_names,$META_ALBUM_SET;
         if($matches[1] != 'slider') {
           return $matches;
         }
-        
-        $cpgslideplug_sliderwidth=$SLIDERSET['slider_width']."px";
-        $cpgslideplug_sliderheight=$SLIDERSET['slider_height']."px";
-        $cpgslideplug_slidespeed=$SLIDERSET['slider_speed'];
-        $cpgslideplug_slidebgcolor=$SLIDERSET['slider_bgcolor'];
         $cpgslideplug_align=$SLIDERSET['slider_align'];
         if ($SLIDERSET['slider_autowidth']) $cpgslideplug_align="left";
-        echo "<!-- Start Slider PlugIn Table-->\n";
+        echo "<!-- Start Slider PlugIn ".$lang_plugin_slider['version']." Table-->\n";
         $slider_icon = array( 'topn' => 'most_viewed', 'lastup' => 'last_uploads', 'toprated' => 'top_rated', 'random' => 'random');
         starttable("100%", cpg_fetch_icon($slider_icon[$SLIDERSET['slider_album']],0,$lang_meta_album_names[$SLIDERSET['slider_album']]).$lang_meta_album_names[$SLIDERSET['slider_album']]);
 ?>
@@ -77,8 +80,8 @@ function slider_mainpage($matches)
                        <td align="left">
                            <script type="text/javascript">
                                 var slideshowgap=2;
-                                var copyspeed=<?php echo $cpgslideplug_slidespeed;?>;
-                                var realcopyspeed=<?php echo $cpgslideplug_slidespeed;?>;
+                                var copyspeed=<?php echo $SLIDERSET['slider_speed'];?>;
+                                var realcopyspeed=<?php echo $SLIDERSET['slider_speed'];?>;
                                 var cpgslid_brwsx,cpgslid_brwsy,cpgslid_oldbrwsx,cpgslid_oldbrwsy;
 <?php
   // maximum pics to show
@@ -173,17 +176,17 @@ function slider_mainpage($matches)
   //Max height of pics fixed
   $cpgslideplug_sliderheight = $max_height."px";
 
-?>                                
-                                var actualwidth='';
+?>                                var actualwidth='';
                                 var cross_slide;
                                 var cross_slide2;
                                 var slider_autowidth;
                                 <?php if ($SLIDERSET['slider_autowidth']) echo "var autowidth=1;"; else echo "var autowidth=0;";?>
+
                                 slid_addLoad(cpgslideplug_fillup);
                            </script>
                                 <span id="slider_temp" style="visibility:visible;position:absolute;top:-100px;white-space:nowrap;left:-9000px;"><?php echo $slider_pics;?></span>
-                                <div id="slider_autow1" style="position:relative<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$cpgslideplug_sliderwidth; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;overflow:hidden;white-space:nowrap;">
-                                      <div id="slider_autow2" style="white-space:nowrap;position:absolute<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$cpgslideplug_sliderwidth; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;<?php if ($cpgslideplug_slidebgcolor) echo "background-color:".$cpgslideplug_slidebgcolor.";";?>">
+                                <div id="slider_autow1" style="position:relative<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$SLIDERSET['slider_width']."px"; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;overflow:hidden;white-space:nowrap;">
+                                      <div id="slider_autow2" style="white-space:nowrap;position:absolute<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$SLIDERSET['slider_width']."px"; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;<?php if ($SLIDERSET['slider_bgcolor']) echo "background-color:".$SLIDERSET['slider_bgcolor'].";";?>">
                                           <div id="slider_test2" style="visibility:hidden;position:absolute;left:0px;top:0px;white-space:nowrap;"><?php echo $slider_pics2;?></div>  
                                           <div id="slider_test3" style="visibility:hidden;position:absolute;left:-2000px;top:0px;white-space:nowrap;"><?php echo $slider_pics3;?></div>
                                       </div>
@@ -229,21 +232,12 @@ function slider_install()
            return true;
 }
 
-// checking for file (Intermadiate) availablity
-function slider_is_file($chk_file)
-{
-    $test_wrong = array ("%28","%29","%C3%BC","%5B","%5D","%25","%23","%7E","%c2%A7","%21","%3D","%C2%B4");
-    $test_right = array ('(',')','#','[',']','%','#','~','§','!','=','´');
-    $chk_file = str_replace($test_wrong, $test_right, $chk_file);
-    if(is_file($chk_file)) return true;
-    else return false;
-}
 
 // Unnstall and drop settings table
 function slider_uninstall()
 {
         global $CONFIG;
-        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}mod_slider");
+        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_slider");
         return true;
 }
 ?>

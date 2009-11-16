@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -20,7 +20,7 @@ $lang_plugin_slider = array(
 'slider_bgcolor' => 'Color de fondo (vacio = transparente)',
 'display_name' => 'PlugIn Deslizador',
 'main_title' => 'Slider PlugIn',
-'version' => 'v0.2',
+'version' => '$VERSION$=0.3',
 'pluginmanager' => 'Administrador de Plugins',
 'slider_install' => 'Instalacion del Deslizador',
 'install_button' => 'Instalar Ahora',

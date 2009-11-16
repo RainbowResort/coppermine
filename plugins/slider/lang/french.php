@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.2
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -21,7 +21,7 @@ $lang_plugin_slider = array(
 'slider_bgcolor' => 'Couleur arrière plan (Background)(vide = transparant)',
 'display_name' => 'Slider Plugin',
 'main_title' => 'Slider Plugin',
-'version' => 'v0.2',
+'version' => '$VERSION$=0.3',
 'pluginmanager' => 'Plugin Manager',
 'slider_install' => 'Slider Installation',
 'install_button' => 'Installez maintenant',
