@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt! $VERSION$=0.4
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -8,12 +8,18 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
+  ********************************************
+  Coppermine version: 1.5.2
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
   
-$name='EnlargeIt!';
-$description='EnlargeIt! - AJAX GUI for Coppermine 1.5.x';
-$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
-$version='0.4';
+$name = 'EnlargeIt!';
+$description = 'EnlargeIt! - AJAX GUI for Coppermine 1.5.x';
+$author = '<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
+$version = '0.5';
 $install_info = "You can configure the plugin after installation, use the button on the plugin manager. "
     . "If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.";
 $extra_info = '<span class="admin_menu"><a href="index.php?file=enlargeit/plugin_config" title="Configure EnlargeIt!">EnlargeIt! Configuration</a></span> '

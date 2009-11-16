@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt! $VERSION$=0.4
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -8,6 +8,12 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
+  ********************************************
+  Coppermine version: 1.5.2
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
   
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
@@ -158,12 +164,12 @@ function enlargeit_head()
 global $ENLARGEITSET, $template_header, $lang_enlargeit,$CONFIG;
 require('./plugins/enlargeit/include/init.inc.php');
     
-    $enlargeit_headcode = <<<EOS
+    $enlargeit_headcode = <<< EOT
 <!-- Begin EnlargeIt! Headcode -->
 <script type="text/javascript" src="plugins/enlargeit/js/enlargeit.js"></script>
 <link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />
 
-EOS;
+EOT;
 
     $enlargeit_headcode .= "<script type=\"text/javascript\"><!--
     ";
@@ -193,17 +199,19 @@ EOS;
     ";
     $enlargeit_headcode .= "enl_shadowintens = ".$ENLARGEITSET['enl_shadowintens'].";
     ";
-    $enlargeit_headcode .= "enl_gifpath = 'plugins/enlargeit/js/';
+    $enlargeit_headcode .= "enl_gifpath = 'plugins/enlargeit/images/';
     ";
     $enlargeit_headcode .= "enl_usecounter = 1;
     ";
     $enlargeit_headcode .= "enl_counterurl = 'index.php?file=enlargeit/enl_cnt&a=';
     ";
-    $enlargeit_headcode .= "enl_btnact = 'bact.png';
+    $enlargeit_headcode .= "enl_btnact = 'icons/bact_transp.png';
     ";
-    $enlargeit_headcode .= "enl_btninact = 'binact.png';
+    $enlargeit_headcode .= "enl_btninact = 'icons/binact_transp.png';
     ";
-    $enlargeit_headcode .= "enl_minuscur = 'minuscur.cur';
+    $enlargeit_headcode .= "enl_minuscur = 'cursors/minuscur.cur';
+    ";
+	$enlargeit_headcode .= "enl_pluscur = 'cursors/pluscur.cur';
     ";
     $enlargeit_headcode .= "enl_speed = ".$ENLARGEITSET['enl_speed'].";
     ";
@@ -217,7 +225,7 @@ EOS;
     ";
     $enlargeit_headcode .= "enl_drgdrop = ".$ENLARGEITSET['enl_dragdrop'].";
     ";
-    $enlargeit_headcode .= "enl_brdbck = '".$ENLARGEITSET['enl_brdbck']."';
+    $enlargeit_headcode .= "enl_brdbck = 'backgrounds/".$ENLARGEITSET['enl_brdbck']."';
     ";
     $enlargeit_headcode .= "enl_darksteps = ".$ENLARGEITSET['enl_darkensteps'].";
     ";
