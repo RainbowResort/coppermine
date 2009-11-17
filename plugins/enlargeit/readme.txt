@@ -1,5 +1,5 @@
 /**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt! $VERSION$=0.4
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -7,7 +7,13 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
-  **************************************************/
+  ********************************************
+  Coppermine version: 1.5.2
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**************************************************/
 
 What's this?
 ------------
@@ -69,8 +75,6 @@ First aid - if it doesn't work
 
 Credits:
 --------
-This plugin uses some icons from the free icon set 'Silk':
-  http://www.famfamfam.com/lab/icons/silk/
 This plugin uses EnlargeIt! technology:
   http://enlargeit.timos-welt.de/
 This plugin uses free FLV player by rphMedia:
@@ -83,23 +87,32 @@ This plugin uses open source FLV player OSFLV:
 
 =========================================================================
 
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
 
-Change log:
------------
-
-v0.4 (2009/11/11)
------------------
-favourite button is back
-histogram  button is back
-download  button is back
-no longer need to copy anything to gallery root
-three new animation modes
-
-
-v0.3 (2009/01/11)
------------------
-using new plugin hook for faster processing and no preg_replace anymore
-
-v0.1 (2008/06/16)
------------------
-first public release
+2009-11-17 [M] Version count updated to 0.6 {GauGau}
+2009-11-17 [A] Added buttons to config screen {GauGau}
+2009-11-17 [M] Replaced silk icons with crystal icons for license compliance {GauGau}
+2009-11-17 [A] Added icons {GauGau} 
+2009-11-17 [M] Converted changelog to coppermine standards {GauGau} 
+2009-11-16 [M] Version count updated to 0.5 {GauGau}
+2009-11-16 [M] Added SVN headers {GauGau}
+2009-11-16 [A] Moved images into separate folder, cleaning up js folder {GauGau}
+2009-11-13 [M] Added enlargeit to subversion repository {eenemeenemuu }
+2009-11-11 [A] Favorite button is back {Timo}
+2009-11-11 [A] Histogram  button is back {Timo}
+2009-11-11 [A] Download  button is back {Timo}
+2009-11-11 [A] No longer need to copy anything to gallery root {Timo}
+2009-11-11 [A] Three new animation modes {Timo}
+2009-11-11 [M] Version count updated to 0.4 {Timo}
+2009-11-01 [A] Using new plugin hook for faster processing and no preg_replace anymore {Timo}
+2009-11-01 [M] Version count updated to 0.3 {Timo}
+2009-11-01 [M] First public release {Timo}

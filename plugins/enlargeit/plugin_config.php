@@ -102,16 +102,44 @@ if ($enl_superCage->post->keyExists('update')) {
   $enl_buttonbbcode = $enl_superCage->post->getInt('enl_buttonbbcode');
   
   // build SQL string
-  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}plugin_enlargeit` SET ";
-  $s .= "enl_pictype=($enl_pictype),enl_brd=($enl_brd),enl_brdsize=($enl_brdsize),enl_brdround=($enl_brdround),enl_brdcolor=('$enl_brdcolor'),";
-  $s .= "enl_shadow=($enl_shadow),enl_shadowsize=($enl_shadowsize),enl_shadowintens=($enl_shadowintens),";
-  $s .= "enl_ani=($enl_ani),enl_maxstep=($enl_maxstep),enl_speed=($enl_speed),enl_titlebar=($enl_titlebar),";
-  $s .= "enl_titletxtcol=('$enl_titletxtcol'),enl_ajaxcolor=('$enl_ajaxcolor'),enl_center=($enl_center),";
-  $s .= "enl_dark=($enl_dark),enl_darkprct=($enl_darkprct),enl_buttonnav=($enl_buttonnav),enl_buttonvote=($enl_buttonvote),enl_buttondownload=($enl_buttondownload),";
-  $s .= "enl_buttonpic=($enl_buttonpic),enl_buttoninfo=($enl_buttoninfo),enl_buttonfav=($enl_buttonfav),enl_buttonclose=($enl_buttonclose),enl_buttonmax=($enl_buttonmax),enl_buttonhist=($enl_buttonhist),";
-  $s .= "enl_buttoncomment=($enl_buttoncomment),enl_wheelnav=($enl_wheelnav),enl_buttonbbcode=($enl_buttonbbcode),";
-  $s .= "enl_adminmode=($enl_adminmode),enl_registeredmode=($enl_registeredmode),enl_guestmode=($enl_guestmode),enl_opaglide=($enl_opaglide),";
-  $s .= "enl_dragdrop=($enl_dragdrop),enl_darkensteps=($enl_darkensteps),enl_brdbck=('$enl_brdbck'),enl_flvplayer=($enl_flvplayer)";
+  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}plugin_enlargeit` 
+      SET enl_pictype='$enl_pictype',
+          enl_brd='$enl_brd',
+          enl_brdsize='$enl_brdsize',
+          enl_brdround='$enl_brdround',
+          enl_brdcolor=('$enl_brdcolor'),
+          enl_shadow='$enl_shadow',
+          enl_shadowsize='$enl_shadowsize',
+          enl_shadowintens='$enl_shadowintens',
+          enl_ani='$enl_ani',
+          enl_maxstep='$enl_maxstep',
+          enl_speed='$enl_speed',
+          enl_titlebar='$enl_titlebar',
+          enl_titletxtcol='$enl_titletxtcol',
+          enl_ajaxcolor='$enl_ajaxcolor',
+          enl_center='$enl_center',
+          enl_dark='$enl_dark',
+          enl_darkprct='$enl_darkprct',
+          enl_buttonnav='$enl_buttonnav',
+          enl_buttonvote='$enl_buttonvote',
+          enl_buttondownload='$enl_buttondownload',
+          enl_buttonpic='$enl_buttonpic',
+          enl_buttoninfo='$enl_buttoninfo',
+          enl_buttonfav='$enl_buttonfav',
+          enl_buttonclose='$enl_buttonclose',
+          enl_buttonmax='$enl_buttonmax',
+          enl_buttonhist='$enl_buttonhist',
+          enl_buttoncomment='$enl_buttoncomment',
+          enl_wheelnav='$enl_wheelnav',
+          enl_buttonbbcode='$enl_buttonbbcode',
+          enl_adminmode='$enl_adminmode',
+          enl_registeredmode='$enl_registeredmode',
+          enl_guestmode='$enl_guestmode',
+          enl_opaglide='$enl_opaglide',
+          enl_dragdrop='$enl_dragdrop',
+          enl_darkensteps='$enl_darkensteps',
+          enl_brdbck='$enl_brdbck',
+          enl_flvplayer='$enl_flvplayer'";
   
   // query database
   cpg_db_query($s); 
@@ -125,16 +153,16 @@ if ($enl_superCage->post->keyExists('update')) {
 }
 
 
-// no POST variables: dispplay config page
+// no POST variables: display config page
 pageheader($lang_enlargeit['display_name']);
-starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'].'<font size=1 color=red> by <a href="http://www.timos-welt.de">Timos-Welt</font>', 3);
+starttable('100%', $enlargeit_icon_array['table'] . $lang_enlargeit['main_title'].' by <a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>', 3);
 ?>
 
-<TR>
-  <TD class=tableh2 colSpan=3 onClick="show_section('section1')"><SPAN style="CURSOR: pointer"><IMG title="Config" height=9 alt="" src="images/descending.gif" width=9 border=0> <strong><?php echo $lang_enlargeit['main_title']?></strong></SPAN> </TD>
-</TR>
-<TR>
-  <td><form action="<?php $_SERVER['PHP_SELF']?>" method="post" name="enlargeit_settings">
+<tr>
+  <td class=tableh2 colSpan=3 onClick="show_section('section1')"><span style="cursor: pointer"><img title="Config" height=9 alt="" src="images/descending.gif" width=9 border=0> <strong><?php echo $lang_enlargeit['main_title']?></strong></span> </td>
+</tr>
+<tr>
+  <td><form action="<?php $CPG_PHP_SELF ?>" method="post" name="enlargeit_settings">
       <table class="maintable" cellSpacing="2" cellPadding="2" width="100%" align="<?php echo $align?>" border=0 id="section1">
         <tr>
           <td width="50%">&nbsp;</td>
@@ -494,7 +522,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           <td><hr /></td><td><hr /></td>
         </tr>
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonpic']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonpic'] . $enlargeit_icon_array['show']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonpic" id="enl_buttonpic">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonpic'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -503,7 +531,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>        
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttoninfo']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttoninfo'] . $enlargeit_icon_array['info'];?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttoninfo" id="enl_buttoninfo">
                  <option value="2" <?php if($ENLARGEITSET['enl_buttoninfo'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_buttoninfoyes2']?></option>
@@ -513,7 +541,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>        
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonfav']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonfav'] . $enlargeit_icon_array['favorites']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonfav" id="enl_buttonfav">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonfav'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -522,25 +550,25 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>        
         <tr>
-          <td align="right"><i>Dummy - does not work yet:</i> <?php echo $lang_enlargeit['enl_buttonvote']?>&nbsp;&nbsp;</td>
+          <td align="right"><em>Dummy - does not work yet:</em> <?php echo $lang_enlargeit['enl_buttonvote'] . $enlargeit_icon_array['vote']; ?>&nbsp;&nbsp;</td>
           <td>
-              <select name="enl_buttonvote" id="enl_buttonvote">
+              <select name="enl_buttonvote" id="enl_buttonvote" disabled="disabled">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonvote'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
                  <option value="0" <?php if($ENLARGEITSET['enl_buttonvote'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
               </select>
           </td>
         </tr>   
         <tr>
-          <td align="right"><i>Dummy - does not work yet:</i> <?php echo $lang_enlargeit['enl_buttoncomment']?>&nbsp;&nbsp;</td>
+          <td align="right"><em>Dummy - does not work yet:</em> <?php echo $lang_enlargeit['enl_buttoncomment'] . $enlargeit_icon_array['comment']; ?>&nbsp;&nbsp;</td>
           <td>
-              <select name="enl_buttoncomment" id="enl_buttoncomment">
+              <select name="enl_buttoncomment" id="enl_buttoncomment" disabled="disabled">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttoncomment'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
                  <option value="0" <?php if($ENLARGEITSET['enl_buttoncomment'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
               </select>
           </td>
         </tr>       
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttondownload']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttondownload'] . $enlargeit_icon_array['download']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttondownload" id="enl_buttondownload">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttondownload'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -550,7 +578,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>  
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonmax']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonmax'] . $enlargeit_icon_array['fullsize']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonmax" id="enl_buttonmax">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonmax'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -562,7 +590,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>       
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonbbcode']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonbbcode'] . $enlargeit_icon_array['bbcode']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonbbcode" id="enl_buttonbbcode">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonbbcode'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -571,7 +599,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>    
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonhist']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonhist'] . $enlargeit_icon_array['histogramm']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonhist" id="enl_buttonhist">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonhist'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -580,7 +608,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr>        
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonnav']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonnav'] . $enlargeit_icon_array['previous'] . $enlargeit_icon_array['next']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonnav" id="enl_buttonnav">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonnav'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -589,7 +617,7 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
           </td>
         </tr> 
         <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonclose']?>&nbsp;&nbsp;</td>
+          <td align="right"><?php echo $lang_enlargeit['enl_buttonclose'] . $enlargeit_icon_array['close']; ?>&nbsp;&nbsp;</td>
           <td>
               <select name="enl_buttonclose" id="enl_buttonclose">
                  <option value="1" <?php if($ENLARGEITSET['enl_buttonclose'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
@@ -646,7 +674,9 @@ starttable('100%', $lang_enlargeit['main_title'].' - '.$lang_enlargeit['version'
         </tr>  
         <tr>
           <td>&nbsp;</td>
-          <td align="left"><input name="Submit" type="submit" value="<?php echo $lang_enlargeit['submit_button']?>" /></td>
+          <td align="left">
+                                          <button type="submit" class="button" name="submit" value="<?php echo $lang_enlargeit['submit_button']; ?>"><?php echo $enlargeit_icon_array['ok'] . $lang_enlargeit['submit_button']; ?></button>
+          </td>
         </tr>
         <tr>
           <td>&nbsp;</td>

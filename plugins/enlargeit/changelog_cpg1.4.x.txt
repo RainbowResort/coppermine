@@ -1,6 +1,8 @@
 EnlargeIt! - http://enlargeit.timos-welt.de
 -------------------------------------------
 
+Note: this file referes to version numbers for the plugin for cpg1.4.x only. The version numbers for cpg1.5.x differ.
+
 * v0.5 (beta)
 -------------
 First public release.

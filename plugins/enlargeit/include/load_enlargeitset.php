@@ -16,6 +16,9 @@
   $Date$
   **************************************************/
 
+if (!defined('IN_COPPERMINE')) { 
+    die('Not in Coppermine...');
+}
 
 // Check if PlugIn is installed
 $enlargeit_isinstalled = 0;

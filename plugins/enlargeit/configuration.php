@@ -16,13 +16,17 @@
   $Date$
   **************************************************/
   
+require('./plugins/enlargeit/include/init.inc.php');
+  
 $name = 'EnlargeIt!';
 $description = 'EnlargeIt! - AJAX GUI for Coppermine 1.5.x';
-$author = '<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
-$version = '0.5';
+$author = '<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>';
+$version = '0.6';
 $install_info = "You can configure the plugin after installation, use the button on the plugin manager. "
     . "If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.";
-$extra_info = '<span class="admin_menu"><a href="index.php?file=enlargeit/plugin_config" title="Configure EnlargeIt!">EnlargeIt! Configuration</a></span> '
-    . '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" title="EnlargeIt! Support">EnlargeIt! Support</a></span>'
-    . '<p>This plugin is currently an alpha version. Not all features will work, especially the AJAX parts (these will be completed after CPG 1.5.x is released). Thanks for understanding.</p>';
+$extra_info = '<p>This plugin is currently an alpha version. Not all features will work, especially the AJAX parts. Thanks for understanding.</p>';
+$announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="admin_menu external">'.$enlargeit_icon_array['announcement'].'Announcement thread</a>';
+$configuration_link = '<a href="index.php?file=enlargeit/plugin_config" title="Configure EnlargeIt!" class="admin_menu">'.$enlargeit_icon_array['configure'].'EnlargeIt! Configuration</a>';
+$install_info .= $announcement_thread;
+$extra_info .= $configuration_link . '&nbsp;' . $announcement_thread;
 ?>
