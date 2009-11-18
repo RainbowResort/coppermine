@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt! $VERSION$=0.4
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -20,14 +20,13 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
+// Define the default language array (English)
+require ("./plugins/enlargeit/lang/english.php");
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
-
 if (file_exists("./plugins/enlargeit/lang/{$CONFIG['lang']}.php")) {
   require ("./plugins/enlargeit/lang/{$CONFIG['lang']}.php");
-} else {
-    require ("./plugins/enlargeit/lang/english.php");
-}
+} 
 
 if ($CONFIG['enable_menu_icons'] >= 1) {
     $enlargeit_icon_array['configure'] = '<img src="./plugins/enlargeit/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';
@@ -74,5 +73,26 @@ if ($CONFIG['enable_menu_icons'] == 2) {
 $enlargeit_icon_array['ok'] = cpg_fetch_icon('ok', 0);
 $enlargeit_icon_array['cancel'] = cpg_fetch_icon('cancel', 0);
 $enlargeit_icon_array['stop'] = cpg_fetch_icon('stop', 0);
+
+$border_texture_array = array(
+'marble',
+'brushed_metal',
+'white_metal',
+'white_metal2',
+'blue_metal',
+'red_metal',
+'green_metal',
+'silver_metal',
+'black_metal',
+'rain',
+'light_rain',
+'light_wood',
+'dark_wood',
+'paper',
+'leather',
+'dark_green',
+'green_liquid',
+'chocolate'
+);
 
 ?>

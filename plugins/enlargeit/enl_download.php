@@ -41,7 +41,7 @@ echo 'if (window.ActiveXObject || window.opera || (navigator.userAgent.toLowerCa
 echo 'window.location=\'index.php?file=enlargeit/enl_download2&pid='.$pid.'\';else window.open(\'index.php?file=enlargeit/enl_download2&pid='.$pid.'\');';
 echo 'return false;';
 
-echo '"><b>'.$lang_enlargeit['enl_clickdownload'].'</a></b><br /></td></tr>';
+echo '"><b>'.$lang_plugin_enlargeit['enl_clickdownload'].'</a></b><br /></td></tr>';
 echo '</table>';
 
 ?>

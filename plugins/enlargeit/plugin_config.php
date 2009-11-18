@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt! $VERSION$=0.4
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -10,15 +10,24 @@
   (at your option) any later version.
   **************************************************/
 
-require_once('include/init.inc.php');
 require('./plugins/enlargeit/include/init.inc.php');
-require('./plugins/enlargeit/include/load_enlargeitset.php');
+if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'js/jquery.spinbutton.js';
+}
+if (in_array('plugins/enlargeit/js/farbtastic.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'plugins/enlargeit/js/farbtastic.js';
+}
+if (in_array('plugins/enlargeit/js/config.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'plugins/enlargeit/js/config.js';
+}
 
 // create Inspekt supercage
-$enl_superCage = Inspekt::makeSuperCage();
+$superCage = Inspekt::makeSuperCage();
 
-global $CONFIG,$lang_enlargeit,$lang_meta_album_names;
-if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+global $CONFIG,$lang_plugin_enlargeit,$lang_meta_album_names;
+if (!GALLERY_ADMIN_MODE) {
+    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+}
 
 // text direction
 if($lang_text_dir=='ltr') {
@@ -30,663 +39,654 @@ if($lang_text_dir=='ltr') {
 }
 
 // get sanitized POST parameters
-if ($enl_superCage->post->keyExists('update')) {
-  $enl_brd = $enl_superCage->post->getInt('enl_brd');
-  $enl_brdsize = $enl_superCage->post->getInt('enl_brdsize');
-  $enl_brdround = $enl_superCage->post->getInt('enl_brdround');
-  // colors can be given as hex value (#ffffff) or clear text (white), so alphanumeric + # is allowed
-  if ($enl_matches = $enl_superCage->post->getMatched('enl_brdcolor','/^[a-zA-Z0-9#]+$/'))
-  {
-    $enl_brdcolor = $enl_matches[0];
+if ($superCage->post->keyExists('update')) {
+  // Define the sanitization patterns
+  $sanitization_array = array(
+      'plugin_enlargeit_adminmode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_registeredmode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_guestmode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_pictype' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_ani' => array('type' => 'int', 'min' => '0', 'max' => '8'),
+      'plugin_enlargeit_speed' => array('type' => 'int', 'min' => '10', 'max' => '32'),
+      'plugin_enlargeit_maxstep' => array('type' => 'int', 'min' => '4', 'max' => '30'),
+      'plugin_enlargeit_opaglide' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_brdsize' => array('type' => 'int', 'min' => '0', 'max' => '40'),
+      'plugin_enlargeit_brdcolor' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
+      'plugin_enlargeit_brdbck' => array('type' => 'raw', 'regex_ok' => '/^[a-z_]+$/'),
+      'plugin_enlargeit_brdround' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_shadowsize' => array('type' => 'int', 'min' => '0', 'max' => '9'),
+      'plugin_enlargeit_shadowintens' => array('type' => 'int', 'min' => '1', 'max' => '30'),
+      'plugin_enlargeit_titlebar' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_titletxtcol' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
+      'plugin_enlargeit_ajaxcolor' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
+      'plugin_enlargeit_center' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_dragdrop' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_wheelnav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_dark' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_darkprct' => array('type' => 'int', 'min' => '0', 'max' => '100'),
+      'plugin_enlargeit_darkensteps' => array('type' => 'int', 'min' => '1', 'max' => '20'),
+      'plugin_enlargeit_buttonpic' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttoninfo' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_buttonfav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttonvote' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttoncomment' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttondownload' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_buttonmax' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_buttonbbcode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttonhist' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttonnav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_buttonclose' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_enlargeit_flvplayer' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+  );
+  $config_changes_counter = 0;
+  foreach ($sanitization_array as $san_key => $san_value) {
+      if (isset($CONFIG[$san_key]) == TRUE) { // only loop if config value is set --- start
+          if ($san_value['type'] == 'checkbox') { // type is checkbox --- start
+            if ($superCage->post->getInt($san_key) == $san_value['max'] && $CONFIG[$san_key] != $san_value['max']) {
+                $CONFIG[$san_key] = $san_value['max'];
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            } elseif($superCage->post->getInt($san_key) == $san_value['min'] && $CONFIG[$san_key] != $san_value['min']) {
+                $CONFIG[$san_key] = $san_value['min'];
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            } elseif($superCage->post->keyExists($san_key) != TRUE && $CONFIG[$san_key] != '0') {
+                $CONFIG[$san_key] = 0;
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            }
+          } // type is checkbox --- end
+          if ($san_value['type'] == 'int') { // type is integer --- start
+              if ($superCage->post->getInt($san_key) <= $san_value['max'] && $superCage->post->getInt($san_key) >= $san_value['min'] && $superCage->post->getInt($san_key) != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $superCage->post->getInt($san_key);
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is integer --- end
+          if ($san_value['type'] == 'raw') { // type is raw --- start
+              if (isset($san_value['regex_ok']) == TRUE && preg_match($san_value['regex_ok'], $superCage->post->getRaw($san_key)) && $superCage->post->getRaw($san_key) != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $superCage->post->getRaw($san_key);
+				  if ($superCage->post->getRaw($san_key) == 'none') {
+					$CONFIG[$san_key] = '';
+				  }
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is raw --- end
+      } // only loop if config value is set --- end
   }
-  else
-  {
-  	$enl_brdcolor = '#FFFFFF';
-  }
-  $enl_shadow = $enl_superCage->post->getInt('enl_shadow');
-  $enl_shadowsize = $enl_superCage->post->getInt('enl_shadowsize');
-  $enl_shadowintens = $enl_superCage->post->getInt('enl_shadowintens');
-  $enl_ani = $enl_superCage->post->getInt('enl_ani');
-  $enl_maxstep = $enl_superCage->post->getInt('enl_maxstep');
-  $enl_speed = $enl_superCage->post->getInt('enl_speed');
-  $enl_titlebar = $enl_superCage->post->getInt('enl_titlebar');
-  // colors can be given as hex value (#ffffff) or clear text (white), so alphanumeric + # is allowed
-  if ($enl_matches = $enl_superCage->post->getMatched('enl_titletxtcol','/^[a-zA-Z0-9#]+$/'))
-  {
-    $enl_titletxtcol = $enl_matches[0];
-  }
-  else
-  {
-  	$enl_titletxtcol = '#445544';
-  }
-  // colors can be given as hex value (#ffffff) or clear text (white), so alphanumeric + # is allowed
-  if ($enl_matches = $enl_superCage->post->getMatched('enl_ajaxcolor','/^[a-zA-Z0-9#]+$/'))
-  {
-    $enl_ajaxcolor = $enl_matches[0];
-  }
-  else
-  {
-  	$enl_ajaxcolor = '#666677';
-  }
-  $enl_center = $enl_superCage->post->getInt('enl_center');
-  $enl_dark = $enl_superCage->post->getInt('enl_dark');
-  $enl_darkprct = $enl_superCage->post->getInt('enl_darkprct');
-  $enl_buttonpic = $enl_superCage->post->getInt('enl_buttonpic');
-  $enl_buttoninfo = $enl_superCage->post->getInt('enl_buttoninfo');
-  $enl_buttonfav = $enl_superCage->post->getInt('enl_buttonfav');
-  $enl_buttoncomment = $enl_superCage->post->getInt('enl_buttoncomment');
-  $enl_buttonhist = $enl_superCage->post->getInt('enl_buttonhist');
-  $enl_buttonvote = $enl_superCage->post->getInt('enl_buttonvote');
-  $enl_buttondownload = $enl_superCage->post->getInt('enl_buttondownload');
-  $enl_buttonmax = $enl_superCage->post->getInt('enl_buttonmax');
-  $enl_buttonclose = $enl_superCage->post->getInt('enl_buttonclose');
-  $enl_buttonnav = $enl_superCage->post->getInt('enl_buttonnav');
-  $enl_adminmode = $enl_superCage->post->getInt('enl_adminmode');
-  $enl_registeredmode = $enl_superCage->post->getInt('enl_registeredmode');
-  $enl_guestmode = $enl_superCage->post->getInt('enl_guestmode');
-  $enl_pictype = $enl_superCage->post->getInt('enl_pictype');
-  $enl_dragdrop = $enl_superCage->post->getInt('enl_dragdrop');
-  $enl_darkensteps = $enl_superCage->post->getInt('enl_darkensteps');
-  // border background is a filename with underscore and dot
-  if ($enl_matches = $enl_superCage->post->getMatched('enl_brdbck','/^[a-zA-Z0-9_\.]+$/'))
-  {
-    $enl_brdbck = $enl_matches[0];
-  }
-  else
-  {
-  	$enl_brdbck = '';
-  }
-  $enl_opaglide = $enl_superCage->post->getInt('enl_opaglide');
-  $enl_wheelnav = $enl_superCage->post->getInt('enl_wheelnav');
-  $enl_flvplayer = $enl_superCage->post->getInt('enl_flvplayer');
-  $enl_buttonbbcode = $enl_superCage->post->getInt('enl_buttonbbcode');
-  
-  // build SQL string
-  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}plugin_enlargeit` 
-      SET enl_pictype='$enl_pictype',
-          enl_brd='$enl_brd',
-          enl_brdsize='$enl_brdsize',
-          enl_brdround='$enl_brdround',
-          enl_brdcolor=('$enl_brdcolor'),
-          enl_shadow='$enl_shadow',
-          enl_shadowsize='$enl_shadowsize',
-          enl_shadowintens='$enl_shadowintens',
-          enl_ani='$enl_ani',
-          enl_maxstep='$enl_maxstep',
-          enl_speed='$enl_speed',
-          enl_titlebar='$enl_titlebar',
-          enl_titletxtcol='$enl_titletxtcol',
-          enl_ajaxcolor='$enl_ajaxcolor',
-          enl_center='$enl_center',
-          enl_dark='$enl_dark',
-          enl_darkprct='$enl_darkprct',
-          enl_buttonnav='$enl_buttonnav',
-          enl_buttonvote='$enl_buttonvote',
-          enl_buttondownload='$enl_buttondownload',
-          enl_buttonpic='$enl_buttonpic',
-          enl_buttoninfo='$enl_buttoninfo',
-          enl_buttonfav='$enl_buttonfav',
-          enl_buttonclose='$enl_buttonclose',
-          enl_buttonmax='$enl_buttonmax',
-          enl_buttonhist='$enl_buttonhist',
-          enl_buttoncomment='$enl_buttoncomment',
-          enl_wheelnav='$enl_wheelnav',
-          enl_buttonbbcode='$enl_buttonbbcode',
-          enl_adminmode='$enl_adminmode',
-          enl_registeredmode='$enl_registeredmode',
-          enl_guestmode='$enl_guestmode',
-          enl_opaglide='$enl_opaglide',
-          enl_dragdrop='$enl_dragdrop',
-          enl_darkensteps='$enl_darkensteps',
-          enl_brdbck='$enl_brdbck',
-          enl_flvplayer='$enl_flvplayer'";
-  
-  // query database
-  cpg_db_query($s); 
-  
-  
-  // success note to user
-  pageheader($lang_enlargeit['display_name']);
-  msg_box($lang_enlargeit['display_name'], $lang_enlargeit['update_success'], $lang_common['continue'], 'pluginmgr.php');
-  pagefooter();
-  exit();
 }
 
 
-// no POST variables: display config page
-pageheader($lang_enlargeit['display_name']);
-starttable('100%', $enlargeit_icon_array['table'] . $lang_enlargeit['main_title'].' by <a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>', 3);
-?>
+// display config page
 
-<tr>
-  <td class=tableh2 colSpan=3 onClick="show_section('section1')"><span style="cursor: pointer"><img title="Config" height=9 alt="" src="images/descending.gif" width=9 border=0> <strong><?php echo $lang_enlargeit['main_title']?></strong></span> </td>
-</tr>
-<tr>
-  <td><form action="<?php $CPG_PHP_SELF ?>" method="post" name="enlargeit_settings">
-      <table class="maintable" cellSpacing="2" cellPadding="2" width="100%" align="<?php echo $align?>" border=0 id="section1">
-        <tr>
-          <td width="50%">&nbsp;</td>
-          <td width="50%">&nbsp;</td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_pictype']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_pictype" id="enl_pictype">
-                 <option value="0" <?php if($ENLARGEITSET['enl_pictype'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_normalsize']?></option>
-                 <option value="1" <?php if($ENLARGEITSET['enl_pictype'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_fullsize']?></option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_pictype'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_forcenormal']?></option>
-                 
-              </select>
-          </td>
-        </tr>
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_ani']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_ani" id="enl_ani">
-                 <option value="0" <?php if($ENLARGEITSET['enl_ani'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['noani']?></option>
-                 <option value="1" <?php if($ENLARGEITSET['enl_ani'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['fade']?></option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_ani'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['glide']?></option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_ani'] == 3) echo 'selected="selected"';?>><?php echo $lang_enlargeit['bumpglide']?></option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_ani'] == 4) echo 'selected="selected"';?>><?php echo $lang_enlargeit['smoothglide']?></option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_ani'] == 5) echo 'selected="selected"';?>><?php echo $lang_enlargeit['expglide']?></option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_ani'] == 6) echo 'selected="selected"';?>><?php echo $lang_enlargeit['topglide']?></option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_ani'] == 7) echo 'selected="selected"';?>><?php echo $lang_enlargeit['leftglide']?></option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_ani'] == 8) echo 'selected="selected"';?>><?php echo $lang_enlargeit['topleftglide']?></option>
-                 
-              </select>
-          </td>
-        </tr>             
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_speed']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_speed" id="enl_speed">
-                 <option value="10" <?php if($ENLARGEITSET['enl_speed'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="12" <?php if($ENLARGEITSET['enl_speed'] == 12) echo 'selected="selected"';?>>12</option>
-                 <option value="14" <?php if($ENLARGEITSET['enl_speed'] == 14) echo 'selected="selected"';?>>14</option>
-                 <option value="16" <?php if($ENLARGEITSET['enl_speed'] == 16) echo 'selected="selected"';?>>16</option>
-                 <option value="18" <?php if($ENLARGEITSET['enl_speed'] == 18) echo 'selected="selected"';?>>18</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_speed'] == 20) echo 'selected="selected"';?>>20</option>
-                 <option value="22" <?php if($ENLARGEITSET['enl_speed'] == 22) echo 'selected="selected"';?>>22</option>
-                 <option value="24" <?php if($ENLARGEITSET['enl_speed'] == 24) echo 'selected="selected"';?>>24</option>
-                 <option value="26" <?php if($ENLARGEITSET['enl_speed'] == 26) echo 'selected="selected"';?>>26</option>
-                 <option value="28" <?php if($ENLARGEITSET['enl_speed'] == 28) echo 'selected="selected"';?>>28</option>
-                 <option value="30" <?php if($ENLARGEITSET['enl_speed'] == 30) echo 'selected="selected"';?>>30</option>
-                 <option value="32" <?php if($ENLARGEITSET['enl_speed'] == 32) echo 'selected="selected"';?>>32</option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_maxstep']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_maxstep" id="enl_maxstep">
-                 <option value="4" <?php if($ENLARGEITSET['enl_maxstep'] == 4) echo 'selected="selected"';?>>4</option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_maxstep'] == 5) echo 'selected="selected"';?>>5</option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_maxstep'] == 6) echo 'selected="selected"';?>>6</option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_maxstep'] == 7) echo 'selected="selected"';?>>7</option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_maxstep'] == 8) echo 'selected="selected"';?>>8</option>
-                 <option value="9" <?php if($ENLARGEITSET['enl_maxstep'] == 9) echo 'selected="selected"';?>>9</option>
-                 <option value="10" <?php if($ENLARGEITSET['enl_maxstep'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="11" <?php if($ENLARGEITSET['enl_maxstep'] == 11) echo 'selected="selected"';?>>11</option>
-                 <option value="12" <?php if($ENLARGEITSET['enl_maxstep'] == 12) echo 'selected="selected"';?>>12</option>
-                 <option value="13" <?php if($ENLARGEITSET['enl_maxstep'] == 13) echo 'selected="selected"';?>>13</option>
-                 <option value="14" <?php if($ENLARGEITSET['enl_maxstep'] == 14) echo 'selected="selected"';?>>14</option>
-                 <option value="15" <?php if($ENLARGEITSET['enl_maxstep'] == 15) echo 'selected="selected"';?>>15</option>
-                 <option value="16" <?php if($ENLARGEITSET['enl_maxstep'] == 16) echo 'selected="selected"';?>>16</option>
-                 <option value="17" <?php if($ENLARGEITSET['enl_maxstep'] == 17) echo 'selected="selected"';?>>17</option>
-                 <option value="18" <?php if($ENLARGEITSET['enl_maxstep'] == 18) echo 'selected="selected"';?>>18</option>
-                 <option value="19" <?php if($ENLARGEITSET['enl_maxstep'] == 19) echo 'selected="selected"';?>>19</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_maxstep'] == 20) echo 'selected="selected"';?>>20</option>
-                 <option value="21" <?php if($ENLARGEITSET['enl_maxstep'] == 21) echo 'selected="selected"';?>>21</option>
-                 <option value="22" <?php if($ENLARGEITSET['enl_maxstep'] == 22) echo 'selected="selected"';?>>22</option>
-                 <option value="23" <?php if($ENLARGEITSET['enl_maxstep'] == 23) echo 'selected="selected"';?>>23</option>
-                 <option value="24" <?php if($ENLARGEITSET['enl_maxstep'] == 24) echo 'selected="selected"';?>>24</option>
-                 <option value="25" <?php if($ENLARGEITSET['enl_maxstep'] == 25) echo 'selected="selected"';?>>25</option>
-                 <option value="26" <?php if($ENLARGEITSET['enl_maxstep'] == 26) echo 'selected="selected"';?>>26</option>
-                 <option value="27" <?php if($ENLARGEITSET['enl_maxstep'] == 27) echo 'selected="selected"';?>>27</option>
-                 <option value="28" <?php if($ENLARGEITSET['enl_maxstep'] == 28) echo 'selected="selected"';?>>28</option>
-                 <option value="29" <?php if($ENLARGEITSET['enl_maxstep'] == 29) echo 'selected="selected"';?>>29</option>
-                 <option value="30" <?php if($ENLARGEITSET['enl_maxstep'] == 30) echo 'selected="selected"';?>>30</option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_opaglide']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_opaglide" id="enl_opaglide">
-                 <option value="1" <?php if($ENLARGEITSET['enl_opaglide'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_opaglide'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_brd']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_brd" id="enl_brd">
-                 <option value="1" <?php if($ENLARGEITSET['enl_brd'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_brd'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>          
-        <tr>
-          <td width="50%" align="right">
-            <?php echo $lang_enlargeit['enl_brdcolor']?>&nbsp;&nbsp;
-          </td>
-          <td width="50%">
-            <input id="enl_brdcolor" name="enl_brdcolor" value="<?php echo $ENLARGEITSET['enl_brdcolor']?>">
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_brdbck']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_brdbck" id="enl_brdbck">
-                 <option value="" <?php if($ENLARGEITSET['enl_brdbck'] == "") echo 'selected="selected"';?>>-</option>
-                 <option value="backgrounds__b_marble.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_marble.png") echo 'selected="selected"';?>>Marble</option>
-                 <option value="backgrounds__b_metallight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metallight.png") echo 'selected="selected"';?>>Brushed Metal</option>
-                 <option value="backgrounds__b_metalwhite.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalwhite.png") echo 'selected="selected"';?>>White Metal</option>
-                 <option value="backgrounds__b_metalwhite2.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalwhite2.png") echo 'selected="selected"';?>>White Metal 2</option>
-                 <option value="backgrounds__b_metalblue.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalblue.png") echo 'selected="selected"';?>>Blue Metal</option>
-                 <option value="backgrounds__b_metalred.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalred.png") echo 'selected="selected"';?>>Red Metal</option>
-                 <option value="backgrounds__b_metalgreen.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalgreen.png") echo 'selected="selected"';?>>Green Metal</option>
-                 <option value="backgrounds__b_metalsilver.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalsilver.png") echo 'selected="selected"';?>>Silver Metal</option>
-                 <option value="backgrounds__b_metalblack.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalblack.png") echo 'selected="selected"';?>>Black Metal</option>
-                 <option value="backgrounds__b_rain.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_rain.png") echo 'selected="selected"';?>>Rain</option>
-                 <option value="backgrounds__b_rainlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_rainlight.png") echo 'selected="selected"';?>>Light Rain</option>
-                 <option value="backgrounds__b_woodlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_woodlight.png") echo 'selected="selected"';?>>Light Wood</option>
-                 <option value="backgrounds__b_wooddark.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_wooddark.png") echo 'selected="selected"';?>>Dark Wood</option>
-                 <option value="backgrounds__b_paper.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_paper.png") echo 'selected="selected"';?>>Paper</option>
-                 <option value="backgrounds__b_leather.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_leather.png") echo 'selected="selected"';?>>Leather</option>
-                 <option value="backgrounds__b_green.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_green.png") echo 'selected="selected"';?>>Dark Green</option>
-                 <option value="backgrounds__b_greenliquid.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_greenliquid.png") echo 'selected="selected"';?>>Green Liquid</option>
-                 <option value="backgrounds__b_choc.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_choc.png") echo 'selected="selected"';?>>Chocolate</option>
-              </select>
-          </td>
-        </tr> 
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_brdsize']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_brdsize" id="enl_brdsize">
-                 <option value="1" <?php if($ENLARGEITSET['enl_brdsize'] == 1) echo 'selected="selected"';?>>1</option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_brdsize'] == 2) echo 'selected="selected"';?>>2</option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_brdsize'] == 3) echo 'selected="selected"';?>>3</option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_brdsize'] == 4) echo 'selected="selected"';?>>4</option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_brdsize'] == 5) echo 'selected="selected"';?>>5</option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_brdsize'] == 6) echo 'selected="selected"';?>>6</option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_brdsize'] == 7) echo 'selected="selected"';?>>7</option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_brdsize'] == 8) echo 'selected="selected"';?>>8</option>
-                 <option value="9" <?php if($ENLARGEITSET['enl_brdsize'] == 9) echo 'selected="selected"';?>>9</option>
-                 <option value="10" <?php if($ENLARGEITSET['enl_brdsize'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="11" <?php if($ENLARGEITSET['enl_brdsize'] == 11) echo 'selected="selected"';?>>11</option>
-                 <option value="12" <?php if($ENLARGEITSET['enl_brdsize'] == 12) echo 'selected="selected"';?>>12</option>
-                 <option value="13" <?php if($ENLARGEITSET['enl_brdsize'] == 13) echo 'selected="selected"';?>>13</option>
-                 <option value="14" <?php if($ENLARGEITSET['enl_brdsize'] == 14) echo 'selected="selected"';?>>14</option>
-                 <option value="15" <?php if($ENLARGEITSET['enl_brdsize'] == 15) echo 'selected="selected"';?>>15</option>
-                 <option value="16" <?php if($ENLARGEITSET['enl_brdsize'] == 16) echo 'selected="selected"';?>>16</option>
-                 <option value="17" <?php if($ENLARGEITSET['enl_brdsize'] == 17) echo 'selected="selected"';?>>17</option>
-                 <option value="18" <?php if($ENLARGEITSET['enl_brdsize'] == 18) echo 'selected="selected"';?>>18</option>
-                 <option value="19" <?php if($ENLARGEITSET['enl_brdsize'] == 19) echo 'selected="selected"';?>>19</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_brdsize'] == 20) echo 'selected="selected"';?>>20</option>
-                 <option value="21" <?php if($ENLARGEITSET['enl_brdsize'] == 21) echo 'selected="selected"';?>>21</option>
-                 <option value="22" <?php if($ENLARGEITSET['enl_brdsize'] == 22) echo 'selected="selected"';?>>22</option>
-                 <option value="23" <?php if($ENLARGEITSET['enl_brdsize'] == 23) echo 'selected="selected"';?>>23</option>
-                 <option value="24" <?php if($ENLARGEITSET['enl_brdsize'] == 24) echo 'selected="selected"';?>>24</option>
-                 <option value="25" <?php if($ENLARGEITSET['enl_brdsize'] == 25) echo 'selected="selected"';?>>25</option>
-                 <option value="30" <?php if($ENLARGEITSET['enl_brdsize'] == 30) echo 'selected="selected"';?>>30</option>
-                 <option value="35" <?php if($ENLARGEITSET['enl_brdsize'] == 35) echo 'selected="selected"';?>>35</option>
-                 <option value="40" <?php if($ENLARGEITSET['enl_brdsize'] == 40) echo 'selected="selected"';?>>40</option>
-              </select>
-          </td>
-        </tr> 
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_brdround']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_brdround" id="enl_brdround">
-                 <option value="1" <?php if($ENLARGEITSET['enl_brdround'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_brdround'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>          
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_shadow']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_shadow" id="enl_shadow">
-                 <option value="1" <?php if($ENLARGEITSET['enl_shadow'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_shadow'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_shadowsize']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_shadowsize" id="enl_shadowsize">
-                 <option value="1" <?php if($ENLARGEITSET['enl_shadowsize'] == 1) echo 'selected="selected"';?>>1</option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_shadowsize'] == 2) echo 'selected="selected"';?>>2</option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_shadowsize'] == 3) echo 'selected="selected"';?>>3</option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_shadowsize'] == 4) echo 'selected="selected"';?>>4</option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_shadowsize'] == 5) echo 'selected="selected"';?>>5</option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_shadowsize'] == 6) echo 'selected="selected"';?>>6</option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_shadowsize'] == 7) echo 'selected="selected"';?>>7</option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_shadowsize'] == 8) echo 'selected="selected"';?>>8</option>
-                 <option value="9" <?php if($ENLARGEITSET['enl_shadowsize'] == 9) echo 'selected="selected"';?>>9</option>
-              </select>
-          </td>
-        </tr>           
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_shadowintens']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_shadowintens" id="enl_shadowintens">
-                 <option value="1" <?php if($ENLARGEITSET['enl_shadowintens'] == 1) echo 'selected="selected"';?>>1</option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_shadowintens'] == 2) echo 'selected="selected"';?>>2</option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_shadowintens'] == 3) echo 'selected="selected"';?>>3</option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_shadowintens'] == 4) echo 'selected="selected"';?>>4</option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_shadowintens'] == 5) echo 'selected="selected"';?>>5</option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_shadowintens'] == 6) echo 'selected="selected"';?>>6</option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_shadowintens'] == 7) echo 'selected="selected"';?>>7</option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_shadowintens'] == 8) echo 'selected="selected"';?>>8</option>
-                 <option value="9" <?php if($ENLARGEITSET['enl_shadowintens'] == 9) echo 'selected="selected"';?>>9</option>
-                 <option value="10" <?php if($ENLARGEITSET['enl_shadowintens'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="11" <?php if($ENLARGEITSET['enl_shadowintens'] == 11) echo 'selected="selected"';?>>11</option>
-                 <option value="12" <?php if($ENLARGEITSET['enl_shadowintens'] == 12) echo 'selected="selected"';?>>12</option>
-                 <option value="13" <?php if($ENLARGEITSET['enl_shadowintens'] == 13) echo 'selected="selected"';?>>13</option>
-                 <option value="14" <?php if($ENLARGEITSET['enl_shadowintens'] == 14) echo 'selected="selected"';?>>14</option>
-                 <option value="15" <?php if($ENLARGEITSET['enl_shadowintens'] == 15) echo 'selected="selected"';?>>15</option>
-                 <option value="16" <?php if($ENLARGEITSET['enl_shadowintens'] == 16) echo 'selected="selected"';?>>16</option>
-                 <option value="17" <?php if($ENLARGEITSET['enl_shadowintens'] == 17) echo 'selected="selected"';?>>17</option>
-                 <option value="18" <?php if($ENLARGEITSET['enl_shadowintens'] == 18) echo 'selected="selected"';?>>18</option>
-                 <option value="19" <?php if($ENLARGEITSET['enl_shadowintens'] == 19) echo 'selected="selected"';?>>19</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_shadowintens'] == 20) echo 'selected="selected"';?>>20</option>
-                 <option value="25" <?php if($ENLARGEITSET['enl_shadowintens'] == 25) echo 'selected="selected"';?>>25</option>
-                 <option value="30" <?php if($ENLARGEITSET['enl_shadowintens'] == 30) echo 'selected="selected"';?>>30</option>
-              </select>
-          </td>
-        </tr>
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_titlebar']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_titlebar" id="enl_titlebar">
-                 <option value="1" <?php if($ENLARGEITSET['enl_titlebar'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_titlebar'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td width="50%" align="right">
-            <?php echo $lang_enlargeit['enl_titletxtcol']?>&nbsp;&nbsp;
-          </td>
-          <td width="50%">
-            <input id="enl_titletxtcol" name="enl_titletxtcol" value="<?php echo $ENLARGEITSET['enl_titletxtcol']?>">
-          </td>
-        </tr>        
-        <tr>
-          <td width="50%" align="right">
-            <?php echo $lang_enlargeit['enl_ajaxcolor']?>&nbsp;&nbsp;
-          </td>
-          <td width="50%">
-            <input id="enl_titletxtcol" name="enl_ajaxcolor" value="<?php echo $ENLARGEITSET['enl_ajaxcolor']?>">
-          </td>
-        </tr>        
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_center']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_center" id="enl_center">
-                 <option value="1" <?php if($ENLARGEITSET['enl_center'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_center'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_dragdrop']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_dragdrop" id="enl_dragdrop">
-                 <option value="1" <?php if($ENLARGEITSET['enl_dragdrop'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_dragdrop'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_wheelnav']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_wheelnav" id="enl_wheelnav">
-                 <option value="1" <?php if($ENLARGEITSET['enl_wheelnav'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_wheelnav'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_dark']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_dark" id="enl_dark">
-                 <option value="1" <?php if($ENLARGEITSET['enl_dark'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?> 1</option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_dark'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?> 2</option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_dark'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_darkprct']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_darkprct" id="enl_darkprct">
-                 <option value="0" <?php if($ENLARGEITSET['enl_darkprct'] == 0) echo 'selected="selected"';?>>0</option>
-                 <option value="10" <?php if($ENLARGEITSET['enl_darkprct'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_darkprct'] == 20) echo 'selected="selected"';?>>20</option>
-                 <option value="30" <?php if($ENLARGEITSET['enl_darkprct'] == 30) echo 'selected="selected"';?>>30</option>
-                 <option value="40" <?php if($ENLARGEITSET['enl_darkprct'] == 40) echo 'selected="selected"';?>>40</option>
-                 <option value="50" <?php if($ENLARGEITSET['enl_darkprct'] == 50) echo 'selected="selected"';?>>50</option>
-                 <option value="60" <?php if($ENLARGEITSET['enl_darkprct'] == 60) echo 'selected="selected"';?>>60</option>
-                 <option value="70" <?php if($ENLARGEITSET['enl_darkprct'] == 70) echo 'selected="selected"';?>>70</option>
-                 <option value="80" <?php if($ENLARGEITSET['enl_darkprct'] == 80) echo 'selected="selected"';?>>80</option>
-                 <option value="90" <?php if($ENLARGEITSET['enl_darkprct'] == 90) echo 'selected="selected"';?>>90</option>
-                 <option value="100" <?php if($ENLARGEITSET['enl_darkprct'] == 100) echo 'selected="selected"';?>>100</option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_darkensteps']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_darkensteps" id="enl_darkensteps">
-                 <option value="1" <?php if($ENLARGEITSET['enl_darkensteps'] == 1) echo 'selected="selected"';?>>1</option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_darkensteps'] == 2) echo 'selected="selected"';?>>2</option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_darkensteps'] == 3) echo 'selected="selected"';?>>3</option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_darkensteps'] == 4) echo 'selected="selected"';?>>4</option>
-                 <option value="5" <?php if($ENLARGEITSET['enl_darkensteps'] == 5) echo 'selected="selected"';?>>5</option>
-                 <option value="6" <?php if($ENLARGEITSET['enl_darkensteps'] == 6) echo 'selected="selected"';?>>6</option>
-                 <option value="7" <?php if($ENLARGEITSET['enl_darkensteps'] == 7) echo 'selected="selected"';?>>7</option>
-                 <option value="8" <?php if($ENLARGEITSET['enl_darkensteps'] == 8) echo 'selected="selected"';?>>8</option>
-                 <option value="9" <?php if($ENLARGEITSET['enl_darkensteps'] == 9) echo 'selected="selected"';?>>9</option>
-                 <option value="10" <?php if($ENLARGEITSET['enl_darkensteps'] == 10) echo 'selected="selected"';?>>10</option>
-                 <option value="11" <?php if($ENLARGEITSET['enl_darkensteps'] == 11) echo 'selected="selected"';?>>11</option>
-                 <option value="12" <?php if($ENLARGEITSET['enl_darkensteps'] == 12) echo 'selected="selected"';?>>12</option>
-                 <option value="13" <?php if($ENLARGEITSET['enl_darkensteps'] == 13) echo 'selected="selected"';?>>13</option>
-                 <option value="14" <?php if($ENLARGEITSET['enl_darkensteps'] == 14) echo 'selected="selected"';?>>14</option>
-                 <option value="15" <?php if($ENLARGEITSET['enl_darkensteps'] == 15) echo 'selected="selected"';?>>15</option>
-                 <option value="16" <?php if($ENLARGEITSET['enl_darkensteps'] == 16) echo 'selected="selected"';?>>16</option>
-                 <option value="17" <?php if($ENLARGEITSET['enl_darkensteps'] == 17) echo 'selected="selected"';?>>17</option>
-                 <option value="18" <?php if($ENLARGEITSET['enl_darkensteps'] == 18) echo 'selected="selected"';?>>18</option>
-                 <option value="19" <?php if($ENLARGEITSET['enl_darkensteps'] == 19) echo 'selected="selected"';?>>19</option>
-                 <option value="20" <?php if($ENLARGEITSET['enl_darkensteps'] == 20) echo 'selected="selected"';?>>20</option>
-              </select>
-          </td>
-        </tr>       
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonpic'] . $enlargeit_icon_array['show']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonpic" id="enl_buttonpic">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonpic'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonpic'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttoninfo'] . $enlargeit_icon_array['info'];?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttoninfo" id="enl_buttoninfo">
-                 <option value="2" <?php if($ENLARGEITSET['enl_buttoninfo'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_buttoninfoyes2']?></option>
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttoninfo'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_buttoninfoyes1']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttoninfo'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonfav'] . $enlargeit_icon_array['favorites']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonfav" id="enl_buttonfav">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonfav'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonfav'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><em>Dummy - does not work yet:</em> <?php echo $lang_enlargeit['enl_buttonvote'] . $enlargeit_icon_array['vote']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonvote" id="enl_buttonvote" disabled="disabled">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonvote'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonvote'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td align="right"><em>Dummy - does not work yet:</em> <?php echo $lang_enlargeit['enl_buttoncomment'] . $enlargeit_icon_array['comment']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttoncomment" id="enl_buttoncomment" disabled="disabled">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttoncomment'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttoncomment'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>       
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttondownload'] . $enlargeit_icon_array['download']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttondownload" id="enl_buttondownload">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttondownload'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_buttondownload'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_maxforreg']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttondownload'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>  
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonmax'] . $enlargeit_icon_array['fullsize']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonmax" id="enl_buttonmax">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonmax'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="2" <?php if($ENLARGEITSET['enl_buttonmax'] == 2) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_maxforreg']?></option>
-                 <option value="3" <?php if($ENLARGEITSET['enl_buttonmax'] == 3) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_maxpopup']?></option>
-                 <option value="4" <?php if($ENLARGEITSET['enl_buttonmax'] == 4) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_maxpopupforreg']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonmax'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>       
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonbbcode'] . $enlargeit_icon_array['bbcode']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonbbcode" id="enl_buttonbbcode">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonbbcode'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonbbcode'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>    
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonhist'] . $enlargeit_icon_array['histogramm']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonhist" id="enl_buttonhist">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonhist'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonhist'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonnav'] . $enlargeit_icon_array['previous'] . $enlargeit_icon_array['next']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonnav" id="enl_buttonnav">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonnav'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonnav'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr> 
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_buttonclose'] . $enlargeit_icon_array['close']; ?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_buttonclose" id="enl_buttonclose">
-                 <option value="1" <?php if($ENLARGEITSET['enl_buttonclose'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_buttonclose'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_adminmode']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_adminmode" id="enl_adminmode">
-                 <option value="1" <?php if($ENLARGEITSET['enl_adminmode'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_adminmode'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_registeredmode']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_registeredmode" id="enl_registeredmode">
-                 <option value="1" <?php if($ENLARGEITSET['enl_registeredmode'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_registeredmode'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_guestmode']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_guestmode" id="enl_guestmode">
-                 <option value="1" <?php if($ENLARGEITSET['enl_guestmode'] == 1) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_yes']?></option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_guestmode'] == 0) echo 'selected="selected"';?>><?php echo $lang_enlargeit['enl_no']?></option>
-              </select>
-          </td>
-        </tr>        
-        <tr>
-          <td><hr /></td><td><hr /></td>
-        </tr>
-        <tr>
-          <td align="right"><?php echo $lang_enlargeit['enl_flvplayer']?>&nbsp;&nbsp;</td>
-          <td>
-              <select name="enl_flvplayer" id="enl_flvplayer">
-                 <option value="1" <?php if($ENLARGEITSET['enl_flvplayer'] == 1) echo 'selected="selected"';?>>OS FLV</option>
-                 <option value="0" <?php if($ENLARGEITSET['enl_flvplayer'] == 0) echo 'selected="selected"';?>>rphMedia</option>
-              </select>
-          </td>
-        </tr>   
-        <tr>
-          <td>&nbsp;</td>
-          <td>
-            <input name="update" type="hidden" id="update" value="1" /></td>
-        </tr>  
-        <tr>
-          <td>&nbsp;</td>
-          <td align="left">
-                                          <button type="submit" class="button" name="submit" value="<?php echo $lang_enlargeit['submit_button']; ?>"><?php echo $enlargeit_icon_array['ok'] . $lang_enlargeit['submit_button']; ?></button>
-          </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td align="center">&nbsp;</td>
-        </tr>
-      </table>
-    </form></td>
-</tr>
-<?php 
+// Set the option output stuff 
+if ($CONFIG['plugin_enlargeit_adminmode'] == '1') {
+	$option_output['plugin_enlargeit_adminmode'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_adminmode'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_registeredmode'] == '1') {
+	$option_output['plugin_enlargeit_registeredmode'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_registeredmode'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_guestmode'] == '1') {
+	$option_output['plugin_enlargeit_guestmode'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_guestmode'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_pictype'] == '0') {
+	$option_output['plugin_enlargeit_pictype_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_pictype_1'] = '';
+	$option_output['plugin_enlargeit_pictype_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_pictype'] == '1') { // 
+	$option_output['plugin_enlargeit_pictype_0'] = '';
+	$option_output['plugin_enlargeit_pictype_1'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_pictype_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_pictype'] == '2') { // 
+	$option_output['plugin_enlargeit_pictype_0'] = '';
+	$option_output['plugin_enlargeit_pictype_1'] = '';
+	$option_output['plugin_enlargeit_pictype_2'] = 'checked="checked"';
+}
+
+for ($i = 0; $i <= 10; $i++) {
+	if ($CONFIG['plugin_enlargeit_ani'] == $i) {
+		$option_output['plugin_enlargeit_ani'][$i] = 'selected="selected"';
+	} else {
+		$option_output['plugin_enlargeit_ani'][$i] = '';
+	}
+}
+
+if ($CONFIG['plugin_enlargeit_opaglide'] == '1') {
+	$option_output['plugin_enlargeit_opaglide'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_opaglide'] = '';
+}
+
+$border_texture_options = '<option value="none">-</option>';
+for ($i = 0; $i < count($border_texture_array); $i++) {
+	if ($CONFIG['plugin_enlargeit_brdbck'] == $border_texture_array[$i]) {
+		$option_output['plugin_enlargeit_brdbck'][$i] = 'selected="selected"';
+	} else {
+		$option_output['plugin_enlargeit_brdbck'][$i] = '';
+	}
+	$border_texture_options .= '<option value="'.$border_texture_array[$i].'" '.$option_output['plugin_enlargeit_brdbck'][$i].' >'.$lang_plugin_enlargeit[$border_texture_array[$i]].'</option>'.$LINEBREAK;
+}
+
+if ($CONFIG['plugin_enlargeit_brdround'] == '1') {
+	$option_output['plugin_enlargeit_brdround'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_brdround'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_titlebar'] == '1') {
+	$option_output['plugin_enlargeit_titlebar'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_titlebar'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_center'] == '1') {
+	$option_output['plugin_enlargeit_center'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_center'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_dragdrop'] == '1') {
+	$option_output['plugin_enlargeit_dragdrop'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_dragdrop'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_wheelnav'] == '1') {
+	$option_output['plugin_enlargeit_wheelnav'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_wheelnav'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_dark'] == '0') {
+	$option_output['plugin_enlargeit_dark_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_dark_1'] = '';
+	$option_output['plugin_enlargeit_dark_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_dark'] == '1') { // 
+	$option_output['plugin_enlargeit_dark_0'] = '';
+	$option_output['plugin_enlargeit_dark_1'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_dark_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_dark'] == '2') { // 
+	$option_output['plugin_enlargeit_dark_0'] = '';
+	$option_output['plugin_enlargeit_dark_1'] = '';
+	$option_output['plugin_enlargeit_dark_2'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonpic'] == '1') {
+	$option_output['plugin_enlargeit_buttonpic'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonpic'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttoninfo'] == '0') {
+	$option_output['plugin_enlargeit_buttoninfo_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttoninfo_1'] = '';
+	$option_output['plugin_enlargeit_buttoninfo_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') { // 
+	$option_output['plugin_enlargeit_buttoninfo_0'] = '';
+	$option_output['plugin_enlargeit_buttoninfo_1'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttoninfo_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttoninfo'] == '2') { // 
+	$option_output['plugin_enlargeit_buttoninfo_0'] = '';
+	$option_output['plugin_enlargeit_buttoninfo_1'] = '';
+	$option_output['plugin_enlargeit_buttoninfo_2'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
+	$option_output['plugin_enlargeit_buttonfav'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonfav'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonvote'] == '1') {
+	$option_output['plugin_enlargeit_buttonvote'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonvote'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttoncomment'] == '1') {
+	$option_output['plugin_enlargeit_buttoncomment'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttoncomment'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttondownload'] == '0') {
+	$option_output['plugin_enlargeit_buttondownload_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttondownload_1'] = '';
+	$option_output['plugin_enlargeit_buttondownload_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '1') { // 
+	$option_output['plugin_enlargeit_buttondownload_0'] = '';
+	$option_output['plugin_enlargeit_buttondownload_1'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttondownload_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '2') { // 
+	$option_output['plugin_enlargeit_buttondownload_0'] = '';
+	$option_output['plugin_enlargeit_buttondownload_1'] = '';
+	$option_output['plugin_enlargeit_buttondownload_2'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonmax'] == '0') {
+	$option_output['plugin_enlargeit_buttonmax_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttonmax_1'] = '';
+	$option_output['plugin_enlargeit_buttonmax_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttonmax'] == '1') { // 
+	$option_output['plugin_enlargeit_buttonmax_0'] = '';
+	$option_output['plugin_enlargeit_buttonmax_1'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_buttonmax_2'] = '';
+} elseif ($CONFIG['plugin_enlargeit_buttonmax'] == '2') { // 
+	$option_output['plugin_enlargeit_buttonmax_0'] = '';
+	$option_output['plugin_enlargeit_buttonmax_1'] = '';
+	$option_output['plugin_enlargeit_buttonmax_2'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
+	$option_output['plugin_enlargeit_buttonbbcode'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonbbcode'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
+	$option_output['plugin_enlargeit_buttonhist'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonhist'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
+	$option_output['plugin_enlargeit_buttonnav'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonnav'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_buttonclose'] == '1') {
+	$option_output['plugin_enlargeit_buttonclose'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_buttonclose'] = '';
+}
+
+if ($CONFIG['plugin_enlargeit_flvplayer'] == '0') {
+	$option_output['plugin_enlargeit_flvplayer_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_flvplayer_1'] = '';
+} elseif ($CONFIG['plugin_enlargeit_flvplayer'] == '1') { // 
+	$option_output['plugin_enlargeit_flvplayer_0'] = '';
+	$option_output['plugin_enlargeit_flvplayer_1'] = 'checked="checked"';
+}
+
+pageheader($lang_plugin_enlargeit['display_name']);
+echo <<< EOT
+<form action="index.php?file=enlargeit/plugin_config" method="post" name="enlargeit_settings">
+EOT;
+starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'], 2, 'cpg_zebra');
+echo <<< EOT
+	<tr>
+		<td class="tablef" colspan="2" >
+EOT;
+if ($superCage->post->keyExists('update')) {
+    if ($config_changes_counter > 0) {
+        msg_box('', $lang_plugin_enlargeit['update_success'], '', '', 'success');
+    } else {
+        msg_box('', $lang_plugin_enlargeit['no_changes'], '', '', 'validation');
+    }
+} else {
+    echo '&copy; Timo Sack (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)';
+}
+echo <<< EOT
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['enlargement_type']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enable_for']}
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['enl_adminmode']}</label><br />
+			<input type="checkbox" name="plugin_enlargeit_registeredmode" id="plugin_enlargeit_registeredmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_registeredmode']} /><label for="plugin_enlargeit_registeredmode" class="clickable_option">{$lang_plugin_enlargeit['enl_registeredmode']}</label><br />
+			<input type="checkbox" name="plugin_enlargeit_guestmode" id="plugin_enlargeit_guestmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_guestmode']} /><label for="plugin_enlargeit_guestmode" class="clickable_option">{$lang_plugin_enlargeit['enl_guestmode']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_pictype']}
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['enl_normalsize']}</label><br />
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_1" class="radio" value="1" {$option_output['plugin_enlargeit_pictype_1']} /><label for="plugin_enlargeit_pictype_1" class="clickable_option">{$lang_plugin_enlargeit['enl_fullsize']}</label><br />
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_2" class="radio" value="2" {$option_output['plugin_enlargeit_pictype_2']} /><label for="plugin_enlargeit_pictype_2" class="clickable_option">{$lang_plugin_enlargeit['enl_forcenormal']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['enl_ani']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['animation_type']}
+		</td>
+		<td>
+			<select name="plugin_enlargeit_ani" id="plugin_enlargeit_ani" class="listbox">
+				<option value="0" {$option_output['plugin_enlargeit_ani'][0]} >{$lang_plugin_enlargeit['noani']}</option>
+				<option value="1" {$option_output['plugin_enlargeit_ani'][1]} >{$lang_plugin_enlargeit['fade']}</option>
+				<option value="2" {$option_output['plugin_enlargeit_ani'][2]} >{$lang_plugin_enlargeit['glide']}</option>
+				<option value="3" {$option_output['plugin_enlargeit_ani'][3]} >{$lang_plugin_enlargeit['bumpglide']}</option>
+				<option value="4" {$option_output['plugin_enlargeit_ani'][4]} >{$lang_plugin_enlargeit['smoothglide']}</option>
+				<option value="5" {$option_output['plugin_enlargeit_ani'][5]} >{$lang_plugin_enlargeit['expglide']}</option>
+				<option value="6" {$option_output['plugin_enlargeit_ani'][6]} >{$lang_plugin_enlargeit['topglide']}</option>
+				<option value="7" {$option_output['plugin_enlargeit_ani'][7]} >{$lang_plugin_enlargeit['leftglide']}</option>
+				<option value="8" {$option_output['plugin_enlargeit_ani'][8]} >{$lang_plugin_enlargeit['topleftglide']}</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_speed']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" /> {$lang_plugin_enlargeit['milliseconds']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_maxstep']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_opaglide" class="clickable_option">{$lang_plugin_enlargeit['enl_opaglide']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_opaglide" id="plugin_enlargeit_opaglide" class="checkbox" value="1" {$option_output['plugin_enlargeit_opaglide']} />
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['border']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_brdsize']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_brdsize" id="plugin_enlargeit_brdsize" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_brdsize']}" /> ({$lang_plugin_enlargeit['zero_to_disable']})
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_brdcolor']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_brdcolor" id="plugin_enlargeit_brdcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_brdcolor']}" style="text-transform:uppercase;" />
+			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
+			<div id="colorpicker_bordercolor" class="detail_body"></div>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_brdbck']}
+		</td>
+		<td>
+			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox">
+				{$border_texture_options}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_brdround" class="clickable_option">{$lang_plugin_enlargeit['enl_brdround']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_brdround" id="plugin_enlargeit_brdround" class="checkbox" value="1" {$option_output['plugin_enlargeit_brdround']} /> ({$lang_plugin_enlargeit['mozilla_only']})
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['shadow']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_shadowsize']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_shadowintens']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_shadowintens" id="plugin_enlargeit_shadowintens" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_shadowintens']}" />
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['title_bar']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['enl_titlebar']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_titletxtcol']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_titletxtcol" id="plugin_enlargeit_titletxtcol" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_titletxtcol']}" style="text-transform:uppercase;" />
+			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
+			<div id="colorpicker_titletext" class="detail_body"></div>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_ajaxcolor']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_ajaxcolor" id="plugin_enlargeit_ajaxcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_ajaxcolor']}" style="text-transform:uppercase;" />
+			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
+			<div id="colorpicker_backgroundcontent" class="detail_body"></div>
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['action']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['enl_center']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enl_dragdrop']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['enl_wheelnav']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" valign="top">
+			{$lang_plugin_enlargeit['enl_dark']}
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_0" class="radio" value="0" {$option_output['plugin_enlargeit_dark_0']} /><label for="plugin_enlargeit_dark_0" class="clickable_option">{$lang_common['no']}</label><br />
+			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_1" class="radio" value="1" {$option_output['plugin_enlargeit_dark_1']} /><label for="plugin_enlargeit_dark_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['only_darken_when_image_shows']}</label><br />
+			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_2" class="radio" value="2" {$option_output['plugin_enlargeit_dark_2']} /><label for="plugin_enlargeit_dark_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['remain dark when using navigation']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_darkprct']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_darkprct" id="plugin_enlargeit_darkprct" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkprct']}" /> %
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_darkensteps']}
+		</td>
+		<td>
+			<input type="text" name="plugin_enlargeit_darkensteps" id="plugin_enlargeit_darkensteps" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkensteps']}" /> ({$lang_plugin_enlargeit['darkening_speed_explain']})
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['buttons']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonpic" class="clickable_option">{$enlargeit_icon_array['show']} {$lang_plugin_enlargeit['enl_buttonpic']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonpic" id="plugin_enlargeit_buttonpic" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonpic']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$enlargeit_icon_array['info']} {$lang_plugin_enlargeit['enl_buttoninfo']}
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttoninfo_0']} /><label for="plugin_enlargeit_buttoninfo_0" class="clickable_option">{$lang_common['no']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttoninfo_1']} /><label for="plugin_enlargeit_buttoninfo_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes1']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes2']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonfav" class="clickable_option">{$enlargeit_icon_array['favorites']} {$lang_plugin_enlargeit['enl_buttonfav']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonfav" id="plugin_enlargeit_buttonfav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonfav']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['enl_buttonvote']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonvote" id="plugin_enlargeit_buttonvote" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonvote']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttoncomment" class="clickable_option">{$enlargeit_icon_array['comment']} {$lang_plugin_enlargeit['enl_buttoncomment']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttoncomment" id="plugin_enlargeit_buttoncomment" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttoncomment']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['enl_buttondownload']}
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttondownload_0']} /><label for="plugin_enlargeit_buttondownload_0" class="clickable_option">{$lang_common['no']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_maxforreg']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['enl_buttonmax']}<br />Needs manual editing later, as the orginal options are silly!
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttonmax_0']} /><label for="plugin_enlargeit_buttonmax_0" class="clickable_option">{$lang_common['no']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttonmax_1']} /><label for="plugin_enlargeit_buttonmax_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_maxpopup']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttonmax_2']} /><label for="plugin_enlargeit_buttonmax_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes1']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonbbcode" class="clickable_option">{$enlargeit_icon_array['bbcode']} {$lang_plugin_enlargeit['enl_buttonbbcode']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonbbcode" id="plugin_enlargeit_buttonbbcode" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonbbcode']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogramm']} {$lang_plugin_enlargeit['enl_buttonhist']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['enl_buttonnav']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['enl_buttonclose']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} />
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['multimedia']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['enl_flvplayer']}
+		</td>
+		<td>
+			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_0" class="radio" value="0" {$option_output['plugin_enlargeit_flvplayer_0']} /><label for="plugin_enlargeit_flvplayer_0" class="clickable_option">{$lang_plugin_enlargeit['rphmedia']}</label><br />
+			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_1" class="radio" value="1" {$option_output['plugin_enlargeit_flvplayer_1']} /><label for="plugin_enlargeit_flvplayer_1" class="clickable_option">{$lang_plugin_enlargeit['os_flv']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="tablef" colspan="2">
+			<input name="update" type="hidden" id="update" value="1" />
+			<button type="submit" class="button" name="submit" value="{$lang_plugin_enlargeit['submit_button']}">{$enlargeit_icon_array['ok']}{$lang_plugin_enlargeit['submit_button']}</button>
+		</td>
+	</tr>
+EOT;
+
 endtable();
+echo <<< EOT
+</form>
+EOT;
 pagefooter();
 ob_end_flush();
 

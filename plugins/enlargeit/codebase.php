@@ -18,7 +18,6 @@
   
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-
 // Add plugin_install action
 $thisplugin->add_action('plugin_install','enlargeit_install');
 
@@ -36,21 +35,21 @@ $thisplugin->add_filter('theme_display_thumbnails_params','enlargeit_addparams')
 
 
 
-global $ENLARGEITSET,$lang_enlargeit;
+global $lang_plugin_enlargeit;
 
 // get settings
-require_once('./plugins/enlargeit/include/load_enlargeitset.php');
+//require_once('./plugins/enlargeit/include/load_enlargeitset.php');
 
 
 // add neccessary parameters
 function enlargeit_addparams($params) 
 {
-    global $thumb, $CONFIG, $template_thumbnail_view, $ENLARGEITSET, $CURRENT_PIC_DATA;
+    global $thumb, $CONFIG, $template_thumbnail_view, $CURRENT_PIC_DATA;
     
     // enabled for current user type?
-    if (GALLERY_ADMIN_MODE && !$ENLARGEITSET['enl_adminmode']) return $params;
-    if (USER_ID && !$ENLARGEITSET['enl_registeredmode']) return $params;
-    if (!USER_ID && !$ENLARGEITSET['enl_guestmode']) return $params;
+    if (GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) return $params;
+    if (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) return $params;
+    if (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']) return $params;
     
     $enl_filetype = explode(".",$thumb['filename']);
     if (substr($thumb['filename'],0,8) == 'youtube_') 
@@ -69,9 +68,9 @@ function enlargeit_addparams($params)
     $enl_filetyplower = strtolower($enl_filetype[1]);
     
     // get file path depending if normal size pic exists and config setting enl_pictype
-    if ($ENLARGEITSET['enl_pictype']==1) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$thumb['filename'];
-    else if ($ENLARGEITSET['enl_pictype']==2) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
-    else if ($ENLARGEITSET['enl_pictype']==0 && is_file($CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'])) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
+    if ($CONFIG['plugin_enlargeit_pictype']==1) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$thumb['filename'];
+    else if ($CONFIG['plugin_enlargeit_pictype']==2) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
+    else if ($CONFIG['plugin_enlargeit_pictype']==0 && is_file($CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'])) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
     else $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$thumb['filename']; 
     
     // CASE 1: images
@@ -126,11 +125,11 @@ function enlargeit_addparams($params)
       {
       	$enl_newthumb .= 'longdesc="swf::'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
       }
-      if ($enl_filetyplower == 'flv' && $ENLARGEITSET['enl_flvplayer'] == 1) 
+      if ($enl_filetyplower == 'flv' && $CONFIG['plugin_enlargeit_flvplayer'] == 1) 
       {
       	$enl_newthumb .= 'longdesc="fl2::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
       }
-      if ($enl_filetyplower == 'flv' && $ENLARGEITSET['enl_flvplayer'] == 2) 
+      if ($enl_filetyplower == 'flv' && $CONFIG['plugin_enlargeit_flvplayer'] == 2) 
       {
       	$enl_newthumb .= 'longdesc="flv::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
       }
@@ -159,235 +158,79 @@ function enlargeit_addparams($params)
 
 
 // include some stuff in page header
-function enlargeit_head()
-{        
-global $ENLARGEITSET, $template_header, $lang_enlargeit,$CONFIG;
-require('./plugins/enlargeit/include/init.inc.php');
-    
-    $enlargeit_headcode = <<< EOT
-<!-- Begin EnlargeIt! Headcode -->
-<script type="text/javascript" src="plugins/enlargeit/js/enlargeit.js"></script>
-<link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />
-
-EOT;
-
-    $enlargeit_headcode .= "<script type=\"text/javascript\"><!--
-    ";
-    $enlargeit_headcode .= "enl_ani = ".$ENLARGEITSET['enl_ani'].";
-    ";
-    $enlargeit_headcode .= "enl_opaglide = ".$ENLARGEITSET['enl_opaglide'].";
-    ";
-    $enlargeit_headcode .= "enl_brd = ".$ENLARGEITSET['enl_brd'].";
-    ";
-    $enlargeit_headcode .= "enl_titlebar = ".$ENLARGEITSET['enl_titlebar'].";
-    ";
-    $enlargeit_headcode .= "enl_brdsize = ".$ENLARGEITSET['enl_brdsize'].";
-    ";
-    $enlargeit_headcode .= "enl_brdcolor = '".$ENLARGEITSET['enl_brdcolor']."';
-    ";
-    $enlargeit_headcode .= "enl_titletxtcol = '".$ENLARGEITSET['enl_titletxtcol']."';
-    ";
-    $enlargeit_headcode .= "enl_ajaxcolor = '".$ENLARGEITSET['enl_ajaxcolor']."';
-    ";
-    $enlargeit_headcode .= "enl_brdround = ".$ENLARGEITSET['enl_brdround'].";
-    ";    
-    $enlargeit_headcode .= "enl_maxstep = ".$ENLARGEITSET['enl_maxstep'].";
-    ";
-    $enlargeit_headcode .= "enl_shadow = ".$ENLARGEITSET['enl_shadow'].";
-    ";
-    $enlargeit_headcode .= "enl_shadowsize = ".$ENLARGEITSET['enl_shadowsize'].";
-    ";
-    $enlargeit_headcode .= "enl_shadowintens = ".$ENLARGEITSET['enl_shadowintens'].";
-    ";
-    $enlargeit_headcode .= "enl_gifpath = 'plugins/enlargeit/images/';
-    ";
-    $enlargeit_headcode .= "enl_usecounter = 1;
-    ";
-    $enlargeit_headcode .= "enl_counterurl = 'index.php?file=enlargeit/enl_cnt&a=';
-    ";
-    $enlargeit_headcode .= "enl_btnact = 'icons/bact_transp.png';
-    ";
-    $enlargeit_headcode .= "enl_btninact = 'icons/binact_transp.png';
-    ";
-    $enlargeit_headcode .= "enl_minuscur = 'cursors/minuscur.cur';
-    ";
-	$enlargeit_headcode .= "enl_pluscur = 'cursors/pluscur.cur';
-    ";
-    $enlargeit_headcode .= "enl_speed = ".$ENLARGEITSET['enl_speed'].";
-    ";
-    $enlargeit_headcode .= "enl_dark = ".$ENLARGEITSET['enl_dark'].";
-    ";
-    $enlargeit_headcode .= "enl_darkprct = ".$ENLARGEITSET['enl_darkprct'].";
-    ";
-    $enlargeit_headcode .= "enl_center = ".$ENLARGEITSET['enl_center'].";
-    ";
-    $enlargeit_headcode .= "enl_wheelnav = ".$ENLARGEITSET['enl_wheelnav'].";
-    ";
-    $enlargeit_headcode .= "enl_drgdrop = ".$ENLARGEITSET['enl_dragdrop'].";
-    ";
-    $enlargeit_headcode .= "enl_brdbck = '".str_replace('__','/',$ENLARGEITSET['enl_brdbck'])."';
-    ";
-    $enlargeit_headcode .= "enl_darksteps = ".$ENLARGEITSET['enl_darkensteps'].";
-    ";
-    $enlargeit_headcode .= "enl_canceltext = \"".$lang_enlargeit['enl_canceltext']."\";
-    ";
-    $enlargeit_headcode .= "enl_noflash = \"".$lang_enlargeit['enl_noflashfound']."\";
-    ";
-    $i = 0;
-    if ($ENLARGEITSET['enl_buttonpic'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'pic';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltippic']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = 0;
-    ";
-    $i = $i + 1;
-    }
-    if ($ENLARGEITSET['enl_buttonfav'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'index.php?file=enlargeit/enl_addfav&pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipfav']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -32;
-    ";
-    $i = $i + 1;
-    }
-/*    if ($ENLARGEITSET['enl_buttoninfo'] == 1)
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'enl_info.php?pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipinfo']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -16;
-    ";
-    $i = $i + 1;
-    } */
-    if ($ENLARGEITSET['enl_buttoninfo'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'site:displayimage.php?pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipinfo']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -16;
-    ";
-    $i = $i + 1;
-    }
-/*    if ($ENLARGEITSET['enl_buttonvote'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'enl_rteit.php?pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipvote']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -112;
-    ";
-    $i = $i + 1;
-    }
-    if ($ENLARGEITSET['enl_buttoncomment'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'enl_comment.php?pos=-';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipcomment']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -64;
-    ";
-    $i = $i + 1;
-    }    */
-    if ($ENLARGEITSET['enl_buttondownload'] == 1 || ($ENLARGEITSET['enl_buttondownload'] == 2 && USER_ID))
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'index.php?file=enlargeit/enl_download&pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipdownload']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -208;
-    ";
-    $i = $i + 1;
-    }   
-    if ($ENLARGEITSET['enl_buttonbbcode'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipbbcode']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -192;
-    ";
-    $i = $i + 1;
-    }        
-    if ($ENLARGEITSET['enl_buttonhist'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'index.php?file=enlargeit/enl_hist&pid=';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltiphist']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -160;
-    ";
-    $i = $i + 1;
-    }
-    if ($ENLARGEITSET['enl_buttonmax'] == 1 || (USER_ID && $ENLARGEITSET['enl_buttonmax'] == 2))
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'max';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipmax']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -144;
-    ";
-    $i = $i + 1;
-    }
-    if ($ENLARGEITSET['enl_buttonmax'] == 3 || (USER_ID && $ENLARGEITSET['enl_buttonmax'] == 4))
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'maxpop';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipmax']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -144;
-    ";
-    $i = $i + 1;
-    }    
-    if ($ENLARGEITSET['enl_buttonnav'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'prev';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipprev']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -96;
-    ";
-    $i = $i + 1;
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'next';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipnext']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -80;
-    ";
-    $i = $i + 1;
-    }
-    if ($ENLARGEITSET['enl_buttonclose'])
-    {
-      $enlargeit_headcode .= "enl_buttonurl[".$i."] = 'close';
-    ";
-      $enlargeit_headcode .= "enl_buttontxt[".$i."] = \"".$lang_enlargeit['enl_tooltipclose']."\";
-    ";
-      $enlargeit_headcode .= "enl_buttonoff[".$i."] = -128;
-";
-    $i = $i + 1;
-    }    
-    $enlargeit_headcode .= "//--></script>
-<!-- End EnlargeIt! Headcode -->
-";
-
-    $template_header = str_replace('{META}','{META}'.$enlargeit_headcode,$template_header);
+function enlargeit_head($meta) {        
+	global $template_header, $lang_plugin_enlargeit, $CONFIG, $CPG_PHP_SELF, $LINEBREAK, $JS;
+	require('./plugins/enlargeit/include/init.inc.php');
+	$enlargeit_pages_array = array('thumbnails.php');
+	if (in_array('plugins/enlargeit/js/enlargeit_source.js', $JS['includes']) != TRUE && in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
+		$JS['includes'][] = 'plugins/enlargeit/js/enlargeit_source.js';
+		$meta  .= '<link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />';
+		set_js_var('enl_ani', $CONFIG['plugin_enlargeit_ani']);
+		set_js_var('enl_opaglide', $CONFIG['plugin_enlargeit_opaglide']);
+		if ($CONFIG['plugin_enlargeit_brdsize'] > 0) {
+			set_js_var('enl_brd', '1');
+		} else {
+			set_js_var('enl_brd', '0');
+		}
+		set_js_var('enl_titlebar', $CONFIG['plugin_enlargeit_titlebar']);
+		set_js_var('enl_brdsize', $CONFIG['plugin_enlargeit_brdsize']);
+		set_js_var('enl_brdcolor', $CONFIG['plugin_enlargeit_brdcolor']);
+		set_js_var('enl_titletxtcol', $CONFIG['plugin_enlargeit_titletxtcol']);
+		set_js_var('enl_ajaxcolor', $CONFIG['plugin_enlargeit_ajaxcolor']);
+		set_js_var('enl_brdround', $CONFIG['plugin_enlargeit_brdround']);
+		set_js_var('enl_maxstep', $CONFIG['plugin_enlargeit_maxstep']);
+		if ($CONFIG['plugin_enlargeit_shadowsize'] > 0) {
+			set_js_var('enl_shadow', 1);
+		} else {
+			set_js_var('enl_shadow', 0);
+		}
+		set_js_var('enl_shadowsize', $CONFIG['plugin_enlargeit_shadowsize']);
+		set_js_var('enl_shadowintens', $CONFIG['plugin_enlargeit_shadowintens']);
+		set_js_var('enl_speed', $CONFIG['plugin_enlargeit_speed']);
+		set_js_var('enl_dark', $CONFIG['plugin_enlargeit_dark']);
+		set_js_var('enl_darkprct', $CONFIG['plugin_enlargeit_darkprct']);
+		set_js_var('enl_center', $CONFIG['plugin_enlargeit_center']);
+		set_js_var('enl_wheelnav', $CONFIG['plugin_enlargeit_wheelnav']);
+		set_js_var('enl_drgdrop', $CONFIG['plugin_enlargeit_dragdrop']);
+		if ($CONFIG['plugin_enlargeit_brdbck'] != '') {
+			set_js_var('enl_brdbck', 'backgrounds/'.$CONFIG['plugin_enlargeit_brdbck'].'.png');
+		} else {
+			set_js_var('enl_brdbck', '');
+		}
+		set_js_var('enl_darksteps', $CONFIG['plugin_enlargeit_darkensteps']);
+		set_js_var('enl_canceltext', $lang_plugin_enlargeit['enl_canceltext']);
+		set_js_var('enl_noflash', $lang_plugin_enlargeit['enl_noflashfound']);
+		// Define the buttons
+		$buttonurl_array = array();
+		$buttontxt_array = array();
+		$buttonoff_array = array();
+		if ($CONFIG['plugin_enlargeit_buttonpic']) {
+			$buttonurl_array[] = 'pic';
+			$buttontxt_array[] = $lang_plugin_enlargeit['enl_tooltippic'];
+			$buttonoff_array[] = '0';
+		}
+		if ($CONFIG['plugin_enlargeit_buttonfav']) {
+			$buttonurl_array[] = 'index.php?file=enlargeit/enl_addfav&pid=';
+			$buttontxt_array[] = $lang_plugin_enlargeit['enl_tooltipfav'];
+			$buttonoff_array[] = '-32';
+		}
+		set_js_var('enl_buttonurl', $buttonurl_array);
+		set_js_var('enl_buttontxt', $buttontxt_array);
+		set_js_var('enl_buttonoff', $buttonoff_array);
+	}
+	return $meta;
 }
 
 
 // Change thumbnail template
 function enl_thumb() 
 {
-  global $CONFIG, $template_thumbnail_view, $lang_enlarge, $ENLARGEITSET;
+  global $CONFIG, $template_thumbnail_view, $lang_enlarge;
   // get language
   require_once('./plugins/enlargeit/include/init.inc.php');
 
   // change thumb template if enlargeit is active for current user
-  if ((GALLERY_ADMIN_MODE && !$ENLARGEITSET['enl_adminmode']) || (USER_ID && !$ENLARGEITSET['enl_registeredmode']) || (!USER_ID && !$ENLARGEITSET['enl_guestmode']))
+  if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']))
   {
     // do nothing
   }
@@ -443,46 +286,100 @@ EOT;
 
 
 // install
-function enlargeit_install()
-{
-    global $CONFIG, $thisplugin;
-    require_once 'include/sql_parse.php';
-
-    // create table
-    $db_schema = $thisplugin->fullpath . '/schema.sql';
-    $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
-    $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
-    $sql_query = remove_remarks($sql_query);
-    $sql_query = split_sql_file($sql_query, ';');
-    echo $sqlquery;
-    foreach($sql_query as $q) { 
-      cpg_db_query($q);
-    }
-    
-    // insert default values
-    $db_schema = $thisplugin->fullpath . '/basic.sql';
-    $sql_query = fread(fopen($db_schema, 'r'), filesize($db_schema));
-    $sql_query = preg_replace('/CPG_/', $CONFIG['TABLE_PREFIX'], $sql_query);
-    $sql_query = remove_remarks($sql_query);
-    $sql_query = split_sql_file($sql_query, ';');
-  
-    foreach($sql_query as $q) { 
-      cpg_db_query($q);
-    }
-    
+function enlargeit_install() {
+    global $CONFIG;
     // register file types FLV and DivX
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_FILETYPES']} (`extension`,`mime`,`content`,`player`) VALUES ('divx','video/divx','movie','')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_FILETYPES']} (`extension`,`mime`,`content`,`player`) VALUES ('flv','application/x-shockwave-flash','movie','Flash Player')");
-    
-           return true;
+	// Add the config options for the plugin
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdsize', '22')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdround', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdcolor', '#FFFFFF')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadow', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadowsize', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadowintens', '20')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_ani', '5')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_maxstep', '18')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_speed', '12')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_titlebar', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_titletxtcol', '#445544')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_ajaxcolor', '#666677')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_center', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_dark', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_darkprct', '20')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonpic', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttoninfo', '2')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonfav', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttoncomment', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttondownload', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonbbcode', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonhist', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonvote', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonmax', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonclose', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonnav', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_adminmode', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_registeredmode', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_guestmode', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_sefmode', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_pictype', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_dragdrop', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_wheelnav', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_flvplayer', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_opaglide', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdbck', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_darkensteps', '20')");
+	
+    return true;
 }
 
 
 // uninstall and drop settings table
-function enlargeit_uninstall()
-{
+function enlargeit_uninstall() {
     global $CONFIG;
-    cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_enlargeit");
+	$superCage = Inspekt::makeSuperCage();
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+    // Delete the plugin config records
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdsize'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdround'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdcolor'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadow'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadowsize'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadowintens'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_ani'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_maxstep'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_speed'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_titlebar'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_titletxtcol'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_ajaxcolor'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_center'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_dark'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_darkprct'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonpic'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttoninfo'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonfav'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttoncomment'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttondownload'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonbbcode'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonhist'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonvote'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonmax'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonclose'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonnav'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_adminmode'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_registeredmode'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_guestmode'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_sefmode'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_pictype'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_dragdrop'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_wheelnav'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_flvplayer'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_opaglide'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdbck'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_darkensteps'");
     return true;
 }
 ?>

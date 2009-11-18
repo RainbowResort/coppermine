@@ -35,14 +35,9 @@ $pos = $superCage->get->getInt('pos');
 $cat = $superCage->get->getInt('cat');
 $album = $superCage->get->getInt('album');
 
-
-
-
-
 //get_meta_album_set in functions.inc.php will populate the $ALBUM_SET instead; matches $META_ALBUM_SET.
 get_meta_album_set($cat,$ALBUM_SET);
 $META_ALBUM_SET = $ALBUM_SET; //displayimage uses $ALBUM_SET but get_pic_data in functions now uses $META_ALBUM_SET
-
 
 // Retrieve data for the current picture
     $pid = ($pos < 0) ? -$pos : $pid;
@@ -56,13 +51,10 @@ $META_ALBUM_SET = $ALBUM_SET; //displayimage uses $ALBUM_SET but get_pic_data in
     $CURRENT_PIC_DATA = $pic_data[0];
 
 
-
 //      Histogram creation
 //      Created by Anton Sparrius (Spaz) 6/9/05  anton_spaz@yahoo.com
 //      Free to use and change, provided you keep these lines :)
 //
-
-
                         
                         $enl_histpath = 'albums/'.$CURRENT_PIC_DATA['filepath'];
                         $enl_histimage = (is_file($enl_histpath.'normal_'.$CURRENT_PIC_DATA['filename'])) ? 'normal_'.$CURRENT_PIC_DATA['filename'] : $CURRENT_PIC_DATA['filename'];

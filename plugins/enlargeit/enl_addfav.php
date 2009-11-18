@@ -28,8 +28,8 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     exit();
 }
 
-global $ENLARGEITSET,$lang_enlargeit;
-require('./plugins/enlargeit/include/load_enlargeitset.php');
+global $lang_plugin_enlargeit;
+//require('./plugins/enlargeit/include/load_enlargeitset.php');
 require('./plugins/enlargeit/include/init.inc.php');
 
 
@@ -70,18 +70,18 @@ if (USER_ID > 0) {
 
 
 echo "<table align=\"center\" cellspacing=\"1\" style=\"width:100%;height:100%\">";
-echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_enlargeit['enl_tooltipfav']."</b></td></tr>";
+echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['enl_tooltipfav']."</b></td></tr>";
 echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotable\"><b>";
 if ($enl_added == 1) {
-	echo $lang_enlargeit['enl_addedtofav'];
+	echo $lang_plugin_enlargeit['enl_addedtofav'];
 }
 else
 {
-	echo $lang_enlargeit['enl_removedfromfav'];
+	echo $lang_plugin_enlargeit['enl_removedfromfav'];
 }
 echo "</b><br /><br />";
-if ($ENLARGEITSET['enl_sefmode']) echo "<a href=\"thumbnails-favpics.html\">".$lang_enlargeit['enl_showfav']."</a>";
-else echo "<br /><br /><a href=\"thumbnails.php?album=favpics\">".$lang_enlargeit['enl_showfav']."</a>";
+if ($CONFIG['plugin_enlargeit_sefmode']) echo "<a href=\"thumbnails-favpics.html\">".$lang_plugin_enlargeit['enl_showfav']."</a>";
+else echo "<br /><br /><a href=\"thumbnails.php?album=favpics\">".$lang_plugin_enlargeit['enl_showfav']."</a>";
 
 echo "</td></tr></table>";
 ob_end_flush();

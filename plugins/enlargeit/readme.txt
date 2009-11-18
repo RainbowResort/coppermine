@@ -58,7 +58,6 @@ How to configure:
 How to uninstall:
 -----------------
 1. Uninstall via plugin manager.
-2. Delete all files enl_*.php from your gallery root.
 
 
 First aid - if it doesn't work
@@ -74,18 +73,14 @@ First aid - if it doesn't work
 
 
 Credits:
---------
-This plugin uses EnlargeIt! technology:
-  http://enlargeit.timos-welt.de/
-This plugin uses free FLV player by rphMedia:
-  http://forum.coppermine-gallery.net/index.php/topic,43180.0.html
-The included plugin 'ImageFlow' is based on the script by Finn Rudolph:
-  http://imageflow.finnrudolph.de/
-This plugin uses open source FLV player OSFLV:
-  http://www.osflv.com/
-
-
-=========================================================================
+========
+This plugin uses the following components:
+* EnlargeIt! technology by Timo Sack: http://enlargeit.timos-welt.de/
+* FLV player by rphMedia: http://forum.coppermine-gallery.net/index.php/topic,43180.0.html
+* ImageFlow is based on the script by Finn Rudolph: http://imageflow.finnrudolph.de/
+* FLV player OSFLV: http://www.osflv.com/
+* Histogram creation by Anton Sparrius (Spaz): anton_spaz@yahoo.com
+* Crystal Clear icons by Everaldo Coelho: http://www.everaldo.com/crystal/
 
 Changelog
 =========
@@ -98,8 +93,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-11-18 [C] Resotred icons for BBCode and Histogram (own work) {Timo}
-2009-11-18 [B] Didn't work in IE {Timo}
+2009-11-18 [M] Version count updated to 0.7 {GauGau}
+2009-11-18 [A] Dropped usage of separate table to store config settings in favor of regular coppermine config table {GauGau}
+2009-11-18 [C] Restored icons for BBCode and Histogram (own work) {Timo}
+2009-11-18 [B] Fixed bug that made plugin stop working in IE {Timo}
+2009-11-18 [A] Added sub-headers to config screen {GauGau}
 2009-11-17 [M] Version count updated to 0.6 {GauGau}
 2009-11-17 [A] Added buttons to config screen {GauGau}
 2009-11-17 [M] Replaced silk icons with crystal icons for license compliance {GauGau}
@@ -118,3 +116,8 @@ Changelog
 2009-11-01 [A] Using new plugin hook for faster processing and no preg_replace anymore {Timo}
 2009-11-01 [M] Version count updated to 0.3 {Timo}
 2009-11-01 [M] First public release {Timo}
+
+
+To Do
+=====
+* Clear histcache
