@@ -35,6 +35,6 @@ CREATE TABLE IF NOT EXISTS `CPG_plugin_enlargeit` (
   `enl_wheelnav` int(2) NOT NULL default '1',
   `enl_flvplayer` int(2) NOT NULL default '1',
   `enl_opaglide` int(2) NOT NULL default '1',
-  `enl_brdbck` varchar(20) default '',
+  `enl_brdbck` varchar(30) default '',
   `enl_darkensteps` int(2) NOT NULL default '15'
 );

@@ -286,24 +286,24 @@ starttable('100%', $enlargeit_icon_array['table'] . $lang_enlargeit['main_title'
           <td>
               <select name="enl_brdbck" id="enl_brdbck">
                  <option value="" <?php if($ENLARGEITSET['enl_brdbck'] == "") echo 'selected="selected"';?>>-</option>
-                 <option value="b_marble.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_marble.png") echo 'selected="selected"';?>>Marble</option>
-                 <option value="b_metallight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metallight.png") echo 'selected="selected"';?>>Brushed Metal</option>
-                 <option value="b_metalwhite.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalwhite.png") echo 'selected="selected"';?>>White Metal</option>
-                 <option value="b_metalwhite2.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalwhite2.png") echo 'selected="selected"';?>>White Metal 2</option>
-                 <option value="b_metalblue.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalblue.png") echo 'selected="selected"';?>>Blue Metal</option>
-                 <option value="b_metalred.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalred.png") echo 'selected="selected"';?>>Red Metal</option>
-                 <option value="b_metalgreen.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalgreen.png") echo 'selected="selected"';?>>Green Metal</option>
-                 <option value="b_metalsilver.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalsilver.png") echo 'selected="selected"';?>>Silver Metal</option>
-                 <option value="b_metalblack.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_metalblack.png") echo 'selected="selected"';?>>Black Metal</option>
-                 <option value="b_rain.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_rain.png") echo 'selected="selected"';?>>Rain</option>
-                 <option value="b_rainlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_rainlight.png") echo 'selected="selected"';?>>Light Rain</option>
-                 <option value="b_woodlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_woodlight.png") echo 'selected="selected"';?>>Light Wood</option>
-                 <option value="b_wooddark.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_wooddark.png") echo 'selected="selected"';?>>Dark Wood</option>
-                 <option value="b_paper.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_paper.png") echo 'selected="selected"';?>>Paper</option>
-                 <option value="b_leather.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_leather.png") echo 'selected="selected"';?>>Leather</option>
-                 <option value="b_green.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_green.png") echo 'selected="selected"';?>>Dark Green</option>
-                 <option value="b_greenliquid.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_greenliquid.png") echo 'selected="selected"';?>>Green Liquid</option>
-                 <option value="b_choc.png" <?php if($ENLARGEITSET['enl_brdbck'] == "b_choc.png") echo 'selected="selected"';?>>Chocolate</option>
+                 <option value="backgrounds__b_marble.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_marble.png") echo 'selected="selected"';?>>Marble</option>
+                 <option value="backgrounds__b_metallight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metallight.png") echo 'selected="selected"';?>>Brushed Metal</option>
+                 <option value="backgrounds__b_metalwhite.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalwhite.png") echo 'selected="selected"';?>>White Metal</option>
+                 <option value="backgrounds__b_metalwhite2.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalwhite2.png") echo 'selected="selected"';?>>White Metal 2</option>
+                 <option value="backgrounds__b_metalblue.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalblue.png") echo 'selected="selected"';?>>Blue Metal</option>
+                 <option value="backgrounds__b_metalred.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalred.png") echo 'selected="selected"';?>>Red Metal</option>
+                 <option value="backgrounds__b_metalgreen.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalgreen.png") echo 'selected="selected"';?>>Green Metal</option>
+                 <option value="backgrounds__b_metalsilver.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalsilver.png") echo 'selected="selected"';?>>Silver Metal</option>
+                 <option value="backgrounds__b_metalblack.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_metalblack.png") echo 'selected="selected"';?>>Black Metal</option>
+                 <option value="backgrounds__b_rain.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_rain.png") echo 'selected="selected"';?>>Rain</option>
+                 <option value="backgrounds__b_rainlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_rainlight.png") echo 'selected="selected"';?>>Light Rain</option>
+                 <option value="backgrounds__b_woodlight.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_woodlight.png") echo 'selected="selected"';?>>Light Wood</option>
+                 <option value="backgrounds__b_wooddark.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_wooddark.png") echo 'selected="selected"';?>>Dark Wood</option>
+                 <option value="backgrounds__b_paper.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_paper.png") echo 'selected="selected"';?>>Paper</option>
+                 <option value="backgrounds__b_leather.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_leather.png") echo 'selected="selected"';?>>Leather</option>
+                 <option value="backgrounds__b_green.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_green.png") echo 'selected="selected"';?>>Dark Green</option>
+                 <option value="backgrounds__b_greenliquid.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_greenliquid.png") echo 'selected="selected"';?>>Green Liquid</option>
+                 <option value="backgrounds__b_choc.png" <?php if($ENLARGEITSET['enl_brdbck'] == "backgrounds__b_choc.png") echo 'selected="selected"';?>>Chocolate</option>
               </select>
           </td>
         </tr> 

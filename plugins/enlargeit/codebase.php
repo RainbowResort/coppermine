@@ -225,7 +225,7 @@ EOT;
     ";
     $enlargeit_headcode .= "enl_drgdrop = ".$ENLARGEITSET['enl_dragdrop'].";
     ";
-    $enlargeit_headcode .= "enl_brdbck = 'backgrounds/".$ENLARGEITSET['enl_brdbck']."';
+    $enlargeit_headcode .= "enl_brdbck = '".str_replace('__','/',$ENLARGEITSET['enl_brdbck'])."';
     ";
     $enlargeit_headcode .= "enl_darksteps = ".$ENLARGEITSET['enl_darkensteps'].";
     ";
