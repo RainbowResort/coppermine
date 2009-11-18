@@ -98,6 +98,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-18 [C] Resotred icons for BBCode and Histogram (own work) {Timo}
+2009-11-18 [B] Didn't work in IE {Timo}
 2009-11-17 [M] Version count updated to 0.6 {GauGau}
 2009-11-17 [A] Added buttons to config screen {GauGau}
 2009-11-17 [M] Replaced silk icons with crystal icons for license compliance {GauGau}
