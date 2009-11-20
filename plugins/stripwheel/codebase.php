@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Mouse wheel support for filmstrip $VERSION$=0.1
+  Coppermine 1.5.x Plugin - Mouse wheel support for filmstrip $VERSION$=0.2
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
