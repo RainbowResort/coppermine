@@ -33,14 +33,6 @@ $thisplugin->add_filter('page_meta','enlargeit_head');
 // Add filter for thumb
 $thisplugin->add_filter('theme_display_thumbnails_params','enlargeit_addparams');
 
-
-
-global $lang_plugin_enlargeit;
-
-// get settings
-//require_once('./plugins/enlargeit/include/load_enlargeitset.php');
-
-
 // add neccessary parameters
 function enlargeit_addparams($params) 
 {
@@ -160,63 +152,157 @@ function enlargeit_addparams($params)
 // include some stuff in page header
 function enlargeit_head($meta) {        
 	global $template_header, $lang_plugin_enlargeit, $CONFIG, $CPG_PHP_SELF, $LINEBREAK, $JS;
-	require('./plugins/enlargeit/include/init.inc.php');
+	require('./plugins/enlargeit/init.inc.php');
 	$enlargeit_pages_array = array('thumbnails.php');
-	if (in_array('plugins/enlargeit/js/enlargeit_source.js', $JS['includes']) != TRUE && in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
-		$JS['includes'][] = 'plugins/enlargeit/js/enlargeit_source.js';
-		$meta  .= '<link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />';
-		set_js_var('enl_ani', $CONFIG['plugin_enlargeit_ani']);
-		set_js_var('enl_opaglide', $CONFIG['plugin_enlargeit_opaglide']);
-		if ($CONFIG['plugin_enlargeit_brdsize'] > 0) {
-			set_js_var('enl_brd', '1');
-		} else {
-			set_js_var('enl_brd', '0');
-		}
-		set_js_var('enl_titlebar', $CONFIG['plugin_enlargeit_titlebar']);
-		set_js_var('enl_brdsize', $CONFIG['plugin_enlargeit_brdsize']);
-		set_js_var('enl_brdcolor', $CONFIG['plugin_enlargeit_brdcolor']);
-		set_js_var('enl_titletxtcol', $CONFIG['plugin_enlargeit_titletxtcol']);
-		set_js_var('enl_ajaxcolor', $CONFIG['plugin_enlargeit_ajaxcolor']);
-		set_js_var('enl_brdround', $CONFIG['plugin_enlargeit_brdround']);
-		set_js_var('enl_maxstep', $CONFIG['plugin_enlargeit_maxstep']);
-		if ($CONFIG['plugin_enlargeit_shadowsize'] > 0) {
-			set_js_var('enl_shadow', 1);
-		} else {
-			set_js_var('enl_shadow', 0);
-		}
-		set_js_var('enl_shadowsize', $CONFIG['plugin_enlargeit_shadowsize']);
-		set_js_var('enl_shadowintens', $CONFIG['plugin_enlargeit_shadowintens']);
-		set_js_var('enl_speed', $CONFIG['plugin_enlargeit_speed']);
-		set_js_var('enl_dark', $CONFIG['plugin_enlargeit_dark']);
-		set_js_var('enl_darkprct', $CONFIG['plugin_enlargeit_darkprct']);
-		set_js_var('enl_center', $CONFIG['plugin_enlargeit_center']);
-		set_js_var('enl_wheelnav', $CONFIG['plugin_enlargeit_wheelnav']);
-		set_js_var('enl_drgdrop', $CONFIG['plugin_enlargeit_dragdrop']);
-		if ($CONFIG['plugin_enlargeit_brdbck'] != '') {
-			set_js_var('enl_brdbck', 'backgrounds/'.$CONFIG['plugin_enlargeit_brdbck'].'.png');
-		} else {
-			set_js_var('enl_brdbck', '');
-		}
-		set_js_var('enl_darksteps', $CONFIG['plugin_enlargeit_darkensteps']);
-		set_js_var('enl_canceltext', $lang_plugin_enlargeit['enl_canceltext']);
-		set_js_var('enl_noflash', $lang_plugin_enlargeit['enl_noflashfound']);
-		// Define the buttons
-		$buttonurl_array = array();
-		$buttontxt_array = array();
-		$buttonoff_array = array();
-		if ($CONFIG['plugin_enlargeit_buttonpic']) {
-			$buttonurl_array[] = 'pic';
-			$buttontxt_array[] = $lang_plugin_enlargeit['enl_tooltippic'];
-			$buttonoff_array[] = '0';
-		}
-		if ($CONFIG['plugin_enlargeit_buttonfav']) {
-			$buttonurl_array[] = 'index.php?file=enlargeit/enl_addfav&pid=';
-			$buttontxt_array[] = $lang_plugin_enlargeit['enl_tooltipfav'];
-			$buttonoff_array[] = '-32';
-		}
-		set_js_var('enl_buttonurl', $buttonurl_array);
-		set_js_var('enl_buttontxt', $buttontxt_array);
-		set_js_var('enl_buttonoff', $buttonoff_array);
+	if (in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
+	    $temp_brdbck = str_replace('__','/',$CONFIG['plugin_enlargeit_brdbck']);
+		$meta  .= <<< EOT
+    <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
+    <link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />
+    <script type=\"text/javascript\"><!--
+        enl_ani = {$CONFIG['plugin_enlargeit_ani']};
+        enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
+        enl_brd = {$CONFIG['plugin_enlargeit_brd']};
+        enl_titlebar = {$CONFIG['plugin_enlargeit_titlebar']};
+        enl_brdsize = {$CONFIG['plugin_enlargeit_brdsize']};
+        enl_brdcolor = '{$CONFIG['plugin_enlargeit_brdcolor']}';
+        enl_titletxtcol = '{$CONFIG['plugin_enlargeit_titletxtcol']}';
+        enl_ajaxcolor = '{$CONFIG['plugin_enlargeit_ajaxcolor']}';
+        enl_brdround = {$CONFIG['plugin_enlargeit_brdround']};
+        enl_maxstep = {$CONFIG['plugin_enlargeit_maxstep']};
+        enl_shadow = {$CONFIG['plugin_enlargeit_shadow']};
+        enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
+        enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
+        enl_gifpath = 'images/';
+        enl_usecounter = 1;
+        enl_counterurl = 'index.php?file=enlargeit/enl_cnt&a=';
+        enl_btnact = 'icons/bact_transp.png';
+        enl_btninact = 'icons/binact_transp.png';
+        enl_minuscur = 'cursors/minuscur.cur';
+        enl_pluscur = 'cursors/pluscur.cur';
+        enl_speed = {$CONFIG['plugin_enlargeit_speed']};
+        enl_dark = {$CONFIG['plugin_enlargeit_dark']};
+        enl_darkprct = {$CONFIG['plugin_enlargeit_darkprct']};
+        enl_center = {$CONFIG['plugin_enlargeit_center']};
+        enl_wheelnav = {$CONFIG['plugin_enlargeit_wheelnav']};
+        enl_drgdrop = {$CONFIG['plugin_enlargeit_dragdrop']};
+        enl_brdbck = '{$temp_brdbck}';
+        enl_darksteps = {$CONFIG['plugin_enlargeit_darkensteps']};
+        enl_canceltext = '{$lang_enlargeit['enl_canceltext']}';
+        enl_noflash = '{$lang_enlargeit['enl_noflashfound']}';
+
+EOT;
+		$loopCounter = 0;
+		// Button "Show picture"
+		if ($CONFIG['plugin_enlargeit_buttonpic'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'pic';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltippic']}';
+        enl_buttonoff[{$loopCounter}] = 0;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Favorites"
+        if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_addfav&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipfav']}';
+        enl_buttonoff[{$loopCounter}] = -32;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Pic Info"
+        if ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'site:displayimage.php?pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipinfo']}';
+        enl_buttonoff[{$loopCounter}] = -16;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Download"
+        if ($CONFIG['plugin_enlargeit_buttondownload'] == '1' || ($CONFIG['plugin_enlargeit_buttondownload'] == 2 && USER_ID)) {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_download&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipdownload']}';
+        enl_buttonoff[{$loopCounter}] = -208;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "BBcode"
+        if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipbbcode']}';
+        enl_buttonoff[{$loopCounter}] = -192;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Histogramm"
+        if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltiphist']}';
+        enl_buttonoff[{$loopCounter}] = -160;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Expand"
+        if ($CONFIG['plugin_enlargeit_buttonmax'] == '1' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '2')) {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'max';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipmax']}';
+        enl_buttonoff[{$loopCounter}] = -144;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Expand"
+        if ($CONFIG['plugin_enlargeit_buttonmax'] == '3' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '4')) {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'maxpop';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipmax']}';
+        enl_buttonoff[{$loopCounter}] = -144;
+
+EOT;
+            $loopCounter++;
+        }
+        // Buttons "Previous" + "Next" (Navigation)
+        if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'prev';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipprev']}';
+        enl_buttonoff[{$loopCounter}] = -96;
+
+EOT;
+            $loopCounter++;
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'next';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipnext']}';
+        enl_buttonoff[{$loopCounter}] = -80;
+
+EOT;
+        }
+        // Button "Close"
+        if ($CONFIG['plugin_enlargeit_buttonclose'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'close';
+        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipclose']}';
+        enl_buttonoff[{$loopCounter}] = -128;
+
+EOT;
+            $loopCounter++;
+        }
+		$meta  .= <<< EOT
+	//--></script>
+
+EOT;
 	}
 	return $meta;
 }
@@ -227,7 +313,7 @@ function enl_thumb()
 {
   global $CONFIG, $template_thumbnail_view, $lang_enlarge;
   // get language
-  require_once('./plugins/enlargeit/include/init.inc.php');
+  require_once('./plugins/enlargeit/init.inc.php');
 
   // change thumb template if enlargeit is active for current user
   if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']))

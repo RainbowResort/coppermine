@@ -93,6 +93,13 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-21 [M] Version count updated to 0.8 {GauGau}
+2009-11-21 [M] Moved include file to plugin root folder for easier maintenance {GauGau}
+2009-11-21 [M] Renamed language variables to match coppermine coding standards {GauGau}
+2009-11-21 [M] Replaced html entities with their equivalents in language files {GauGau}
+2009-11-21 [M] Replaced single quotes in language file strings with double quotes {GauGau}
+2009-11-21 [M] Rolled back changes in JS files as requested by plugin author {GauGau}
+2009-11-21 [D] Added js-alert comments to language file for easier translation {GauGau}
 2009-11-18 [M] Version count updated to 0.7 {GauGau}
 2009-11-18 [A] Dropped usage of separate table to store config settings in favor of regular coppermine config table {GauGau}
 2009-11-18 [C] Restored icons for BBCode and Histogram (own work) {Timo}

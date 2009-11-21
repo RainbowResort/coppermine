@@ -20,7 +20,7 @@ define('IN_COPPERMINE', true);
 define('RATEPIC_PHP', true);
 
 
-require_once('include/init.inc.php');
+require_once('init.inc.php');
 
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     $redirect = $redirect . "login.php";
@@ -30,7 +30,7 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
 
 global $lang_plugin_enlargeit;
 //require('./plugins/enlargeit/include/load_enlargeitset.php');
-require('./plugins/enlargeit/include/init.inc.php');
+require('./plugins/enlargeit/init.inc.php');
 
 
 $pic = $superCage->get->getInt('pid');
@@ -70,18 +70,18 @@ if (USER_ID > 0) {
 
 
 echo "<table align=\"center\" cellspacing=\"1\" style=\"width:100%;height:100%\">";
-echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['enl_tooltipfav']."</b></td></tr>";
+echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['favorites']."</b></td></tr>";
 echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotable\"><b>";
 if ($enl_added == 1) {
-	echo $lang_plugin_enlargeit['enl_addedtofav'];
+	echo $lang_plugin_enlargeit['file_added_to_favorites'];
 }
 else
 {
-	echo $lang_plugin_enlargeit['enl_removedfromfav'];
+	echo $lang_plugin_enlargeit['file_removed_from_favorites'];
 }
 echo "</b><br /><br />";
-if ($CONFIG['plugin_enlargeit_sefmode']) echo "<a href=\"thumbnails-favpics.html\">".$lang_plugin_enlargeit['enl_showfav']."</a>";
-else echo "<br /><br /><a href=\"thumbnails.php?album=favpics\">".$lang_plugin_enlargeit['enl_showfav']."</a>";
+if ($CONFIG['plugin_enlargeit_sefmode']) echo "<a href=\"thumbnails-favpics.html\">".$lang_plugin_enlargeit['button_favorites']."</a>";
+else echo "<br /><br /><a href=\"thumbnails.php?album=favpics\">".$lang_plugin_enlargeit['button_favorites']."</a>";
 
 echo "</td></tr></table>";
 ob_end_flush();

@@ -21,8 +21,8 @@ define('DISPLAYIMAGE_PHP', true);
 define('INDEX_PHP', true);
 //define('SMILIES_PHP', true);
 
-require_once('include/init.inc.php');
-require('./plugins/enlargeit/include/init.inc.php');
+require_once('init.inc.php');
+require('./plugins/enlargeit/init.inc.php');
 
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     $redirect = $redirect . "login.php";

@@ -18,8 +18,8 @@
 
 define('IN_COPPERMINE', true);
 
-require_once('include/init.inc.php');
-require('./plugins/enlargeit/include/init.inc.php');
+require_once('init.inc.php');
+require('./plugins/enlargeit/init.inc.php');
 
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     $redirect = $redirect . "login.php";
@@ -41,7 +41,7 @@ echo 'if (window.ActiveXObject || window.opera || (navigator.userAgent.toLowerCa
 echo 'window.location=\'index.php?file=enlargeit/enl_download2&pid='.$pid.'\';else window.open(\'index.php?file=enlargeit/enl_download2&pid='.$pid.'\');';
 echo 'return false;';
 
-echo '"><b>'.$lang_plugin_enlargeit['enl_clickdownload'].'</a></b><br /></td></tr>';
+echo '"><b>'.$lang_plugin_enlargeit['download_explain'].'</a></b><br /></td></tr>';
 echo '</table>';
 
 ?>

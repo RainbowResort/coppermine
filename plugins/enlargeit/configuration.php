@@ -16,12 +16,12 @@
   $Date$
   **************************************************/
   
-require('./plugins/enlargeit/include/init.inc.php');
+require('./plugins/enlargeit/init.inc.php');
   
 $name = 'EnlargeIt!';
 $description = 'AJAX GUI for Coppermine 1.5.x to seamlessly open the image embedded into the output on the thumbnail page, with an optional greybox feature and a detailed configuration screen.';
 $author = '<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>';
-$version = '0.7';
+$version = '0.8';
 $install_info = "You can configure the plugin after installation, use the button on the plugin manager. If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.";
 $extra_info = 'This plugin is currently an alpha version. Not all features will work, especially the AJAX parts. Thanks for understanding.';
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="admin_menu external">'.$enlargeit_icon_array['announcement'].'Announcement thread</a>';

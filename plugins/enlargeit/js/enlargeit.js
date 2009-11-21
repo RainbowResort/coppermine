@@ -1,20 +1,9 @@
-/**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt!
-  *************************************************
-  Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
-  This comment MUST stay intact for legal use, so don't remove it.
-  *************************************************
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 3 of the License, or
-  (at your option) any later version.
-  ********************************************
-  Coppermine version: 1.5.2
-  $HeadURL$
-  $Revision$
-  $LastChangedBy$
-  $Date$
-  **************************************************/
+/*  This comment MUST stay intact for legal use, so don't remove it. EnlargeIt! 
+v1.1 - (c) 2008 Timo Sack - http://enlargeit.timos-welt.de This program is free 
+software: you can redistribute it and/or modify it under the terms of the GNU 
+General Public License as published by the Free Software Foundation, either 
+version 3 of the License, or (at your option) any later version. See LICENSE.TXT 
+for details. */
 
 // modify these
 var enl_gifpath='./';  // path to graphics

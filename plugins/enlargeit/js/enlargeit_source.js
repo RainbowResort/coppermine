@@ -1,43 +1,43 @@
-/**************************************************
-  Coppermine 1.5.x Plugin - EnlargeIt!
-  *************************************************
-  Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
-  This comment MUST stay intact for legal use, so don't remove it.
-  *************************************************
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 3 of the License, or
-  (at your option) any later version.
-  ********************************************
-  Coppermine version: 1.5.2
-  $HeadURL$
-  $Revision$
-  $LastChangedBy$
-  $Date$
-  **************************************************/
-
-
+/*  This comment MUST stay intact for legal use, so don't remove it. EnlargeIt! 
+v1.1 - (c) 2008 Timo Sack - http://enlargeit.timos-welt.de This program is free 
+software: you can redistribute it and/or modify it under the terms of the GNU 
+General Public License as published by the Free Software Foundation, either 
+version 3 of the License, or (at your option) any later version. See LICENSE.TXT 
+for details. */
 
 // modify these
-var enl_brdsize=js_vars.enl_brdsize;    // border thickness (5-30)
-var enl_brdbck=js_vars.enl_brdbck;     // border background pic, '' for no pic
-var enl_maxstep=js_vars.enl_maxstep;    // ani steps (10-30)
-var enl_speed=js_vars.enl_speed;      // time between steps
-var enl_ani=js_vars.enl_ani;         // 0=no,1=fade,2=glide,3=bumpglide,4=smoothglide,5=expglide,6=topglide,7=leftglide,8=topleftglide
-var enl_opaglide=js_vars.enl_opaglide;    // glide transparency
-var enl_shadow=js_vars.enl_shadow;      // shadow under border
-var enl_shadowsize=9;  // size of shadow right/bottom (0-20)
-var enl_shadowintens=js_vars.enl_shadowintens;// shadow intensity (5-30)
-var enl_dark=js_vars.enl_dark;        // darken screen (0=off/1=on/2=keep dark when nav)
-var enl_darkprct=js_vars.enl_darkprct;   // how dark the screen should be (0-100)
-var enl_darksteps=js_vars.enl_darksteps;   // how long darkening should take
-var enl_center=js_vars.enl_center;      // center enlarged pic on screen
-var enl_drgdrop=js_vars.enl_drgdrop;     // enable drag&drop for pics
-var enl_wheelnav=js_vars.enl_wheelnav;    // mouse wheel navigation
-var enl_noflash=js_vars.enl_noflash;// msg if no flash plugin found
-var enl_canceltext=js_vars.enl_canceltext;    // tooltip to cancel loading
-//alert(js_vars.enl_buttonurl);
-
+var enl_gifpath = '../images/';  // path to graphics
+var enl_brdsize=12;    // border thickness (5-30)
+var enl_brdcolor='';   // border color (white if empty)
+var enl_brdbck='';     // border background pic, '' for no pic
+var enl_brdround=1;    // use rounded borders (Mozilla/Safari only)
+var enl_maxstep=18;    // ani steps (10-30)
+var enl_speed=12;      // time between steps
+var enl_ani=5;         // 0=no, 1=fade, 2=glide, 3=bumpglide, 4=smoothglide, 5=expglide, 6=topglide, 7=leftglide, 8=topleftglide
+var enl_opaglide=0;    // glide transparency
+var enl_shadow=1;      // shadow under border
+var enl_shadowsize=1;  // size of shadow right/bottom (0-20)
+var enl_shadowcolor='';// shadow color (empty: black)
+var enl_shadowintens=9;// shadow intensity (5-30)
+var enl_dark=1;        // darken screen (0=off/1=on/2=keep dark when nav)
+var enl_darkprct=20;   // how dark the screen should be (0-100)
+var enl_darksteps=9;   // how long darkening should take
+var enl_center=1;      // center enlarged pic on screen
+var enl_drgdrop=1;     // enable drag&drop for pics
+var enl_preload=1;     // preload next/prev pic
+var enl_titlebar=1;    // show pic title bar
+var enl_keynav=1;      // key navigation
+var enl_wheelnav=1;    // mouse wheel navigation
+var enl_titletxtcol='';// color of title bar text (empty: dark grey)
+var enl_ajaxcolor='';  // background color for AJAX (empty: light grey)
+var enl_usecounter=0;  // hidden call of counter page
+var enl_counterurl=''; // base URL of counter page
+var enl_btnact='icons/bact.png';               // active buttons
+var enl_btninact='icons/binact.png';           // inactive buttons
+var enl_pluscur='pluscur.cur';           // mouse cursor of thumbnail
+var enl_minuscur='minuscur.cur';         // mouse cursor of enlarged image
+var enl_noflash='No flash plugin found!';// msg if no flash plugin found
+var enl_canceltext='Click to cancel';    // tooltip to cancel loading
 
 
 
@@ -47,16 +47,6 @@ var enl_buttonurl = new Array(),enl_buttontxt = new Array(),enl_buttonoff = new 
 // define your buttons here
 
 // stuff to leave alone
-var enl_gifpath='plugins/enlargeit/images/';  // path to graphics
-var enl_usecounter=1;  // hidden call of counter page
-var enl_counterurl='index.php?file=enlargeit/enl_cnt&a='; // base URL of counter page
-var enl_btnact='icons/bact.png';               // active buttons
-var enl_btninact='icons/binact.png';           // inactive buttons
-var enl_pluscur='icons/pluscur.cur';           // mouse cursor of thumbnail
-var enl_minuscur='icons/minuscur.cur';         // mouse cursor of enlarged image
-var enl_shadowcolor='';// shadow color (empty: black)
-var enl_preload=1;     // preload next/prev pic
-var enl_keynav=1;      // key navigation
 
 // global vars
 var enl_prldimg=new Array(),enl_button=new Array(),enl_stopload=0;
@@ -81,8 +71,8 @@ function enl_init()
     if (typeof enl_dropshadow == 'undefined') enl_shadow = 0;
     if (typeof enl_wheel == 'undefined') enl_wheelnav = 0;
     if (typeof enl_keynavi == 'undefined') enl_keynav = 0;
-    if (typeof enl_mktitlebar == 'undefined') js_vars.enl_titlebar = 0;
-    else if (enl_buttonurl.length) js_vars.enl_titlebar = 1;
+    if (typeof enl_mktitlebar == 'undefined') enl_titlebar = 0;
+    else if (enl_buttonurl.length) enl_titlebar = 1;
     if (typeof enl_dofadein == 'undefined' && enl_ani == 1) enl_ani = 2;
     if (typeof enl_doglidein == 'undefined' && enl_ani > 1) enl_ani = 0;
     var enl_i = 0;
@@ -91,7 +81,7 @@ function enl_init()
     if (typeof enl_ajax != 'undefined') enl_ajaxprepare();
     
     // button img
-    if (js_vars.enl_titlebar) {
+    if (enl_titlebar) {
       enl_preloadit(enl_gifpath+enl_btnact);
       enl_butact = enl_prldimg[enl_prldcnt];
       enl_preloadit(enl_gifpath+enl_btninact);
@@ -116,9 +106,9 @@ function enl_init()
     // border div
     enl_brdm = enl_mkdiv('enl_brd');
     enl_brdm.name = 'ajax';
-    enl_brdm.style.backgroundColor = (js_vars.enl_brdcolor) ? js_vars.enl_brdcolor : '#ffffff';
+    enl_brdm.style.backgroundColor = (enl_brdcolor) ? enl_brdcolor : '#ffffff';
     if (enl_brdbck) enl_brdm.style.backgroundImage = 'url('+enl_gifpath+enl_brdbck+')';
-    if (js_vars.enl_brdround == 1 && !enl_brdbck)
+    if (enl_brdround && !enl_brdbck)
     {
       enl_brdm.style.MozBorderRadius = enl_brdsize+'px';
       enl_brdm.style.khtmlBorderRadius = enl_brdsize+'px';
@@ -130,7 +120,7 @@ function enl_init()
         enl_shdm = enl_mkdiv('enl_shd');
         enl_shdm.style.backgroundColor = (enl_shadowcolor) ? enl_shadowcolor : 'black';
         enl_setopa(enl_shdm,enl_shadowintens);
-        if (js_vars.enl_brdround == 1 && !enl_brdbck)
+        if (enl_brdround && !enl_brdbck)
         {
           enl_shdm.style.MozBorderRadius = eval(enl_brdsize+1)+'px';
           enl_shdm.style.khtmlBorderRadius = eval(enl_brdsize+1)+'px';
@@ -291,7 +281,7 @@ function enl_makedraggable(enl_imgid)
   if (enl_drgdrop)
   { enl_img.onmousedown=enl_buttonpress;
     enl_img.onmouseup=enl_enddrag; }
-  else if (enl_img.ispic || !js_vars.enl_titlebar) enl_img.onclick = function() { enl_shrink(enl_imgid); };
+  else if (enl_img.ispic || !enl_titlebar) enl_img.onclick = function() { enl_shrink(enl_imgid); };
   if (!enl_inmax && enl_usecounter) setTimeout('enl_count("'+enl_orig.id+'")' ,40);
   if (enl_drgdrop) enl_setcur(enl_img,enl_minuscur,'move','move');
   else enl_setcur(enl_img,enl_minuscur,'pointer','hand');
@@ -391,7 +381,7 @@ function enl_mkborder(enl_imgid)
   enl_img = enl_geto(enl_imgid);
   enl_brdclone = enl_geto(enl_imgid+"brd");
   if (enl_wheelnav) enl_wheelenable(enl_brdclone);
-  if (js_vars.enl_titlebar && enl_brdsize < enl_btnheight+4)
+  if (enl_titlebar && enl_brdsize < enl_btnheight+4)
   {
     enl_tmph = enl_img.newh + enl_brdsize + enl_btnheight + 4;
     enl_tmpt = enl_img.newt-enl_brdsize- (enl_btnheight+4) +enl_brdsize;
@@ -435,7 +425,7 @@ function enlarge(enl_img)
     return false;
   }
   if (enl_brdbck && !enl_brdbckpic.complete) return false;
-  if (js_vars.enl_titlebar && (!enl_butact.complete || !enl_butinact.complete)) return false;
+  if (enl_titlebar && (!enl_butact.complete || !enl_butinact.complete)) return false;
   var enl_getlongdesc=enl_img.getAttribute('longdesc');
   if (enl_getlongdesc.slice(3,5) == '::' && typeof enl_checkflash == 'undefined') return false;
   enl_inprogress = 1;
@@ -585,7 +575,7 @@ function enl_doenlarge(enl_imgid)
   }
   enl_img.steps = 1;
   enl_img.thumbpic = enl_img.src;
-  if (js_vars.enl_titlebar) enl_mktitlebar(enl_imgid);
+  if (enl_titlebar) enl_mktitlebar(enl_imgid);
   if (!enl_ani || !enl_img.ispic ) enl_donoani(enl_imgid);
   else if (enl_ani==1) setTimeout('enl_dofadein("'+enl_imgid+'")' ,50);
   else if (enl_ani==6) setTimeout('enl_topleftglide("'+enl_imgid+'",0)' ,50);
@@ -603,7 +593,7 @@ function enl_donoani(enl_imgid)
   enl_img.style.position = 'absolute';
   enl_visible(enl_img);
   enl_mkborder(enl_imgid);
-  if (js_vars.enl_titlebar) enl_showbtn(enl_imgid);
+  if (enl_titlebar) enl_showbtn(enl_imgid);
   enl_makedraggable(enl_imgid);
   if (enl_dark) enl_darken();
 }
@@ -622,7 +612,7 @@ function enl_enable(enl_imgid)
          if (typeof enl_makenull[enl_i] == "function") enl_makenull[enl_i] = null;
        }
      }
-  if (js_vars.enl_titlebar) document.body.removeChild(enl_geto(enl_imgid+"btns"));
+  if (enl_titlebar) document.body.removeChild(enl_geto(enl_imgid+"btns"));
   document.body.removeChild(enl_geto(enl_imgid+"brd"));
   if (enl_shadow) {
     document.body.removeChild(enl_geto(enl_imgid+"shd1"));
@@ -662,7 +652,7 @@ function enl_shrink(enl_imgid)
   enl_fullimg = enl_orig.getAttribute('longdesc');
   enl_visible(enl_img);
   enl_delborder(enl_imgid);
-  if (js_vars.enl_titlebar) enl_hidebtn(enl_imgid);
+  if (enl_titlebar) enl_hidebtn(enl_imgid);
   if (enl_dark) enl_nodark();
   enl_keepblack = 0;
   enl_r = enl_coord(enl_geto(enl_img.orig));
@@ -686,7 +676,7 @@ function enl_dropshadow(enl_imgid)
   enl_shdclone1 = enl_geto(enl_imgid+"shd1");
   enl_shdclone2 = enl_geto(enl_imgid+"shd2");
   enl_tmpw = enl_img.neww + enl_shadowsize + enl_brdsize*2 + 2;
-  if (js_vars.enl_titlebar && enl_brdsize < enl_btnheight+4) 
+  if (enl_titlebar && enl_brdsize < enl_btnheight+4) 
   {
     enl_tmph = enl_img.newh + enl_shadowsize + enl_brdsize*2 + 6 + enl_btnheight - enl_brdsize;
     enl_tmpt = enl_img.newt - enl_brdsize - 1 - (enl_btnheight + 4) + enl_brdsize;
@@ -771,7 +761,7 @@ function enl_doglidein(enl_imgid)
     setTimeout('enl_mkborder("'+enl_imgid+'")' ,enl_speed);
     if (enl_dark) setTimeout('enl_darken()', enl_speed*4);
     setTimeout('enl_makedraggable("'+enl_imgid+'")' ,enl_speed*3);
-    if (js_vars.enl_titlebar) setTimeout('enl_showbtn("'+enl_imgid+'")' ,enl_speed*2);
+    if (enl_titlebar) setTimeout('enl_showbtn("'+enl_imgid+'")' ,enl_speed*2);
   }
   else
   {
@@ -834,7 +824,7 @@ function enl_dofadein(enl_imgid)
     enl_img.style.filter = '';
     enl_img.steps = 1;
     enl_mkborder(enl_imgid);
-    if (js_vars.enl_titlebar) enl_showbtn(enl_imgid);
+    if (enl_titlebar) enl_showbtn(enl_imgid);
     setTimeout('enl_makedraggable("'+enl_imgid+'")' ,30);
     if (enl_dark) setTimeout('enl_darken()', 100);
   }
@@ -853,9 +843,9 @@ function enl_mousemv(enl_el)
     enl_tmpl = enl_nn6 ? enl_tx + enl_el.clientX - enl_x : enl_tx + event.clientX - enl_x;
     enl_tmpt = enl_nn6 ? enl_ty + enl_el.clientY - enl_y : enl_ty + event.clientY - enl_y;
     enl_setpos(enl_drgelem,enl_tmpl,enl_tmpt);
-    if (js_vars.enl_titlebar && enl_brdsize<enl_btnheight+4) enl_setpos(enl_geto(enl_drgelem.id+"brd"),enl_tmpl - enl_brdsize,enl_tmpt - (enl_btnheight+4));
+    if (enl_titlebar && enl_brdsize<enl_btnheight+4) enl_setpos(enl_geto(enl_drgelem.id+"brd"),enl_tmpl - enl_brdsize,enl_tmpt - (enl_btnheight+4));
     else enl_setpos(enl_geto(enl_drgelem.id+"brd"),enl_tmpl - enl_brdsize,enl_tmpt - enl_brdsize);
-    if (js_vars.enl_titlebar) enl_showbtn(enl_drgelem.id);
+    if (enl_titlebar) enl_showbtn(enl_drgelem.id);
     enl_mvcnt++;
     if (enl_mvcnt > 3) enl_hasmvd = true;
     return false;
@@ -868,7 +858,7 @@ function enl_buttonpress(enl_el)
   enl_drgelem = enl_nn6 ? enl_el.target : event.srcElement; var topenl_el = enl_nn6 ? "HTML" : "BODY"; enl_hasmvd = false; while (enl_drgelem.tagName != topenl_el && !enl_drgelem.newh) {
   enl_drgelem = enl_nn6 ? enl_drgelem.parentNode : enl_drgelem.parentElement; } enl_drgmode = true; enl_zcnt+=3;
   var enl_drgid = enl_drgelem.id;
-  if (js_vars.enl_titlebar) enl_geto(enl_drgid+'btns').style.zIndex = enl_zcnt+1;
+  if (enl_titlebar) enl_geto(enl_drgid+'btns').style.zIndex = enl_zcnt+1;
   enl_drgelem.style.zIndex = enl_zcnt; 
   if (enl_shadow) enl_delshadow(enl_drgid);
   enl_geto(enl_drgid+"brd").style.zIndex = enl_zcnt-1;
@@ -888,7 +878,7 @@ function enl_enddrag()
   if (enl_hasmvd==true || !enl_drgelem.ispic) {
     if (typeof enl_hideselect != 'undefined') enl_hideselect(0,1);
     enl_mkborder(enl_drgid);
-    if (js_vars.enl_titlebar) enl_showbtn(enl_drgid);
+    if (enl_titlebar) enl_showbtn(enl_drgid);
     enl_hasmvd=false;
     setTimeout('enl_makedraggable("'+enl_drgid+'")' ,100);
   }
@@ -936,7 +926,7 @@ function enl_mktitlebar(enl_imgid)
       paddingTop = '0px';
       fontFamily = 'Arial,Helvetica,sans-serif';
       fontSize = '10pt';
-      color = (js_vars.enl_titletxtcol) ? js_vars.enl_titletxtcol : '#444444';
+      color = (enl_titletxtcol) ? enl_titletxtcol : '#444444';
       whiteSpace = 'nowrap';
       fontWeight = 'bold';
     }
@@ -1060,7 +1050,7 @@ function enl_showbtn(enl_imgid)
   enl_btns = enl_geto(enl_imgid+'btns');
   enl_img = enl_geto(enl_imgid);
   enl_tmpl = parseInt(enl_img.style.left)+enl_img.neww-enl_img.btnw+5;
-  enl_tmpt = (js_vars.enl_titlebar && enl_brdsize < enl_btnheight+4) ? parseInt(enl_img.style.top)-(enl_btnheight+4) : parseInt(enl_img.style.top)-enl_brdsize;
+  enl_tmpt = (enl_titlebar && enl_brdsize < enl_btnheight+4) ? parseInt(enl_img.style.top)-(enl_btnheight+4) : parseInt(enl_img.style.top)-enl_brdsize;
   enl_setpos(enl_btns,enl_tmpl,enl_tmpt);
   enl_btns.style.zIndex = enl_zcnt+1;
   enl_visible(enl_btns);
@@ -1107,7 +1097,7 @@ function enl_ajax(enl_img,enl_url)
         enl_answer = enl_request.responseText;
         enl_divh = enl_img.newh-2;
         enl_divw = enl_img.neww-2;
-        var enl_myajaxcol = (js_vars.enl_ajaxcolor) ? js_vars.enl_ajaxcolor : '#d0d0d0';
+        var enl_myajaxcol = (enl_ajaxcolor) ? enl_ajaxcolor : '#d0d0d0';
         enl_tmphtml = '<div style="width:'+enl_divw+'px;height:'+enl_divh+'px;overflow:auto;border-color:#666677;border-width:1px;border-style:solid;background-color:'+enl_myajaxcol+';margin-left:'+enl_brdsize+'px;margin-bottom:'+enl_brdsize+'px;margin-right:'+enl_brdsize+'px;margin-top:';
         enl_tmphtml += (enl_brdsize < enl_btnheight+4) ? eval(enl_btnheight+4) : enl_brdsize;
         enl_tmphtml += 'px;">'+enl_answer+'</div>';
@@ -1413,7 +1403,7 @@ function enl_topleftglide(enl_imgid,enl_tl)
     setTimeout('enl_mkborder("'+enl_imgid+'")' ,enl_speed);
     if (enl_dark) setTimeout('enl_darken()', enl_speed*4);
     setTimeout('enl_makedraggable("'+enl_imgid+'")' ,enl_speed*3);
-    if (js_vars.enl_titlebar) setTimeout('enl_showbtn("'+enl_imgid+'")' ,enl_speed*2);
+    if (enl_titlebar) setTimeout('enl_showbtn("'+enl_imgid+'")' ,enl_speed*2);
   }
   else
   {

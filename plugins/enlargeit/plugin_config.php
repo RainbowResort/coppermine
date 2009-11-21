@@ -10,7 +10,7 @@
   (at your option) any later version.
   **************************************************/
 
-require('./plugins/enlargeit/include/init.inc.php');
+require('./plugins/enlargeit/init.inc.php');
 if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
 	$JS['includes'][] = 'js/jquery.spinbutton.js';
 }
@@ -350,24 +350,24 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['enable_for']}
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['enl_adminmode']}</label><br />
-			<input type="checkbox" name="plugin_enlargeit_registeredmode" id="plugin_enlargeit_registeredmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_registeredmode']} /><label for="plugin_enlargeit_registeredmode" class="clickable_option">{$lang_plugin_enlargeit['enl_registeredmode']}</label><br />
-			<input type="checkbox" name="plugin_enlargeit_guestmode" id="plugin_enlargeit_guestmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_guestmode']} /><label for="plugin_enlargeit_guestmode" class="clickable_option">{$lang_plugin_enlargeit['enl_guestmode']}</label>
+			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['administrators']}</label><br />
+			<input type="checkbox" name="plugin_enlargeit_registeredmode" id="plugin_enlargeit_registeredmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_registeredmode']} /><label for="plugin_enlargeit_registeredmode" class="clickable_option">{$lang_plugin_enlargeit['registered_users']}</label><br />
+			<input type="checkbox" name="plugin_enlargeit_guestmode" id="plugin_enlargeit_guestmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_guestmode']} /><label for="plugin_enlargeit_guestmode" class="clickable_option">{$lang_plugin_enlargeit['guests']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_pictype']}
+			{$lang_plugin_enlargeit['enlarge_to_pic_in']}
 		</td>
 		<td>
-			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['enl_normalsize']}</label><br />
-			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_1" class="radio" value="1" {$option_output['plugin_enlargeit_pictype_1']} /><label for="plugin_enlargeit_pictype_1" class="clickable_option">{$lang_plugin_enlargeit['enl_fullsize']}</label><br />
-			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_2" class="radio" value="2" {$option_output['plugin_enlargeit_pictype_2']} /><label for="plugin_enlargeit_pictype_2" class="clickable_option">{$lang_plugin_enlargeit['enl_forcenormal']}</label>
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['intermediate_size']}</label><br />
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_1" class="radio" value="1" {$option_output['plugin_enlargeit_pictype_1']} /><label for="plugin_enlargeit_pictype_1" class="clickable_option">{$lang_plugin_enlargeit['full_size']}</label><br />
+			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_2" class="radio" value="2" {$option_output['plugin_enlargeit_pictype_2']} /><label for="plugin_enlargeit_pictype_2" class="clickable_option">{$lang_plugin_enlargeit['force_intermediate_size']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="2">
-			{$lang_plugin_enlargeit['enl_ani']}
+			{$lang_plugin_enlargeit['animation']}
 		</td>
 	</tr>
 	<tr>
@@ -376,7 +376,7 @@ echo <<< EOT
 		</td>
 		<td>
 			<select name="plugin_enlargeit_ani" id="plugin_enlargeit_ani" class="listbox">
-				<option value="0" {$option_output['plugin_enlargeit_ani'][0]} >{$lang_plugin_enlargeit['noani']}</option>
+				<option value="0" {$option_output['plugin_enlargeit_ani'][0]} >{$lang_plugin_enlargeit['none']}</option>
 				<option value="1" {$option_output['plugin_enlargeit_ani'][1]} >{$lang_plugin_enlargeit['fade']}</option>
 				<option value="2" {$option_output['plugin_enlargeit_ani'][2]} >{$lang_plugin_enlargeit['glide']}</option>
 				<option value="3" {$option_output['plugin_enlargeit_ani'][3]} >{$lang_plugin_enlargeit['bumpglide']}</option>
@@ -390,7 +390,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_speed']}
+			{$lang_plugin_enlargeit['time_between_animation_steps']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" /> {$lang_plugin_enlargeit['milliseconds']}
@@ -398,7 +398,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_maxstep']}
+			{$lang_plugin_enlargeit['animation_steps']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" />
@@ -406,7 +406,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_opaglide" class="clickable_option">{$lang_plugin_enlargeit['enl_opaglide']}</label>
+			<label for="plugin_enlargeit_opaglide" class="clickable_option">{$lang_plugin_enlargeit['transparency_for_glide']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_opaglide" id="plugin_enlargeit_opaglide" class="checkbox" value="1" {$option_output['plugin_enlargeit_opaglide']} />
@@ -419,7 +419,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_brdsize']}
+			{$lang_plugin_enlargeit['border_width']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_brdsize" id="plugin_enlargeit_brdsize" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_brdsize']}" /> ({$lang_plugin_enlargeit['zero_to_disable']})
@@ -427,7 +427,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_brdcolor']}
+			{$lang_plugin_enlargeit['border_color']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_brdcolor" id="plugin_enlargeit_brdcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_brdcolor']}" style="text-transform:uppercase;" />
@@ -437,7 +437,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_brdbck']}
+			{$lang_plugin_enlargeit['border_texture']}
 		</td>
 		<td>
 			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox">
@@ -447,7 +447,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_brdround" class="clickable_option">{$lang_plugin_enlargeit['enl_brdround']}</label>
+			<label for="plugin_enlargeit_brdround" class="clickable_option">{$lang_plugin_enlargeit['round_border']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_brdround" id="plugin_enlargeit_brdround" class="checkbox" value="1" {$option_output['plugin_enlargeit_brdround']} /> ({$lang_plugin_enlargeit['mozilla_only']})
@@ -460,7 +460,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_shadowsize']}
+			{$lang_plugin_enlargeit['shadow_size']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
@@ -468,7 +468,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_shadowintens']}
+			{$lang_plugin_enlargeit['shadow_opacity']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_shadowintens" id="plugin_enlargeit_shadowintens" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_shadowintens']}" />
@@ -481,7 +481,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['enl_titlebar']}</label>
+			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['show_titlebar']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} />
@@ -489,7 +489,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_titletxtcol']}
+			{$lang_plugin_enlargeit['title_bar_text_color']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_titletxtcol" id="plugin_enlargeit_titletxtcol" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_titletxtcol']}" style="text-transform:uppercase;" />
@@ -499,7 +499,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_ajaxcolor']}
+			{$lang_plugin_enlargeit['background_color_ajax_area']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_ajaxcolor" id="plugin_enlargeit_ajaxcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_ajaxcolor']}" style="text-transform:uppercase;" />
@@ -514,7 +514,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['enl_center']}</label>
+			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['center_enlarge_images']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} />
@@ -522,7 +522,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enl_dragdrop']}</label>
+			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enable_drag_drop']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} />
@@ -530,7 +530,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['enl_wheelnav']}</label>
+			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['mouse_wheel_navigation']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} />
@@ -538,7 +538,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top" valign="top">
-			{$lang_plugin_enlargeit['enl_dark']}
+			{$lang_plugin_enlargeit['darken_screen']}
 		</td>
 		<td>
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_0" class="radio" value="0" {$option_output['plugin_enlargeit_dark_0']} /><label for="plugin_enlargeit_dark_0" class="clickable_option">{$lang_common['no']}</label><br />
@@ -548,7 +548,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_darkprct']}
+			{$lang_plugin_enlargeit['darken_strength']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_darkprct" id="plugin_enlargeit_darkprct" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkprct']}" /> %
@@ -556,7 +556,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_darkensteps']}
+			{$lang_plugin_enlargeit['darkening_speed']}
 		</td>
 		<td>
 			<input type="text" name="plugin_enlargeit_darkensteps" id="plugin_enlargeit_darkensteps" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkensteps']}" /> ({$lang_plugin_enlargeit['darkening_speed_explain']})
@@ -569,7 +569,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonpic" class="clickable_option">{$enlargeit_icon_array['show']} {$lang_plugin_enlargeit['enl_buttonpic']}</label>
+			<label for="plugin_enlargeit_buttonpic" class="clickable_option">{$enlargeit_icon_array['show']} {$lang_plugin_enlargeit['button_picture']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonpic" id="plugin_enlargeit_buttonpic" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonpic']} />
@@ -577,17 +577,17 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$enlargeit_icon_array['info']} {$lang_plugin_enlargeit['enl_buttoninfo']}
+			{$enlargeit_icon_array['info']} {$lang_plugin_enlargeit['button_info']}
 		</td>
 		<td>
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttoninfo_0']} /><label for="plugin_enlargeit_buttoninfo_0" class="clickable_option">{$lang_common['no']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttoninfo_1']} /><label for="plugin_enlargeit_buttoninfo_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes1']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes2']}</label>
+			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttoninfo_1']} /><label for="plugin_enlargeit_buttoninfo_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_as_ajax']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_intermediate_page']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonfav" class="clickable_option">{$enlargeit_icon_array['favorites']} {$lang_plugin_enlargeit['enl_buttonfav']}</label>
+			<label for="plugin_enlargeit_buttonfav" class="clickable_option">{$enlargeit_icon_array['favorites']} {$lang_plugin_enlargeit['button_favorites']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonfav" id="plugin_enlargeit_buttonfav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonfav']} />
@@ -595,7 +595,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['enl_buttonvote']}</label>
+			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['button_vote']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonvote" id="plugin_enlargeit_buttonvote" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonvote']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
@@ -603,7 +603,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttoncomment" class="clickable_option">{$enlargeit_icon_array['comment']} {$lang_plugin_enlargeit['enl_buttoncomment']}</label>
+			<label for="plugin_enlargeit_buttoncomment" class="clickable_option">{$enlargeit_icon_array['comment']} {$lang_plugin_enlargeit['button_comments']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttoncomment" id="plugin_enlargeit_buttoncomment" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttoncomment']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
@@ -611,27 +611,27 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['enl_buttondownload']}
+			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['button_download']}
 		</td>
 		<td>
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttondownload_0']} /><label for="plugin_enlargeit_buttondownload_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_maxforreg']}</label>
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_registered_users']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['enl_buttonmax']}<br />Needs manual editing later, as the orginal options are silly!
+			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['button_maximize']}<br />Needs manual editing later, as the orginal options are silly!
 		</td>
 		<td>
 			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttonmax_0']} /><label for="plugin_enlargeit_buttonmax_0" class="clickable_option">{$lang_common['no']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttonmax_1']} /><label for="plugin_enlargeit_buttonmax_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_maxpopup']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttonmax_2']} /><label for="plugin_enlargeit_buttonmax_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['enl_buttoninfoyes1']}</label>
+			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttonmax_1']} /><label for="plugin_enlargeit_buttonmax_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['as_popup_window']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttonmax_2']} /><label for="plugin_enlargeit_buttonmax_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_as_ajax']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonbbcode" class="clickable_option">{$enlargeit_icon_array['bbcode']} {$lang_plugin_enlargeit['enl_buttonbbcode']}</label>
+			<label for="plugin_enlargeit_buttonbbcode" class="clickable_option">{$enlargeit_icon_array['bbcode']} {$lang_plugin_enlargeit['button_bbcode']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonbbcode" id="plugin_enlargeit_buttonbbcode" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonbbcode']} />
@@ -639,7 +639,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogramm']} {$lang_plugin_enlargeit['enl_buttonhist']}</label>
+			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogramm']} {$lang_plugin_enlargeit['button_histogramm']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} />
@@ -647,7 +647,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['enl_buttonnav']}</label>
+			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['button_navigation']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} />
@@ -655,7 +655,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['enl_buttonclose']}</label>
+			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['button_close']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} />
@@ -668,7 +668,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enl_flvplayer']}
+			{$lang_plugin_enlargeit['flash_player']}
 		</td>
 		<td>
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_0" class="radio" value="0" {$option_output['plugin_enlargeit_flvplayer_0']} /><label for="plugin_enlargeit_flvplayer_0" class="clickable_option">{$lang_plugin_enlargeit['rphmedia']}</label><br />
@@ -678,7 +678,7 @@ echo <<< EOT
 	<tr>
 		<td class="tablef" colspan="2">
 			<input name="update" type="hidden" id="update" value="1" />
-			<button type="submit" class="button" name="submit" value="{$lang_plugin_enlargeit['submit_button']}">{$enlargeit_icon_array['ok']}{$lang_plugin_enlargeit['submit_button']}</button>
+			<button type="submit" class="button" name="submit" value="{$lang_plugin_enlargeit['submit']}">{$enlargeit_icon_array['ok']}{$lang_plugin_enlargeit['submit']}</button>
 		</td>
 	</tr>
 EOT;

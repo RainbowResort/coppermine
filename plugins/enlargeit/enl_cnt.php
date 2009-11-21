@@ -18,7 +18,7 @@
 
 
 define("IN_COPPERMINE", true);
-require_once('include/init.inc.php');
+require_once('init.inc.php');
 
 // if guest login not allowed => go to login page
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) 
