@@ -81,6 +81,8 @@ This plugin uses the following components:
 * FLV player OSFLV: http://www.osflv.com/
 * Histogram creation by Anton Sparrius (Spaz): anton_spaz@yahoo.com
 * Crystal Clear icons by Everaldo Coelho: http://www.everaldo.com/crystal/
+* Farbtastic color picker by Steven Wittens: http://acko.net/dev/farbtastic/
+* SpinButton jquery plugin by George Adamson: http://www.softwareunity.com/jquery/JQuerySpinBtn/
 
 Changelog
 =========

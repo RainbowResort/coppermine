@@ -159,7 +159,8 @@ function enlargeit_head($meta) {
 		$meta  .= <<< EOT
     <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
     <link rel="stylesheet" href="plugins/enlargeit/style.css" type="text/css" />
-    <script type=\"text/javascript\"><!--
+    <script type="text/javascript">
+        //<!--
         enl_ani = {$CONFIG['plugin_enlargeit_ani']};
         enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
         enl_brd = {$CONFIG['plugin_enlargeit_brd']};
@@ -300,7 +301,8 @@ EOT;
             $loopCounter++;
         }
 		$meta  .= <<< EOT
-	//--></script>
+	    //-->
+	</script>
 
 EOT;
 	}

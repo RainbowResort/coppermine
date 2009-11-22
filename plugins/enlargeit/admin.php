@@ -18,7 +18,7 @@ if (in_array('plugins/enlargeit/js/farbtastic.js', $JS['includes']) != TRUE) {
 	$JS['includes'][] = 'plugins/enlargeit/js/farbtastic.js';
 }
 if (in_array('plugins/enlargeit/js/config.js', $JS['includes']) != TRUE) {
-	$JS['includes'][] = 'plugins/enlargeit/js/config.js';
+	$JS['includes'][] = 'plugins/enlargeit/js/admin.js';
 }
 
 // create Inspekt supercage
@@ -321,7 +321,7 @@ if ($CONFIG['plugin_enlargeit_flvplayer'] == '0') {
 
 pageheader($lang_plugin_enlargeit['display_name']);
 echo <<< EOT
-<form action="index.php?file=enlargeit/plugin_config" method="post" name="enlargeit_settings">
+<form action="index.php?file=enlargeit/admin" method="post" name="enlargeit_settings">
 EOT;
 starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'], 2, 'cpg_zebra');
 echo <<< EOT
@@ -432,7 +432,7 @@ echo <<< EOT
 		<td>
 			<input type="text" name="plugin_enlargeit_brdcolor" id="plugin_enlargeit_brdcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_brdcolor']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
-			<div id="colorpicker_bordercolor" class="detail_body"></div>
+			<div id="colorpicker_bordercolor" class="detail_body">foo</div>
 		</td>
 	</tr>
 	<tr>
