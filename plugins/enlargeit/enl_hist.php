@@ -27,7 +27,7 @@ $pic = $superCage->get->getInt('pid');
 
 
 echo "<table align=\"center\" cellspacing=\"1\" style=\"width:100%;height:100%\">";
-echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['histogramm']."</b></td></tr>";
+echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['histogram']."</b></td></tr>";
 echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotable\">";
 echo "<img border=\"0\" src=\"index.php?file=enlargeit/enl_hst&pid=".$pic."\" width=\"284\" height=\"164\"/>";
 echo "</td></tr></table>";

@@ -158,7 +158,7 @@ function enlargeit_head($meta) {
 	    $temp_brdbck = str_replace('__','/',$CONFIG['plugin_enlargeit_brdbck']);
 		$meta  .= <<< EOT
     <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
-    <link rel="stylesheet" href="plugins/enlargeit/enl_styles.css" type="text/css" />
+    <link rel="stylesheet" href="plugins/enlargeit/style.css" type="text/css" />
     <script type=\"text/javascript\"><!--
         enl_ani = {$CONFIG['plugin_enlargeit_ani']};
         enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
@@ -175,7 +175,7 @@ function enlargeit_head($meta) {
         enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
         enl_gifpath = 'images/';
         enl_usecounter = 1;
-        enl_counterurl = 'index.php?file=enlargeit/enl_cnt&a=';
+        enl_counterurl = 'index.php?file=enlargeit/counter&a=';
         enl_btnact = 'icons/bact_transp.png';
         enl_btninact = 'icons/binact_transp.png';
         enl_minuscur = 'cursors/minuscur.cur';
@@ -188,8 +188,8 @@ function enlargeit_head($meta) {
         enl_drgdrop = {$CONFIG['plugin_enlargeit_dragdrop']};
         enl_brdbck = '{$temp_brdbck}';
         enl_darksteps = {$CONFIG['plugin_enlargeit_darkensteps']};
-        enl_canceltext = '{$lang_enlargeit['enl_canceltext']}';
-        enl_noflash = '{$lang_enlargeit['enl_noflashfound']}';
+        enl_canceltext = '{$lang_plugin_enlargeit['enl_canceltext']}';
+        enl_noflash = '{$lang_plugin_enlargeit['enl_noflashfound']}';
 
 EOT;
 		$loopCounter = 0;
@@ -197,7 +197,7 @@ EOT;
 		if ($CONFIG['plugin_enlargeit_buttonpic'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'pic';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltippic']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['show_picture']}';
         enl_buttonoff[{$loopCounter}] = 0;
 
 EOT;
@@ -206,8 +206,8 @@ EOT;
         // Button "Favorites"
         if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_addfav&pid=';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipfav']}';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['favorites']}';
         enl_buttonoff[{$loopCounter}] = -32;
 
 EOT;
@@ -217,7 +217,7 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'site:displayimage.php?pid=';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipinfo']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['show_info']}';
         enl_buttonoff[{$loopCounter}] = -16;
 
 EOT;
@@ -226,8 +226,8 @@ EOT;
         // Button "Download"
         if ($CONFIG['plugin_enlargeit_buttondownload'] == '1' || ($CONFIG['plugin_enlargeit_buttondownload'] == 2 && USER_ID)) {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_download&pid=';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipdownload']}';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/download&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['download_this_file']}';
         enl_buttonoff[{$loopCounter}] = -208;
 
 EOT;
@@ -237,17 +237,17 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipbbcode']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['bbcode']}';
         enl_buttonoff[{$loopCounter}] = -192;
 
 EOT;
             $loopCounter++;
         }
-        // Button "Histogramm"
+        // Button "Histogram"
         if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&pid=';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltiphist']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['histogram']}';
         enl_buttonoff[{$loopCounter}] = -160;
 
 EOT;
@@ -257,7 +257,7 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttonmax'] == '1' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '2')) {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'max';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipmax']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['full_size']}';
         enl_buttonoff[{$loopCounter}] = -144;
 
 EOT;
@@ -267,7 +267,7 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttonmax'] == '3' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '4')) {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'maxpop';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipmax']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['full_size']}';
         enl_buttonoff[{$loopCounter}] = -144;
 
 EOT;
@@ -277,14 +277,14 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'prev';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipprev']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['previous_left']}';
         enl_buttonoff[{$loopCounter}] = -96;
 
 EOT;
             $loopCounter++;
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'next';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipnext']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['enl_tooltipnext']}';
         enl_buttonoff[{$loopCounter}] = -80;
 
 EOT;
@@ -293,7 +293,7 @@ EOT;
         if ($CONFIG['plugin_enlargeit_buttonclose'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'close';
-        enl_buttontxt[{$loopCounter}] = '{$lang_enlargeit['enl_tooltipclose']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['next_right']}';
         enl_buttonoff[{$loopCounter}] = -128;
 
 EOT;
@@ -311,7 +311,7 @@ EOT;
 // Change thumbnail template
 function enl_thumb() 
 {
-  global $CONFIG, $template_thumbnail_view, $lang_enlarge;
+  global $CONFIG, $template_thumbnail_view, $lang_plugin_enlargeit;
   // get language
   require_once('./plugins/enlargeit/init.inc.php');
 

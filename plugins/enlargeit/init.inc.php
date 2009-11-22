@@ -45,7 +45,7 @@ if ($CONFIG['enable_menu_icons'] == 2) {
     $enlargeit_icon_array['table'] = '<img src="./plugins/enlargeit/images/icons/enlargeit.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['favorites'] = '<img src="./plugins/enlargeit/images/icons/favorites.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['fullsize'] = '<img src="./plugins/enlargeit/images/icons/fullsize.png" border="0" width="16" height="16" alt="" class="icon" />';
-    $enlargeit_icon_array['histogramm'] = '<img src="./plugins/enlargeit/images/icons/histogramm.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $enlargeit_icon_array['histogram'] = '<img src="./plugins/enlargeit/images/icons/histogram.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['info'] = '<img src="./plugins/enlargeit/images/icons/info.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['mail'] = '<img src="./plugins/enlargeit/images/icons/mail.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['next'] = '<img src="./plugins/enlargeit/images/icons/next.png" border="0" width="16" height="16" alt="" class="icon" />';
@@ -62,7 +62,7 @@ if ($CONFIG['enable_menu_icons'] == 2) {
     $enlargeit_icon_array['table'] = '';
     $enlargeit_icon_array['favorites'] = '';
     $enlargeit_icon_array['fullsize'] = '';
-    $enlargeit_icon_array['histogramm'] = '';
+    $enlargeit_icon_array['histogram'] = '';
     $enlargeit_icon_array['info'] = '';
     $enlargeit_icon_array['mail'] = '';
     $enlargeit_icon_array['next'] = '';

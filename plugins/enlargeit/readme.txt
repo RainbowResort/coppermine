@@ -93,6 +93,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-22 [M] Version count updated to 0.9 {GauGau}
+2009-11-22 [C] Fixed spelling mistake "histogramm" {GauGau}
+2009-11-22 [B] Renamed variable that differed from language file to codebase {GauGau}
+2009-11-22 [M] Renamed style sheet to match coppermine standards {GauGau}
+2009-11-22 [M] Renamed files that get included by URL pattern to be easier to memorize {GauGau}
 2009-11-21 [M] Version count updated to 0.8 {GauGau}
 2009-11-21 [M] Moved include file to plugin root folder for easier maintenance {GauGau}
 2009-11-21 [M] Renamed language variables to match coppermine coding standards {GauGau}
@@ -128,3 +133,4 @@ Changelog
 To Do
 =====
 * Clear histcache
+* i18n of configuration file
