@@ -639,7 +639,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogramm']} {$lang_plugin_enlargeit['button_histogramm']}</label>
+			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogram']} {$lang_plugin_enlargeit['button_histogram']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} />
