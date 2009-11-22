@@ -163,7 +163,6 @@ function enlargeit_head($meta) {
         //<!--
         enl_ani = {$CONFIG['plugin_enlargeit_ani']};
         enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
-        enl_brd = {$CONFIG['plugin_enlargeit_brd']};
         enl_titlebar = {$CONFIG['plugin_enlargeit_titlebar']};
         enl_brdsize = {$CONFIG['plugin_enlargeit_brdsize']};
         enl_brdcolor = '{$CONFIG['plugin_enlargeit_brdcolor']}';
@@ -174,7 +173,7 @@ function enlargeit_head($meta) {
         enl_shadow = {$CONFIG['plugin_enlargeit_shadow']};
         enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
         enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
-        enl_gifpath = 'images/';
+        enl_gifpath = 'plugins/enlargeit/images/';
         enl_usecounter = 1;
         enl_counterurl = 'index.php?file=enlargeit/counter&a=';
         enl_btnact = 'icons/bact_transp.png';
