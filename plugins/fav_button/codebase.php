@@ -36,17 +36,23 @@ function fav_button($template_img_navbar) {
 
     if (!in_array($CURRENT_PIC_DATA['pid'], $FAVPICS)) {
         $fav_title = $lang_picinfo['addFav'];
-        $fav_icon = "icons/top_rated.png";
+        $fav_icon = "nofav.png";
+        $fav_icon_hover = "nofav_hover.png";
     } else {
         $fav_title = $lang_picinfo['remFav'];
-        $fav_icon = "icons/cancel.png";
+        $fav_icon = "isfav.png";
+        $fav_icon_hover = "isfav_hover.png";
     }
 
-    $fav_button = '
-        <td align="center" valign="middle" class="navmenu" width="48">
-            <a href="'.$fav_tgt.'" class="navmenu_pic" title="'.$fav_title.'"><img src="{LOCATION}images/'.$fav_icon.'" border="0" align="middle" alt="'.$fav_title.'" /></a>
+    $fav_button = "
+        <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
+            <a href=\"$fav_tgt\" class=\"navmenu_pic\" title=\"$fav_title\" id=\"fav_lnk\"><img src=\"plugins/fav_button/$fav_icon\" border=\"0\" align=\"middle\" alt=\"$fav_title\" id=\"fav_ico\" /></a>
         </td>
-    ';
+        <script type=\"text/javascript\">
+            $('#fav_lnk').mouseover(function() { $('#fav_ico').attr('src', 'plugins/fav_button/$fav_icon_hover'); } );
+            $('#fav_lnk').mouseout(function() { $('#fav_ico').attr('src', 'plugins/fav_button/$fav_icon'); } );
+        </script>
+    ";
 
     $search = substr_count($template_img_navbar, "<!-- BEGIN nav_start -->") > 0 ? "<!-- BEGIN nav_start -->" : "<!-- BEGIN nav_prev -->";
 
