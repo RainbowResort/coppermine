@@ -95,6 +95,13 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-23 [M] Version count updated to 0.10 {GauGau}
+2009-11-23 [A] Brought German language file up to date {GauGau}
+2009-11-23 [A] Added recommendation for particular options {GauGau}
+2009-11-23 [A] i18n of configuration.php screen {GauGau}
+2009-11-23 [O] Added workaround for config options that were removed in plugin but that the enlargeit.js expects {GauGau}
+2009-11-23 [B] Added missing parameters to embedded JavaScript in codebase.php {Timo}
+2009-11-23 [B] Changed encoding or German language file from iso8859-1 to utf-8 {GauGau}
 2009-11-22 [M] Version count updated to 0.9 {GauGau}
 2009-11-22 [C] Fixed spelling mistake "histogramm" {GauGau}
 2009-11-22 [B] Renamed variable that differed from language file to codebase {GauGau}
@@ -135,4 +142,3 @@ Changelog
 To Do
 =====
 * Clear histcache
-* i18n of configuration file

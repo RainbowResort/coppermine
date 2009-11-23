@@ -19,7 +19,7 @@
 if (!defined('IN_COPPERMINE')) { 
 	die('Not in Coppermine...'); 
 }
-$lang_plugin_enlargeit['display_name'] = 'EnlargeIt! PlugIn';
+$lang_plugin_enlargeit['display_name'] = 'EnlargeIt!';
 $lang_plugin_enlargeit['update_success'] = 'Die Werte wurden erfolgreich aktualisiert';
 $lang_plugin_enlargeit['main_title'] = 'EnlargeIt! PlugIn';
 $lang_plugin_enlargeit['pluginmanager'] = 'Plugin Manager';
@@ -68,7 +68,7 @@ $lang_plugin_enlargeit['histogram'] = 'Histogramm'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Button "Bewerten" anzeigen';
 $lang_plugin_enlargeit['vote'] = 'Bewerten';
 $lang_plugin_enlargeit['button_maximize'] = 'Button "Maximieren" anzeigen';
-$lang_plugin_enlargeit['full_size'] = 'Volle Groesse'; // js-alert
+$lang_plugin_enlargeit['full_size'] = 'Volle Größe'; // js-alert
 $lang_plugin_enlargeit['button_close'] = 'Button "Schließen" anzeigen';
 $lang_plugin_enlargeit['button_download'] = 'Button "Download" anzeigen';
 $lang_plugin_enlargeit['download_this_file'] = 'Datei herunterladen'; // js-alert
@@ -77,18 +77,18 @@ $lang_plugin_enlargeit['close_esc'] = 'Schliessen [Esc]'; // js-alert
 $lang_plugin_enlargeit['button_navigation'] = 'Buttons "Navigation" anzeigen';
 $lang_plugin_enlargeit['previous_left'] = 'Vorheriges Bild [linke Pfeiltaste]'; // js-alert
 $lang_plugin_enlargeit['next_right'] = 'Naechstes Bild [rechte Pfeiltaste]'; // js-alert
-$lang_plugin_enlargeit['administrators'] = 'EnlargeIt! im Admin-Modus aktivieren';
-$lang_plugin_enlargeit['registered_users'] = 'EnlargeIt! für registrierte Besucher aktivieren';
-$lang_plugin_enlargeit['guests'] = 'EnlargeIt! für anonyme Besucher aktivieren';
+$lang_plugin_enlargeit['administrators'] = 'Administratoren';
+$lang_plugin_enlargeit['registered_users'] = 'registrierte Benutzer';
+$lang_plugin_enlargeit['guests'] = 'anonyme Besucher (Gäste)';
 $lang_plugin_enlargeit['enable_sefurl_support'] = 'SEF-Unterstützung aktivieren';
 $lang_plugin_enlargeit['file_added_to_favorites'] = 'Das Bild wurde zu den Favoriten hinzugefügt.';
 $lang_plugin_enlargeit['file_removed_from_favorites'] = 'Das Bild wurde von den Favoriten entfernt.';
 $lang_plugin_enlargeit['button_favorites'] = 'Meine Favoriten anzeigen';
-$lang_plugin_enlargeit['for_registered_users'] = 'Ja, aber nicht für anonyme Gäste';
+$lang_plugin_enlargeit['for_registered_users'] = 'für registrierte Benutzer';
 $lang_plugin_enlargeit['as_popup_window'] = 'Ja, als Pop-Up';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'Ja, als Pop-Up aber nicht für anonyme Gäste';
 $lang_plugin_enlargeit['enable_drag_drop'] = 'Vergrösserte Bilder mit der Maus verschiebbar (Drag & Drop)';
-$lang_plugin_enlargeit['darkening_speed'] = 'Zahl der Schritte beim Abdunkeln (1 = sofort)';
+$lang_plugin_enlargeit['darkening_speed'] = 'Zahl der Schritte beim Abdunkeln';
 $lang_plugin_enlargeit['no_comments'] = 'Es gibt noch keine Kommentare, und Du hast nicht das Recht, einen hinzuzufügen!';
 $lang_plugin_enlargeit['mouse_wheel_navigation'] = 'Mausrad-Navigation';
 $lang_plugin_enlargeit['cancel_loading'] = 'Klicken, um das Laden des Bildes abzubrechen'; // js-alert
@@ -98,6 +98,52 @@ $lang_plugin_enlargeit['button_bbcode'] = 'Button "BBCode" anzeigen';
 $lang_plugin_enlargeit['bbcode'] = 'BBCode'; // js-alert
 $lang_plugin_enlargeit['copy_to_clipboard'] = 'In Zwischenablage kopieren';
 $lang_plugin_enlargeit['transparency_for_glide'] = 'Transparenzeffekt für Gleit-Animation';
-
-
+$lang_plugin_enlargeit['marble'] = 'Marmor';
+$lang_plugin_enlargeit['brushed_metal'] = 'Gebürsteter Edelstahl';
+$lang_plugin_enlargeit['white_metal'] = 'Helles Metall';
+$lang_plugin_enlargeit['white_metal2'] = 'Helleres Metall';
+$lang_plugin_enlargeit['blue_metal'] = 'Metallisches Blau';
+$lang_plugin_enlargeit['red_metal'] = 'Metallisches Rot';
+$lang_plugin_enlargeit['green_metal'] = 'Metalisches Grün';
+$lang_plugin_enlargeit['silver_metal'] = 'Silber';
+$lang_plugin_enlargeit['black_metal'] = 'Metallisches Schwarz';
+$lang_plugin_enlargeit['rain'] = 'Regen';
+$lang_plugin_enlargeit['light_rain'] = 'Nieselregen';
+$lang_plugin_enlargeit['light_wood'] = 'Kiefer';
+$lang_plugin_enlargeit['dark_wood'] = 'Eiche';
+$lang_plugin_enlargeit['paper'] = 'Papier';
+$lang_plugin_enlargeit['leather'] = 'Leder';
+$lang_plugin_enlargeit['dark_green'] = 'Dunkelgrün';
+$lang_plugin_enlargeit['green_liquid'] = 'Grüne Flüssigkeit';
+$lang_plugin_enlargeit['chocolate'] = 'Schokolade';
+$lang_plugin_enlargeit['plugin_configuration'] = 'Plugin Einstellungen';
+$lang_plugin_enlargeit['enlargement_type'] = 'Vergrößerungsart';
+$lang_plugin_enlargeit['animation_type'] = 'Animationsart';
+$lang_plugin_enlargeit['milliseconds'] = 'Millisekunden';
+$lang_plugin_enlargeit['zero_to_disable'] = '0 zum deaktivieren';
+$lang_plugin_enlargeit['border'] = 'Rahmen';
+$lang_plugin_enlargeit['toggle_color_picker'] = 'Farbwähler an/aus';
+$lang_plugin_enlargeit['mozilla_only'] = 'Nur für Mozilla/Safari';
+$lang_plugin_enlargeit['shadow'] = 'Schatten';
+$lang_plugin_enlargeit['right_bottom'] = 'nach rechts und unten';
+$lang_plugin_enlargeit['title_bar'] = 'Titel-Leiste';
+$lang_plugin_enlargeit['action'] = 'Aktion';
+$lang_plugin_enlargeit['only_darken_when_image_shows'] = 'nur verdunkeln wenn das Bild angezeigt wird';
+$lang_plugin_enlargeit['remain_dark_when_using_navigation'] = 'Dunkel bleiben während Navigationsvorgang';
+$lang_plugin_enlargeit['darkening_speed_explain'] = '1 = sofort dunkel, 20 = langsame Dämmerung';
+$lang_plugin_enlargeit['buttons'] = 'Buttons';
+$lang_plugin_enlargeit['not_implemented_yet'] = 'Noch nicht implementiert';
+$lang_plugin_enlargeit['for_all'] = 'für jedermann (Gäste und registrierte Benutzer)';
+$lang_plugin_enlargeit['enable_for'] = 'Aktivieren für';
+$lang_plugin_enlargeit['multimedia'] = 'Multimedia';
+$lang_plugin_enlargeit['os_flv'] = 'OS FLV';
+$lang_plugin_enlargeit['rphmedia'] = 'RphMedia';
+$lang_plugin_enlargeit['no_changes'] = 'Entweder gab es keine Veränderungen oder die Veränderungen waren ungültig';
+$lang_plugin_enlargeit['recommended'] = 'empfohlen';
+$lang_plugin_enlargeit['not_recommended'] = 'nicht empfohlen';
+$lang_plugin_enlargeit['description'] = 'Web 2.0 Benutzerinterface für Coppermine 1.5.x zum nahtlosen Öffnen der eingebetteten Bilder innerhalb der Thumbnail-Seite, mit optionaler Abdunklung der Umgebung und detailierten Plugin-Einstellungsmöglichkeiten.';
+$lang_plugin_enlargeit['install_info'] = 'Zur Konfiguration des Plugins nach der Installation den entsprechenden Knopf auf der Plugin-Manager Seite benutzen. Um die Plugins "ImageFlow" oder "Slider" zusammen mit EnlargeIt! zu nutzen sind diese separat zu installieren und in deren Einstellungs-Seiten die entsprechenden Optionen zu aktivieren.';
+$lang_plugin_enlargeit['extra_info'] = 'Dieses Plugin ist derzeit in Alpha-Stadium. Nicht alle Features funktionieren, spezielle nicht die Ajax-Komponenten. Danke für Dein Verständnis.';
+$lang_plugin_enlargeit['announcement_thread'] = 'Ankündigungs-Thread';
+$lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! Einstellungen';
 ?>

@@ -484,7 +484,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['show_titlebar']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} />
+			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} /> <label for="plugin_enlargeit_titlebar" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -517,7 +517,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['center_enlarge_images']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} />
+			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} /> <label for="plugin_enlargeit_center" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -525,7 +525,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enable_drag_drop']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} />
+			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} /> <label for="plugin_enlargeit_dragdrop" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -533,7 +533,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['mouse_wheel_navigation']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} />
+			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} /> <label for="plugin_enlargeit_wheelnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -543,7 +543,7 @@ echo <<< EOT
 		<td>
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_0" class="radio" value="0" {$option_output['plugin_enlargeit_dark_0']} /><label for="plugin_enlargeit_dark_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_1" class="radio" value="1" {$option_output['plugin_enlargeit_dark_1']} /><label for="plugin_enlargeit_dark_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['only_darken_when_image_shows']}</label><br />
-			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_2" class="radio" value="2" {$option_output['plugin_enlargeit_dark_2']} /><label for="plugin_enlargeit_dark_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['remain dark when using navigation']}</label>
+			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_2" class="radio" value="2" {$option_output['plugin_enlargeit_dark_2']} /><label for="plugin_enlargeit_dark_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['remain_dark_when_using_navigation']}</label>
 		</td>
 	</tr>
 	<tr>
@@ -650,7 +650,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['button_navigation']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} />
+			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} /> <label for="plugin_enlargeit_buttonnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -658,7 +658,7 @@ echo <<< EOT
 			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['button_close']}</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} />
+			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} /> <label for="plugin_enlargeit_buttonclose" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>

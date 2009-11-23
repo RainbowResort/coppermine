@@ -19,7 +19,7 @@
 if (!defined('IN_COPPERMINE')) { 
 	die('Not in Coppermine...'); 
 }
-$lang_plugin_enlargeit['display_name'] = 'EnlargeIt! PlugIn';
+$lang_plugin_enlargeit['display_name'] = 'EnlargeIt!';
 $lang_plugin_enlargeit['update_success'] = 'Configuration has been updated successfully; your changes have been saved.';
 $lang_plugin_enlargeit['main_title'] = 'EnlargeIt! PlugIn';
 $lang_plugin_enlargeit['pluginmanager'] = 'Plugin Manager';
@@ -138,4 +138,11 @@ $lang_plugin_enlargeit['multimedia'] = 'Multimedia';
 $lang_plugin_enlargeit['os_flv'] = 'OS FLV';
 $lang_plugin_enlargeit['rphmedia'] = 'RphMedia';
 $lang_plugin_enlargeit['no_changes'] = 'There have been no changes or the changes you applied were invalid.';
+$lang_plugin_enlargeit['recommended'] = 'recommended';
+$lang_plugin_enlargeit['not_recommended'] = 'not recommended';
+$lang_plugin_enlargeit['description'] = 'AJAX GUI for Coppermine 1.5.x to seamlessly open the image embedded into the output on the thumbnail page, with an optional greybox feature and a detailed configuration screen.';
+$lang_plugin_enlargeit['install_info'] = 'You can configure the plugin after installation, use the button on the plugin manager. If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.';
+$lang_plugin_enlargeit['extra_info'] = 'This plugin is currently an alpha version. Not all features will work, especially the AJAX parts. Thanks for understanding.';
+$lang_plugin_enlargeit['announcement_thread'] = 'Announcement thread';
+$lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! configuration';
 ?>

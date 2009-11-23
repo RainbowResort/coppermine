@@ -155,41 +155,56 @@ function enlargeit_head($meta) {
 	require('./plugins/enlargeit/init.inc.php');
 	$enlargeit_pages_array = array('thumbnails.php');
 	if (in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
-	    $temp_brdbck = str_replace('__','/',$CONFIG['plugin_enlargeit_brdbck']);
+	    if ($CONFIG['plugin_enlargeit_brdbck'] != '') {
+	        $temp_brdbck = 'backgrounds/' . $CONFIG['plugin_enlargeit_brdbck'] . '.png';
+	    } else {
+	        $temp_brdbck = '';
+	    }
+	    if ($CONFIG['plugin_enlargeit_brdsize'] > 0) {
+	        $temp_border = 1;
+	    } else {
+	        $temp_border = 0;
+	    }
+	    if ($CONFIG['plugin_enlargeit_shadowsize'] > 0) {
+	        $temp_shadow = 1;
+	    } else {
+	        $temp_shadow = 0;
+	    }
 		$meta  .= <<< EOT
     <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
     <link rel="stylesheet" href="plugins/enlargeit/style.css" type="text/css" />
     <script type="text/javascript">
         //<!--
-        enl_ani = {$CONFIG['plugin_enlargeit_ani']};
-        enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
-        enl_titlebar = {$CONFIG['plugin_enlargeit_titlebar']};
-        enl_brdsize = {$CONFIG['plugin_enlargeit_brdsize']};
-        enl_brdcolor = '{$CONFIG['plugin_enlargeit_brdcolor']}';
-        enl_titletxtcol = '{$CONFIG['plugin_enlargeit_titletxtcol']}';
-        enl_ajaxcolor = '{$CONFIG['plugin_enlargeit_ajaxcolor']}';
-        enl_brdround = {$CONFIG['plugin_enlargeit_brdround']};
-        enl_maxstep = {$CONFIG['plugin_enlargeit_maxstep']};
-        enl_shadow = {$CONFIG['plugin_enlargeit_shadow']};
-        enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
-        enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
-        enl_gifpath = 'plugins/enlargeit/images/';
-        enl_usecounter = 1;
-        enl_counterurl = 'index.php?file=enlargeit/counter&a=';
-        enl_btnact = 'icons/bact_transp.png';
-        enl_btninact = 'icons/binact_transp.png';
-        enl_minuscur = 'cursors/minuscur.cur';
-        enl_pluscur = 'cursors/pluscur.cur';
-        enl_speed = {$CONFIG['plugin_enlargeit_speed']};
-        enl_dark = {$CONFIG['plugin_enlargeit_dark']};
-        enl_darkprct = {$CONFIG['plugin_enlargeit_darkprct']};
-        enl_center = {$CONFIG['plugin_enlargeit_center']};
-        enl_wheelnav = {$CONFIG['plugin_enlargeit_wheelnav']};
-        enl_drgdrop = {$CONFIG['plugin_enlargeit_dragdrop']};
-        enl_brdbck = '{$temp_brdbck}';
-        enl_darksteps = {$CONFIG['plugin_enlargeit_darkensteps']};
-        enl_canceltext = '{$lang_plugin_enlargeit['enl_canceltext']}';
-        enl_noflash = '{$lang_plugin_enlargeit['enl_noflashfound']}';
+        var enl_brd = {$temp_border};
+        var enl_ani = {$CONFIG['plugin_enlargeit_ani']};
+        var enl_opaglide = {$CONFIG['plugin_enlargeit_opaglide']};
+        var enl_titlebar = {$CONFIG['plugin_enlargeit_titlebar']};
+        var enl_brdsize = {$CONFIG['plugin_enlargeit_brdsize']};
+        var enl_brdcolor = '{$CONFIG['plugin_enlargeit_brdcolor']}';
+        var enl_titletxtcol = '{$CONFIG['plugin_enlargeit_titletxtcol']}';
+        var enl_ajaxcolor = '{$CONFIG['plugin_enlargeit_ajaxcolor']}';
+        var enl_brdround = {$CONFIG['plugin_enlargeit_brdround']};
+        var enl_maxstep = {$CONFIG['plugin_enlargeit_maxstep']};
+        var enl_shadow = {$temp_shadow};
+        var enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
+        var enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
+        var enl_gifpath = 'images/';
+        var enl_usecounter = 1;
+        var enl_counterurl = 'index.php?file=enlargeit/counter&amp;a=';
+        var enl_btnact = 'icons/bact_transp.png';
+        var enl_btninact = 'icons/binact_transp.png';
+        var enl_minuscur = 'cursors/minuscur.cur';
+        var enl_pluscur = 'cursors/pluscur.cur';
+        var enl_speed = {$CONFIG['plugin_enlargeit_speed']};
+        var enl_dark = {$CONFIG['plugin_enlargeit_dark']};
+        var enl_darkprct = {$CONFIG['plugin_enlargeit_darkprct']};
+        var enl_center = {$CONFIG['plugin_enlargeit_center']};
+        var enl_wheelnav = {$CONFIG['plugin_enlargeit_wheelnav']};
+        var enl_drgdrop = {$CONFIG['plugin_enlargeit_dragdrop']};
+        var enl_brdbck = '{$temp_brdbck}';
+        var enl_darksteps = {$CONFIG['plugin_enlargeit_darkensteps']};
+        var enl_canceltext = '{$lang_plugin_enlargeit['enl_canceltext']}';
+        var enl_noflash = '{$lang_plugin_enlargeit['enl_noflashfound']}';
 
 EOT;
 		$loopCounter = 0;
@@ -206,7 +221,7 @@ EOT;
         // Button "Favorites"
         if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&amp;pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['favorites']}';
         enl_buttonoff[{$loopCounter}] = -32;
 
@@ -226,7 +241,7 @@ EOT;
         // Button "Download"
         if ($CONFIG['plugin_enlargeit_buttondownload'] == '1' || ($CONFIG['plugin_enlargeit_buttondownload'] == 2 && USER_ID)) {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/download&pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/download&amp;pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['download_this_file']}';
         enl_buttonoff[{$loopCounter}] = -208;
 
@@ -236,7 +251,7 @@ EOT;
         // Button "BBcode"
         if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&amp;pos=-';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['bbcode']}';
         enl_buttonoff[{$loopCounter}] = -192;
 
@@ -246,7 +261,7 @@ EOT;
         // Button "Histogram"
         if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&amp;pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['histogram']}';
         enl_buttonoff[{$loopCounter}] = -160;
 
