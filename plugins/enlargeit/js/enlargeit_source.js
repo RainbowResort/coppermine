@@ -945,7 +945,7 @@ function enl_mktitlebar(enl_imgid)
     if (enl_buttonurl[enl_i] == 'next' && enl_getnext(enl_imgid,0) == null) { enl_i++; continue; }
     else if (enl_buttonurl[enl_i] == 'prev' && enl_getnext(enl_imgid,1) == null) { enl_i++; continue; }
     else if (((enl_buttonurl[enl_i] == 'max') || (enl_buttonurl[enl_i] == 'maxpop')) && (enl_orig.getAttribute('longdesc').search(/normal_.+/) == -1)) { enl_i++; continue; }
-    else if (!enl_clone.ispic && (enl_buttonurl[enl_i] == 'enl_bbcode.php?pos=-' || enl_buttonurl[enl_i] == 'enl_hist.php?pid=')) { enl_i++; continue; }
+    else if (!enl_clone.ispic && (enl_buttonurl[enl_i] == 'enl_bbcode.php?pos=-' || enl_buttonurl[enl_i] == 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=')) { enl_i++; continue; }
     enl_button[enl_i] = enl_makebtn(enl_imgid+enl_i,enl_buttonoff[enl_i]);
     enl_button[enl_i].title = enl_buttontxt[enl_i];
     enl_button[enl_i].whichpic = enl_imgid;

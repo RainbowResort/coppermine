@@ -96,6 +96,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-24 [M] Version count updated to 1.0 {GauGau}
+2009-11-24 [B] Fixed broken histogram {GauGau}
+2009-11-24 [B] Added missing info file (work in progress) {GauGau}
+2009-11-24 [M] Merged histogram feature into one file instead of two {GauGau}
 2009-11-24 [M] Version count updated to 0.11 {GauGau}
 2009-11-24 [A] Added menu icon {GauGau}
 2009-11-24 [A] Added loader path variable {GauGau}

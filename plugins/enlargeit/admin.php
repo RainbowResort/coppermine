@@ -168,7 +168,7 @@ if ($CONFIG['plugin_enlargeit_opaglide'] == '1') {
 	$option_output['plugin_enlargeit_opaglide'] = '';
 }
 
-$border_texture_options = '<option value="none">-</option>';
+$border_texture_options = '<option value="none">-</option>' . $LINEBREAK;
 for ($i = 0; $i < count($border_texture_array); $i++) {
 	if ($CONFIG['plugin_enlargeit_brdbck'] == $border_texture_array[$i]) {
 		$option_output['plugin_enlargeit_brdbck'][$i] = 'selected="selected"';

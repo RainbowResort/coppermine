@@ -78,23 +78,23 @@ $enlargeit_icon_array['stop'] = cpg_fetch_icon('stop', 0);
 
 $border_texture_array = array(
     'marble',
-    'brushed_metal',
-    'white_metal',
-    'white_metal2',
-    'blue_metal',
-    'red_metal',
-    'green_metal',
-    'silver_metal',
-    'black_metal',
+    'metallight',
+    'metalwhite',
+    'metalwhite2',
+    'metalblue',
+    'metalred',
+    'metalgreen',
+    'metalsilver',
+    'metalblack',
     'rain',
-    'light_rain',
-    'light_wood',
-    'dark_wood',
+    'rainlight',
+    'woodlight',
+    'wooddark',
     'paper',
     'leather',
-    'dark_green',
-    'green_liquid',
-    'chocolate'
+    'green',
+    'greenliquid',
+    'choc'
 );
 
 ?>

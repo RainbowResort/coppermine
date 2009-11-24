@@ -209,7 +209,7 @@ function enlargeit_head($meta) {
         var enl_swfpath = 'plugins/enlargeit/images/flash/';
         var enl_loaderpathfile = '{$temp_loader}';
         var enl_usecounter = 1;
-        var enl_counterurl = 'index.php?file=enlargeit/counter&amp;a=';
+        var enl_counterurl = 'index.php?file=enlargeit/counter&a=';
         var enl_btnact = 'icons/bact_transp.png';
         var enl_btninact = 'icons/binact_transp.png';
         var enl_minuscur = 'cursors/minuscur.cur';
@@ -240,7 +240,7 @@ EOT;
         // Button "Favorites"
         if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&amp;pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['favorites']}';
         enl_buttonoff[{$loopCounter}] = -32;
 
@@ -249,6 +249,14 @@ EOT;
         }
         // Button "Pic Info"
         if ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/info&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['show_info']}';
+        enl_buttonoff[{$loopCounter}] = -16;
+
+EOT;
+            $loopCounter++;
+        } elseif ($CONFIG['plugin_enlargeit_buttoninfo'] == '2') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'site:displayimage.php?pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['show_info']}';
@@ -260,7 +268,7 @@ EOT;
         // Button "Download"
         if ($CONFIG['plugin_enlargeit_buttondownload'] == '1' || ($CONFIG['plugin_enlargeit_buttondownload'] == 2 && USER_ID)) {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/download&amp;pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/download&pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['download_this_file']}';
         enl_buttonoff[{$loopCounter}] = -208;
 
@@ -270,7 +278,7 @@ EOT;
         // Button "BBcode"
         if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&amp;pos=-';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['bbcode']}';
         enl_buttonoff[{$loopCounter}] = -192;
 
@@ -280,7 +288,7 @@ EOT;
         // Button "Histogram"
         if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&amp;action=file&amp;pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/histogram&action=file&pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['histogram']}';
         enl_buttonoff[{$loopCounter}] = -160;
 
