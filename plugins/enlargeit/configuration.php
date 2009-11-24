@@ -21,7 +21,7 @@ require('./plugins/enlargeit/init.inc.php');
 $name = $lang_plugin_enlargeit['display_name'];
 $description = $lang_plugin_enlargeit['description'];
 $author = '<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>';
-$version = '0.10';
+$version = '0.11';
 $install_info = $lang_plugin_enlargeit['install_info'];
 $extra_info = $lang_plugin_enlargeit['extra_info'];
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="admin_menu external">'.$enlargeit_icon_array['announcement'].$lang_plugin_enlargeit['announcement_thread'].'</a>';
