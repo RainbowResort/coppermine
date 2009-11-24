@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Thumb Rotate $VERSION$=0.4
+  Coppermine 1.5.x Plugin - Thumb Rotate
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
