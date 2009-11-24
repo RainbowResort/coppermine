@@ -29,7 +29,6 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
 }
 
 global $lang_plugin_enlargeit;
-//require('./plugins/enlargeit/include/load_enlargeitset.php');
 require('./plugins/enlargeit/init.inc.php');
 
 

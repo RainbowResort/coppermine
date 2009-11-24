@@ -87,7 +87,7 @@ $lang_plugin_enlargeit['button_favorites'] = 'Meine Favoriten anzeigen';
 $lang_plugin_enlargeit['for_registered_users'] = 'für registrierte Benutzer';
 $lang_plugin_enlargeit['as_popup_window'] = 'Ja, als Pop-Up';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'Ja, als Pop-Up aber nicht für anonyme Gäste';
-$lang_plugin_enlargeit['enable_drag_drop'] = 'Vergrösserte Bilder mit der Maus verschiebbar (Drag & Drop)';
+$lang_plugin_enlargeit['enable_drag_drop'] = 'Vergrösserte Bilder mit der Maus verschiebbar';
 $lang_plugin_enlargeit['darkening_speed'] = 'Zahl der Schritte beim Abdunkeln';
 $lang_plugin_enlargeit['no_comments'] = 'Es gibt noch keine Kommentare, und Du hast nicht das Recht, einen hinzuzufügen!';
 $lang_plugin_enlargeit['mouse_wheel_navigation'] = 'Mausrad-Navigation';
@@ -146,4 +146,6 @@ $lang_plugin_enlargeit['install_info'] = 'Zur Konfiguration des Plugins nach der
 $lang_plugin_enlargeit['extra_info'] = 'Dieses Plugin ist derzeit in Alpha-Stadium. Nicht alle Features funktionieren, spezielle nicht die Ajax-Komponenten. Danke für Dein Verständnis.';
 $lang_plugin_enlargeit['announcement_thread'] = 'Ankündigungs-Thread';
 $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! Einstellungen';
+$lang_plugin_enlargeit['plugin_setup'] = 'Plugin Setup';
+$lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Zeige einen Link zur Konfiguration dieses Plugins im Admin-Menü';
 ?>

@@ -16,7 +16,9 @@
   $Date$
   **************************************************/
   
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+if (!defined('IN_COPPERMINE')) {
+    die('Not in Coppermine...');
+}
 
 // Add plugin_install action
 $thisplugin->add_action('plugin_install','enlargeit_install');
@@ -32,6 +34,19 @@ $thisplugin->add_filter('page_meta','enlargeit_head');
 
 // Add filter for thumb
 $thisplugin->add_filter('theme_display_thumbnails_params','enlargeit_addparams');
+
+if (GALLERY_ADMIN_MODE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
+    $thisplugin->add_filter('admin_menu','enlargeit_add_admin_button');
+}
+
+function enlargeit_add_admin_button($admin_menu) {
+    global $lang_plugin_enlargeit, $enlargeit_icon_array, $CONFIG;
+	require('./plugins/enlargeit/init.inc.php');
+    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=enlargeit/admin" title="' . $lang_plugin_enlargeit['description'] . '">'. $enlargeit_icon_array['configure'] . $lang_plugin_enlargeit['enlargeit_configuration'] . '</a></div>';
+    $look_for = '<!-- END bridge_manager -->';
+    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
+    return $admin_menu;
+}
 
 // add neccessary parameters
 function enlargeit_addparams($params) 
@@ -104,12 +119,9 @@ function enlargeit_addparams($params)
       if ($CURRENT_PIC_DATA['pwidth'] == 0) $CURRENT_PIC_DATA['pwidth'] = 500;
       if ($CURRENT_PIC_DATA['pheight'] == 0) $CURRENT_PIC_DATA['pheight'] = 410;
       
-      if ($enl_filetyplower == 'swf') 
-      {
+      if ($enl_filetyplower == 'swf') {
       	$enl_newthumb  = '<img src="images/thumbs/thumb_swf.png" class="enlargeimg" width="'.$thumb['pwidth'].'" height="'.$thumb['pheight'].'" ';
-      }
-      else 
-      {
+      } else {
       	$enl_newthumb  = '<img src="images/thumbs/thumb_movie.png" class="enlargeimg" width="'.$thumb['pwidth'].'" height="'.$thumb['pheight'].'" ';
       }
       $enl_newthumb .= 'border="0" onclick="enlarge(this);" ';
@@ -151,7 +163,7 @@ function enlargeit_addparams($params)
 
 // include some stuff in page header
 function enlargeit_head($meta) {        
-	global $template_header, $lang_plugin_enlargeit, $CONFIG, $CPG_PHP_SELF, $LINEBREAK, $JS;
+	global $template_header, $lang_plugin_enlargeit, $CONFIG, $CPG_PHP_SELF, $LINEBREAK, $JS, $THEME_DIR;
 	require('./plugins/enlargeit/init.inc.php');
 	$enlargeit_pages_array = array('thumbnails.php');
 	if (in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
@@ -169,6 +181,11 @@ function enlargeit_head($meta) {
 	        $temp_shadow = 1;
 	    } else {
 	        $temp_shadow = 0;
+	    }
+	    if (defined('THEME_HAS_PROGRESS_GRAPHICS')) {
+	        $temp_loader = $THEME_DIR . 'images/loader.gif';
+	    } else {
+	        $temp_loader = 'images/loader.gif';
 	    }
 		$meta  .= <<< EOT
     <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
@@ -188,7 +205,9 @@ function enlargeit_head($meta) {
         var enl_shadow = {$temp_shadow};
         var enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
         var enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
-        var enl_gifpath = 'images/';
+        var enl_gifpath = 'plugins/enlargeit/images/';
+        var enl_swfpath = 'plugins/enlargeit/images/flash/';
+        var enl_loaderpathfile = '{$temp_loader}';
         var enl_usecounter = 1;
         var enl_counterurl = 'index.php?file=enlargeit/counter&amp;a=';
         var enl_btnact = 'icons/bact_transp.png';
@@ -261,7 +280,7 @@ EOT;
         // Button "Histogram"
         if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&amp;pid=';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_hist&amp;action=file&amp;pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['histogram']}';
         enl_buttonoff[{$loopCounter}] = -160;
 
@@ -299,16 +318,17 @@ EOT;
             $loopCounter++;
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'next';
-        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['enl_tooltipnext']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['next_right']}';
         enl_buttonoff[{$loopCounter}] = -80;
 
 EOT;
+            $loopCounter++;
         }
         // Button "Close"
         if ($CONFIG['plugin_enlargeit_buttonclose'] == '1') {
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'close';
-        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['next_right']}';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['close_esc']}';
         enl_buttonoff[{$loopCounter}] = -128;
 
 EOT;
@@ -431,6 +451,7 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_opaglide', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdbck', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_darkensteps', '20')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_adminmenu', '1')");
 	
     return true;
 }
@@ -482,6 +503,7 @@ function enlargeit_uninstall() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_opaglide'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdbck'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_darkensteps'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_adminmenu'");
     return true;
 }
 ?>

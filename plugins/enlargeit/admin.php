@@ -77,6 +77,7 @@ if ($superCage->post->keyExists('update')) {
       'plugin_enlargeit_buttonnav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonclose' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_flvplayer' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_adminmenu' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
   );
   $config_changes_counter = 0;
   foreach ($sanitization_array as $san_key => $san_value) {
@@ -317,6 +318,12 @@ if ($CONFIG['plugin_enlargeit_flvplayer'] == '0') {
 } elseif ($CONFIG['plugin_enlargeit_flvplayer'] == '1') { // 
 	$option_output['plugin_enlargeit_flvplayer_0'] = '';
 	$option_output['plugin_enlargeit_flvplayer_1'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_enlargeit_adminmenu'] == '1') {
+	$option_output['plugin_enlargeit_adminmenu'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_enlargeit_adminmenu'] = '';
 }
 
 pageheader($lang_plugin_enlargeit['display_name']);
@@ -673,6 +680,19 @@ echo <<< EOT
 		<td>
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_0" class="radio" value="0" {$option_output['plugin_enlargeit_flvplayer_0']} /><label for="plugin_enlargeit_flvplayer_0" class="clickable_option">{$lang_plugin_enlargeit['rphmedia']}</label><br />
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_1" class="radio" value="1" {$option_output['plugin_enlargeit_flvplayer_1']} /><label for="plugin_enlargeit_flvplayer_1" class="clickable_option">{$lang_plugin_enlargeit['os_flv']}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="tableh1" colspan="2">
+			{$lang_plugin_enlargeit['plugin_setup']}
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_enlargeit_adminmenu" class="clickable_option">{$lang_plugin_enlargeit['display_plugin_config_in_admin_menu']}</label>
+		</td>
+		<td>
+			<input type="checkbox" name="plugin_enlargeit_adminmenu" id="plugin_enlargeit_adminmenu" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmenu']} />
 		</td>
 	</tr>
 	<tr>

@@ -88,7 +88,7 @@ $lang_plugin_enlargeit['enable_sefurl_support'] = 'Enable SEF_URL support';
 $lang_plugin_enlargeit['file_added_to_favorites'] = 'The file has been added to your favorites.';
 $lang_plugin_enlargeit['file_removed_from_favorites'] = 'The file has been removed from your favorites.';
 $lang_plugin_enlargeit['button_favorites'] = 'Show my favorites';
-$lang_plugin_enlargeit['enable_drag_drop'] = 'Drag &amp; drop of enlarged pictures';
+$lang_plugin_enlargeit['enable_drag_drop'] = 'Allow enlarged pictures to be moved around';
 $lang_plugin_enlargeit['darkening_speed'] = 'Darkening speed';
 $lang_plugin_enlargeit['no_comments'] = 'There are no comments yet, and you are not allowed to add one!';
 $lang_plugin_enlargeit['mouse_wheel_navigation'] = 'Mouse wheel navigation';
@@ -145,4 +145,6 @@ $lang_plugin_enlargeit['install_info'] = 'You can configure the plugin after ins
 $lang_plugin_enlargeit['extra_info'] = 'This plugin is currently an alpha version. Not all features will work, especially the AJAX parts. Thanks for understanding.';
 $lang_plugin_enlargeit['announcement_thread'] = 'Announcement thread';
 $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! configuration';
+$lang_plugin_enlargeit['plugin_setup'] = 'Plugin setup';
+$lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Display a link to the plugin configuration in the admin menu';
 ?>

@@ -62,9 +62,10 @@ How to uninstall:
 
 First aid - if it doesn't work
 ------------------------------
-- Check if the visitor has the right to access enlargeit.js 
-  (http://path.to.your.gallery/plugins/enlargeit/js/enlargeit.js)
-  the whole folder must be accessable via web by the visitors, 
+- Check if the visitor has permissions to access enlargeit.js  and 
+  the rest of the plugin's folders and files
+  (http://path.to.your.gallery/plugins/enlargeit/js/enlargeit.js).
+  The whole folder must be accessible via web for the visitors, 
   because it contains the javascript and graphic files.
 - If you use the SEF plugin, don't forget to switch the setting 
   on the EnlargeIt! config page.
@@ -95,6 +96,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-24 [M] Version count updated to 0.11 {GauGau}
+2009-11-24 [A] Added menu icon {GauGau}
+2009-11-24 [A] Added loader path variable {GauGau}
+2009-11-24 [B] Fixed improper path for enl_gifpath {GauGau}
 2009-11-23 [M] Version count updated to 0.10 {GauGau}
 2009-11-23 [A] Brought German language file up to date {GauGau}
 2009-11-23 [A] Added recommendation for particular options {GauGau}
@@ -141,4 +146,4 @@ Changelog
 
 To Do
 =====
-* Clear histcache
+* Implement a feature to clear histcache (garbage collection)

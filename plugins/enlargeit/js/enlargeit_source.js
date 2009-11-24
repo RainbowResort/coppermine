@@ -6,7 +6,9 @@ version 3 of the License, or (at your option) any later version. See LICENSE.TXT
 for details. */
 
 // modify these
-var enl_gifpath = '';  // path to graphics
+var enl_gifpath = 'plugins/enlargeit/images/';  // path to graphics
+var enl_swfpath = 'plugins/enlargeit/images/flash/';  // path to swf files
+var enl_loaderpathfile = 'images/loader.gif';  // path to loader animation plus filename
 var enl_brdsize=12;    // border thickness (5-30)
 var enl_brdcolor='';   // border color (white if empty)
 var enl_brdbck='';     // border background pic, '' for no pic
@@ -34,8 +36,8 @@ var enl_usecounter=0;  // hidden call of counter page
 var enl_counterurl=''; // base URL of counter page
 var enl_btnact='icons/bact.png';               // active buttons
 var enl_btninact='icons/binact.png';           // inactive buttons
-var enl_pluscur='pluscur.cur';           // mouse cursor of thumbnail
-var enl_minuscur='minuscur.cur';         // mouse cursor of enlarged image
+var enl_pluscur='cursors/pluscur.cur';           // mouse cursor of thumbnail
+var enl_minuscur='cursors/minuscur.cur';         // mouse cursor of enlarged image
 var enl_noflash='No flash plugin found!';// msg if no flash plugin found
 var enl_canceltext='Click to cancel';    // tooltip to cancel loading
 
@@ -96,7 +98,7 @@ function enl_init()
     enl_ldr = enl_mkdiv('enl_ldr');
     enl_ldr.style.zIndex = 9999;
     enl_ldrgif = new Image();
-    enl_ldrgif.src = enl_gifpath+'loader.gif';
+    enl_ldrgif.src = enl_loaderpathfile;
     enl_ldrgif.style.borderWidth = '1px';
     enl_ldrgif.style.borderStyle = 'solid';
     enl_ldrgif.style.borderColor = 'black';
@@ -1258,15 +1260,15 @@ function enl_swfdiv(enl_img,enl_getlongdesc)
   }
   else if (enl_getlongdesc.slice(0,5) == 'flv::')
   {
-    var enl_swfsrc = (enl_isie)? ' id="' + enl_img.id+'swfinner" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'+enl_gifpath+'flvPlayer.swf"' : '';
-    enl_swfsrc += ' width="' + enl_getlongdesc.split('::')[2] + '" height="' + enl_getlongdesc.split('::')[3] + '"><param name="movie" value="'+enl_gifpath+'flvPlayer.swf"></param><param name="allowFullScreen" value="true"></param><param name="FlashVars" value="flvPath='+enl_getlongdesc.split('::')[1]+'&flvTitle=FLV Video"></param>';
-    enl_swfsrc += '<embed id="' + enl_img.id+'swfinneremb' + '" src="'+enl_gifpath+'flvPlayer.swf" type="application/x-shockwave-flash" width="' + enl_getlongdesc.split('::')[2] + '" allowfullscreen="true" FlashVars="flvPath='+enl_getlongdesc.split('::')[1]+'&flvTitle=FLV Video" height="' + enl_getlongdesc.split('::')[3] + '"></embed></object>';
+    var enl_swfsrc = (enl_isie)? ' id="' + enl_img.id+'swfinner" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'+enl_swfpath+'flvPlayer.swf"' : '';
+    enl_swfsrc += ' width="' + enl_getlongdesc.split('::')[2] + '" height="' + enl_getlongdesc.split('::')[3] + '"><param name="movie" value="'+enl_swfpath+'flvPlayer.swf"></param><param name="allowFullScreen" value="true"></param><param name="FlashVars" value="flvPath='+enl_getlongdesc.split('::')[1]+'&flvTitle=FLV Video"></param>';
+    enl_swfsrc += '<embed id="' + enl_img.id+'swfinneremb' + '" src="'+enl_swfpath+'flvPlayer.swf" type="application/x-shockwave-flash" width="' + enl_getlongdesc.split('::')[2] + '" allowfullscreen="true" FlashVars="flvPath='+enl_getlongdesc.split('::')[1]+'&flvTitle=FLV Video" height="' + enl_getlongdesc.split('::')[3] + '"></embed></object>';
   }
   else
   {
-    var enl_swfsrc = (enl_isie)? ' id="' + enl_img.id+'swfinner" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'+enl_gifpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0"' : '';
-    enl_swfsrc += ' width="' + enl_getlongdesc.split('::')[2] + '" height="' + enl_getlongdesc.split('::')[3] + '"><param name="movie" value="'+enl_gifpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0"></param><param name="allowFullScreen" value="true"></param>';
-    enl_swfsrc += '<embed id="' + enl_img.id+'swfinneremb' + '" src="'+enl_gifpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0" type="application/x-shockwave-flash" width="' + enl_getlongdesc.split('::')[2] + '" allowfullscreen="true" height="' + enl_getlongdesc.split('::')[3] + '"></embed></object>';
+    var enl_swfsrc = (enl_isie)? ' id="' + enl_img.id+'swfinner" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'+enl_swfpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0"' : '';
+    enl_swfsrc += ' width="' + enl_getlongdesc.split('::')[2] + '" height="' + enl_getlongdesc.split('::')[3] + '"><param name="movie" value="'+enl_swfpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0"></param><param name="allowFullScreen" value="true"></param>';
+    enl_swfsrc += '<embed id="' + enl_img.id+'swfinneremb' + '" src="'+enl_swfpath+'player.swf?movie='+enl_getlongdesc.split('::')[1]+'&autoload=on&fgcolor=0xFF0000&bgcolor=0x000000&volume=70&autorewind=0" type="application/x-shockwave-flash" width="' + enl_getlongdesc.split('::')[2] + '" allowfullscreen="true" height="' + enl_getlongdesc.split('::')[3] + '"></embed></object>';
   }
   // internet explorer 
   if (enl_isie)

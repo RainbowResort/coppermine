@@ -35,6 +35,7 @@ if ($CONFIG['enable_menu_icons'] >= 1) {
     $enlargeit_icon_array['configure'] = '';
     $enlargeit_icon_array['announcement'] = '';
 }
+
 if ($CONFIG['enable_menu_icons'] == 2) {
     $enlargeit_icon_array['table'] = '<img src="./plugins/enlargeit/images/icons/enlargeit.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['bbcode'] = '<img src="./plugins/enlargeit/images/icons/bbcode.png" border="0" width="16" height="16" alt="" class="icon" />';
@@ -70,29 +71,30 @@ if ($CONFIG['enable_menu_icons'] == 2) {
     $enlargeit_icon_array['show'] = '';
     $enlargeit_icon_array['vote'] = '';
 }
+
 $enlargeit_icon_array['ok'] = cpg_fetch_icon('ok', 0);
 $enlargeit_icon_array['cancel'] = cpg_fetch_icon('cancel', 0);
 $enlargeit_icon_array['stop'] = cpg_fetch_icon('stop', 0);
 
 $border_texture_array = array(
-'marble',
-'brushed_metal',
-'white_metal',
-'white_metal2',
-'blue_metal',
-'red_metal',
-'green_metal',
-'silver_metal',
-'black_metal',
-'rain',
-'light_rain',
-'light_wood',
-'dark_wood',
-'paper',
-'leather',
-'dark_green',
-'green_liquid',
-'chocolate'
+    'marble',
+    'brushed_metal',
+    'white_metal',
+    'white_metal2',
+    'blue_metal',
+    'red_metal',
+    'green_metal',
+    'silver_metal',
+    'black_metal',
+    'rain',
+    'light_rain',
+    'light_wood',
+    'dark_wood',
+    'paper',
+    'leather',
+    'dark_green',
+    'green_liquid',
+    'chocolate'
 );
 
 ?>
