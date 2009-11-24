@@ -10,9 +10,9 @@
   ********************************************
   Coppermine version: 1.5.2
   $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/codebase.php $
-  $Revision: 6759 $
+  $Revision: 6739 $
   $LastChangedBy: gaugau $
-  $Date: 2009-11-22 09:35:47 +0100 (So, 22. Nov 2009) 
+  $Date: 2009-11-16 19:44:39 +0100 (Mo, 16 Nov 2009) $
   **************************************************/
 
 jQuery.fn.farbtastic = function (callback) {

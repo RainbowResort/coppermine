@@ -42,7 +42,7 @@ if (GALLERY_ADMIN_MODE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
 function enlargeit_add_admin_button($admin_menu) {
     global $lang_plugin_enlargeit, $enlargeit_icon_array, $CONFIG;
 	require('./plugins/enlargeit/init.inc.php');
-    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=enlargeit/admin" title="' . $lang_plugin_enlargeit['description'] . '">'. $enlargeit_icon_array['configure'] . $lang_plugin_enlargeit['enlargeit_configuration'] . '</a></div>';
+    $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=enlargeit/admin" title="' . $lang_plugin_enlargeit['description'] . '">'. $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['enlargeit_configuration'] . '</a></div>';
     $look_for = '<!-- END bridge_manager -->';
     $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
     return $admin_menu;
@@ -165,7 +165,7 @@ function enlargeit_addparams($params)
 function enlargeit_head($meta) {        
 	global $template_header, $lang_plugin_enlargeit, $CONFIG, $CPG_PHP_SELF, $LINEBREAK, $JS, $THEME_DIR;
 	require('./plugins/enlargeit/init.inc.php');
-	$enlargeit_pages_array = array('thumbnails.php');
+	$enlargeit_pages_array = array('displayimage.php', 'index.php', 'thumbnails.php');
 	if (in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
 	    if ($CONFIG['plugin_enlargeit_brdbck'] != '') {
 	        $temp_brdbck = 'backgrounds/' . $CONFIG['plugin_enlargeit_brdbck'] . '.png';
@@ -207,6 +207,8 @@ function enlargeit_head($meta) {
         var enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
         var enl_gifpath = 'plugins/enlargeit/images/';
         var enl_swfpath = 'plugins/enlargeit/images/flash/';
+		var enl_histogramurl = 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=';
+		var enl_bbcodeurl = 'index.php?file=enlargeit/bbcode.php?pos=-';
         var enl_loaderpathfile = '{$temp_loader}';
         var enl_usecounter = 1;
         var enl_counterurl = 'index.php?file=enlargeit/counter&a=';
@@ -278,7 +280,7 @@ EOT;
         // Button "BBcode"
         if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/enl_bbcode&pos=-';
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/bbcode&pos=-';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['bbcode']}';
         enl_buttonoff[{$loopCounter}] = -192;
 
@@ -286,7 +288,7 @@ EOT;
             $loopCounter++;
         }
         // Button "Histogram"
-        if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
+        if ($CONFIG['plugin_enlargeit_buttonhist'] == '1' && (version_compare($enlargeit_gd_version, '2', '>') || $CONFIG['thumb_method'] != 'gd2')) { // Only allow the histogramm feature if GD2 is available
 		    $meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/histogram&action=file&pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['histogram']}';

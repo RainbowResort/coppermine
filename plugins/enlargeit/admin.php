@@ -300,6 +300,10 @@ if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 	$option_output['plugin_enlargeit_buttonhist'] = '';
 }
 
+if ($CONFIG['thumb_method'] != 'gd2' || version_compare($enlargeit_gd_version, '2.0.0', '<')) { // Only display histogram option if GD2 is available.
+	$option_output['plugin_enlargeit_buttonhist'] .= ' disabled="disabled"';
+}
+
 if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
 	$option_output['plugin_enlargeit_buttonnav'] = 'checked="checked"';
 } else { 
@@ -342,7 +346,7 @@ if ($superCage->post->keyExists('update')) {
         msg_box('', $lang_plugin_enlargeit['no_changes'], '', '', 'validation');
     }
 } else {
-    echo '&copy; Timo Sack (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)';
+    echo '&copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)';
 }
 echo <<< EOT
 		</td>

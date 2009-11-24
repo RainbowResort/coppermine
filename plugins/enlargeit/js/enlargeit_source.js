@@ -1,5 +1,5 @@
 /*  This comment MUST stay intact for legal use, so don't remove it. EnlargeIt! 
-v1.1 - (c) 2008 Timo Sack - http://enlargeit.timos-welt.de This program is free 
+v1.1 - (c) 2008 Timo Schewe - http://enlargeit.timos-welt.de This program is free 
 software: you can redistribute it and/or modify it under the terms of the GNU 
 General Public License as published by the Free Software Foundation, either 
 version 3 of the License, or (at your option) any later version. See LICENSE.TXT 
@@ -9,6 +9,8 @@ for details. */
 var enl_gifpath = 'plugins/enlargeit/images/';  // path to graphics
 var enl_swfpath = 'plugins/enlargeit/images/flash/';  // path to swf files
 var enl_loaderpathfile = 'images/loader.gif';  // path to loader animation plus filename
+var enl_histogramurl = 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=';  // relative path + filename + get parameters for the histogram link
+var enl_bbcodeurl = 'index.php?file=enlargeit/bbcode.php?pos=-';  // relative path + filename + get parameters for the bbcode link
 var enl_brdsize=12;    // border thickness (5-30)
 var enl_brdcolor='';   // border color (white if empty)
 var enl_brdbck='';     // border background pic, '' for no pic
@@ -99,9 +101,6 @@ function enl_init()
     enl_ldr.style.zIndex = 9999;
     enl_ldrgif = new Image();
     enl_ldrgif.src = enl_loaderpathfile;
-    enl_ldrgif.style.borderWidth = '1px';
-    enl_ldrgif.style.borderStyle = 'solid';
-    enl_ldrgif.style.borderColor = 'black';
     enl_ldrgif.id = 'enl_ldrgif';
     enl_ldr.appendChild(enl_ldrgif);
 
@@ -945,7 +944,7 @@ function enl_mktitlebar(enl_imgid)
     if (enl_buttonurl[enl_i] == 'next' && enl_getnext(enl_imgid,0) == null) { enl_i++; continue; }
     else if (enl_buttonurl[enl_i] == 'prev' && enl_getnext(enl_imgid,1) == null) { enl_i++; continue; }
     else if (((enl_buttonurl[enl_i] == 'max') || (enl_buttonurl[enl_i] == 'maxpop')) && (enl_orig.getAttribute('longdesc').search(/normal_.+/) == -1)) { enl_i++; continue; }
-    else if (!enl_clone.ispic && (enl_buttonurl[enl_i] == 'enl_bbcode.php?pos=-' || enl_buttonurl[enl_i] == 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=')) { enl_i++; continue; }
+    else if (!enl_clone.ispic && (enl_buttonurl[enl_i] == enl_bbcodeurl || enl_buttonurl[enl_i] == enl_histogramurl)) { enl_i++; continue; }
     enl_button[enl_i] = enl_makebtn(enl_imgid+enl_i,enl_buttonoff[enl_i]);
     enl_button[enl_i].title = enl_buttontxt[enl_i];
     enl_button[enl_i].whichpic = enl_imgid;

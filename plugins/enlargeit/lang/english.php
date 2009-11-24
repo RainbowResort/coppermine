@@ -147,4 +147,5 @@ $lang_plugin_enlargeit['announcement_thread'] = 'Announcement thread';
 $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! configuration';
 $lang_plugin_enlargeit['plugin_setup'] = 'Plugin setup';
 $lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Display a link to the plugin configuration in the admin menu';
+$lang_plugin_enlargeit['not_a_valid_extension'] = '%s is not a valid extension';
 ?>

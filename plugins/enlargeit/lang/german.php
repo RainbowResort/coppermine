@@ -148,4 +148,5 @@ $lang_plugin_enlargeit['announcement_thread'] = 'Ankündigungs-Thread';
 $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! Einstellungen';
 $lang_plugin_enlargeit['plugin_setup'] = 'Plugin Setup';
 $lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Zeige einen Link zur Konfiguration dieses Plugins im Admin-Menü';
+$lang_plugin_enlargeit['not_a_valid_extension'] = '%s ist keine gültige Datei-Erweiterung';
 ?>

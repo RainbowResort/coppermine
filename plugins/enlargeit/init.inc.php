@@ -31,9 +31,11 @@ if (file_exists("./plugins/enlargeit/lang/{$CONFIG['lang']}.php")) {
 if ($CONFIG['enable_menu_icons'] >= 1) {
     $enlargeit_icon_array['configure'] = '<img src="./plugins/enlargeit/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['announcement'] = '<img src="./plugins/enlargeit/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$enlargeit_icon_array['copy'] = '<img src="./plugins/enlargeit/images/icons/copy.png" border="0" width="16" height="16" alt="" class="icon" />';
 } else {
     $enlargeit_icon_array['configure'] = '';
     $enlargeit_icon_array['announcement'] = '';
+	$enlargeit_icon_array['copy'] = '';
 }
 
 if ($CONFIG['enable_menu_icons'] == 2) {
@@ -43,7 +45,6 @@ if ($CONFIG['enable_menu_icons'] == 2) {
     $enlargeit_icon_array['comment'] = '<img src="./plugins/enlargeit/images/icons/comment.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['comments'] = '<img src="./plugins/enlargeit/images/icons/comments.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['download'] = '<img src="./plugins/enlargeit/images/icons/download.png" border="0" width="16" height="16" alt="" class="icon" />';
-    $enlargeit_icon_array['table'] = '<img src="./plugins/enlargeit/images/icons/enlargeit.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['favorites'] = '<img src="./plugins/enlargeit/images/icons/favorites.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['fullsize'] = '<img src="./plugins/enlargeit/images/icons/fullsize.png" border="0" width="16" height="16" alt="" class="icon" />';
     $enlargeit_icon_array['histogram'] = '<img src="./plugins/enlargeit/images/icons/histogram.png" border="0" width="16" height="16" alt="" class="icon" />';
@@ -96,5 +97,14 @@ $border_texture_array = array(
     'greenliquid',
     'choc'
 );
+
+if (function_exists('gd_info') == TRUE) {
+	$gd_array = gd_info();
+}
+if (array_key_exists('GD Version' , $gd_array) == TRUE) {
+	$enlargeit_gd_version = preg_replace('/[[:alpha:][:space:]()]+/', '', $gd_array['GD Version']);
+}
+	
+
 
 ?>

@@ -76,7 +76,7 @@ First aid - if it doesn't work
 Credits:
 ========
 This plugin uses the following components:
-* EnlargeIt! technology by Timo Sack: http://enlargeit.timos-welt.de/
+* EnlargeIt! technology by Timo Schewe: http://enlargeit.timos-welt.de/
 * FLV player by rphMedia: http://forum.coppermine-gallery.net/index.php/topic,43180.0.html
 * ImageFlow is based on the script by Finn Rudolph: http://imageflow.finnrudolph.de/
 * FLV player OSFLV: http://www.osflv.com/
@@ -96,6 +96,14 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-24 [M] Version count updated to 1.1 {GauGau}
+2009-11-24 [A] Moved histogram cache from plugin folder to individual storage location of corresponding file {GauGau}
+2009-11-24 [A] Added color variables to histogram output {GauGau}
+2009-11-24 [A] Added needed path variables to codebase and JavaScript file enlargeit_source.js {GauGau}
+2009-11-24 [M] Renamed bbcode file {GauGau}
+2009-11-24 [B] Added switch to only allow histogram if needed image library is available {GauGau}
+2009-11-24 [B] Added index and displayimage page to $enlargeit_pages_array in codebase.php to allow enlargeIt to work on those pages as well {GauGau}
+2009-11-24 [B] Updated credits as per suggestion {GauGau}
 2009-11-24 [M] Version count updated to 1.0 {GauGau}
 2009-11-24 [B] Fixed broken histogram {GauGau}
 2009-11-24 [B] Added missing info file (work in progress) {GauGau}
@@ -151,3 +159,4 @@ Changelog
 To Do
 =====
 * Implement a feature to clear histcache (garbage collection)
+* Implement a function to check permissions
