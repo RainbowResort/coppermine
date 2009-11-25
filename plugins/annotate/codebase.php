@@ -654,72 +654,50 @@ function annotate_meta_album($meta) {
     return $meta;
 }
 
-function annotate_configuration_submit() {
-    global $CONFIG, $lang_errors;
+
+function annotate_configuration_save_value($name, $upper_limit) {
+    global $CONFIG;
     $superCage = Inspekt::makeSuperCage();
-    // Populate the form fields and run the queries for the submit form
-    $config_changes_counter = 0;
+    $new_value = $superCage->post->getInt($name);
+
+    if ($superCage->post->keyExists($name) && $new_value >= 0 && $new_value <= $upper_limit) {
+        if (!isset($CONFIG[$name])) {
+            cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('$name', '$new_value')");
+            $CONFIG[$name] = $new_value;
+            return 1;
+        } elseif ($new_value != $CONFIG[$name]) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = '$name'");
+            $CONFIG[$name] = $new_value;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+
+function annotate_configuration_submit() {
     if (!GALLERY_ADMIN_MODE) {
+        global $lang_errors;
         cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
     }
 
-    if ($superCage->post->keyExists('plugin_annotate_type') && $superCage->post->getInt('plugin_annotate_type') >= '0'  && $superCage->post->getInt('plugin_annotate_type') <= '3') {
-        $new_value = $superCage->post->getInt('plugin_annotate_type');
-        if ($new_value != $CONFIG['plugin_annotate_type']) {
-            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_type'");
-            $CONFIG['plugin_annotate_type'] = $new_value;
-            $config_changes_counter++;
-        }
-    }
+    // Populate the form fields and run the queries for the submit form
+    global $CONFIG;
+    $config_changes_counter = 0;
+
+    $config_changes_counter += annotate_configuration_save_value('plugin_annotate_type', 3);
 
     $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']} WHERE has_admin_access != '1'");
     while($row = mysql_fetch_assoc($result)) {
-        if ($superCage->post->keyExists('plugin_annotate_permissions_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']) <= '3') {
-            $new_value = $superCage->post->getInt('plugin_annotate_permissions_'.$row['group_id']);
-            if ($new_value == $CONFIG['plugin_annotate_permissions_'.$row['group_id']]) {
-                continue;
-            } elseif (is_numeric($CONFIG['plugin_annotate_permissions_'.$row['group_id']])) {
-                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_permissions_{$row['group_id']}'");
-                $config_changes_counter++;
-            } else {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_permissions_{$row['group_id']}', '$new_value')");
-                $config_changes_counter++;
-            }
-        }
+        $config_changes_counter += annotate_configuration_save_value('plugin_annotate_permissions_'.$row['group_id'], 3);
     }
     mysql_free_result($result);
 
     $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
     while($row = mysql_fetch_assoc($result)) {
-        if ($superCage->post->keyExists('plugin_annotate_display_notes_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']) <= '1') {
-            $new_value = $superCage->post->getInt('plugin_annotate_display_notes_'.$row['group_id']);
-            if ($new_value == $CONFIG['plugin_annotate_display_notes_'.$row['group_id']]) {
-                continue;
-            } elseif (is_numeric($CONFIG['plugin_annotate_display_notes_'.$row['group_id']])) {
-                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_notes_{$row['group_id']}'");
-                $config_changes_counter++;
-            } else {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_display_notes_{$row['group_id']}', '$new_value')");
-                $config_changes_counter++;
-            }
-        }
-    }
-    mysql_free_result($result);
-
-    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']}");
-    while($row = mysql_fetch_assoc($result)) {
-        if ($superCage->post->keyExists('plugin_annotate_display_links_'.$row['group_id']) && $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']) >= '0'  && $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']) <= '1') {
-            $new_value = $superCage->post->getInt('plugin_annotate_display_links_'.$row['group_id']);
-            if ($new_value == $CONFIG['plugin_annotate_display_links_'.$row['group_id']]) {
-                continue;
-            } elseif (is_numeric($CONFIG['plugin_annotate_display_links_'.$row['group_id']])) {
-                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = 'plugin_annotate_display_links_{$row['group_id']}'");
-                $config_changes_counter++;
-            } else {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_annotate_display_links_{$row['group_id']}', '$new_value')");
-                $config_changes_counter++;
-            }
-        }
+        $config_changes_counter += annotate_configuration_save_value('plugin_annotate_display_notes_'.$row['group_id'], 1);
+        $config_changes_counter += annotate_configuration_save_value('plugin_annotate_display_links_'.$row['group_id'], 1);
     }
     mysql_free_result($result);
 
@@ -727,7 +705,7 @@ function annotate_configuration_submit() {
 }
 
 function annotate_configure() {
-    global $CONFIG, $THEME_DIR, $thisplugin, $lang_plugin_annotate, $lang_common, $annotate_icon_array, $lang_errors, $annotate_installation, $annotate_title;
+    global $CONFIG, $cpg_udb, $THEME_DIR, $thisplugin, $lang_plugin_annotate, $lang_common, $annotate_icon_array, $lang_errors, $annotate_installation, $annotate_title;
     $superCage = Inspekt::makeSuperCage();
     $additional_submit_information = '';
     if (!GALLERY_ADMIN_MODE) {
@@ -748,8 +726,8 @@ function annotate_configure() {
         }
     }
 
-    // Check if guests have greater permissions than registered users - TODO: doesn't work after permission system change -- how do we detect the guest group? Fixed group_id 3? How does it work in bridged mode?
-    if ($CONFIG['plugin_annotate_permissions_registered'] < $CONFIG['plugin_annotate_permissions_guest']) {
+    // Check if guests have greater permissions than registered users
+    if ($CONFIG['plugin_annotate_permissions_'.$cpg_udb->guestgroup] > mysql_result(cpg_db_query("SELECT MIN(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE name LIKE 'plugin_annotate_permissions_%'"), 0)) {
         $additional_submit_information .= '<div class="cpg_message_warning">' . $lang_plugin_annotate['guests_more_permissions_than_registered'] . '</div>';
     }
 
@@ -769,9 +747,9 @@ EOT;
     }
 
     $permissions = "";
-    $result = cpg_db_query("SELECT group_id, group_name, has_admin_access FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
+    $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
-        if ($row['has_admin_access'] == "1") {
+        if (in_array($row['group_id'], $cpg_udb->admingroups)) {
             $permissions .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
