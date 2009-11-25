@@ -193,7 +193,7 @@ EOT;
                 if (mysql_num_rows($result)) {
                     $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
                     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-                        $btns_person .= "<span onclick=\"return addnote('{$row[0]}')\" class=\"button\" style=\"cursor:pointer;\" title=\"{$row[0]} auf dem Bild markieren\">&nbsp;{$row[0]}&nbsp;</span> ";
+                        $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $row[0])."\">{$row[0]}</button> ";
                     }
                     $btns_person .= "</div>";
                     $html = $btns_person.$html;
@@ -207,7 +207,7 @@ EOT;
             $on_this_pic_array = array();
             $n = 0;
             foreach($notes as $value) {
-                $on_this_pic_array[] = "<a href=\"thumbnails.php?album=shownotes&amp;note={$value['note']}\" class=\"admin_menu\" title=\"{$lang_plugin_annotate['all_pics_of']} {$value['note']}\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">{$value['note']}</a> ";
+                $on_this_pic_array[] = "<button onclick=\"window.location.href='thumbnails.php?album=shownotes&amp;note={$value['note']}';\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['all_pics_of'], $value['note'])."\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">{$value['note']}</button> ";
                 $n++;
             }
             sort($on_this_pic_array);
@@ -581,6 +581,11 @@ function annotate_get_pic_pos($album) {
 
 // New meta albums
 function annotate_meta_album($meta) {
+    if (annotate_get_level('permissions') < 1) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    }
+
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
@@ -980,10 +985,15 @@ EOT;
 
 
 function annotate_get_level($what) {
-    global $CONFIG;
+    global $CONFIG, $cpg_udb;
 
+    // Admin always have the highest permission
     if ($what == "permissions" && GALLERY_ADMIN_MODE) {
         return 3;
+    }
+
+    if (!USER_ID) {
+        return $CONFIG["plugin_annotate_{$what}_".$cpg_udb->guestgroup];
     }
 
     $result = cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID);
@@ -1002,8 +1012,6 @@ function annotate_get_level($what) {
     $level = mysql_result($result, 0);
     mysql_free_result($result);
     $level = $level > 0 ? $level : 0;
-
-    // TODO if visitor = guest: detect guest group and set level
 
     return $level;
 }

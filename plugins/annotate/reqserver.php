@@ -20,13 +20,10 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
-if (!USER_ID) {
+if (annotate_get_level('permissions') < 2) {
     die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
-} elseif (!GALLERY_ADMIN_MODE) {
-    if (annotate_get_permission_level() < 2) {
-        die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
-    }
-} 
+}
+
 
 $superCage = Inspekt::makeSuperCage();
 
