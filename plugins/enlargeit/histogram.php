@@ -66,7 +66,10 @@ if ($action == 'image') {
     for($pos = 0; $pic_data[$pos]['pid'] != $pid && $pos < $pic_count; $pos++);
     $pic_data = get_pic_data($album, $pic_count, $album_name, $pos, 1, false);
     $CURRENT_PIC_DATA = $pic_data[0];
-    
+    $result = cpg_db_query("SELECT histogram FROM {$CONFIG['TABLE_PICTURES']} AS histogram WHERE pid='{$CURRENT_PIC_DATA['pid']}' LIMIT 1");
+    $row = mysql_fetch_assoc($result);
+    mysql_free_result($result);
+    $CURRENT_PIC_DATA['histogram'] = $row['histogram'];
     
     //      Histogram creation
     //      Created by Anton Sparrius (Spaz) 6/9/05  anton_spaz@yahoo.com
@@ -82,63 +85,70 @@ if ($action == 'image') {
 	$filenameWithoutExtension = str_replace('.' . ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.'), '', $CURRENT_PIC_DATA['filename']);
     $enl_histfile = "histogram_".$filenameWithoutExtension . '.png'; // The file name for the histogram file (target file)
 
-    if (file_exists($enl_histpath.$enl_histfile)) {
-    header('Content-type: image/png');
-    readfile ($enl_histpath.$enl_histfile);
+    if ($CURRENT_PIC_DATA['histogram'] == 'YES' && file_exists($enl_histpath.$enl_histfile)) {
+        // Both the database record as well as the file are there, so let's go ahead and display the histogram file
+        header('Content-type: image/png');
+        readfile ($enl_histpath.$enl_histfile);
     } else {
-    $im = imagecreatefromjpeg($enl_histpath.$enl_histimage);
-    for($i=0;$i<imagesx($im);$i+=2) {
-		for($j=0;$j<imagesy($im);$j++) {
-			$rrggbb=imagecolorsforindex ($im, imagecolorat($im,$i,$j));
-			$r[$rrggbb['red']]+=1;
-			$g[$rrggbb['green']]+=1;
-			$b[$rrggbb['blue']]+=1;
-		}
-    }
-    for ($i=0;$i<256;$i++) {
-		$max[$i]=($r[$i]+$g[$i]+$b[$i])/3;
-    }
-    $max_value = max($max)/150;
-    $m[0] = max($r);
-    $m[1] = max($b);
-    $m[2] = max($g);
-    $max_rgb = max($m)/150;
-	
-	
+        if (file_exists($enl_histpath.$enl_histfile)) {
+            // The file is there, but the corresponding database record is not, so let's create it from fresh
+            cpg_folder_file_delete($enl_histpath.$enl_histfile);
+        }
+        $im = imagecreatefromjpeg($enl_histpath.$enl_histimage);
+        for ($i = 0; $i < imagesx($im); $i+=2) {
+    		for ($j = 0; $j < imagesy($im); $j++) {
+    			$rrggbb = imagecolorsforindex ($im, imagecolorat($im,$i,$j));
+    			$r[$rrggbb['red']]+=1;
+    			$g[$rrggbb['green']]+=1;
+    			$b[$rrggbb['blue']]+=1;
+    		}
+        }
+        for ($i = 0;$i < 256; $i++) {
+    		$max[$i] = ($r[$i]+$g[$i]+$b[$i])/3;
+        }
+        $max_value = max($max)/150;
+        $m[0] = max($r);
+        $m[1] = max($b);
+        $m[2] = max($g);
+        $max_rgb = max($m)/150;
     
-    $im_out = imagecreate (284, 164);
-    //$background = imagecolorallocate($im_out,100,100,110);
-	$boxfill_color_array = enlargeit_hex2rgb($CONFIG['plugin_enlargeit_ajaxcolor']);
-	$background = imagecolorallocate($im_out, $boxfill_color_array[0], $boxfill_color_array[1], $boxfill_color_array[2]);
-	$box_fill   = imagecolorallocate($im_out, $boxfill_color_array[0], $boxfill_color_array[1], $boxfill_color_array[2]);
-    $white = imagecolorallocate($im_out,240,240,240);
-    $black = imagecolorallocate($im_out,20,20,20);
-    $grey = imagecolorallocate($im_out,200,200,200);
-    $red = imagecolorallocate($im_out,255,0,0);
-    $green = imagecolorallocate($im_out,0,200,0);
-    $blue = imagecolorallocate($im_out,0,0,255);
-    $ry=107;
-    $gy=107;
-    $by=107;
-    
-    imagefilledrectangle($im_out,13,6,270,158,$box_fill);
-    
-    for($i=0;$i<256;$i++) {
-		imageline($im_out, $i+14, 157, $i+14, 157-($max[$i]/$max_value),$white);
-		imageline($im_out, $i+13, $ry, $i+14, 157-($r[$i]/$max_rgb), $red);
-		imageline($im_out, $i+13, $gy, $i+14, 157-($g[$i]/$max_rgb), $green);
-		imageline($im_out, $i+13, $by, $i+14, 157-($b[$i]/$max_rgb), $blue);
-		$ry = 157-($r[$i]/$max_rgb);
-		$gy = 157-($g[$i]/$max_rgb);
-		$by = 157-($b[$i]/$max_rgb);
-    }
-    imagepng($im_out,$enl_histpath.$enl_histfile);
-    imagedestroy($im);
-    imagedestroy($im_out);
-    $im=imagecreatefrompng($enl_histpath.$enl_histfile);
-    imagedestroy($im);
-    header('Content-type: image/png');
-    readfile ($enl_histpath.$enl_histfile);
+        $im_out = imagecreate (284, 164);
+        //$background = imagecolorallocate($im_out,100,100,110);
+    	$boxfill_color_array = enlargeit_hex2rgb($CONFIG['plugin_enlargeit_ajaxcolor']);
+    	$background = imagecolorallocate($im_out, $boxfill_color_array[0], $boxfill_color_array[1], $boxfill_color_array[2]);
+    	$box_fill = imagecolorallocate($im_out, $boxfill_color_array[0], $boxfill_color_array[1], $boxfill_color_array[2]);
+        $white = imagecolorallocate($im_out,240,240,240);
+        $black = imagecolorallocate($im_out,20,20,20);
+        $grey = imagecolorallocate($im_out,200,200,200);
+        $red = imagecolorallocate($im_out,255,0,0);
+        $green = imagecolorallocate($im_out,0,200,0);
+        $blue = imagecolorallocate($im_out,0,0,255);
+        $ry = 107;
+        $gy = 107;
+        $by = 107;
+        
+        imagefilledrectangle($im_out,13,6,270,158,$box_fill);
+        
+        for ($i = 0; $i < 256; $i++) {
+    		imageline($im_out, $i+14, 157, $i+14, 157-($max[$i]/$max_value),$white);
+    		imageline($im_out, $i+13, $ry, $i+14, 157-($r[$i]/$max_rgb), $red);
+    		imageline($im_out, $i+13, $gy, $i+14, 157-($g[$i]/$max_rgb), $green);
+    		imageline($im_out, $i+13, $by, $i+14, 157-($b[$i]/$max_rgb), $blue);
+    		$ry = 157-($r[$i]/$max_rgb);
+    		$gy = 157-($g[$i]/$max_rgb);
+    		$by = 157-($b[$i]/$max_rgb);
+        }
+        imagepng($im_out,$enl_histpath.$enl_histfile);
+        imagedestroy($im);
+        imagedestroy($im_out);
+        $im = imagecreatefrompng($enl_histpath.$enl_histfile);
+        imagedestroy($im);
+        // Perform the database query to populate the pictures table record
+        if (file_exists($enl_histpath.$enl_histfile)) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram='YES' WHERE pid='{$CURRENT_PIC_DATA['pid']}'");
+        }
+        header('Content-type: image/png');
+        readfile ($enl_histpath.$enl_histfile);
     }
 } elseif ($action == 'file') {
     require('./plugins/enlargeit/init.inc.php');

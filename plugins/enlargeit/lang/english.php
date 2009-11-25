@@ -148,4 +148,7 @@ $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! configuration';
 $lang_plugin_enlargeit['plugin_setup'] = 'Plugin setup';
 $lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Display a link to the plugin configuration in the admin menu';
 $lang_plugin_enlargeit['not_a_valid_extension'] = '%s is not a valid extension';
+$lang_plugin_enlargeit['gd_version'] = 'GD version: %s';
+$lang_plugin_enlargeit['not_available'] = 'Not available';
+$lang_plugin_enlargeit['cached_files_x'] = 'Cached files: %s';
 ?>

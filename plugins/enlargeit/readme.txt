@@ -96,6 +96,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-25 [M] Version count updated to 1.2 {GauGau}
+2009-11-25 [A] Added histogram cache database recording {GauGau}
+2009-11-25 [A] Added version number output on config screen {GauGau}
 2009-11-24 [M] Version count updated to 1.1 {GauGau}
 2009-11-24 [A] Moved histogram cache from plugin folder to individual storage location of corresponding file {GauGau}
 2009-11-24 [A] Added color variables to histogram output {GauGau}

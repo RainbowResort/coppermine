@@ -10,7 +10,7 @@
   (at your option) any later version.
   **************************************************/
 
-require('./plugins/enlargeit/init.inc.php');
+require('./plugins/enlargeit/configuration.php');
 if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
 	$JS['includes'][] = 'js/jquery.spinbutton.js';
 }
@@ -300,9 +300,20 @@ if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 	$option_output['plugin_enlargeit_buttonhist'] = '';
 }
 
-if ($CONFIG['thumb_method'] != 'gd2' || version_compare($enlargeit_gd_version, '2.0.0', '<')) { // Only display histogram option if GD2 is available.
-	$option_output['plugin_enlargeit_buttonhist'] .= ' disabled="disabled"';
+if ($CONFIG['thumb_method'] == 'gd2' || version_compare($enlargeit_gd_version, '2', '>=')) { // Only display histogram option if GD2 is available.
+	$option_output['plugin_enlargeit_buttonhist'] .= '';
+} else {
+    $option_output['plugin_enlargeit_buttonhist'] .= ' disabled="disabled"';
 }
+if ($enlargeit_gd_version == '') {
+    $enlargeit_gd_version = $lang_plugin_enlargeit['not_available'];
+}
+$gd_version_string = sprintf($lang_plugin_enlargeit['gd_version'], $enlargeit_gd_version);
+$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram='YES'");
+list($cache_count) = mysql_fetch_row($result);
+mysql_free_result($result);
+$cached_files = sprintf($lang_plugin_enlargeit['cached_files_x'], cpg_float2decimal($cache_count));
+
 
 if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
 	$option_output['plugin_enlargeit_buttonnav'] = 'checked="checked"';
@@ -334,7 +345,7 @@ pageheader($lang_plugin_enlargeit['display_name']);
 echo <<< EOT
 <form action="index.php?file=enlargeit/admin" method="post" name="enlargeit_settings">
 EOT;
-starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'], 2, 'cpg_zebra');
+starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'] . ' v' . $version, 2, 'cpg_zebra');
 echo <<< EOT
 	<tr>
 		<td class="tablef" colspan="2" >
@@ -650,10 +661,10 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogram']} {$lang_plugin_enlargeit['button_histogram']}</label>
+			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogram']} {$lang_plugin_enlargeit['button_histogram']} ({$cached_files})</label>
 		</td>
 		<td>
-			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} />
+			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} /> <label for="plugin_enlargeit_buttonhist" class="clickable_option">({$gd_version_string})</label>
 		</td>
 	</tr>
 	<tr>
