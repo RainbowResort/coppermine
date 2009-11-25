@@ -22,7 +22,7 @@ if (!defined('IN_COPPERMINE')) {
 
 require_once './plugins/annotate/init.inc.php';
 $annotate_init_array = annotate_initialize();
-$lang_plugin_annotate = $annotate_init_array['language']; 
+$lang_plugin_annotate = $annotate_init_array['language'];
 $annotate_icon_array = $annotate_init_array['icon'];
 
 $name = $lang_plugin_annotate['plugin_name'];
@@ -40,8 +40,9 @@ $version = '2.2';
 
 $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="admin_menu external">' . $annotate_icon_array['announcement'] . sprintf($lang_plugin_annotate['announcement_thread'], $lang_plugin_annotate['plugin_name']) . '</a>';
 $extra_info .= '<a href="index.php?file=annotate/admin" class="admin_menu">' . $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'] . '</a> ';
-$extra_info .= '<a href="index.php?plugin=annotate&delete_orphans" class="admin_menu">' . $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries'] . '</a> ';
-$extra_info .= '<a href="index.php?plugin=annotate&update_database" class="admin_menu">' . $annotate_icon_array['update_database'] . $lang_plugin_annotate['update_database'] . '</a> ';
+$extra_info .= '<a href="index.php?plugin=annotate&amp;delete_orphans" class="admin_menu">' . $annotate_icon_array['delete'] . $lang_plugin_annotate['delete_orphaned_entries'] . '</a> ';
+$extra_info .= '<a href="index.php?plugin=annotate&amp;update_database" class="admin_menu">' . $annotate_icon_array['update_database'] . $lang_plugin_annotate['update_database'] . '</a> ';
+$extra_info .= '<a href="index.php?plugin=annotate&amp;rename_delete" class="admin_menu">' . $annotate_icon_array['rename_delete'] . $lang_plugin_annotate['rename_delete'] . '</a> ';
 $extra_info .= $install_info;
 
 

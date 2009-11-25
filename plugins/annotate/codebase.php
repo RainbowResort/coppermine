@@ -442,7 +442,7 @@ EOT;
 
 //// New meta album
 
-// Meta album titles, delete orphans
+// Meta album titles, custom pages
 function annotate_page_start() {
     global $lang_meta_album_names;
 
@@ -516,6 +516,155 @@ EOT;
         </tr>
 EOT;
         endtable();
+        exit;
+    }
+
+    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('rename_delete')) {
+        if (!GALLERY_ADMIN_MODE) {
+            return;
+        }
+
+        global $CONFIG;
+        require_once './plugins/annotate/init.inc.php';
+        $annotate_init_array = annotate_initialize();
+        $lang_plugin_annotate = $annotate_init_array['language'];
+        $annotate_icon_array = $annotate_init_array['icon'];
+        load_template();
+
+        if ($superCage->post->keyExists('submit')) {
+            if (!checkFormToken()) {
+                global $lang_errors;
+                cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+            }
+            if ($superCage->get->keyExists('batch_rename')) {
+                if (strlen($superCage->post->getRaw('note_new')) < 1) {
+                    header("Location: index.php?plugin=annotate&rename_delete&batch_rename&status=0&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                } else {
+                    cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET note = '{$superCage->post->getRaw('note_new')}' WHERE note = '{$superCage->post->getRaw('note_old')}'");
+                    header("Location: index.php?plugin=annotate&rename_delete&batch_rename&status=1&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                }
+            }
+            if ($superCage->get->keyExists('batch_delete')) {
+                cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE note = '{$superCage->post->getRaw('note_old')}'");
+                header("Location: index.php?plugin=annotate&rename_delete&batch_delete&status=1&note_old={$superCage->post->getRaw('note_old')}");
+            }
+        }
+
+        pageheader($lang_plugin_annotate['rename_delete']);
+        if ($superCage->get->keyExists('batch_rename')) {
+            starttable("100%", $lang_plugin_annotate['batch_rename']);
+        } elseif ($superCage->get->keyExists('batch_delete')) {
+            starttable("100%", $lang_plugin_annotate['batch_delete']);
+        } else {
+            starttable("100%", $lang_plugin_annotate['rename_delete']);
+        }
+
+        if ($superCage->post->keyExists('sure')) {
+            if ($superCage->get->keyExists('batch_rename')) {
+                global $lang_common;
+                $note_new = $superCage->post->getRaw('note_new');
+                if (strlen($note_new) < 1) {
+                    echo '<tr><td class="tableb">'.$lang_plugin_annotate['note_empty'].' <a href="javascript:history.back();">'.$lang_common['back'].'</a></td></tr>';
+                    endtable();
+                    pagefooter();
+                    die();
+                }
+                list($timestamp, $form_token) = getFormToken();
+                echo '
+                    <tr><td class="tableb">
+                    <form method="post" action="index.php?plugin=annotate&rename_delete&batch_rename">
+                    '.sprintf($lang_plugin_annotate['sure_rename'], $superCage->post->getRaw('note_old'), $note_new).'
+                    <input type="hidden" name="note_old" class="textinput" value="'.$superCage->post->getRaw('note_old').'" readonly="readonly">
+                    <input type="hidden" name="note_new" class="textinput" value="'.$note_new.'" readonly="readonly">
+                    <input type="hidden" name="form_token" value="'.$form_token.'" />
+                    <input type="hidden" name="timestamp" value="'.$timestamp.'" />
+                    <input type="submit" name="submit" class="button" value="'.$lang_common['go'].'">
+                    <a href="javascript:history.back();">'.$lang_common['back'].'</a>
+                    </form>
+                    </td></tr>
+                ';
+            }
+            if ($superCage->get->keyExists('batch_delete')) {
+                global $lang_common;
+                list($timestamp, $form_token) = getFormToken();
+                echo '
+                    <tr><td class="tableb">
+                    <form method="post" action="index.php?plugin=annotate&rename_delete&batch_delete">
+                    '.sprintf($lang_plugin_annotate['sure_delete'], $superCage->post->getRaw('note_old')).'
+                    <input type="hidden" name="note_old" class="textinput" value="'.$superCage->post->getRaw('note_old').'" readonly="readonly">
+                    <input type="hidden" name="form_token" value="'.$form_token.'" />
+                    <input type="hidden" name="timestamp" value="'.$timestamp.'" />
+                    <input type="submit" name="submit" class="button" value="'.$lang_common['go'].'">
+                    <a href="javascript:history.back();">'.$lang_common['back'].'</a>
+                    </form>
+                    </td></tr>
+                ';
+            }
+        }
+
+        if (!$superCage->post->keyExists('note_old')) {
+            if ($superCage->get->keyExists('status')) {
+                if ($superCage->get->keyExists('batch_rename')) {
+                    if ($superCage->get->getInt('status') == 1) {
+                        echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['rename_success'], $superCage->get->getRaw('note_old'), $superCage->get->getRaw('note_new')).' </td></tr>';
+                    }
+                    if ($superCage->get->getInt('status') == 0) {
+                        echo '<tr><td class="tableb">"'.sprintf($lang_plugin_annotate['rename_fail'], $superCage->get->getRaw('note_old'), $superCage->get->getRaw('note_new')).'. '.$lang_plugin_annotate['note_empty'].'</td></tr>'; 
+                    }
+                }
+                if ($superCage->get->keyExists('batch_delete') && $superCage->get->getInt('status') == 1) {
+                    echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['delete_success'], $superCage->get->getRaw('note_old'), $superCage->get->getRaw('note_new')).' </td></tr>';
+                }
+            }
+            if ($superCage->get->keyExists('note')) {
+                if ($superCage->get->keyExists('batch_rename')) {
+                    global $lang_common;
+                    echo '
+                        <tr><td class="tableb">
+                        <form method="post">
+                        <input type="text" name="note_old" size="40" class="textinput" value="'.$superCage->get->getRaw('note').'" readonly="readonly"> '.$lang_plugin_annotate['rename_to'].'
+                        <input type="text" name="note_new" size="40" class="textinput" id="note_new">
+                        <input type="submit" name="sure" class="button" value="'.$lang_common['go'].'">
+                        </form> <script type="text/javascript"> document.getElementById("note_new").select(); </script>
+                        </td></tr>
+                    ';
+                }
+                if ($superCage->get->keyExists('batch_delete')) {
+                    global $lang_common;
+                    echo '
+                        <tr><td class="tableb">
+                        <form method="post">
+                        '.$lang_common['delete'].'
+                        <input type="text" name="note_old" class="textinput" value="'.$superCage->get->getRaw('note').'" readonly="readonly">
+                        <input type="submit" name="sure" class="button" value="'.$lang_common['go'].'">
+                        </form>
+                        </td></tr>
+                    ';
+                }
+            }
+
+            $result = cpg_db_query("SELECT DISTINCT(note) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate ORDER BY note");
+            if (mysql_num_rows($result)) {
+                $person_array = Array();
+                while ($row = mysql_fetch_assoc($result)) {
+                    $person_array[] = $row['note'];
+                }
+
+                echo '<tr><td class="tableb" align="left">';
+                for ($i = 0; $i < count($person_array); $i++) {
+                    echo "
+                        <a href=\"index.php?plugin=annotate&amp;rename_delete&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" class=\"image\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;rename_delete&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" class=\"image\" /></a>
+                        {$person_array[$i]}<br />
+                    ";
+                }
+                echo '</td></tr>';
+            }
+            mysql_free_result($result);
+        }
+
+        endtable();
+        pagefooter();
         exit;
     }
 }

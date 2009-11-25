@@ -69,4 +69,13 @@ $lang_plugin_annotate['display_notes'] = 'Zeige Schnellbeschriftungs-Buttons';
 $lang_plugin_annotate['display_notes_title'] = 'Zeige Buttons von bereits erstellten Beschriftungen des jeweiligen Albums im Buttonbereich (zur leichteren/schnelleren Beschriftung)';
 $lang_plugin_annotate['display_links'] = 'Zeige Markierungen über dem Bild';
 $lang_plugin_annotate['note_empty'] = 'Beschriftungen dürfen nicht leer sein!'; // JS-alert
+$lang_plugin_annotate['rename_delete'] = 'Beschriftungen verwalten';
+$lang_plugin_annotate['batch_rename'] = 'Batch-umbenennen';
+$lang_plugin_annotate['batch_delete'] = 'Batch-löschen';
+$lang_plugin_annotate['rename_to'] = 'umbenennen in';
+$lang_plugin_annotate['sure_rename'] = 'Soll "%s" wirklich in "%s" umbenannt werden?';
+$lang_plugin_annotate['rename_success'] = '"%s" wurde in "%s" umbenannt';
+$lang_plugin_annotate['rename_fail'] = '"%s" wurde <b>nicht</b> in "%s" umbenannt';
+$lang_plugin_annotate['sure_delete'] = 'Soll "%s" wirklich gelöscht werden?';
+$lang_plugin_annotate['delete_success'] = '"%s" wurde erfolgreich gelöscht';
 ?>

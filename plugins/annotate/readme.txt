@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-25 [A] Added annotation manager (batch rename, batch delete) {eenemeenemuu}
 2009-11-25 [A] Added check for empty annotations {eenemeenemuu}
 2009-11-25 [C] Moved 'on this pic' annotations above the picture {eenemeenemuu}
 2009-11-25 [C] Moved rapid annotation button to buttons section {eenemeenemuu}
@@ -89,4 +90,3 @@ Move embedded JS into separate file
 Fix JS errors in IE
 Test in bridging mode (especially configuration and permission level detection)
 Add import/convert button to copy annotations from old 'notes' table - maybe auto detect on plugin install
-Add annotation manager (batch rename, batch delete - partially done in eenemeenemuu's fork)
