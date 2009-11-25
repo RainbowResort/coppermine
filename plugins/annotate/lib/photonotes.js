@@ -326,15 +326,18 @@ PhotoNote.prototype.CreateElements = function()
 
     //attach mouse events to this element...
     addEvent(newAreaInner, 'mouseover', function() {
+            currentNote.hover = 1;
             currentNote.ShowNoteText();
         });
     addEvent(newAreaInner, 'mouseout', function() {
-
+            currentNote.hover = 0;
             if(!currentNote.selected)
             {
                 setTimeout(function () {
-                    currentNote.HideNoteText();
-                    }, 250);
+                    if (currentNote.hover == 0) {
+                        currentNote.HideNoteText();
+                    }
+                }, 500);
                     
             }
         });
@@ -356,12 +359,33 @@ PhotoNote.prototype.CreateElements = function()
     noteArea.className = 'fn-note';
     
     var titleArea = document.createElement('div');
-    //titleArea.className = 'fn-note-text';
     titleArea.className = 'tableh1';
     var t = document.createTextNode(this.text);
-    titleArea.appendChild(t);
+    var a = document.createElement('a');
+    a.href = 'thumbnails.php?album=shownotes&note=' + this.text;
+    a.title = sprintf(js_vars.lang_annotate_all_pics_of, this.text);
+    a.appendChild(t);
+    titleArea.appendChild(a);
     noteArea.appendChild(titleArea);
-    
+
+    //attach mouse events to this element...
+    addEvent(titleArea, 'mouseover', function() {
+            currentNote.hover = 1;
+            currentNote.ShowNoteText();
+        });
+    addEvent(titleArea, 'mouseout', function() {
+            currentNote.hover = 0;
+            if(!currentNote.selected)
+            {
+                setTimeout(function () {
+                    if (currentNote.hover == 0) {
+                        currentNote.HideNoteText();
+                    }
+                }, 500);
+                    
+            }
+        });
+
     var editArea = document.createElement('div');
     editArea.className = 'fn-note-edit';
     
@@ -385,34 +409,26 @@ PhotoNote.prototype.CreateElements = function()
     newButtonOK.value = js_vars.lang_annotate_save;
     newButtonOK.innerHTML = js_vars.icon_annotate_ok + js_vars.lang_annotate_save;
     newButtonOK.onclick = function() {
+
+        if(currentNote.onsave) {
+            /* nibbler */
+            currentNote.text = currentNote.gui.TextBox.value;
             
-            
-            if(currentNote.onsave) 
-            {
-                /* nibbler */
-                currentNote.text = currentNote.gui.TextBox.value;
-                
-                var res = currentNote.onsave(currentNote);
-                if(res > 0)
-                {
-                    //window.status = '';
-                    currentNote.id = res;
-                    currentNote.Save();
-                }
-                else
-                {
-                    alert(js_vars.lang_annotate_error_saving_note);
-                    currentNote.Cancel();                        
-                }
-            }
-            else
-            {
-                alert(js_vars.lang_annotate_onsave_not_implemented);
+            var res = currentNote.onsave(currentNote);
+            if(res > 0) {
+                //window.status = '';
+                currentNote.id = res;
+                currentNote.Save();
+            } else {
+                alert(js_vars.lang_annotate_error_saving_note);
                 currentNote.Cancel();                        
             }
-        
-             
-        };
+        } else {
+            alert(js_vars.lang_annotate_onsave_not_implemented);
+            currentNote.Cancel();                        
+        }
+
+    };
     buttonsDiv.appendChild(newButtonOK);
     
     var newButtonCancel = document.createElement('button');

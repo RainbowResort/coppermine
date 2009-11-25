@@ -65,8 +65,7 @@ $lang_plugin_annotate['annotation_type'] = 'Annotation type';
 $lang_plugin_annotate['free_text'] = 'Free text';
 $lang_plugin_annotate['drop_down_existing_annotations'] = 'Drop-down list of already existing annotations';
 $lang_plugin_annotate['drop_down_registered_users'] = 'Drop-down list of registered users';
-$lang_plugin_annotate['display_notes'] = 'Display buttons above the picture';
-$lang_plugin_annotate['display_notes_title'] = 'Display buttons of existing annotations of the currently viewed album for easier/faster annotation';
-$lang_plugin_annotate['display_links'] = 'Display links below the picture';
-$lang_plugin_annotate['display_links_title'] = 'When you click on that links, you will be directed to a meta album containing all pictures of that annotation';
+$lang_plugin_annotate['display_notes'] = 'Display rapid annotation buttons';
+$lang_plugin_annotate['display_notes_title'] = 'Display buttons of existing annotations of the currently viewed album in the buttons section (for easier/faster annotation)';
+$lang_plugin_annotate['display_links'] = 'Display annotations above the picture';
 ?>

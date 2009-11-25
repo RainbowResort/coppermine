@@ -38,6 +38,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-25 [C] Moved 'on this pic' annotations above the picture {eenemeenemuu}
+2009-11-25 [C] Moved rapid annotation button to buttons section {eenemeenemuu}
+2009-11-25 [A] Made annotation text clickable (go to meta album and show all pictures with the same annotation) {eenemeenemuu}
 2009-11-25 [S] Added permission check to meta albums {eenemeenemuu}
 2009-11-25 [O] Added function to save config values {eenemeenemuu}
 2009-11-13 [A] Added configuration options for displaying buttons/links above/below pictures {eenemeenemuu}

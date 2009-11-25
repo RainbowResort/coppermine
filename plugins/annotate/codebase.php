@@ -47,6 +47,7 @@ function annotate_meta($meta){
     set_js_var('lang_annotate_delete', $lang_common['delete']);
     set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
+    set_js_var('lang_annotate_all_pics_of', $lang_plugin_annotate['all_pics_of']);
     set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
     set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
     set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
@@ -65,7 +66,33 @@ function annotate_file_data($data){
     global $CONFIG, $LINEBREAK, $lang_plugin_annotate, $annotate_icon_array, $REFERER;
     // Determine if the visitor is allowed to have that button
     if (annotate_get_level('permissions') >= 2) {
-        if ($CONFIG['plugin_annotate_type'] > 0) { 
+
+        // list existing annotations of the currently viewed album
+        $btns_person = "";
+        if (annotate_get_level('display_notes') == 1) {
+            $superCage = Inspekt::MakeSuperCage();
+            if ($superCage->get->getInt('album')) {
+                $result = cpg_db_query("
+                    SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
+                    INNER JOIN {$CONFIG['TABLE_PICTURES']} p
+                    ON p.pid = n.pid
+                    WHERE p.aid = {$superCage->get->getInt('album')}
+                    ORDER BY note
+                ");
+
+                if (mysql_num_rows($result)) {
+                    $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
+                    while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+                        $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $row[0])."\">{$row[0]}</button> ";
+                    }
+                    $btns_person .= "</div>";
+                    $data['menu'] = $btns_person.$data['menu'];
+                }
+                mysql_free_result($result);
+            }
+        }
+
+        if ($CONFIG['plugin_annotate_type'] > 0) {
             // free text
             if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
                 $data['menu'] .= <<< EOT
@@ -176,32 +203,6 @@ EOT;
             $html = $panorama_viewer_matches[1].$html.$panorama_viewer_matches[3];
         }
 
-        $superCage = Inspekt::MakeSuperCage();
-
-        // list existing annotations of the currently viewed album
-        $btns_person = "";
-        if (annotate_get_level('display_notes') == 1 && annotate_get_level('permissions') >= 2) {
-            if ($superCage->get->getInt('album')) {
-                $result = cpg_db_query("
-                    SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
-                    INNER JOIN {$CONFIG['TABLE_PICTURES']} p
-                    ON p.pid = n.pid
-                    WHERE p.aid = {$superCage->get->getInt('album')}
-                    ORDER BY note
-                ");
-
-                if (mysql_num_rows($result)) {
-                    $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
-                    while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-                        $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $row[0])."\">{$row[0]}</button> ";
-                    }
-                    $btns_person .= "</div>";
-                    $html = $btns_person.$html;
-                }
-                mysql_free_result($result);
-            }
-        }
-
         // list annotations from the currently viewed picture and generate link to meta album
         if (annotate_get_level('display_links') == 1 && $nr_notes > 0) {
             $on_this_pic_array = array();
@@ -216,7 +217,7 @@ EOT;
                 $on_this_pic_div .= $value;
             }
             $on_this_pic_div .= "</div>";
-            $html .= $on_this_pic_div;
+            $html = $on_this_pic_div.$html;
         }
 
         $permission_level = annotate_get_level('permissions');
@@ -944,7 +945,7 @@ EOT;
                     </tr>
                     <tr>
                         <td valign="top" class="tableb">
-                            {$lang_plugin_annotate['display_links']} <img src="./images/help.gif" border="0" title="{$lang_plugin_annotate['display_links_title']}" />
+                            {$lang_plugin_annotate['display_links']}
                         </td>
                         <td valign="top" class="tableb" colspan="2">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
