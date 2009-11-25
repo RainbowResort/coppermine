@@ -412,6 +412,12 @@ PhotoNote.prototype.CreateElements = function()
 
         if(currentNote.onsave) {
             /* nibbler */
+            if (currentNote.gui.TextBox.value.length < 1)
+            {
+              alert(js_vars.lang_annotate_note_empty);
+              die();
+            }
+
             currentNote.text = currentNote.gui.TextBox.value;
             
             var res = currentNote.onsave(currentNote);

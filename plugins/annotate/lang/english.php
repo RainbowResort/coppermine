@@ -68,4 +68,5 @@ $lang_plugin_annotate['drop_down_registered_users'] = 'Drop-down list of registe
 $lang_plugin_annotate['display_notes'] = 'Display rapid annotation buttons';
 $lang_plugin_annotate['display_notes_title'] = 'Display buttons of existing annotations of the currently viewed album in the buttons section (for easier/faster annotation)';
 $lang_plugin_annotate['display_links'] = 'Display annotations above the picture';
+$lang_plugin_annotate['note_empty'] = 'Annotations may not be empty!'; // JS-alert
 ?>

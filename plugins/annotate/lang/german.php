@@ -68,4 +68,5 @@ $lang_plugin_annotate['drop_down_registered_users'] = 'Liste der registrierten B
 $lang_plugin_annotate['display_notes'] = 'Zeige Schnellbeschriftungs-Buttons';
 $lang_plugin_annotate['display_notes_title'] = 'Zeige Buttons von bereits erstellten Beschriftungen des jeweiligen Albums im Buttonbereich (zur leichteren/schnelleren Beschriftung)';
 $lang_plugin_annotate['display_links'] = 'Zeige Markierungen über dem Bild';
+$lang_plugin_annotate['note_empty'] = 'Beschriftungen dürfen nicht leer sein!'; // JS-alert
 ?>

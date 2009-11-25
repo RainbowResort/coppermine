@@ -48,6 +48,7 @@ function annotate_meta($meta){
     set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
     set_js_var('lang_annotate_all_pics_of', $lang_plugin_annotate['all_pics_of']);
+    set_js_var('lang_annotate_note_empty', $lang_plugin_annotate['note_empty']);
     set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
     set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
     set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
