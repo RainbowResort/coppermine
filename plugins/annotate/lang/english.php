@@ -69,7 +69,7 @@ $lang_plugin_annotate['display_notes'] = 'Display rapid annotation buttons';
 $lang_plugin_annotate['display_notes_title'] = 'Display buttons of existing annotations of the currently viewed album in the buttons section (for easier/faster annotation)';
 $lang_plugin_annotate['display_links'] = 'Display annotations above the picture';
 $lang_plugin_annotate['note_empty'] = 'Annotations may not be empty!'; // JS-alert
-$lang_plugin_annotate['rename_delete'] = 'Manage annotations';
+$lang_plugin_annotate['manage'] = 'Manage annotations';
 $lang_plugin_annotate['batch_rename'] = 'Batch rename';
 $lang_plugin_annotate['batch_delete'] = 'Batch delete';
 $lang_plugin_annotate['rename_to'] = 'rename to';
@@ -78,4 +78,5 @@ $lang_plugin_annotate['rename_success'] = '\'%s\' was renamed to \'%s\'';
 $lang_plugin_annotate['rename_fail'] = '\'%s\' was <b>not</b> renamed to \'%s\'';
 $lang_plugin_annotate['sure_delete'] = 'Do you really want to delete \'%s\'?';
 $lang_plugin_annotate['delete_success'] = '\'%s\' was deleted successfully';
+$lang_plugin_annotate['import'] = 'Import annotations';
 ?>

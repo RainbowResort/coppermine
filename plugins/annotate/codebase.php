@@ -459,19 +459,23 @@ function annotate_page_start() {
         load_template();
         pageheader($lang_plugin_annotate['delete_orphaned_entries']);
 
-        $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']}");
-        $pids = array();
-        while ($row = mysql_fetch_row($result)) {
-            $pids[] = $row[0];
-        }
-        $pids = implode(",", $pids);
-        mysql_free_result($result);
+        if (version_compare(cpg_phpinfo_mysql_version(), '4.1', '>=')) {
+            // we can use subqueries here
+            cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN (SELECT pid FROM {$CONFIG['TABLE_PICTURES']})");
+        } else {
+            $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']}");
+            $pids = array();
+            while ($row = mysql_fetch_row($result)) {
+                $pids[] = $row[0];
+            }
+            $pids = implode(",", $pids);
+            mysql_free_result($result);
 
-        $result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
-        list($count) = mysql_fetch_row($result);
-        mysql_free_result($result);
-        
-        cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
+            // cpg_db_query can cause browser to crash if debug output is enabled
+            mysql_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid NOT IN ($pids)");
+        }
+        $count = mysql_affected_rows();
+
         if ($count == 1) {
             $count_output = $lang_plugin_annotate['1_orphaned_entry_deleted'];
         } else {
@@ -486,6 +490,7 @@ function annotate_page_start() {
         </tr>
 EOT;
         endtable();
+        pagefooter();
         exit;
     }
 
@@ -516,10 +521,11 @@ EOT;
         </tr>
 EOT;
         endtable();
+        pagefooter();
         exit;
     }
 
-    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('rename_delete')) {
+    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('manage')) {
         if (!GALLERY_ADMIN_MODE) {
             return;
         }
@@ -538,25 +544,25 @@ EOT;
             }
             if ($superCage->get->keyExists('batch_rename')) {
                 if (strlen($superCage->post->getRaw('note_new')) < 1) {
-                    header("Location: index.php?plugin=annotate&rename_delete&batch_rename&status=0&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=0&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
                 } else {
                     cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET note = '{$superCage->post->getRaw('note_new')}' WHERE note = '{$superCage->post->getRaw('note_old')}'");
-                    header("Location: index.php?plugin=annotate&rename_delete&batch_rename&status=1&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=1&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
                 }
             }
             if ($superCage->get->keyExists('batch_delete')) {
                 cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE note = '{$superCage->post->getRaw('note_old')}'");
-                header("Location: index.php?plugin=annotate&rename_delete&batch_delete&status=1&note_old={$superCage->post->getRaw('note_old')}");
+                header("Location: index.php?plugin=annotate&manage&batch_delete&status=1&note_old={$superCage->post->getRaw('note_old')}");
             }
         }
 
-        pageheader($lang_plugin_annotate['rename_delete']);
+        pageheader($lang_plugin_annotate['manage']);
         if ($superCage->get->keyExists('batch_rename')) {
             starttable("100%", $lang_plugin_annotate['batch_rename']);
         } elseif ($superCage->get->keyExists('batch_delete')) {
             starttable("100%", $lang_plugin_annotate['batch_delete']);
         } else {
-            starttable("100%", $lang_plugin_annotate['rename_delete']);
+            starttable("100%", $lang_plugin_annotate['manage']);
         }
 
         if ($superCage->post->keyExists('sure')) {
@@ -572,7 +578,7 @@ EOT;
                 list($timestamp, $form_token) = getFormToken();
                 echo '
                     <tr><td class="tableb">
-                    <form method="post" action="index.php?plugin=annotate&rename_delete&batch_rename">
+                    <form method="post" action="index.php?plugin=annotate&manage&batch_rename">
                     '.sprintf($lang_plugin_annotate['sure_rename'], $superCage->post->getRaw('note_old'), $note_new).'
                     <input type="hidden" name="note_old" class="textinput" value="'.$superCage->post->getRaw('note_old').'" readonly="readonly">
                     <input type="hidden" name="note_new" class="textinput" value="'.$note_new.'" readonly="readonly">
@@ -589,7 +595,7 @@ EOT;
                 list($timestamp, $form_token) = getFormToken();
                 echo '
                     <tr><td class="tableb">
-                    <form method="post" action="index.php?plugin=annotate&rename_delete&batch_delete">
+                    <form method="post" action="index.php?plugin=annotate&manage&batch_delete">
                     '.sprintf($lang_plugin_annotate['sure_delete'], $superCage->post->getRaw('note_old')).'
                     <input type="hidden" name="note_old" class="textinput" value="'.$superCage->post->getRaw('note_old').'" readonly="readonly">
                     <input type="hidden" name="form_token" value="'.$form_token.'" />
@@ -653,8 +659,8 @@ EOT;
                 echo '<tr><td class="tableb" align="left">';
                 for ($i = 0; $i < count($person_array); $i++) {
                     echo "
-                        <a href=\"index.php?plugin=annotate&amp;rename_delete&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" class=\"image\" /></a>
-                        <a href=\"index.php?plugin=annotate&amp;rename_delete&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" class=\"image\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" class=\"image\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" class=\"image\" /></a>
                         {$person_array[$i]}<br />
                     ";
                 }
@@ -732,11 +738,6 @@ function annotate_get_pic_pos($album) {
 
 // New meta albums
 function annotate_meta_album($meta) {
-    if (annotate_get_level('permissions') < 1) {
-        global $lang_errors;
-        cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
-    }
-
     global $CONFIG, $CURRENT_CAT_NAME, $RESTRICTEDWHERE, $lang_plugin_annotate;
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
@@ -777,6 +778,11 @@ function annotate_meta_album($meta) {
             break;
 
         case 'shownotes':
+            if (annotate_get_level('permissions') < 1) {
+                global $lang_errors;
+                cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+            }
+
             $superCage = Inspekt::makeSuperCage();
             $note = $superCage->get->keyExists('note') ? $superCage->get->getEscaped('note') : $superCage->cookie->getEscaped($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
