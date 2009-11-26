@@ -121,12 +121,14 @@ PhotoNoteContainer.prototype.EnableAllNotes = function()
 /*********************************************************/
 /*** Photo Note ******************************************/
 /*********************************************************/
-function PhotoNote(text,id,rect)
+function PhotoNote(text,id,rect,annotator_name,annotator_id)
 {
     var props = {
-        text: text,                   
+        text: text,
         id: id,
-        rect: rect,                    
+        rect: rect,
+        annotator_name: annotator_name,
+        annotator_id: annotator_id,
         selected: false,
         container: null,
         dragresize: null,
@@ -359,13 +361,29 @@ PhotoNote.prototype.CreateElements = function()
     noteArea.className = 'fn-note';
     
     var titleArea = document.createElement('div');
-    titleArea.className = 'tableh1';
-    var t = document.createTextNode(this.text);
+    titleArea.className = 'tableh1 statlink fn-note-text';
     var a = document.createElement('a');
     a.href = 'thumbnails.php?album=shownotes&note=' + this.text;
     a.title = sprintf(js_vars.lang_annotate_all_pics_of, this.text);
-    a.appendChild(t);
+    a.appendChild(document.createTextNode(this.text));
+    a.className = 'font-weight-bold';
     titleArea.appendChild(a);
+
+    // add annotator name and link to profile
+    titleArea.appendChild(document.createElement('br'));
+    titleArea.appendChild(document.createElement('br'));
+    var i = document.createElement('i');
+    i.appendChild(document.createTextNode(js_vars.lang_annotate_annotated_by + ':'));
+    i.className = 'font-weight-normal';
+    titleArea.appendChild(i);
+    titleArea.appendChild(document.createElement('br'));
+    var a = document.createElement('a');
+    a.href = 'profile.php?uid=' + this.annotator_id;
+    a.title = sprintf(js_vars.lang_annotate_view_profile, this.annotator_name);
+    a.appendChild(document.createTextNode(this.annotator_name));
+    a.className = 'font-weight-normal';
+    titleArea.appendChild(a);
+
     noteArea.appendChild(titleArea);
 
     //attach mouse events to this element...

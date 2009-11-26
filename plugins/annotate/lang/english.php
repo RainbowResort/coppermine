@@ -82,4 +82,6 @@ $lang_plugin_annotate['import'] = 'Import annotations';
 $lang_plugin_annotate['import_found'] = 'Found %s annotations';
 $lang_plugin_annotate['imported_already'] = 'Import has already been executed';
 $lang_plugin_annotate['import_success'] = 'Imported %s annotations';
+$lang_plugin_annotate['annotated_by'] = 'Annotated by';
+$lang_plugin_annotate['view_profile'] = 'View profile of \'%s\'';
 ?>

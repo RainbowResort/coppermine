@@ -82,4 +82,6 @@ $lang_plugin_annotate['import'] = 'Beschriftungen importieren';
 $lang_plugin_annotate['import_found'] = '%s Beschriftungen gefunden';
 $lang_plugin_annotate['imported_already'] = 'Der Import wurde bereits ausgeführt';
 $lang_plugin_annotate['import_success'] = '%s Beschriftungen importiert';
+$lang_plugin_annotate['annotated_by'] = 'Beschriftet von';
+$lang_plugin_annotate['view_profile'] = 'Profil von "%s" anzeigen';
 ?>

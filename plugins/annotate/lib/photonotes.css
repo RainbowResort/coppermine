@@ -62,6 +62,18 @@ container-inactive container-active
     z-index:5000;
 }
 
+.fn-note-text {
+    text-align: left;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
+.font-weight-normal {
+    font-weight: normal;
+}
+
 .fn-note-edit-text {
     border: 1px solid #000000;
 }

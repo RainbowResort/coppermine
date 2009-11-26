@@ -49,6 +49,8 @@ function annotate_meta($meta){
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
     set_js_var('lang_annotate_all_pics_of', $lang_plugin_annotate['all_pics_of']);
     set_js_var('lang_annotate_note_empty', $lang_plugin_annotate['note_empty']);
+    set_js_var('lang_annotate_annotated_by', $lang_plugin_annotate['annotated_by']);
+    set_js_var('lang_annotate_view_profile', $lang_plugin_annotate['view_profile']);
     set_js_var('icon_annotate_ok', $annotate_icon_array['ok']);
     set_js_var('icon_annotate_cancel', $annotate_icon_array['cancel']);
     set_js_var('icon_annotate_delete', $annotate_icon_array['delete']);
@@ -140,19 +142,19 @@ EOT;
             }
         }
 
-        $sql = "SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE pid = {$data['pid']}";
+        $sql = "SELECT n.*, u.user_name FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_USERS']} u ON n.user_id = u.user_id WHERE n.pid = {$data['pid']}";
         $result = cpg_db_query($sql);
-        
+
         $notes = array();
-        
+
         while ($row = mysql_fetch_assoc($result)) {
             //$row['note'] = addslashes($row['note']);
             $notes[] = $row;
         }
-                
+
         mysql_free_result($result);
         $nr_notes = count($notes);
-        
+
         // Visitor can view annotations in the first place?
         if (USER_ID && annotate_get_level('permissions') == 0) {
             // Stop processing the annotations any further
@@ -179,7 +181,7 @@ EOT;
             // Stop processing the annotations any further
             return $data;
         } 
-    
+
         $jsarray = arrayToJS4($notes, 'annotations');
 
         $html =& $data['html'];
@@ -240,7 +242,7 @@ var notes = new PhotoNoteContainer(container);
 for (var n = 0; n < annotations.length; n++){
     /* create a note */
     var size = new PhotoNoteRect(annotations[n].posx, annotations[n].posy, annotations[n].width, annotations[n].height);
-    var note = new PhotoNote(annotations[n].note,'note' + n, size);
+    var note = new PhotoNote(annotations[n].note,'note' + n, size, annotations[n].user_name, annotations[n].user_id);
     /* implement the save/delete functions */
     note.onsave = function (note) { return ajax_save(note); };
     note.ondelete = function (note) { return ajax_delete(note); };
@@ -524,7 +526,7 @@ EOT;
             } elseif ($CONFIG['plugin_annotate_import'] == "1") {
                 echo '<tr><td class="tableb">'.$lang_plugin_annotate['imported_already'].'</td></tr>';
             } else {
-                echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['import_found'], $notes_to_import).'<a href="index.php?plugin=annotate&import&do" class="admin_menu">'.$lang_plugin_annotate['import'].'</a></td></tr>';
+                echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['import_found'], $notes_to_import).' <a href="index.php?plugin=annotate&import&do" class="admin_menu">'.$lang_plugin_annotate['import'].'</a></td></tr>';
             }
         }
         endtable();
