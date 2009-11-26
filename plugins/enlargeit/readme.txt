@@ -8,7 +8,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -96,6 +95,14 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-26 [M] Version count updated to 1.3 {GauGau}
+2009-11-26 [A] Added background image preview {GauGau}
+2009-11-26 [A] Added permission checks to download script {GauGau}
+2009-11-26 [A] Added form token check {GauGau}
+2009-11-26 [A] Added credits to config screen output {GauGau}
+2009-11-26 [B] Fixed broken maximize option (permission settings for full-size access exist in cpg1.5.x's core, so there is no need for a granular check inside this plugin) {GauGau}
+2009-11-26 [O] Turned download script into single file {GauGau}
+2009-11-26 [A] Added garbage collection feature for histogram files {GauGau}
 2009-11-25 [M] Version count updated to 1.2 {GauGau}
 2009-11-25 [A] Added histogram cache database recording {GauGau}
 2009-11-25 [A] Added version number output on config screen {GauGau}
@@ -161,5 +168,4 @@ Changelog
 
 To Do
 =====
-* Implement a feature to clear histcache (garbage collection)
 * Implement a function to check permissions

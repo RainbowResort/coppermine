@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -239,16 +238,6 @@ EOT;
 EOT;
             $loopCounter++;
         }
-        // Button "Favorites"
-        if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
-		    $meta  .= <<< EOT
-        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&pid=';
-        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['favorites']}';
-        enl_buttonoff[{$loopCounter}] = -32;
-
-EOT;
-            $loopCounter++;
-        }
         // Button "Pic Info"
         if ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') {
 		    $meta  .= <<< EOT
@@ -263,6 +252,16 @@ EOT;
         enl_buttonurl[{$loopCounter}] = 'site:displayimage.php?pid=';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['show_info']}';
         enl_buttonoff[{$loopCounter}] = -16;
+
+EOT;
+            $loopCounter++;
+        }
+        // Button "Favorites"
+        if ($CONFIG['plugin_enlargeit_buttonfav'] == '1') {
+		    $meta  .= <<< EOT
+        enl_buttonurl[{$loopCounter}] = 'index.php?file=enlargeit/addfav&pid=';
+        enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['favorites']}';
+        enl_buttonoff[{$loopCounter}] = -32;
 
 EOT;
             $loopCounter++;
@@ -298,24 +297,24 @@ EOT;
             $loopCounter++;
         }
         // Button "Expand"
-        if ($CONFIG['plugin_enlargeit_buttonmax'] == '1' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '2')) {
-		    $meta  .= <<< EOT
+        if ($CONFIG['plugin_enlargeit_maximizemethod'] == '1') {
+		    if ((USER_ID && $USER_DATA['access_level'] == '3') || (!USER_ID && $CONFIG['allow_unlogged_access'] == '3')) {
+				$meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'max';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['full_size']}';
         enl_buttonoff[{$loopCounter}] = -144;
-
 EOT;
-            $loopCounter++;
-        }
-        // Button "Expand"
-        if ($CONFIG['plugin_enlargeit_buttonmax'] == '3' || (USER_ID && $CONFIG['plugin_enlargeit_buttonmax'] == '4')) {
-		    $meta  .= <<< EOT
+				$loopCounter++;
+			}
+        } elseif ($CONFIG['plugin_enlargeit_maximizemethod'] == '0') {
+		    if ((USER_ID && $USER_DATA['access_level'] == '3') || (!USER_ID && $CONFIG['allow_unlogged_access'] == '3')) {
+				$meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'maxpop';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['full_size']}';
         enl_buttonoff[{$loopCounter}] = -144;
-
 EOT;
-            $loopCounter++;
+				$loopCounter++;
+			}
         }
         // Buttons "Previous" + "Next" (Navigation)
         if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
@@ -360,14 +359,10 @@ function enl_thumb()
   global $CONFIG, $template_thumbnail_view, $lang_plugin_enlargeit;
   // get language
   require_once('./plugins/enlargeit/init.inc.php');
-
   // change thumb template if enlargeit is active for current user
-  if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']))
-  {
+  if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode'])) {
     // do nothing
-  }
-  else
-  {
+  } else {
     $template_thumbnail_view = <<<EOT
 
 <!-- BEGIN header -->
@@ -447,7 +442,6 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonbbcode', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonhist', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonvote', '0')");
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonmax', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonclose', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonnav', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_adminmode', '1')");
@@ -462,7 +456,12 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_brdbck', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_darkensteps', '20')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_adminmenu', '1')");
-	cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PICTURES']} ADD histogram enum('YES','NO') NOT NULL default 'NO';");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_cachecontrol', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_cachemaxage', '30')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_cachemaxsizemb', '10')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_maximizemethod', '1')");
+	cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PICTURES']} ADD histogram_filesize int(11) NOT NULL default '0'");
+	cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PICTURES']} ADD histogram_timestamp int(11) NOT NULL default '0'");
     return true;
 }
 
@@ -475,6 +474,16 @@ function enlargeit_uninstall() {
         global $lang_errors;
         cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
     }
+	// Delete the histogram cache
+	$result = cpg_db_query("SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_filesize<>'0'");
+	if (mysql_num_rows($result)) {
+		while ( ($data = mysql_fetch_assoc($result)) ) {
+			$delete = cpg_folder_file_delete($CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png');
+			print $CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png<br />';
+		}
+	}
+	mysql_free_result($result);
+
     // Delete the plugin config records
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdsize'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdround'");
@@ -499,7 +508,6 @@ function enlargeit_uninstall() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonbbcode'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonhist'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonvote'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonmax'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonclose'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_buttonnav'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_adminmode'");
@@ -514,7 +522,12 @@ function enlargeit_uninstall() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_brdbck'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_darkensteps'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_adminmenu'");
-	cpg_db_query("ALTER TABLE `{$CONFIG['TABLE_PICTURES']}` DROP `histogram`");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_cachecontrol'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_cachemaxage'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_cachemaxsizemb'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_maximizemethod'");
+	cpg_db_query("ALTER TABLE `{$CONFIG['TABLE_PICTURES']}` DROP `histogram_filesize`");
+	cpg_db_query("ALTER TABLE `{$CONFIG['TABLE_PICTURES']}` DROP `histogram_timestamp`");
     return true;
 }
 ?>

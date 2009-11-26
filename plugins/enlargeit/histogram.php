@@ -9,12 +9,24 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
   **************************************************/
+
+if (!USER_ID && ($CONFIG['allow_unlogged_access'] <= 1)) {
+    $redirect = 'login.php';
+    if ($matches = $superCage->server->getMatched('QUERY_STRING', '/^[a-zA-Z0-9&=_\/.-]+$/')) {
+        $redirect .= '?force_login=1&referer='.urlencode('index.php?'.$matches[0]);
+    }
+    header("Location: $redirect");
+    exit();
+}
+
+if (USER_ID && (USER_ACCESS_LEVEL <= 1)) {
+    cpg_die(ERROR, ((USER_ACCESS_LEVEL == 1) ? $lang_errors['access_thumbnail_only'] : $lang_errors['access_none']));
+}
 
 $pid    = $superCage->get->getInt('pid');
 $pos    = $superCage->get->getInt('pos');
@@ -66,10 +78,10 @@ if ($action == 'image') {
     for($pos = 0; $pic_data[$pos]['pid'] != $pid && $pos < $pic_count; $pos++);
     $pic_data = get_pic_data($album, $pic_count, $album_name, $pos, 1, false);
     $CURRENT_PIC_DATA = $pic_data[0];
-    $result = cpg_db_query("SELECT histogram FROM {$CONFIG['TABLE_PICTURES']} AS histogram WHERE pid='{$CURRENT_PIC_DATA['pid']}' LIMIT 1");
+    $result = cpg_db_query("SELECT histogram_filesize FROM {$CONFIG['TABLE_PICTURES']} AS histogram_filesize WHERE pid='{$CURRENT_PIC_DATA['pid']}' LIMIT 1");
     $row = mysql_fetch_assoc($result);
     mysql_free_result($result);
-    $CURRENT_PIC_DATA['histogram'] = $row['histogram'];
+    $CURRENT_PIC_DATA['histogram_filesize'] = $row['histogram_filesize'];
     
     //      Histogram creation
     //      Created by Anton Sparrius (Spaz) 6/9/05  anton_spaz@yahoo.com
@@ -85,7 +97,7 @@ if ($action == 'image') {
 	$filenameWithoutExtension = str_replace('.' . ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.'), '', $CURRENT_PIC_DATA['filename']);
     $enl_histfile = "histogram_".$filenameWithoutExtension . '.png'; // The file name for the histogram file (target file)
 
-    if ($CURRENT_PIC_DATA['histogram'] == 'YES' && file_exists($enl_histpath.$enl_histfile)) {
+    if ($CURRENT_PIC_DATA['histogram_filesize'] != '0' && file_exists($enl_histpath.$enl_histfile)) {
         // Both the database record as well as the file are there, so let's go ahead and display the histogram file
         header('Content-type: image/png');
         readfile ($enl_histpath.$enl_histfile);
@@ -93,6 +105,7 @@ if ($action == 'image') {
         if (file_exists($enl_histpath.$enl_histfile)) {
             // The file is there, but the corresponding database record is not, so let's create it from fresh
             cpg_folder_file_delete($enl_histpath.$enl_histfile);
+			cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram_filesize='0', histogram_timestamp='0' WHERE pid='{$CURRENT_PIC_DATA['pid']}'");
         }
         $im = imagecreatefromjpeg($enl_histpath.$enl_histimage);
         for ($i = 0; $i < imagesx($im); $i+=2) {
@@ -143,9 +156,10 @@ if ($action == 'image') {
         imagedestroy($im_out);
         $im = imagecreatefrompng($enl_histpath.$enl_histfile);
         imagedestroy($im);
+		$image_filesize = filesize($enl_histpath.$enl_histfile);
         // Perform the database query to populate the pictures table record
-        if (file_exists($enl_histpath.$enl_histfile)) {
-            cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram='YES' WHERE pid='{$CURRENT_PIC_DATA['pid']}'");
+        if (file_exists($enl_histpath.$enl_histfile) && $image_filesize > 0) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram_filesize='{$image_filesize}', histogram_timestamp='" . time() . "' WHERE pid='{$CURRENT_PIC_DATA['pid']}'");
         }
         header('Content-type: image/png');
         readfile ($enl_histpath.$enl_histfile);
@@ -166,6 +180,50 @@ if ($action == 'image') {
     </tr>
 </table>
 EOT;
-
+	// Perform the garbage collection if needed
+	if ($CONFIG['plugin_enlargeit_cachecontrol'] == '1') {
+    	// Gargabe control by max age
+    	$time_limit = time() - ($CONFIG['plugin_enlargeit_cachemaxage'] * 24 * 60 * 60);
+    	$result = cpg_db_query("SELECT pid, filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_timestamp<'{$time_limit}' AND histogram_filesize<>'0'");
+    	$success_array = array();
+        if (mysql_num_rows($result)) {
+            while ( ($data = mysql_fetch_assoc($result)) ) {
+                $delete = cpg_folder_file_delete($CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png');
+                clearstatcache();
+                if (file_exists($CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png') != TRUE) {
+                    $success_array[] = $data['pid'];
+                }
+            }
+        }
+        mysql_free_result($result);
+        foreach ($success_array as $key) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram_filesize='0', histogram_timestamp='0' WHERE pid='{$key}'");
+        }
+	} elseif ($CONFIG['plugin_enlargeit_cachecontrol'] == '2') {
+        // Garbage collection by maximum storage
+        $result = cpg_db_query("SELECT SUM(histogram_filesize) AS sum_histogram FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_filesize>'0'");
+        $row = mysql_fetch_assoc($result);
+        $cache_sum = $row['sum_histogram'];
+        mysql_free_result($result);
+        $result = cpg_db_query("SELECT pid, filepath, filename, histogram_filesize, histogram_timestamp FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_filesize<>'0' ORDER BY histogram_timestamp ASC");
+        $success_array = array();
+        if (mysql_num_rows($result)) {
+            $success_array = array();
+            while ( ($data = mysql_fetch_assoc($result)) ) {
+                if (($CONFIG['plugin_enlargeit_cachemaxsizemb'] * 1048576) < $cache_sum) { //  1048576
+                    $delete = cpg_folder_file_delete($CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png');
+                    clearstatcache();
+                    if (file_exists($CONFIG['fullpath'] . $data['filepath'] . 'histogram_' . str_replace('.' . ltrim(substr($data['filename'], strrpos($data['filename'], '.')), '.'), '', $data['filename']) . '.png') != TRUE) {
+                        $success_array[] = $data['pid'];
+                        $cache_sum = $cache_sum - $data['histogram_filesize'];
+                    }
+                }
+            }
+        }
+        mysql_free_result($result);
+        foreach ($success_array as $key) {
+            cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET histogram_filesize='0', histogram_timestamp='0' WHERE pid='{$key}'");
+        }
+	}
 }
 ?>

@@ -8,6 +8,11 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 require('./plugins/enlargeit/configuration.php');
@@ -24,7 +29,6 @@ if (in_array('plugins/enlargeit/js/config.js', $JS['includes']) != TRUE) {
 // create Inspekt supercage
 $superCage = Inspekt::makeSuperCage();
 
-global $CONFIG,$lang_plugin_enlargeit,$lang_meta_album_names;
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
@@ -39,7 +43,11 @@ if($lang_text_dir=='ltr') {
 }
 
 // get sanitized POST parameters
-if ($superCage->post->keyExists('update')) {
+if ($superCage->post->keyExists('submit')) {
+	//Check if the form token is valid
+	if(!checkFormToken()){
+		cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+	}
   // Define the sanitization patterns
   $sanitization_array = array(
       'plugin_enlargeit_adminmode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
@@ -71,13 +79,16 @@ if ($superCage->post->keyExists('update')) {
       'plugin_enlargeit_buttonvote' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttoncomment' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttondownload' => array('type' => 'int', 'min' => '0', 'max' => '2'),
-      'plugin_enlargeit_buttonmax' => array('type' => 'int', 'min' => '0', 'max' => '2'),
       'plugin_enlargeit_buttonbbcode' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonhist' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonnav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonclose' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_flvplayer' => array('type' => 'int', 'min' => '0', 'max' => '2'),
       'plugin_enlargeit_adminmenu' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_enlargeit_cachecontrol' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+	  'plugin_enlargeit_cachemaxage' => array('type' => 'int', 'min' => '1', 'max' => '365'),
+	  'plugin_enlargeit_cachemaxsizemb' => array('type' => 'int', 'min' => '1', 'max' => '99'),
+	  'plugin_enlargeit_maximizemethod' => array('type' => 'int', 'min' => '0', 'max' => '1'),
   );
   $config_changes_counter = 0;
   foreach ($sanitization_array as $san_key => $san_value) {
@@ -175,7 +186,7 @@ for ($i = 0; $i < count($border_texture_array); $i++) {
 	} else {
 		$option_output['plugin_enlargeit_brdbck'][$i] = '';
 	}
-	$border_texture_options .= '<option value="'.$border_texture_array[$i].'" '.$option_output['plugin_enlargeit_brdbck'][$i].' >'.$lang_plugin_enlargeit[$border_texture_array[$i]].'</option>'.$LINEBREAK;
+	$border_texture_options .= '				<option value="'.$border_texture_array[$i].'" '.$option_output['plugin_enlargeit_brdbck'][$i].' >'.$lang_plugin_enlargeit[$border_texture_array[$i]].'</option>'.$LINEBREAK;
 }
 
 if ($CONFIG['plugin_enlargeit_brdround'] == '1') {
@@ -264,28 +275,22 @@ if ($CONFIG['plugin_enlargeit_buttondownload'] == '0') {
 	$option_output['plugin_enlargeit_buttondownload_0'] = 'checked="checked"';
 	$option_output['plugin_enlargeit_buttondownload_1'] = '';
 	$option_output['plugin_enlargeit_buttondownload_2'] = '';
-} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '1') { // 
+} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '1') {
 	$option_output['plugin_enlargeit_buttondownload_0'] = '';
 	$option_output['plugin_enlargeit_buttondownload_1'] = 'checked="checked"';
 	$option_output['plugin_enlargeit_buttondownload_2'] = '';
-} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '2') { // 
+} elseif ($CONFIG['plugin_enlargeit_buttondownload'] == '2') {
 	$option_output['plugin_enlargeit_buttondownload_0'] = '';
 	$option_output['plugin_enlargeit_buttondownload_1'] = '';
 	$option_output['plugin_enlargeit_buttondownload_2'] = 'checked="checked"';
 }
 
-if ($CONFIG['plugin_enlargeit_buttonmax'] == '0') {
-	$option_output['plugin_enlargeit_buttonmax_0'] = 'checked="checked"';
-	$option_output['plugin_enlargeit_buttonmax_1'] = '';
-	$option_output['plugin_enlargeit_buttonmax_2'] = '';
-} elseif ($CONFIG['plugin_enlargeit_buttonmax'] == '1') { // 
-	$option_output['plugin_enlargeit_buttonmax_0'] = '';
-	$option_output['plugin_enlargeit_buttonmax_1'] = 'checked="checked"';
-	$option_output['plugin_enlargeit_buttonmax_2'] = '';
-} elseif ($CONFIG['plugin_enlargeit_buttonmax'] == '2') { // 
-	$option_output['plugin_enlargeit_buttonmax_0'] = '';
-	$option_output['plugin_enlargeit_buttonmax_1'] = '';
-	$option_output['plugin_enlargeit_buttonmax_2'] = 'checked="checked"';
+if ($CONFIG['plugin_enlargeit_maximizemethod'] == '0') {
+	$option_output['plugin_enlargeit_maximizemethod_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_maximizemethod_1'] = '';
+} elseif ($CONFIG['plugin_enlargeit_maximizemethod'] == '1') {
+	$option_output['plugin_enlargeit_maximizemethod_0'] = '';
+	$option_output['plugin_enlargeit_maximizemethod_1'] = 'checked="checked"';
 }
 
 if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
@@ -296,8 +301,15 @@ if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 
 if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 	$option_output['plugin_enlargeit_buttonhist'] = 'checked="checked"';
+	$cache_visibility = 'visible';
 } else { 
 	$option_output['plugin_enlargeit_buttonhist'] = '';
+	$cache_visibility = 'hidden';
+	$option_output['plugin_enlargeit_cachecontrol_0'] = 'disabled="disabled"';
+	$option_output['plugin_enlargeit_cachecontrol_1'] = 'disabled="disabled"';
+	$option_output['plugin_enlargeit_cachecontrol_2'] = 'disabled="disabled"';
+	$option_output['plugin_enlargeit_cachemaxage'] = ' disabled="disabled"';
+	$option_output['plugin_enlargeit_cachemaxsizemb'] = ' disabled="disabled"';
 }
 
 if ($CONFIG['thumb_method'] == 'gd2' || version_compare($enlargeit_gd_version, '2', '>=')) { // Only display histogram option if GD2 is available.
@@ -309,11 +321,15 @@ if ($enlargeit_gd_version == '') {
     $enlargeit_gd_version = $lang_plugin_enlargeit['not_available'];
 }
 $gd_version_string = sprintf($lang_plugin_enlargeit['gd_version'], $enlargeit_gd_version);
-$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram='YES'");
+$result = cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_filesize>'0'");
 list($cache_count) = mysql_fetch_row($result);
 mysql_free_result($result);
-$cached_files = sprintf($lang_plugin_enlargeit['cached_files_x'], cpg_float2decimal($cache_count));
+$result = cpg_db_query("SELECT SUM(histogram_filesize) AS sum_histogram FROM {$CONFIG['TABLE_PICTURES']} WHERE histogram_filesize>'0'");
+$row = mysql_fetch_assoc($result);
+$cache_sum = $row['sum_histogram'];
+mysql_free_result($result);
 
+$cached_files = sprintf($lang_plugin_enlargeit['file_cache_x_files_using_x_bytes'], cpg_float2decimal($cache_count), cpg_format_bytes($cache_sum));
 
 if ($CONFIG['plugin_enlargeit_buttonnav'] == '1') {
 	$option_output['plugin_enlargeit_buttonnav'] = 'checked="checked"';
@@ -341,29 +357,64 @@ if ($CONFIG['plugin_enlargeit_adminmenu'] == '1') {
 	$option_output['plugin_enlargeit_adminmenu'] = '';
 }
 
+if ($CONFIG['plugin_enlargeit_cachecontrol'] == '0') {
+	$option_output['plugin_enlargeit_cachecontrol_0'] .= 'checked="checked"';
+	$option_output['plugin_enlargeit_cachecontrol_1'] .= '';
+	$option_output['plugin_enlargeit_cachecontrol_2'] .= '';
+} elseif ($CONFIG['plugin_enlargeit_cachecontrol'] == '1') { // 
+	$option_output['plugin_enlargeit_cachecontrol_0'] .= '';
+	$option_output['plugin_enlargeit_cachecontrol_1'] .= 'checked="checked"';
+	$option_output['plugin_enlargeit_cachecontrol_2'] .= '';
+} elseif ($CONFIG['plugin_enlargeit_cachecontrol'] == '2') { // 
+	$option_output['plugin_enlargeit_cachecontrol_0'] .= '';
+	$option_output['plugin_enlargeit_cachecontrol_1'] .= '';
+	$option_output['plugin_enlargeit_cachecontrol_2'] .= 'checked="checked"';
+}
+
 pageheader($lang_plugin_enlargeit['display_name']);
+list($timestamp, $form_token) = getFormToken();
 echo <<< EOT
 <form action="index.php?file=enlargeit/admin" method="post" name="enlargeit_settings">
 EOT;
-starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'] . ' v' . $version, 2, 'cpg_zebra');
+starttable('100%', $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['plugin_configuration'] . ': ' . $lang_plugin_enlargeit['main_title'] . ' v' . $version, 3, 'cpg_zebra');
 echo <<< EOT
 	<tr>
-		<td class="tablef" colspan="2" >
+		<td class="tablef" colspan="3" >
 EOT;
-if ($superCage->post->keyExists('update')) {
+if ($superCage->post->keyExists('submit')) {
     if ($config_changes_counter > 0) {
         msg_box('', $lang_plugin_enlargeit['update_success'], '', '', 'success');
     } else {
         msg_box('', $lang_plugin_enlargeit['no_changes'], '', '', 'validation');
     }
 } else {
-    echo '&copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)';
+    $credit_details = '';
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://enlargeit.timos-welt.de/" rel="external" class="external">EnlargeIt!</a>', 'Timo Schewe') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://forum.coppermine-gallery.net/index.php/topic,43180.0.html" rel="external" class="external">FLV player</a>', 'rphMedia') . '</li>' . $LINEBREAK;
+	$credit_details = '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://imageflow.finnrudolph.de/" rel="external" class="external">ImageFlow</a>', 'Finn Rudolph') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.osflv.com/" rel="external" class="external">FLV player OSFLV</a>', 'OSFLV') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], 'Histogram creation', '<a href="http://forum.coppermine-gallery.net/index.php?action=;u=10507" rel="external" class="external">Anton Sparrius (Spaz)</a>') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.everaldo.com/crystal/" rel="external" class="external">Crystal Clear icons</a>', 'Everaldo Coelho') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Farbtastic color picker</a>', 'Steven Wittens') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.softwareunity.com/jquery/JQuerySpinBtn/" rel="external" class="external">SpinButton jquery plugin</a>', 'George Adamson') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], 'Integration into cpg1.5.x', '<a href="http://gaugau.de/" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
+	
+	echo <<< EOT
+	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)<br />
+	<span class="detail_head_collapsed">{$lang_plugin_enlargeit['details']}</span>
+	<div id="creditdetails" class="detail_body">
+		{$lang_plugin_enlargeit['this_plugin_uses_the_following_components']}:
+		<ul>
+			{$credit_details}
+		</ul>
+	</div>
+EOT;
 }
 echo <<< EOT
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['enlargement_type']}
 		</td>
 	</tr>
@@ -371,7 +422,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['enable_for']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['administrators']}</label><br />
 			<input type="checkbox" name="plugin_enlargeit_registeredmode" id="plugin_enlargeit_registeredmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_registeredmode']} /><label for="plugin_enlargeit_registeredmode" class="clickable_option">{$lang_plugin_enlargeit['registered_users']}</label><br />
 			<input type="checkbox" name="plugin_enlargeit_guestmode" id="plugin_enlargeit_guestmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_guestmode']} /><label for="plugin_enlargeit_guestmode" class="clickable_option">{$lang_plugin_enlargeit['guests']}</label>
@@ -381,14 +432,14 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['enlarge_to_pic_in']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['intermediate_size']}</label><br />
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_1" class="radio" value="1" {$option_output['plugin_enlargeit_pictype_1']} /><label for="plugin_enlargeit_pictype_1" class="clickable_option">{$lang_plugin_enlargeit['full_size']}</label><br />
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_2" class="radio" value="2" {$option_output['plugin_enlargeit_pictype_2']} /><label for="plugin_enlargeit_pictype_2" class="clickable_option">{$lang_plugin_enlargeit['force_intermediate_size']}</label>
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['animation']}
 		</td>
 	</tr>
@@ -396,7 +447,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['animation_type']}
 		</td>
-		<td>
+		<td colspan="2">
 			<select name="plugin_enlargeit_ani" id="plugin_enlargeit_ani" class="listbox">
 				<option value="0" {$option_output['plugin_enlargeit_ani'][0]} >{$lang_plugin_enlargeit['none']}</option>
 				<option value="1" {$option_output['plugin_enlargeit_ani'][1]} >{$lang_plugin_enlargeit['fade']}</option>
@@ -414,7 +465,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['time_between_animation_steps']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" /> {$lang_plugin_enlargeit['milliseconds']}
 		</td>
 	</tr>
@@ -422,7 +473,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['animation_steps']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" />
 		</td>
 	</tr>
@@ -430,12 +481,12 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_opaglide" class="clickable_option">{$lang_plugin_enlargeit['transparency_for_glide']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_opaglide" id="plugin_enlargeit_opaglide" class="checkbox" value="1" {$option_output['plugin_enlargeit_opaglide']} />
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['border']}
 		</td>
 	</tr>
@@ -443,7 +494,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['border_width']}
 		</td>
-		<td>
+		<td valign="top" colspan="2">
 			<input type="text" name="plugin_enlargeit_brdsize" id="plugin_enlargeit_brdsize" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_brdsize']}" /> ({$lang_plugin_enlargeit['zero_to_disable']})
 		</td>
 	</tr>
@@ -451,32 +502,35 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['border_color']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_brdcolor" id="plugin_enlargeit_brdcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_brdcolor']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
-			<div id="colorpicker_bordercolor" class="detail_body">foo</div>
+			<div id="colorpicker_bordercolor" class="detail_body"></div>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['border_texture']}
 		</td>
-		<td>
+		<td valign="top">
 			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox">
 				{$border_texture_options}
 			</select>
+		</td>
+		<td valign="middle" align="center">
+			<div id="borderpreview" style="background-image:url(./plugins/enlargeit/images/backgrounds/{$CONFIG['plugin_enlargeit_brdbck']}.png);background-repeat:repeat;width:200px;">{$lang_plugin_enlargeit['preview']}</div>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_brdround" class="clickable_option">{$lang_plugin_enlargeit['round_border']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_brdround" id="plugin_enlargeit_brdround" class="checkbox" value="1" {$option_output['plugin_enlargeit_brdround']} /> ({$lang_plugin_enlargeit['mozilla_only']})
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['shadow']}
 		</td>
 	</tr>
@@ -484,7 +538,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['shadow_size']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
 		</td>
 	</tr>
@@ -492,12 +546,12 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['shadow_opacity']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_shadowintens" id="plugin_enlargeit_shadowintens" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_shadowintens']}" />
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['title_bar']}
 		</td>
 	</tr>
@@ -505,7 +559,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['show_titlebar']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} /> <label for="plugin_enlargeit_titlebar" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
@@ -513,7 +567,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['title_bar_text_color']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_titletxtcol" id="plugin_enlargeit_titletxtcol" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_titletxtcol']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
 			<div id="colorpicker_titletext" class="detail_body"></div>
@@ -523,14 +577,14 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['background_color_ajax_area']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_ajaxcolor" id="plugin_enlargeit_ajaxcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_ajaxcolor']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
 			<div id="colorpicker_backgroundcontent" class="detail_body"></div>
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['action']}
 		</td>
 	</tr>
@@ -538,7 +592,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['center_enlarge_images']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} /> <label for="plugin_enlargeit_center" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
@@ -546,7 +600,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enable_drag_drop']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} /> <label for="plugin_enlargeit_dragdrop" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
@@ -554,7 +608,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['mouse_wheel_navigation']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} /> <label for="plugin_enlargeit_wheelnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
@@ -562,7 +616,7 @@ echo <<< EOT
 		<td valign="top" valign="top">
 			{$lang_plugin_enlargeit['darken_screen']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_0" class="radio" value="0" {$option_output['plugin_enlargeit_dark_0']} /><label for="plugin_enlargeit_dark_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_1" class="radio" value="1" {$option_output['plugin_enlargeit_dark_1']} /><label for="plugin_enlargeit_dark_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['only_darken_when_image_shows']}</label><br />
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_2" class="radio" value="2" {$option_output['plugin_enlargeit_dark_2']} /><label for="plugin_enlargeit_dark_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['remain_dark_when_using_navigation']}</label>
@@ -572,7 +626,7 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['darken_strength']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_darkprct" id="plugin_enlargeit_darkprct" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkprct']}" /> %
 		</td>
 	</tr>
@@ -580,12 +634,12 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['darkening_speed']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="text" name="plugin_enlargeit_darkensteps" id="plugin_enlargeit_darkensteps" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkensteps']}" /> ({$lang_plugin_enlargeit['darkening_speed_explain']})
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['buttons']}
 		</td>
 	</tr>
@@ -593,7 +647,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonpic" class="clickable_option">{$enlargeit_icon_array['show']} {$lang_plugin_enlargeit['button_picture']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonpic" id="plugin_enlargeit_buttonpic" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonpic']} />
 		</td>
 	</tr>
@@ -601,7 +655,7 @@ echo <<< EOT
 		<td valign="top">
 			{$enlargeit_icon_array['info']} {$lang_plugin_enlargeit['button_info']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttoninfo_0']} /><label for="plugin_enlargeit_buttoninfo_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttoninfo_1']} /><label for="plugin_enlargeit_buttoninfo_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_as_ajax']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_intermediate_page']}</label>
@@ -611,7 +665,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonfav" class="clickable_option">{$enlargeit_icon_array['favorites']} {$lang_plugin_enlargeit['button_favorites']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonfav" id="plugin_enlargeit_buttonfav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonfav']} />
 		</td>
 	</tr>
@@ -619,7 +673,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['button_vote']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonvote" id="plugin_enlargeit_buttonvote" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonvote']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
 		</td>
 	</tr>
@@ -627,7 +681,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttoncomment" class="clickable_option">{$enlargeit_icon_array['comment']} {$lang_plugin_enlargeit['button_comments']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttoncomment" id="plugin_enlargeit_buttoncomment" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttoncomment']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
 		</td>
 	</tr>
@@ -635,33 +689,32 @@ echo <<< EOT
 		<td valign="top">
 			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['button_download']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttondownload_0']} /><label for="plugin_enlargeit_buttondownload_0" class="clickable_option">{$lang_common['no']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_registered_users']}</label>
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_registered_users_only']}</label><br />
+			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['button_maximize']}<br />Needs manual editing later, as the orginal options are silly!
+			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['maximize_method']}
 		</td>
-		<td>
-			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttonmax_0']} /><label for="plugin_enlargeit_buttonmax_0" class="clickable_option">{$lang_common['no']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttonmax_1']} /><label for="plugin_enlargeit_buttonmax_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['as_popup_window']}</label><br />
-			<input type="radio" name="plugin_enlargeit_buttonmax" id="plugin_enlargeit_buttonmax_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttonmax_2']} /><label for="plugin_enlargeit_buttonmax_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_as_ajax']}</label>
+		<td colspan="2">
+			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_0" class="radio" value="0" {$option_output['plugin_enlargeit_maximizemethod_0']} /><label for="plugin_enlargeit_maximizemethod_0" class="clickable_option">{$lang_plugin_enlargeit['as_popup_window']} ({$lang_plugin_enlargeit['not_recommended']})</label><br />
+			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_1" class="radio" value="1" {$option_output['plugin_enlargeit_maximizemethod_1']} /><label for="plugin_enlargeit_maximizemethod_1" class="clickable_option">{$lang_plugin_enlargeit['open_as_ajax']} ({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonbbcode" class="clickable_option">{$enlargeit_icon_array['bbcode']} {$lang_plugin_enlargeit['button_bbcode']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonbbcode" id="plugin_enlargeit_buttonbbcode" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonbbcode']} />
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogram']} {$lang_plugin_enlargeit['button_histogram']} ({$cached_files})</label>
+			<label for="plugin_enlargeit_buttonhist" class="clickable_option">{$enlargeit_icon_array['histogram']} {$lang_plugin_enlargeit['button_histogram']}</label>
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} /> <label for="plugin_enlargeit_buttonhist" class="clickable_option">({$gd_version_string})</label>
@@ -671,7 +724,7 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['button_navigation']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} /> <label for="plugin_enlargeit_buttonnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
@@ -679,12 +732,12 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['button_close']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} /> <label for="plugin_enlargeit_buttonclose" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['multimedia']}
 		</td>
 	</tr>
@@ -692,13 +745,13 @@ echo <<< EOT
 		<td valign="top">
 			{$lang_plugin_enlargeit['flash_player']}
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_0" class="radio" value="0" {$option_output['plugin_enlargeit_flvplayer_0']} /><label for="plugin_enlargeit_flvplayer_0" class="clickable_option">{$lang_plugin_enlargeit['rphmedia']}</label><br />
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_1" class="radio" value="1" {$option_output['plugin_enlargeit_flvplayer_1']} /><label for="plugin_enlargeit_flvplayer_1" class="clickable_option">{$lang_plugin_enlargeit['os_flv']}</label>
 		</td>
 	</tr>
 	<tr>
-		<td class="tableh1" colspan="2">
+		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['plugin_setup']}
 		</td>
 	</tr>
@@ -706,13 +759,27 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_adminmenu" class="clickable_option">{$lang_plugin_enlargeit['display_plugin_config_in_admin_menu']}</label>
 		</td>
-		<td>
+		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_adminmenu" id="plugin_enlargeit_adminmenu" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmenu']} />
 		</td>
 	</tr>
 	<tr>
-		<td class="tablef" colspan="2">
-			<input name="update" type="hidden" id="update" value="1" />
+		<td valign="top">
+			{$lang_plugin_enlargeit['histogram_cache_file_lifetime']}<br />
+			<span style="visibility:{$cache_visibility}" id="cache_visibility">(<em>{$cached_files}</em>)</span>
+		</td>
+		<td colspan="2">
+			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_0" class="radio" value="0" {$option_output['plugin_enlargeit_cachecontrol_0']} /><label for="plugin_enlargeit_cachecontrol_0" class="clickable_option">{$lang_plugin_enlargeit['unlimited']}</label><br />
+			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_1" class="radio" value="1" {$option_output['plugin_enlargeit_cachecontrol_1']} />
+			<label for="plugin_enlargeit_cachecontrol_1" class="clickable_option"><input type="text" name="plugin_enlargeit_cachemaxage" id="plugin_enlargeit_cachemaxage" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_enlargeit_cachemaxage']}" {$option_output['plugin_enlargeit_cachemaxage']} /> {$lang_plugin_enlargeit['days']}</label><br />
+			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_2" class="radio" value="2" {$option_output['plugin_enlargeit_cachecontrol_2']} /><label for="plugin_enlargeit_cachecontrol_2" class="clickable_option">{$lang_plugin_enlargeit['max_file_size_total']}:
+			<input type="text" name="plugin_enlargeit_cachemaxsizemb" id="plugin_enlargeit_cachemaxsizemb" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_enlargeit_cachemaxsizemb']}" {$option_output['plugin_enlargeit_cachemaxsizemb']} />{$lang_byte_units[2]}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="tablef" colspan="3">
+			<input type="hidden" name="form_token" value="{$form_token}" />
+			<input type="hidden" name="timestamp" value="{$timestamp}" />
 			<button type="submit" class="button" name="submit" value="{$lang_plugin_enlargeit['submit']}">{$enlargeit_icon_array['ok']}{$lang_plugin_enlargeit['submit']}</button>
 		</td>
 	</tr>
@@ -723,7 +790,7 @@ echo <<< EOT
 </form>
 EOT;
 pagefooter();
-ob_end_flush();
+
 
 
 ?>

@@ -1,20 +1,19 @@
 <?php
 /**************************************************
-  Coppermine 1.4.x Plugin - EnlargeIt!
+  Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
-  Copyright (c) 2008 Timos-Welt (www.timos-welt.de)
+  Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-  ***************************************************/
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) { 
 	die('Not in Coppermine...'); 
@@ -70,9 +69,8 @@ $lang_plugin_enlargeit['button_histogram'] = 'Mostra bottone "Istogramma"';
 $lang_plugin_enlargeit['histogram'] = 'Istogramma'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Mostra bottone "Vota"';
 $lang_plugin_enlargeit['vote'] = 'Vota';
-$lang_plugin_enlargeit['button_maximize'] = 'Mostra bottone "Massimizza"';
 $lang_plugin_enlargeit['full_size'] = 'Dimensione originale'; // js-alert
-$lang_plugin_enlargeit['for_registered_users'] = 'si, ma non per utenti anonimi';
+$lang_plugin_enlargeit['for_registered_users_only'] = 'si, ma non per utenti anonimi';
 $lang_plugin_enlargeit['as_popup_window'] = 'yes, as pop-up window';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'yes, as pop-up but not for anonymous users';
 $lang_plugin_enlargeit['button_close'] = 'Mostra bottone "Chiudi"';

@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -70,7 +69,6 @@ $lang_plugin_enlargeit['button_histogram'] = 'Affichez le bouton "Histogramme"';
 $lang_plugin_enlargeit['histogram'] = 'Histogramme'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Affichez le bouton "Vote"';
 $lang_plugin_enlargeit['vote'] = 'Vote';
-$lang_plugin_enlargeit['button_maximize'] = 'Affichez le bouton "Maximisez"';
 $lang_plugin_enlargeit['full_size'] = 'Maximizez'; // js-alert
 $lang_plugin_enlargeit['button_close'] = 'Affichez le bouton "Fermez"';
 $lang_plugin_enlargeit['close_esc'] = 'Fermez'; // js-alert

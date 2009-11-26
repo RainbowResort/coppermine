@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -67,7 +66,6 @@ $lang_plugin_enlargeit['button_histogram'] = 'Button "Histogramm" anzeigen';
 $lang_plugin_enlargeit['histogram'] = 'Histogramm'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Button "Bewerten" anzeigen';
 $lang_plugin_enlargeit['vote'] = 'Bewerten';
-$lang_plugin_enlargeit['button_maximize'] = 'Button "Maximieren" anzeigen';
 $lang_plugin_enlargeit['full_size'] = 'Volle Größe'; // js-alert
 $lang_plugin_enlargeit['button_close'] = 'Button "Schließen" anzeigen';
 $lang_plugin_enlargeit['button_download'] = 'Button "Download" anzeigen';
@@ -84,7 +82,7 @@ $lang_plugin_enlargeit['enable_sefurl_support'] = 'SEF-Unterstützung aktivieren
 $lang_plugin_enlargeit['file_added_to_favorites'] = 'Das Bild wurde zu den Favoriten hinzugefügt.';
 $lang_plugin_enlargeit['file_removed_from_favorites'] = 'Das Bild wurde von den Favoriten entfernt.';
 $lang_plugin_enlargeit['button_favorites'] = 'Meine Favoriten anzeigen';
-$lang_plugin_enlargeit['for_registered_users'] = 'für registrierte Benutzer';
+$lang_plugin_enlargeit['for_registered_users_only'] = 'für registrierte Benutzer';
 $lang_plugin_enlargeit['as_popup_window'] = 'Ja, als Pop-Up';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'Ja, als Pop-Up aber nicht für anonyme Gäste';
 $lang_plugin_enlargeit['enable_drag_drop'] = 'Vergrösserte Bilder mit der Maus verschiebbar';
@@ -149,4 +147,16 @@ $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! Einstellungen';
 $lang_plugin_enlargeit['plugin_setup'] = 'Plugin Setup';
 $lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Zeige einen Link zur Konfiguration dieses Plugins im Admin-Menü';
 $lang_plugin_enlargeit['not_a_valid_extension'] = '%s ist keine gültige Datei-Erweiterung';
+$lang_plugin_enlargeit['gd_version'] = 'GD-Version: %s';
+$lang_plugin_enlargeit['not_available'] = 'nicht verfügbar';
+$lang_plugin_enlargeit['file_cache_x_files_using_x_bytes'] = 'Datei-Cache: %s Dateien verbrauchen %s an Speicherplatz';
+$lang_plugin_enlargeit['histogram_cache_file_lifetime'] = 'Speicherdauer von Dateien im Histgramm-Cache';
+$lang_plugin_enlargeit['unlimited'] = 'unbegrenzt';
+$lang_plugin_enlargeit['days'] = 'Tage';
+$lang_plugin_enlargeit['max_file_size_total'] = 'Maximale Summe der Datei-Grösse';
+$lang_plugin_enlargeit['maximize_method'] = 'Vergößerungs-Methode';
+$lang_plugin_enlargeit['details'] = 'Details';
+$lang_plugin_enlargeit['this_plugin_uses_the_following_components'] = 'Dieses Plugin benutzt die folgenden Komponenten';
+$lang_plugin_enlargeit['x_by_x'] = '%s von %s';
+$lang_plugin_enlargeit['preview'] = 'Vorschau';
 ?>

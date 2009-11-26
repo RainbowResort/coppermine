@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -70,9 +69,8 @@ $lang_plugin_enlargeit['download_this_file'] = 'Download this file'; // js-alert
 $lang_plugin_enlargeit['download_explain'] = 'Click here to download this file';
 $lang_plugin_enlargeit['button_vote'] = 'Laat knop zien "Stem"';
 $lang_plugin_enlargeit['vote'] = 'Stem';
-$lang_plugin_enlargeit['button_maximize'] = 'Laat knop zien "Maximaliseer"';
 $lang_plugin_enlargeit['full_size'] = 'Maximaliseer'; // js-alert
-$lang_plugin_enlargeit['for_registered_users'] = 'Ja, maar niet voor anonieme bezoekers';
+$lang_plugin_enlargeit['for_registered_users_only'] = 'Ja, maar niet voor anonieme bezoekers';
 $lang_plugin_enlargeit['as_popup_window'] = 'ja, als pop-up scherm';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'ja, als pop-up maar niet voor anonieme bezoekers';
 $lang_plugin_enlargeit['button_close'] = 'Laat knop zien "Sluiten"';

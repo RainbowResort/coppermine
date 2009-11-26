@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -55,8 +54,8 @@ $lang_plugin_enlargeit['darken_strength'] = 'Darken strength';
 $lang_plugin_enlargeit['button_picture'] = 'Display button "Show picture"';
 $lang_plugin_enlargeit['show_picture'] = 'Show picture'; // js-alert
 $lang_plugin_enlargeit['button_info'] = 'Show button "Info"';
-$lang_plugin_enlargeit['open_as_ajax'] = 'open as AJAX snippet';
-$lang_plugin_enlargeit['open_intermediate_page'] = 'open "regular" intermediate page';
+$lang_plugin_enlargeit['open_as_ajax'] = 'Open as AJAX snippet';
+$lang_plugin_enlargeit['open_intermediate_page'] = 'Open "regular" intermediate page';
 $lang_plugin_enlargeit['show_info'] = 'Show info'; // js-alert
 $lang_plugin_enlargeit['button_download'] = 'Display "Download" button ';
 $lang_plugin_enlargeit['download_this_file'] = 'Download this file'; // js-alert
@@ -71,10 +70,9 @@ $lang_plugin_enlargeit['button_bbcode'] = 'Display "BBCode" button';
 $lang_plugin_enlargeit['bbcode'] = 'BBCode'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Display "Vote" button';
 $lang_plugin_enlargeit['vote'] = 'Vote';
-$lang_plugin_enlargeit['button_maximize'] = 'Display "Maximize" button';
 $lang_plugin_enlargeit['full_size'] = 'Full size'; // js-alert
-$lang_plugin_enlargeit['for_registered_users'] = 'for registered users';
-$lang_plugin_enlargeit['as_popup_window'] = 'as pop-up window';
+$lang_plugin_enlargeit['for_registered_users_only'] = 'for registered users only';
+$lang_plugin_enlargeit['as_popup_window'] = 'As pop-up window';
 $lang_plugin_enlargeit['enl_maxpopupforreg'] = 'yes, as pop-up but not for anonymous users';
 $lang_plugin_enlargeit['button_close'] = 'Display "Close" button';
 $lang_plugin_enlargeit['close_esc'] = 'Close [Esc]'; // js-alert
@@ -141,14 +139,23 @@ $lang_plugin_enlargeit['no_changes'] = 'There have been no changes or the change
 $lang_plugin_enlargeit['recommended'] = 'recommended';
 $lang_plugin_enlargeit['not_recommended'] = 'not recommended';
 $lang_plugin_enlargeit['description'] = 'AJAX GUI for Coppermine 1.5.x to seamlessly open the image embedded into the output on the thumbnail page, with an optional greybox feature and a detailed configuration screen.';
-$lang_plugin_enlargeit['install_info'] = 'You can configure the plugin after installation, use the button on the plugin manager. If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on their config pages.';
-$lang_plugin_enlargeit['extra_info'] = 'This plugin is currently an alpha version. Not all features will work, especially the AJAX parts. Thanks for understanding.';
+$lang_plugin_enlargeit['install_info'] = 'You can configure the plugin after installation using the button on the plugin manager or inside the admin menu (configurable). If you want ImageFlow or Slider plugins to use EnlargeIt!, install them together with this plugin and switch the settings on the config pages of those plugins.';
+$lang_plugin_enlargeit['extra_info'] = 'This plugin is currently a beta version. Not all features may work, especially the AJAX parts. Thanks for understanding.';
 $lang_plugin_enlargeit['announcement_thread'] = 'Announcement thread';
 $lang_plugin_enlargeit['enlargeit_configuration'] = 'EnlargeIt! configuration';
 $lang_plugin_enlargeit['plugin_setup'] = 'Plugin setup';
 $lang_plugin_enlargeit['display_plugin_config_in_admin_menu'] = 'Display a link to the plugin configuration in the admin menu';
 $lang_plugin_enlargeit['not_a_valid_extension'] = '%s is not a valid extension';
 $lang_plugin_enlargeit['gd_version'] = 'GD version: %s';
-$lang_plugin_enlargeit['not_available'] = 'Not available';
-$lang_plugin_enlargeit['cached_files_x'] = 'Cached files: %s';
+$lang_plugin_enlargeit['not_available'] = 'not available';
+$lang_plugin_enlargeit['file_cache_x_files_using_x_bytes'] = 'File cache: %s files using %s of web space';
+$lang_plugin_enlargeit['histogram_cache_file_lifetime'] = 'Histogram cache file lifetime';
+$lang_plugin_enlargeit['unlimited'] = 'unlimited';
+$lang_plugin_enlargeit['days'] = 'days';
+$lang_plugin_enlargeit['max_file_size_total'] = 'Maximum file size total';
+$lang_plugin_enlargeit['maximize_method'] = 'Maximize method';
+$lang_plugin_enlargeit['details'] = 'Details';
+$lang_plugin_enlargeit['this_plugin_uses_the_following_components'] = 'This plugin uses the following components';
+$lang_plugin_enlargeit['x_by_x'] = '%s by %s';
+$lang_plugin_enlargeit['preview'] = 'Preview';
 ?>

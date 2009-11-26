@@ -25,4 +25,26 @@ $(document).ready(function() {
 	$('#plugin_enlargeit_shadowintens').SpinButton({min: 1,max: 30});
 	$('#plugin_enlargeit_darkprct').SpinButton({min: 0,max: 100, step: 10});
 	$('#plugin_enlargeit_darkensteps').SpinButton({min: 1,max: 20});
+	$('#plugin_enlargeit_cachemaxage').SpinButton({min: 1,max: 365});
+	$('#plugin_enlargeit_cachemaxsizemb').SpinButton({min: 1,max: 99});
+    $('#plugin_enlargeit_buttonhist').change(function () {
+		if ($('#plugin_enlargeit_buttonhist').attr('checked')) {
+			$('#plugin_enlargeit_cachecontrol_0').attr('disabled', '');
+			$('#plugin_enlargeit_cachecontrol_1').attr('disabled', '');
+			$('#plugin_enlargeit_cachecontrol_2').attr('disabled', '');
+			$('#plugin_enlargeit_cachemaxage').attr('disabled', '');
+			$('#plugin_enlargeit_cachemaxsizemb').attr('disabled', '');
+			$('#cache_visibility').css('visibility', 'visible');
+		} else {
+			$('#plugin_enlargeit_cachecontrol_0').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_cachecontrol_1').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_cachecontrol_2').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_cachemaxage').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_cachemaxsizemb').attr('disabled', 'disabled');
+			$('#cache_visibility').css('visibility', 'hidden');
+		}
+    })
+	$('#plugin_enlargeit_brdbck').change(function(){
+			$('#borderpreview').css('background-image', 'url('+'plugins/enlargeit/images/backgrounds/'+$('#plugin_enlargeit_brdbck').val()+'.png'+')');
+    });
 });

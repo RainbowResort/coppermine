@@ -9,7 +9,6 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.2
   $HeadURL$
   $Revision$
   $LastChangedBy$
@@ -70,11 +69,10 @@ $lang_plugin_enlargeit['button_histogram'] = 'Mostrar boton "Histograma (experim
 $lang_plugin_enlargeit['histogram'] = 'Histograma'; // js-alert
 $lang_plugin_enlargeit['button_vote'] = 'Mostrar boton "Votar"';
 $lang_plugin_enlargeit['vote'] = 'Votar';
-$lang_plugin_enlargeit['button_maximize'] = 'Mostrar boton "Maximizar"';
 $lang_plugin_enlargeit['full_size'] = 'Maximizar'; // js-alert
-$lang_plugin_enlargeit['for_registered_users'] = 'Si, pero no para usuarios anonimos';
-$lang_plugin_enlargeit['as_popup_window'] = 'Si, como ventana pop-up';
-$lang_plugin_enlargeit['enl_maxpopupforreg'] = 'Si, como pop-up pero no para usuarios anonimos';
+$lang_plugin_enlargeit['for_registered_users_only'] = 'Solo para usuarios';
+$lang_plugin_enlargeit['as_popup_window'] = 'como ventana pop-up';
+$lang_plugin_enlargeit['enl_maxpopupforreg'] = 'como pop-up pero no para usuarios anonimos';
 $lang_plugin_enlargeit['button_close'] = 'Mostrar boton "Cerrar ventana"';
 $lang_plugin_enlargeit['close_esc'] = 'Cerrar ventana [Esc]'; // js-alert
 $lang_plugin_enlargeit['button_navigation'] = 'Mostrar botones "Navegacion"';
