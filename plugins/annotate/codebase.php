@@ -494,6 +494,42 @@ EOT;
         exit;
     }
 
+    if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('import')) {
+        global $CONFIG;
+        require_once './plugins/annotate/init.inc.php';
+        $annotate_init_array = annotate_initialize();
+        $lang_plugin_annotate = $annotate_init_array['language'];
+        $annotate_icon_array = $annotate_init_array['icon'];
+        load_template();
+        pageheader($lang_plugin_annotate['import']);
+
+        starttable('-1', $annotate_icon_array['import'] . $lang_plugin_annotate['import']);
+
+        if ($superCage->get->keyExists('do') && $CONFIG['plugin_annotate_import'] != "1") {
+            if (!mysql_query("SELECT user_time FROM {$CONFIG['TABLE_PREFIX']}notes")) {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate (pid, posx, posy, width, height, note, user_id, user_time) 
+                              SELECT pid, posx, posy, width, height, note, user_id, UNIX_TIMESTAMP() FROM {$CONFIG['TABLE_PREFIX']}notes");
+            } else {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_annotate (pid, posx, posy, width, height, note, user_id, user_time) 
+                              SELECT pid, posx, posy, width, height, note, user_id, user_time FROM {$CONFIG['TABLE_PREFIX']}notes");
+            }
+            echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['import_success'], mysql_affected_rows()).'</td></tr>';
+            cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES ('plugin_annotate_import', '1')");
+        } else {
+            $notes_to_import = mysql_result(cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PREFIX']}notes"), 0);
+            if (!$notes_to_import) {
+                echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['import_found'], $notes_to_import).'</td></tr>';
+            } elseif ($CONFIG['plugin_annotate_import'] == "1") {
+                echo '<tr><td class="tableb">'.$lang_plugin_annotate['imported_already'].'</td></tr>';
+            } else {
+                echo '<tr><td class="tableb">'.sprintf($lang_plugin_annotate['import_found'], $notes_to_import).'<a href="index.php?plugin=annotate&import&do" class="admin_menu">'.$lang_plugin_annotate['import'].'</a></td></tr>';
+            }
+        }
+        endtable();
+        pagefooter();
+        exit;
+    }
+
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('update_database')) {
         global $CONFIG;
         require_once './plugins/annotate/init.inc.php';

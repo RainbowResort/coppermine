@@ -79,4 +79,7 @@ $lang_plugin_annotate['rename_fail'] = '\'%s\' was <b>not</b> renamed to \'%s\''
 $lang_plugin_annotate['sure_delete'] = 'Do you really want to delete \'%s\'?';
 $lang_plugin_annotate['delete_success'] = '\'%s\' was deleted successfully';
 $lang_plugin_annotate['import'] = 'Import annotations';
+$lang_plugin_annotate['import_found'] = 'Found %s annotations';
+$lang_plugin_annotate['imported_already'] = 'Import has already been executed';
+$lang_plugin_annotate['import_success'] = 'Imported %s annotations';
 ?>

@@ -79,4 +79,7 @@ $lang_plugin_annotate['rename_fail'] = '"%s" wurde <b>nicht</b> in "%s" umbenann
 $lang_plugin_annotate['sure_delete'] = 'Soll "%s" wirklich gelöscht werden?';
 $lang_plugin_annotate['delete_success'] = '"%s" wurde erfolgreich gelöscht';
 $lang_plugin_annotate['import'] = 'Beschriftungen importieren';
+$lang_plugin_annotate['import_found'] = '%s Beschriftungen gefunden';
+$lang_plugin_annotate['imported_already'] = 'Der Import wurde bereits ausgeführt';
+$lang_plugin_annotate['import_success'] = '%s Beschriftungen importiert';
 ?>
