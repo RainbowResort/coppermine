@@ -173,7 +173,7 @@ PhotoNote.prototype.UnSelect = function()
 PhotoNote.prototype.Save = function()
 {
     this.oldRect = null;
-    this.gui.TextTitle.innerHTML = this.gui.TextBox.value;
+    this.gui.TextTitle.innerHTML = '<a href="thumbnails.php?album=shownotes&note=' + this.gui.TextBox.value + '">' + this.gui.TextBox.value + '</a>';
     this.text = this.gui.TextBox.value
     this.UnSelect();
 }
@@ -417,9 +417,10 @@ PhotoNote.prototype.CreateElements = function()
               alert(js_vars.lang_annotate_note_empty);
               die();
             }
+            currentNote.gui.TextBox.value = currentNote.gui.TextBox.value.replace(/"/g, '\'');
 
             currentNote.text = currentNote.gui.TextBox.value;
-            
+
             var res = currentNote.onsave(currentNote);
             if(res > 0) {
                 //window.status = '';
@@ -436,7 +437,7 @@ PhotoNote.prototype.CreateElements = function()
 
     };
     buttonsDiv.appendChild(newButtonOK);
-    
+
     var newButtonCancel = document.createElement('button');
     newButtonCancel.type = 'button';
     newButtonCancel.className = 'button';
@@ -476,8 +477,7 @@ PhotoNote.prototype.CreateElements = function()
 
     editArea.appendChild(buttonsDiv);
     noteArea.appendChild(editArea);
-    
-    
+
 
     /********* DRAG & RESIZE EVENTS **********************/
     this.dragresize.isElement = function(elm)

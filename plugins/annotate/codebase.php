@@ -84,7 +84,8 @@ function annotate_file_data($data){
                 if (mysql_num_rows($result)) {
                     $btns_person .= "<div id=\"btns_person\" style=\"white-space:normal; cursor:default;\"> {$lang_plugin_annotate['rapid_annotation']}: ";
                     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-                        $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $row[0])."\">{$row[0]}</button> ";
+                        $note = stripslashes($row[0]);
+                        $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $note)."\">$note</button> ";
                     }
                     $btns_person .= "</div>";
                     $data['menu'] = $btns_person.$data['menu'];
@@ -145,7 +146,7 @@ EOT;
         $notes = array();
         
         while ($row = mysql_fetch_assoc($result)) {
-            $row['note'] = addslashes($row['note']);
+            //$row['note'] = addslashes($row['note']);
             $notes[] = $row;
         }
                 
@@ -209,7 +210,8 @@ EOT;
             $on_this_pic_array = array();
             $n = 0;
             foreach($notes as $value) {
-                $on_this_pic_array[] = "<button onclick=\"window.location.href='thumbnails.php?album=shownotes&amp;note={$value['note']}';\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['all_pics_of'], $value['note'])."\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">{$value['note']}</button> ";
+                $note = stripslashes($value['note']);
+                $on_this_pic_array[] = "<button onclick=\"window.location.href='thumbnails.php?album=shownotes&amp;note={$value['note']}';\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['all_pics_of'], $note)."\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">$note</button> ";
                 $n++;
             }
             sort($on_this_pic_array);
@@ -741,8 +743,10 @@ function annotate_get_pic_pos($album) {
 
         case 'shownotes':
             $superCage = Inspekt::makeSuperCage();
-            $note = $superCage->get->keyExists('note') ? $superCage->get->getEscaped('note') : $superCage->cookie->getEscaped($CONFIG['cookie_name'].'note');
+            $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
+
+            $note = addslashes($note);
 
             $query = "SELECT DISTINCT p.pid 
                 FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid 
@@ -820,13 +824,15 @@ function annotate_meta_album($meta) {
             }
 
             $superCage = Inspekt::makeSuperCage();
-            $note = $superCage->get->keyExists('note') ? $superCage->get->getEscaped('note') : $superCage->cookie->getEscaped($CONFIG['cookie_name'].'note');
-            setcookie($CONFIG['cookie_name'].'note', $note);
+            $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+            setcookie($CONFIG['cookie_name'].'note', stripslashes($note));
 
-            $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '$note'";
+            $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '".stripslashes($note)."'";
             if ($CURRENT_CAT_NAME) {
                 $album_name .= " - $CURRENT_CAT_NAME";
             }
+
+            $note = addslashes($note);
 
             $query = "SELECT p.pid FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid $RESTRICTEDWHERE AND approved = 'YES' AND n.note = '$note' GROUP BY p.pid";
             $result = cpg_db_query($query);

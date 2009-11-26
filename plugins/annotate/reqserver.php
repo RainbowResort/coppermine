@@ -24,7 +24,6 @@ if (annotate_get_level('permissions') < 2) {
     die('Access denied'); // Nobody will see that, as it's only for debugging purposes, so we can leave that string untranslated
 }
 
-
 $superCage = Inspekt::makeSuperCage();
 
 if ($superCage->post->keyExists('add')){
@@ -34,7 +33,7 @@ if ($superCage->post->keyExists('add')){
     $posy = $superCage->post->getInt('posy');
     $width = $superCage->post->getInt('width');
     $height = $superCage->post->getInt('height');
-    $note = addslashes(urldecode($superCage->post->getRaw('note')));
+    $note = addslashes(urldecode(str_replace('"', '\'', $superCage->post->getRaw('note'))));
     $time = time();
     if ($nid){
         $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";

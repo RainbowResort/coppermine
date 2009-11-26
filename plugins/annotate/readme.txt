@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-26 [B] Fixed several issues with apostrophe and quote signs {eenemeenemuu}
 2009-11-26 [A] Added import function to copy annotations from old 'notes' table {eenemeenemuu}
 2009-11-25 [A] Added annotation manager (batch rename, batch delete) {eenemeenemuu}
 2009-11-25 [A] Added check for empty annotations {eenemeenemuu}
@@ -90,3 +91,4 @@ Implement permission system (done?)
 Move embedded JS into separate file
 Fix JS errors in IE
 Test in bridging mode (especially configuration and permission level detection)
+Avoid getRaw() if possible
