@@ -92,3 +92,4 @@ Move embedded JS into separate file
 Fix JS errors in IE
 Test in bridging mode (especially configuration and permission level detection)
 Avoid getRaw() if possible
+Fix issues when entering special chars like # or & 
