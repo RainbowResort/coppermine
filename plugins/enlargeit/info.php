@@ -15,8 +15,10 @@
   $Date$
   **************************************************/
 
-require('include/init.inc.php');
-
+if (!defined('IN_COPPERMINE')) {
+    die('Not in Coppermine...');
+}  
+  
 if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     cpg_die(ERROR, $lang_errors['access_none'], __FILE__, __LINE__);
 }
@@ -47,7 +49,7 @@ function sanitize_data(&$value, $key)
 function html_picinfo()
 {
     global $CONFIG, $CURRENT_PIC_DATA, $CURRENT_ALBUM_DATA, $THEME_DIR, $FAVPICS, $REFERER;
-    global $album, $lang_picinfo, $lang_display_image_php, $lang_byte_units, $lastup_date_fmt;
+    global $album, $lang_picinfo, $lang_display_image_php, $lang_byte_units, $lastup_date_fmt, $lang_common, $lang_plugin_enlargeit, $lang_date;
 
     if ($CURRENT_PIC_DATA['owner_id'] && $CURRENT_PIC_DATA['owner_name']) {
         $owner_link = '<a href ="profile.php?uid=' . $CURRENT_PIC_DATA['owner_id'] . '">' . $CURRENT_PIC_DATA['owner_name'] . '</a> ';
@@ -69,7 +71,13 @@ function html_picinfo()
         }
     }
 
-    $info[$lang_picinfo['Filename']] = htmlspecialchars($CURRENT_PIC_DATA['filename']);
+
+
+if (!defined('DISPLAYIMAGE_PHP')) {
+    die('missing');
+}  
+	
+	$info[$lang_common['filename']] = htmlspecialchars($CURRENT_PIC_DATA['filename']);
     $info[$lang_picinfo['Album name']] = '<span class="alblink">' . $owner_link . '/ <a href="thumbnails.php?album=' . $CURRENT_PIC_DATA['aid'] . '">' . $CURRENT_ALBUM_DATA['title'] . '</a></span>';
 
     if ($CURRENT_PIC_DATA['votes'] > 0) {
@@ -86,7 +94,7 @@ function html_picinfo()
           $height = 250;
         }
 
-        $detailsLink = $CONFIG['vote_details'] ? ' (<a href="#" onclick="MM_openBrWindow(\'stat_details.php?type=vote&amp;pid='.$CURRENT_PIC_DATA['pid'].'&amp;sort=sdate&amp;dir=&amp;sdate=1&amp;ip=1&amp;rating=1&amp;referer=1&amp;browser=1&amp;os=1\',\'\',\'resizable=yes,width='.$width.',height='.$height.',top=50,left=50,scrollbars=yes\'); return false;">'.$lang_picinfo['details'].'</a>)' : '';
+        $detailsLink = $CONFIG['vote_details'] ? ' (<a href="#" onclick="MM_openBrWindow(\'stat_details.php?type=vote&amp;pid='.$CURRENT_PIC_DATA['pid'].'&amp;sort=sdate&amp;dir=&amp;sdate=1&amp;ip=1&amp;rating=1&amp;referer=1&amp;browser=1&amp;os=1\',\'\',\'resizable=yes,width='.$width.',height='.$height.',top=50,left=50,scrollbars=yes\'); return false;">'.$lang_plugin_enlargeit['details'].'</a>)' : '';
         $info[sprintf($lang_picinfo['Rating'], $CURRENT_PIC_DATA['votes'])] = '<img width="65" height="14" src="plugins/enlargeit/rating/rating' . round($CURRENT_PIC_DATA['pic_rating'] / 2000) . '.gif" align="middle" alt="" />'.$detailsLink;
     }
 
@@ -102,11 +110,11 @@ function html_picinfo()
         }
     }
 
-    $info[$lang_picinfo['File Size']] = ($CURRENT_PIC_DATA['filesize'] > 10240 ? ($CURRENT_PIC_DATA['filesize'] >> 10) . '&nbsp;' . $lang_byte_units[1] : $CURRENT_PIC_DATA['filesize'] . '&nbsp;' . $lang_byte_units[0]);
-    $info[$lang_picinfo['File Size']] = '<span dir="ltr">' . $info[$lang_picinfo['File Size']] . '</span>';
-    $info[$lang_picinfo['Date Added']] = localised_date($CURRENT_PIC_DATA['ctime'],$lastup_date_fmt);
+    $info[$lang_common['filesize']] = ($CURRENT_PIC_DATA['filesize'] > 10240 ? ($CURRENT_PIC_DATA['filesize'] >> 10) . '&nbsp;' . $lang_byte_units[1] : $CURRENT_PIC_DATA['filesize'] . '&nbsp;' . $lang_byte_units[0]);
+    $info[$lang_common['filesize']] = '<span dir="ltr">' . $info[$lang_common['filesize']] . '</span>';
+    $info[$lang_picinfo['Date Added']] = localised_date($CURRENT_PIC_DATA['ctime'],$lang_date['lastup']);
     $info[$lang_picinfo['Dimensions']] = sprintf($lang_display_image_php['size'], $CURRENT_PIC_DATA['pwidth'], $CURRENT_PIC_DATA['pheight']);
-    $detailsLink = ($CURRENT_PIC_DATA['hits'] && $CONFIG['hit_details'] && GALLERY_ADMIN_MODE) ? ' (<a href="#" onclick="MM_openBrWindow(\'stat_details.php?type=hits&amp;pid='.$CURRENT_PIC_DATA['pid'].'&amp;sort=sdate&amp;dir=&amp;sdate=1&amp;ip=1&amp;search_phrase=1&amp;referer=1&amp;browser=1&amp;os=1\',\'\',\'resizable=yes,width=800,height=500,top=50,left=50,scrollbars=yes\'); return false;">'.$lang_picinfo['details'].'</a>)' : '';
+    $detailsLink = ($CURRENT_PIC_DATA['hits'] && $CONFIG['hit_details'] && GALLERY_ADMIN_MODE) ? ' (<a href="#" onclick="MM_openBrWindow(\'stat_details.php?type=hits&amp;pid='.$CURRENT_PIC_DATA['pid'].'&amp;sort=sdate&amp;dir=&amp;sdate=1&amp;ip=1&amp;search_phrase=1&amp;referer=1&amp;browser=1&amp;os=1\',\'\',\'resizable=yes,width=800,height=500,top=50,left=50,scrollbars=yes\'); return false;">'.$lang_plugin_enlargeit['details'].'</a>)' : '';
     $info[$lang_picinfo['Displayed']] = sprintf($lang_display_image_php['views'], $CURRENT_PIC_DATA['hits']);
     $info[$lang_picinfo['Displayed']] .= $detailsLink;
 
@@ -184,33 +192,43 @@ if (isset($CURRENT_PIC_DATA)) {
     }
 }
 
-echo "<table align=\"center\" cellspacing=\"1\" style=\"width:100%;height:100%\">";
+//echo '<table align="center" cellspacing="1" style="width:100%;height:100%">';
 
+starttable('100%', '', 2, 'cpg_zebra');
 $test = html_picinfo();
-$test = str_replace("tableb_compact","enl_infotable\" width=\"50%",$test);
-$test = str_replace("tableh2_compact","enl_infotablehead\" align=\"center",$test);
-$test = str_replace("valign=\"top\"","align=\"right\"",$test);
-$test = str_replace(" class=\"alblink\"","",$test);
 $kopf = '';
 
 if ($CURRENT_PIC_DATA['title']) {
-$kopf .= "<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\">";
-$kopf .=  $lang_upload_php['pic_title'];
-$kopf .=  ":</td><td class=\"enl_infotable\" width=\"50%\">";
-$kopf .=  $CURRENT_PIC_DATA['title'];
-$kopf .=  "</td></tr>";
+$kopf .= <<< EOT
+<tr>
+	<td>
+		{$lang_upload_php['pic_title']}:
+	</td>
+	<td>
+		{$CURRENT_PIC_DATA['title']}
+	</td>
+</tr>
+
+EOT;
 }
 if ($CURRENT_PIC_DATA['caption']) {
-$kopf .=  "<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\">";
-$kopf .=  $lang_upload_php['description'];
-$kopf .=  ":</td><td class=\"enl_infotable\" width=\"50%\">";
-$kopf .=  $CURRENT_PIC_DATA['caption'];
-$kopf .=  "</td></tr>";
+$kopf .= <<< EOT
+<tr>
+	<td>
+		{$lang_upload_php['description']}:
+	</td>
+	<td>
+		{$CURRENT_PIC_DATA['caption']}
+	</td>
+</tr>
+
+EOT;
 }
 $kopf .=  "<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'];
 $test = str_replace("<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'],$kopf,$test);
 
 echo $test;
-echo "</table>";
+//echo "</table>";
+endtable();
 
 ?>

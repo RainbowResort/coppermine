@@ -95,7 +95,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-11-26 [M] Version count updated to 1.3 {GauGau}
+2009-11-26 [M] Version count updated to 1.4 {GauGau}
+2009-11-27 [B] Fixed broken output of info.php {GauGau}
 2009-11-26 [A] Added background image preview {GauGau}
 2009-11-26 [A] Added permission checks to download script {GauGau}
 2009-11-26 [A] Added form token check {GauGau}

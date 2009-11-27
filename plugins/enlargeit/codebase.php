@@ -38,6 +38,13 @@ if (GALLERY_ADMIN_MODE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
     $thisplugin->add_filter('admin_menu','enlargeit_add_admin_button');
 }
 
+// Set some constants that are needed for i18n
+if ($CONFIG['plugin_enlargeit_buttoninfo'] == '1') {
+	if (!defined('DISPLAYIMAGE_PHP')) {
+		define('DISPLAYIMAGE_PHP', true);
+	}
+}
+
 function enlargeit_add_admin_button($admin_menu) {
     global $lang_plugin_enlargeit, $enlargeit_icon_array, $CONFIG;
 	require('./plugins/enlargeit/init.inc.php');
@@ -356,14 +363,14 @@ EOT;
 // Change thumbnail template
 function enl_thumb() 
 {
-  global $CONFIG, $template_thumbnail_view, $lang_plugin_enlargeit;
-  // get language
-  require_once('./plugins/enlargeit/init.inc.php');
-  // change thumb template if enlargeit is active for current user
-  if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode'])) {
-    // do nothing
-  } else {
-    $template_thumbnail_view = <<<EOT
+	global $CONFIG, $template_thumbnail_view, $lang_plugin_enlargeit;
+	// get language
+	require_once('./plugins/enlargeit/init.inc.php');
+	// change thumb template if enlargeit is active for current user
+	if ((GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) || (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) || (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode'])) {
+		// do nothing
+	} else {
+		$template_thumbnail_view = <<<EOT
 
 <!-- BEGIN header -->
         <tr>
