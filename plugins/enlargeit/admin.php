@@ -83,12 +83,14 @@ if ($superCage->post->keyExists('submit')) {
       'plugin_enlargeit_buttonhist' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonnav' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_buttonclose' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
-      'plugin_enlargeit_flvplayer' => array('type' => 'int', 'min' => '0', 'max' => '2'),
+      'plugin_enlargeit_flvplayer' => array('type' => 'int', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_adminmenu' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
 	  'plugin_enlargeit_cachecontrol' => array('type' => 'int', 'min' => '0', 'max' => '2'),
 	  'plugin_enlargeit_cachemaxage' => array('type' => 'int', 'min' => '1', 'max' => '365'),
 	  'plugin_enlargeit_cachemaxsizemb' => array('type' => 'int', 'min' => '1', 'max' => '99'),
 	  'plugin_enlargeit_maximizemethod' => array('type' => 'int', 'min' => '0', 'max' => '1'),
+	  'plugin_enlargeit_img_types' => array('type' => 'array', 'regex_ok' => '/^[a-z_]+$/', 'delimiter' => '/'),
+	  'plugin_enlargeit_mov_types' => array('type' => 'array', 'regex_ok' => '/^[a-z_]+$/', 'delimiter' => '/'),
   );
   $config_changes_counter = 0;
   foreach ($sanitization_array as $san_key => $san_value) {
@@ -125,9 +127,32 @@ if ($superCage->post->keyExists('submit')) {
                   $config_changes_counter++;
               }
           } // type is raw --- end
+          if ($san_value['type'] == 'array') { // type is raw --- start              $evaluate_value = $superCage->post->getRaw($san_key);
+              if (is_array($evaluate_value) && isset($san_value['regex_ok']) == TRUE && isset($san_value['delimiter']) == TRUE) {
+                  $temp = '';
+                  for ($i = 0; $i <= count($evaluate_value); $i++) {
+                      if (preg_match($san_value['regex_ok'], $evaluate_value[$i])) {
+                          $temp .= $evaluate_value[$i] . $san_value['delimiter'];
+                      }
+                  }
+                  unset($evaluate_value);
+                  $evaluate_value = rtrim($temp, $san_value['delimiter']);
+                  unset($temp);
+              }
+              if ($evaluate_value != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $evaluate_value;
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is raw --- end
       } // only loop if config value is set --- end
   }
 }
+
+// Help messages
+$image_format_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['image_formats']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['format_explain']))), 470, 245);
+$video_format_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['video_formats']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['format_explain']))), 470, 245);
+$multi_select_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['multimedia']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['press_ctrl_to_select_multiple_rows'] . '<br />' . $lang_plugin_enlargeit['asterisk_explain']))), 470, 245);
 
 
 // display config page
@@ -740,6 +765,66 @@ echo <<< EOT
 		<td class="tableh1" colspan="3">
 			{$lang_plugin_enlargeit['multimedia']}
 		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['image_formats']}{$image_format_help}
+		</td>
+		<td valign="top">
+		    <select name="plugin_enlargeit_img_types[]" id="plugin_enlargeit_img_types" size="5" multiple="multiple" class="listbox">
+
+EOT;
+$current_format_config_array = explode('/', $CONFIG['plugin_enlargeit_img_types']);
+$current_upload_allowed_array = explode('/', ($CONFIG['allowed_doc_types'] . '/' . $CONFIG['allowed_img_types'] . '/' . $CONFIG['allowed_mov_types'] . '/' . $CONFIG['allowed_snd_types']));
+foreach ($enlargeit_supported_image_file_array as $key) {
+    $format_name = strtoupper($key) . ' - ' . $lang_plugin_enlargeit[$key];
+    if (in_array($key, $current_format_config_array) == TRUE) {
+        $img_type_output[$key] = 'selected="selected"';
+    } 
+    if (in_array($key, $current_upload_allowed_array) != TRUE) {
+        $format_name .= '*';
+    } 
+    echo <<< EOT
+			<option value="{$key}" {$img_type_output[$key]} >{$format_name}</option>
+
+EOT;
+}
+echo <<< EOT
+            </select>
+        </td>
+        <td valign="top">
+            {$multi_select_help}
+        </td>	
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['video_formats']}{$video_format_help}
+		</td>
+		<td valign="top">
+		    <select name="plugin_enlargeit_mov_types[]" id="plugin_enlargeit_mov_types" size="4" multiple="multiple" class="listbox">
+
+EOT;
+$current_format_config_array = explode('/', $CONFIG['plugin_enlargeit_mov_types']);
+$current_upload_allowed_array = explode('/', ($CONFIG['allowed_doc_types'] . '/' . $CONFIG['allowed_img_types'] . '/' . $CONFIG['allowed_mov_types'] . '/' . $CONFIG['allowed_snd_types']));
+foreach ($enlargeit_supported_video_file_array as $key) {
+    $format_name = strtoupper($key) . ' - ' . $lang_plugin_enlargeit[$key];
+    if (in_array($key, $current_format_config_array) == TRUE) {
+        $mov_type_output[$key] = 'selected="selected"';
+    }
+    if (in_array($key, $current_upload_allowed_array) != TRUE) {
+        $format_name .= '*';
+    } 
+    echo <<< EOT
+			<option value="{$key}" {$mov_type_output[$key]} >{$format_name}</option>
+
+EOT;
+}
+echo <<< EOT
+            </select>
+        </td>
+        <td valign="top">
+            {$multi_select_help}
+        </td>	
 	</tr>
 	<tr>
 		<td valign="top">

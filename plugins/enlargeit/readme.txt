@@ -95,7 +95,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-11-26 [M] Version count updated to 1.4 {GauGau}
+2009-11-29 [M] Version count updated to 1.5 {GauGau}
+2009-11-29 [A] Adding selection for the files that the plugin should be used with {GauGau}
+2009-11-29 [A] Adding help section to config screen {GauGau}
+2009-11-27 [M] Version count updated to 1.4 {GauGau}
 2009-11-27 [B] Fixed broken output of info.php {GauGau}
 2009-11-26 [A] Added background image preview {GauGau}
 2009-11-26 [A] Added permission checks to download script {GauGau}
@@ -169,4 +172,14 @@ Changelog
 
 To Do
 =====
-* Implement a function to check permissions
+* Implement the changes that went into the enlargeit plugin for cpg1.4.x:
+    * Use hourglass mouse cursors if browser supports it
+    * Shadow color
+    * Vote button
+    * Comment button
+    * Ecard button
+    * SEF_URL support
+* Add screenshots
+* Add a help page
+* Add an animation preview on the config page
+*Add support for non-image files

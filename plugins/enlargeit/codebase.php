@@ -55,54 +55,52 @@ function enlargeit_add_admin_button($admin_menu) {
 }
 
 // add neccessary parameters
-function enlargeit_addparams($params) 
-{
-    global $thumb, $CONFIG, $template_thumbnail_view, $CURRENT_PIC_DATA;
-    
+function enlargeit_addparams($params) {
+    global $thumb, $CONFIG, $template_thumbnail_view, $CURRENT_PIC_DATA, $enlargeit_supported_image_file_array, $enlargeit_supported_video_file_array;
     // enabled for current user type?
-    if (GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) return $params;
-    if (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) return $params;
-    if (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']) return $params;
-    
-    $enl_filetype = explode(".",$thumb['filename']);
-    if (substr($thumb['filename'],0,8) == 'youtube_') 
-    {
-      $enl_filetype[1] = 'ytb';
+    if (GALLERY_ADMIN_MODE && !$CONFIG['plugin_enlargeit_adminmode']) {
+        return $params;
     }
-    if (substr($thumb['filename'],-5) == '.divx') 
-    {
-      $enl_filetype[1] = 'dvx';
+    if (USER_ID && !$CONFIG['plugin_enlargeit_registeredmode']) {
+        return $params;
     }
-    if (substr($thumb['filename'],-4) == '.flv') 
-    {
-      $enl_filetype[1] = 'flv';
+    if (!USER_ID && !$CONFIG['plugin_enlargeit_guestmode']) {
+        return $params;
     }
     
-    $enl_filetyplower = strtolower($enl_filetype[1]);
+    // Populate the list of files that this plugin should be used with in the first place
+    $image_array = explode('/', $CONFIG['plugin_enlargeit_img_types']);
+    $movie_array = explode('/', $CONFIG['plugin_enlargeit_mov_types']);    
+  
+    $enl_filetyplower = strtolower(ltrim(substr($thumb['filename'], strrpos($thumb['filename'], '.')), '.'));
+    if (substr($thumb['filename'],0,8) == 'youtube_') {
+      $enl_filetyplower = 'ytb';
+    }
     
     // get file path depending if normal size pic exists and config setting enl_pictype
-    if ($CONFIG['plugin_enlargeit_pictype']==1) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$thumb['filename'];
-    else if ($CONFIG['plugin_enlargeit_pictype']==2) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
-    else if ($CONFIG['plugin_enlargeit_pictype']==0 && is_file($CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'])) $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$CONFIG['normal_pfx'].$thumb['filename'];
-    else $enl_path = $CONFIG['fullpath'].$thumb['filepath'].$thumb['filename']; 
+    if ($CONFIG['plugin_enlargeit_pictype'] == '1') {
+        $enl_path = $CONFIG['fullpath'] . $thumb['filepath'] . $thumb['filename'];
+    } elseif ($CONFIG['plugin_enlargeit_pictype'] == '2') {
+        $enl_path = $CONFIG['fullpath'] . $thumb['filepath'] . $CONFIG['normal_pfx'] . $thumb['filename'];
+    } elseif ($CONFIG['plugin_enlargeit_pictype'] == '0' && is_file($CONFIG['fullpath'] . $thumb['filepath'] . $CONFIG['normal_pfx'] . $thumb['filename'])) {
+        $enl_path = $CONFIG['fullpath'] . $thumb['filepath'] . $CONFIG['normal_pfx'] . $thumb['filename'];
+    } else {
+        $enl_path = $CONFIG['fullpath'] . $thumb['filepath'] . $thumb['filename'];
+    } 
     
     // CASE 1: images
-    if ($enl_filetyplower == 'jpg' || $enl_filetyplower == 'jpeg' || $enl_filetyplower == 'jpe' || $enl_filetyplower == 'png' || $enl_filetyplower == 'gif' || $enl_filetyplower == 'bmp' || $enl_filetyplower == 'jpc' || $enl_filetyplower == 'jp2' || $enl_filetyplower == 'jpx' || $enl_filetyplower == 'jb2' || $enl_filetyplower == 'swc')
-    {
-       $enl_newthumb  = '<img src="'.$CONFIG['fullpath'].$thumb['filepath'].$CONFIG['thumb_pfx'].$thumb['filename'].'" ';
+    if (in_array($enl_filetyplower, $image_array) == TRUE) {
+       $enl_newthumb  = '<img src="' . $CONFIG['fullpath'] . $thumb['filepath'] . $CONFIG['thumb_pfx'] . $thumb['filename'] . '" ';
        $enl_newthumb .= 'class="enlargeimg" ';
-       if (($CONFIG['thumb_use'] == 'any' && $thumb['pwidth'] >= $thumb['pheight']) || $CONFIG['thumb_use'] == 'wd')
-       {
-       	 $enl_thumbheight = round($thumb['pheight']/$thumb['pwidth']*$CONFIG['thumb_width']);
-       	 $enl_newthumb  .= 'width="'.$CONFIG['thumb_width'].'" height="'.$enl_thumbheight.'" ';
+       if (($CONFIG['thumb_use'] == 'any' && $thumb['pwidth'] >= $thumb['pheight']) || $CONFIG['thumb_use'] == 'wd') {
+       	 $enl_thumbheight = round($thumb['pheight'] / $thumb['pwidth'] * $CONFIG['thumb_width']);
+       	 $enl_newthumb  .= 'width="' . $CONFIG['thumb_width'] . '" height="' . $enl_thumbheight . '" ';
+       } elseif (($CONFIG['thumb_use'] == 'any' && $thumb['pwidth'] < $thumb['pheight']) || $CONFIG['thumb_use'] == 'ht') {
+       	 $enl_thumbwidth = round($thumb['pwidth'] / $thumb['pheight'] * $CONFIG['thumb_width']);
+       	 $enl_newthumb  .= 'width="' . $enl_thumbwidth . '" height="' . $CONFIG['thumb_width'] . '" ';
        }
-       else if (($CONFIG['thumb_use'] == 'any' && $thumb['pwidth'] < $thumb['pheight']) || $CONFIG['thumb_use'] == 'ht')
-       {
-       	 $enl_thumbwidth = round($thumb['pwidth']/$thumb['pheight']*$CONFIG['thumb_width']);
-       	 $enl_newthumb  .= 'width="'.$enl_thumbwidth.'" height="'.$CONFIG['thumb_width'].'" ';
-       }
-       $enl_newthumb .= 'border="0" onclick="enlarge(this);" longdesc="'.path2url($enl_path).'" name="'.$thumb['pid'].'" ';
-       $enl_newthumb .= 'alt="'.$thumb['title'].'" />';
+       $enl_newthumb .= 'border="0" onclick="enlarge(this);" longdesc="' . path2url($enl_path) . '" name="' . $thumb['pid'] . '" ';
+       $enl_newthumb .= 'alt="' . $thumb['title'] . '" />';
        $more_params = array(
         '{LINK_ONCLICK}'  => 'onclick="return false;"',
         '{THUMB}'  => $enl_newthumb,
@@ -110,8 +108,7 @@ function enlargeit_addparams($params)
     }
     
     // CASE 2: flash or movie
-    else if ($enl_filetyplower == 'swf' || $enl_filetyplower == 'ytb' || $enl_filetyplower == 'dvx' || $enl_filetyplower == 'flv')
-    {
+    elseif (in_array($enl_filetyplower, $movie_array) == TRUE) {
       $pid = $thumb['pid'];
       
       // For flash or movie files we need some more data from the database
@@ -119,11 +116,16 @@ function enlargeit_addparams($params)
       $row = mysql_fetch_array($result);
       $album = $row['aid'];
       $pic_data = get_pic_data($album, $pic_count, $album_name, -1, -1, false);
-      for($pos = 0; $pic_data[$pos]['pid'] != $pid && $pos < $pic_count; $pos++);
-      $pic_data = get_pic_data($album, $pic_count, $album_name, $pos, 1, false);
+      for($pos = 0; $pic_data[$pos]['pid'] != $pid && $pos < $pic_count; $pos++) {
+          $pic_data = get_pic_data($album, $pic_count, $album_name, $pos, 1, false);
+      }
       $CURRENT_PIC_DATA = $pic_data[0];
-      if ($CURRENT_PIC_DATA['pwidth'] == 0) $CURRENT_PIC_DATA['pwidth'] = 500;
-      if ($CURRENT_PIC_DATA['pheight'] == 0) $CURRENT_PIC_DATA['pheight'] = 410;
+      if ($CURRENT_PIC_DATA['pwidth'] == 0) {
+          $CURRENT_PIC_DATA['pwidth'] = 500;
+      }
+      if ($CURRENT_PIC_DATA['pheight'] == 0) {
+          $CURRENT_PIC_DATA['pheight'] = 410;
+      }
       
       if ($enl_filetyplower == 'swf') {
       	$enl_newthumb  = '<img src="images/thumbs/thumb_swf.png" class="enlargeimg" width="'.$thumb['pwidth'].'" height="'.$thumb['pheight'].'" ';
@@ -131,23 +133,18 @@ function enlargeit_addparams($params)
       	$enl_newthumb  = '<img src="images/thumbs/thumb_movie.png" class="enlargeimg" width="'.$thumb['pwidth'].'" height="'.$thumb['pheight'].'" ';
       }
       $enl_newthumb .= 'border="0" onclick="enlarge(this);" ';
-      if ($enl_filetyplower == 'swf') 
-      {
+      if ($enl_filetyplower == 'swf') {
       	$enl_newthumb .= 'longdesc="swf::'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
-      }
-      if ($enl_filetyplower == 'flv' && $CONFIG['plugin_enlargeit_flvplayer'] == 1) 
-      {
-      	$enl_newthumb .= 'longdesc="fl2::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
-      }
-      if ($enl_filetyplower == 'flv' && $CONFIG['plugin_enlargeit_flvplayer'] == 2) 
-      {
-      	$enl_newthumb .= 'longdesc="flv::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
-      }
-      if ($enl_filetyplower == 'dvx') 
-      {
+      } elseif ($enl_filetyplower == 'flv') {
+      	if ($CONFIG['plugin_enlargeit_flvplayer'] == '0') {
+      	    $enl_newthumb .= 'longdesc="fl2::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
+      	} else {
+      	    $enl_newthumb .= 'longdesc="flv::../../../'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
+      	}
+      } elseif ($enl_filetyplower == 'dvx') {
       	$enl_newthumb .= 'longdesc="dvx::'.path2url($enl_path).'::'.$CURRENT_PIC_DATA['pwidth'].'::'.$CURRENT_PIC_DATA['pheight'].'" ';
       }
-      $enl_newthumb .= 'name="'.$thumb['pid'].'" alt="'.$thumb['title'].'" />';
+      $enl_newthumb .= 'name="'.$thumb['pid'].'" alt="" title="'.$thumb['title'].'" />';
       $more_params = array(
        '{LINK_ONCLICK}'  => 'onclick="return false;"',
        '{THUMB}'  => $enl_newthumb,
@@ -467,6 +464,8 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_cachemaxage', '30')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_cachemaxsizemb', '10')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_maximizemethod', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_img_types', 'jpg/jpeg/png/gif/bmp')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_mov_types', '')");
 	cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PICTURES']} ADD histogram_filesize int(11) NOT NULL default '0'");
 	cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PICTURES']} ADD histogram_timestamp int(11) NOT NULL default '0'");
     return true;
@@ -533,6 +532,8 @@ function enlargeit_uninstall() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_cachemaxage'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_cachemaxsizemb'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_maximizemethod'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_img_types'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_mov_types'");
 	cpg_db_query("ALTER TABLE `{$CONFIG['TABLE_PICTURES']}` DROP `histogram_filesize`");
 	cpg_db_query("ALTER TABLE `{$CONFIG['TABLE_PICTURES']}` DROP `histogram_timestamp`");
     return true;

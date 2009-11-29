@@ -104,6 +104,7 @@ if (array_key_exists('GD Version' , $gd_array) == TRUE) {
 	$enlargeit_gd_version = preg_replace('/[[:alpha:][:space:]()]+/', '', $gd_array['GD Version']);
 }
 	
-
+$enlargeit_supported_image_file_array = array('jpg', 'jpeg', 'jpe', 'png', 'gif', 'bmp', 'jpc', 'jp2', 'jpx', 'jb2', 'swc');
+$enlargeit_supported_video_file_array = array('swf', 'ytb', 'dvx', 'flv');
 
 ?>
