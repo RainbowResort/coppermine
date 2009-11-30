@@ -213,7 +213,7 @@ EOT;
             $n = 0;
             foreach($notes as $value) {
                 $note = stripslashes($value['note']);
-                $on_this_pic_array[] = "<button onclick=\"window.location.href='thumbnails.php?album=shownotes&amp;note={$value['note']}';\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['all_pics_of'], $note)."\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">$note</button> ";
+                $on_this_pic_array[] = "<button onclick=\"window.location.href='thumbnails.php?album=shownotes&amp;note=".addslashes(str_replace(Array("#", "&"), Array("%23", "%26"), $note))."';\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['all_pics_of'], $note)."\" onmouseover=\"notes.notes[$n].ShowNote(); notes.notes[$n].ShowNoteText();\" onmouseout=\"notes.notes[$n].HideNote(); notes.notes[$n].HideNoteText();\">$note</button> ";
                 $n++;
             }
             sort($on_this_pic_array);

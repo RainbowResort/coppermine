@@ -175,7 +175,7 @@ PhotoNote.prototype.UnSelect = function()
 PhotoNote.prototype.Save = function()
 {
     this.oldRect = null;
-    this.gui.TextTitle.innerHTML = '<a href="thumbnails.php?album=shownotes&note=' + this.gui.TextBox.value + '">' + this.gui.TextBox.value + '</a>';
+    this.gui.TextTitle.innerHTML = '<a href="thumbnails.php?album=shownotes&note=' + this.gui.TextBox.value.replace(/#/g, '%23').replace(/&/g, '%26') + '">' + this.gui.TextBox.value + '</a>';
     this.text = this.gui.TextBox.value
     this.UnSelect();
 }
@@ -363,7 +363,7 @@ PhotoNote.prototype.CreateElements = function()
     var titleArea = document.createElement('div');
     titleArea.className = 'tableh1 statlink fn-note-text';
     var a = document.createElement('a');
-    a.href = 'thumbnails.php?album=shownotes&note=' + this.text;
+    a.href = 'thumbnails.php?album=shownotes&note=' + this.text.replace(/#/g, '%23').replace(/&/g, '%26');
     a.title = sprintf(js_vars.lang_annotate_all_pics_of, this.text);
     a.appendChild(document.createTextNode(this.text));
     a.className = 'font-weight-bold';
@@ -435,9 +435,11 @@ PhotoNote.prototype.CreateElements = function()
               alert(js_vars.lang_annotate_note_empty);
               die();
             }
-            currentNote.gui.TextBox.value = currentNote.gui.TextBox.value.replace(/"/g, '\'');
+            // Replace " with ' and trim white spaces
+            currentNote.gui.TextBox.value = currentNote.gui.TextBox.value.replace(/"/g, '\'').replace(/^\s+/, '').replace(/\s+$/, '');
 
-            currentNote.text = currentNote.gui.TextBox.value;
+            // urlencode '&'
+            currentNote.text = currentNote.gui.TextBox.value.replace(/&/g, '%26');
 
             var res = currentNote.onsave(currentNote);
             if(res > 0) {
