@@ -125,7 +125,7 @@ EOT;
             $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
             $result = mysql_query("SELECT user_id, user_name FROM {$CONFIG['TABLE_USERS']} ORDER BY user_name ASC");
             while ($row = mysql_fetch_assoc($result)) {
-                $select_options .= "<option value=\"{$row['user_name']}\">{$row['user_name']}</option>"; // TODO: save user_id in database; get user_name by id when displaying/editing annotations
+                $select_options .= "<option value=\"{$row['user_name']}\">{$row['user_name']}</option>";
             }
             $data['menu'] .= <<< EOT
             <script type="text/javascript">
@@ -444,14 +444,21 @@ EOT;
 
 
 
-//// New meta album
+//// New meta albums
 
 // Meta album titles, custom pages
 function annotate_page_start() {
     global $lang_meta_album_names;
 
-    $lang_meta_album_names['lastnotes'] = 'Pictures with latest annotations'; // TODO - i18n
-    $lang_meta_album_names['shownotes'] = 'Pictures of \'....\''; // TODO - i18n
+    require_once './plugins/annotate/init.inc.php';
+    $annotate_init_array = annotate_initialize();
+    $lang_plugin_annotate = $annotate_init_array['language'];
+    $annotate_icon_array = $annotate_init_array['icon'];
+    $superCage = Inspekt::MakeSuperCage();
+    $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
+
+    $lang_meta_album_names['lastnotes'] = $lang_plugin_annotate['lastnotes'];
+    $lang_meta_album_names['shownotes'] = $lang_plugin_annotate['shownotes']." '".stripslashes($note)."'";
 
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
