@@ -78,20 +78,20 @@ echo <<< EOT
 <table cellspacing="1" style="width:100%;height:100%">
 	<tr>
 		<td colspan="2" class="tableh1" align="center">
-			<h1>{$lang_plugin_enlargeit['bbcode']}</h1>
+			<h2>{$lang_plugin_enlargeit['bbcode']}</h2>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableb" align="center">
-			<h5>[url][img][/url]</h5>
-			<textarea rows="6" cols="40" style="overflow:off;">{$img_url}</textarea>
+			<h5 style="margin:0px;padding:0px;line-height:0.8em;">[url][img][/url]</h5>
+			<textarea rows="5" cols="40" class="textinput" style="overflow:off;">{$img_url}</textarea>
 			{$copy_image_string}
 		</td>
 	</tr>
 	<tr>
 		<td class="tableb" align="center">
-			<h5>[url]title[/url]</h5>
-			<textarea rows="3" cols="40" style="overflow:off;">{$name_url}</textarea>
+			<h5 style="margin:0px;padding:0px;line-height:0.8em;">[url]title[/url]</h5>
+			<textarea rows="3" cols="40" class="textinput" style="overflow:off;">{$name_url}</textarea>
 			{$copy_url_string}
 		</td>
 	</tr>

@@ -13,56 +13,6 @@
   $LastChangedBy$
   $Date$
   **************************************************/
-  
-.enl_infotablehead {
-        background-color: #ddddff;
-        padding-top: 2px;
-        padding-right: 5px;
-        padding-bottom: 2px;
-        padding-left: 5px;
-        font-family: Arial, Verdana, Helvetica, sans-serif;
-        font-size: 14px;
-        color: #333311;
-        font-weight: bold;
-        text-align: center;
-}
-
-.enl_infotablehead a {
-        color: #113355;
-}
-
-.enl_infotablehead a:hover {
-        color: #335577;
-}
-
-.enl_infotable {
-        background-color: #eeeeff;
-        padding-top: 2px;
-        padding-right: 5px;
-        padding-bottom: 2px;
-        padding-left: 5px;
-        font-family: Verdana, Helvetica, sans-serif;
-        font-size: 11px;
-        color: #444411;
-}
-
-.enl_commenthead {
-        background-color: #ddddff;
-        padding-top: 2px;
-        padding-right: 5px;
-        padding-bottom: 2px;
-        padding-left: 5px;
-        font-family: Verdana, Helvetica, sans-serif;
-        font-size: 12px;
-        color: #333311;
-}
-
-.enl_infotable a {
-        color: #113399;
-}
-.enl_infotable a:hover {
-        color: #3355cc;
-}
 
 .enlargeimg {
         border-width: 1px;
@@ -77,33 +27,6 @@
 
 .enlargeimg a {
   outline: none;
-}
-
-
-.enl_textinput {
-	      border: 1px solid #747495 ; 
-        color: #000033;
-        background-color: #ddddee;
-        font-family: "Trebuchet MS", Verdana, Geneva, Arial, sans-serif;
-        font-size: 100%;
-        padding-right: 3px;
-        padding-left: 3px;
-}
-
-.enl_commentbutton {
-        border: 1px solid #747495 ; 
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 100%;
-        background-color: #bbbbff;
-        color: #000000;
-        padding-left: 3px;
-        padding-right: 3px;
-}
-
-.enl_commentdate {
-        font-size: 90%;
-        vertical-align : middle;
-        color : #5F5F5F;
 }
 
 .farbtastic {
@@ -137,9 +60,4 @@
   margin: -8px 0 0 -8px;
   overflow: hidden; 
   background: url(images/farbtastic/marker.png) no-repeat;
-}
-
-h1,h2,h3,h4,h5,h6 {
-	margin-top:0px;
-	margin-bottom:0px;
 }

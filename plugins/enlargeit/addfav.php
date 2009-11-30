@@ -66,10 +66,17 @@ if (USER_ID > 0) {
     }
 }
 
-
-echo "<table align=\"center\" cellspacing=\"1\" style=\"width:100%;height:100%\">";
-echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotablehead\"><b>".$lang_plugin_enlargeit['favorites']."</b></td></tr>";
-echo "<tr><td width=\"100%\" align=\"center\" class=\"enl_infotable\"><b>";
+echo <<< EOT
+<table align="center" cellspacing="1" style="width:100%;height:100%">
+    <tr>
+        <td width="100%" align="center" class="tableh1">
+            <h2>{$lang_plugin_enlargeit['favorites']}</h2>
+        </td>
+    </tr>
+    <tr>
+        <td width="100%" align="center" class="tableb">
+            <strong>
+EOT;
 if ($enl_added == 1) {
 	echo $lang_plugin_enlargeit['file_added_to_favorites'];
 }
@@ -77,9 +84,12 @@ else
 {
 	echo $lang_plugin_enlargeit['file_removed_from_favorites'];
 }
-echo "</b><br /><br />";
-if ($CONFIG['plugin_enlargeit_sefmode']) echo "<a href=\"thumbnails-favpics.html\">".$lang_plugin_enlargeit['button_favorites']."</a>";
-else echo "<br /><br /><a href=\"thumbnails.php?album=favpics\">".$lang_plugin_enlargeit['button_favorites']."</a>";
+echo '            </strong><br />' . $LINEBREAK;
+if ($CONFIG['plugin_enlargeit_sefmode']) {
+    echo "<a href=\"thumbnails-favpics.html\">".$lang_plugin_enlargeit['button_favorites']."</a>";
+} else {
+    echo "<br /><a href=\"thumbnails.php?album=favpics\">".$lang_plugin_enlargeit['button_favorites']."</a>";
+}
 
 echo "</td></tr></table>";
 ob_end_flush();

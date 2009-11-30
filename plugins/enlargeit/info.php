@@ -23,12 +23,7 @@ if (!USER_ID && $CONFIG['allow_unlogged_access'] == 0) {
     cpg_die(ERROR, $lang_errors['access_none'], __FILE__, __LINE__);
 }
 
-if($CONFIG['read_exif_data'] ){
-        include("include/exif_php.inc.php");
-}
-if($CONFIG['read_iptc_data'] ){
-        include("include/iptc.inc.php");
-}
+
 
 /*
  * Local functions definition
@@ -120,14 +115,18 @@ if (!defined('DISPLAYIMAGE_PHP')) {
 
     $path_to_pic = $CONFIG['fullpath'] . $CURRENT_PIC_DATA['filepath'] . $CURRENT_PIC_DATA['filename'];
 
-    if ($CONFIG['read_exif_data']) $exif = exif_parse_file($path_to_pic);
+    if ($CONFIG['read_exif_data']) {
+        $exif = exif_parse_file($path_to_pic, $CURRENT_PIC_DATA['pid']);
+    }
 
     if (isset($exif) && is_array($exif)) {
-                array_walk($exif, 'sanitize_data');
+        array_walk($exif, 'sanitize_data');
         $info = array_merge($info,$exif);
     }
 
-    if ($CONFIG['read_iptc_data']) $iptc = get_IPTC($path_to_pic);
+    if ($CONFIG['read_iptc_data']) {
+        $iptc = get_IPTC($path_to_pic);
+    }
 
     if (isset($iptc) && is_array($iptc)) {
         array_walk($iptc, 'sanitize_data');
@@ -155,6 +154,13 @@ $pid    = $superCage->get->getInt('pid');
 $pos    = $superCage->get->getInt('pos');
 $cat    = $superCage->get->getInt('cat');
 $album  = $superCage->get->getInt('album');
+
+if($CONFIG['read_exif_data'] ){
+        include("include/exif_php.inc.php");
+}
+if($CONFIG['read_iptc_data'] ){
+        include("include/iptc.inc.php");
+}
 
 
 //get_meta_album_set in functions.inc.php will populate the $ALBUM_SET instead; matches $META_ALBUM_SET.
@@ -192,9 +198,8 @@ if (isset($CURRENT_PIC_DATA)) {
     }
 }
 
-//echo '<table align="center" cellspacing="1" style="width:100%;height:100%">';
+echo '<table align="center" cellspacing="1" style="width:100%;height:100%">';
 
-starttable('100%', '', 2, 'cpg_zebra');
 $test = html_picinfo();
 $kopf = '';
 
@@ -224,11 +229,10 @@ $kopf .= <<< EOT
 
 EOT;
 }
-$kopf .=  "<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'];
-$test = str_replace("<tr><td class=\"enl_infotable\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'],$kopf,$test);
+$kopf .=  "<tr><td class=\"tableb\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'];
+$test = str_replace("<tr><td class=\"tableb\" width=\"50%\" align=\"right\" >".$lang_picinfo['Filename'],$kopf,$test);
 
 echo $test;
-//echo "</table>";
-endtable();
+echo "</table>";
 
 ?>

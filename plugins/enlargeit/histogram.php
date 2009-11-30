@@ -169,12 +169,12 @@ if ($action == 'image') {
     echo <<< EOT
 <table align="center" cellspacing="1" style="width:100%;height:100%">
     <tr>
-        <td width="100%" align="center" class="enl_infotablehead">
-            <h1>{$lang_plugin_enlargeit['histogram']}</h1>
+        <td width="100%" align="center" class="tableh1">
+            <h2>{$lang_plugin_enlargeit['histogram']}</h2>
         </td>
     </tr>
     <tr>
-        <td width="100%" align="center" style="background-color:{$CONFIG['plugin_enlargeit_ajaxcolor']}">
+        <td width="100%" align="center" class="tableb">
             <img border="0" src="index.php?file=enlargeit/histogram&amp;pid={$pid}&amp;action=image" width="284" height="164" alt="" />
         </td>
     </tr>

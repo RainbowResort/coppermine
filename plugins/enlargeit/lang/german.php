@@ -179,4 +179,5 @@ $lang_plugin_enlargeit['swf'] = 'Shockwave Flash';
 $lang_plugin_enlargeit['ytb'] = 'YouTube Video';
 $lang_plugin_enlargeit['dvx'] = 'DivX Video';
 $lang_plugin_enlargeit['flv'] = 'Flash Video-Datei';
+$lang_plugin_enlargeit['download'] = 'Download';
 ?>

@@ -103,7 +103,12 @@ if ($action == 'download' && $CURRENT_PIC_DATA['filename'] != '') {
 	echo <<< EOT
 <table cellspacing="1" style="width:100%;height:100%">
 	<tr>
-		<td align="center" style="background-color:{$CONFIG['plugin_enlargeit_ajaxcolor']};cursor: pointer;">
+		<td align="center" class="tableh1">
+			<h2>{$lang_plugin_enlargeit['download']}</h2>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" class="tableb">
 			<strong><a href="index.php?file=enlargeit/download&action=download&pid={$pid}" onclick="{$download_link}">{$lang_plugin_enlargeit['download_explain']}</a></strong>
 		</td>
 	</tr>
