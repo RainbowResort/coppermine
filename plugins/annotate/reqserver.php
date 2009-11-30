@@ -33,7 +33,7 @@ if ($superCage->post->keyExists('add')){
     $posy = $superCage->post->getInt('posy');
     $width = $superCage->post->getInt('width');
     $height = $superCage->post->getInt('height');
-    $note = addslashes(urldecode(str_replace('"', '\'', $superCage->post->getRaw('note'))));
+    $note = addslashes(addslashes(urldecode(str_replace('"', '\'', $superCage->post->getRaw('note')))));
     $time = time();
     if ($nid){
         $sql = "UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET posx = $posx, posy = $posy, width = $width, height = $height, note = '$note' WHERE nid = $nid";

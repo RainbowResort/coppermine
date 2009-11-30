@@ -242,7 +242,7 @@ var notes = new PhotoNoteContainer(container);
 for (var n = 0; n < annotations.length; n++){
     /* create a note */
     var size = new PhotoNoteRect(annotations[n].posx, annotations[n].posy, annotations[n].width, annotations[n].height);
-    var note = new PhotoNote(annotations[n].note,'note' + n, size, annotations[n].user_name, annotations[n].user_id);
+    var note = new PhotoNote(annotations[n].note, 'note' + n, size, annotations[n].user_name, annotations[n].user_id);
     /* implement the save/delete functions */
     note.onsave = function (note) { return ajax_save(note); };
     note.ondelete = function (note) { return ajax_delete(note); };
@@ -267,7 +267,7 @@ function addnote(note_text){
     if (js_vars.visitor_annotate_permission_level < 2) {
         return false;
     }
-    var newNote = new PhotoNote(note_text,'note' + n,new PhotoNoteRect(10,10,50,50));
+    var newNote = new PhotoNote(note_text, 'note' + n, new PhotoNoteRect(10,10,50,50), '', '');
     newNote.onsave = function (note) { return ajax_save(note); };
     newNote.ondelete = function (note) { return ajax_delete(note); };
     notes.AddNote(newNote);
@@ -458,7 +458,7 @@ function annotate_page_start() {
     $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
 
     $lang_meta_album_names['lastnotes'] = $lang_plugin_annotate['lastnotes'];
-    $lang_meta_album_names['shownotes'] = $lang_plugin_annotate['shownotes']." '".stripslashes($note)."'";
+    $lang_meta_album_names['shownotes'] = $lang_plugin_annotate['shownotes']." '$note'";
 
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
@@ -755,7 +755,7 @@ function annotate_get_pic_pos($album) {
             $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
             setcookie($CONFIG['cookie_name'].'note', $note);
 
-            $note = addslashes($note);
+            $note = addslashes(addslashes($note));
 
             $query = "SELECT DISTINCT p.pid 
                 FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid 
@@ -834,14 +834,14 @@ function annotate_meta_album($meta) {
 
             $superCage = Inspekt::makeSuperCage();
             $note = $superCage->get->keyExists('note') ? $superCage->get->getRaw('note') : $superCage->cookie->getRaw($CONFIG['cookie_name'].'note');
-            setcookie($CONFIG['cookie_name'].'note', stripslashes($note));
+            setcookie($CONFIG['cookie_name'].'note', $note);
 
-            $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '".stripslashes($note)."'";
+            $album_name = cpg_fetch_icon('search', 2) . ' ' . $lang_plugin_annotate['shownotes'] . " '$note'";
             if ($CURRENT_CAT_NAME) {
                 $album_name .= " - $CURRENT_CAT_NAME";
             }
 
-            $note = addslashes($note);
+            $note = addslashes(addslashes($note));
 
             $query = "SELECT p.pid FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON p.aid = r.aid INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate n ON p.pid = n.pid $RESTRICTEDWHERE AND approved = 'YES' AND n.note = '$note' GROUP BY p.pid";
             $result = cpg_db_query($query);
