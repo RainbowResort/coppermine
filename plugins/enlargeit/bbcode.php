@@ -77,19 +77,19 @@ if (in_array($client_array['browser'], array('IE8', 'IE7', 'IE6', 'IE5.5', 'IE5'
 echo <<< EOT
 <table cellspacing="1" style="width:100%;height:100%">
 	<tr>
-		<td colspan="2" class="enl_infotablehead" align="center">
+		<td colspan="2" class="tableh1" align="center">
 			<h1>{$lang_plugin_enlargeit['bbcode']}</h1>
 		</td>
 	</tr>
 	<tr>
-		<td class="enl_infotable" align="center">
+		<td class="tableb" align="center">
 			<h5>[url][img][/url]</h5>
 			<textarea rows="6" cols="40" style="overflow:off;">{$img_url}</textarea>
 			{$copy_image_string}
 		</td>
 	</tr>
 	<tr>
-		<td class="enl_infotable" align="center">
+		<td class="tableb" align="center">
 			<h5>[url]title[/url]</h5>
 			<textarea rows="3" cols="40" style="overflow:off;">{$name_url}</textarea>
 			{$copy_url_string}

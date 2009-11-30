@@ -170,7 +170,7 @@ function enlargeit_head($meta) {
 	require('./plugins/enlargeit/init.inc.php');
 	$enlargeit_pages_array = array('displayimage.php', 'index.php', 'thumbnails.php');
 	if (in_array($CPG_PHP_SELF, $enlargeit_pages_array) == TRUE) {
-	    if ($CONFIG['plugin_enlargeit_brdbck'] != '') {
+	    if ($CONFIG['plugin_enlargeit_brdbck'] != '' && $CONFIG['plugin_enlargeit_brdbck'] != '0') {
 	        $temp_brdbck = 'backgrounds/' . $CONFIG['plugin_enlargeit_brdbck'] . '.png';
 	    } else {
 	        $temp_brdbck = '';
@@ -191,7 +191,7 @@ function enlargeit_head($meta) {
 	        $temp_loader = 'images/loader.gif';
 	    }
 		$meta  .= <<< EOT
-    <script type="text/javascript" src="plugins/enlargeit/js/enlargeit_source.js"></script>
+    <script type="text/javascript" src="plugins/enlargeit/js/enlargeit.js"></script>
     <link rel="stylesheet" href="plugins/enlargeit/style.css" type="text/css" />
     <script type="text/javascript">
         //<!--
@@ -210,7 +210,7 @@ function enlargeit_head($meta) {
         var enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
         var enl_gifpath = 'plugins/enlargeit/images/';
         var enl_swfpath = 'plugins/enlargeit/images/flash/';
-		var enl_histogramurl = 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=';
+        var enl_histogramurl = 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=';
 		var enl_bbcodeurl = 'index.php?file=enlargeit/bbcode.php?pos=-';
         var enl_loaderpathfile = '{$temp_loader}';
         var enl_usecounter = 1;

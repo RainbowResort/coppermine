@@ -95,6 +95,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-30 [M] Version count updated to 1.6 {GauGau}
+2009-11-30 [B] Fixed broken feature "rounded corners" {GauGau}
+2009-11-30 [C] Packed enlargit.js {GauGau}
 2009-11-29 [M] Version count updated to 1.5 {GauGau}
 2009-11-29 [A] Adding selection for the files that the plugin should be used with {GauGau}
 2009-11-29 [A] Adding help section to config screen {GauGau}

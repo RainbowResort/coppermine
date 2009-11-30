@@ -89,8 +89,8 @@ if ($superCage->post->keyExists('submit')) {
 	  'plugin_enlargeit_cachemaxage' => array('type' => 'int', 'min' => '1', 'max' => '365'),
 	  'plugin_enlargeit_cachemaxsizemb' => array('type' => 'int', 'min' => '1', 'max' => '99'),
 	  'plugin_enlargeit_maximizemethod' => array('type' => 'int', 'min' => '0', 'max' => '1'),
-	  'plugin_enlargeit_img_types' => array('type' => 'array', 'regex_ok' => '/^[a-z_]+$/', 'delimiter' => '/'),
-	  'plugin_enlargeit_mov_types' => array('type' => 'array', 'regex_ok' => '/^[a-z_]+$/', 'delimiter' => '/'),
+	  'plugin_enlargeit_img_types' => array('type' => 'array', 'regex_ok' => '/^[a-z]+$/', 'delimiter' => '/'),
+	  'plugin_enlargeit_mov_types' => array('type' => 'array', 'regex_ok' => '/^[a-z]+$/', 'delimiter' => '/'),
   );
   $config_changes_counter = 0;
   foreach ($sanitization_array as $san_key => $san_value) {
@@ -127,7 +127,8 @@ if ($superCage->post->keyExists('submit')) {
                   $config_changes_counter++;
               }
           } // type is raw --- end
-          if ($san_value['type'] == 'array') { // type is raw --- start              $evaluate_value = $superCage->post->getRaw($san_key);
+          if ($san_value['type'] == 'array') { // type is array --- start              $evaluate_value = $superCage->post->getRaw($san_key);
+              //print_r($superCage->post->getRaw('plugin_enlargeit_img_types'));
               if (is_array($evaluate_value) && isset($san_value['regex_ok']) == TRUE && isset($san_value['delimiter']) == TRUE) {
                   $temp = '';
                   for ($i = 0; $i <= count($evaluate_value); $i++) {
@@ -144,7 +145,7 @@ if ($superCage->post->keyExists('submit')) {
                   cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
                   $config_changes_counter++;
               }
-          } // type is raw --- end
+          } // type is array --- end
       } // only loop if config value is set --- end
   }
 }
