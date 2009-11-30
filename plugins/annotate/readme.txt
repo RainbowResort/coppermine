@@ -38,6 +38,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-11-30 [A] Added annotation statistics of the currently viewed album {eenemeenemuu}
 2009-11-26 [A] Added annotator name and profile link to annotation output {eenemeenemuu}
 2009-11-26 [B] Fixed several issues with apostrophe and quote signs {eenemeenemuu}
 2009-11-26 [A] Added import function to copy annotations from old 'notes' table {eenemeenemuu}

@@ -74,7 +74,7 @@ function annotate_file_data($data){
         $btns_person = "";
         if (annotate_get_level('display_notes') == 1) {
             $superCage = Inspekt::MakeSuperCage();
-            if ($superCage->get->getInt('album')) {
+            if ($superCage->get->testInt('album')) {
                 $result = cpg_db_query("
                     SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
                     INNER JOIN {$CONFIG['TABLE_PICTURES']} p
@@ -89,7 +89,7 @@ function annotate_file_data($data){
                         $note = stripslashes($row[0]);
                         $btns_person .= "<button onclick=\"return addnote('{$row[0]}')\" class=\"admin_menu\" title=\"".sprintf($lang_plugin_annotate['annotate_x_on_this_pic'], $note)."\">$note</button> ";
                     }
-                    $btns_person .= "</div>";
+                    $btns_person .= "</div><hr />";
                     $data['menu'] = $btns_person.$data['menu'];
                 }
                 mysql_free_result($result);
@@ -225,6 +225,22 @@ EOT;
             $html = $on_this_pic_div.$html;
         }
 
+        // Display annotation statistics of the currently viewed album
+        if (annotate_get_level('display_stats') == 1) {
+            $superCage = Inspekt::MakeSuperCage();
+            if ($superCage->get->testInt('album')) {
+                $annotations_pic = $nr_notes;
+                $annotated_pics = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.pid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = {$superCage->get->getInt('album')}"));
+                $annotations_album = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.nid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = {$superCage->get->getInt('album')}"));
+                $annotation_stats = "
+                    <span title=\"{$lang_plugin_annotate['annotations_pic']}\">($annotations_pic)</span>
+                    <span title=\"{$lang_plugin_annotate['annotations_album']}\">($annotations_album)</span>
+                    <span title=\"{$lang_plugin_annotate['annotated_pics']}\">($annotated_pics)</span>
+                ";
+                $data['menu'] .= $annotation_stats;
+            }
+        }
+
         $permission_level = annotate_get_level('permissions');
         $user_id = USER_ID;
         
@@ -239,7 +255,7 @@ var container = document.getElementById('PhotoContainer');
 
 var notes = new PhotoNoteContainer(container);
 
-for (var n = 0; n < annotations.length; n++){
+for (var n = 0; n < annotations.length; n++) {
     /* create a note */
     var size = new PhotoNoteRect(annotations[n].posx, annotations[n].posy, annotations[n].width, annotations[n].height);
     var note = new PhotoNote(annotations[n].note, 'note' + n, size, annotations[n].user_name, annotations[n].user_id);
@@ -593,12 +609,12 @@ EOT;
                 if (strlen($superCage->post->getRaw('note_new')) < 1) {
                     header("Location: index.php?plugin=annotate&manage&batch_rename&status=0&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
                 } else {
-                    cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET note = '{$superCage->post->getRaw('note_new')}' WHERE note = '{$superCage->post->getRaw('note_old')}'");
+                    cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET note = '".addslashes(addslashes($superCage->post->getRaw('note_new')))."' WHERE note = '".addslashes(addslashes($superCage->post->getRaw('note_old')))."'");
                     header("Location: index.php?plugin=annotate&manage&batch_rename&status=1&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
                 }
             }
             if ($superCage->get->keyExists('batch_delete')) {
-                cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE note = '{$superCage->post->getRaw('note_old')}'");
+                cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE note = '".addslashes(addslashes($superCage->post->getRaw('note_old')))."'");
                 header("Location: index.php?plugin=annotate&manage&batch_delete&status=1&note_old={$superCage->post->getRaw('note_old')}");
             }
         }
@@ -700,14 +716,14 @@ EOT;
             if (mysql_num_rows($result)) {
                 $person_array = Array();
                 while ($row = mysql_fetch_assoc($result)) {
-                    $person_array[] = $row['note'];
+                    $person_array[] = stripslashes($row['note']);
                 }
 
                 echo '<tr><td class="tableb" align="left">';
                 for ($i = 0; $i < count($person_array); $i++) {
                     echo "
-                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" class=\"image\" /></a>
-                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" class=\"image\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" border=\"0\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" border=\"0\" /></a>
                         {$person_array[$i]}<br />
                     ";
                 }
@@ -911,6 +927,7 @@ function annotate_configuration_submit() {
     while($row = mysql_fetch_assoc($result)) {
         $config_changes_counter += annotate_configuration_save_value('plugin_annotate_display_notes_'.$row['group_id'], 1);
         $config_changes_counter += annotate_configuration_save_value('plugin_annotate_display_links_'.$row['group_id'], 1);
+        $config_changes_counter += annotate_configuration_save_value('plugin_annotate_display_stats_'.$row['group_id'], 1);
     }
     mysql_free_result($result);
 
@@ -1012,7 +1029,7 @@ EOT;
     $display_notes = "";
     $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
-            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_notes_{$row['group_id']}'"),0);
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_notes_{$row['group_id']}'"), 0);
             $display_notes .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
@@ -1040,7 +1057,7 @@ EOT;
     $display_links = "";
     $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
     while($row = mysql_fetch_assoc($result)) {
-            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_links_{$row['group_id']}'"),0);
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_links_{$row['group_id']}'"), 0);
             $display_links .= <<< EOT
                 <tr>
                     <td valign="top" align="left" class="tableb">
@@ -1062,6 +1079,35 @@ EOT;
             $display_links .= <<< EOT
                 </tr>
 EOT;
+    }
+    mysql_free_result($result);
+
+    $display_stats = "";
+    $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
+    while($row = mysql_fetch_assoc($result)) {
+            $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_annotate_display_stats_{$row['group_id']}'"), 0);
+            $display_stats .= <<< EOT
+                <tr>
+                    <td valign="top" align="left" class="tableb">
+                        {$row['group_name']}
+                    </td>
+EOT;
+            for ($i=0; $i <= 1; $i++) {
+                if (!is_numeric($row['permission']) && $i == 0) {
+                    $checked = "checked=\"checked\"";
+                } else {
+                    $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+                }
+                $display_stats .= <<< EOT
+                    <td valign="top" align="center" class="tableb">
+                        <input type="radio" name="plugin_annotate_display_stats_{$row['group_id']}" id="plugin_annotate_display_stats_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
+                    </td>
+EOT;
+            }
+            $display_stats .= <<< EOT
+                </tr>
+EOT;
+            $display_stats_title = sprintf($lang_plugin_annotate['display_stats_title'], $lang_plugin_annotate['annotations_pic'], $lang_plugin_annotate['annotations_album'], $lang_plugin_annotate['annotated_pics']);
     }
     mysql_free_result($result);
 
@@ -1169,6 +1215,29 @@ EOT;
                                 </tr>
                                 <tr>
                                     $display_links
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="tableb">
+                            {$lang_plugin_annotate['display_stats']} <img src="./images/help.gif" border="0" title="$display_stats_title" />
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        {$lang_plugin_annotate['group']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['no']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['yes']}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    $display_stats
                                 </tr>
                             </table>
                         </td>

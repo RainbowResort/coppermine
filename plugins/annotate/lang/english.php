@@ -84,4 +84,9 @@ $lang_plugin_annotate['imported_already'] = 'Import has already been executed';
 $lang_plugin_annotate['import_success'] = 'Imported %s annotations';
 $lang_plugin_annotate['annotated_by'] = 'Annotated by';
 $lang_plugin_annotate['view_profile'] = 'View profile of \'%s\'';
+$lang_plugin_annotate['display_stats'] = 'Display statistics';
+$lang_plugin_annotate['display_stats_title'] = 'Display \'%s\', \'%s\' and \'%s\' next to the annotation button';
+$lang_plugin_annotate['annotations_pic'] = 'Annotations on this picture';
+$lang_plugin_annotate['annotations_album'] = 'Annotations in this album';
+$lang_plugin_annotate['annotated_pics'] = 'Annotated pictures in this album';
 ?>
