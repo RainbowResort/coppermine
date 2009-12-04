@@ -33,7 +33,10 @@ function mirr_reflect(mirr_image)
   mirr_image.style.marginBottom = '0px';
   mirr_image.style.paddingBottom = '0px';
   mirr_div = document.createElement("div");
+  var mirr_divwidth = mirr_width+10;
+  mirr_div.style.width = mirr_divwidth+'px';
   mirr_div.appendChild(mirr_image);
+  mirr_div.style.cursor = 'pointer';
   for (var i = 1;i<=mirr_size;i++)
   {
     
