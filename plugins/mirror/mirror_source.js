@@ -32,6 +32,7 @@ function mirr_reflect(mirr_image)
   var mirr_parent = mirr_image.parentNode;
   mirr_image.style.marginBottom = '0px';
   mirr_image.style.paddingBottom = '0px';
+  mirr_image.galleryimg = 'no';
   mirr_div = document.createElement("div");
   var mirr_divwidth = mirr_width+10;
   mirr_div.style.width = mirr_divwidth+'px';
