@@ -91,24 +91,24 @@ function slider_mainpage($matches)
   $slider_pics2='';
   $slider_pics3='';
   $slider_FORBIDDEN_SET = "";
-  if ($FORBIDDEN_SET != "") $slider_FORBIDDEN_SET = "AND $FORBIDDEN_SET";
+  if ($FORBIDDEN_SET != "") $slider_FORBIDDEN_SET = $FORBIDDEN_SET;
 
   // request string for meta album toprated
   if ($SLIDERSET['slider_album'] == "toprated") {
-    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' approved = 'YES' $slider_FORBIDDEN_SET AND votes >= '{$CONFIG['min_votes_for_rating']}' $META_ALBUM_SET ORDER BY pic_rating DESC, votes DESC, pid DESC LIMIT $sliderlimit";
+    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' $slider_FORBIDDEN_SET AND votes >= '{$CONFIG['min_votes_for_rating']}' $META_ALBUM_SET ORDER BY pic_rating DESC, votes DESC, pid DESC LIMIT $sliderlimit";
   }
   // request string for meta album most viewed
   else if ($SLIDERSET['slider_album'] == "topn") {
-    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' AND approved = 'YES' $slider_FORBIDDEN_SET AND hits > 0 $META_ALBUM_SET ORDER BY hits DESC, filename LIMIT $sliderlimit";  
+    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' $slider_FORBIDDEN_SET AND hits > 0 $META_ALBUM_SET ORDER BY hits DESC, filename LIMIT $sliderlimit";  
   }
   // request string for meta album last uploads
   else if ($SLIDERSET['slider_album'] == "lastup") {
-    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' AND approved = 'YES' $slider_FORBIDDEN_SET $META_ALBUM_SET ORDER BY pid DESC LIMIT $sliderlimit";  
+    $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' $slider_FORBIDDEN_SET $META_ALBUM_SET ORDER BY pid DESC LIMIT $sliderlimit";  
   }
   // request string for meta album random pics
   else
   {
-  $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' AND approved = 'YES' $slider_FORBIDDEN_SET $META_ALBUM_SET ORDER BY RAND() LIMIT $sliderlimit";
+  $slider_query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p WHERE filename like '%.jpg' AND filename not like 'youtube_%' $slider_FORBIDDEN_SET $META_ALBUM_SET ORDER BY RAND() LIMIT $sliderlimit";
   }
   // For reading result
   $slider_rowset = array();

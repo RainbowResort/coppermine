@@ -1,5 +1,5 @@
 /**************************************************
-  Coppermine 1.5.x Plugin - Slider $VERSION$=0.3
+  Coppermine 1.5.x Plugin - Slider $VERSION$=0.4
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -61,6 +61,10 @@ Don't try to contact the plugin author for support - post on the board publicly 
 
 Change log:
 -----------
+
+v0.4 (2009/12/04)
+-----------------
+* fixed: SQL error
 
 v0.2 (2009/11/11)
 -----------------
