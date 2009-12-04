@@ -316,10 +316,10 @@ function buttons_add_comment($template_add_your_comment) {
     $new_html_add_comment = '                                <td>
                                         <table width="100%" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td class="tableh2_compact">
+                                                <td class="tableh2">
                                                     {ADD_YOUR_COMMENT}{HELP_ICON}
                                                 </td>
-                                                <td class="tableh2_compact" align="right">
+                                                <td class="tableh2" align="right">
                                                     ' . $bbcodes . '
                                                 </td>
                                             </tr>
