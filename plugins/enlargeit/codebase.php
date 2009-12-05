@@ -34,7 +34,7 @@ $thisplugin->add_filter('page_meta','enlargeit_head');
 // Add filter for thumb
 $thisplugin->add_filter('theme_display_thumbnails_params','enlargeit_addparams');
 
-if (defined('GALLERY_ADMIN_MODE') == TRUE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
+if ('GALLERY_ADMIN_MODE' && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
     $thisplugin->add_filter('admin_menu','enlargeit_add_admin_button');
 }
 
