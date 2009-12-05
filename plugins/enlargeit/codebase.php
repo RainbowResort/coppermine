@@ -34,7 +34,7 @@ $thisplugin->add_filter('page_meta','enlargeit_head');
 // Add filter for thumb
 $thisplugin->add_filter('theme_display_thumbnails_params','enlargeit_addparams');
 
-if (GALLERY_ADMIN_MODE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
+if (defined('GALLERY_ADMIN_MODE') == TRUE && $CONFIG['plugin_enlargeit_adminmenu'] == '1') {
     $thisplugin->add_filter('admin_menu','enlargeit_add_admin_button');
 }
 
@@ -227,8 +227,8 @@ function enlargeit_head($meta) {
         var enl_drgdrop = {$CONFIG['plugin_enlargeit_dragdrop']};
         var enl_brdbck = '{$temp_brdbck}';
         var enl_darksteps = {$CONFIG['plugin_enlargeit_darkensteps']};
-        var enl_canceltext = '{$lang_plugin_enlargeit['enl_canceltext']}';
-        var enl_noflash = '{$lang_plugin_enlargeit['enl_noflashfound']}';
+        var enl_canceltext = '{$lang_plugin_enlargeit['cancel_loading']}';
+        var enl_noflash = '{$lang_plugin_enlargeit['no_flash_found']}';
 
 EOT;
 		$loopCounter = 0;
@@ -302,7 +302,7 @@ EOT;
         }
         // Button "Expand"
         if ($CONFIG['plugin_enlargeit_maximizemethod'] == '1') {
-		    if ((USER_ID && $USER_DATA['access_level'] == '3') || (!USER_ID && $CONFIG['allow_unlogged_access'] == '3')) {
+		    if ((USER_ID && isset($USER_DATA['access_level']) == TRUE && $USER_DATA['access_level'] == '3') || (!USER_ID && $CONFIG['allow_unlogged_access'] == '3')) {
 				$meta  .= <<< EOT
         enl_buttonurl[{$loopCounter}] = 'max';
         enl_buttontxt[{$loopCounter}] = '{$lang_plugin_enlargeit['full_size']}';
@@ -439,7 +439,7 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_dark', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_darkprct', '20')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonpic', '1')");
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttoninfo', '2')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttoninfo', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttonfav', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttoncomment', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_buttondownload', '1')");

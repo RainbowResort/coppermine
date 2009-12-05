@@ -95,6 +95,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-05 [M] Version count updated to 1.7 {GauGau}
+2009-12-05 [O] Changed default for info button {GauGau}
+2009-12-05 [O] Silenced some notices {GauGau}
 2009-11-30 [C] Backgrounds now use the style sheet classes of the theme instead of the prpoprietary plugin style {GauGau}
 2009-11-30 [B] Fixed broken feature exif info partially (silencing error messages only) {GauGau}
 2009-11-30 [M] Version count updated to 1.6 {GauGau}

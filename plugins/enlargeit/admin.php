@@ -128,7 +128,7 @@ if ($superCage->post->keyExists('submit')) {
               }
           } // type is raw --- end
           if ($san_value['type'] == 'array') { // type is array --- start              $evaluate_value = $superCage->post->getRaw($san_key);
-              //print_r($superCage->post->getRaw('plugin_enlargeit_img_types'));
+              //print_r($superCage->post->getRaw($san_key));
               if (is_array($evaluate_value) && isset($san_value['regex_ok']) == TRUE && isset($san_value['delimiter']) == TRUE) {
                   $temp = '';
                   for ($i = 0; $i <= count($evaluate_value); $i++) {
@@ -328,6 +328,11 @@ if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
 if ($CONFIG['plugin_enlargeit_buttonhist'] == '1') {
 	$option_output['plugin_enlargeit_buttonhist'] = 'checked="checked"';
 	$cache_visibility = 'visible';
+	$option_output['plugin_enlargeit_cachecontrol_0'] = '';
+	$option_output['plugin_enlargeit_cachecontrol_1'] = '';
+	$option_output['plugin_enlargeit_cachecontrol_2'] = '';
+	$option_output['plugin_enlargeit_cachemaxage'] = '';
+	$option_output['plugin_enlargeit_cachemaxsizemb'] = '';
 } else { 
 	$option_output['plugin_enlargeit_buttonhist'] = '';
 	$cache_visibility = 'hidden';
@@ -383,7 +388,7 @@ if ($CONFIG['plugin_enlargeit_adminmenu'] == '1') {
 	$option_output['plugin_enlargeit_adminmenu'] = '';
 }
 
-if ($CONFIG['plugin_enlargeit_cachecontrol'] == '0') {
+if (isset($CONFIG['plugin_enlargeit_cachecontrol']) != TRUE || $CONFIG['plugin_enlargeit_cachecontrol'] == '0') {
 	$option_output['plugin_enlargeit_cachecontrol_0'] .= 'checked="checked"';
 	$option_output['plugin_enlargeit_cachecontrol_1'] .= '';
 	$option_output['plugin_enlargeit_cachecontrol_2'] .= '';
@@ -781,7 +786,9 @@ foreach ($enlargeit_supported_image_file_array as $key) {
     $format_name = strtoupper($key) . ' - ' . $lang_plugin_enlargeit[$key];
     if (in_array($key, $current_format_config_array) == TRUE) {
         $img_type_output[$key] = 'selected="selected"';
-    } 
+    } else {
+        $img_type_output[$key] = '';
+    }
     if (in_array($key, $current_upload_allowed_array) != TRUE) {
         $format_name .= '*';
     } 
@@ -811,6 +818,8 @@ foreach ($enlargeit_supported_video_file_array as $key) {
     $format_name = strtoupper($key) . ' - ' . $lang_plugin_enlargeit[$key];
     if (in_array($key, $current_format_config_array) == TRUE) {
         $mov_type_output[$key] = 'selected="selected"';
+    } else {
+        $mov_type_output[$key] = '';
     }
     if (in_array($key, $current_upload_allowed_array) != TRUE) {
         $format_name .= '*';
