@@ -1,20 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2009 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - album_fav_boxes!
+  *************************************************
+  Copyright (c) 2009 Nibbler
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/albmgr.php $
-  $Revision: 6131 $
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/album_fav_boxes/admin.php $
+  $Revision: 6793 $
   $LastChangedBy: gaugau $
-  $Date: 2009-06-10 08:42:56 +0200 (Mi, 10 Jun 2009) $
-**********************************************/
+  $Date: 2009-11-26 18:23:33 +0100 (Do, 26. Nov 2009) $
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
@@ -35,4 +34,14 @@ $lightbox['lang']['x files removed from favorites'] = '%s Dateien von der Favori
 $lightbox['lang']['1 file removed from favorites'] = 'Eine Datei von der Favoriten-Liste entfernt';
 $lightbox['lang']['Favorites cleared'] = 'Favoriten-Liste wurde gelöscht';
 $lightbox['lang']['Announcement thread'] = 'Ankündigungs-Thread';
+$lightbox['lang']['Configuration'] = 'Einstellungen';
+$lightbox['lang']['Update success'] = 'ie Werte wurden erfolgreich aktualisiert';
+$lightbox['lang']['No changes'] = 'Es gabe keine Änderungen';
+$lightbox['lang']['Submit'] = 'Senden';
+$lightbox['lang']['Albums'] = 'Aktiviere "%s" in den folgenden Meta-Alben'; // Don't translate or modify %s
+$lightbox['lang']['Regular albums'] = 'Normale Alben';
+$lightbox['lang']['Search results'] = 'Suchergebnisse';
+$lightbox['lang']['Last comments by'] = 'Letzte Kommentare von';
+$lightbox['lang']['Last additions by'] = 'Zuletzt hinzugefügt von';
+$lightbox['lang']['install_instructions'] = 'Nach der Installation kannst Du entscheiden, in welchen Meta-Alben die Lightbox-Ankreuzfelder erscheinen sollen. Benutze dazu die "Einstellungen"-Schaltfläche auf der Plugin-Manager-Seite.';
 ?>

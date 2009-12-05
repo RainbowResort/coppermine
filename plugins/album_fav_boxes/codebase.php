@@ -1,46 +1,41 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2009 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - album_fav_boxes!
+  *************************************************
+  Copyright (c) 2009 Nibbler
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/albmgr.php $
-  $Revision: 6131 $
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/admin.php $
+  $Revision: 6793 $
   $LastChangedBy: gaugau $
-  $Date: 2009-06-10 08:42:56 +0200 (Mi, 10 Jun 2009) $
-**********************************************/
+  $Date: 2009-11-26 18:23:33 +0100 (Do, 26. Nov 2009) $
+  **************************************************/
 
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+if (!defined('IN_COPPERMINE')) {
+    die('Not in Coppermine...');
+}
 
+// Add plugin_install action$thisplugin->add_action('plugin_install','album_fav_boxes_install');
 
-/*
-	Add an add_filter call for any album type you wish to enable the plugin for
+// Add plugin_uninstall action$thisplugin->add_action('plugin_uninstall','album_fav_boxes_uninstall');
 
-	'thumb_caption_regular'
-	'thumb_caption_lastcom'                
-	'thumb_caption_lastcomby'
-	'thumb_caption_lastup'
-	'thumb_caption_lastupby'
-	'thumb_caption_topn'
-	'thumb_caption_toprated'
-	'thumb_caption_lasthits'
-	'thumb_caption_random'
-	'thumb_caption_search'
-	'thumb_caption_lastalb'                
-	'thumb_caption_favpics'
-*/
+$existing_meta_albums_array = array('regular', 'lastcom', 'lastcomby', 'lastup', 'lastupby', 'topn', 'toprated', 'lasthits', 'random', 'search', 'lastalb', 'favpics');
+
+foreach ($existing_meta_albums_array as $key) {
+    if ($CONFIG['plugin_album_fav_boxes_' . $key] == '1') {
+        $thisplugin->add_filter('thumb_caption_' . $key, 'thumb_caption_add_to_favs');
+    }
+}
 
 // Enable selector in regular albums
-$thisplugin->add_filter('thumb_caption_regular','thumb_caption_add_to_favs');
+//$thisplugin->add_filter('thumb_caption_regular','thumb_caption_add_to_favs');
 
 // Enable the selector in search results
-$thisplugin->add_filter('thumb_caption_search','thumb_caption_add_to_favs');
+//$thisplugin->add_filter('thumb_caption_search','thumb_caption_add_to_favs');
 
 // Enable remover in favourites album
 $thisplugin->add_filter('thumb_caption_favpics','thumb_caption_remove_from_favs');
@@ -48,8 +43,50 @@ $thisplugin->add_filter('thumb_caption_favpics','thumb_caption_remove_from_favs'
 // This will detect the add/remove forms being submitted and process them
 $thisplugin->add_action('page_start','form_intercept');
 
-// Iinitialise data array 
+// Initialise data array 
 $lightbox['data'] = array();
+
+// install
+function album_fav_boxes_install() {
+    global $CONFIG;
+	// Add the config options for the plugin	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_regular', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_search', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_favpics', '1')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lastcom', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lastcomby', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lastup', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lastupby', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_topn', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_toprated', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lasthits', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_random', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_album_fav_boxes_lastalb', '0')");
+    return true;
+}
+
+
+// uninstall and drop settings table
+function album_fav_boxes_uninstall() {
+    global $CONFIG;
+	$superCage = Inspekt::makeSuperCage();
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+    // Delete the plugin config records	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_regular'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_search'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_favpics'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lastcom'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lastcomby'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lastup'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lastupby'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_topn'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_toprated'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lasthits'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_random'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_album_fav_boxes_lastalb'");
+    return true;
+}
 
 function form_intercept(){
 	global $CONFIG, $FAVPICS, $lightbox;

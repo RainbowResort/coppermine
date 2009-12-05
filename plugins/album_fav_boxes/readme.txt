@@ -3,7 +3,7 @@ Read up the documentation that comes with Coppermine to find out more, e.g. how 
 
 Coppermine version: cpg1.5.x
 Plugin name: album_fav_boxes
-Plugin version: 2.0
+Plugin version: 3.0
 Plugin author: Nibbler
 Plugin announcement thread: http://forum.coppermine-gallery.net/index.php/topic,60278.0.html
 
