@@ -34,18 +34,20 @@ function mirr_reflect(mirr_image)
   mirr_image.style.paddingBottom = '0px';
   mirr_image.galleryimg = 'no';
   mirr_div = document.createElement("div");
+  mirr_div.style.display = 'block';
   var mirr_divwidth = mirr_width+10;
   mirr_div.style.width = mirr_divwidth+'px';
-  mirr_div.appendChild(mirr_image);
   mirr_div.style.cursor = 'pointer';
+  mirr_clone = mirr_image.cloneNode(true);
+  mirr_div.appendChild(mirr_clone);
   for (var i = 1;i<=mirr_size;i++)
-  {
-    
+  {   
     mirr_innerdiv[i] = document.createElement("div");
     mirr_scroll = mirr_height-i;
     mirr_innerdiv[i].style.backgroundImage = 'url('+mirr_image.src+')';
     mirr_innerdiv[i].style.backgroundPosition = '0px -' + mirr_scroll + 'px';
     mirr_innerdiv[i].style.height = '1px';
+    mirr_innerdiv[i].galleryimg = 'no';
     mirr_innerdiv[i].style.width = mirr_width+'px';
     mirr_innerdiv[i].style.overflow = 'hidden';
     mirr_opacity = mirr_opa-(mirr_opa/mirr_size*i);
@@ -55,7 +57,7 @@ function mirr_reflect(mirr_image)
     mirr_innerdiv[i].style.MozOpacity = mirr_opacity;
     mirr_div.appendChild(mirr_innerdiv[i]);
   }
-mirr_parent.appendChild(mirr_div);
+mirr_parent.replaceChild(mirr_div, mirr_image);
 }
 
 
