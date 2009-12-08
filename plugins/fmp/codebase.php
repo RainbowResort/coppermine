@@ -71,10 +71,12 @@ function fmp_get_html($CURRENT_PIC_DATA) {
             </object>
 EOT;
         if ($CURRENT_PIC_DATA['popup'] != true) {
+            list($timestamp, $form_token) = getFormToken();
+            $link = "displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}&amp;form_token=$form_token&amp;timestamp=$timestamp";
             $pic_html .= <<< EOT
             <script type="text/javascript">
                 function popup(url,target,w,h) {
-                    var args = 'width='+w+',height='+h+',left=10,top=10,resizable,scrollbars';
+                    var args = 'width='+w+',height='+h+',left=10,top=10,resizable';
                     ok = window.open(url,target,args);
                     ok.focus();
                     if (ok) return false;
@@ -82,7 +84,7 @@ EOT;
                 }
                 </script>
             <br />
-            <a href="displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}" onclick="javascript: return popup('displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}', 'fmp' + Math.random(), {$CURRENT_PIC_DATA['pwidth']} + {$CONFIG['fullsize_padding_x']}, {$CURRENT_PIC_DATA['pheight']} + {$CONFIG['fullsize_padding_y']})">Popup <img src="images/link.gif" border="0" /></a>
+            <a href="$link" onclick="javascript: return popup('$link', 'fmp' + Math.random(), {$CURRENT_PIC_DATA['pwidth']} + {$CONFIG['fullsize_padding_x']}, {$CURRENT_PIC_DATA['pheight']} + {$CONFIG['fullsize_padding_y']})">Popup <img src="images/link.gif" border="0" /></a>
 EOT;
         }
     }
@@ -102,9 +104,22 @@ function fmp_other_media($pic_html) {
 function fmp_page_start() {
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->testInt('fmp')) {
+        // Disable permanent direct access 
+        if (!checkFormToken()) {
+            global $lang_errors;
+            cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+        }
+
         global $CONFIG;
-        // TODO: check if user is has access rights for the file
+        // TODO: check access rights
         $CURRENT_PIC_DATA = mysql_fetch_assoc(cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = ".$superCage->get->getInt('fmp')));
+
+        // File does not exist or access denied
+        if (!$CURRENT_PIC_DATA) {
+            global $lang_errors;
+            cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
+        }
+
         $path_parts = pathinfo($CURRENT_PIC_DATA['filename']);
         $CURRENT_PIC_DATA['extension'] = $path_parts['extension'];
         $CURRENT_PIC_DATA['popup'] = true;

@@ -25,7 +25,7 @@
 $name = 'Flash Media Player';
 $description = 'Use <a href="http://www.longtailvideo.com/players/jw-flv-player/" rel="external" class="external">JW Media Player</a> to play flv, mp4, mp3 &amp; aac files. Consider the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" class="external">noncommercial license</a>!';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0';
+$version = '1.1';
 $extra_info = $install_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
         <tr>
