@@ -29,17 +29,17 @@ $thisplugin->add_action('plugin_uninstall', 'fmp_uninstall');
 $thisplugin->add_action('plugin_cleanup', 'fmp_cleanup');
 
 $thisplugin->add_filter('html_other_media','fmp_other_media');
+$thisplugin->add_action('page_start','fmp_page_start');
 
 
-function fmp_other_media($pic_html) {
-    global $CURRENT_PIC_DATA;
+function fmp_get_html($CURRENT_PIC_DATA) {
     if (in_array($CURRENT_PIC_DATA['extension'], Array('flv', 'mp4', 'mp3', 'aac'))) {
         global $CONFIG, $USER;
         $CURRENT_PIC_DATA['pheight'] += 20;
         $thumb = get_pic_url($CURRENT_PIC_DATA, 'thumb');
         $file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
-        $autostart = $CONFIG['media_autostart'] == 1 ? true : false;
+        $autostart = $CONFIG['media_autostart'] == 1 ? "1" : "0";
 
         $theme = $USER['theme'] ? $USER['theme'] : $CONFIG['theme'];
         $stylesheet = file_get_contents("themes/{$theme}/style.css");
@@ -69,10 +69,52 @@ function fmp_other_media($pic_html) {
             <param name="allowfullscreen" value="true" />
             <param name="wmode" value="opaque" />
             </object>
-        
 EOT;
+        if ($CURRENT_PIC_DATA['popup'] != true) {
+            $pic_html .= <<< EOT
+            <script type="text/javascript">
+                function popup(url,target,w,h) {
+                    var args = 'width='+w+',height='+h+',left=10,top=10,resizable,scrollbars';
+                    ok = window.open(url,target,args);
+                    ok.focus();
+                    if (ok) return false;
+                    else return true;
+                }
+                </script>
+            <br />
+            <a href="displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}" onclick="javascript: return popup('displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}', 'fmp' + Math.random(), {$CURRENT_PIC_DATA['pwidth']} + {$CONFIG['fullsize_padding_x']}, {$CURRENT_PIC_DATA['pheight']} + {$CONFIG['fullsize_padding_y']})">Popup <img src="images/link.gif" border="0" /></a>
+EOT;
+        }
     }
     return $pic_html;
+}
+
+
+function fmp_other_media($pic_html) {
+    global $CURRENT_PIC_DATA;
+    if (fmp_get_html($CURRENT_PIC_DATA)) {
+        $pic_html = fmp_get_html($CURRENT_PIC_DATA);
+    }
+    return $pic_html;
+}
+
+
+function fmp_page_start() {
+    $superCage = Inspekt::makeSuperCage();
+    if ($superCage->get->testInt('fmp')) {
+        global $CONFIG;
+        // TODO: check if user is has access rights for the file
+        $CURRENT_PIC_DATA = mysql_fetch_assoc(cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = ".$superCage->get->getInt('fmp')));
+        $path_parts = pathinfo($CURRENT_PIC_DATA['filename']);
+        $CURRENT_PIC_DATA['extension'] = $path_parts['extension'];
+        $CURRENT_PIC_DATA['popup'] = true;
+        if ($CURRENT_PIC_DATA['pwidth']==0 || $CURRENT_PIC_DATA['pheight']==0) {
+            $CURRENT_PIC_DATA['pwidth']  = 320;
+            $CURRENT_PIC_DATA['pheight'] = 240;
+        }
+        echo fmp_get_html($CURRENT_PIC_DATA);
+        exit;
+    }
 }
 
 
