@@ -127,7 +127,8 @@ if ($superCage->post->keyExists('submit')) {
                   $config_changes_counter++;
               }
           } // type is raw --- end
-          if ($san_value['type'] == 'array') { // type is array --- start              $evaluate_value = $superCage->post->getRaw($san_key);
+          if ($san_value['type'] == 'array') { // type is array --- start              
+          $evaluate_value = $superCage->post->getRaw($san_key);
               //print_r($superCage->post->getRaw($san_key));
               if (is_array($evaluate_value) && isset($san_value['regex_ok']) == TRUE && isset($san_value['delimiter']) == TRUE) {
                   $temp = '';
