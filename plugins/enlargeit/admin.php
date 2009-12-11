@@ -425,11 +425,11 @@ if ($superCage->post->keyExists('submit')) {
 	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://forum.coppermine-gallery.net/index.php/topic,43180.0.html" rel="external" class="external">FLV player</a>', 'rphMedia') . '</li>' . $LINEBREAK;
 	$credit_details = '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://imageflow.finnrudolph.de/" rel="external" class="external">ImageFlow</a>', 'Finn Rudolph') . '</li>' . $LINEBREAK;
 	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.osflv.com/" rel="external" class="external">FLV player OSFLV</a>', 'OSFLV') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], 'Histogram creation', '<a href="http://forum.coppermine-gallery.net/index.php?action=;u=10507" rel="external" class="external">Anton Sparrius (Spaz)</a>') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], $lang_plugin_enlargeit['histogram_creation'], '<a href="http://forum.coppermine-gallery.net/index.php?action=;u=10507" rel="external" class="external">Anton Sparrius (Spaz)</a>') . '</li>' . $LINEBREAK;
 	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.everaldo.com/crystal/" rel="external" class="external">Crystal Clear icons</a>', 'Everaldo Coelho') . '</li>' . $LINEBREAK;
 	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Farbtastic color picker</a>', 'Steven Wittens') . '</li>' . $LINEBREAK;
 	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.softwareunity.com/jquery/JQuerySpinBtn/" rel="external" class="external">SpinButton jquery plugin</a>', 'George Adamson') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], 'Integration into cpg1.5.x', '<a href="http://gaugau.de/" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
+	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], sprintf($lang_plugin_enlargeit['integration_into_x'], 'cpg'.COPPERMINE_VERSION), '<a href="http://gaugau.de/" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
 	
 	echo <<< EOT
 	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)<br />

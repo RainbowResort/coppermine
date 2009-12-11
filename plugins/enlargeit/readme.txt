@@ -51,7 +51,7 @@ How to install:
 
 How to configure:
 -----------------
-* Use the additional button 'EnlargeIt!' in admin menu.
+* Use the additional button 'EnlargeIt!' in admin menu or on the plugin manager page.
 
 
 How to uninstall:
@@ -83,6 +83,7 @@ This plugin uses the following components:
 * Crystal Clear icons by Everaldo Coelho: http://www.everaldo.com/crystal/
 * Farbtastic color picker by Steven Wittens: http://acko.net/dev/farbtastic/
 * SpinButton jquery plugin by George Adamson: http://www.softwareunity.com/jquery/JQuerySpinBtn/
+* Czech and Slovak language files by Drahus: http://dc-foto.com/
 
 Changelog
 =========
@@ -95,10 +96,15 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-11 [M] Version count updated to 1.8 {GauGau}
+2009-12-11 [M] Backported Czech language file from cpg1.4.x-plugin {GauGau}
+2009-12-11 [M] Backported Slovak language file from cpg1.4.x-plugin {GauGau}
+2009-12-11 [A] Backported JS file from cpg1.4.x-plugin  {GauGau}
+2009-12-11 [B] Fixed improper line break that caused config form not to work on some setups  {Timo}
 2009-12-05 [M] Version count updated to 1.7 {GauGau}
 2009-12-05 [O] Changed default for info button {GauGau}
 2009-12-05 [O] Silenced some notices {GauGau}
-2009-11-30 [C] Backgrounds now use the style sheet classes of the theme instead of the prpoprietary plugin style {GauGau}
+2009-11-30 [C] Backgrounds now use the style sheet classes of the theme instead of the proprietary plugin style {GauGau}
 2009-11-30 [B] Fixed broken feature exif info partially (silencing error messages only) {GauGau}
 2009-11-30 [M] Version count updated to 1.6 {GauGau}
 2009-11-30 [B] Fixed broken feature "rounded corners" {GauGau}

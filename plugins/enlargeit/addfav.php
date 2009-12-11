@@ -16,8 +16,6 @@
   **************************************************/
 
 define('IN_COPPERMINE', true);
-define('RATEPIC_PHP', true);
-
 
 require_once('init.inc.php');
 

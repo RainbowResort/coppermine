@@ -179,4 +179,6 @@ $lang_plugin_enlargeit['ytb'] = 'YouTube Video';
 $lang_plugin_enlargeit['dvx'] = 'DivX Video';
 $lang_plugin_enlargeit['flv'] = 'Flash video file';
 $lang_plugin_enlargeit['download'] = 'Download';
+$lang_plugin_enlargeit['histogram_creation'] = 'Histogram creation';
+$lang_plugin_enlargeit['integration_into_x'] = 'Integration into %s';
 ?>
