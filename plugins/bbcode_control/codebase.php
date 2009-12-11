@@ -287,6 +287,10 @@ function special_close_tag($tag) {
 
 
 function buttons_add_comment($template_add_your_comment) {
+    if (!USER_CAN_POST_COMMENTS) {
+        return $template_add_your_comment;
+    }
+
     global $CONFIG, $enabled_languages_array;
 
     // language detection
