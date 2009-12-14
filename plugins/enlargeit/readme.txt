@@ -14,77 +14,6 @@
   $Date$
 **************************************************/
 
-What's this?
-------------
-This plugin replaces the intermediate page with an AJAX gui that is widely configurable. It provides one of the fastest possible ways to browse a picture gallery.
-
-This plugin works fine with any graphical web browser (Firefox 1.5 and higher, IE 5.0 and higher, Opera 8 and higher, Safari 3 and higher, Konqueror 3.5 and higher, Google Chrome ...), so you won't lose any visitors because of compatibility issues. Users without a Javascript-capable browser or who have deactivated scripting in their browser can use the gallery as if EnlargeIt! wasn't there at all.
-
-
-Features:
----------
-* buttons for picture info, full size image, favourite pics, download, histogram
-* navigation and close buttons
-* navigation with arrow keys or mouse wheel (mouse wheel only supported with mozilla & IE)
-* five different animation types
-* chose animation speed and steps
-* select border size, color and shadow
-* centering and screen darkening (lightbox alike)
-* enlarge to intermediate size or full size pics
-* doesn't blow up your page size - only 22 Kbyte of javascript and 1 Kbyte of CSS is added
-  Still too big for you? Go to http://enlargeit.timos-welt.de/english/11/building_blocks.php
-  and generate your own smaller, personalized version of the Javascript part
-* support for playback of flash files (*.swf)
-* support for playback of *.flv files - simply upload them to your CPG and they will play
-* support for playback of *.divx files via DivX Web Player (http://labs.divx.com/WebPlayer) - 
-  simply upload a *.divx file to your gallery, and EnlargeIt! will play it on Windows and Mac
-* you can configure virtually everything on the config page - but it's not mandatory
-
-
-How to install:
----------------
-1. Copy folder enlargeit to your plugins folder.
-2. Install via plugin manager.
-3. If you update from a previous version, make sure to always completely uninstall the 
-   old version before installing the new one, and empty your browser cache afterwards.
-
-
-How to configure:
------------------
-* Use the additional button 'EnlargeIt!' in admin menu or on the plugin manager page.
-
-
-How to uninstall:
------------------
-1. Uninstall via plugin manager.
-
-
-First aid - if it doesn't work
-------------------------------
-- Check if the visitor has permissions to access enlargeit.js  and 
-  the rest of the plugin's folders and files
-  (http://path.to.your.gallery/plugins/enlargeit/js/enlargeit.js).
-  The whole folder must be accessible via web for the visitors, 
-  because it contains the javascript and graphic files.
-- If you use the SEF plugin, don't forget to switch the setting 
-  on the EnlargeIt! config page.
-- If you use a highly modded theme or a theme that doesn't provide 
-  valid HTML/XHTML, this plugin probably won't work. I can live with that, and you must!
-
-
-Credits:
-========
-This plugin uses the following components:
-* EnlargeIt! technology by Timo Schewe: http://enlargeit.timos-welt.de/
-* FLV player by rphMedia: http://forum.coppermine-gallery.net/index.php/topic,43180.0.html
-* ImageFlow is based on the script by Finn Rudolph: http://imageflow.finnrudolph.de/
-* FLV player OSFLV: http://www.osflv.com/
-* Histogram creation by Anton Sparrius (Spaz): anton_spaz@yahoo.com
-* Crystal Clear icons by Everaldo Coelho: http://www.everaldo.com/crystal/
-* Farbtastic color picker by Steven Wittens: http://acko.net/dev/farbtastic/
-* SpinButton jquery plugin by George Adamson: http://www.softwareunity.com/jquery/JQuerySpinBtn/
-* Czech and Slovak language files by Drahus: http://dc-foto.com/
-
 Changelog
 =========
 [A] = Added new feature
@@ -96,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-14 [M] Version count updated to 1.9 {GauGau}
+2009-12-14 [A] Added documentation {GauGau}
 2009-12-11 [M] Version count updated to 1.8 {GauGau}
 2009-12-11 [M] Backported Czech language file from cpg1.4.x-plugin {GauGau}
 2009-12-11 [M] Backported Slovak language file from cpg1.4.x-plugin {GauGau}
@@ -184,16 +115,3 @@ Changelog
 2009-11-01 [M] First public release {Timo}
 
 
-To Do
-=====
-* Implement the changes that went into the enlargeit plugin for cpg1.4.x:
-    * Use hourglass mouse cursors if browser supports it
-    * Shadow color
-    * Vote button
-    * Comment button
-    * Ecard button
-    * SEF_URL support
-* Add screenshots
-* Add a help page
-* Add an animation preview on the config page
-*Add support for non-image files

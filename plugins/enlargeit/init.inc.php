@@ -24,8 +24,15 @@ require ("./plugins/enlargeit/lang/english.php");
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
 if (file_exists("./plugins/enlargeit/lang/{$CONFIG['lang']}.php")) {
-  require ("./plugins/enlargeit/lang/{$CONFIG['lang']}.php");
+    require ("./plugins/enlargeit/lang/{$CONFIG['lang']}.php");
 } 
+
+// Determine the help file link
+if (file_exists("./plugins/enlargeit/docs/{$CONFIG['lang']}.htm")) {
+    $documentation_file = $CONFIG['lang'];
+} else {
+    $documentation_file = 'english';
+}
 
 if ($CONFIG['enable_menu_icons'] >= 1) {
     $enlargeit_icon_array['configure'] = '<img src="./plugins/enlargeit/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';

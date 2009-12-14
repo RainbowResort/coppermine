@@ -160,7 +160,6 @@ $lang_plugin_enlargeit['x_by_x'] = '%s by %s';
 $lang_plugin_enlargeit['preview'] = 'Preview';
 $lang_plugin_enlargeit['image_formats'] = 'Image formats';
 $lang_plugin_enlargeit['video_formats'] = 'Video formats';
-$lang_plugin_enlargeit['format_explain'] = 'Select the file formats where the EnlargeIt! plugin should be used with. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload -  to control that, go to Coppermine\'s config.';
 $lang_plugin_enlargeit['press_ctrl_to_select_multiple_rows'] = 'Hold down the [Ctrl]-key to select multiple rows.';
 $lang_plugin_enlargeit['asterisk_explain'] = 'Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine\'s config, so it\'s quite likely that those files don\'t exist in your gallery in the first place.';
 $lang_plugin_enlargeit['jpg'] = 'Joint Photography Experts Group graphics file format'; 

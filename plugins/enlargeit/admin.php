@@ -152,9 +152,7 @@ if ($superCage->post->keyExists('submit')) {
 }
 
 // Help messages
-$image_format_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['image_formats']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['format_explain']))), 470, 245);
-$video_format_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['video_formats']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['format_explain']))), 470, 245);
-$multi_select_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['multimedia']))).'&amp;t='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['press_ctrl_to_select_multiple_rows'] . '<br />' . $lang_plugin_enlargeit['asterisk_explain']))), 470, 245);
+$multi_select_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['multimedia']))).'&amp;t='.urlencode(base64_encode(serialize('<p>' . $lang_plugin_enlargeit['press_ctrl_to_select_multiple_rows'] . '</p><p>' . $lang_plugin_enlargeit['asterisk_explain'] . '</p>'))), 470, 245);
 
 
 // display config page
@@ -452,7 +450,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enable_for']}
+			{$lang_plugin_enlargeit['enable_for']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enablefor" class="greybox" title="{$lang_plugin_enlargeit['enable_for']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td colspan="2">
 			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['administrators']}</label><br />
@@ -462,7 +460,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enlarge_to_pic_in']}
+			{$lang_plugin_enlargeit['enlarge_to_pic_in']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enlargetopicin" class="greybox" title="{$lang_plugin_enlargeit['enlarge_to_pic_in']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td colspan="2">
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['intermediate_size']}</label><br />
@@ -477,7 +475,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['animation_type']}
+			{$lang_plugin_enlargeit['animation_type']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_animationtype" class="greybox" title="{$lang_plugin_enlargeit['animation_type']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td colspan="2">
 			<select name="plugin_enlargeit_ani" id="plugin_enlargeit_ani" class="listbox">
@@ -775,7 +773,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['image_formats']}{$image_format_help}
+			{$lang_plugin_enlargeit['image_formats']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_imageformats" class="greybox" title="{$lang_plugin_enlargeit['image_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td valign="top">
 		    <select name="plugin_enlargeit_img_types[]" id="plugin_enlargeit_img_types" size="5" multiple="multiple" class="listbox">
@@ -807,7 +805,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['video_formats']}{$video_format_help}
+			{$lang_plugin_enlargeit['video_formats']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_videoformats" class="greybox" title="{$lang_plugin_enlargeit['video_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td valign="top">
 		    <select name="plugin_enlargeit_mov_types[]" id="plugin_enlargeit_mov_types" size="4" multiple="multiple" class="listbox">

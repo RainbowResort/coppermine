@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+<title>EnlargeIt Plugin for cpg1.5.x</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="language" content="en" />
+<meta name="copyright" content="Joachim Müller" />
+<meta name="description" content="" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta http-equiv="imagetoolbar" content="no" />
+<!--
+  SVN version info:
+
+  Coppermine version: 1.5.3
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/docs/en/copyrights.htm $
+  $Revision: 6849 $
+  $LastChangedBy: gaugau $
+  $Date: 2009-12-11 09:49:36 +0100 (Fr, 11. Dez 2009) $
+-->
+<link rel="stylesheet" type="text/css" href="../../../docs/style/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../../docs/style/screen.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../../../docs/style/print.css" media="print" />
+<link rel="shortcut icon" href="../../../favicon.ico" />
+</head>
+<body>
+<a name="header"></a><h1 id="docheader">EnlargeIt Plugin for cpg1.5.x: Documentation<a href="#header" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h1>
+
+<a name="purpose"></a><h2>What's this?<a href="#purpose" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This plugin replaces coppermine's intermediate page with an AJAX gui that is widely configurable. It provides one of the fastest possible ways to browse a picture gallery.</p>
+
+<a name="unobtrusive"></a><h2>Unobtrusive<a href="#unobtrusive" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This plugin works fine with any modern graphical web browser so you won't lose any visitors because of compatibility issues. Users without a Javascript-capable browser or who have deactivated scripting in their browser can use the gallery as if EnlargeIt! wasn't there at all, so this plugin falls back nicely if anything goes wrong.</p>
+<p>Search engine spiders will not be kept from indexing your gallery, so this plugin doesn't have a negative impact on your search engine ranking.</p>
+
+<a name="compatibility"></a><h3>Browser compatibility chart<a href="#compatibility" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+This is a table that represents the environments that the enlargeIt plugin has been tested with. It's far from complete, but should cover most setups that are currently used. In brackets you will find details about the actual testbeds that the contributors of this plugin have tested with.
+<table border="0" cellspacing="0" cellpadding="0" class="maintable">
+    <tr>
+        <th class="tableh1" colspan="2">Browser</th>
+        <th class="tableh1">Version</th>
+        <th class="tableh1">Operating System</th>
+        <th class="tableh1">Result</th>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/msie.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Internet Explorer</td>
+        <td class="tableb">5.0</td>
+        <td class="tableb"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/msie.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Internet Explorer</td>
+        <td class="tableb tableb_alternate">5.5</td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb tableb_alternate"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/msie6.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Internet Explorer</td>
+        <td class="tableb">6.0</td>
+        <td class="tableb"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/msie7.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Internet Explorer</td>
+        <td class="tableb tableb_alternate">7.0</td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb tableb_alternate"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/msie8.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Internet Explorer</td>
+        <td class="tableb">8.0</td>
+        <td class="tableb"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/firefox.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Mozilla Firefox</td>
+        <td class="tableb tableb_alternate">1.5</td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb tableb_alternate"></td>
+    </tr>
+<tr>
+        <td class="tableb"><img src="../../../images/browser/firefox.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Mozilla Firefox</td>
+        <td class="tableb">3.5</td>
+        <td class="tableb"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /> <img src="../../../images/os/linux.png" width="16" height="16" border="0" class="icon" alt="" title="Linux" /> <img src="../../../images/os/linuxubuntu.png" width="16" height="16" border="0" class="icon" alt="" title="Ubuntu 9.10" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/opera.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Opera</td>
+        <td class="tableb tableb_alternate">8</td>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/opera.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Opera</td>
+        <td class="tableb">9</td>
+        <td class="tableb"><img src="../../../images/os/linux.png" width="16" height="16" border="0" class="icon" alt="" title="Linux" /> <img src="../../../images/os/linuxubuntu.png" width="16" height="16" border="0" class="icon" alt="" title="Ubuntu 9.10" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/konqueror.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Konqueror</td>
+        <td class="tableb tableb_alternate">3.5</td>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/chrome.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Google Chrome</td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/epiphany.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">Epiphany (WebKit)</td>
+        <td class="tableb tableb_alternate">2.28</td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/linux.png" width="16" height="16" border="0" class="icon" alt="" title="Linux" /> <img src="../../../images/os/linuxubuntu.png" width="16" height="16" border="0" class="icon" alt="" title="Ubuntu 9.10" /></td>
+        <td class="tableb tableb_alternate"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/galeon.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Galeon</td>
+        <td class="tableb">2.0.7</td>
+        <td class="tableb"><img src="../../../images/os/linux.png" width="16" height="16" border="0" class="icon" alt="" title="Linux" /> <img src="../../../images/os/linuxubuntu.png" width="16" height="16" border="0" class="icon" alt="" title="Ubuntu 9.10" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
+    </tr>
+    <tr>
+        <td class="tableb tableb_alternate"><img src="../../../images/browser/netsurf.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb tableb_alternate">NetSurf</td>
+        <td class="tableb tableb_alternate">1.2</td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/linux.png" width="16" height="16" border="0" class="icon" alt="" title="Linux" /> <img src="../../../images/os/linuxubuntu.png" width="16" height="16" border="0" class="icon" alt="" title="Ubuntu 9.10" /></td>
+        <td class="tableb tableb_alternate"><img src="../../../images/icons/stop.png" width="16" height="16" border="0" class="icon" alt="" title="does not work (Browser is not JavaScript-enabled)" /></td>
+    </tr>
+    <tr>
+        <td class="tableb"><img src="../../../images/browser/safari.png" width="16" height="16" border="0" alt="" /></td>
+        <td class="tableb">Safari</td>
+        <td class="tableb">3</td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+    </tr>
+    <!--<tr>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+        <td class="tableb tableb_alternate"></td>
+    </tr>
+    <tr>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+        <td class="tableb"></td>
+    </tr>-->
+</table>
+
+<a name="features"></a><h2>Features<a href="#features" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<ul>
+    <li>buttons for picture info, full size image, favourite pics, download, histogram</li>
+    <li>navigation and close buttons</li>
+    <li>navigation with arrow keys or mouse wheel (mouse wheel only supported with mozilla & IE)</li>
+    <li>five different animation types</li>
+    <li>chose animation speed and steps</li>
+    <li>select border size, color and shadow</li>
+    <li>centering and screen darkening (lightbox alike)</li>
+    <li>enlarge to intermediate size or full size pics</li>
+    <li>doesn't blow up your page size - only 22 Kbyte of javascript and 1 Kbyte of CSS is added</li>
+    <li>Still too big for you? Go to http://enlargeit.timos-welt.de/english/11/building_blocks.php
+  and generate your own smaller, personalized version of the Javascript part</li>
+    <li>support for playback of flash files (*.swf)</li>
+    <li>support for playback of *.flv files - simply upload them to your CPG and they will play</li>
+    <li>support for playback of *.divx files via DivX Web Player (http://labs.divx.com/WebPlayer) - 
+  simply upload a *.divx file to your gallery, and EnlargeIt! will play it on Windows and Mac</li>
+    <li>you can configure virtually everything on the config page - but it's not mandatory</li>
+</ul>
+
+<a name="install"></a><h2>How to install<a href="#install" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This plugin is installed as any other plugin; there are no extra install steps, so besically you should do as suggested in the corresponding section of the documentation that comes with Coppermine.</p>
+
+<a name="upgrade"></a><h2>Upgrading<a href="#upgrade" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>If you update this plugin from a previous version, make sure to always completely uninstall the old version before installing the new one, and to empty your browser cache afterwards uninstalling.</p>
+
+<a name="uninstall"></a><h2>How to uninstall<a href="#uninstall" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>Uninstall via plugin manager</p>
+
+<a name="configuration"></a><h2>Configuration<a href="#configuration" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>Use the additional button <button type="button" style="font-size: 85%;" name="config" value="EnlargeIt"><img src="../images/icons/configure.png" width="16" height="16" border="0" alt="" />EnlargeIt configuration</button> inside the coppermine admin menu or on the plugin manager page to access the configuration screen for the EnlargeIt plugin.</p>
+
+    <div class="indent">
+    
+    <a name="configuration_type"></a><h3>Enlargement type <a href="#configuration_type" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    
+        <div class="indent">
+        <a name="configuration_type_enablefor"></a><h4>Enable for<a href="#configuration_type_enablefor" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Possible checkboxes:
+        <ul>
+            <li>administrators</li>
+            <li>registered users</li>
+            <li>guests</li>
+        </ul>
+        This option determines who will see the EnlargeIt plugin in the first place. Note that this doesn't actually determine anything about the permissions to view or upload in coppermine: those settings are still being controlled using the "regular" coppermine mechanisms. Instead, this option determines for which group the enlargeIt plugin will be enabled in the first place. All visitors who don't belong to a group that enlargeIt is enabled for will see the regular coppermine mechanism to display images, i.e. they will be sent from the thumbnail screen to the intermediate sized image screen (displayimage.php).<br />
+        By default, all three checkboxes are ticked.
+        
+        <a name="configuration_type_enlargetopicin"></a><h4>Enlarge to pic in<a href="#configuration_type_enlargetopicin" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Specify to what "magnification factor" a thumbnail that get's accessed (i.e. clicked) should be enlarged to. There are three possible options:
+        <ul>
+            <li><em>intermediate size</em></li>
+            <li><em>full size</em></li>
+            <li><em>force intermediate size</em></li>
+        </ul>
+        </div>
+        
+    <a name="configuration_type_end"></a>
+    
+    <a name="configuration_animation"></a><h3>Animation<a href="#configuration_animation" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_animation_end"></a>
+    
+        <div class="indent">
+        <a name="configuration_animation_animationtype"></a><h4>Animation type<a href="#configuration_animation_animationtype" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Specify what animation should be used when a thumbnail is clicked or when going from one image to the other.<br />
+        Possible options:
+        <ul>
+            <li><em>none</em><br />
+            No animation at all - the EnlargeIt-box will apear instantly without any animation effect.</li>
+            <li><em>fade in/out</em></li>
+            <li><em>glide</em></li>
+            <li><em>bump glide</em></li>
+            <li><em>smooth glide</em></li>
+            <li><em>hard glide</em></li>
+            <li><em>glide from top</em></li>
+            <li><em>glide from left</em></li>
+            <li><em>glide from top left</em></li>
+        </ul>
+        </div>
+    
+    <a name="configuration_border"></a><h3>Border<a href="#" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_border_end"></a>
+    
+    <a name="configuration_shadow"></a><h3>Shadow<a href="#configuration_shadow" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_shadow_end"></a>
+    
+    <a name="configuration_title"></a><h3>Title bar <a href="#configuration_title" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_title_end"></a>
+    
+    <a name="configuration_action"></a><h3>Action<a href="#configuration_action" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_action_end"></a>
+    
+    <a name="configuration_buttons"></a><h3>Buttons<a href="#configuration_buttons" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_buttons_end"></a>
+    
+    <a name="configuration_multimedia"></a><h3>Multimedia<a href="#configuration_multimedia" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_multimedia_end"></a>
+        
+        <div class="indent">
+        <a name="configuration_multimedia_imageformats"></a><h4>Image formats<a href="#configuration_multimedia_imageformats" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        <p>Select the file formats where the EnlargeIt! plugin should be used with. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
+        <p>Hold down the [Ctrl]-key to select multiple rows. Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
+        
+        <a name="configuration_multimedia_videoformats"></a><h4>Video formats<a href="#configuration_multimedia_videoformats" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        <p>Select the file formats where the EnlargeIt! plugin should be used with. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
+        <p>Hold down the [Ctrl]-key to select multiple rows. Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
+        </div>
+    
+    <a name="configuration_setup"></a><h3>Plugin setup<a href="#configuration_setup" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_setup_end"></a>
+    
+    </div>
+
+<a name="configuration_end"></a>
+
+<a name="firstaid"></a><h2>First aid - if it doesn't work<a href="#firstaid" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<ul>
+    <li>Check if the visitor has permissions to access enlargeit.js and the rest of the plugin's folders and files (http://path.to.your.gallery/plugins/enlargeit/js/enlargeit.js).<br />
+    The whole folder must be accessible via web for the visitors, because it contains the javascript and graphic files.</li>
+    <li>If you use the SEF plugin, don't forget to switch the setting on the EnlargeIt! config page.</li>
+    <li>If you use a highly modded theme or a theme that doesn't provide valid HTML/XHTML, this plugin probably won't work. I can live with that, and you must!</li>
+</ul>
+
+<a name="support"></a><h2>Support<a href="#support" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>If you have issues with this plugin and need support, it's a good idea to visit the plugin's <a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="external">announcement thread</a> first.</p>
+
+<a name="credits"></a><h2>Credits<a href="#credits" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+This plugin uses the following components:
+<ul>
+    <li><a href="http://enlargeit.timos-welt.de/" rel="external" class="external">EnlargeIt!</a> technology by Timo Schewe</li>
+    <li><a href="http://forum.coppermine-gallery.net/index.php/topic,43180.0.html" rel="external" class="external">FLV player</a> by rphMedia</li>
+    <li><a href="http://imageflow.finnrudolph.de/" rel="external" class="external">ImageFlow</a> is based on the script by Finn Rudolph</li>
+    <li>FLV player <a href="http://www.osflv.com/" rel="external" class="external">OSFLV</a></li>
+    <li>Histogram creation by <a href="mailto:anton_spaz@yahoo.com" rel="external" class="external">Anton Sparrius</a> (Spaz)</li>
+    <li><a href="http://www.everaldo.com/crystal/" rel="external" class="external">Crystal Clear icons</a> by Everaldo Coelho</li>
+    <li><a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Farbtastic color picker</a> by Steven Wittens</li>
+    <li><a href="http://www.softwareunity.com/jquery/JQuerySpinBtn/" rel="external" class="external">SpinButton jquery plugin</a> by George Adamson</li>
+    <li>Czech and Slovak language files by <a href="http://dc-foto.com/" rel="external" class="external">Drahus</a></li>
+</ul>
+
+<a name="todo"></a><h2>To Do<a href="#todo" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This is a list of things that might get improved in future versions of this plugin. There's no guarantee that this will actually happen or when it will happen, so please don't ask for it on the support board.</p>
+<ul>
+    <li>Implement the changes that went into the enlargeit plugin for cpg1.4.x:
+    <ul>
+        <li>Use hourglass mouse cursors if browser supports it</li>
+        <li>Shadow color</li>
+        <li>Vote button</li>
+        <li>Comment button</li>
+        <li>Ecard button</li>
+        <li>SEF_URL support</li>
+    </ul>
+    </li>
+    <li>Add an animation preview on the config page</li>
+    <li>Add screenshots</li>
+    <li>Add support for non-image files</li>
+</ul>
+
+
+<div id="doc_footer">
+	<div class="doc_info_wrapper">
+		<span id="doc_last_changed">$LastChangedDate: 2009-12-11 09:49:36 +0100 (Fr, 11. Dez 2009) $</span>
+		<span id="doc_revision">$Revision: 6849 $</span>
+	</div>
+</div>
+</body>
+</html>
