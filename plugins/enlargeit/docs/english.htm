@@ -67,7 +67,7 @@ This is a table that represents the environments that the enlargeIt plugin has b
         <td class="tableb tableb_alternate"><img src="../../../images/browser/msie7.png" width="16" height="16" border="0" alt="" /></td>
         <td class="tableb tableb_alternate">Internet Explorer</td>
         <td class="tableb tableb_alternate">7.0</td>
-        <td class="tableb tableb_alternate"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb tableb_alternate"><img src="../../../images/os/winxp.png" width="16" height="16" border="0" class="icon" alt="" title="Windows XP" /></td>
         <td class="tableb tableb_alternate"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
     </tr>
     <tr>
@@ -115,9 +115,9 @@ This is a table that represents the environments that the enlargeIt plugin has b
     <tr>
         <td class="tableb"><img src="../../../images/browser/chrome.png" width="16" height="16" border="0" alt="" /></td>
         <td class="tableb">Google Chrome</td>
-        <td class="tableb"></td>
-        <td class="tableb"></td>
-        <td class="tableb"></td>
+        <td class="tableb">3.0</td>
+        <td class="tableb"><img src="../../../images/os/win.png" width="16" height="16" border="0" class="icon" alt="" title="Windows" /></td>
+        <td class="tableb"><img src="../../../images/icons/ok.png" width="16" height="16" border="0" class="icon" alt="" title="OK" /></td>
     </tr>
     <tr>
         <td class="tableb tableb_alternate"><img src="../../../images/browser/epiphany.png" width="16" height="16" border="0" alt="" /></td>
@@ -203,9 +203,9 @@ This is a table that represents the environments that the enlargeIt plugin has b
         <a name="configuration_type_enablefor"></a><h4>Enable for<a href="#configuration_type_enablefor" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
         Possible checkboxes:
         <ul>
-            <li>administrators</li>
-            <li>registered users</li>
-            <li>guests</li>
+            <li><em>administrators</em></li>
+            <li><em>registered users</em></li>
+            <li><em>guests</em></li>
         </ul>
         This option determines who will see the EnlargeIt plugin in the first place. Note that this doesn't actually determine anything about the permissions to view or upload in coppermine: those settings are still being controlled using the "regular" coppermine mechanisms. Instead, this option determines for which group the enlargeIt plugin will be enabled in the first place. All visitors who don't belong to a group that enlargeIt is enabled for will see the regular coppermine mechanism to display images, i.e. they will be sent from the thumbnail screen to the intermediate sized image screen (displayimage.php).<br />
         By default, all three checkboxes are ticked.
@@ -240,18 +240,114 @@ This is a table that represents the environments that the enlargeIt plugin has b
             <li><em>glide from left</em></li>
             <li><em>glide from top left</em></li>
         </ul>
+		
+		<a name="configuration_animation_time"></a><h4>Time between animation steps<a href="#configuration_animation_time" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The animation is actually a set of individual animation steps that get triggered when a visitor accesses the thumbnail. Think of them as frames of a video. You can specify the delay in milliseconds between the animation steps, so this option determines the speed of the animation. The default value is 12 <abbr title="milliseconds">ms</abbr>. You need to play with this setting in relation to the <a href="#configuration_animation_animationtype">animation type</a> to find a setting that works good for you.
+		
+		<a name="configuration_animation_steps"></a><h4>Animation steps <a href="#configuration_animation_steps" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The number of animation steps. Default value is 18. Minimum value is 4, maximum value is 30. This setting determines how smooth the animation will look. The higher the value, the smoother the animation will look. The drawback of setting this to a high value is that it will cause lags on slower, older clients. When testing this setting, don't get lulled into believing that everything will be fine if it looks OK on your PC: on other less powerfull machines a high number of animation steps can cause issues.
+		
+		<a name="configuration_animation_transparency"></a><h4>Transparency effect for glide animation<a href="#configuration_animation_transparency" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		When this option is checked the script tries to use transparency for the glide effect, which will have a performance impact on older clients. Default setting is off.
         </div>
     
-    <a name="configuration_border"></a><h3>Border<a href="#" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+    <a name="configuration_border"></a><h3>Border<a href="#configuration_border" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	Settings in relation to the border around individual images when using EnlargeIt to view an image that resides in your gallery.
+        <div class="indent">
+        <a name="configuration_border_width"></a><h4>Border width<a href="#configuration_border_width" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+	The width of the border in pixels. Default value is 22. Set to zero to disable the border feature. All other border settings below will not be taken into account if you set the border width to 0.
+		
+		<a name="configuration_border_color"></a><h4>Border color<a href="#configuration_border_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The background color of the border, using the hexadecimal notation with the leading #-sign. You can enter the value manually or use the <a href="#configuration_color_picker">color picker</a>.<br />
+		Default value is #FFFFFF, which is plain white.
+		
+		<a name="configuration_border_texture"></a><h4>Border texture<a href="#configuration_border_texture" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		In addition to the background color you can as well assign a background image texture to the border. When specifying a texture, the background color will not be taken into account. The Border texture setting is a dropdown list where you can select one of the images. A preview will be displayed at the very right column. Default value is "none".<br />
+		Available options are:
+		<ul>
+			<li>None</li>
+			<li style="background-image:url(../images/backgrounds/marble.png);width:200px;">Marble</li>
+			<li style="background-image:url(../images/backgrounds/metallight.png);width:200px;">Brushed Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalwhite.png);width:200px;">White Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalwhite2.png);width:200px;">White Metal 2</li>
+			<li style="background-image:url(../images/backgrounds/metalblue.png);width:200px;">Blue Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalred.png);width:200px;">Red Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalgreen.png);width:200px;">Green Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalsilver.png);width:200px;">Silver Metal</li>
+			<li style="background-image:url(../images/backgrounds/metalblack.png);width:200px;color:white;">Black Metal</li>
+			<li style="background-image:url(../images/backgrounds/rain.png);width:200px;">Rain</li>
+			<li style="background-image:url(../images/backgrounds/rainlight.png);width:200px;">Light Rain</li>
+			<li style="background-image:url(../images/backgrounds/woodlight.png);width:200px;">Light Wood</li>
+			<li style="background-image:url(../images/backgrounds/wooddark.png);width:200px;color:white;">Dark Wood</li>
+			<li style="background-image:url(../images/backgrounds/paper.png);width:200px;">Paper</li>
+			<li style="background-image:url(../images/backgrounds/leather.png);width:200px;color:white;">Leather</li>
+			<li style="background-image:url(../images/backgrounds/green.png);width:200px;color:white;">Dark Green</li>
+			<li style="background-image:url(../images/backgrounds/greenliquid.png);width:200px;color:white;">Green Liquid</li>
+			<li style="background-image:url(../images/backgrounds/choc.png);width:200px;color:white;">Chocolate</li>
+		</ul>
+		
+		<a name="configuration_border_round"></a><h4>Round border<a href="#configuration_border_round" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Checkbox to enable rounded borders. The rounded borders feature is Mozilla/Safari only, so it doesn't work on <abbr title="Internet Explorer">IE</abbr>, but if you enable it, nothing bad will happen for visitors who have a browser that doesn't support this feature: there will be no error messages if you enable this feature. Default is off.
+		</div>
     <a name="configuration_border_end"></a>
     
     <a name="configuration_shadow"></a><h3>Shadow<a href="#configuration_shadow" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        <div class="indent">
+        <a name="configuration_shadow_size"></a><h4>Shadow size<a href="#configuration_shadow_size" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		This setting allows you to specify the width of the shadow effect. The shadow effect streches both to the right and to the bottom, as if the light was coming from the top left of the screen. Set this option to zero to disable the shadow effect entirely. Values can range from 1 (small shadow) to 9 (huge shadow).
+		
+		<a name="configuration_shadow_opacity"></a><h4>Shadow opacity<a href="#configuration_shadow_opacity" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Determine how "dark" the shadow will be, i.e. how much of the page content in the shadow area is allowed to shine through. Value can range from 1 to 30. Default setting is 20.
+		</div>
     <a name="configuration_shadow_end"></a>
     
     <a name="configuration_title"></a><h3>Title bar <a href="#configuration_title" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        <div class="indent">
+        <a name="configuration_title_show_inactive"></a><h4>Show title bar when buttons are inactive<a href="#configuration_title_show_inactive" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<em>I have no idea what this option actually does. Could some other dev please clarify? Thanks. Joachim</em><br />
+		By default this checkbox is enabled.
+		
+		<a name="configuration_title_text_color"></a><h4>Title bar text color<a href="#configuration_title_text_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The font color for the title bar, i.e. the color in hex representation with leading #-sign for the title of the individual image. It's necessary to use a color with good contrast compared to the background of the title bar, i.e. the <a href="#configuration_border_color">border color</a> or the <a href="#configuration_border_texture">border texture</a>. Use the <a href="#configuration_color_picker">color picker</a> to set the color using your mouse.<br />
+		Default value is <tt class="code">#44554</tt>, which is a dark green.
+		
+		<a name="configuration_title_background_color"></a><h4>Background color AJAX area<a href="#configuration_title_background_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Background color for the actual content of the EnlargeIt-object. Use the <a href="#configuration_color_picker">color picker</a> to set the color using your mouse.<br />
+		Default value is <tt class="code">#666677</tt>, which is a medium grey.
+		</div>
     <a name="configuration_title_end"></a>
     
     <a name="configuration_action"></a><h3>Action<a href="#configuration_action" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        <div class="indent">
+        <a name="configuration_action_center"></a><h4>Center enlarged image<a href="#configuration_action_center" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Determines if the image should be centered inside the EnlargeIt! object. Default (and recommended) is "on".
+		
+		<a name="configuration_action_move"></a><h4>Allow enlarged pictures to be moved around<a href="#configuration_action_move" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		When enabled the visitor can move the EnlargeIt object around on the screen using his mouse. This is often helpfull if the theme is narrow and there's information right underneath the enlarged image that the visitor would like to see.<br />
+		Default is off. Recommended setting in on.
+		
+		<a name="configuration_action_wheel"></a><h4>Mouse wheel navigation<a href="#configuration_action_wheel" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		When this option is enabled visitors can use their mouse wheel to cycle through the images instead of having to click on the previous / next button, which makes navigating the screen a breeze. Only drawback of this option is the fact that the "regular" behaviour of the mouse wheel (scrolling of the browser window) get's disabled in favor of the mouse wheel navigation.<br />
+		By default, mouse wheel navigation is enabled.
+		
+		<a name="configuration_action_darken_toggle"></a><h4>Darken screen when enlarged <a href="#configuration_action_darken_toggle" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<em>I have no idea what this option actually does. Could some other dev please clarify? Thanks. Joachim</em><br />
+		Possible options are:
+		<ul>
+			<li><em>No</em></li>
+			<li><em>Yes: only darken when image shows</em><br />Default option</li>
+			<li><em>Yes: remain dark when using navigation</em></li>
+		</ul>
+		
+		<a name="configuration_action_darken_strength"></a><h4>Darken strength<a href="#configuration_action_darken_strength" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Determine how much the screen around the EnlargeIt object is being darkened, i.e. the strength of the greybox effect. Possible values range from 0% to 100%.<br />
+		Default value is 20%.
+		
+		<a name="configuration_action_darken_speed"></a><h4>Darkening speed <a href="#configuration_action_darken_speed" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		Determine how fast the darkening effect should be: possible value range from 1 to 20, where 1 means "immediately dark" and 20 means "very slowly darkening".<br />
+		Default value is 20.
+		
+		</div>
     <a name="configuration_action_end"></a>
     
     <a name="configuration_buttons"></a><h3>Buttons<a href="#configuration_buttons" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
@@ -262,16 +358,25 @@ This is a table that represents the environments that the enlargeIt plugin has b
         
         <div class="indent">
         <a name="configuration_multimedia_imageformats"></a><h4>Image formats<a href="#configuration_multimedia_imageformats" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        <p>Select the file formats where the EnlargeIt! plugin should be used with. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
-        <p>Hold down the [Ctrl]-key to select multiple rows. Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
+        <p>Select the file formats where the EnlargeIt! plugin should be used with from this <a href="#configuration_multi_select">multiple select field</a>. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
+        <p>Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
         
         <a name="configuration_multimedia_videoformats"></a><h4>Video formats<a href="#configuration_multimedia_videoformats" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        <p>Select the file formats where the EnlargeIt! plugin should be used with. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
-        <p>Hold down the [Ctrl]-key to select multiple rows. Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
+        <p>Select the file formats where the EnlargeIt! plugin should be used with from this <a href="#configuration_multi_select">multiple select field</a>. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
+        <p>Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
         </div>
     
     <a name="configuration_setup"></a><h3>Plugin setup<a href="#configuration_setup" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
     <a name="configuration_setup_end"></a>
+	
+	<a name="configuration_color_picker"></a><h3>Color pickers<a href="#configuration_color_picker" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	On the configuration panel of the EnlargeIt! plugin there are several color pickers that allow you to specify a color by clicking. To use the color picker you need to expand it first (by default it is collapsed) using the <tt class="code">Toggle color picker</tt> links. You then select a color from the circle and the shade from the inner box. When clicking on the box the actual color field is being populated. All color fields accept the hexadecimal color notation with the leading hash sign.
+    <a name="configuration_color_picker_end"></a>
+	
+	<a name="configuration_multi_select"></a><h3>Multiple select fields<a href="#configuration_multi_select" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	Hold down the [Ctrl]-key to select multiple rows on a multiple select field. To select no line at all, unselect the last selected row by holding the [Ctrl]-key down and then clicking on that last remaining row.
+    <a name="configuration_color_picker_end"></a>
+	
     
     </div>
 

@@ -151,9 +151,6 @@ if ($superCage->post->keyExists('submit')) {
   }
 }
 
-// Help messages
-$multi_select_help = '&nbsp;'. cpg_display_help('f=empty.htm&amp;base=64&amp;h='.urlencode(base64_encode(serialize($lang_plugin_enlargeit['multimedia']))).'&amp;t='.urlencode(base64_encode(serialize('<p>' . $lang_plugin_enlargeit['press_ctrl_to_select_multiple_rows'] . '</p><p>' . $lang_plugin_enlargeit['asterisk_explain'] . '</p>'))), 470, 245);
-
 
 // display config page
 
@@ -418,26 +415,9 @@ if ($superCage->post->keyExists('submit')) {
         msg_box('', $lang_plugin_enlargeit['no_changes'], '', '', 'validation');
     }
 } else {
-    $credit_details = '';
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://enlargeit.timos-welt.de/" rel="external" class="external">EnlargeIt!</a>', 'Timo Schewe') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://forum.coppermine-gallery.net/index.php/topic,43180.0.html" rel="external" class="external">FLV player</a>', 'rphMedia') . '</li>' . $LINEBREAK;
-	$credit_details = '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://imageflow.finnrudolph.de/" rel="external" class="external">ImageFlow</a>', 'Finn Rudolph') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.osflv.com/" rel="external" class="external">FLV player OSFLV</a>', 'OSFLV') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], $lang_plugin_enlargeit['histogram_creation'], '<a href="http://forum.coppermine-gallery.net/index.php?action=;u=10507" rel="external" class="external">Anton Sparrius (Spaz)</a>') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.everaldo.com/crystal/" rel="external" class="external">Crystal Clear icons</a>', 'Everaldo Coelho') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Farbtastic color picker</a>', 'Steven Wittens') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], '<a href="http://www.softwareunity.com/jquery/JQuerySpinBtn/" rel="external" class="external">SpinButton jquery plugin</a>', 'George Adamson') . '</li>' . $LINEBREAK;
-	$credit_details .= '<li>' . sprintf($lang_plugin_enlargeit['x_by_x'], sprintf($lang_plugin_enlargeit['integration_into_x'], 'cpg'.COPPERMINE_VERSION), '<a href="http://gaugau.de/" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
-	
 	echo <<< EOT
-	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)<br />
-	<span class="detail_head_collapsed">{$lang_plugin_enlargeit['details']}</span>
-	<div id="creditdetails" class="detail_body">
-		{$lang_plugin_enlargeit['this_plugin_uses_the_following_components']}:
-		<ul>
-			{$credit_details}
-		</ul>
-	</div>
+	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)<br />&nbsp;<br />
+	<a href="plugins/enlargeit/docs/{$documentation_file}.htm#credits" class="admin_menu greybox" title="{$lang_plugin_enlargeit['credits']}">{$lang_plugin_enlargeit['credits']}</a>
 EOT;
 }
 echo <<< EOT
@@ -445,39 +425,45 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['enlargement_type']}
+			{$lang_plugin_enlargeit['enlargement_type']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type" class="greybox" title="{$lang_plugin_enlargeit['enlargement_type']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enable_for']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enablefor" class="greybox" title="{$lang_plugin_enlargeit['enable_for']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_enlargeit['enable_for']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_adminmode" id="plugin_enlargeit_adminmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmode']} /><label for="plugin_enlargeit_adminmode" class="clickable_option">{$lang_plugin_enlargeit['administrators']}</label><br />
 			<input type="checkbox" name="plugin_enlargeit_registeredmode" id="plugin_enlargeit_registeredmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_registeredmode']} /><label for="plugin_enlargeit_registeredmode" class="clickable_option">{$lang_plugin_enlargeit['registered_users']}</label><br />
 			<input type="checkbox" name="plugin_enlargeit_guestmode" id="plugin_enlargeit_guestmode" class="checkbox" value="1" {$option_output['plugin_enlargeit_guestmode']} /><label for="plugin_enlargeit_guestmode" class="clickable_option">{$lang_plugin_enlargeit['guests']}</label>
 		</td>
+		<td>
+			 <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enablefor" class="greybox" title="{$lang_plugin_enlargeit['enable_for']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['enlarge_to_pic_in']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enlargetopicin" class="greybox" title="{$lang_plugin_enlargeit['enlarge_to_pic_in']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_enlargeit['enlarge_to_pic_in']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_0" class="radio" value="0" {$option_output['plugin_enlargeit_pictype_0']} /><label for="plugin_enlargeit_pictype_0" class="clickable_option">{$lang_plugin_enlargeit['intermediate_size']}</label><br />
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_1" class="radio" value="1" {$option_output['plugin_enlargeit_pictype_1']} /><label for="plugin_enlargeit_pictype_1" class="clickable_option">{$lang_plugin_enlargeit['full_size']}</label><br />
 			<input type="radio" name="plugin_enlargeit_pictype" id="plugin_enlargeit_pictype_2" class="radio" value="2" {$option_output['plugin_enlargeit_pictype_2']} /><label for="plugin_enlargeit_pictype_2" class="clickable_option">{$lang_plugin_enlargeit['force_intermediate_size']}</label>
 		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enlargetopicin" class="greybox" title="{$lang_plugin_enlargeit['enlarge_to_pic_in']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['animation']}
+			{$lang_plugin_enlargeit['animation']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation" class="greybox" title="{$lang_plugin_enlargeit['animation']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['animation_type']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_animationtype" class="greybox" title="{$lang_plugin_enlargeit['animation_type']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_enlargeit['animation_type']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<select name="plugin_enlargeit_ani" id="plugin_enlargeit_ani" class="listbox">
 				<option value="0" {$option_output['plugin_enlargeit_ani'][0]} >{$lang_plugin_enlargeit['none']}</option>
 				<option value="1" {$option_output['plugin_enlargeit_ani'][1]} >{$lang_plugin_enlargeit['fade']}</option>
@@ -490,52 +476,70 @@ echo <<< EOT
 				<option value="8" {$option_output['plugin_enlargeit_ani'][8]} >{$lang_plugin_enlargeit['topleftglide']}</option>
 			</select>
 		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_animationtype" class="greybox" title="{$lang_plugin_enlargeit['animation_type']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['time_between_animation_steps']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" /> {$lang_plugin_enlargeit['milliseconds']}
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_steps" class="greybox" title="{$lang_plugin_enlargeit['time_between_animation_steps']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['animation_steps']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" />
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_steps" class="greybox" title="{$lang_plugin_enlargeit['animation_steps']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_opaglide" class="clickable_option">{$lang_plugin_enlargeit['transparency_for_glide']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_opaglide" id="plugin_enlargeit_opaglide" class="checkbox" value="1" {$option_output['plugin_enlargeit_opaglide']} />
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_transparency" class="greybox" title="{$lang_plugin_enlargeit['transparency_for_glide']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['border']}
+			{$lang_plugin_enlargeit['border']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border" class="greybox" title="{$lang_plugin_enlargeit['border']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['border_width']}
 		</td>
-		<td valign="top" colspan="2">
+		<td valign="top" colspan="1">
 			<input type="text" name="plugin_enlargeit_brdsize" id="plugin_enlargeit_brdsize" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_brdsize']}" /> ({$lang_plugin_enlargeit['zero_to_disable']})
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_width" class="greybox" title="{$lang_plugin_enlargeit['border_width']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['border_color']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_brdcolor" id="plugin_enlargeit_brdcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_brdcolor']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
 			<div id="colorpicker_bordercolor" class="detail_body"></div>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_color" class="greybox" title="{$lang_plugin_enlargeit['border_color']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -546,6 +550,7 @@ echo <<< EOT
 			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox">
 				{$border_texture_options}
 			</select>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_texture" class="greybox" title="{$lang_plugin_enlargeit['border_texture']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td valign="middle" align="center">
 			<div id="borderpreview" style="background-image:url(./plugins/enlargeit/images/backgrounds/{$CONFIG['plugin_enlargeit_brdbck']}.png);background-repeat:repeat;width:200px;">{$lang_plugin_enlargeit['preview']}</div>
@@ -555,191 +560,243 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_brdround" class="clickable_option">{$lang_plugin_enlargeit['round_border']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_brdround" id="plugin_enlargeit_brdround" class="checkbox" value="1" {$option_output['plugin_enlargeit_brdround']} /> ({$lang_plugin_enlargeit['mozilla_only']})
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_round" class="greybox" title="{$lang_plugin_enlargeit['round_border']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['shadow']}
+			{$lang_plugin_enlargeit['shadow']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow" class="greybox" title="{$lang_plugin_enlargeit['shadow']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['shadow_size']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow_size" class="greybox" title="{$lang_plugin_enlargeit['shadow_size']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['shadow_opacity']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_shadowintens" id="plugin_enlargeit_shadowintens" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_shadowintens']}" />
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow_opacity" class="greybox" title="{$lang_plugin_enlargeit['shadow_opacity']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['title_bar']}
+			{$lang_plugin_enlargeit['title_bar']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_title" class="greybox" title="{$lang_plugin_enlargeit['title_bar']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_titlebar" class="clickable_option">{$lang_plugin_enlargeit['show_titlebar']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_titlebar" id="plugin_enlargeit_titlebar" class="checkbox" value="1" {$option_output['plugin_enlargeit_titlebar']} /> <label for="plugin_enlargeit_titlebar" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_title_show_inactive" class="greybox" title="{$lang_plugin_enlargeit['show_titlebar']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['title_bar_text_color']}
+			{$lang_plugin_enlargeit['title_bar_text_color']} 
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_titletxtcol" id="plugin_enlargeit_titletxtcol" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_titletxtcol']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
 			<div id="colorpicker_titletext" class="detail_body"></div>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_title_text_color" class="greybox" title="{$lang_plugin_enlargeit['title_bar_text_color']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['background_color_ajax_area']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_ajaxcolor" id="plugin_enlargeit_ajaxcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_ajaxcolor']}" style="text-transform:uppercase;" />
 			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
 			<div id="colorpicker_backgroundcontent" class="detail_body"></div>
 		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_title_background_color" class="greybox" title="{$lang_plugin_enlargeit['background_color_ajax_area']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['action']}
+			{$lang_plugin_enlargeit['action']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action" class="greybox" title="{$lang_plugin_enlargeit['action']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_center" class="clickable_option">{$lang_plugin_enlargeit['center_enlarge_images']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_center" id="plugin_enlargeit_center" class="checkbox" value="1" {$option_output['plugin_enlargeit_center']} /> <label for="plugin_enlargeit_center" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_center" class="greybox" title="{$lang_plugin_enlargeit['center_enlarge_images']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_dragdrop" class="clickable_option">{$lang_plugin_enlargeit['enable_drag_drop']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_dragdrop" id="plugin_enlargeit_dragdrop" class="checkbox" value="1" {$option_output['plugin_enlargeit_dragdrop']} /> <label for="plugin_enlargeit_dragdrop" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_move" class="greybox" title="{$lang_plugin_enlargeit['enable_drag_drop']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_wheelnav" class="clickable_option">{$lang_plugin_enlargeit['mouse_wheel_navigation']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_wheelnav" id="plugin_enlargeit_wheelnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_wheelnav']} /> <label for="plugin_enlargeit_wheelnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_wheel" class="greybox" title="{$lang_plugin_enlargeit['mouse_wheel_navigation']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top" valign="top">
 			{$lang_plugin_enlargeit['darken_screen']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_0" class="radio" value="0" {$option_output['plugin_enlargeit_dark_0']} /><label for="plugin_enlargeit_dark_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_1" class="radio" value="1" {$option_output['plugin_enlargeit_dark_1']} /><label for="plugin_enlargeit_dark_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['only_darken_when_image_shows']}</label><br />
 			<input type="radio" name="plugin_enlargeit_dark" id="plugin_enlargeit_dark_2" class="radio" value="2" {$option_output['plugin_enlargeit_dark_2']} /><label for="plugin_enlargeit_dark_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['remain_dark_when_using_navigation']}</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_darken_toggle" class="greybox" title="{$lang_plugin_enlargeit['darken_screen']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['darken_strength']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_darkprct" id="plugin_enlargeit_darkprct" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkprct']}" /> %
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_darken_strength" class="greybox" title="{$lang_plugin_enlargeit['darken_strength']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['darkening_speed']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="text" name="plugin_enlargeit_darkensteps" id="plugin_enlargeit_darkensteps" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_darkensteps']}" /> ({$lang_plugin_enlargeit['darkening_speed_explain']})
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_action_darken_speed" class="greybox" title="{$lang_plugin_enlargeit['darkening_speed']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['buttons']}
+			{$lang_plugin_enlargeit['buttons']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons" class="greybox" title="{$lang_plugin_enlargeit['buttons']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonpic" class="clickable_option">{$enlargeit_icon_array['show']} {$lang_plugin_enlargeit['button_picture']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonpic" id="plugin_enlargeit_buttonpic" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonpic']} />
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$enlargeit_icon_array['info']} {$lang_plugin_enlargeit['button_info']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttoninfo_0']} /><label for="plugin_enlargeit_buttoninfo_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttoninfo_1']} /><label for="plugin_enlargeit_buttoninfo_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_as_ajax']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_intermediate_page']}</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonfav" class="clickable_option">{$enlargeit_icon_array['favorites']} {$lang_plugin_enlargeit['button_favorites']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonfav" id="plugin_enlargeit_buttonfav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonfav']} />
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['button_vote']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonvote" id="plugin_enlargeit_buttonvote" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonvote']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttoncomment" class="clickable_option">{$enlargeit_icon_array['comment']} {$lang_plugin_enlargeit['button_comments']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttoncomment" id="plugin_enlargeit_buttoncomment" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttoncomment']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['button_download']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttondownload_0']} /><label for="plugin_enlargeit_buttondownload_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_registered_users_only']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['maximize_method']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_0" class="radio" value="0" {$option_output['plugin_enlargeit_maximizemethod_0']} /><label for="plugin_enlargeit_maximizemethod_0" class="clickable_option">{$lang_plugin_enlargeit['as_popup_window']} ({$lang_plugin_enlargeit['not_recommended']})</label><br />
 			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_1" class="radio" value="1" {$option_output['plugin_enlargeit_maximizemethod_1']} /><label for="plugin_enlargeit_maximizemethod_1" class="clickable_option">{$lang_plugin_enlargeit['open_as_ajax']} ({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonbbcode" class="clickable_option">{$enlargeit_icon_array['bbcode']} {$lang_plugin_enlargeit['button_bbcode']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonbbcode" id="plugin_enlargeit_buttonbbcode" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonbbcode']} />
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
@@ -754,26 +811,30 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonnav" class="clickable_option">{$enlargeit_icon_array['next']} {$lang_plugin_enlargeit['button_navigation']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} /> <label for="plugin_enlargeit_buttonnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonclose" class="clickable_option">{$enlargeit_icon_array['close']} {$lang_plugin_enlargeit['button_close']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} /> <label for="plugin_enlargeit_buttonclose" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['multimedia']}
+			{$lang_plugin_enlargeit['multimedia']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia" class="greybox" title="{$lang_plugin_enlargeit['multimedia']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['image_formats']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_imageformats" class="greybox" title="{$lang_plugin_enlargeit['image_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_enlargeit['image_formats']}
 		</td>
 		<td valign="top">
 		    <select name="plugin_enlargeit_img_types[]" id="plugin_enlargeit_img_types" size="5" multiple="multiple" class="listbox">
@@ -800,12 +861,12 @@ echo <<< EOT
             </select>
         </td>
         <td valign="top">
-            {$multi_select_help}
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_imageformats" class="greybox" title="{$lang_plugin_enlargeit['image_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
         </td>	
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_enlargeit['video_formats']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_videoformats" class="greybox" title="{$lang_plugin_enlargeit['video_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_enlargeit['video_formats']}
 		</td>
 		<td valign="top">
 		    <select name="plugin_enlargeit_mov_types[]" id="plugin_enlargeit_mov_types" size="4" multiple="multiple" class="listbox">
@@ -832,16 +893,18 @@ echo <<< EOT
             </select>
         </td>
         <td valign="top">
-            {$multi_select_help}
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_videoformats" class="greybox" title="{$lang_plugin_enlargeit['video_formats']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
         </td>	
 	</tr>
 	<tr>
 		<td valign="top">
 			{$lang_plugin_enlargeit['flash_player']}
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_0" class="radio" value="0" {$option_output['plugin_enlargeit_flvplayer_0']} /><label for="plugin_enlargeit_flvplayer_0" class="clickable_option">{$lang_plugin_enlargeit['rphmedia']}</label><br />
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_1" class="radio" value="1" {$option_output['plugin_enlargeit_flvplayer_1']} /><label for="plugin_enlargeit_flvplayer_1" class="clickable_option">{$lang_plugin_enlargeit['os_flv']}</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
@@ -853,8 +916,10 @@ echo <<< EOT
 		<td valign="top">
 			<label for="plugin_enlargeit_adminmenu" class="clickable_option">{$lang_plugin_enlargeit['display_plugin_config_in_admin_menu']}</label>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="checkbox" name="plugin_enlargeit_adminmenu" id="plugin_enlargeit_adminmenu" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmenu']} />
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>
@@ -862,12 +927,14 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['histogram_cache_file_lifetime']}<br />
 			<span style="visibility:{$cache_visibility}" id="cache_visibility">(<em>{$cached_files}</em>)</span>
 		</td>
-		<td colspan="2">
+		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_0" class="radio" value="0" {$option_output['plugin_enlargeit_cachecontrol_0']} /><label for="plugin_enlargeit_cachecontrol_0" class="clickable_option">{$lang_plugin_enlargeit['unlimited']}</label><br />
 			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_1" class="radio" value="1" {$option_output['plugin_enlargeit_cachecontrol_1']} />
 			<label for="plugin_enlargeit_cachecontrol_1" class="clickable_option"><input type="text" name="plugin_enlargeit_cachemaxage" id="plugin_enlargeit_cachemaxage" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_enlargeit_cachemaxage']}" {$option_output['plugin_enlargeit_cachemaxage']} /> {$lang_plugin_enlargeit['days']}</label><br />
 			<input type="radio" name="plugin_enlargeit_cachecontrol" id="plugin_enlargeit_cachecontrol_2" class="radio" value="2" {$option_output['plugin_enlargeit_cachecontrol_2']} /><label for="plugin_enlargeit_cachecontrol_2" class="clickable_option">{$lang_plugin_enlargeit['max_file_size_total']}:
 			<input type="text" name="plugin_enlargeit_cachemaxsizemb" id="plugin_enlargeit_cachemaxsizemb" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_enlargeit_cachemaxsizemb']}" {$option_output['plugin_enlargeit_cachemaxsizemb']} />{$lang_byte_units[2]}</label>
+		</td>
+		<td>
 		</td>
 	</tr>
 	<tr>

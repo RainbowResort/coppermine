@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-14 [M] Version count updated to 1.10 {GauGau}
+2009-12-14 [D] Added some sections to documentation {GauGau}
 2009-12-14 [M] Version count updated to 1.9 {GauGau}
 2009-12-14 [A] Added documentation {GauGau}
 2009-12-14 [M] Renamed readme to changelog {GauGau}

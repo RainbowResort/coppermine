@@ -36,11 +36,9 @@ if (file_exists("./plugins/enlargeit/docs/{$CONFIG['lang']}.htm")) {
 
 if ($CONFIG['enable_menu_icons'] >= 1) {
     $enlargeit_icon_array['configure'] = '<img src="./plugins/enlargeit/images/icons/configure.png" border="0" width="16" height="16" alt="" class="icon" />';
-    $enlargeit_icon_array['announcement'] = '<img src="./plugins/enlargeit/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
 	$enlargeit_icon_array['copy'] = '<img src="./plugins/enlargeit/images/icons/copy.png" border="0" width="16" height="16" alt="" class="icon" />';
 } else {
     $enlargeit_icon_array['configure'] = '';
-    $enlargeit_icon_array['announcement'] = '';
 	$enlargeit_icon_array['copy'] = '';
 }
 
@@ -82,6 +80,9 @@ if ($CONFIG['enable_menu_icons'] == 2) {
 $enlargeit_icon_array['ok'] = cpg_fetch_icon('ok', 0);
 $enlargeit_icon_array['cancel'] = cpg_fetch_icon('cancel', 0);
 $enlargeit_icon_array['stop'] = cpg_fetch_icon('stop', 0);
+$enlargeit_icon_array['announcement'] = cpg_fetch_icon('announcement', 1);
+$enlargeit_icon_array['documentation'] = cpg_fetch_icon('documentation', 1);
+
 
 $border_texture_array = array(
     'marble',

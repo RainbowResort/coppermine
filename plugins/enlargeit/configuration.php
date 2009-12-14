@@ -20,11 +20,12 @@ require('./plugins/enlargeit/init.inc.php');
 $name = $lang_plugin_enlargeit['display_name'];
 $description = $lang_plugin_enlargeit['description'];
 $author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
-$version = '1.9';
+$version = '1.10';
 $install_info = $lang_plugin_enlargeit['install_info'];
 $extra_info = $lang_plugin_enlargeit['extra_info'];
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="admin_menu external">'.$enlargeit_icon_array['announcement'].$lang_plugin_enlargeit['announcement_thread'].'</a>';
 $configuration_link = '<a href="index.php?file=enlargeit/admin" class="admin_menu">'.$enlargeit_icon_array['configure'].$lang_plugin_enlargeit['enlargeit_configuration'].'</a>';
-$install_info .= '<br />' . $announcement_thread;
-$extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread;
+$documentation_link = '<a href="plugins/enlargeit/docs/' . $documentation_file  . '.htm" class="admin_menu">'.$enlargeit_icon_array['documentation'].$lang_plugin_enlargeit['enlargeit_documentation'].'</a>';
+$install_info .= '<br />' . $announcement_thread . '&nbsp;' . $documentation_link;
+$extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread . '&nbsp;' . $documentation_link;
 ?>
