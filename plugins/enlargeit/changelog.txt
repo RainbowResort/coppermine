@@ -27,6 +27,7 @@ Changelog
 
 2009-12-14 [M] Version count updated to 1.9 {GauGau}
 2009-12-14 [A] Added documentation {GauGau}
+2009-12-14 [M] Renamed readme to changelog {GauGau}
 2009-12-11 [M] Version count updated to 1.8 {GauGau}
 2009-12-11 [M] Backported Czech language file from cpg1.4.x-plugin {GauGau}
 2009-12-11 [M] Backported Slovak language file from cpg1.4.x-plugin {GauGau}
