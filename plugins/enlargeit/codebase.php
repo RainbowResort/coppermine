@@ -49,7 +49,7 @@ function enlargeit_add_admin_button($admin_menu) {
     global $lang_plugin_enlargeit, $enlargeit_icon_array, $CONFIG;
 	require('./plugins/enlargeit/init.inc.php');
     $new_button = '<div class="admin_menu admin_float"><a href="index.php?file=enlargeit/admin" title="' . $lang_plugin_enlargeit['description'] . '">'. $enlargeit_icon_array['table'] . $lang_plugin_enlargeit['enlargeit_configuration'] . '</a></div>';
-    $look_for = '<!-- END bridge_manager -->';
+    $look_for = '<!-- END plugin_manager -->';
     $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
     return $admin_menu;
 }

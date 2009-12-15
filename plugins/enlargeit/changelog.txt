@@ -25,6 +25,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-15 [M] Version count updated to 1.12 {GauGau}
+2009-12-15 [O] Moved admin menu item to the right of the plugin manager {GauGau}
+2009-12-15 [D] Added screenshots to documentation {GauGau}
 2009-12-15 [M] Version count updated to 1.11 {GauGau}
 2009-12-15 [O] Moved maximize-option up on config screen {GauGau}
 2009-12-15 [M] Changed defaults for buttons {GauGau}

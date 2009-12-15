@@ -734,6 +734,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonpic" id="plugin_enlargeit_buttonpic" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonpic']} />
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_picture" class="greybox" title="{$lang_plugin_enlargeit['button_picture']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -746,6 +747,7 @@ echo <<< EOT
 			<input type="radio" name="plugin_enlargeit_buttoninfo" id="plugin_enlargeit_buttoninfo_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttoninfo_2']} /><label for="plugin_enlargeit_buttoninfo_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['open_intermediate_page']}</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_info" class="greybox" title="{$lang_plugin_enlargeit['button_info']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -756,6 +758,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonfav" id="plugin_enlargeit_buttonfav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonfav']} />
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_favorites" class="greybox" title="{$lang_plugin_enlargeit['button_favorites']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<!--
@@ -767,6 +770,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonvote" id="plugin_enlargeit_buttonvote" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonvote']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_vote" class="greybox" title="{$lang_plugin_enlargeit['button_vote']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -777,6 +781,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttoncomment" id="plugin_enlargeit_buttoncomment" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttoncomment']}  disabled="disabled" /> (<em>{$lang_plugin_enlargeit['not_implemented_yet']}</em>)
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_comments" class="greybox" title="{$lang_plugin_enlargeit['button_comments']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	-->
@@ -790,6 +795,7 @@ echo <<< EOT
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_download" class="greybox" title="{$lang_plugin_enlargeit['button_download']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -800,6 +806,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonbbcode" id="plugin_enlargeit_buttonbbcode" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonbbcode']} />
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_bbcode" class="greybox" title="{$lang_plugin_enlargeit['button_bbcode']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -808,6 +815,9 @@ echo <<< EOT
 		</td>
 		<td>
 			<input type="checkbox" name="plugin_enlargeit_buttonhist" id="plugin_enlargeit_buttonhist" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonhist']} /> <label for="plugin_enlargeit_buttonhist" class="clickable_option">({$gd_version_string})</label>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_histogram" class="greybox" title="{$lang_plugin_enlargeit['button_histogram']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -818,6 +828,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonnav" id="plugin_enlargeit_buttonnav" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonnav']} /> <label for="plugin_enlargeit_buttonnav" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_navigation" class="greybox" title="{$lang_plugin_enlargeit['button_navigation']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -828,6 +839,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_buttonclose" id="plugin_enlargeit_buttonclose" class="checkbox" value="1" {$option_output['plugin_enlargeit_buttonclose']} /> <label for="plugin_enlargeit_buttonclose" class="clickable_option">({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_buttons_close" class="greybox" title="{$lang_plugin_enlargeit['button_close']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -908,11 +920,12 @@ echo <<< EOT
 			<input type="radio" name="plugin_enlargeit_flvplayer" id="plugin_enlargeit_flvplayer_1" class="radio" value="1" {$option_output['plugin_enlargeit_flvplayer_1']} /><label for="plugin_enlargeit_flvplayer_1" class="clickable_option">{$lang_plugin_enlargeit['os_flv']}</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_multimedia_flv" class="greybox" title="{$lang_plugin_enlargeit['flash_player']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
 		<td class="tableh1" colspan="3">
-			{$lang_plugin_enlargeit['plugin_setup']}
+			{$lang_plugin_enlargeit['plugin_setup']} <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_setup" class="greybox" title="{$lang_plugin_enlargeit['plugin_setup']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -923,6 +936,7 @@ echo <<< EOT
 			<input type="checkbox" name="plugin_enlargeit_adminmenu" id="plugin_enlargeit_adminmenu" class="checkbox" value="1" {$option_output['plugin_enlargeit_adminmenu']} />
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_setup_adminmenu" class="greybox" title="{$lang_plugin_enlargeit['display_plugin_config_in_admin_menu']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -938,6 +952,7 @@ echo <<< EOT
 			<input type="text" name="plugin_enlargeit_cachemaxsizemb" id="plugin_enlargeit_cachemaxsizemb" class="textinput spin-button" size="3" maxlength="3" value="{$CONFIG['plugin_enlargeit_cachemaxsizemb']}" {$option_output['plugin_enlargeit_cachemaxsizemb']} />{$lang_byte_units[2]}</label>
 		</td>
 		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_setup_histogram" class="greybox" title="{$lang_plugin_enlargeit['histogram_cache_file_lifetime']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>

@@ -234,69 +234,75 @@ This is a table that represents the environments that the enlargeIt plugin has b
     <a name="configuration_animation_end"></a>
     
         <div class="indent">
-        <a name="configuration_animation_animationtype"></a><h4>Animation type<a href="#configuration_animation_animationtype" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        Specify what animation should be used when a thumbnail is clicked or when going from one image to the other.<br />
-        Possible options:
-        <ul>
-            <li><em>none</em><br />
-            No animation at all - the EnlargeIt-box will apear instantly without any animation effect.</li>
-            <li><em>fade in/out</em></li>
-            <li><em>glide</em></li>
-            <li><em>bump glide</em></li>
-            <li><em>smooth glide</em></li>
-            <li><em>hard glide</em></li>
-            <li><em>glide from top</em></li>
-            <li><em>glide from left</em></li>
-            <li><em>glide from top left</em></li>
-        </ul>
-		
-		<a name="configuration_animation_time"></a><h4>Time between animation steps<a href="#configuration_animation_time" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		The animation is actually a set of individual animation steps that get triggered when a visitor accesses the thumbnail. Think of them as frames of a video. You can specify the delay in milliseconds between the animation steps, so this option determines the speed of the animation. The default value is 12 <abbr title="milliseconds">ms</abbr>. You need to play with this setting in relation to the <a href="#configuration_animation_animationtype">animation type</a> to find a setting that works good for you.
-		
-		<a name="configuration_animation_steps"></a><h4>Animation steps <a href="#configuration_animation_steps" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		The number of animation steps. Default value is 18. Minimum value is 4, maximum value is 30. This setting determines how smooth the animation will look. The higher the value, the smoother the animation will look. The drawback of setting this to a high value is that it will cause lags on slower, older clients. When testing this setting, don't get lulled into believing that everything will be fine if it looks OK on your PC: on other less powerfull machines a high number of animation steps can cause issues.
-		
-		<a name="configuration_animation_transparency"></a><h4>Transparency effect for glide animation<a href="#configuration_animation_transparency" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		When this option is checked the script tries to use transparency for the glide effect, which will have a performance impact on older clients. Default setting is off.
+			<a name="configuration_animation_animationtype"></a><h4>Animation type<a href="#configuration_animation_animationtype" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			Specify what animation should be used when a thumbnail is clicked or when going from one image to the other.<br />
+			Possible options:
+			<ul>
+				<li><em>none</em><br />
+				No animation at all - the EnlargeIt-box will apear instantly without any animation effect.</li>
+				<li><em>fade in/out</em></li>
+				<li><em>glide</em></li>
+				<li><em>bump glide</em></li>
+				<li><em>smooth glide</em></li>
+				<li><em>hard glide</em></li>
+				<li><em>glide from top</em></li>
+				<li><em>glide from left</em></li>
+				<li><em>glide from top left</em></li>
+			</ul>
+			
+			<a name="configuration_animation_time"></a><h4>Time between animation steps<a href="#configuration_animation_time" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			The animation is actually a set of individual animation steps that get triggered when a visitor accesses the thumbnail. Think of them as frames of a video. You can specify the delay in milliseconds between the animation steps, so this option determines the speed of the animation. The default value is 12 <abbr title="milliseconds">ms</abbr>. You need to play with this setting in relation to the <a href="#configuration_animation_animationtype">animation type</a> to find a setting that works good for you.
+			
+			<a name="configuration_animation_steps"></a><h4>Animation steps <a href="#configuration_animation_steps" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			The number of animation steps. Default value is 18. Minimum value is 4, maximum value is 30. This setting determines how smooth the animation will look. The higher the value, the smoother the animation will look. The drawback of setting this to a high value is that it will cause lags on slower, older clients. When testing this setting, don't get lulled into believing that everything will be fine if it looks OK on your PC: on other less powerfull machines a high number of animation steps can cause issues.
+			
+			<a name="configuration_animation_transparency"></a><h4>Transparency effect for glide animation<a href="#configuration_animation_transparency" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			When this option is checked the script tries to use transparency for the glide effect, which will have a performance impact on older clients. Default setting is off.
         </div>
     
     <a name="configuration_border"></a><h3>Border<a href="#configuration_border" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 	Settings in relation to the border around individual images when using EnlargeIt to view an image that resides in your gallery.
         <div class="indent">
-        <a name="configuration_border_width"></a><h4>Border width<a href="#configuration_border_width" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-	The width of the border in pixels. Default value is 22. Set to zero to disable the border feature. All other border settings below will not be taken into account if you set the border width to 0.
-		
-		<a name="configuration_border_color"></a><h4>Border color<a href="#configuration_border_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		The background color of the border, using the hexadecimal notation with the leading #-sign. You can enter the value manually or use the <a href="#configuration_color_picker">color picker</a>.<br />
-		Default value is #FFFFFF, which is plain white.
-		
-		<a name="configuration_border_texture"></a><h4>Border texture<a href="#configuration_border_texture" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		In addition to the background color you can as well assign a background image texture to the border. When specifying a texture, the background color will not be taken into account. The Border texture setting is a dropdown list where you can select one of the images. A preview will be displayed at the very right column. Default value is "none".<br />
-		Available options are:
-		<ul>
-			<li>None</li>
-			<li style="background-image:url(../images/backgrounds/marble.png);width:200px;">Marble</li>
-			<li style="background-image:url(../images/backgrounds/metallight.png);width:200px;">Brushed Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalwhite.png);width:200px;">White Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalwhite2.png);width:200px;">White Metal 2</li>
-			<li style="background-image:url(../images/backgrounds/metalblue.png);width:200px;">Blue Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalred.png);width:200px;">Red Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalgreen.png);width:200px;">Green Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalsilver.png);width:200px;">Silver Metal</li>
-			<li style="background-image:url(../images/backgrounds/metalblack.png);width:200px;color:white;">Black Metal</li>
-			<li style="background-image:url(../images/backgrounds/rain.png);width:200px;">Rain</li>
-			<li style="background-image:url(../images/backgrounds/rainlight.png);width:200px;">Light Rain</li>
-			<li style="background-image:url(../images/backgrounds/woodlight.png);width:200px;">Light Wood</li>
-			<li style="background-image:url(../images/backgrounds/wooddark.png);width:200px;color:white;">Dark Wood</li>
-			<li style="background-image:url(../images/backgrounds/paper.png);width:200px;">Paper</li>
-			<li style="background-image:url(../images/backgrounds/leather.png);width:200px;color:white;">Leather</li>
-			<li style="background-image:url(../images/backgrounds/green.png);width:200px;color:white;">Dark Green</li>
-			<li style="background-image:url(../images/backgrounds/greenliquid.png);width:200px;color:white;">Green Liquid</li>
-			<li style="background-image:url(../images/backgrounds/choc.png);width:200px;color:white;">Chocolate</li>
-		</ul>
-		
-		<a name="configuration_border_round"></a><h4>Round border<a href="#configuration_border_round" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		Checkbox to enable rounded borders. The rounded borders feature is Mozilla/Safari only, so it doesn't work on <abbr title="Internet Explorer">IE</abbr>, but if you enable it, nothing bad will happen for visitors who have a browser that doesn't support this feature: there will be no error messages if you enable this feature. Default is off.
+			<a name="configuration_border_width"></a><h4>Border width<a href="#configuration_border_width" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<img src="../images/docs/border_width.png" border="0" width="156" height="103" alt="" title="border width" style="margin:5px" align="right" />The width of the border in pixels. Default value is 22. Set to zero to disable the border feature. All other border settings below will not be taken into account if you set the border width to 0.
+			
+			<a name="configuration_border_color"></a><h4>Border color<a href="#configuration_border_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			<img src="../images/docs/border_bg.png" border="0" width="156" height="103" alt="" title="border color" style="margin:5px" align="left" />The background color of the border, using the hexadecimal notation with the leading #-sign. You can enter the value manually or use the <a href="#configuration_color_picker">color picker</a>.<br />
+			Default value is #FFFFFF, which is plain white.
+			<br clear="all" />
+			
+			<a name="configuration_border_texture"></a><h4>Border texture<a href="#configuration_border_texture" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			In addition to the background color you can as well assign a background image texture to the border. When specifying a texture, the background color will not be taken into account. The Border texture setting is a dropdown list where you can select one of the images. A preview will be displayed at the very right column. Default value is "none".<br />
+			Available options are:
+			<ul>
+				<li>None</li>
+				<li style="background-image:url(../images/backgrounds/marble.png);width:200px;">Marble</li>
+				<li style="background-image:url(../images/backgrounds/metallight.png);width:200px;">Brushed Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalwhite.png);width:200px;">White Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalwhite2.png);width:200px;">White Metal 2</li>
+				<li style="background-image:url(../images/backgrounds/metalblue.png);width:200px;">Blue Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalred.png);width:200px;">Red Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalgreen.png);width:200px;">Green Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalsilver.png);width:200px;">Silver Metal</li>
+				<li style="background-image:url(../images/backgrounds/metalblack.png);width:200px;color:white;">Black Metal</li>
+				<li style="background-image:url(../images/backgrounds/rain.png);width:200px;">Rain</li>
+				<li style="background-image:url(../images/backgrounds/rainlight.png);width:200px;">Light Rain</li>
+				<li style="background-image:url(../images/backgrounds/woodlight.png);width:200px;">Light Wood</li>
+				<li style="background-image:url(../images/backgrounds/wooddark.png);width:200px;color:white;">Dark Wood</li>
+				<li style="background-image:url(../images/backgrounds/paper.png);width:200px;">Paper</li>
+				<li style="background-image:url(../images/backgrounds/leather.png);width:200px;color:white;">Leather</li>
+				<li style="background-image:url(../images/backgrounds/green.png);width:200px;color:white;">Dark Green</li>
+				<li style="background-image:url(../images/backgrounds/greenliquid.png);width:200px;color:white;">Green Liquid</li>
+				<li style="background-image:url(../images/backgrounds/choc.png);width:200px;color:white;">Chocolate</li>
+			</ul>
+			
+			<a name="configuration_border_round"></a><h4>Round border<a href="#configuration_border_round" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			<div style="background-color:#BFBFBF; -moz-border-radius: 22px;padding:10px;">
+				<div style="background-color:#F7F7F7; -moz-border-radius: 22px;padding:10px;height:110px">
+					<img src="../images/docs/rounded_corner.png" border="0" width="156" height="103" alt="" title="rounded border" style="margin:5px" align="right" /><img src="../images/docs/rounded_corner_zoomed.png" border="0" width="47" height="54" alt="" title="rounded border detail" style="margin:5px" align="left" />Checkbox to enable rounded borders. The rounded borders feature is Mozilla/Safari only, so it doesn't work on <abbr title="Internet Explorer">IE</abbr>. However, if you enable it, nothing bad will happen for visitors who have a browser that doesn't support this feature: there will be no error messages if you enable this feature. Instead, the EnlargeIt object will be displayed with "regular", non-rounded borders.<br />
+					Default is off.
+				</div>
+			</div>
 		</div>
     <a name="configuration_border_end"></a>
     
@@ -317,7 +323,7 @@ This is a table that represents the environments that the enlargeIt plugin has b
 		By default this checkbox is enabled.
 		
 		<a name="configuration_title_text_color"></a><h4>Title bar text color<a href="#configuration_title_text_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-		The font color for the title bar, i.e. the color in hex representation with leading #-sign for the title of the individual image. It's necessary to use a color with good contrast compared to the background of the title bar, i.e. the <a href="#configuration_border_color">border color</a> or the <a href="#configuration_border_texture">border texture</a>. Use the <a href="#configuration_color_picker">color picker</a> to set the color using your mouse.<br />
+		<img src="../images/docs/title_text.png" border="0" width="156" height="103" alt="" title="title bar text color" style="margin:5px" align="right" />The font color for the title bar, i.e. the color in hex representation with leading #-sign for the title of the individual image. It's necessary to use a color with good contrast compared to the background of the title bar, i.e. the <a href="#configuration_border_color">border color</a> or the <a href="#configuration_border_texture">border texture</a>. Use the <a href="#configuration_color_picker">color picker</a> to set the color using your mouse.<br />
 		Default value is <tt class="code">#44554</tt>, which is a dark green.
 		
 		<a name="configuration_title_background_color"></a><h4>Background color AJAX area<a href="#configuration_title_background_color" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
@@ -458,7 +464,8 @@ This is a table that represents the environments that the enlargeIt plugin has b
         Default is &quot;disabled&quot;.
         
         <a name="configuration_buttons_histogram"></a><h4>Display "Histogram" button<a href="#configuration_buttons_histogram" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        Determines if a histogram button (<img src="../images/icons/histogram.png" border="0" width="16" height="16" alt="" class="icon" />) should be available on the EnlargeIt interface<div class="cpg_message_info">
+        Determines if a histogram button (<img src="../images/icons/histogram.png" border="0" width="16" height="16" alt="" class="icon" />) should be available on the EnlargeIt interface.
+		<div class="cpg_message_info">
             <p>This plugin has got an option to create and display a histogram for all your images in your gallery. It's beyond the scope of this documentation to provide a detailed explanation what histograms are and what they're suppossed to be used for.</p>
             <p>A rough explanation: a histogram of an image is a graphical representation of the tonal distribution of a digital image.</p>
             <p>Recommended usage: you should only provide the histogram if your target audience are photographers and know what a histogram is and what it can be used for.</p>
@@ -469,7 +476,7 @@ This is a table that represents the environments that the enlargeIt plugin has b
                 <li><a href="http://crackerhammer.com/understanding-histograms.html" rel="external" class="external">Michael Mercadante &rarr; Understanding Histograms</a></li>
             </ul>
         </div>
-        Next to the checkbox that allows you to toggle the histogram usage on and off there is the output from your system about the version of the GD library on your server. As the histogram creation itself needs the GD2 or better, you can't enable the checkbox if your version of GD isn't good enough. For details, log in on your coppermine-driven gallery as admin and then click on the phpinfo button from your admin menu. On the phpinfo screen, scroll to the GD section for details. Please understand that it's beyond the scope of the coppermine support board to teach you about webserver setup, so you'll need to figure this out with your webhost if you don't have GD2 support enabled.<br />
+        <img src="../images/docs/histogram_example.png" border="0" width="284" height="164" alt="" align="right" title="Example histogram file" style="margin-left:5px" />Next to the checkbox that allows you to toggle the histogram usage on and off there is the output from your system about the version of the GD library on your server. As the histogram creation itself needs the GD2 or better, you can't enable the checkbox if your version of GD isn't good enough. For details, log in on your coppermine-driven gallery as admin and then click on the phpinfo button from your admin menu. On the phpinfo screen, scroll to the GD section for details. Please understand that it's beyond the scope of the coppermine support board to teach you about webserver setup, so you'll need to figure this out with your webhost if you don't have GD2 support enabled.<br />
         The options that correspond to &quot;<a href="#configuration_setup_histogram">Histogram cache file lifetime</a>&quot; will be greyed out if the histogram button is not enabled because they don't apply.<br />
         It's important to understand the impact that the creation of histograms can have on your server: they can cause a huge performance spike because the creation of histograms is a resources-intensive process: the image is being loaded into memory and then processed in various non-trivial steps.<br />
         Default is &quot;disabled&quot;.
@@ -509,13 +516,131 @@ This is a table that represents the environments that the enlargeIt plugin has b
     <a name="configuration_setup"></a><h3>Plugin setup<a href="#configuration_setup" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
     <a name="configuration_setup_end"></a>
         <div class="indent">
-        <a name="configuration_setup_adminmenu"></a><h4>Display a link to the plugin configuration in the admin menu<a href="#configuration_setup_adminmenu" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        Determines if a link to the configuration panel for the EnlargeIt! plugin should reside in the admin menu. Only recommended if you plan to change the settings very often or during the initial configuration stage. Once you have properly configured the EnlargeIt plugin you should disable the admin menu link to make the admin menu appear less cluttered.<br />
-        Default is &quot;enabled&quot;.
-        
-        <a name="configuration_setup_histogram"></a><h4>Histogram cache file lifetime<a href="#configuration_setup_histogram" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        tbc...
-        
+			<a name="configuration_setup_adminmenu"></a><h4>Display a link to the plugin configuration in the admin menu<a href="#configuration_setup_adminmenu" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			Determines if a link to the configuration panel for the EnlargeIt! plugin should reside in the admin menu. Only recommended if you plan to change the settings very often or during the initial configuration stage. Once you have properly configured the EnlargeIt plugin you should disable the admin menu link to make the admin menu appear less cluttered.<br />
+			Default is &quot;enabled&quot;.
+			
+			<a name="configuration_setup_histogram"></a><h4>Histogram cache file lifetime<a href="#configuration_setup_histogram" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+			<div class="indent">
+				By default the options that correspond to the histogram cache file lifetime are greyed out (disabled) unless you enable the option <a href="#configuration_buttons_histogram">Display "Histogram" button</a>.<br />
+				Available options are:
+				<ul>
+					<li><em>unlimited</em></li>
+					<li><em>XX days</em></li>
+					<li><em>Maximum file size total of XX MiB</em></li>
+				</ul>
+				<a name="configuration_setup_histogram_concept"></a><h5>Concept<a href="#configuration_setup_histogram_concept" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				To understand the impact of these settings you need to understand what the histogram button does in the first place: whenever a visitor is accessing an image using the EnlargeIt interface and click on the "histogram"-button, the plugin checks if a histogram file already exists. If it doesn't exist, the script creates a new histogram file and saves that file. That saved file later get's embedded into the output of EnlargeIt, so the visitor can see the actual histogram.
+				<a name="configuration_setup_histogram_permissions"></a><h5>Permissions<a href="#configuration_setup_histogram_permissions" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				<p>The script attempts to create the histogram file in the same folder where the original image resides. Subsequently, if the permissions on file system level are not set up properly (remember: coppermine needs rxw permissions on the albums folder and everything within it), the plugin won't be able to save the histogram file. Subsequently, if the histogram file can't be created you should check first if the script has got the needed permissions to create the file in the first place. Refer to the documentation that comes with coppermine, section "Permissions" to read more. 
+				<a name="configuration_setup_histogram_naming_scheme"></a><h5>Naming scheme<a href="#configuration_setup_histogram_naming_scheme" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				The naming scheme for the histogram file is pretty straightforward: similar to the thumbnails get get prefixed with <tt class="code">thumb_</tt> the histogram file get's prefixed with <tt class="code">histogram_</tt>. Subsequently, you should make sure not to upload any files using regular http uploads that are prefixed that way to make sure that there are no naming collissions (which should be rarely the case anyway).<br />
+				<div class="cpg_example">If your original file resides at <br /><tt class="code">http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/<strong>yourimage.jpg</strong></tt> and your thumbnail subsequently at <br /><tt class="code">http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/<strong>thumb_yourimage.jpg</strong></tt>, the histogram file will be <br /><tt class="code">http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/<strong>histogram_yourimage.png</strong></tt></div>
+				<a name="configuration_setup_histogram_file_size"></a><h5>File size<a href="#configuration_setup_histogram_file_size" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				The dimensions and file size of the histogram file do not correlate to the dimensions or size of your original image, so you don't have to be worried about the consumption of webspace too much; below is a table that shows the webspace consumption of some example images:
+				<table border="0" cellspacing="0" cellpadding="0" class="maintable">
+					<tr>
+						<th class="tableh1" rowspan="2">#</th>
+						<th class="tableh1" colspan="3">Original file</th>
+						<th class="tableh1" colspan="3">Histogram file</th>
+					</tr>
+					<tr>
+						<th class="tableh1">File type</th>
+						<th class="tableh1">File size</th>
+						<th class="tableh1">Image dimension</th>
+						<th class="tableh1">File type</th>
+						<th class="tableh1">File size</th>
+						<th class="tableh1">Image dimension</th>
+					</tr>
+					<tr>
+						<td class="tableb">1</td>
+						<td class="tableb">jpg</td>
+						<td class="tableb">32.69 KiB</td>
+						<td class="tableb">391 x 600</td>
+						<td class="tableb">png</td>
+						<td class="tableb">1.64 KiB</td>
+						<td class="tableb">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb tableb_alternate">2</td>
+						<td class="tableb tableb_alternate">jpg</td>
+						<td class="tableb tableb_alternate">385 x 415</td>
+						<td class="tableb tableb_alternate">20.89 KiB</td>
+						<td class="tableb tableb_alternate">png</td>
+						<td class="tableb tableb_alternate">2.10 KiB</td>
+						<td class="tableb tableb_alternate">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb">3</td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb">png</td>
+						<td class="tableb"></td>
+						<td class="tableb">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb tableb_alternate">4</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">png</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb">5</td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb">png</td>
+						<td class="tableb"></td>
+						<td class="tableb">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb tableb_alternate">6</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">png</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb">7</td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb"></td>
+						<td class="tableb">png</td>
+						<td class="tableb"></td>
+						<td class="tableb">284 x 164</td>
+					</tr>
+					<tr>
+						<td class="tableb tableb_alternate">8</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">png</td>
+						<td class="tableb tableb_alternate"></td>
+						<td class="tableb tableb_alternate">284 x 164</td>
+					</tr>
+				</table>
+				As you can see, the dimensions of the histogram file are always the same: their resolution 284 x 164 pixels is hard-coded into the EnlargeIt plugin. Also the file format of the histogram file always is <tt class="code">png</tt>.
+				
+				<a name="configuration_setup_histogram_age"></a><h5>Automatic deleting of histogram cache by file age<a href="#configuration_setup_histogram_age" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				The option &quot;<tt class="code">Histogram cache file lifetime</tt> &rarr; <tt class="code">XX days</tt> allows you to specify to see the histogram cache deleted after a set number of days. This way, the histogram files that are older than the number of days you specify will be deleted whenever a visitor clicks on <em>any</em> histogram button in the gallery. You can specify any number of days between 1 and 365.<br />
+				Default value is 30 days. Only applies if the radio button in front of this option has been ticked in the first place.
+				
+				<a name="configuration_setup_histogram_size"></a><h5>Automatic deleting of histogram cache by max file size<a href="#configuration_setup_histogram_size" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				The option &quot;<tt class="code">Histogram cache file lifetime</tt> &rarr; <tt class="code">Maximum file size total XX MiB</tt> allows you to specify a maximum for the webspace consumption of the entire histogram cache. If the total of file sizes of all histogram files get's bigger han the value you specify here, the oldest histogram files will be deleted untill the total is below the value you have set. This option can be used to make sure that the webspace consumption never get's bigger than your maximum webspace. The garbage collection routine that will delete the oldest cache files will be triggered whenever a site visitor clicks on <em>any</em> histogram button. You can specify any number of days between 1 and 99.<br />
+				Default value is 10 MiB. Only applies if the radio button in front of this option has been ticked in the first place.
+				
+				<a name="configuration_setup_histogram_information"></a><h5>Additional cache information<a href="#configuration_setup_histogram_information" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				If the histogram cache is <strong>not</strong> empty (i.e. if the option &quot;<a href="#configuration_buttons_histogram">Display "Histogram" button</a>&quot; has been enabled and the form was submit, there will be additional information available underneath the &quot;Histogram cache file lifetime&quot; option: the actual size of the cache (number of files and webspace consumption) will be displayed.
+				
+				<a name="configuration_setup_histogram_default"></a><h5>Default value<a href="#configuration_setup_histogram_default" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				Default selection for histogram caching is &quot;<em>unlimited</em>&quot;, which means that the cache will never be cleared. Recommended if you have enough webspace available.
+			</div>
         </div>
 	
 	<a name="configuration_color_picker"></a><h3>Color pickers<a href="#configuration_color_picker" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
@@ -571,6 +696,7 @@ This plugin uses the following components:
     <li>Add an animation preview on the config page</li>
     <li>Add screenshots</li>
     <li>Add support for non-image files</li>
+	<li>Add page to manually clear the histogram cache</li>
 </ul>
 
 <div id="doc_footer">
