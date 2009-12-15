@@ -187,6 +187,14 @@ if ($CONFIG['plugin_enlargeit_pictype'] == '0') {
 	$option_output['plugin_enlargeit_pictype_2'] = 'checked="checked"';
 }
 
+if ($CONFIG['plugin_enlargeit_maximizemethod'] == '0') {
+	$option_output['plugin_enlargeit_maximizemethod_0'] = 'checked="checked"';
+	$option_output['plugin_enlargeit_maximizemethod_1'] = '';
+} elseif ($CONFIG['plugin_enlargeit_maximizemethod'] == '1') {
+	$option_output['plugin_enlargeit_maximizemethod_0'] = '';
+	$option_output['plugin_enlargeit_maximizemethod_1'] = 'checked="checked"';
+}
+
 for ($i = 0; $i <= 10; $i++) {
 	if ($CONFIG['plugin_enlargeit_ani'] == $i) {
 		$option_output['plugin_enlargeit_ani'][$i] = 'selected="selected"';
@@ -305,14 +313,6 @@ if ($CONFIG['plugin_enlargeit_buttondownload'] == '0') {
 	$option_output['plugin_enlargeit_buttondownload_0'] = '';
 	$option_output['plugin_enlargeit_buttondownload_1'] = '';
 	$option_output['plugin_enlargeit_buttondownload_2'] = 'checked="checked"';
-}
-
-if ($CONFIG['plugin_enlargeit_maximizemethod'] == '0') {
-	$option_output['plugin_enlargeit_maximizemethod_0'] = 'checked="checked"';
-	$option_output['plugin_enlargeit_maximizemethod_1'] = '';
-} elseif ($CONFIG['plugin_enlargeit_maximizemethod'] == '1') {
-	$option_output['plugin_enlargeit_maximizemethod_0'] = '';
-	$option_output['plugin_enlargeit_maximizemethod_1'] = 'checked="checked"';
 }
 
 if ($CONFIG['plugin_enlargeit_buttonbbcode'] == '1') {
@@ -452,6 +452,18 @@ echo <<< EOT
 		</td>
 		<td>
 			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_enlargetopicin" class="greybox" title="{$lang_plugin_enlargeit['enlarge_to_pic_in']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['maximize_method']}
+		</td>
+		<td colspan="1">
+			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_0" class="radio" value="0" {$option_output['plugin_enlargeit_maximizemethod_0']} /><label for="plugin_enlargeit_maximizemethod_0" class="clickable_option">{$lang_plugin_enlargeit['as_popup_window']} ({$lang_plugin_enlargeit['not_recommended']})</label><br />
+			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_1" class="radio" value="1" {$option_output['plugin_enlargeit_maximizemethod_1']} /><label for="plugin_enlargeit_maximizemethod_1" class="clickable_option">{$lang_plugin_enlargeit['open_as_ajax']} ({$lang_plugin_enlargeit['recommended']})</label>
+		</td>
+		<td>
+		    <a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_type_maximize" class="greybox" title="{$lang_plugin_enlargeit['maximize_method']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -746,6 +758,7 @@ echo <<< EOT
 		<td>
 		</td>
 	</tr>
+	<!--
 	<tr>
 		<td valign="top">
 			<label for="plugin_enlargeit_buttonvote" class="clickable_option">{$enlargeit_icon_array['vote']} {$lang_plugin_enlargeit['button_vote']}</label>
@@ -766,6 +779,7 @@ echo <<< EOT
 		<td>
 		</td>
 	</tr>
+	-->
 	<tr>
 		<td valign="top">
 			{$enlargeit_icon_array['download']} {$lang_plugin_enlargeit['button_download']}
@@ -774,17 +788,6 @@ echo <<< EOT
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_0" class="radio" value="0" {$option_output['plugin_enlargeit_buttondownload_0']} /><label for="plugin_enlargeit_buttondownload_0" class="clickable_option">{$lang_common['no']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_2" class="radio" value="2" {$option_output['plugin_enlargeit_buttondownload_2']} /><label for="plugin_enlargeit_buttondownload_2" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_registered_users_only']}</label><br />
 			<input type="radio" name="plugin_enlargeit_buttondownload" id="plugin_enlargeit_buttondownload_1" class="radio" value="1" {$option_output['plugin_enlargeit_buttondownload_1']} /><label for="plugin_enlargeit_buttondownload_1" class="clickable_option">{$lang_common['yes']}: {$lang_plugin_enlargeit['for_all']}</label>
-		</td>
-		<td>
-		</td>
-	</tr>
-	<tr>
-		<td valign="top">
-			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['maximize_method']}
-		</td>
-		<td colspan="1">
-			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_0" class="radio" value="0" {$option_output['plugin_enlargeit_maximizemethod_0']} /><label for="plugin_enlargeit_maximizemethod_0" class="clickable_option">{$lang_plugin_enlargeit['as_popup_window']} ({$lang_plugin_enlargeit['not_recommended']})</label><br />
-			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_1" class="radio" value="1" {$option_output['plugin_enlargeit_maximizemethod_1']} /><label for="plugin_enlargeit_maximizemethod_1" class="clickable_option">{$lang_plugin_enlargeit['open_as_ajax']} ({$lang_plugin_enlargeit['recommended']})</label>
 		</td>
 		<td>
 		</td>

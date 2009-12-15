@@ -25,6 +25,12 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-15 [M] Version count updated to 1.11 {GauGau}
+2009-12-15 [O] Moved maximize-option up on config screen {GauGau}
+2009-12-15 [M] Changed defaults for buttons {GauGau}
+2009-12-15 [M] Removed reference to ImageFlow from credits section, as it is not being used in this version and went into the list in error {GauGau}
+2009-12-15 [O] Hid config options for comment and vote buttons, as the corresponding features aren't implemented yet {GauGau}
+2009-12-15 [D] Added buttons section to docs {GauGau}
 2009-12-14 [M] Version count updated to 1.10 {GauGau}
 2009-12-14 [D] Added some sections to documentation {GauGau}
 2009-12-14 [M] Version count updated to 1.9 {GauGau}

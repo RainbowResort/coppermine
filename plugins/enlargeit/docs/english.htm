@@ -217,6 +217,15 @@ This is a table that represents the environments that the enlargeIt plugin has b
             <li><em>full size</em></li>
             <li><em>force intermediate size</em></li>
         </ul>
+        
+        <a name="configuration_type_maximize"></a><h4>Maximize method<a href="#configuration_type_maximize" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determine how full-size images should be opened.<br />
+        Available options:
+        <ul>
+            <li><em>As pop-up window</em> (not recommended)</li>
+            <li><em>Open as AJAX snippet</em> (recommended)</li>
+        </ul>
+        This option only applies if you allow full-size images in the first place, so both the EnlargeIt option &quot;<a href="#configuration_type_enlargetopicin">Enlarge to pic in</a>&quot; as well as the coppermine config options that have an impact on the resizing of full-sized images has got an impact need to be taken into account.
         </div>
         
     <a name="configuration_type_end"></a>
@@ -351,6 +360,129 @@ This is a table that represents the environments that the enlargeIt plugin has b
     <a name="configuration_action_end"></a>
     
     <a name="configuration_buttons"></a><h3>Buttons<a href="#configuration_buttons" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        <div class="indent">
+        <a name="configuration_buttons_picture"></a><h4>Display button "Show picture"<a href="#configuration_buttons_picture" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines wether the "show picture" button (<img src="../images/icons/show.png" border="0" width="16" height="16" alt="" class="icon" />) should be displayed when the EnlargeIt object is being displayed.<br />
+        Out of the box, the image is being displayed anyway when the EnlargeIt object fires up, so this little button only makes sense to offer the visitor an option to return to the image if he's allowed to see something else in the first place. Subsequently, you should only enable this option if you have enabled at least one other button from the list below:
+        <ul>
+            <li><a href="#configuration_buttons_info">Show button "Info"</a></li>
+            <li><a href="#configuration_buttons_favorites">Show my favorites</a></li>
+            <li><a href="#configuration_buttons_vote">Display "Vote" button</a></li>
+            <li><a href="#configuration_buttons_comments">Display "Comments" button</a></li>
+            <li><a href="#configuration_buttons_download">Display "Download" button</a></li>
+            <li><a href="#configuration_buttons_bbcode">Display "BBCode" button</a></li>
+            <li><a href="#configuration_buttons_histogram">Display "Histogram" button</a></li>
+        </ul>
+        Default is &quot;diabled&quot;.
+        
+        <a name="configuration_buttons_info"></a><h4>Show button "Info"<a href="#configuration_buttons_info" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if the file information should be available as a separate button (<img src="../images/icons/info.png" border="0" width="16" height="16" alt="" class="icon" />) that the visitor can click. The file information usually doesn't mean much to the visitor on a gallery, so it's recommended to leave that option off in order not to confuse the visitor.<br />
+        Available options are:
+        <ul>
+            <li><em>No</em></li>
+            <li><em>Yes: Open as AJAX snippet</em></li>
+            <li><em>Yes: Open "regular" intermediate page</em></li>
+        </ul>
+        Default option is &quot;<em>No</em>&quot;.<br />
+        The file information (if this button is enabled) usually looks like this:<br />
+        <table border="0" cellspacing="0" cellpadding="0" class="maintable">
+            <tr>
+                <td class="tableh2" colspan="2">File information</td>
+            </tr>
+            <tr>
+                <td class="tableb">Filename:</td>
+                <td class="tableb">040804_LOTUS_1.jpg</td>
+            </tr>
+            <tr>
+                <td class="tableb">Album name:</td>
+                <td class="tableb">/ Flowers</td>
+            </tr>
+            <tr>
+                <td class="tableb">Filesize:</td>
+                <td class="tableb">59 KiB</td>
+            </tr>
+            <tr>
+                <td class="tableb">Date added:</td>
+                <td class="tableb">Jun 11, 2009</td>
+            </tr>
+            <tr>
+                <td class="tableb">Dimensions:</td>
+                <td class="tableb">600 x 800 pixels</td>
+            </tr>
+            <tr>
+                <td class="tableb">Displayed:</td>
+                <td class="tableb">13 times ()</td>
+            </tr>
+        </table>
+        
+        <a name="configuration_buttons_favorites"></a><h4>Show my favorites<a href="#configuration_buttons_favorites" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if the favorites button (<img src="../images/icons/favorites.png" border="0" width="16" height="16" alt="" class="icon" />) should be displayed when the EnlargeIt object fires up. The favorites button allows your visitor to quickly add a file to their personal favorites list or remove it from that list. This is a button that can help build a community and is only recommended if your target audience is using the favorites feature built into coppermine in the first place.<br />
+        Default is "disabled".
+        
+        <a name="configuration_buttons_vote"></a><h4>Display "Vote" button<a href="#configuration_buttons_vote" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Feature currently isn't implemented, so there's nothing you can do here.
+        
+        <a name="configuration_buttons_comments"></a><h4>Display "Comments" button<a href="#configuration_buttons_comments" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Feature currently isn't implemented, so there's nothing you can do here.
+
+        <a name="configuration_buttons_download"></a><h4>Display "Download" button<a href="#configuration_buttons_download" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if there will be a download button (<img src="../images/icons/download.png" border="0" width="16" height="16" alt="" class="icon" />) when the EnlargeIt object fires up. Enabling this button will make it easier even for newbies to download your images. In fact you encourage visitors to download your images and use it elsewhere, so make up your mind about that carefully. If you disable this option, you will just not display the download button, but your visitors will still be able to steal them just as they would be able to do so using a regular coppermine gallery.<br />
+        Available options are:
+        <ul>
+            <li><em>No</em></li>
+            <li><em>Yes: for registered users only</em></li>
+            <li><em>Yes: for all (guests as well as registered users)</em></li>
+        </ul>
+        Default option is &quot;<em>No</em>&quot;
+        
+        <a name="configuration_buttons_bbcode"></a><h4>Display "BBCode" button<a href="#configuration_buttons_bbcode" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if there is a bbcode button (<img src="../images/icons/bbcode.png" border="0" width="16" height="16" alt="" class="icon" />) in the EnlargeIt interface that will lead the visitor to a table where he/she can copy bbcode from that will enable them to refer to a particular image from within a forum or similar application that allows bbcode. This option only makes sense if you want your visitors to link to your images in forums and similar. Usually, this is the case if you run an avatar gallery or similar. Recommended option is &quot;off&quot; unless you understand the impact of enabling this option.<br />
+        The bbcode table looks like this:<br />
+        <table border="0" cellspacing="0" cellpadding="0" class="maintable">
+            <tr>
+                <td class="tableh1" align="center">BBCode</td>
+            </tr>
+            <tr>
+                <td class="tableb" align="center">
+                    <h5 style="margin: 0px; padding: 0px; line-height: 0.8em;">[url][img][/url]</h5>
+                    <textarea rows="5" cols="40" class="textinput">[url=http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/yourimage.jpg][IMG]http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/thumb_yourimage.jpg[/IMG][/url]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="tableb" align="center">
+                    <h5 style="margin: 0px; padding: 0px; line-height: 0.8em;">[url]title[/url]</h5>
+                    <textarea rows="3" cols="40" class="textinput" style="">[url=http://yoursite.tld/your_coppermine_folder/albums/userpics/10001/yourimage.jpg]title of your image[/url]</textarea>
+                </td>
+            </tr>
+        </table>
+        Default is &quot;disabled&quot;.
+        
+        <a name="configuration_buttons_histogram"></a><h4>Display "Histogram" button<a href="#configuration_buttons_histogram" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if a histogram button (<img src="../images/icons/histogram.png" border="0" width="16" height="16" alt="" class="icon" />) should be available on the EnlargeIt interface<div class="cpg_message_info">
+            <p>This plugin has got an option to create and display a histogram for all your images in your gallery. It's beyond the scope of this documentation to provide a detailed explanation what histograms are and what they're suppossed to be used for.</p>
+            <p>A rough explanation: a histogram of an image is a graphical representation of the tonal distribution of a digital image.</p>
+            <p>Recommended usage: you should only provide the histogram if your target audience are photographers and know what a histogram is and what it can be used for.</p>
+            <p>Usefull links:</p>
+            <ul>
+                <li><a href="http://en.wikipedia.org/wiki/Image_histogram" rel="external" class="external">Wikipedia &rarr; Image histogram</a></li>
+                <li><a href="http://www.luminous-landscape.com/tutorials/understanding-series/understanding-histograms.shtml" rel="external" class="external">The Luminous Landscape &rarr; Tutorials &rarr; Understanding Histograms</a></li>
+                <li><a href="http://crackerhammer.com/understanding-histograms.html" rel="external" class="external">Michael Mercadante &rarr; Understanding Histograms</a></li>
+            </ul>
+        </div>
+        Next to the checkbox that allows you to toggle the histogram usage on and off there is the output from your system about the version of the GD library on your server. As the histogram creation itself needs the GD2 or better, you can't enable the checkbox if your version of GD isn't good enough. For details, log in on your coppermine-driven gallery as admin and then click on the phpinfo button from your admin menu. On the phpinfo screen, scroll to the GD section for details. Please understand that it's beyond the scope of the coppermine support board to teach you about webserver setup, so you'll need to figure this out with your webhost if you don't have GD2 support enabled.<br />
+        The options that correspond to &quot;<a href="#configuration_setup_histogram">Histogram cache file lifetime</a>&quot; will be greyed out if the histogram button is not enabled because they don't apply.<br />
+        It's important to understand the impact that the creation of histograms can have on your server: they can cause a huge performance spike because the creation of histograms is a resources-intensive process: the image is being loaded into memory and then processed in various non-trivial steps.<br />
+        Default is &quot;disabled&quot;.
+        
+        <a name="configuration_buttons_navigation"></a><h4>Display "Navigation" buttons<a href="#configuration_buttons_navigation" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if the previous (<img src="../images/icons/previous.png" border="0" width="16" height="16" alt="" class="icon" />) and next (<img src="../images/icons/next.png" border="0" width="16" height="16" alt="" class="icon" />) buttons will be displayed if applicable (i.e. if there actually is a previous/next image within an album) in the EnlargeIt interface for easier navigation from one image to the next. If this option is not enabled, your visitors will be forced to close each image and go to the next image by clicking on the corresponding thumbnail. If you enable this option, they can go from one image to the next without the in-between click on the thumbnail. The only drawback of enabling this option is a slightly cluttered interface.<br />
+        Default (and recommended) is &quot;enabled&quot;.
+         
+        <a name="configuration_buttons_close"></a><h4>Display "Close" button<a href="#configuration_buttons_close" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if a close button (<img src="../images/icons/close.png" border="0" width="16" height="16" alt="" class="icon" />) will be displayed in the EnlargeIt interface.<br />
+        Default (and recommended) is &quot;enabled&quot;.
+        
+        </div>
     <a name="configuration_buttons_end"></a>
     
     <a name="configuration_multimedia"></a><h3>Multimedia<a href="#configuration_multimedia" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
@@ -364,10 +496,27 @@ This is a table that represents the environments that the enlargeIt plugin has b
         <a name="configuration_multimedia_videoformats"></a><h4>Video formats<a href="#configuration_multimedia_videoformats" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
         <p>Select the file formats where the EnlargeIt! plugin should be used with from this <a href="#configuration_multi_select">multiple select field</a>. All other file formats (if present in your gallery) will be displayed using the "regular" Coppermine mechanisms. This setting does NOT determine what files you can upload - to control that, go to Coppermine's config.</p>
         <p>Rows marked with an asterisk (*) show file formats that are disallowed in Coppermine's config, so it's quite likely that those files don't exist in your gallery in the first place.</p>
+        
+        <a name="configuration_multimedia_flv"></a><h4>Use which FLV player software<a href="#configuration_multimedia_flv" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines which FLV player to use. Only applies if you have enabled FLV playback in the first place in the option <a href="#configuration_multimedia_videoformats">Video formats</a>.<br />
+        Available options:
+        <ul>
+            <li><em>RphMedia</em></li>
+            <li><em>OS FLV</em> (default)</li>
+        </ul> 
         </div>
     
     <a name="configuration_setup"></a><h3>Plugin setup<a href="#configuration_setup" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
     <a name="configuration_setup_end"></a>
+        <div class="indent">
+        <a name="configuration_setup_adminmenu"></a><h4>Display a link to the plugin configuration in the admin menu<a href="#configuration_setup_adminmenu" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Determines if a link to the configuration panel for the EnlargeIt! plugin should reside in the admin menu. Only recommended if you plan to change the settings very often or during the initial configuration stage. Once you have properly configured the EnlargeIt plugin you should disable the admin menu link to make the admin menu appear less cluttered.<br />
+        Default is &quot;enabled&quot;.
+        
+        <a name="configuration_setup_histogram"></a><h4>Histogram cache file lifetime<a href="#configuration_setup_histogram" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        tbc...
+        
+        </div>
 	
 	<a name="configuration_color_picker"></a><h3>Color pickers<a href="#configuration_color_picker" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 	On the configuration panel of the EnlargeIt! plugin there are several color pickers that allow you to specify a color by clicking. To use the color picker you need to expand it first (by default it is collapsed) using the <tt class="code">Toggle color picker</tt> links. You then select a color from the circle and the shade from the inner box. When clicking on the box the actual color field is being populated. All color fields accept the hexadecimal color notation with the leading hash sign.
@@ -398,7 +547,6 @@ This plugin uses the following components:
 <ul>
     <li><a href="http://enlargeit.timos-welt.de/" rel="external" class="external">EnlargeIt!</a> technology by Timo Schewe</li>
     <li><a href="http://forum.coppermine-gallery.net/index.php/topic,43180.0.html" rel="external" class="external">FLV player</a> by rphMedia</li>
-    <li><a href="http://imageflow.finnrudolph.de/" rel="external" class="external">ImageFlow</a> is based on the script by Finn Rudolph</li>
     <li>FLV player <a href="http://www.osflv.com/" rel="external" class="external">OSFLV</a></li>
     <li>Histogram creation by <a href="mailto:anton_spaz@yahoo.com" rel="external" class="external">Anton Sparrius</a> (Spaz)</li>
     <li><a href="http://www.everaldo.com/crystal/" rel="external" class="external">Crystal Clear icons</a> by Everaldo Coelho</li>
@@ -424,7 +572,6 @@ This plugin uses the following components:
     <li>Add screenshots</li>
     <li>Add support for non-image files</li>
 </ul>
-
 
 <div id="doc_footer">
 	<div class="doc_info_wrapper">
