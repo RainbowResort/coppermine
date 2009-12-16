@@ -154,7 +154,7 @@ $lang_plugin_enlargeit['histogram_cache_file_lifetime'] = 'Speicherdauer von Dat
 $lang_plugin_enlargeit['unlimited'] = 'unbegrenzt';
 $lang_plugin_enlargeit['days'] = 'Tage';
 $lang_plugin_enlargeit['max_file_size_total'] = 'Maximale Summe der Datei-Grösse';
-$lang_plugin_enlargeit['maximize_method'] = 'Vergößerungs-Methode';
+$lang_plugin_enlargeit['maximize_method'] = 'Vergößerungs-Methode für Vollbilder';
 $lang_plugin_enlargeit['preview'] = 'Vorschau';
 $lang_plugin_enlargeit['image_formats'] = 'Bild-Formate';
 $lang_plugin_enlargeit['video_formats'] = 'Video-Formate';
@@ -174,4 +174,6 @@ $lang_plugin_enlargeit['ytb'] = 'YouTube Video';
 $lang_plugin_enlargeit['dvx'] = 'DivX Video';
 $lang_plugin_enlargeit['flv'] = 'Flash Video-Datei';
 $lang_plugin_enlargeit['download'] = 'Download';
+$lang_plugin_enlargeit['enlargeit_documentation'] = 'EnlargeIt! Dokumentation';
+$lang_plugin_enlargeit['shadow_color'] = 'Schattenfarbe';
 ?>

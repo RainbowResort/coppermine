@@ -25,6 +25,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-16 [M] Version count updated to 1.13 {GauGau}
+2009-12-16 [A] Added documentation link to config page {GauGau}
+2009-12-16 [A] Added JS check for animation type {GauGau}
+2009-12-16 [A] Added shadow color feature {GauGau}
 2009-12-15 [M] Version count updated to 1.12 {GauGau}
 2009-12-15 [O] Moved admin menu item to the right of the plugin manager {GauGau}
 2009-12-15 [D] Added screenshots to documentation {GauGau}

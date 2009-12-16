@@ -153,7 +153,7 @@ $lang_plugin_enlargeit['histogram_cache_file_lifetime'] = 'Histogram cache file 
 $lang_plugin_enlargeit['unlimited'] = 'unlimited';
 $lang_plugin_enlargeit['days'] = 'days';
 $lang_plugin_enlargeit['max_file_size_total'] = 'Maximum file size total';
-$lang_plugin_enlargeit['maximize_method'] = 'Maximize method';
+$lang_plugin_enlargeit['maximize_method'] = 'Maximize method for full-size pics';
 $lang_plugin_enlargeit['preview'] = 'Preview';
 $lang_plugin_enlargeit['image_formats'] = 'Image formats';
 $lang_plugin_enlargeit['video_formats'] = 'Video formats';
@@ -174,5 +174,5 @@ $lang_plugin_enlargeit['dvx'] = 'DivX Video';
 $lang_plugin_enlargeit['flv'] = 'Flash video file';
 $lang_plugin_enlargeit['download'] = 'Download';
 $lang_plugin_enlargeit['enlargeit_documentation'] = 'EnlargeIt! documentation';
-$lang_plugin_enlargeit['credits'] = 'Credits';
+$lang_plugin_enlargeit['shadow_color'] = 'Shadow color';
 ?>

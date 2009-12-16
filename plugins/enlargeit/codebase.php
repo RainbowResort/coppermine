@@ -208,6 +208,7 @@ function enlargeit_head($meta) {
         var enl_shadow = {$temp_shadow};
         var enl_shadowsize = {$CONFIG['plugin_enlargeit_shadowsize']};
         var enl_shadowintens = {$CONFIG['plugin_enlargeit_shadowintens']};
+		var enl_shadowcolor = '{$CONFIG['plugin_enlargeit_shadowcolor']}';
         var enl_gifpath = 'plugins/enlargeit/images/';
         var enl_swfpath = 'plugins/enlargeit/images/flash/';
         var enl_histogramurl = 'index.php?file=enlargeit/histogram&amp;action=file&amp;pid=';
@@ -429,6 +430,7 @@ function enlargeit_install() {
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadow', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadowsize', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadowintens', '20')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_shadowcolor', '#000000')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_ani', '5')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_maxstep', '18')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_enlargeit_speed', '12')");
@@ -497,6 +499,7 @@ function enlargeit_uninstall() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadow'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadowsize'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadowintens'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_shadowcolor'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_ani'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_maxstep'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_enlargeit_speed'");

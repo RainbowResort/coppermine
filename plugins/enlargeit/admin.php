@@ -64,6 +64,7 @@ if ($superCage->post->keyExists('submit')) {
       'plugin_enlargeit_brdround' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_shadowsize' => array('type' => 'int', 'min' => '0', 'max' => '9'),
       'plugin_enlargeit_shadowintens' => array('type' => 'int', 'min' => '1', 'max' => '30'),
+	  'plugin_enlargeit_shadowcolor' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
       'plugin_enlargeit_titlebar' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_enlargeit_titletxtcol' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
       'plugin_enlargeit_ajaxcolor' => array('type' => 'raw', 'regex_ok' => '/^#(?:(?:[a-f\d]{3}){1,2})$/i'),
@@ -203,10 +204,19 @@ for ($i = 0; $i <= 10; $i++) {
 	}
 }
 
+$option_output['plugin_enlargeit_speed'] = '';
+$option_output['plugin_enlargeit_maxstep'] = '';
+$option_output['plugin_enlargeit_opaglide'] = '';
+
+
+if ($CONFIG['plugin_enlargeit_ani'] == '0') {
+	$option_output['plugin_enlargeit_speed'] .= 'disabled="disabled" ';
+	$option_output['plugin_enlargeit_maxstep'] .= 'disabled="disabled" ';
+	$option_output['plugin_enlargeit_opaglide'] .= 'disabled="disabled" ';
+}
+
 if ($CONFIG['plugin_enlargeit_opaglide'] == '1') {
-	$option_output['plugin_enlargeit_opaglide'] = 'checked="checked"';
-} else { 
-	$option_output['plugin_enlargeit_opaglide'] = '';
+	$option_output['plugin_enlargeit_opaglide'] .= 'checked="checked"';
 }
 
 $border_texture_options = '<option value="none">-</option>' . $LINEBREAK;
@@ -416,8 +426,10 @@ if ($superCage->post->keyExists('submit')) {
     }
 } else {
 	echo <<< EOT
-	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)<br />&nbsp;<br />
-	<a href="plugins/enlargeit/docs/{$documentation_file}.htm#credits" class="admin_menu greybox" title="{$lang_plugin_enlargeit['credits']}">{$lang_plugin_enlargeit['credits']}</a>
+	{$lang_plugin_enlargeit['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)
+	<a href="http://forum.coppermine-gallery.net/index.php/topic,57424.0.html" rel="external" class="admin_menu">{$enlargeit_icon_array['announcement']}{$lang_plugin_enlargeit['announcement_thread']}</a>
+	<a href="plugins/enlargeit/docs/{$documentation_file}.htm" class="admin_menu">{$enlargeit_icon_array['documentation']}{$lang_plugin_enlargeit['enlargeit_documentation']}</a>
+
 EOT;
 }
 echo <<< EOT
@@ -456,7 +468,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$enlargeit_icon_array['fullsize']} {$lang_plugin_enlargeit['maximize_method']}
+			{$lang_plugin_enlargeit['maximize_method']}
 		</td>
 		<td colspan="1">
 			<input type="radio" name="plugin_enlargeit_maximizemethod" id="plugin_enlargeit_maximizemethod_0" class="radio" value="0" {$option_output['plugin_enlargeit_maximizemethod_0']} /><label for="plugin_enlargeit_maximizemethod_0" class="clickable_option">{$lang_plugin_enlargeit['as_popup_window']} ({$lang_plugin_enlargeit['not_recommended']})</label><br />
@@ -497,7 +509,7 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['time_between_animation_steps']}
 		</td>
 		<td colspan="1">
-			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" /> {$lang_plugin_enlargeit['milliseconds']}
+			<input type="text" name="plugin_enlargeit_speed" id="plugin_enlargeit_speed" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_speed']}" {$option_output['plugin_enlargeit_speed']} /> {$lang_plugin_enlargeit['milliseconds']}
 		</td>
 		<td>
 			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_steps" class="greybox" title="{$lang_plugin_enlargeit['time_between_animation_steps']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
@@ -508,7 +520,7 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['animation_steps']}
 		</td>
 		<td colspan="1">
-			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" />
+			<input type="text" name="plugin_enlargeit_maxstep" id="plugin_enlargeit_maxstep" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_enlargeit_maxstep']}" {$option_output['plugin_enlargeit_maxstep']} />
 		</td>
 		<td>
 			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_animation_steps" class="greybox" title="{$lang_plugin_enlargeit['animation_steps']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
@@ -559,13 +571,13 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['border_texture']}
 		</td>
 		<td valign="top">
-			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox">
+			<select name="plugin_enlargeit_brdbck" id="plugin_enlargeit_brdbck" class="listbox" style="float:left;margin-right:5px;">
 				{$border_texture_options}
 			</select>
-			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_texture" class="greybox" title="{$lang_plugin_enlargeit['border_texture']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
-		</td>
-		<td valign="middle" align="center">
 			<div id="borderpreview" style="background-image:url(./plugins/enlargeit/images/backgrounds/{$CONFIG['plugin_enlargeit_brdbck']}.png);background-repeat:repeat;width:200px;">{$lang_plugin_enlargeit['preview']}</div>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_border_texture" class="greybox" title="{$lang_plugin_enlargeit['border_texture']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>
@@ -589,7 +601,7 @@ echo <<< EOT
 			{$lang_plugin_enlargeit['shadow_size']}
 		</td>
 		<td colspan="1">
-			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="1" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
+			<input type="text" name="plugin_enlargeit_shadowsize" id="plugin_enlargeit_shadowsize" class="textinput spin-button" size="2" maxlength="1" value="{$CONFIG['plugin_enlargeit_shadowsize']}" /> {$lang_plugin_enlargeit['right_bottom']} ({$lang_plugin_enlargeit['zero_to_disable']})
 		</td>
 		<td>
 			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow_size" class="greybox" title="{$lang_plugin_enlargeit['shadow_size']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
@@ -604,6 +616,19 @@ echo <<< EOT
 		</td>
 		<td>
 			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow_opacity" class="greybox" title="{$lang_plugin_enlargeit['shadow_opacity']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_enlargeit['shadow_color']} 
+		</td>
+		<td colspan="1">
+			<input type="text" name="plugin_enlargeit_shadowcolor" id="plugin_enlargeit_shadowcolor" class="textinput" size="8" maxlength="7" value="{$CONFIG['plugin_enlargeit_shadowcolor']}" style="text-transform:uppercase;" />
+			<span class="detail_head_collapsed">{$lang_plugin_enlargeit['toggle_color_picker']}</span>
+			<div id="colorpicker_shadowcolor" class="detail_body"></div>
+		</td>
+		<td>
+			<a href="plugins/enlargeit/docs/{$documentation_file}.htm#configuration_shadow_color" class="greybox" title="{$lang_plugin_enlargeit['shadow_color']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 	</tr>
 	<tr>

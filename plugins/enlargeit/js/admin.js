@@ -18,6 +18,7 @@ $(document).ready(function() {
 	$('#colorpicker_bordercolor').farbtastic('#plugin_enlargeit_brdcolor');
 	$('#colorpicker_titletext').farbtastic('#plugin_enlargeit_titletxtcol');
 	$('#colorpicker_backgroundcontent').farbtastic('#plugin_enlargeit_ajaxcolor');
+	$('#colorpicker_shadowcolor').farbtastic('#plugin_enlargeit_shadowcolor');
 	$('#plugin_enlargeit_speed').SpinButton({min: 10,max: 32});
 	$('#plugin_enlargeit_maxstep').SpinButton({min: 4,max: 30});
 	$('#plugin_enlargeit_brdsize').SpinButton({min: 0,max: 40});
@@ -44,6 +45,17 @@ $(document).ready(function() {
 			$('#cache_visibility').css('visibility', 'hidden');
 		}
     })
+	$('#plugin_enlargeit_ani').change(function () {
+		if ($('#plugin_enlargeit_ani').val() == 0) {
+			$('#plugin_enlargeit_speed').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_maxstep').attr('disabled', 'disabled');
+			$('#plugin_enlargeit_opaglide').attr('disabled', 'disabled');
+		} else {
+			$('#plugin_enlargeit_speed').attr('disabled', '');
+			$('#plugin_enlargeit_maxstep').attr('disabled', '');
+			$('#plugin_enlargeit_opaglide').attr('disabled', '');
+		}
+	})
 	$('#plugin_enlargeit_brdbck').change(function(){
 			$('#borderpreview').css('background-image', 'url('+'plugins/enlargeit/images/backgrounds/'+$('#plugin_enlargeit_brdbck').val()+'.png'+')');
     });
