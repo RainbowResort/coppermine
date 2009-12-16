@@ -37,13 +37,185 @@ function shorturl_page_start() {
             $result = cpg_db_query("SELECT url FROM {$CONFIG['TABLE_PREFIX']}plugin_shorturl WHERE rid = ".$superCage->get->getInt('r'));
             $url = mysql_result($result, 0);
             mysql_free_result($result);
-            header("Location: $url");
+            if ($CONFIG['plugin_shorturl_preview'] == 1 || $superCage->get->keyExists('preview')) {
+                load_template();
+                pageheader('Redirection preview');
+                starttable('100%', 'Redirection preview');
+                echo <<<EOT
+                    <tr>
+                        <td class="tableb">
+                            <a href="$url" class="external">$url</a>
+                        </td>
+                    </tr>
+EOT;
+                endtable();
+                pagefooter();
+                exit;
+            } else {
+                header("Location: $url");
+            }
         }
         if ($superCage->get->keyExists('shorturl')) {
             if ($superCage->get->getAlpha('shorturl') == 'config') {
-                // Maybe here will be a config screen later
+                global $CONFIG, $lang_common, $lang_errors, $cpg_udb;
+
+                if (!GALLERY_ADMIN_MODE) {
+                    load_template();
+                    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+                }
+
+                if ($superCage->post->keyExists('submit') == TRUE) {
+                    if(!checkFormToken()){
+                        load_template();
+                        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+                    }
+
+                    $superCage = Inspekt::makeSuperCage();
+
+                    if (!isset($CONFIG['plugin_shorturl_preview'])) {
+                        cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_shorturl_preview', '".$superCage->post->getInt('plugin_shorturl_preview')."')");
+                    } else {
+                        cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '".$superCage->post->getInt('plugin_shorturl_preview')."' WHERE name = 'plugin_shorturl_preview'");
+                    }
+                    $CONFIG['plugin_shorturl_preview'] = $superCage->post->getInt('plugin_shorturl_preview');
+
+                    $result = cpg_db_query("SELECT group_id FROM {$CONFIG['TABLE_USERGROUPS']} WHERE has_admin_access != '1'");
+                    while($row = mysql_fetch_assoc($result)) {
+                        if (!isset($CONFIG['plugin_shorturl_permissions_'.$row['group_id']])) {
+                            cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('plugin_shorturl_permissions_{$row['group_id']}', '".$superCage->post->getInt('plugin_shorturl_permissions_'.$row['group_id'])."')");
+                        } else {
+                            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '".$superCage->post->getInt('plugin_shorturl_permissions_'.$row['group_id'])."' WHERE name = 'plugin_shorturl_permissions_{$row['group_id']}'");
+                        }
+                        $CONFIG['plugin_shorturl_permissions_'.$row['group_id']] = $superCage->post->getInt('plugin_shorturl_permissions_'.$row['group_id']);
+                    }
+                    mysql_free_result($result);
+                }
+
+                load_template();
+                pageheader('Short URL config');
+
+                $permissions = "";
+                $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
+                while($row = mysql_fetch_assoc($result)) {
+                    if (in_array($row['group_id'], $cpg_udb->admingroups)) {
+                        $permissions .= <<< EOT
+                            <tr>
+                                <td valign="top" align="left" class="tableb">
+                                    {$row['group_name']}
+                                </td>
+                                <td valign="top" align="center" class="tableb">
+                                    <input type="radio" class="radio" disabled="disabled" />
+                                </td>
+                                <td valign="top" align="center" class="tableb">
+                                    <input type="radio" class="radio" checked="checked" />
+                                </td>
+                            </tr>
+EOT;
+                    } else {
+                        $row['permission'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_shorturl_permissions_{$row['group_id']}'"),0);
+                        $permissions .= <<< EOT
+                            <tr>
+                                <td valign="top" align="left" class="tableb">
+                                    {$row['group_name']}
+                                </td>
+EOT;
+                        for ($i=0; $i <= 1; $i++) {
+                            if (!is_numeric($row['permission']) && $i == 0) {
+                                $checked = "checked=\"checked\"";
+                            } else {
+                                $checked = $row['permission'] == $i ? "checked=\"checked\"" : "";
+                            }
+                            $permissions .= <<< EOT
+                                <td valign="top" align="center" class="tableb">
+                                    <input type="radio" name="plugin_shorturl_permissions_{$row['group_id']}" id="plugin_shorturl_permissions_{$row['group_id']}_{$i}" class="radio" value="{$i}" $checked />
+                                </td>
+EOT;
+                        }
+                        $permissions .= <<< EOT
+                            </tr>
+EOT;
+                    }
+                }
+                mysql_free_result($result);
+
+                $preview = "";
+                for ($i=0; $i <= 1; $i++) {
+                    $checked = $CONFIG['plugin_shorturl_preview'] == $i ? "checked=\"checked\"" : "";
+                    $preview .= <<< EOT
+                        <td valign="top" align="center" class="tableb">
+                            <input type="radio" name="plugin_shorturl_preview" id="plugin_shorturl_preview_{$i}" class="radio" value="{$i}" $checked />
+                        </td>
+EOT;
+                }
+
+                list($timestamp, $form_token) = getFormToken();
+
+                echo <<< EOT
+                    <form action="" method="post" name="shorturl_config" id="shorturl_config">
+EOT;
+                starttable('100%', 'Short URL config', 3);
+                echo <<<EOT
+                    <tr>
+                        <td valign="top" class="tableb">
+                            Display menu button
+                        </td>
+                        <td valign="top" class="tableb" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="left" class="tableh2">
+                                        Group
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['no']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['yes']}
+                                    </th>
+                                </tr>
+                                $permissions
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableb">
+                            Show redirection preview
+                        </td>
+                        <td class="tableb">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                <tr>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['no']}
+                                    </th>
+                                    <th valign="top" align="center" class="tableh2">
+                                        {$lang_common['yes']}
+                                    </th>
+                                </tr>
+                                $preview
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" class="tablef">
+                        </td>
+                        <td valign="middle" class="tablef" colspan="2">
+                            <input type="hidden" name="form_token" value="{$form_token}" />
+                            <input type="hidden" name="timestamp" value="{$timestamp}" />
+                            <button type="submit" class="button" name="submit" value="{$lang_common['ok']}">{$annotate_icon_array['ok']}{$lang_common['ok']}</button>
+                        </td>
+                    </tr>
+EOT;
+                endtable();
+                pagefooter();
+                exit;
             }
-            if ($superCage->get->getAlpha('shorturl') == 'add' && USER_ID > 0) {
+
+            if ($superCage->get->getAlpha('shorturl') == 'add') {
+                if (shorturl_get_permission() == 0) {
+                    global $lang_errors;
+                    load_template();
+                    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+                }
+
                 if ($superCage->post->keyExists('url')) {
                     js_include('plugins/shorturl/jquery.copy.js');
                     load_template();
@@ -71,7 +243,7 @@ EOT;
                             .'$';
                     $url = $superCage->post->getRaw('url');
                     if(!preg_match('#' . $regex . '#i', $url)) {
-                        echo "Invalid url: <tt>$url</tt> <br/> <a href=\"javascript:history.back();\"><button class=\"button\">Back</button></a>";
+                        echo "Invalid url: <tt>$url</tt> <br/> <form action=\"javascript:history.back();\"><button type=\"submit\" class=\"button\">Back</button></form>";
                     } else {
                         $result = cpg_db_query("SELECT rid FROM {$CONFIG['TABLE_PREFIX']}plugin_shorturl WHERE url = '$url'");
                         if (mysql_num_rows($result) > 0) {
@@ -82,12 +254,13 @@ EOT;
                             $rid = mysql_result($result, 0);
                         }
                         mysql_free_result($result);
-                        $length = strlen($CONFIG['ecards_more_pic_target']."?r=$rid") + 5;
+                        $length = strlen($CONFIG['ecards_more_pic_target']."?r=$rid") + 20;
                         echo <<< EOT
-                            <input id="shorturl" type="text" name="url" size="$length" class="textinput" value="{$CONFIG['ecards_more_pic_target']}?r=$rid" readonly="readonly" />
-                            <button class="button" onclick="$('#shorturl').select().copy();$('#copy_success').show().fadeOut('slow');">Copy to clipboard</button>
-                            <span id="copy_success" class="important" style="display:none;">Copied to clipboard</span>
-                            <script type="text/javascript">$(document).ready(function() { $('#shorturl').select(); });</script>
+                            <input id="shorturl" type="text" name="url" size="$length" class="textinput" value="{$CONFIG['ecards_more_pic_target']}?r=$rid" readonly="readonly" onclick="$(this).select();" />
+                            Immediate redirection (works only if the admin has disabled url preview in the first place)
+                            <br />
+                            <input id="shorturl_p" type="text" name="url" size="$length" class="textinput" value="{$CONFIG['ecards_more_pic_target']}?r=$rid&amp;preview" readonly="readonly" onclick="$(this).select();" />
+                            Display a preview of the destination url (no redirection)
 EOT;
                     }
                     echo <<< EOT
@@ -106,7 +279,7 @@ EOT;
                     echo <<< EOT
                         <tr>
                             <td class="tableb">
-                                <input type="text" id="url" name="url" size="40" class="textinput" style="width:100%;" />
+                                <input type="text" id="url" name="url" size="40" class="textinput" style="width:90%;" />
                                 <input type="hidden" name="form_token" value="{$form_token}" />
                                 <input type="hidden" name="timestamp" value="{$timestamp}" />
                             </td>
@@ -130,7 +303,7 @@ EOT;
 $thisplugin->add_filter('sys_menu', 'shorturl_sys_menu');
 
 function shorturl_sys_menu($menu) {
-    if (!USER_ID) {
+    if (shorturl_get_permission() == 0) {
         return $menu;
     }
 
@@ -144,9 +317,38 @@ function shorturl_sys_menu($menu) {
     $new_button[0][5] = '';
     $new_button[0][4] = $template_sys_menu_spacer;
 
-    array_splice($menu, count($menu)-1, 0, $new_button);
+    array_splice($menu, count($menu)-2, 0, $new_button);
 
     return $menu;
+}
+
+
+function shorturl_get_permission() {
+    global $CONFIG, $cpg_udb;
+
+    if (GALLERY_ADMIN_MODE) {
+        return 1;
+    } elseif (!USER_ID) {
+        return $CONFIG["plugin_shorturl_permissions_".$cpg_udb->guestgroup];
+    } else {
+        $result = cpg_db_query("SELECT user_group, user_group_list FROM {$CONFIG['TABLE_USERS']} WHERE user_id = ".USER_ID);
+        $user = mysql_fetch_assoc($result);
+        mysql_free_result($result);
+        if ($user['user_group_list'] != "") {
+            $user_group_list = explode(",", $user['user_group_list']);
+        }
+        $user_group_list[] = $user['user_group'];
+
+        for($i=0; $i<count($user_group_list); $i++) {
+            $list[$i] = "name = 'plugin_shorturl_permissions_{$user_group_list[$i]}'";
+        }
+
+        $result = cpg_db_query("SELECT MAX(value) FROM {$CONFIG['TABLE_CONFIG']} WHERE ".implode(" OR ", $list));
+        $permission = mysql_result($result, 0);
+        mysql_free_result($result);
+
+        return $permission;
+    }
 }
 
 
