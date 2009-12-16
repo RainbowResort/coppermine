@@ -29,12 +29,12 @@ $version = '1.0';
 
 $extra_info = '
     <a href="index.php?shorturl=config" class="admin_menu">'.cpg_fetch_icon('config', 1).$name.' '.$lang_gallery_admin_menu['admin_lnk'].'</a>
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,TODO.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,62877.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>
 ';
 
 $install_info = '
     You can configure the plugin after installation using the button in the plugin manager
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,TODO.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,62877.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>
 ';
 
 
