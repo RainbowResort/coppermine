@@ -42,39 +42,16 @@ $description = <<< EOT
 EOT;
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 
+$announcement_icon = cpg_fetch_icon('announcement', 1);
+$config_icon = cpg_fetch_icon('config', 1);
+
 $extra_info = <<<EOT
-    <table border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="admin_menu">
-                <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
-            </td>
-            <td>
-                &nbsp;
-            </td>
-            <td class="admin_menu">
-                <a href="index.php?file=bbcode_control/admin">$name {$lang_gallery_admin_menu['admin_lnk']}</a>
-            </td>
-        </tr>
-    </table>
+    <a href="index.php?file=bbcode_control/admin" class="admin_menu">{$config_icon}$name {$lang_gallery_admin_menu['admin_lnk']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu external">{$announcement_icon}Announcement thread for $name plugin</a>
 EOT;
 
-$install_info=<<<EOT
-    <table border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td>
-                {$lang_plugin_bbcode_control['install_info']}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
-            </td>
-        </tr>
-    </table>
+$install_info = <<<EOT
+    {$lang_plugin_bbcode_control['install_info']}
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu external">{$announcement_icon}Announcement thread for $name plugin</a>
 EOT;
 ?>

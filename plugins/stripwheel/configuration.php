@@ -16,5 +16,5 @@ $description='Moving the mouse pointer above the filmstrip, the visitor may use 
 $author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
 $version='0.2';
 $install_info = "This plugin requires no configuration.";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,62454.0.html" rel="external" title="Mouse wheel for filmstrip support">Mouse wheel for filmstrip support</a></span>';
+$extra_info = '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,62454.0.html" rel="external" title="Mouse wheel for filmstrip support">Mouse wheel for filmstrip support</a></span>';
 ?>

@@ -15,5 +15,5 @@ $description='If this plugin is installed, the generated intermediate images wil
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
 $version='0.3';
 $install_info = "This plugin requires no configuration.";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,62435.0.html" rel="external" title="Sharpen Intermediate Support">Sharpen Intermediate Support Thread</a></span>';
+$extra_info = '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,62435.0.html" rel="external" title="Sharpen Intermediate Support">Sharpen Intermediate Support Thread</a></span>';
 ?>

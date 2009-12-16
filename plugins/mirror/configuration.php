@@ -16,5 +16,5 @@ $description="Will only work if 'Insert a transparent overlay to minimize image 
 $author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>';
 $version='1.0';
 $install_info = "This plugin requires no configuration.";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,62636.0.html" rel="external" title="Mirror support">Mirror support</a></span>';
+$extra_info = '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,62636.0.html" rel="external" title="Mirror support">Mirror support</a></span>';
 ?>

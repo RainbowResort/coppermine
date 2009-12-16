@@ -16,6 +16,6 @@ $author='<a href="http://www.timos-welt.de" rel="external" class="external">Timo
 $version='0.2';
 $install_info = "You can configure the plugin after installation, use the button on plugin manager page.";
 $extra_info = '<span class="admin_menu"><a href="index.php?file=slider/plugin_config" title="Configure Slider">Slider Configuration</a></span> '
-    . '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php/topic,57388.0.html" rel="external" title="Slider Support">Slider Support</a></span>'
+    . '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,57388.0.html" rel="external" title="Slider Support">Slider Support</a></span>'
     . '<br />To enable this plugin (make it actually display the slider animation), the string "slider" (separated with a slash) has to be added to "the content of the main page" in Coppermine\'s config in the section "Album list view". The setting should now look like "breadcrumb/catlist/alblist/slider" or similar. To change the position of the block, move the string "slider" around inside that config field.';
 ?>

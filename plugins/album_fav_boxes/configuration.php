@@ -18,12 +18,12 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 function initialize_languages() {
-	global $lightbox, $CONFIG;
-	require_once "./plugins/album_fav_boxes/lang/english.php";
-	if ($CONFIG['lang'] != 'english' && file_exists("./plugins/album_fav_boxes/lang/{$CONFIG['lang']}.php")) {
-		require_once "./plugins/album_fav_boxes/lang/{$CONFIG['lang']}.php";
-	}
-	return $lightbox;
+    global $lightbox, $CONFIG;
+    require_once "./plugins/album_fav_boxes/lang/english.php";
+    if ($CONFIG['lang'] != 'english' && file_exists("./plugins/album_fav_boxes/lang/{$CONFIG['lang']}.php")) {
+        require_once "./plugins/album_fav_boxes/lang/{$CONFIG['lang']}.php";
+    }
+    return $lightbox;
 } 
 
 require_once('./plugins/album_fav_boxes/icons.inc.php');
@@ -36,7 +36,7 @@ $description = $lightbox_lang['plugin_description'];
 $author      = 'Nibbler';
 $version     = '2.2';
 $announcement_button = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60278.0.html" class="admin_menu">{$album_fav_boxes_icon_array['announcement']}{$lightbox['lang']['Announcement thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60278.0.html" class="admin_menu external">{$album_fav_boxes_icon_array['announcement']}{$lightbox['lang']['Announcement thread']}</a>
 EOT;
 $config_button = <<<EOT
     <a href="index.php?file=album_fav_boxes/admin" class="admin_menu">{$album_fav_boxes_icon_array['config']}{$lightbox['lang']['Configuration']}</a>

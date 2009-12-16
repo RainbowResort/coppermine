@@ -26,14 +26,6 @@ $name = 'Favorite Button';
 $description = 'Adds a button to the navigation menu to easily add/remove pictures to/from your favorites';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 $version = '1.2';
-$extra_info = $install_info = <<<EOT
-    <table border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="admin_menu">
-                <a href="http://forum.coppermine-gallery.net/index.php/topic,57565.0.html" rel="external" class="external">Announcement thread for <strong>$name</strong> plugin</a>
-            </td>
-        </tr>
-    </table>
-EOT;
+$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,57565.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>';
 
 ?>
