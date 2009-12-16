@@ -15,12 +15,7 @@
   $Date: 2009-11-26 18:23:33 +0100 (Do, 26. Nov 2009) $
   **************************************************/
 
-if ($CONFIG['enable_menu_icons'] == 2) {
-    $album_fav_boxes_icon_array['announcement'] = '<img src="./plugins/album_fav_boxes/images/icons/announcement.png" border="0" width="16" height="16" alt="" class="icon" />';
-} else {
-    $album_fav_boxes_icon_array['announcement'] = '';
-}
-
+$album_fav_boxes_icon_array['announcement'] = cpg_fetch_icon('announcement', 1);
 $album_fav_boxes_icon_array['ok'] = cpg_fetch_icon('ok', 2);
 $album_fav_boxes_icon_array['config'] = cpg_fetch_icon('config', 2);
 $album_fav_boxes_icon_array['regular'] = cpg_fetch_icon('thumbnails', 2);
