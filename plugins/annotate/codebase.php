@@ -721,9 +721,10 @@ EOT;
 
                 echo '<tr><td class="tableb" align="left">';
                 for ($i = 0; $i < count($person_array); $i++) {
+                    $note = str_replace(Array("#", "&"), Array("%23", "%26"), $person_array[$i]);
                     echo "
-                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_delete&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" border=\"0\" /></a>
-                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_rename&amp;note={$person_array[$i]}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" border=\"0\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_delete&amp;note={$note}\" title=\"{$lang_plugin_annotate['batch_delete']}\"><img src=\"images/icons/delete.png\" border=\"0\" /></a>
+                        <a href=\"index.php?plugin=annotate&amp;manage&amp;batch_rename&amp;note={$note}\" title=\"{$lang_plugin_annotate['batch_rename']}\"><img src=\"images/icons/edit.png\" border=\"0\" /></a>
                         {$person_array[$i]}<br />
                     ";
                 }
