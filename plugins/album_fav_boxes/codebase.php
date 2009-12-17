@@ -25,17 +25,15 @@ if (!defined('IN_COPPERMINE')) {
 
 $existing_meta_albums_array = array('regular', 'lastcom', 'lastcomby', 'lastup', 'lastupby', 'topn', 'toprated', 'lasthits', 'random', 'search', 'lastalb', 'favpics');
 
+$album_fav_boxes_pages_array = array('index.php', 'thumbnails.php'); // Determine what pages the actual plugin function should be executed
+
+$superCage = Inspekt::makeSuperCage();
+
 foreach ($existing_meta_albums_array as $key) {
-    if ($CONFIG['plugin_album_fav_boxes_' . $key] == '1') {
+    if (in_array($superCage->server->getEscaped('SCRIPT_FILENAME'), $album_fav_boxes_pages_array) == TRUE && $CONFIG['plugin_album_fav_boxes_' . $key] == '1') {
         $thisplugin->add_filter('thumb_caption_' . $key, 'thumb_caption_add_to_favs');
     }
 }
-
-// Enable selector in regular albums
-//$thisplugin->add_filter('thumb_caption_regular','thumb_caption_add_to_favs');
-
-// Enable the selector in search results
-//$thisplugin->add_filter('thumb_caption_search','thumb_caption_add_to_favs');
 
 // Enable remover in favourites album
 $thisplugin->add_filter('thumb_caption_favpics','thumb_caption_remove_from_favs');
