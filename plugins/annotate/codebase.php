@@ -47,7 +47,7 @@ function annotate_meta($meta){
     set_js_var('lang_annotate_delete', $lang_common['delete']);
     set_js_var('lang_annotate_error_saving_note', $lang_plugin_annotate['error_saving_note']);
     set_js_var('lang_annotate_onsave_not_implemented', $lang_plugin_annotate['onsave_not_implemented']);
-    set_js_var('lang_annotate_all_pics_of', $lang_plugin_annotate['all_pics_of']);
+    set_js_var('lang_annotate_all_pics_of', str_replace('&quot;', '"', $lang_plugin_annotate['all_pics_of']));
     set_js_var('lang_annotate_note_empty', $lang_plugin_annotate['note_empty']);
     set_js_var('lang_annotate_annotated_by', $lang_plugin_annotate['annotated_by']);
     set_js_var('lang_annotate_view_profile', $lang_plugin_annotate['view_profile']);
