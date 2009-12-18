@@ -1,3 +1,15 @@
+
+// variables
+var im_strdarker   = 'Darker';
+var im_strlighter  = 'Lighter';
+var im_strreset    = 'Reset';
+var im_strbw       = 'B/W';
+var im_strflipv    = 'Flip vert';
+var im_strfliph    = 'Flip hori';
+var im_strinvert   = 'Invert';
+var im_stremboss   = 'Emboss';
+var im_strblur     = 'Blur';
+
 /*
  * Pixastic - JavaScript Image Processing Library
  * Copyright (c) 2008 Jacob Seidelin, jseidelin@nihilogic.dk, http://blog.nihilogic.dk/
@@ -128,20 +140,34 @@ function im_afterload()
  {
  // create btn div
  im_btn = document.createElement('div');
- var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" type="button">'
- im_btn.innerHTML = '<input value="Reset" class="admin_menu" type="button" onclick="im_reset();">';
- im_btn.innerHTML += ' <input value="B/W" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate;
- im_btn.innerHTML += ' <input value="Lighten" onclick="im_lightval = (im_lightval > 10) ? 10 : im_lightval+2; im_setit();" class="admin_menu" type="button">';
- im_btn.innerHTML += ' <input value="Darken" onclick="im_lightval = (im_lightval < -8) ? -8 : im_lightval-2; im_setit();" class="admin_menu" type="button">';
- im_btn.innerHTML += ' <input value="Flip vert" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
- im_btn.innerHTML += ' <input value="Flip hori" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
- im_btn.innerHTML += ' <input value="Invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
- im_btn.innerHTML += ' <input value="Emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
- im_btn.innerHTML += ' <input value="Blur" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
+ var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
+ im_btn.innerHTML = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_strdarker+' </span>';
+ for(var im_i=-9;im_i<10;im_i++){
+   im_btn.innerHTML += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;border-color:#222233;cursor:pointer" id="'+im_i+'" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
+ }
+ im_btn.innerHTML += '<a style="height:10px;border-width:1px;border-style:solid;border-color:#222233;cursor:pointer" id="10" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
+ im_btn.innerHTML += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> '+im_strlighter+'</span>';
+ im_btn.innerHTML += '<br/><input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
+ im_btn.innerHTML += ' <input value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate;
+ im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
+ im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
+ im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
+ im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
+ im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
+
  $('.display_media').append(im_btn);
+ showbrightness();
  }
 }
- 
+
+function showbrightness()
+{
+  for(var im_i=-9;im_i<11;im_i++){
+    if (im_lightval >= im_i) document.getElementById(im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById(im_i).style.backgroundColor = '#444455';
+  }
+}
+
 function im_reset()
 {
   Pixastic.revert($('.image')[0]);
@@ -156,6 +182,7 @@ function im_reset()
   for(var im_i=0;im_i<im_mybuttns.length;im_i++){
     if (typeof im_mybuttns[im_i].oldbrd != 'undefined') im_mybuttns[im_i].style.borderColor = im_mybuttns[im_i].oldbrd;
   }
+  showbrightness();
 }
 
 function im_addLoad(im_func)
