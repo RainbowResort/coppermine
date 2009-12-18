@@ -42,6 +42,7 @@ Changelog
 2009-12-18 [C] Silenced notices {GauGau}
 2009-12-18 [A] Streamlined plugin config panel {GauGau}
 2009-12-18 [O] Removed needless queries {GauGau}
+2009-12-17 [B] Fixed bug when batch delete/rename annotations with '#' and '&' {eenemeenemuu}
 2009-11-30 [A] Added annotation statistics of the currently viewed album {eenemeenemuu}
 2009-11-26 [A] Added annotator name and profile link to annotation output {eenemeenemuu}
 2009-11-26 [B] Fixed several issues with apostrophe and quote signs {eenemeenemuu}

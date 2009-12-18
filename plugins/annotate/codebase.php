@@ -764,7 +764,7 @@ function annotate_get_pic_pos($album) {
                 list($pos) = mysql_fetch_row($result);
                 mysql_free_result($result);
 
-            return $pos;
+            return strval($pos);
             break;
 
         case 'shownotes':
@@ -793,7 +793,7 @@ function annotate_get_pic_pos($album) {
                 }
                 mysql_free_result($result);
 
-            return $pos;
+            return strval($pos);
             break;
 
         default: 
@@ -972,25 +972,25 @@ function annotate_configure() {
     }
 
     if ($CONFIG['plugin_annotate_type'] == '0') {
-    	$option_output['plugin_annotate_type_0'] = 'checked="checked"';
-    	$option_output['plugin_annotate_type_1'] = '';
-    	$option_output['plugin_annotate_type_2'] = '';
-    	$option_output['plugin_annotate_type_3'] = '';
+        $option_output['plugin_annotate_type_0'] = 'checked="checked"';
+        $option_output['plugin_annotate_type_1'] = '';
+        $option_output['plugin_annotate_type_2'] = '';
+        $option_output['plugin_annotate_type_3'] = '';
     } elseif ($CONFIG['plugin_annotate_type'] == '1') {
-    	$option_output['plugin_annotate_type_0'] = '';
-    	$option_output['plugin_annotate_type_1'] = 'checked="checked"';
-    	$option_output['plugin_annotate_type_2'] = '';
-    	$option_output['plugin_annotate_type_3'] = '';
+        $option_output['plugin_annotate_type_0'] = '';
+        $option_output['plugin_annotate_type_1'] = 'checked="checked"';
+        $option_output['plugin_annotate_type_2'] = '';
+        $option_output['plugin_annotate_type_3'] = '';
     } elseif ($CONFIG['plugin_annotate_type'] == '2') {
-    	$option_output['plugin_annotate_type_0'] = '';
-    	$option_output['plugin_annotate_type_1'] = '';
-    	$option_output['plugin_annotate_type_2'] = 'checked="checked"';
-    	$option_output['plugin_annotate_type_3'] = '';
+        $option_output['plugin_annotate_type_0'] = '';
+        $option_output['plugin_annotate_type_1'] = '';
+        $option_output['plugin_annotate_type_2'] = 'checked="checked"';
+        $option_output['plugin_annotate_type_3'] = '';
     } elseif ($CONFIG['plugin_annotate_type'] == '3') {
-    	$option_output['plugin_annotate_type_0'] = '';
-    	$option_output['plugin_annotate_type_1'] = '';
-    	$option_output['plugin_annotate_type_2'] = '';
-    	$option_output['plugin_annotate_type_3'] = 'checked="checked"';
+        $option_output['plugin_annotate_type_0'] = '';
+        $option_output['plugin_annotate_type_1'] = '';
+        $option_output['plugin_annotate_type_2'] = '';
+        $option_output['plugin_annotate_type_3'] = 'checked="checked"';
     }
     
     list($timestamp, $form_token) = getFormToken();
