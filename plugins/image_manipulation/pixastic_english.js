@@ -143,9 +143,9 @@ function im_afterload()
  var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
  im_btn.innerHTML = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_strdarker+' </span>';
  for(var im_i=-9;im_i<10;im_i++){
-   im_btn.innerHTML += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;border-color:#222233;cursor:pointer" id="'+im_i+'" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
+   im_btn.innerHTML += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_i+'" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
  }
- im_btn.innerHTML += '<a style="height:10px;border-width:1px;border-style:solid;border-color:#222233;cursor:pointer" id="10" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
+ im_btn.innerHTML += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="10" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
  im_btn.innerHTML += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> '+im_strlighter+'</span>';
  im_btn.innerHTML += '<br/><input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
  im_btn.innerHTML += ' <input value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate;
