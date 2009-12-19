@@ -89,7 +89,7 @@ if ($action == 'image') {
     //
     $enl_histpath = $CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'];
     $enl_histimage = (is_file($enl_histpath.$CONFIG['normal_pfx'].$CURRENT_PIC_DATA['filename'])) ? $CONFIG['normal_pfx'].$CURRENT_PIC_DATA['filename'] : $CURRENT_PIC_DATA['filename']; // Which image to process? The full-sized one or the intermediate
-	$extension = ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.');
+	$extension = strtolower(ltrim(substr($CURRENT_PIC_DATA['filename'], strrpos($CURRENT_PIC_DATA['filename'], '.')), '.'));
 	if (in_array($extension, explode('/', $CONFIG['allowed_img_types'])) != TRUE) {
 		printf($lang_plugin_enlargeit['not_a_valid_extension'], $extension);
 		die;

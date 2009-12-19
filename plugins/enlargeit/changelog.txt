@@ -25,7 +25,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-12-16 [M] Version count updated to 1.13 {GauGau}
+2009-12-16 [M] Version count updated to 1.14 {GauGau}
+2009-12-16 [A] Added German documentation file (partial translation) {GauGau}
+2009-12-16 [B] Fixed issue with file extension in uppercase for the histogram {GauGau}
+2009-12-16 [A] Added table of content to docs {GauGau}
+2009-12-19 [M] Version count updated to 1.13 {GauGau}
 2009-12-16 [A] Added documentation link to config page {GauGau}
 2009-12-16 [A] Added JS check for animation type {GauGau}
 2009-12-16 [A] Added shadow color feature {GauGau}
