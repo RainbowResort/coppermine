@@ -22,10 +22,132 @@
 <link rel="stylesheet" type="text/css" href="../../../docs/style/screen.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="../../../docs/style/print.css" media="print" />
 <link rel="shortcut icon" href="../../../favicon.ico" />
+<script src="../../../js/jquery-1.3.2.js" type="text/javascript"></script>
+<script src="../../../js/jquery.treeview.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $("#toclist").treeview({
+            collapsed: true,
+            animated: "medium",
+            control:"#sidetreecontrol"
+        });
+    });
+</script>
 </head>
 <body>
 <a name="header"></a><h1 id="docheader">EnlargeIt Plugin for cpg1.5.x: Documentation<a href="#header" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h1>
+<a name="top"></a>
 
+<div id="toc">
+EnlargeIt Plugin for cpg1.5.x
+<ul id="toclist" class="tree">
+    <li><a href="#purpose">What's this?</a></li>
+    <li><a href="#unobtrusive">Unobtrusive</a>
+        <ul>
+            <li><a href="#compatibility">Browser compatibility chart</a></li>
+        </ul>
+    </li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#install">How to install</a></li>
+    <li><a href="#upgrade">Upgrading</a></li>
+    <li><a href="#uninstall">How to uninstall</a></li>
+    <li><a href="#configuration">Configuration</a>
+        <ul>
+            <li><a href="#configuration_type">Enlargement type</a>
+                <ul>
+                    <li><a href="#configuration_type_enablefor">Enable for</a></li>
+                    <li><a href="#configuration_type_enlargetopicin">Enlarge to pic in</a></li>
+                    <li><a href="#configuration_type_maximize">Maximize method</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_animation">Animation</a>
+                <ul>
+                    <li><a href="#configuration_animation_animationtype">Animation type</a></li>
+                    <li><a href="#configuration_animation_time">Time between animation steps</a></li>
+                    <li><a href="#configuration_animation_steps">Animation steps</a></li>
+                    <li><a href="#configuration_animation_transparency">Transparency effect for glide animation</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_border">Border</a>
+                <ul>
+                    <li><a href="#configuration_border_width">Border width</a></li>
+                    <li><a href="#configuration_border_color">Border color</a></li>
+                    <li><a href="#configuration_border_texture">Border texture</a></li>
+                    <li><a href="#configuration_border_round">Round border</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_shadow">Shadow</a>
+                <ul>
+                    <li><a href="#configuration_shadow_size">Shadow size</a></li>
+                    <li><a href="#configuration_shadow_opacity">Shadow opacity</a></li>
+                    <li><a href="#configuration_shadow_color">Shadow color</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_title">Title bar</a>
+                <ul>
+                    <li><a href="#configuration_title_show_inactive">Show title bar when buttons are inactive</a></li>
+                    <li><a href="#configuration_title_text_color">Title bar text color</a></li>
+                    <li><a href="#configuration_title_background_color">Background color AJAX area</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_action">Action</a>
+                <ul>
+                    <li><a href="#configuration_action_center">Center enlarged image</a></li>
+                    <li><a href="#configuration_action_move">Allow enlarged pictures to be moved around</a></li>
+                    <li><a href="#configuration_action_wheel">Mouse wheel navigation</a></li>
+                    <li><a href="#configuration_action_darken_toggle">Darken screen when enlarged</a></li>
+                    <li><a href="#configuration_action_darken_strength">Darken strength</a></li>
+                    <li><a href="#configuration_action_darken_speed">Darkening speed</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_buttons">Buttons</a>
+                <ul>
+                    <li><a href="#configuration_buttons_picture">Display button "Show picture"</a></li>
+                    <li><a href="#configuration_buttons_info">Show button "Info"</a></li>
+                    <li><a href="#configuration_buttons_favorites">Show my favorites</a></li>
+                    <li><a href="#configuration_buttons_vote" style="text-decoration:line-through;">Display "Vote" button</a></li>
+                    <li><a href="#configuration_buttons_comments" style="text-decoration:line-through;">Display "Comments" button</a></li>
+                    <li><a href="#configuration_buttons_download">Display "Download" button</a></li>
+                    <li><a href="#configuration_buttons_bbcode">Display "BBCode" button</a></li>
+                    <li><a href="#configuration_buttons_histogram">Display "Histogram" button</a></li>
+                    <li><a href="#configuration_buttons_navigation">Display "Navigation" buttons</a></li>
+                    <li><a href="#configuration_buttons_close">Display "Close" button</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_multimedia">Multimedia</a>
+                <ul>
+                    <li><a href="#configuration_multimedia_imageformats">Image formats</a></li>
+                    <li><a href="#configuration_multimedia_videoformats">Video formats</a></li>
+                    <li><a href="#configuration_multimedia_flv">Use which FLV player software</a></li>
+                </ul>
+            </li>
+            <li><a href="#configuration_setup">Plugin setup</a>
+                <ul>
+                    <li><a href="#configuration_setup_adminmenu">Display a link to the plugin configuration in the admin menu</a></li>
+                    <li><a href="#configuration_setup_histogram">Histogram cache file lifetime</a>
+                        <ul>
+                            <li><a href="#configuration_setup_histogram_concept">Concept</a></li>
+                            <li><a href="#configuration_setup_histogram_permissions">Permissions</a></li>
+                            <li><a href="#configuration_setup_histogram_naming_scheme">Naming scheme</a></li>
+                            <li><a href="#configuration_setup_histogram_file_size">File size</a></li>
+                            <li><a href="#configuration_setup_histogram_age">Automatic deleting of histogram cache by file age</a></li>
+                            <li><a href="#configuration_setup_histogram_size">Automatic deleting of histogram cache by max file size</a></li>
+                            <li><a href="#configuration_setup_histogram_information">Additional cache information</a></li>
+                            <li><a href="#configuration_setup_histogram_default">Default value</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#configuration_color_picker">Color pickers</a></li>
+            <li><a href="#configuration_multi_select">Multiple select fields</a></li>
+        </ul>
+    </li>
+    <li><a href="#firstaid">First aid - if it doesn't work</a></li>
+    <li><a href="#support">Support</a></li>
+    <li><a href="#credits">Credits</a></li>
+    <li><a href="#todo">To Do</a></li>
+</ul>
+</div>
 <a name="purpose"></a><h2>What's this?<a href="#purpose" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 <p>This plugin replaces coppermine's intermediate page with an AJAX gui that is widely configurable. It provides one of the fastest possible ways to browse a picture gallery.</p>
 
@@ -568,8 +690,8 @@ This is a table that represents the environments that the enlargeIt plugin has b
 					<tr>
 						<td class="tableb tableb_alternate">2</td>
 						<td class="tableb tableb_alternate">jpg</td>
-						<td class="tableb tableb_alternate">385 x 415</td>
 						<td class="tableb tableb_alternate">20.89 KiB</td>
+						<td class="tableb tableb_alternate">385 x 415</td>
 						<td class="tableb tableb_alternate">png</td>
 						<td class="tableb tableb_alternate">2.10 KiB</td>
 						<td class="tableb tableb_alternate">284 x 164</td>
