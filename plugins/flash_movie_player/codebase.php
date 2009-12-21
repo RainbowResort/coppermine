@@ -193,6 +193,7 @@ function fmp_cleanup($action) {
     if ($action == 1) {
         global $lang_common;
         list($timestamp, $form_token) = getFormToken();
+		$button_array = array('cancel' => cpg_fetch_icon('leftleft', 2), 'continue' => cpg_fetch_icon('rightright', 2));
         echo <<< EOT
             <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
@@ -201,7 +202,7 @@ function fmp_cleanup($action) {
                     </td>
                     <td class="tableb">
                         <form action="pluginmgr.php" method="post">
-                            <input type="submit" name="submit" value="{$lang_common['back']}" class="button" />
+							<button type="submit" class="button" name="cancel" value="{$lang_common['back']}">{$button_array['cancel']}{$lang_common['back']}</button>
                         </form>
                     </td>
                     <td class="tableb">
@@ -209,7 +210,7 @@ function fmp_cleanup($action) {
                             <input type="hidden" name="drop" value="1" />
                             <input type="hidden" name="form_token" value="{$form_token}" />
                             <input type="hidden" name="timestamp" value="{$timestamp}" />
-                            <input type="submit" name="submit" value="{$lang_common['continue']}" class="button" />
+							<button type="submit" class="button" name="submit" value="{$lang_common['continue']}">{$button_array['continue']}{$lang_common['continue']}</button>
                         </form>
                     </td>
                 </tr>
