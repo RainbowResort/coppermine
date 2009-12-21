@@ -1,26 +1,14 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+/**************************************************
+  Coppermine 1.5.x Plugin - Flash Media Player
+  *************************************************
+  Copyright (c) 2009 eenemeenemuu
   ********************************************
-  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - Flash Media Player
-  ********************************************
-  Copyright (c) 2009 eenemeenemuu
-**********************************************/
+**************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
@@ -55,7 +43,7 @@ function fmp_get_html($CURRENT_PIC_DATA) {
             }
         }
 
-        $player = "plugins/fmp/player.swf";
+        $player = "plugins/flash_media_player/player.swf";
         $player .= "?file=$file";
         $player .= "&image=$thumb";
         $player .= "&autostart=$autostart";
