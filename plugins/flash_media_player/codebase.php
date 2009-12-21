@@ -134,7 +134,7 @@ function fmp_update_filetype($extension, $type) {
     } elseif ($type == "audio") {
         $config_value = "allowed_snd_types";
     }
-    if (strpos($CONFIG[$config_value], '$extension') === FALSE) {
+    if (strpos($CONFIG[$config_value], $extension) === FALSE) {
         cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = CONCAT(value, '/$extension') WHERE name = '$config_value'");
     }
     return;
