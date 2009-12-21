@@ -4,10 +4,10 @@
   *************************************************
   Copyright (c) 2009 eenemeenemuu
   *************************************************
-  $HeadURL$
-  $Revision$
-  $LastChangedBy$
-  $Date$
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/flash_movie_player/configuration.php $
+  $Revision: 6888 $
+  $LastChangedBy: gaugau $
+  $Date: 2009-12-21 13:55:20 +0100 (Mo, 21 Dez 2009) $
 **************************************************/
 
 $name = 'Flash Media Player';
