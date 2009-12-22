@@ -26,7 +26,7 @@ if (annotate_get_level('permissions') < 2) {
 
 $superCage = Inspekt::makeSuperCage();
 
-if ($superCage->post->keyExists('add')){
+if ($superCage->post->keyExists('add')) {
     $pid = $superCage->post->getInt('add');
     $nid = $superCage->post->getInt('nid');
     $posx = $superCage->post->getInt('posx');
@@ -48,7 +48,7 @@ if ($superCage->post->keyExists('add')){
         $nid = mysql_insert_id($CONFIG['LINK_ID']);
         die("$nid");
     }
-} elseif ($superCage->post->keyExists('remove')){
+} elseif ($superCage->post->keyExists('remove')) {
     $nid = $superCage->post->getInt('remove');
     $sql = "DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE nid = $nid";
     if (!GALLERY_ADMIN_MODE) {
@@ -56,5 +56,45 @@ if ($superCage->post->keyExists('add')){
     }
     cpg_db_query($sql);
     die("$nid");
+} elseif ($superCage->post->keyExists('livesearch')) {
+    $q = $superCage->post->getRaw('q');
+    if (strlen(trim($q)) > 0) {
+        $searchword = explode(" ", $q);
+        for( $i = 0; $i < sizeof($searchword); $i++ ) {
+            $searchword[$i] = "note LIKE '%" .$searchword[$i]. "%'";
+        }
+        $ready = implode(" AND ", $searchword);
+
+        $result = cpg_db_query("
+            SELECT DISTINCT note
+            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate
+            WHERE $ready
+            ORDER BY note ASC
+        ");
+        $hint = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['search_results']} (".mysql_num_rows($result)."): $q --</option>";
+        while ($row = mysql_fetch_assoc($result)) {
+            $hint .= "<option value=\"{$row['note']}\">{$row['note']}</option>";
+        }
+        mysql_free_result($result);
+    } else {
+        $result = cpg_db_query("
+            SELECT DISTINCT note
+            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate
+            ORDER BY note ASC
+        ");
+        $hint = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
+        while ($row = mysql_fetch_assoc($result)) {
+            $hint .= "<option value=\"{$row['note']}\">{$row['note']}</option>";
+        }
+        mysql_free_result($result);
+    }
+
+    if (!$hint) {
+        $response = "-";
+    } else {
+        $response = $hint;
+    }
+    echo $response;
+    die();
 }
 die("0"); // Just a precaution

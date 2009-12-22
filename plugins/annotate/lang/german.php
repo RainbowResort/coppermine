@@ -89,4 +89,6 @@ $lang_plugin_annotate['display_stats_title'] = 'Zeigt \'%s\', \'%s\' und \'%s\' 
 $lang_plugin_annotate['annotations_pic'] = 'Markierungen auf diesem Bild';
 $lang_plugin_annotate['annotations_album'] = 'Markierungen in diesem Album';
 $lang_plugin_annotate['annotated_pics'] = 'Markierte Bilder in diesem Album';
+$lang_plugin_annotate['filter_annotations'] = 'Beschriftungen filtern';
+$lang_plugin_annotate['search_results'] = 'Suchergebnisse';
 ?>

@@ -96,6 +96,23 @@ function annotate_file_data($data){
             }
         }
 
+        $livesearch_button = '<input id="livesearch_input" type="text" class="textinput" size="8" title="'.$lang_plugin_annotate['filter_annotations'].'" style="cursor:help; padding-right: 16px; background-image: url(images/icons/search.png); background-repeat: no-repeat; background-position: right center;" />';
+        $livesearch_script = <<< EOT
+            $(document).ready(function() {
+                var alertTimerId = 0;
+                $('#livesearch_input').keyup(function() {
+                    $('#livesearch_input').addClass('blue');
+                    clearTimeout(alertTimerId);
+                    alertTimerId = setTimeout(function () {
+                        $.post('index.php?file=annotate/reqserver', {livesearch:'1',q:$('#livesearch_input').val()}, function(data) { 
+                            $('#livesearch_output').html(data); 
+                            $('#livesearch_input').removeClass('blue');
+                        });
+                    }, 250);
+                });
+            });
+EOT;
+
         if ($CONFIG['plugin_annotate_type'] > 0) {
             // free text
             if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
@@ -116,7 +133,8 @@ EOT;
                 }
                 $data['menu'] .= <<< EOT
                 <script type="text/javascript">
-                    document.write(' <select size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>');
+                    document.write('<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button');
+                    $livesearch_script
                 </script>
 EOT;
             }
@@ -129,12 +147,13 @@ EOT;
             }
             $data['menu'] .= <<< EOT
             <script type="text/javascript">
-                document.write(' <select size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>');
+                document.write('<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button');
+                $livesearch_script
             </script>
 EOT;
         }
     }
-
+        
     if (is_image($data['filename'])){
         if (function_exists(panorama_viewer_is_360_degree_panorama)) {
             if (panorama_viewer_is_360_degree_panorama()) {
