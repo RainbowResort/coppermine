@@ -14,19 +14,30 @@
   MIT License [http://www.pixastic.com/lib/license.txt]
 
 
-This plugin allows the visitor to non-destructively manipulate the image using new buttons on displayimage.php.
+This plugin allows the visitor to non-destructively manipulate the image using new LED sliders and buttons on displayimage.php.
 
-Available effect buttons:
+Available effects with compatibility mode 'on' or visitor uses IE:
+ * brightness (LED slider)
  * reset
  * blur
  * b/w
- * lighten
- * darken
  * invert
  * emboss
  * flip vertically
  * flip horizontally
 
+Available effects with compatibility mode 'off' and visitor doesn't use IE:
+ * brightness (LED slider)
+ * contrast (LED slider)
+ * saturation (LED slider)
+ * sharpness (LED slider)
+ * reset
+ * sepia
+ * flip vert
+ * flip hori
+ * invert
+ * emboss
+ * blur
 
 Browser compatibility:
 The effects work fine with
@@ -34,10 +45,10 @@ The effects work fine with
  - Opera 9.5+
  - Firefox 2+
  - Chrome 3+
- - Safari
  - most other modern browsers should work, too or fall back without crashing
 
 Please note:
  * Turn off 'add transparent overlay to avoid image theft' to make this plugin work.
  * This plugin and the plugin 'mirror' may not be used at the same time.
  * The buttons will only be available for visitors with javascript turned on. Others won't notice a thing.
+ * It is highly recommended to use compatibility mode. If you don't, it depends on the visitor's browser which effects will be available.

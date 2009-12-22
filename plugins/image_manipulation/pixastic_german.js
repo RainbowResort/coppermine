@@ -1,5 +1,5 @@
 // variables
-var im_compatible  = 0;
+var im_compatible  = 1;
 var im_strlightness= 'Helligkeit';
 var im_strreset    = 'Originalbild';
 var im_strbw       = 'S/W';
@@ -197,7 +197,8 @@ function im_afterload()
    else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" onclick="im_issepia = (im_issepia) ? 0 : 1; if (im_issepia) '+changestate; }
    im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
    im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
-   im_btn.innerHTML += '<br/><input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
+   if (!im_isie || !im_compatible) im_btn.innerHTML += '<br />';
+   im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
    im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
    im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
    $('.display_media').append(im_btn);
@@ -236,12 +237,12 @@ function im_setit()
 // create LED slider
 function im_makeled(im_buttonstring,im_idstring,im_valstring)
 {
-  im_tempstr = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' </span>';
+  im_tempstr = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' &#150; </span>';
   for(var im_i=-9;im_i<10;im_i++){
     im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
   }
    im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
-   im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> '+im_buttonstring+'</span><br/>';   
+   im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_buttonstring+'</span><br/>';   
   return im_tempstr;
 }
 
