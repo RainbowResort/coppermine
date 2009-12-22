@@ -846,7 +846,7 @@ function annotate_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT *
+            $query = "SELECT *, user_time AS msg_date
                 FROM {$CONFIG['TABLE_PICTURES']} AS p
                 INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n1 ON p.pid = n1.pid 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
