@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.5
+  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.6
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -22,7 +22,6 @@ function include_js_maniplug() {
   global $JS, $CONFIG;
   if (defined('DISPLAYIMAGE_PHP')) 
   {  
-    $JS['includes'][] = "./plugins/image_manipulation/myslider.js";
     if (file_exists("./plugins/image_manipulation/pixastic_{$CONFIG['lang']}.js")) 
     {
       $JS['includes'][] = "./plugins/image_manipulation/pixastic_{$CONFIG['lang']}.js";

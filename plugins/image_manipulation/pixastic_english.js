@@ -1,14 +1,19 @@
 
 // variables
-var im_strdarker   = 'Darker';
-var im_strlighter  = 'Lighter';
+var im_compatible  = 0;
+var im_strlightness= 'Lightness';
 var im_strreset    = 'Reset';
 var im_strbw       = 'B/W';
+var im_strsepia    = 'Sepia';
 var im_strflipv    = 'Flip vert';
 var im_strfliph    = 'Flip hori';
 var im_strinvert   = 'Invert';
 var im_stremboss   = 'Emboss';
 var im_strblur     = 'Blur';
+var im_strcontrast = 'Contrast';
+var im_strsatur    = 'Saturation';
+var im_strsharpen  = 'Sharpness';
+
 
 /*
  * Pixastic - JavaScript Image Processing Library
@@ -82,6 +87,19 @@ weight=1/(weight*2);var rect=params.options.rect;var w=rect.width;var h=rect.hei
 +dataCopy[offsetNext+2])*2
 +dataCopy[offset+2]*4)*weight;}while(--x);}while(--y);return true;}else if(Pixastic.Client.isIE()){params.image.style.filter+=" progid:DXImageTransform.Microsoft.Blur(pixelradius=1.5)";if(params.options.fixMargin){params.image.style.marginLeft=(parseInt(params.image.style.marginLeft,10)||0)-2+"px";params.image.style.marginTop=(parseInt(params.image.style.marginTop,10)||0)-2+"px";}
 return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvasImageData()||Pixastic.Client.isIE());}}
+Pixastic.Actions.brightness={process:function(params){var brightness=parseInt(params.options.brightness,10)||0;var contrast=parseFloat(params.options.contrast)||0;var legacy=!!(params.options.legacy&&params.options.legacy!="false");if(legacy){brightness=Math.min(150,Math.max(-150,brightness));}else{var brightMul=1+Math.min(150,Math.max(-150,brightness))/150;}
+contrast=Math.max(0,contrast+1);if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var rect=params.options.rect;var w=rect.width;var h=rect.height;var p=w*h;var pix=p*4,pix1,pix2;var mul,add;if(contrast!=1){if(legacy){mul=contrast;add=(brightness-128)*contrast+128;}else{mul=brightMul*contrast;add=-contrast*128+128;}}else{if(legacy){mul=1;add=brightness;}else{mul=brightMul;add=0;}}
+var r,g,b;while(p--){if((r=data[pix-=4]*mul+add)>255)
+data[pix]=255;else if(r<0)
+data[pix]=0;else
+data[pix]=r;if((g=data[pix1=pix+1]*mul+add)>255)
+data[pix1]=255;else if(g<0)
+data[pix1]=0;else
+data[pix1]=g;if((b=data[pix2=pix+2]*mul+add)>255)
+data[pix2]=255;else if(b<0)
+data[pix2]=0;else
+data[pix2]=b;}
+return true;}},checkSupport:function(){return Pixastic.Client.hasCanvasImageData();}}
 Pixastic.Actions.desaturate={process:function(params){var useAverage=!!(params.options.average&&params.options.average!="false");if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var rect=params.options.rect;var w=rect.width;var h=rect.height;var p=w*h;var pix=p*4,pix1,pix2;if(useAverage){while(p--)
 data[pix-=4]=data[pix1=pix+1]=data[pix2=pix+2]=(data[pix]+data[pix1]+data[pix2])/3}else{while(p--)
 data[pix-=4]=data[pix1=pix+1]=data[pix2=pix+2]=(data[pix]*0.3+data[pix1]*0.59+data[pix2]*0.11);}
@@ -96,6 +114,34 @@ Pixastic.Actions.fliph={process:function(params){if(Pixastic.Client.hasCanvas())
 params.useData=false;return true;}else if(Pixastic.Client.isIE()){params.image.style.filter+=" fliph";return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvas()||Pixastic.Client.isIE());}}
 Pixastic.Actions.flipv={process:function(params){if(Pixastic.Client.hasCanvas()){var rect=params.options.rect;var copyCanvas=document.createElement("canvas");copyCanvas.width=rect.width;copyCanvas.height=rect.height;copyCanvas.getContext("2d").drawImage(params.image,rect.left,rect.top,rect.width,rect.height,0,0,rect.width,rect.height);var ctx=params.canvas.getContext("2d");ctx.clearRect(rect.left,rect.top,rect.width,rect.height);ctx.scale(1,-1);ctx.drawImage(copyCanvas,rect.left,-rect.top-rect.height,rect.width,rect.height)
 params.useData=false;return true;}else if(Pixastic.Client.isIE()){params.image.style.filter+=" flipv";return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvas()||Pixastic.Client.isIE());}}
+Pixastic.Actions.hsl={process:function(params){var hue=parseInt(params.options.hue,10)||0;var saturation=(parseInt(params.options.saturation,10)||0)/100;var lightness=(parseInt(params.options.lightness,10)||0)/100;if(saturation<0){var satMul=1+saturation;}else{var satMul=1+saturation*2;}
+hue=(hue%360)/360;var hue6=hue*6;var rgbDiv=1/255;var light255=lightness*255;var lightp1=1+lightness;var lightm1=1-lightness;if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var rect=params.options.rect;var p=rect.width*rect.height;var pix=p*4,pix1=pix+1,pix2=pix+2,pix3=pix+3;while(p--){var r=data[pix-=4];var g=data[pix1=pix+1];var b=data[pix2=pix+2];if(hue!=0||saturation!=0){var vs=r;if(g>vs)vs=g;if(b>vs)vs=b;var ms=r;if(g<ms)ms=g;if(b<ms)ms=b;var vm=(vs-ms);var l=(ms+vs)/510;if(l>0){if(vm>0){if(l<=0.5){var s=vm/(vs+ms)*satMul;if(s>1)s=1;var v=(l*(1+s));}else{var s=vm/(510-vs-ms)*satMul;if(s>1)s=1;var v=(l+s-l*s);}
+if(r==vs){if(g==ms)
+var h=5+((vs-b)/vm)+hue6;else
+var h=1-((vs-g)/vm)+hue6;}else if(g==vs){if(b==ms)
+var h=1+((vs-r)/vm)+hue6;else
+var h=3-((vs-b)/vm)+hue6;}else{if(r==ms)
+var h=3+((vs-g)/vm)+hue6;else
+var h=5-((vs-r)/vm)+hue6;}
+if(h<0)h+=6;if(h>=6)h-=6;var m=(l+l-v);var sextant=h>>0;if(sextant==0){r=v*255;g=(m+((v-m)*(h-sextant)))*255;b=m*255;}else if(sextant==1){r=(v-((v-m)*(h-sextant)))*255;g=v*255;b=m*255;}else if(sextant==2){r=m*255;g=v*255;b=(m+((v-m)*(h-sextant)))*255;}else if(sextant==3){r=m*255;g=(v-((v-m)*(h-sextant)))*255;b=v*255;}else if(sextant==4){r=(m+((v-m)*(h-sextant)))*255;g=m*255;b=v*255;}else if(sextant==5){r=v*255;g=m*255;b=(v-((v-m)*(h-sextant)))*255;}}}}
+if(lightness<0){r*=lightp1;g*=lightp1;b*=lightp1;}else if(lightness>0){r=r*lightm1+light255;g=g*lightm1+light255;b=b*lightm1+light255;}
+if(r<0)
+data[pix]=0
+else if(r>255)
+data[pix]=255
+else
+data[pix]=r;if(g<0)
+data[pix1]=0
+else if(g>255)
+data[pix1]=255
+else
+data[pix1]=g;if(b<0)
+data[pix2]=0
+else if(b>255)
+data[pix2]=255
+else
+data[pix2]=b;}
+return true;}},checkSupport:function(){return Pixastic.Client.hasCanvasImageData();}}
 Pixastic.Actions.invert={process:function(params){if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var invertAlpha=!!params.options.invertAlpha;var rect=params.options.rect;var p=rect.width*rect.height;var pix=p*4,pix1=pix+1,pix2=pix+2,pix3=pix+3;while(p--){data[pix-=4]=255-data[pix];data[pix1-=4]=255-data[pix1];data[pix2-=4]=255-data[pix2];if(invertAlpha)
 data[pix3-=4]=255-data[pix3];}
 return true;}else if(Pixastic.Client.isIE()){params.image.style.filter+=" invert";return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvasImageData()||Pixastic.Client.isIE());}}
@@ -105,84 +151,145 @@ data[pix1]=255;if((data[pix2-=4]=data[pix2]*mul)>255)
 data[pix2]=255;}
 return true;}else if(Pixastic.Client.isIE()){var img=params.image;if(amount<0){img.style.filter+=" light()";img.filters[img.filters.length-1].addAmbient(255,255,255,100*-amount);}else if(amount>0){img.style.filter+=" light()";img.filters[img.filters.length-1].addAmbient(255,255,255,100);img.filters[img.filters.length-1].addAmbient(255,255,255,100*amount);}
 return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvasImageData()||Pixastic.Client.isIE());}}
+Pixastic.Actions.sepia={process:function(params){var mode=(parseInt(params.options.mode,10)||0);if(mode<0)mode=0;if(mode>1)mode=1;if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var rect=params.options.rect;var w=rect.width;var h=rect.height;var w4=w*4;var y=h;do{var offsetY=(y-1)*w4;var x=w;do{var offset=offsetY+(x-1)*4;if(mode){var d=data[offset]*0.299+data[offset+1]*0.587+data[offset+2]*0.114;var r=(d+39);var g=(d+14);var b=(d-36);}else{var or=data[offset];var og=data[offset+1];var ob=data[offset+2];var r=(or*0.393+og*0.769+ob*0.189);var g=(or*0.349+og*0.686+ob*0.168);var b=(or*0.272+og*0.534+ob*0.131);}
+if(r<0)r=0;if(r>255)r=255;if(g<0)g=0;if(g>255)g=255;if(b<0)b=0;if(b>255)b=255;data[offset]=r;data[offset+1]=g;data[offset+2]=b;}while(--x);}while(--y);return true;}},checkSupport:function(){return Pixastic.Client.hasCanvasImageData();}}
+Pixastic.Actions.sharpen={process:function(params){var strength=0;if(typeof params.options.amount!="undefined")
+strength=parseFloat(params.options.amount)||0;if(strength<0)strength=0;if(strength>1)strength=1;if(Pixastic.Client.hasCanvasImageData()){var data=Pixastic.prepareData(params);var dataCopy=Pixastic.prepareData(params,true)
+var mul=15;var mulOther=1+3*strength;var kernel=[[0,-mulOther,0],[-mulOther,mul,-mulOther],[0,-mulOther,0]];var weight=0;for(var i=0;i<3;i++){for(var j=0;j<3;j++){weight+=kernel[i][j];}}
+weight=1/weight;var rect=params.options.rect;var w=rect.width;var h=rect.height;mul*=weight;mulOther*=weight;var w4=w*4;var y=h;do{var offsetY=(y-1)*w4;var nextY=(y==h)?y-1:y;var prevY=(y==1)?0:y-2;var offsetYPrev=prevY*w4;var offsetYNext=nextY*w4;var x=w;do{var offset=offsetY+(x*4-4);var offsetPrev=offsetYPrev+((x==1)?0:x-2)*4;var offsetNext=offsetYNext+((x==w)?x-1:x)*4;var r=((-dataCopy[offsetPrev]
+-dataCopy[offset-4]
+-dataCopy[offset+4]
+-dataCopy[offsetNext])*mulOther
++dataCopy[offset]*mul);var g=((-dataCopy[offsetPrev+1]
+-dataCopy[offset-3]
+-dataCopy[offset+5]
+-dataCopy[offsetNext+1])*mulOther
++dataCopy[offset+1]*mul);var b=((-dataCopy[offsetPrev+2]
+-dataCopy[offset-2]
+-dataCopy[offset+6]
+-dataCopy[offsetNext+2])*mulOther
++dataCopy[offset+2]*mul);if(r<0)r=0;if(g<0)g=0;if(b<0)b=0;if(r>255)r=255;if(g>255)g=255;if(b>255)b=255;data[offset]=r;data[offset+1]=g;data[offset+2]=b;}while(--x);}while(--y);return true;}},checkSupport:function(){return Pixastic.Client.hasCanvasImageData();}}
 
 
 // initialize
-var im_lightval = 0;
-var im_isbw = 0;
-var im_isflipv = 0;
-var im_isfliph = 0;
-var im_isblur = 0;
-var im_isinvert = 0;
-var im_isemboss = 0;
-
-// set values
-function im_setit()
-{
-  Pixastic.revert($('.image')[0]);
-  if (im_isflipv) $('.image').pixastic('flipv');
-  if (im_isfliph) $('.image').pixastic('fliph');
-  if (im_isbw) $('.image').pixastic('desaturate');
-  if (im_isblur) $('.image').pixastic('blur');
-  if (im_isinvert && Pixastic.Client.isIE()) $('.image').pixastic('invert');
-  if (im_isemboss) $('.image').pixastic('emboss', {greyLevel:170,direction:'topleft',strength:1.0});
-  if (im_lightval != 0)
-  {
-    if (im_lightval >= 0 || !Pixastic.Client.isIE()) $('.image').pixastic('lighten', {amount:im_lightval/10});
-    else $('.image').pixastic('lighten', {amount:-1-im_lightval/10});
-  }
-  if (im_isinvert && !Pixastic.Client.isIE()) $('.image').pixastic('invert');
-}
+var im_isflipv = 0,im_isfliph = 0,im_issepia = 0,im_isbw = 0,im_lightval = 0;
+var im_contrastval = 0,im_isemboss = 0,im_isinvert = 0,im_isblur = 0;
+var im_ispoint = 0,im_ishisto = 0,im_saturval = 0;
+var im_sharpenval = -9;
+var im_isie = Pixastic.Client.isIE();
 
 function im_afterload()
 {
  if ($('.image')[0])
  {
- // create btn div
- im_btn = document.createElement('div');
- var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
- im_btn.innerHTML = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_strdarker+' </span>';
- for(var im_i=-9;im_i<10;im_i++){
-   im_btn.innerHTML += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_i+'" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
- }
- im_btn.innerHTML += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="10" onclick="im_lightval = parseInt(this.id); im_setit(); showbrightness();">&nbsp;</a>';
- im_btn.innerHTML += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> '+im_strlighter+'</span>';
- im_btn.innerHTML += '<br/><input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
- im_btn.innerHTML += ' <input value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate;
- im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
- im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
- im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
- im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
- im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
-
- $('.display_media').append(im_btn);
- showbrightness();
+   // create btn div
+   im_btn = document.createElement('div');
+   var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
+   if (im_isie || im_compatible) im_btn.innerHTML = im_makeled(im_strlightness,'brig','im_lightval');
+   else
+   {
+     im_btn.innerHTML = im_makeled(im_strlightness,'brig','im_lightval');
+     im_btn.innerHTML += im_makeled(im_strcontrast,'cont','im_contrastval');
+     im_btn.innerHTML += im_makeled(im_strsatur,'satu','im_saturval');
+     im_btn.innerHTML += im_makeled(im_strsharpen,'shar','im_sharpenval');
+   }
+   im_btn.innerHTML += '<input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
+   if (im_isie || im_compatible) { im_btn.innerHTML += ' <input value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate; }
+   else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" onclick="im_issepia = (im_issepia) ? 0 : 1; if (im_issepia) '+changestate; }
+   im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
+   im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
+   im_btn.innerHTML += '<br/><input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
+   im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
+   im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
+   $('.display_media').append(im_btn);
+   im_showled();
  }
 }
 
-function showbrightness()
+// modify image
+function im_setit()
+{
+  Pixastic.revert($('.image')[0]);
+  if (im_issepia) $('.image').pixastic('sepia');
+  if (im_isflipv) $('.image').pixastic('flipv');
+  if (im_isfliph) $('.image').pixastic('fliph');
+  if (im_isbw) $('.image').pixastic('desaturate');
+  if (im_isblur) $('.image').pixastic('blur');
+  if (im_isinvert && im_isie) $('.image').pixastic('invert');
+  if (im_isemboss) $('.image').pixastic('emboss', {greyLevel:170,direction:'topleft',strength:1.0});
+  if (im_isie || im_compatible)
+  {
+    if (im_lightval != 0)
+    {
+      if (im_lightval >= 0 || !Pixastic.Client.isIE()) $('.image').pixastic('lighten', {amount:im_lightval/10});
+      else $('.image').pixastic('lighten', {amount:-1-im_lightval/10});
+    }
+  }
+  else
+  {
+    if (im_lightval != 0 || im_contrastval != 0)$('.image').pixastic('brightness', {brightness:im_lightval*15,contrast:im_contrastval/10});
+    if (im_saturval != 0) $('.image').pixastic('hsl', {hue:0,saturation:im_saturval*10,lightness:0});
+    if (im_sharpenval != -9) $('.image').pixastic('sharpen', {amount:(im_sharpenval+9)/30});
+  }
+  if (im_isinvert && !im_isie) $('.image').pixastic('invert');
+}
+
+// create LED slider
+function im_makeled(im_buttonstring,im_idstring,im_valstring)
+{
+  im_tempstr = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' </span>';
+  for(var im_i=-9;im_i<10;im_i++){
+    im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
+  }
+   im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
+   im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> '+im_buttonstring+'</span><br/>';   
+  return im_tempstr;
+}
+
+// lighten LEDs 
+function im_showled()
 {
   for(var im_i=-9;im_i<11;im_i++){
-    if (im_lightval >= im_i) document.getElementById(im_i).style.backgroundColor = '#bbbbff';
-    else document.getElementById(im_i).style.backgroundColor = '#444455';
+    if (im_lightval >= im_i) document.getElementById('brig'+im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById('brig'+im_i).style.backgroundColor = '#444455';
+  }
+  if (!im_isie & !im_compatible)
+  {
+    for(var im_i=-9;im_i<11;im_i++){
+    if (im_contrastval >= im_i) document.getElementById('cont'+im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById('cont'+im_i).style.backgroundColor = '#444455';
+    }
+    for(var im_i=-9;im_i<11;im_i++){
+    if (im_saturval >= im_i) document.getElementById('satu'+im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById('satu'+im_i).style.backgroundColor = '#444455';
+    }
+    for(var im_i=-9;im_i<11;im_i++){
+    if (im_sharpenval >= im_i) document.getElementById('shar'+im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById('shar'+im_i).style.backgroundColor = '#444455';
+    }
   }
 }
 
+// reset
 function im_reset()
 {
   Pixastic.revert($('.image')[0]);
   im_lightval = 0;
+  im_contrastval = 0;
   im_isbw = 0;
+  im_issepia = 0;
   im_isflipv = 0;
   im_isfliph = 0;
   im_isinvert = 0;
   im_isemboss = 0;
   im_isblur = 0;
+  im_saturval = 0;
+  im_sharpenval = -9;
   im_mybuttns = document.getElementsByTagName('input');
   for(var im_i=0;im_i<im_mybuttns.length;im_i++){
     if (typeof im_mybuttns[im_i].oldbrd != 'undefined') im_mybuttns[im_i].style.borderColor = im_mybuttns[im_i].oldbrd;
   }
-  showbrightness();
+  im_showled();
 }
 
 function im_addLoad(im_func)
