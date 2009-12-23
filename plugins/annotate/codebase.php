@@ -72,7 +72,7 @@ function annotate_file_data($data){
 
         // list existing annotations of the currently viewed album
         $btns_person = "";
-        if (annotate_get_level('        display_notes') == 1) {
+        if (annotate_get_level('display_notes') == 1) {
             $superCage = Inspekt::MakeSuperCage();
             if ($superCage->get->testInt('album')) {
                 $result = cpg_db_query("
