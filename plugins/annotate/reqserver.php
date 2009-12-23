@@ -57,6 +57,7 @@ if ($superCage->post->keyExists('add')) {
     cpg_db_query($sql);
     die("$nid");
 } elseif ($superCage->post->keyExists('livesearch')) {
+	header("Content-Type: text/html; charset={$CONFIG['charset']}");
     $q = $superCage->post->getRaw('q');
     if (strlen(trim($q)) > 0) {
         $searchword = explode(" ", $q);
