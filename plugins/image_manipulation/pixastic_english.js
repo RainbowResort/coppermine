@@ -198,7 +198,7 @@ function im_afterload()
    else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" onclick="im_issepia = (im_issepia) ? 0 : 1; if (im_issepia) '+changestate; }
    im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
    im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
-   if (!im_isie || !im_compatible) im_btn.innerHTML += '<br />';
+   if (im_isie || im_compatible) im_btn.innerHTML += '<br />';
    im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
    im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
    im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
