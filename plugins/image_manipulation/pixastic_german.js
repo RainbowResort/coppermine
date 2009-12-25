@@ -1,5 +1,6 @@
 // variables
 var im_compatible  = 1;
+var im_useurlvalues= 1;
 var im_strlightness= 'Helligkeit';
 var im_strreset    = 'Originalbild';
 var im_strbw       = 'S/W';
@@ -171,13 +172,14 @@ weight=1/weight;var rect=params.options.rect;var w=rect.width;var h=rect.height;
 
 
 // initialize
-var im_isflipv = 0,im_isfliph = 0,im_issepia = 0,im_isbw = 0,im_lightval = 0;
-var im_contrastval = 0,im_isemboss = 0,im_isinvert = 0,im_isblur = 0;
-var im_ispoint = 0,im_ishisto = 0,im_saturval = 0;
-var im_sharpenval = -9;
+var im_isflipv,im_isfliph,im_issepia,im_isbw,im_lightval;
+var im_contrastval,im_isemboss,im_isinvert,im_isblur;
+var im_ispoint,im_saturval;
+var im_sharpenval;
 var im_isie = Pixastic.Client.isIE();
+var im_oldhash;
 
-function im_afterload()
+function im_init()
 {
  if ($('.image')[0])
  {
@@ -197,14 +199,30 @@ function im_afterload()
    else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" onclick="im_issepia = (im_issepia) ? 0 : 1; if (im_issepia) '+changestate; }
    im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
    im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
-   if (im_isie || im_compatible) im_btn.innerHTML += '<br />';
    im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
    im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
    im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
    $('.display_media').append(im_btn);
-   im_showled();
+   
+   if (im_useurlvalues && window.location.hash.substr(0,19) == "#image_manipulation" && window.location.hash.length > 32)
+   {  
+     im_getvalues();
+   }
+   else
+   {
+   	im_reset();
+   }
+   im_oldhash = window.location.hash;
+   setInterval(im_checkstate, 100);
  }
 }
+
+function im_checkstate()
+{
+	if (im_oldhash != window.location.hash) im_getvalues();
+	im_oldhash = window.location.hash;
+}
+
 
 // modify image
 function im_setit()
@@ -232,6 +250,7 @@ function im_setit()
     if (im_sharpenval != -9) $('.image').pixastic('sharpen', {amount:(im_sharpenval+9)/30});
   }
   if (im_isinvert && !im_isie) $('.image').pixastic('invert');
+  if (im_useurlvalues) im_changeurl();
 }
 
 // create LED slider
@@ -290,6 +309,7 @@ function im_reset()
     if (typeof im_mybuttns[im_i].oldbrd != 'undefined') im_mybuttns[im_i].style.borderColor = im_mybuttns[im_i].oldbrd;
   }
   im_showled();
+  if (im_useurlvalues) im_changeurl();
 }
 
 function im_addLoad(im_func)
@@ -305,4 +325,41 @@ function im_addLoad(im_func)
   }
 }
 
-im_addLoad(im_afterload);
+im_addLoad(im_init);
+
+function im_changeurl()
+{
+	
+	if (im_useurlvalues) window.location.hash = "image_manipulation"+im_isbw+im_issepia+im_isflipv+im_isfliph+im_isinvert+im_isemboss+im_isblur+"+"+im_lightval+"+"+im_contrastval+"+"+im_saturval+"+"+im_sharpenval;
+}
+
+function im_getvalues()
+{
+	im_hash = window.location.hash;
+	im_isbw = parseInt(im_hash.substr(19,1));
+	im_isbw = (im_isbw == 0 || im_isbw == 1) ? im_isbw : 0;
+	im_issepia = parseInt(im_hash.substr(20,1));
+	im_issepia = (im_issepia == 0 || im_issepia == 1) ? im_issepia : 0;
+	im_isflipv = parseInt(im_hash.substr(21,1));
+	im_isflipv = (im_isflipv == 0 || im_isflipv == 1) ? im_isflipv : 0;
+	im_isfliph = parseInt(im_hash.substr(22,1));
+	im_isfliph = (im_isfliph == 0 || im_isfliph == 1) ? im_isfliph : 0;
+	im_isinvert = parseInt(im_hash.substr(23,1));
+	im_isinvert = (im_isinvert == 0 || im_isinvert == 1) ? im_isinvert : 0;
+	im_isemboss = parseInt(im_hash.substr(24,1));
+	im_isemboss = (im_isemboss == 0 || im_isemboss == 1) ? im_isemboss : 0;
+	im_isblur = parseInt(im_hash.substr(25,1));
+	im_isblur = (im_isblur == 0 || im_isblur == 1) ? im_isblur : 0;
+	var im_splitted = im_hash.split("+");
+	im_lightval = parseInt(im_splitted[1]);
+	im_lightval = (im_lightval > -10 && im_lightval < 11) ? im_lightval : 0;
+	im_contrastval = parseInt(im_splitted[2]);
+	im_contrastval = (im_contrastval > -10 && im_contrastval < 11) ? im_contrastval : 0;
+	im_saturval = parseInt(im_splitted[3]);
+	im_saturval = (im_saturval > -10 && im_saturval < 11) ? im_saturval : 0;
+	im_sharpenval = parseInt(im_splitted[4]);
+	im_sharpenval = (im_sharpenval > -10 && im_sharpenval < 11) ? im_sharpenval : -9;
+  im_setit();
+  im_showled();
+}
+
