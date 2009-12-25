@@ -1,6 +1,6 @@
-
 // variables
 var im_compatible  = 1;
+var im_useurlvalues= 1;
 var im_strlightness= 'Lightness';
 var im_strreset    = 'Reset';
 var im_strbw       = 'B/W';
