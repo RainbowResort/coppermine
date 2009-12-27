@@ -185,7 +185,7 @@ function im_init()
  {
    // create btn div
    im_btn = document.createElement('div');
-   var changestate = '{ this.oldbrd = this.style.borderColor; this.style.borderColor=\'#ff0000\'; } else {this.style.borderColor=this.oldbrd } im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
+   var im_btnsuffix = 'im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
    if (im_isie || im_compatible) im_btn.innerHTML = im_makeled(im_strlightness,'brig','im_lightval');
    else
    {
@@ -195,32 +195,28 @@ function im_init()
      im_btn.innerHTML += im_makeled(im_strsharpen,'shar','im_sharpenval');
    }
    im_btn.innerHTML += '<input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
-   if (im_isie || im_compatible) { im_btn.innerHTML += ' <input value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; if (im_isbw) '+changestate; }
-   else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" onclick="im_issepia = (im_issepia) ? 0 : 1; if (im_issepia) '+changestate; }
-   im_btn.innerHTML += ' <input value="'+im_strfliph+'" onclick="im_isfliph = (im_isfliph) ? 0 : 1; if (im_isfliph)'+changestate;
-   im_btn.innerHTML += ' <input value="'+im_strflipv+'" onclick="im_isflipv = (im_isflipv) ? 0 : 1; if (im_isflipv) '+changestate;
-   im_btn.innerHTML += ' <input value="'+im_strinvert+'" onclick="im_isinvert = (im_isinvert) ? 0 : 1; if (im_isinvert) '+changestate;
-   im_btn.innerHTML += ' <input value="'+im_stremboss+'" onclick="im_isemboss = (im_isemboss) ? 0 : 1; if (im_isemboss)  '+changestate;
-   im_btn.innerHTML += ' <input value="'+im_strblur+'" onclick="im_isblur = (im_isblur) ? 0 : 1; if (im_isblur)  '+changestate;
+   if (im_isie || im_compatible) { im_btn.innerHTML += ' <input id="but_bw" value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; '+im_btnsuffix; }
+   else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" id="but_sepia" onclick="im_issepia = (im_issepia) ? 0 : 1; '+im_btnsuffix; }
+   im_btn.innerHTML += ' <input value="'+im_strfliph+'" id="but_fliph" onclick="im_isfliph = (im_isfliph) ? 0 : 1; '+im_btnsuffix;
+   im_btn.innerHTML += ' <input value="'+im_strflipv+'" id="but_flipv" onclick="im_isflipv = (im_isflipv) ? 0 : 1; '+im_btnsuffix;
+   im_btn.innerHTML += ' <input value="'+im_strinvert+'" id="but_invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; '+im_btnsuffix;
+   im_btn.innerHTML += ' <input value="'+im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+im_btnsuffix;
+   im_btn.innerHTML += ' <input value="'+im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+im_btnsuffix;
    $('.display_media').append(im_btn);
-   
-   if (im_useurlvalues && window.location.hash.substr(0,19) == "#image_manipulation" && window.location.hash.length > 32)
-   {  
-     im_getvalues();
-   }
-   else
-   {
-   	im_reset();
-   }
+
+   // if URL contains info about im, get them
+   if (im_useurlvalues && window.location.hash.substr(0,4) == "#im_" && window.location.hash.length > 19) im_getvalues();
+   else im_reset();
    im_oldhash = window.location.hash;
    setInterval(im_checkstate, 100);
  }
 }
 
+// check if URL has changed
 function im_checkstate()
 {
-	if (im_oldhash != window.location.hash) im_getvalues();
-	im_oldhash = window.location.hash;
+  if (im_oldhash != window.location.hash) im_getvalues();
+  im_oldhash = window.location.hash;
 }
 
 
@@ -250,7 +246,22 @@ function im_setit()
     if (im_sharpenval != -9) $('.image').pixastic('sharpen', {amount:(im_sharpenval+9)/30});
   }
   if (im_isinvert && !im_isie) $('.image').pixastic('invert');
-  if (im_useurlvalues) im_changeurl();
+  im_changeurl();
+  // show values
+  im_showled(im_lightval,'brig');
+  im_onebutton(im_isflipv,'but_flipv');
+  im_onebutton(im_isfliph,'but_fliph');
+  im_onebutton(im_isblur,'but_blur');
+  im_onebutton(im_isinvert,'but_invert');
+  im_onebutton(im_isemboss,'but_emboss');
+  if (!im_isie & !im_compatible)
+  {
+    im_showled(im_contrastval,'cont');
+    im_showled(im_saturval,'satu');
+    im_showled(im_sharpenval,'shar');
+    im_onebutton(im_issepia,'but_sepia');
+  }
+  else im_onebutton(im_isbw,'but_bw');
 }
 
 // create LED slider
@@ -258,33 +269,39 @@ function im_makeled(im_buttonstring,im_idstring,im_valstring)
 {
   im_tempstr = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' &#150; </span>';
   for(var im_i=-9;im_i<10;im_i++){
-    im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
+    im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
   }
-   im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit(); im_showled();">&nbsp;</a>';
+   im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_buttonstring+'</span><br/>';   
   return im_tempstr;
 }
 
-// lighten LEDs 
-function im_showled()
+
+// lighten one LED chain
+function im_showled(im_value,im_elid)
 {
   for(var im_i=-9;im_i<11;im_i++){
-    if (im_lightval >= im_i) document.getElementById('brig'+im_i).style.backgroundColor = '#bbbbff';
-    else document.getElementById('brig'+im_i).style.backgroundColor = '#444455';
+    if (im_value >= im_i) document.getElementById(im_elid+im_i).style.backgroundColor = '#bbbbff';
+    else document.getElementById(im_elid+im_i).style.backgroundColor = '#444455';
   }
-  if (!im_isie & !im_compatible)
+}
+
+// set one button state
+function im_onebutton(im_value,im_elid)
+{
+  var im_mybuttns = document.getElementsByTagName('input');
+  for(var im_i=0;im_i<im_mybuttns.length;im_i++)
   {
-    for(var im_i=-9;im_i<11;im_i++){
-    if (im_contrastval >= im_i) document.getElementById('cont'+im_i).style.backgroundColor = '#bbbbff';
-    else document.getElementById('cont'+im_i).style.backgroundColor = '#444455';
-    }
-    for(var im_i=-9;im_i<11;im_i++){
-    if (im_saturval >= im_i) document.getElementById('satu'+im_i).style.backgroundColor = '#bbbbff';
-    else document.getElementById('satu'+im_i).style.backgroundColor = '#444455';
-    }
-    for(var im_i=-9;im_i<11;im_i++){
-    if (im_sharpenval >= im_i) document.getElementById('shar'+im_i).style.backgroundColor = '#bbbbff';
-    else document.getElementById('shar'+im_i).style.backgroundColor = '#444455';
+    if (im_mybuttns[im_i].id == im_elid) 
+    {   
+      if (im_value)
+      {
+        if (typeof im_mybuttns[im_i].oldbrd == 'undefined') im_mybuttns[im_i].oldbrd = im_mybuttns[im_i].style.borderColor; im_mybuttns[im_i].style.borderColor='#ff0000';
+      }
+      else
+      {
+        if (typeof im_mybuttns[im_i].oldbrd != 'undefined') im_mybuttns[im_i].style.borderColor = im_mybuttns[im_i].oldbrd;
+      }
     }
   }
 }
@@ -292,24 +309,11 @@ function im_showled()
 // reset
 function im_reset()
 {
-  Pixastic.revert($('.image')[0]);
-  im_lightval = 0;
-  im_contrastval = 0;
-  im_isbw = 0;
-  im_issepia = 0;
-  im_isflipv = 0;
-  im_isfliph = 0;
-  im_isinvert = 0;
-  im_isemboss = 0;
-  im_isblur = 0;
-  im_saturval = 0;
+  im_lightval = im_contrastval = im_isbw = im_issepia = im_isflipv = 0;
+  im_isfliph = im_isinvert = im_isemboss = im_isblur = im_saturval = 0;
   im_sharpenval = -9;
-  im_mybuttns = document.getElementsByTagName('input');
-  for(var im_i=0;im_i<im_mybuttns.length;im_i++){
-    if (typeof im_mybuttns[im_i].oldbrd != 'undefined') im_mybuttns[im_i].style.borderColor = im_mybuttns[im_i].oldbrd;
-  }
-  im_showled();
-  if (im_useurlvalues) im_changeurl();
+  im_setit();
+  im_changeurl();
 }
 
 function im_addLoad(im_func)
@@ -325,41 +329,46 @@ function im_addLoad(im_func)
   }
 }
 
-im_addLoad(im_init);
-
 function im_changeurl()
 {
-	
-	if (im_useurlvalues) window.location.hash = "image_manipulation"+im_isbw+im_issepia+im_isflipv+im_isfliph+im_isinvert+im_isemboss+im_isblur+"+"+im_lightval+"+"+im_contrastval+"+"+im_saturval+"+"+im_sharpenval;
+  if (im_useurlvalues) window.location.hash = "im_"+im_isbw+im_issepia+im_isflipv+im_isfliph+im_isinvert+im_isemboss+im_isblur+"+"+im_lightval+"+"+im_contrastval+"+"+im_saturval+"+"+im_sharpenval;
 }
 
 function im_getvalues()
 {
-	im_hash = window.location.hash;
-	im_isbw = parseInt(im_hash.substr(19,1));
-	im_isbw = (im_isbw == 0 || im_isbw == 1) ? im_isbw : 0;
-	im_issepia = parseInt(im_hash.substr(20,1));
-	im_issepia = (im_issepia == 0 || im_issepia == 1) ? im_issepia : 0;
-	im_isflipv = parseInt(im_hash.substr(21,1));
-	im_isflipv = (im_isflipv == 0 || im_isflipv == 1) ? im_isflipv : 0;
-	im_isfliph = parseInt(im_hash.substr(22,1));
-	im_isfliph = (im_isfliph == 0 || im_isfliph == 1) ? im_isfliph : 0;
-	im_isinvert = parseInt(im_hash.substr(23,1));
-	im_isinvert = (im_isinvert == 0 || im_isinvert == 1) ? im_isinvert : 0;
-	im_isemboss = parseInt(im_hash.substr(24,1));
-	im_isemboss = (im_isemboss == 0 || im_isemboss == 1) ? im_isemboss : 0;
-	im_isblur = parseInt(im_hash.substr(25,1));
-	im_isblur = (im_isblur == 0 || im_isblur == 1) ? im_isblur : 0;
-	var im_splitted = im_hash.split("+");
-	im_lightval = parseInt(im_splitted[1]);
-	im_lightval = (im_lightval > -10 && im_lightval < 11) ? im_lightval : 0;
-	im_contrastval = parseInt(im_splitted[2]);
-	im_contrastval = (im_contrastval > -10 && im_contrastval < 11) ? im_contrastval : 0;
-	im_saturval = parseInt(im_splitted[3]);
-	im_saturval = (im_saturval > -10 && im_saturval < 11) ? im_saturval : 0;
-	im_sharpenval = parseInt(im_splitted[4]);
-	im_sharpenval = (im_sharpenval > -10 && im_sharpenval < 11) ? im_sharpenval : -9;
+  im_hash = window.location.hash;
+  im_isbw = parseInt(im_hash.substr(4,1));
+  im_isbw = (im_isbw == 0 || im_isbw == 1) ? im_isbw : 0;
+  im_issepia = parseInt(im_hash.substr(5,1));
+  im_issepia = (im_issepia == 0 || im_issepia == 1) ? im_issepia : 0;
+  im_isflipv = parseInt(im_hash.substr(6,1));
+  im_isflipv = (im_isflipv == 0 || im_isflipv == 1) ? im_isflipv : 0;
+  im_isfliph = parseInt(im_hash.substr(7,1));
+  im_isfliph = (im_isfliph == 0 || im_isfliph == 1) ? im_isfliph : 0;
+  im_isinvert = parseInt(im_hash.substr(8,1));
+  im_isinvert = (im_isinvert == 0 || im_isinvert == 1) ? im_isinvert : 0;
+  im_isemboss = parseInt(im_hash.substr(9,1));
+  im_isemboss = (im_isemboss == 0 || im_isemboss == 1) ? im_isemboss : 0;
+  im_isblur = parseInt(im_hash.substr(10,1));
+  im_isblur = (im_isblur == 0 || im_isblur == 1) ? im_isblur : 0;
+  var im_splitted = im_hash.split("+");
+  im_lightval = parseInt(im_splitted[1]);
+  im_lightval = (im_lightval > -10 && im_lightval < 11) ? im_lightval : 0;
+  im_contrastval = parseInt(im_splitted[2]);
+  im_contrastval = (im_contrastval > -10 && im_contrastval < 11) ? im_contrastval : 0;
+  im_saturval = parseInt(im_splitted[3]);
+  im_saturval = (im_saturval > -10 && im_saturval < 11) ? im_saturval : 0;
+  im_sharpenval = parseInt(im_splitted[4]);
+  im_sharpenval = (im_sharpenval > -10 && im_sharpenval < 11) ? im_sharpenval : -9;
+  if (im_isie)
+  {
+    if (im_issepia) { im_isbw = 1; im_issepia = 0; }
+    im_contrastval = 0;
+    im_saturval = 0;
+    im_sharpenval = -9;
+  }
   im_setit();
-  im_showled();
 }
 
+
+im_addLoad(im_init);

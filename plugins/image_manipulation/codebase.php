@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.6
+  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.7
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
