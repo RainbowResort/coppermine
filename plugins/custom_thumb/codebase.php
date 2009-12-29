@@ -80,7 +80,7 @@ function custom_thumb_page_start() {
             die();
         } else {
             load_template();
-            pageheader('Custom Thumbnail');
+            pageheader($lang_plugin_custom_thumb['custom_thumbnail']);
             echo '<form method="post" enctype="multipart/form-data">';
             starttable('60%', $lang_plugin_custom_thumb['upload_custom_thumbnail'], 2);
             list($timestamp, $form_token) = getFormToken();

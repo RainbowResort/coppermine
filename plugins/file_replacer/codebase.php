@@ -42,6 +42,11 @@ function file_replacer_page_start() {
             cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
         }
 
+        require_once "./plugins/file_replacer/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/file_replacer/lang/{$CONFIG['lang']}.php")) {
+            require_once "./plugins/file_replacer/lang/{$CONFIG['lang']}.php";
+        }
+
         if ($superCage->files->keyExists('fileupload') && $row) {
             if (!checkFormToken()) {
                 load_template();
@@ -50,10 +55,10 @@ function file_replacer_page_start() {
             }
 
             $fileupload = $superCage->files->getRaw('fileupload');
-            
+
             if ($fileupload['error']) {
                 load_template();
-                cpg_die(ERROR, 'Upload error '.$fileupload['error'], __FILE__, __LINE__);
+                cpg_die(ERROR, $lang_errors['error'].' '.$fileupload['error'], __FILE__, __LINE__);
             }
 
             $image = $CONFIG['fullpath'] . $row['filepath'] . $row['filename'];
@@ -156,14 +161,14 @@ function file_replacer_page_start() {
             
         } else {
             load_template();
-            pageheader('File replacer');
+            pageheader($lang_plugin_file_replacer['file_replacer']);
             echo '<form method="post" enctype="multipart/form-data">';
-            starttable('60%', 'Upload replacement file', 2);
+            starttable('60%', $lang_plugin_file_replacer['upload_file'], 2);
             list($timestamp, $form_token) = getFormToken();
             echo <<< EOT
                 <tr>
                     <td class="tableb" valign="top">
-                        Browse: 
+                        {$lang_plugin_file_replacer['browse']}: 
                     </td>
                     <td class="tableb" valign="top">
                         <input type="file" name="fileupload" size="40" class="listbox" />
@@ -173,7 +178,7 @@ function file_replacer_page_start() {
                     <td align="center" colspan="2" class="tablef">
                         <input type="hidden" name="form_token" value="{$form_token}" />
                         <input type="hidden" name="timestamp" value="{$timestamp}" />
-                        <input type="submit" name="commit" class="button" value="Upload"/>
+                        <input type="submit" name="commit" class="button" value="{$lang_plugin_file_replacer['upload']}"/>
                     </td>
                 </tr>
 EOT;
@@ -190,8 +195,12 @@ function file_replacer_file_data($data) {
     global $CONFIG, $CURRENT_ALBUM_DATA;
 
     if ((USER_ADMIN_MODE && $CURRENT_ALBUM_DATA['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $data['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE) {
+        require_once "./plugins/file_replacer/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/file_replacer/lang/{$CONFIG['lang']}.php")) {
+            require_once "./plugins/file_replacer/lang/{$CONFIG['lang']}.php";
+        }
         $file_replacer_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/alb_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $data['menu'] .= " <a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}Replace file</a>";
+        $data['menu'] .= " <a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a>";
     }
     return $data;
 }
