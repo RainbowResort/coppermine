@@ -1,18 +1,19 @@
 // variables
-var im_compatible  = 1;
-var im_useurlvalues= 1;
-var im_strlightness= 'Helligkeit';
-var im_strreset    = 'Originalbild';
-var im_strbw       = 'S/W';
-var im_strsepia    = 'Sepia';
-var im_strflipv    = 'Spiegeln vert';
-var im_strfliph    = 'Spiegeln hori';
-var im_strinvert   = 'Negativ';
-var im_stremboss   = 'Relief';
-var im_strblur     = 'Weichzeichnen';
-var im_strcontrast = 'Kontrast';
-var im_strsatur    = 'S&auml;ttigung';
-var im_strsharpen  = 'Sch&auml;rfe';
+var im_compatible   = 1;
+var im_useurlvalues = 1;
+var im_usecookies   = 1;
+var im_strlightness = 'Helligkeit';
+var im_strreset     = 'Originalbild';
+var im_strbw        = 'S/W';
+var im_strsepia     = 'Sepia';
+var im_strflipv     = 'Spiegeln vert';
+var im_strfliph     = 'Spiegeln hori';
+var im_strinvert    = 'Negativ';
+var im_stremboss    = 'Relief';
+var im_strblur      = 'Weichzeichnen';
+var im_strcontrast  = 'Kontrast';
+var im_strsatur     = 'S&auml;ttigung';
+var im_strsharpen   = 'Sch&auml;rfe';
 
 
 /*
@@ -171,14 +172,15 @@ weight=1/weight;var rect=params.options.rect;var w=rect.width;var h=rect.height;
 +dataCopy[offset+2]*mul);if(r<0)r=0;if(g<0)g=0;if(b<0)b=0;if(r>255)r=255;if(g>255)g=255;if(b>255)b=255;data[offset]=r;data[offset+1]=g;data[offset+2]=b;}while(--x);}while(--y);return true;}},checkSupport:function(){return Pixastic.Client.hasCanvasImageData();}}
 
 
-// initialize
+// variables
 var im_isflipv,im_isfliph,im_issepia,im_isbw,im_lightval;
 var im_contrastval,im_isemboss,im_isinvert,im_isblur;
 var im_ispoint,im_saturval;
 var im_sharpenval;
 var im_isie = Pixastic.Client.isIE();
-var im_oldhash;
+var im_oldhash, im_pid;
 
+// page is ready loaded
 function im_init()
 {
  if ($('.image')[0])
@@ -203,26 +205,49 @@ function im_init()
    im_btn.innerHTML += ' <input value="'+im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+im_btnsuffix;
    im_btn.innerHTML += ' <input value="'+im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+im_btnsuffix;
    $('.display_media').append(im_btn);
+   var im_cookieval = 0;
+   // check for cookie
+   if (im_usecookies)
+   {
+     var im_getpid = window.location.href.split("pid=");
+     var im_getpid2;
+     if (im_getpid[1].indexOf(";") != -1) im_getpid2 = im_getpid[1].split(";")[0];
+     else if (im_getpid[1].indexOf("#") != -1) im_getpid2 = im_getpid[1].split("#")[0];
+     else im_getpid2 = im_getpid[1];
+     im_pid = parseInt(im_getpid2);
+     if (!isNaN(im_pid)) 
+     {
+      im_cookieval = parseInt(im_readCookie('cpgim_'+im_pid));
+      im_cookieval += 90909000;
+      if (im_cookieval)
+      {
+        im_splitvalue(im_cookieval);
+        im_setit();
+      }
+     }
+   }
 
    // if URL contains info about im, get them
-   if (im_useurlvalues && window.location.hash.substr(0,4) == "#im_" && window.location.hash.length > 19) im_getvalues();
-   else im_reset();
+   if (im_useurlvalues && !im_cookieval) im_getvalues();
+   else if (!im_cookieval) im_reset();
    im_oldhash = window.location.hash;
-   setInterval(im_checkstate, 100);
+   if (im_useurlvalues) setInterval(im_checkstate, 250);
  }
 }
 
 // check if URL has changed
 function im_checkstate()
 {
-  if (im_oldhash != window.location.hash) im_getvalues();
-  im_oldhash = window.location.hash;
+  if (im_oldhash != window.location.hash) {
+    im_getvalues();
+    im_oldhash = window.location.hash
+  }
 }
-
 
 // modify image
 function im_setit()
 {
+  // modify image
   Pixastic.revert($('.image')[0]);
   if (im_issepia) $('.image').pixastic('sepia');
   if (im_isflipv) $('.image').pixastic('flipv');
@@ -233,35 +258,55 @@ function im_setit()
   if (im_isemboss) $('.image').pixastic('emboss', {greyLevel:170,direction:'topleft',strength:1.0});
   if (im_isie || im_compatible)
   {
-    if (im_lightval != 0)
+    if (im_lightval)
     {
-      if (im_lightval >= 0 || !Pixastic.Client.isIE()) $('.image').pixastic('lighten', {amount:im_lightval/10});
+      if (im_lightval > 0 || !Pixastic.Client.isIE()) $('.image').pixastic('lighten', {amount:im_lightval/10});
       else $('.image').pixastic('lighten', {amount:-1-im_lightval/10});
     }
   }
   else
   {
-    if (im_lightval != 0 || im_contrastval != 0)$('.image').pixastic('brightness', {brightness:im_lightval*15,contrast:im_contrastval/10});
+    if (im_lightval || im_contrastval)$('.image').pixastic('brightness', {brightness:im_lightval*15,contrast:im_contrastval/10});
     if (im_saturval != 0) $('.image').pixastic('hsl', {hue:0,saturation:im_saturval*10,lightness:0});
     if (im_sharpenval != -9) $('.image').pixastic('sharpen', {amount:(im_sharpenval+9)/30});
   }
   if (im_isinvert && !im_isie) $('.image').pixastic('invert');
-  im_changeurl();
+  
+  im_seturl();
   // show values
   im_showled(im_lightval,'brig');
-  im_onebutton(im_isflipv,'but_flipv');
-  im_onebutton(im_isfliph,'but_fliph');
-  im_onebutton(im_isblur,'but_blur');
-  im_onebutton(im_isinvert,'but_invert');
-  im_onebutton(im_isemboss,'but_emboss');
+  im_showbtn(im_isflipv,'but_flipv');
+  im_showbtn(im_isfliph,'but_fliph');
+  im_showbtn(im_isblur,'but_blur');
+  im_showbtn(im_isinvert,'but_invert');
+  im_showbtn(im_isemboss,'but_emboss');
   if (!im_isie & !im_compatible)
   {
     im_showled(im_contrastval,'cont');
     im_showled(im_saturval,'satu');
     im_showled(im_sharpenval,'shar');
-    im_onebutton(im_issepia,'but_sepia');
+    im_showbtn(im_issepia,'but_sepia');
   }
-  else im_onebutton(im_isbw,'but_bw');
+  else im_showbtn(im_isbw,'but_bw');
+  
+}
+
+// set URL value
+function im_seturl()
+{
+  var im_buttonvalues = im_isblur+im_isemboss*2+im_isinvert*4+im_isfliph*8+im_isflipv*16+im_issepia*32+im_isbw*64;
+  im_urlvalue = (im_sharpenval+9)*1000000000+(im_contrastval+9)*10000000+(im_saturval+9)*100000+(im_lightval+9)*1000+im_buttonvalues;
+  im_urlvalue = (isNaN(im_urlvalue)) ? 0 : im_urlvalue - 90909000;
+  if (im_useurlvalues)
+  {
+    window.location.hash = "im="+im_urlvalue;
+    im_oldhash = window.location.hash;
+  }
+  // save cookie
+  if (im_usecookies)
+  {
+    im_createCookie('cpgim_'+im_pid,im_urlvalue);
+  }
 }
 
 // create LED slider
@@ -287,7 +332,7 @@ function im_showled(im_value,im_elid)
 }
 
 // set one button state
-function im_onebutton(im_value,im_elid)
+function im_showbtn(im_value,im_elid)
 {
   var im_mybuttns = document.getElementsByTagName('input');
   for(var im_i=0;im_i<im_mybuttns.length;im_i++)
@@ -306,16 +351,16 @@ function im_onebutton(im_value,im_elid)
   }
 }
 
-// reset
+// reset values
 function im_reset()
 {
   im_lightval = im_contrastval = im_isbw = im_issepia = im_isflipv = 0;
   im_isfliph = im_isinvert = im_isemboss = im_isblur = im_saturval = 0;
   im_sharpenval = -9;
   im_setit();
-  im_changeurl();
 }
 
+// add to window.onload
 function im_addLoad(im_func)
 {
   var im_oldonload = window.onload;
@@ -329,46 +374,57 @@ function im_addLoad(im_func)
   }
 }
 
-function im_changeurl()
-{
-  if (im_useurlvalues) window.location.hash = "im_"+im_isbw+im_issepia+im_isflipv+im_isfliph+im_isinvert+im_isemboss+im_isblur+"+"+im_lightval+"+"+im_contrastval+"+"+im_saturval+"+"+im_sharpenval;
-}
-
+// get values from URL
 function im_getvalues()
 {
   im_hash = window.location.hash;
-  im_isbw = parseInt(im_hash.substr(4,1));
-  im_isbw = (im_isbw == 0 || im_isbw == 1) ? im_isbw : 0;
-  im_issepia = parseInt(im_hash.substr(5,1));
-  im_issepia = (im_issepia == 0 || im_issepia == 1) ? im_issepia : 0;
-  im_isflipv = parseInt(im_hash.substr(6,1));
-  im_isflipv = (im_isflipv == 0 || im_isflipv == 1) ? im_isflipv : 0;
-  im_isfliph = parseInt(im_hash.substr(7,1));
-  im_isfliph = (im_isfliph == 0 || im_isfliph == 1) ? im_isfliph : 0;
-  im_isinvert = parseInt(im_hash.substr(8,1));
-  im_isinvert = (im_isinvert == 0 || im_isinvert == 1) ? im_isinvert : 0;
-  im_isemboss = parseInt(im_hash.substr(9,1));
-  im_isemboss = (im_isemboss == 0 || im_isemboss == 1) ? im_isemboss : 0;
-  im_isblur = parseInt(im_hash.substr(10,1));
-  im_isblur = (im_isblur == 0 || im_isblur == 1) ? im_isblur : 0;
-  var im_splitted = im_hash.split("+");
-  im_lightval = parseInt(im_splitted[1]);
-  im_lightval = (im_lightval > -10 && im_lightval < 11) ? im_lightval : 0;
-  im_contrastval = parseInt(im_splitted[2]);
-  im_contrastval = (im_contrastval > -10 && im_contrastval < 11) ? im_contrastval : 0;
-  im_saturval = parseInt(im_splitted[3]);
-  im_saturval = (im_saturval > -10 && im_saturval < 11) ? im_saturval : 0;
-  im_sharpenval = parseInt(im_splitted[4]);
-  im_sharpenval = (im_sharpenval > -10 && im_sharpenval < 11) ? im_sharpenval : -9;
-  if (im_isie)
+  var im_splitted = im_hash.split("=");
+  if (im_hash.substr(0,4) != "#im=" || isNaN(im_splitted[1])) im_reset();
+  else
   {
-    if (im_issepia) { im_isbw = 1; im_issepia = 0; }
-    im_contrastval = 0;
-    im_saturval = 0;
-    im_sharpenval = -9;
-  }
+  im_urlvalue = parseInt(im_splitted[1]) + 90909000;
+  im_splitvalue(im_urlvalue);
   im_setit();
+  }
 }
 
+function im_splitvalue(im_val)
+{
+  if (im_val > 19191919063 || im_val < 0) im_val = 90909000;
+  im_sharpenval = Math.floor(im_val / 1000000000)-9;
+  im_val = im_val - Math.floor(im_val / 1000000000) * 1000000000;
+  im_contrastval = Math.floor(im_val / 10000000)-9;
+  im_val = im_val - Math.floor(im_val / 10000000) * 10000000;
+  im_saturval = Math.floor(im_val / 100000)-9;
+  im_val = im_val - Math.floor(im_val / 100000) * 100000;  
+  im_lightval = Math.floor(im_val / 1000)-9;
+  im_val = im_val - Math.floor(im_val / 1000) * 1000;
+  im_isbw = (im_val & 64) ? 1 : 0;
+  im_issepia = (im_val & 32) ? 1 : 0;
+  im_isflipv = (im_val & 16) ? 1 : 0;
+  im_isfliph = (im_val & 8) ? 1 : 0;
+  im_isinvert = (im_val & 4) ? 1 : 0;
+  im_isemboss = (im_val & 2) ? 1 : 0;
+  im_isblur = (im_val & 1) ? 1 : 0;
+}
+
+function im_createCookie(im_name,im_value) {
+
+  var im_date = new Date();
+  im_date.setTime(im_date.getTime()+62208000000);
+  var im_expires = "; expires="+im_date.toGMTString();
+  document.cookie = im_name+"="+im_value+im_expires+"; path=/";
+}
+
+function im_readCookie(im_name) {
+  var im_nameEQ = im_name + "=";
+  var im_ca = document.cookie.split(';');
+  for(var i=0;i < im_ca.length;i++) {
+    var im_c = im_ca[i];
+    while (im_c.charAt(0)==' ') im_c = im_c.substring(1,im_c.length);
+    if (im_c.indexOf(im_nameEQ) == 0) return im_c.substring(im_nameEQ.length,im_c.length);
+  }
+  return null;
+}
 
 im_addLoad(im_init);
