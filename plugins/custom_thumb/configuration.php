@@ -22,10 +22,15 @@
   Copyright (c) 2009 eenemeenemuu
 **********************************************/
 
+require_once "./plugins/custom_thumb/lang/english.php";
+if ($CONFIG['lang'] != 'english' && file_exists("./plugins/custom_thumb/lang/{$CONFIG['lang']}.php")) {
+    require_once "./plugins/custom_thumb/lang/{$CONFIG['lang']}.php";
+}
+
 $name = 'Custom Thumbnail';
-$description = 'Upload custom thumbnails for pictures and files';
+$description = $lang_plugin_custom_thumb['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.1';
+$version = '1.2';
 $extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60272.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>';
 
 ?>
