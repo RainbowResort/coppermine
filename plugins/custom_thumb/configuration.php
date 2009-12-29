@@ -27,10 +27,10 @@ if ($CONFIG['lang'] != 'english' && file_exists("./plugins/custom_thumb/lang/{$C
     require_once "./plugins/custom_thumb/lang/{$CONFIG['lang']}.php";
 }
 
-$name = 'Custom Thumbnail';
+$name = $lang_plugin_custom_thumb['custom_thumbnail'];
 $description = $lang_plugin_custom_thumb['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 $version = '1.2';
-$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60272.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>';
+$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60272.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).$lang_plugin_custom_thumb['announcement_thread'].'</a>';
 
 ?>

@@ -26,5 +26,6 @@ $lang_plugin_custom_thumb['upload_custom_thumbnail'] = 'Benutzerdefiniertes Vors
 $lang_plugin_custom_thumb['browse'] = 'Durchsuchen';
 $lang_plugin_custom_thumb['upload'] = 'Hochladen';
 $lang_plugin_custom_thumb['description'] = 'Lade benutzerdefinierte Vorschaubilder für Bilder und Dateien hoch';
+$lang_plugin_custom_thumb['announcement_thread'] = 'Ankündigungs-Thema';
 
 ?>
