@@ -1,5 +1,5 @@
   *************************************************
-  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.7
+  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.8
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -14,7 +14,7 @@
   MIT License [http://www.pixastic.com/lib/license.txt]
 
 
-This plugin allows the visitor to non-destructively manipulate the image using new LED sliders and buttons on displayimage.php. It will add ~30 kbyte of javascript to the page. The URL will change accordingly, so if you pass on the link, the recepient will see the pic just as you liked it.
+This plugin allows the visitor to non-destructively manipulate the image using new LED sliders and buttons on displayimage.php. It will add ~30 kbyte of javascript to the page. The URL will change accordingly, so if you pass on the link, the recepient will see the pic just as you like it. Settings will be saved in a cookie on the visitor's computer, so if a picture is visited again, the old settings will be applied.
 
 Available effects with compatibility mode 'on' or visitor uses IE:
  * brightness (LED slider)
@@ -54,6 +54,7 @@ Please note:
  * It is highly recommended to use compatibility mode. If you don't, it depends on the visitor's browser which effects will be available.
  * To disable compatibility mode, open the *.js files and set var im_compatible = 0;
  * To disable URL modification, open the *.js files and set var im_useurlvalues = 0;
+ * To disable saving settings in a cookie, open the *.js files and set var im_usecookies= 0;
 
 If you like to contribute a localisation, copy pixastic_english.js to pixastic_yourlanguage.js, open with a text editor and adapt the strings (first lines). The plugin will automatically use the correct language file if it exists, otherwise it defaults to pixastic_english.js.
 
