@@ -41,13 +41,13 @@ echo table::open();
 echo table::tds(array(
     array('class'=>'tableb', 'text'=>
         table::open(2).
-        table::tds(array(        
+        table::tds(array(
             array('align'=>'left' , 'text'=>Lang::item('board.page').forum::paging($paging)),
         )).
-        table::close()    
+        table::close()
     ),
 ));
-
+echo table::close();
 
 
 
