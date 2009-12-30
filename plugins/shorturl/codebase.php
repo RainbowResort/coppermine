@@ -11,10 +11,10 @@
 
   ********************************************
   Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/fav_button/codebase.php $
-  $Revision: 6770 $
-  $LastChangedBy: eenemeenemuu $
-  $Date: 2009-11-23 15:05:21 +0100 (Mo, 23 Nov 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 /*********************************************
   Coppermine Plugin - Short URL
@@ -28,7 +28,11 @@ $thisplugin->add_action('page_start', 'shorturl_page_start');
 
 function shorturl_page_start() {
     if(defined('INDEX_PHP')) {
-        global $CONFIG;
+        global $CONFIG, $lang_common, $lang_errors, $cpg_udb, $lang_gallery_admin_menu;
+        require "./plugins/shorturl/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/shorturl/lang/{$CONFIG['lang']}.php")) {
+            require "./plugins/shorturl/lang/{$CONFIG['lang']}.php";
+        }
         $superCage = Inspekt::MakeSuperCage();
         if ($superCage->get->keyExists('c')) header("Location: index.php?cat=".$superCage->get->getInt('c'));
         if ($superCage->get->keyExists('a')) header("Location: thumbnails.php?album=".$superCage->get->getInt('a'));
@@ -39,8 +43,8 @@ function shorturl_page_start() {
             mysql_free_result($result);
             if ($CONFIG['plugin_shorturl_preview'] == 1 || $superCage->get->keyExists('preview')) {
                 load_template();
-                pageheader('Redirection preview');
-                starttable('100%', 'Redirection preview');
+                pageheader($lang_plugin_shorturl['redirection_preview']);
+                starttable('100%', $lang_plugin_shorturl['redirection_preview']);
                 echo <<<EOT
                     <tr>
                         <td class="tableb">
@@ -57,8 +61,6 @@ EOT;
         }
         if ($superCage->get->keyExists('shorturl')) {
             if ($superCage->get->getAlpha('shorturl') == 'config') {
-                global $CONFIG, $lang_common, $lang_errors, $cpg_udb;
-
                 if (!GALLERY_ADMIN_MODE) {
                     load_template();
                     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
@@ -92,7 +94,7 @@ EOT;
                 }
 
                 load_template();
-                pageheader('Short URL config');
+                pageheader($lang_plugin_shorturl['plugin_name'].' '.$lang_gallery_admin_menu['admin_lnk']);
 
                 $permissions = "";
                 $result = cpg_db_query("SELECT group_id, group_name FROM {$CONFIG['TABLE_USERGROUPS']} ORDER BY group_id ASC");
@@ -153,17 +155,17 @@ EOT;
                 echo <<< EOT
                     <form action="" method="post" name="shorturl_config" id="shorturl_config">
 EOT;
-                starttable('100%', 'Short URL config', 3);
+                starttable('100%', $lang_plugin_shorturl['plugin_name'].' '.$lang_gallery_admin_menu['admin_lnk'], 3);
                 echo <<<EOT
                     <tr>
                         <td valign="top" class="tableb">
-                            Display menu button
+                            {$lang_plugin_shorturl['display_menu_button']}
                         </td>
                         <td valign="top" class="tableb" colspan="2">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
                                     <th valign="top" align="left" class="tableh2">
-                                        Group
+                                        {$lang_plugin_shorturl['group']}
                                     </th>
                                     <th valign="top" align="center" class="tableh2">
                                         {$lang_common['no']}
@@ -178,7 +180,7 @@ EOT;
                     </tr>
                     <tr>
                         <td class="tableb">
-                            Show redirection preview
+                            {$lang_plugin_shorturl['show_redirection_preview']}
                         </td>
                         <td class="tableb">
                             <table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -219,8 +221,8 @@ EOT;
                 if ($superCage->post->keyExists('url')) {
                     js_include('plugins/shorturl/jquery.copy.js');
                     load_template();
-                    pageheader('Your short url');
-                    starttable('100%', 'Your short url', 2);
+                    pageheader($lang_plugin_shorturl['your_url']);
+                    starttable('100%', $lang_plugin_shorturl['your_url'], 2);
                     echo <<< EOT
                         <tr>
                             <td class="tableb">
@@ -243,7 +245,7 @@ EOT;
                             .'$';
                     $url = $superCage->post->getRaw('url');
                     if(!preg_match('#' . $regex . '#i', $url)) {
-                        echo "Invalid url: <tt>$url</tt> <br/> <form action=\"javascript:history.back();\"><button type=\"submit\" class=\"button\">Back</button></form>";
+                        echo $lang_plugin_shorturl['invalid_url'].": <tt>$url</tt> <br/> <form action=\"javascript:history.back();\"><button type=\"submit\" class=\"button\">{$lang_common['back']}</button></form>";
                     } else {
                         $result = cpg_db_query("SELECT rid FROM {$CONFIG['TABLE_PREFIX']}plugin_shorturl WHERE url = '$url'");
                         if (mysql_num_rows($result) > 0) {
@@ -255,12 +257,13 @@ EOT;
                         }
                         mysql_free_result($result);
                         $length = strlen($CONFIG['ecards_more_pic_target']."?r=$rid") + 20;
+                        $preview_status = sprintf($lang_plugin_shorturl['preview_status'], ($CONFIG['plugin_shorturl_preview'] == 1 ? $lang_plugin_shorturl['enabled'] : $lang_plugin_shorturl['disabled']));
                         echo <<< EOT
                             <input id="shorturl" type="text" name="url" size="$length" class="textinput" value="{$CONFIG['ecards_more_pic_target']}?r=$rid" readonly="readonly" onclick="$(this).select();" />
-                            Immediate redirection (works only if the admin has disabled url preview in the first place)
+                            <span style="cursor:help;" title="$preview_status">{$lang_plugin_shorturl['immediate_redirection']}</span>
                             <br />
                             <input id="shorturl_p" type="text" name="url" size="$length" class="textinput" value="{$CONFIG['ecards_more_pic_target']}?r=$rid&amp;preview" readonly="readonly" onclick="$(this).select();" />
-                            Display a preview of the destination url (no redirection)
+                            {$lang_plugin_shorturl['display_link']}
 EOT;
                     }
                     echo <<< EOT
@@ -272,9 +275,9 @@ EOT;
                     exit;
                 } else {
                     load_template();
-                    pageheader('Create short url');
+                    pageheader($lang_plugin_shorturl['create_url']);
                     echo '<form method="post">';
-                    starttable('100%', 'Enter url', 2);
+                    starttable('100%', $lang_plugin_shorturl['enter_url'], 2);
                     list($timestamp, $form_token) = getFormToken();
                     echo <<< EOT
                         <tr>
@@ -284,7 +287,7 @@ EOT;
                                 <input type="hidden" name="timestamp" value="{$timestamp}" />
                             </td>
                             <td class="tableb">
-                                <input type="submit" name="commit" class="button" value="Shorten" />
+                                <input type="submit" name="commit" class="button" value="{$lang_plugin_shorturl['shorten']}" />
                             </td>
                         </tr>
 EOT;
@@ -307,11 +310,16 @@ function shorturl_sys_menu($menu) {
         return $menu;
     }
 
-    global $template_sys_menu_spacer;
+    global $CONFIG, $template_sys_menu_spacer;
+
+    require "./plugins/shorturl/lang/english.php";
+    if ($CONFIG['lang'] != 'english' && file_exists("./plugins/shorturl/lang/{$CONFIG['lang']}.php")) {
+        require "./plugins/shorturl/lang/{$CONFIG['lang']}.php";
+    }
 
     $new_button = array();
-    $new_button[0][0] = 'Short URL';
-    $new_button[0][1] = 'Create short url';
+    $new_button[0][0] = $lang_plugin_shorturl['menu_link'];
+    $new_button[0][1] = $lang_plugin_shorturl['title'];
     $new_button[0][2] = './?shorturl=add';
     $new_button[0][3] = '';
     $new_button[0][5] = '';
@@ -377,6 +385,8 @@ function shorturl_uninstall() {
     if ($superCage->post->getInt('drop') == 1) {
         global $CONFIG;
         return cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_shorturl");
+    } else {
+        return true;
     }
 }
 
@@ -387,14 +397,20 @@ function shorturl_cleanup($action) {
     $superCage = Inspekt::makeSuperCage();
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
-        global $lang_common;
+        global $CONFIG, $lang_common;
+
+        require "./plugins/shorturl/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/shorturl/lang/{$CONFIG['lang']}.php")) {
+            require "./plugins/shorturl/lang/{$CONFIG['lang']}.php";
+        }
+
         list($timestamp, $form_token) = getFormToken();
         echo <<< EOT
             <form action="{$cleanup}" method="post">
                 <table border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td class="tableb">
-                            Drop database table?
+                            {$lang_plugin_shorturl['drop_db']}?
                         </td>
                         <td class="tableb">
                             <input type="radio" name="drop" id="drop_yes" value="1" checked="checked" />
