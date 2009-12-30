@@ -62,5 +62,6 @@ $lang_plugin_bbcode_control['description_new_codes'] = 'Maak nieuwe BBCodes aan 
 $lang_plugin_bbcode_control['description_control_codes'] = 'Activeer/deactiveer BBCode tags';
 $lang_plugin_bbcode_control['description_buttons'] = 'Beheer het laten zien van BBCode knoppen voor het bewerken van commentaar';
 $lang_plugin_bbcode_control['install_info'] = 'Na installatie kan je de plugin beheren via het Admin menu';
+$lang_plugin_bbcode_control['announcement_thread'] = 'Announcement thread';
 
 ?>

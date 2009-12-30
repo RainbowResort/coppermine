@@ -31,7 +31,7 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bb
 }
 
 $name = 'BBCode Control';
-$version = '1.4';
+$version = '1.5';
 $description = <<< EOT
 <ul>
     <li>{$lang_plugin_bbcode_control['description_new_codes']}</li>
@@ -47,11 +47,11 @@ $config_icon = cpg_fetch_icon('config', 1);
 
 $extra_info = <<<EOT
     <a href="index.php?file=bbcode_control/admin" class="admin_menu">{$config_icon}$name {$lang_gallery_admin_menu['admin_lnk']}</a>
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu external">{$announcement_icon}Announcement thread for $name plugin</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu">{$announcement_icon}{$lang_plugin_bbcode_control['announcement_thread']}</a>
 EOT;
 
 $install_info = <<<EOT
     {$lang_plugin_bbcode_control['install_info']}
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu external">{$announcement_icon}Announcement thread for $name plugin</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,57432.0.html" rel="external" class="admin_menu">{$announcement_icon}{$lang_plugin_bbcode_control['announcement_thread']}</a>
 EOT;
 ?>

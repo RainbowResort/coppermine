@@ -62,5 +62,6 @@ $lang_plugin_bbcode_control['description_new_codes'] = 'Añadir nuevos BBCodes a 
 $lang_plugin_bbcode_control['description_control_codes'] = 'Activar/Desactivar los tags BBCode';
 $lang_plugin_bbcode_control['description_buttons'] = 'Mostrar el control de los botones de los tags BBCode cuando se agrega/edita los comentarios';
 $lang_plugin_bbcode_control['install_info'] = 'Puedes configurar el plugin luego de la instalación utilizando el pael en el menú de administración';
+$lang_plugin_bbcode_control['announcement_thread'] = 'Announcement thread';
 
 ?>
