@@ -3,10 +3,10 @@
   *************************************************
   Copyright (c) 2009 eenemeenemuu
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/changelog.txt $
-  $Revision: 6883 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-12-19 16:48:45 +0100 (Sa, 19. Dez 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
 Changelog
@@ -20,6 +20,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-30 [M] Version count updated to 1.4 {eenemeenemuu}
+2009-12-30 [A] Internationalization {eenemeenemuu}
+2009-12-30 [M] Updated JW Player to version 5.0.753 {eenemeenemuu}
+2009-12-30 [M] Dropped popup button and removed code {eenemeenemuu}
 2009-12-21 [B] Fixed bug that created config dupes {eenemeenemuu}
 2009-12-21 [M] Version count updated to 1.3 {GauGau}
 2009-12-21 [A] Added icons to buttons {GauGau}

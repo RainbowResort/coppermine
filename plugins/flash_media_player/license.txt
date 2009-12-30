@@ -3,10 +3,10 @@
   *************************************************
   Copyright (c) 2009 eenemeenemuu
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/changelog.txt $
-  $Revision: 6883 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-12-19 16:48:45 +0100 (Sa, 19. Dez 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
 The Flash Media Player plugin uses the JW Media Player (http://www.longtailvideo.com/players/jw-flv-player/) that comes with the create commons share alike license. Subsequently, this plugin can not be released under the same license that coppermine and most plugins designed for coppermine come with (GNU GPL), but is released under the same license. Please observe the difference!

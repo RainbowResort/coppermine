@@ -4,10 +4,10 @@
   *************************************************
   Copyright (c) 2009 eenemeenemuu
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/flash_movie_player/codebase.php $
-  $Revision: 6888 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-12-21 13:55:20 +0100 (Mo, 21 Dez 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
@@ -23,7 +23,7 @@ $thisplugin->add_action('page_start','fmp_page_start');
 function fmp_get_html($CURRENT_PIC_DATA) {
     if (in_array($CURRENT_PIC_DATA['extension'], Array('flv', 'mp4', 'mp3', 'aac'))) {
         global $CONFIG, $USER;
-        $CURRENT_PIC_DATA['pheight'] += 20;
+        $CURRENT_PIC_DATA['pheight'] += 24;
         $thumb = get_pic_url($CURRENT_PIC_DATA, 'thumb');
         $file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
@@ -58,23 +58,6 @@ function fmp_get_html($CURRENT_PIC_DATA) {
             <param name="wmode" value="opaque" />
             </object>
 EOT;
-        if ($CURRENT_PIC_DATA['popup'] != true) {
-            list($timestamp, $form_token) = getFormToken();
-            $link = "displayimage.php?fmp={$CURRENT_PIC_DATA['pid']}&amp;form_token=$form_token&amp;timestamp=$timestamp";
-            $pic_html .= <<< EOT
-            <script type="text/javascript">
-                function popup(url,target,w,h) {
-                    var args = 'width='+w+',height='+h+',left=10,top=10,resizable';
-                    ok = window.open(url,target,args);
-                    ok.focus();
-                    if (ok) return false;
-                    else return true;
-                }
-                </script>
-            <br />
-            <a href="$link" onclick="javascript: return popup('$link', 'fmp' + Math.random(), {$CURRENT_PIC_DATA['pwidth']} + {$CONFIG['fullsize_padding_x']}, {$CURRENT_PIC_DATA['pheight']} + {$CONFIG['fullsize_padding_y']})">Popup <img src="images/link.gif" border="0" /></a>
-EOT;
-        }
     }
     return $pic_html;
 }
@@ -86,38 +69,6 @@ function fmp_other_media($pic_html) {
         $pic_html = fmp_get_html($CURRENT_PIC_DATA);
     }
     return $pic_html;
-}
-
-
-function fmp_page_start() {
-    $superCage = Inspekt::makeSuperCage();
-    if ($superCage->get->testInt('fmp')) {
-        // Disable permanent direct access 
-        if (!checkFormToken()) {
-            global $lang_errors;
-            cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
-        }
-
-        global $CONFIG;
-        // TODO: check access rights
-        $CURRENT_PIC_DATA = mysql_fetch_assoc(cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = ".$superCage->get->getInt('fmp')));
-
-        // File does not exist or access denied
-        if (!$CURRENT_PIC_DATA) {
-            global $lang_errors;
-            cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
-        }
-
-        $path_parts = pathinfo($CURRENT_PIC_DATA['filename']);
-        $CURRENT_PIC_DATA['extension'] = $path_parts['extension'];
-        $CURRENT_PIC_DATA['popup'] = true;
-        if ($CURRENT_PIC_DATA['pwidth']==0 || $CURRENT_PIC_DATA['pheight']==0) {
-            $CURRENT_PIC_DATA['pwidth']  = 320;
-            $CURRENT_PIC_DATA['pheight'] = 240;
-        }
-        echo fmp_get_html($CURRENT_PIC_DATA);
-        exit;
-    }
 }
 
 
@@ -191,18 +142,24 @@ function fmp_cleanup($action) {
     $superCage = Inspekt::makeSuperCage();
     $cleanup = $superCage->server->getEscaped('REQUEST_URI');
     if ($action == 1) {
-        global $lang_common;
+        global $CONFIG, $lang_common;
+
+        require_once "./plugins/flash_media_player/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/flash_media_player/lang/{$CONFIG['lang']}.php")) {
+            require_once "./plugins/flash_media_player/lang/{$CONFIG['lang']}.php";
+        }
+
         list($timestamp, $form_token) = getFormToken();
-		$button_array = array('cancel' => cpg_fetch_icon('leftleft', 2), 'continue' => cpg_fetch_icon('rightright', 2));
+        $button_array = array('cancel' => cpg_fetch_icon('leftleft', 2), 'continue' => cpg_fetch_icon('rightright', 2));
         echo <<< EOT
             <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class="tableb">
-                        Playback of existing flv files won't work anymore!
+                        {$lang_plugin_flash_media_player['uninstall_info']}!
                     </td>
                     <td class="tableb">
                         <form action="pluginmgr.php" method="post">
-							<button type="submit" class="button" name="cancel" value="{$lang_common['back']}">{$button_array['cancel']}{$lang_common['back']}</button>
+                            <button type="submit" class="button" name="cancel" value="{$lang_common['back']}">{$button_array['cancel']}{$lang_common['back']}</button>
                         </form>
                     </td>
                     <td class="tableb">
@@ -210,7 +167,7 @@ function fmp_cleanup($action) {
                             <input type="hidden" name="drop" value="1" />
                             <input type="hidden" name="form_token" value="{$form_token}" />
                             <input type="hidden" name="timestamp" value="{$timestamp}" />
-							<button type="submit" class="button" name="submit" value="{$lang_common['continue']}">{$button_array['continue']}{$lang_common['continue']}</button>
+                            <button type="submit" class="button" name="submit" value="{$lang_common['continue']}">{$button_array['continue']}{$lang_common['continue']}</button>
                         </form>
                     </td>
                 </tr>
