@@ -11,10 +11,11 @@
   ***************************************************/
 
 
-$name='Image manipulation';
-$description="This plugin allows the visitor to non-destructively manipulate the image using new buttons on displayimage.php";
-$author='Timo Schewe (<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>) - JS library Pixastic by <a href="http://www.pixastic.com" rel="external" class="external">Jacob Seidelin</a>';
-$version='0.8';
-$install_info = "This plugin requires no configuration.";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php?topic=62875" rel="external" title="Announcement thread">Image manipulation Announcement</a></span>';
+$name = 'Image manipulation';
+$description = 'This plugin allows the visitor to non-destructively manipulate the image using new buttons on displayimage.php';
+$author = 'Timo Schewe (<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>) - JS library Pixastic by <a href="http://www.pixastic.com" rel="external" class="external">Jacob Seidelin</a>';
+$version = '0.8';
+$install_info = 'This plugin requires no configuration.';
+$extra_info = '<a href="http://forum.coppermine-gallery.net/index.php?topic=62875" rel="external" class="admin_menu" title="Announcement thread">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
+
 ?>
