@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/codebase.php $
-  $Revision: 6870 $
-  $LastChangedBy: timoswelt $
-  $Date: 2009-12-29 17:46:38 +0100 (Di, 29. Dez 2009) $
+  $HeadURL: $
+  $Revision: $
+  $LastChangedBy: $
+  $Date: $
   **************************************************/
 
   
