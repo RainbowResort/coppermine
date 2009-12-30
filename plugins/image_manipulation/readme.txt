@@ -1,5 +1,5 @@
-  *************************************************
-  Coppermine 1.5.x Plugin - Image manipulation $VERSION$=0.8
+/**************************************************
+  Coppermine 1.5.x Plugin - Image manipulation
   *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -7,7 +7,12 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
-  *************************************************
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/readme.txt $
+  $Revision: 6870 $
+  $LastChangedBy: timoswelt $
+  $Date: 2009-12-29 17:46:38 +0100 (Di, 29. Dez 2009) $
+  **************************************************/
 
   This plugin uses the great Pixastic Javascript library
   Copyright (c) 2008 Jacob Seidelin, jseidelin@nihilogic.dk, http://blog.nihilogic.dk/
@@ -52,10 +57,8 @@ Please note:
  * This plugin and the plugin 'mirror' may not be used at the same time.
  * The buttons will only be available for visitors with javascript turned on. Others won't notice a thing.
  * It is highly recommended to use compatibility mode. If you don't, it depends on the visitor's browser which effects will be available.
- * To disable compatibility mode, open the *.js files and set var im_compatible = 0;
- * To disable URL modification, open the *.js files and set var im_useurlvalues = 0;
- * To disable saving settings in a cookie, open the *.js files and set var im_usecookies= 0;
+ * Use the config page to disable compatible mode (not recommended)
+ * Use the config page to disable url values
+ * Use the config page to disable cookies
 
-If you like to contribute a localisation, copy pixastic_english.js to pixastic_yourlanguage.js, open with a text editor and adapt the strings (first lines). The plugin will automatically use the correct language file if it exists, otherwise it defaults to pixastic_english.js.
-
-This plugin uses the great Pixastic Javascript library (http://www.pixastic.com) by Jacob Seidelin (MIT License).
+If you like to contribute a localisation, copy im_english.js to im_yourlanguage.js, open with a text editor and adapt the strings (first lines). The plugin will automatically use the correct language file if it exists, otherwise it defaults to im_english.js.
