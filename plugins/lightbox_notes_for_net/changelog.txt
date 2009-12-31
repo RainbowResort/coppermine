@@ -1,0 +1,38 @@
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2009-12-31 [A] Added plugin to SVN repository {GauGau}
+2009-12-31 [A] Renamed plugin folder {GauGau}
+2009-12-31 [A] Moved files around {GauGau}
+2009-12-27 [A] Release Version 1.0 {Joe Carver}
+2009-12-27 [A] Added configuration page to plugin package {Joe Carver}
+2009-12-27 [A] Visual timer can now be set on/off (to save CPU) {Joe Carver}
+2009-12-27 [A] Added "nofollow" attribute - configurable {Joe Carver}
+2009-12-27 [A] Added captions, border, timers, etc. to config {Joe Carver}
+2009-12-27 [A] Major .css and style changes {Joe Carver}
+2009-12-27 [A] Tweaks, cleanups for more efficient operation {Joe Carver}
+2009-12-27 [D] Added detailed instructions for Config in on-line readme file {Joe Carver}
+2009-12-20 [M] Release Version 0.3 {Joe Carver}
+2009-12-20 [A] Added hit counter function - (borrowed from EnlargeIt!) {Joe Carver}
+2009-12-20 [A] Meta album set maintained for LightBox image set {Joe Carver}
+2009-12-20 [M] Release Version 0.2 {Joe Carver}
+2009-12-20 [B] JavaScript fix bug in escape key function	 {Joe Carver}
+2009-12-20 [B] JavaScript enable/fix click overlay to close	 {Joe Carver}
+2009-12-20 [A] JavaScript added function - return to last image	 {Joe Carver}
+2009-12-20 [A] JavaScript added function - show image caption	 {Joe Carver}
+2009-12-20 [A] JavaScript page - added function resize image to screen	 {Joe Carver}
+2009-12-20 [O] JavaScript remove uneeded code	 {Joe Carver}
+2009-12-20 [A] Nav. images edited for contrast	 {Joe Carver}
+2009-12-20 [A] Added image caption	 {Joe Carver}
+2009-12-20 [A] Added a few JavaScript variables to <head>	 {Joe Carver}
+2009-12-20 [O] Small CSS edits	 {Joe Carver}
+2009-12-20 [D] Add readme to plugin package	 {Joe Carver}
+2009-12-17 [M] Release Version 0.1 for Coppermine 1.5.x	 {Joe Carver}
