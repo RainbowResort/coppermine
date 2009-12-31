@@ -82,15 +82,15 @@
             // Configuration related to navigation
             fixedNavigation: false,
             // Configuration related to images
-            imageLoading: 'plugins/a_light_box/images/loading.gif',
-            imageBtnPrev: 'plugins/a_light_box/images/prev.png',
-            imageBtnNext: 'plugins/a_light_box/images/next.png',
-            imageBtnClose: 'plugins/a_light_box/images/close.png',
-            imageBlank: 'plugins/a_light_box/images/lightbox-blank.gif',
-            imageBtnBottomPrev: 'plugins/a_light_box/images/back_bot.png',
-            imageBtnBottomNext: 'plugins/a_light_box/images/start.png',
-            imageBtnPlay: 'plugins/a_light_box/images/start.png',
-            imageBtnStop: 'plugins/a_light_box/images/pause.png',
+            imageLoading: 'plugins/lightbox_notes_for_net/images/loading.gif',
+            imageBtnPrev: 'plugins/lightbox_notes_for_net/images/prev.png',
+            imageBtnNext: 'plugins/lightbox_notes_for_net/images/next.png',
+            imageBtnClose: 'plugins/lightbox_notes_for_net/images/close.png',
+            imageBlank: 'plugins/lightbox_notes_for_net/images/lightbox-blank.gif',
+            imageBtnBottomPrev: 'plugins/lightbox_notes_for_net/images/back_bot.png',
+            imageBtnBottomNext: 'plugins/lightbox_notes_for_net/images/start.png',
+            imageBtnPlay: 'plugins/lightbox_notes_for_net/images/start.png',
+            imageBtnStop: 'plugins/lightbox_notes_for_net/images/pause.png',
             // Configuration related to container image box
             // containerBorderSize: 8,
             // containerResizeSpeed: 800,
@@ -407,7 +407,7 @@ function getPageSize(){
 		function _add_hit_count() {
 		if (settings.imageArray[settings.activeImage][4]) {		
 		var picid = (settings.imageArray[settings.activeImage][4]);
-		var url = ("index.php?file=a_light_box/counter&a=" + picid);
+		var url = ("index.php?file=lightbox_notes_for_net/counter&a=" + picid);
 		}		
 		$.get(url);
         }
