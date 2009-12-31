@@ -20,6 +20,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-31 [C] Fixing code flaw in admin.php (starttable needs endtable!) {GauGau}
+2009-12-31 [C] Fixing nesting for form tag {GauGau}
+2009-12-31 [C] Fixing indentation of PHP code for admin screen {GauGau}
 2009-12-31 [M] Counted version up from 1.1 to 2.0 {GauGau}
 2009-12-31 [A] Added i18n for plugin configuration screen {GauGau}
 2009-12-31 [B] Fixed uninstall routine {GauGau}

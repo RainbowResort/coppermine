@@ -64,12 +64,15 @@ if ($lb_fol  == '0') {
 
 
 // Make form 
-$lb_superCage = Inspekt::makeSuperCage();
+$superCage = Inspekt::makeSuperCage();
 
+echo <<< EOT
+<form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
+EOT;
 starttable("85%");
 echo <<< EOT
 	<tr><td>
-	<form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
+	
 	<table border="0" cellspacing="2" cellpadding="2" width= "85%">
 			<tr>
 			<td><br /><b>Configure the settings of your LightBox plugin.</b></td>
@@ -203,21 +206,23 @@ echo <<< EOT
 		</td>
 		</tr>
 		</td>		
-		</table>
-		</form>
+EOT;
+endtable();
+echo <<< EOT
+</form>
 EOT;
 
 //change values in the configuration table - minimal data filtering assumes admin use only
-if ($lb_superCage->post->keyExists('update')) {
+if ($superCage->post->keyExists('update')) {
     
-    $lb_bor = $lb_superCage->post->getInt('border');
-    $lb_tim = $lb_superCage->post->getInt('slidetimer');
-    $lb_spd = $lb_superCage->post->getInt('sizespeed');
-    $lb_not = $lb_superCage->post->getInt('notimer');
-    $lb_ext = $lb_superCage->post->getRaw('exit');
-    $lb_cap = $lb_superCage->post->getInt('caption');
-    $lb_fol = $lb_superCage->post->getInt('nofollow');
-    $lb_max = $lb_superCage->post->getInt('maxpics');  
+    $lb_bor = $superCage->post->getInt('border');
+    $lb_tim = $superCage->post->getInt('slidetimer');
+    $lb_spd = $superCage->post->getInt('sizespeed');
+    $lb_not = $superCage->post->getInt('notimer');
+    $lb_ext = $superCage->post->getRaw('exit');
+    $lb_cap = $superCage->post->getInt('caption');
+    $lb_fol = $superCage->post->getInt('nofollow');
+    $lb_max = $superCage->post->getInt('maxpics');  
       
     if ($lb_bor == '') {
         cpg_die(ERROR, 'ERROR - BORDER FIELD EMPTY', __FILE__, __LINE__);
