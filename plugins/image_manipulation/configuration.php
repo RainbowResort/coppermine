@@ -20,7 +20,7 @@ require('./plugins/image_manipulation/init.inc.php');
 $name = $lang_plugin_im['display_name'];
 $description = $lang_plugin_im['description'];
 $author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
-$version = '1.0';
+$version = '1.1';
 $install_info = $lang_plugin_im['install_info'];
 $extra_info = $lang_plugin_im['extra_info'];
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62875.0.html" rel="external" class="admin_menu">'.$lang_plugin_im['announcement_thread'].'</a>';
