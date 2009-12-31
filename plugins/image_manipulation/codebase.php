@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: $
-  $Revision: $
-  $LastChangedBy: $
-  $Date: $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
   
