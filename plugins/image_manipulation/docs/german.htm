@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+<title>Image Manipulation PlugIn für cpg1.5.x</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="language" content="en" />
+<meta name="copyright" content="Timo Schewe" />
+<meta name="description" content="" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+<meta http-equiv="imagetoolbar" content="no" />
+<!--
+  SVN version info:
+
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+-->
+<link rel="stylesheet" type="text/css" href="../../../docs/style/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../../docs/style/screen.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../../../docs/style/print.css" media="print" />
+<link rel="shortcut icon" href="../../../favicon.ico" />
+<script src="../../../js/jquery-1.3.2.js" type="text/javascript"></script>
+<script src="../../../js/jquery.treeview.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $("#toclist").treeview({
+            collapsed: true,
+            animated: "medium",
+            control:"#sidetreecontrol"
+        });
+    });
+</script>
+</head>
+    <body>
+<h1>Plugin für CPG 1.5.x: Image Manipulation</h1>
+<h2>Worum geht's?</h2>
+<p> Dieses PlugIn ermöglicht es dem Besucher, non-destruktiv die Bilder auf der Seite displayimage.php zu verändern. Je nach Konfiguration des PlugIns werden die Einstellungen für jedes Bild in einem Cookie auf dem Computer des Besuchers gespeichert (besucht er dasselbe Bild später erneut, so sind seine Einstellungen wieder da), und die URL wird dynamisch angepasst (gibt der Besucher also den Link an jemand anders weiter, so sieht der das Bild mit dem Einstellungen, die er bevorzugte). Dieses PlugIn fügt etwa 30 KByte an Javascript zur Seite hinzu.</p>
+
+<p><b>Verfügbare Effekte im Kompatibilitätsmodus oder falls der Besucher den IE als Browser benutzt</b><br /><br />
+<ul>
+<li>Helligkeit (LED-Regler)</li>
+<li>Original</li>
+<li>Weichzeichnen</li>
+<li>S/W</li>
+<li>Negativ</li>
+<li>Relief</li>
+<li>Spiegeln hori</li>
+<li>Spiegeln vert</li>
+</ul></p>
+
+<p><b>Verfügbare Effekte mit abgeschalteten Kompatibilitätsmodus und falls der Besucher nicht den IE als Browser benutzt</b><br /><br />
+<ul>
+<li>Helligkeit (LED-Regler)</li>
+<li>Kontrast (LED-Regler)</li>
+<li>Sättigung (LED-Regler)</li>
+<li>Schärfe (LED-Regler)</li>
+<li>Original</li>
+<li>Sepia</li>
+<li>Spiegeln vert</li>
+<li>Spiegeln hori</li>
+<li>Negativ</li>
+<li>Relief</li>
+<li>Weichzeichnen</li>
+</ul></p>
+
+<h2>Browser-Kompatibilität</h2>
+<p>Die Effekte funktionieren mit<br /><br />
+<ul>
+<li>IE 5.5+</li>
+<li>Opera 9.5+</li>
+<li>Firefox 2+</li>
+<li>Chrome 3+</li>
+<li>die meisten anderen Browser sollten ebenfalls funktionieren oder zumindest problemlos weiterarbeiten</li></ul></p>
+
+<h2>Bitte beachten:</h2>
+<p><ul><li>Dieses PlugIn funktioniert nur dann, wenn 'Transparente Grafik &uuml;ber dem tats&auml;chlichen Bild einf&uuml;gen, um Bilderdiebstahl zu reduzieren' in den Galerie-Einstellungen deaktiviert ist.</li>
+<li>Dieses PlugIn und das PlugIn 'mirror' dürfen nicht zugleich benutzt werden.</li>
+<li>Die neuen Schaltflächen sind nur für Benutzer verfügbar, die Javascript aktiviert haben. Alle anderen sehen nichts.</li>
+<li>Es ist empfohlen, den Kompatibilitätsmodus zu benutzen. Tust du das nicht, so hängt es vom Browser des Besuchers ab, welche Effekte verfügbar sind.</li>
+<li>Benutze die Konfigurations-Seite, die du über den Plugin-Manager erreichst, um Kompatibilitätsmodus, die Benutzung von Cookies und URL-Werten einzustellen.</li></ul></p>
+
+</body>
+</html>

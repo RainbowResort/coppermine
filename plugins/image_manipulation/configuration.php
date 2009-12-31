@@ -25,6 +25,7 @@ $install_info = $lang_plugin_im['install_info'];
 $extra_info = $lang_plugin_im['extra_info'];
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62875.0.html" rel="external" class="admin_menu">'.$lang_plugin_im['announcement_thread'].'</a>';
 $configuration_link = '<a href="index.php?file=image_manipulation/admin" class="admin_menu">'.$lang_plugin_im['im_configuration'].'</a>';
-$install_info .= '<br />' . $announcement_thread;
-$extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread;
+$documentation_link = '<a href="plugins/image_manipulation/docs/' . $documentation_file  . '.htm" class="admin_menu">'.$lang_plugin_im['im_documentation'].'</a>';
+$install_info .= '<br />' . $announcement_thread . '&nbsp;' . $documentation_link;
+$extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread . '&nbsp;' . $documentation_link;
 ?>

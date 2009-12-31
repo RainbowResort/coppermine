@@ -27,4 +27,11 @@ if (file_exists("./plugins/image_manipulation/lang/{$CONFIG['lang']}.php")) {
     require ("./plugins/image_manipulation/lang/{$CONFIG['lang']}.php");
 } 
 
+// Determine the help file link
+if (file_exists("./plugins/image_manipulation/docs/{$CONFIG['lang']}.htm")) {
+    $documentation_file = $CONFIG['lang'];
+} else {
+    $documentation_file = 'english';
+}
+
 ?>
