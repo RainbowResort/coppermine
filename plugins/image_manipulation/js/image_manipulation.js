@@ -77,12 +77,7 @@ function im_init()
         var im_cookieval = 0;
         if (im_usecookies)
         {
-            var im_getpid = window.location.href.split("pid=");
-            var im_getpid2;
-            if (im_getpid[1].indexOf(";") != -1) im_getpid2 = im_getpid[1].split(";")[0];
-            else if (im_getpid[1].indexOf("#") != -1) im_getpid2 = im_getpid[1].split("#")[0];
-            else im_getpid2 = im_getpid[1];
-            im_pid = parseInt(im_getpid2);
+            im_pid = parseInt(js_vars.picture_id);
             if (!isNaN(im_pid)) 
             {
                 im_cookieval = parseInt(im_readCookie('cpgim_'+im_pid));
