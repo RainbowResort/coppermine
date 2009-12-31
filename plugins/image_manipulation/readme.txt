@@ -57,8 +57,4 @@ Please note:
  * This plugin and the plugin 'mirror' may not be used at the same time.
  * The buttons will only be available for visitors with javascript turned on. Others won't notice a thing.
  * It is highly recommended to use compatibility mode. If you don't, it depends on the visitor's browser which effects will be available.
- * Use the config page to disable compatible mode (not recommended)
- * Use the config page to disable url values
- * Use the config page to disable cookies
-
-If you like to contribute a localisation, copy im_english.js to im_yourlanguage.js, open with a text editor and adapt the strings (first lines). The plugin will automatically use the correct language file if it exists, otherwise it defaults to im_english.js.
+ * Use the config page to set up compatibility mode, URL values and cookies.

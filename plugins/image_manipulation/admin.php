@@ -97,26 +97,26 @@ if ($CONFIG['plugin_im_urlvalues'] == '1') {
 
 
 
-pageheader("Image Manipulation Admin Page");
+pageheader($lang_plugin_im['display_name']);
 list($timestamp, $form_token) = getFormToken();
 echo <<< EOT
 <form action="index.php?file=image_manipulation/admin" method="post" name="im_settings">
 EOT;
-starttable('100%', "Image Manipulation v" . $version, 3, 'cpg_zebra');
+starttable('100%', $lang_plugin_im['plugin_configuration'] . ': ' . $lang_plugin_im['main_title'] . ' v' . $version, 3, 'cpg_zebra');
 echo <<< EOT
 	<tr>
 		<td class="tablef" colspan="3" >
 EOT;
 if ($superCage->post->keyExists('submit')) {
     if ($config_changes_counter > 0) {
-        msg_box('', 'Update was successful', '', '', 'success');
+        msg_box('', $lang_plugin_im['update_success'], '', '', 'success');
     } else {
-        msg_box('', 'There were no changes', '', '', 'validation');
+        msg_box('', $lang_plugin_im['no_changes'], '', '', 'validation');
     }
 } else {
 	echo <<< EOT
-	Image Manipulation &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)
-
+	{$lang_plugin_im['display_name']} &copy; Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-welt.de</a>)
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,62875.0.html" rel="external" class="admin_menu">{$lang_plugin_im['announcement_thread']}</a>
 EOT;
 }
 echo <<< EOT
@@ -124,36 +124,36 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			Use compatible mode
+			{$lang_plugin_im['usecompatible']}
 		</td>
 		<td colspan="1">
-			<input type="radio" name="plugin_im_compatible" id="plugin_im_compatible_1" class="radio" value="1" {$option_output['plugin_im_compatible_1']} /><label for="plugin_im_compatible_1" class="clickable_option">Yes</label><br />
-			<input type="radio" name="plugin_im_compatible" id="plugin_im_compatible_0" class="radio" value="0" {$option_output['plugin_im_compatible_0']} /><label for="plugin_im_compatible_0" class="clickable_option">No</label>
+			<input type="radio" name="plugin_im_compatible" id="plugin_im_compatible_1" class="radio" value="1" {$option_output['plugin_im_compatible_1']} /><label for="plugin_im_compatible_1" class="clickable_option">{$lang_plugin_im['enable']}</label><br />
+			<input type="radio" name="plugin_im_compatible" id="plugin_im_compatible_0" class="radio" value="0" {$option_output['plugin_im_compatible_0']} /><label for="plugin_im_compatible_0" class="clickable_option">{$lang_plugin_im['disable']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			Use cookies
+			{$lang_plugin_im['usecookies']}
 		</td>
 		<td colspan="1">
-			<input type="radio" name="plugin_im_cookies" id="plugin_im_cookies_1" class="radio" value="1" {$option_output['plugin_im_cookies_1']} /><label for="plugin_im_cookies_1" class="clickable_option">Yes</label><br />
-			<input type="radio" name="plugin_im_cookies" id="plugin_im_cookies_0" class="radio" value="0" {$option_output['plugin_im_cookies_0']} /><label for="plugin_im_cookies_0" class="clickable_option">No</label>
+			<input type="radio" name="plugin_im_cookies" id="plugin_im_cookies_1" class="radio" value="1" {$option_output['plugin_im_cookies_1']} /><label for="plugin_im_cookies_1" class="clickable_option">{$lang_plugin_im['enable']}</label><br />
+			<input type="radio" name="plugin_im_cookies" id="plugin_im_cookies_0" class="radio" value="0" {$option_output['plugin_im_cookies_0']} /><label for="plugin_im_cookies_0" class="clickable_option">{$lang_plugin_im['disable']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td valign="top">
-			Use URL values
+			{$lang_plugin_im['useurlvalues']}
 		</td>
 		<td colspan="1">
-			<input type="radio" name="plugin_im_urlvalues" id="plugin_im_urlvalues_1" class="radio" value="1" {$option_output['plugin_im_urlvalues_1']} /><label for="plugin_im_urlvalues_1" class="clickable_option">Yes</label><br />
-			<input type="radio" name="plugin_im_urlvalues" id="plugin_im_urlvalues_0" class="radio" value="0" {$option_output['plugin_im_urlvalues_0']} /><label for="plugin_im_urlvalues_0" class="clickable_option">No</label>
+			<input type="radio" name="plugin_im_urlvalues" id="plugin_im_urlvalues_1" class="radio" value="1" {$option_output['plugin_im_urlvalues_1']} /><label for="plugin_im_urlvalues_1" class="clickable_option">{$lang_plugin_im['enable']}</label><br />
+			<input type="radio" name="plugin_im_urlvalues" id="plugin_im_urlvalues_0" class="radio" value="0" {$option_output['plugin_im_urlvalues_0']} /><label for="plugin_im_urlvalues_0" class="clickable_option">{$lang_plugin_im['disable']}</label>
 		</td>
 	</tr>
 	<tr>
 		<td class="tablef" colspan="3">
 			<input type="hidden" name="form_token" value="{$form_token}" />
 			<input type="hidden" name="timestamp" value="{$timestamp}" />
-			<button type="submit" class="button" name="submit" value="Submit">Submit</button>
+			<button type="submit" class="button" name="submit" value="Submit">{$lang_plugin_im['submit']}</button>
 		</td>
 	</tr>
 EOT;

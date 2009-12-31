@@ -18,7 +18,6 @@
   
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-
 // Add js files
 $thisplugin->add_action('page_start','include_js_maniplug');
 
@@ -29,29 +28,39 @@ $thisplugin->add_action('plugin_install','im_install');
 $thisplugin->add_action('plugin_uninstall','im_uninstall');
 
 
-function include_js_maniplug() {
-  global $JS, $CONFIG;
-  if (defined('DISPLAYIMAGE_PHP')) 
-  {  
-    if ($CONFIG['plugin_im_compatible'] == '1')
-    {
-    	$JS['includes'][] = "./plugins/image_manipulation/pixastic_compatible.js";
+function include_js_maniplug() 
+{
+    global $JS, $CONFIG, $lang_plugin_im;
+    require('./plugins/image_manipulation/init.inc.php');
+
+    if (defined('DISPLAYIMAGE_PHP')) 
+    {  
+        set_js_var('im_strlightness', $lang_plugin_im['im_strlightness']);
+        set_js_var('im_strreset', $lang_plugin_im['im_strreset']);
+        set_js_var('im_strbw', $lang_plugin_im['im_strbw']);
+        set_js_var('im_strsepia', $lang_plugin_im['im_strsepia']);
+        set_js_var('im_strflipv', $lang_plugin_im['im_strflipv']);
+        set_js_var('im_strfliph', $lang_plugin_im['im_strfliph']);
+        set_js_var('im_strinvert', $lang_plugin_im['im_strinvert']);
+        set_js_var('im_stremboss', $lang_plugin_im['im_stremboss']);
+        set_js_var('im_strblur', $lang_plugin_im['im_strblur']);
+        set_js_var('im_strcontrast', $lang_plugin_im['im_strcontrast']);
+        set_js_var('im_strsatur', $lang_plugin_im['im_strsatur']);
+        set_js_var('im_strsharpen', $lang_plugin_im['im_strsharpen']);
+        set_js_var('im_useurlvalues', $CONFIG['plugin_im_urlvalues']);
+        set_js_var('im_usecookies', $CONFIG['plugin_im_cookies']);
+
+        if ($CONFIG['plugin_im_compatible'] == '1')
+        {
+        	$JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
+        }
+        else
+        {
+        	$JS['includes'][] = "./plugins/image_manipulation/js/pixastic.js";
+        }
+        
+        $JS['includes'][] = "./plugins/image_manipulation/js/image_manipulation.js";
     }
-    else
-    {
-    	$JS['includes'][] = "./plugins/image_manipulation/pixastic.js";
-    }
-    
-    
-    if (file_exists("./plugins/image_manipulation/im_{$CONFIG['lang']}.js")) 
-    {
-      $JS['includes'][] = "./plugins/image_manipulation/im_{$CONFIG['lang']}.js";
-    }
-    else
-    {
-      $JS['includes'][] = "./plugins/image_manipulation/im_english.js";
-    }
-  }
 }
 
 
@@ -69,7 +78,6 @@ function im_install() {
 // uninstall and drop settings table
 function im_uninstall() {
     global $CONFIG;
-
     // Delete the plugin config records
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_im_compatible'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_im_cookies'");

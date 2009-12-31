@@ -15,10 +15,16 @@
   $Date$
   **************************************************/
 
-$name='Image manipulation';
-$description="This plugin allows the visitor to non-destructively manipulate the image using new buttons on displayimage.php";
-$author='Timo Schewe (<a href="http://www.timos-welt.de" rel="external" class="external">Timos-Welt</a>) - JS library Pixastic by <a href="http://www.pixastic.com" rel="external" class="external">Jacob Seidelin</a>';
-$version='0.9';
-$install_info = "";
-$extra_info = '<span class="admin_menu"><a href="http://forum.coppermine-gallery.net/index.php?topic=62875" rel="external" title="Announcement thread">Image manipulation Announcement</a></span> <span class="admin_menu"><a href="index.php?file=image_manipulation/admin">Configure this plugin</a></span>';
+require('./plugins/image_manipulation/init.inc.php');
+  
+$name = $lang_plugin_im['display_name'];
+$description = $lang_plugin_im['description'];
+$author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
+$version = '1.0';
+$install_info = $lang_plugin_im['install_info'];
+$extra_info = $lang_plugin_im['extra_info'];
+$announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62875.0.html" rel="external" class="admin_menu">'.$lang_plugin_im['announcement_thread'].'</a>';
+$configuration_link = '<a href="index.php?file=image_manipulation/admin" class="admin_menu">'.$lang_plugin_im['im_configuration'].'</a>';
+$install_info .= '<br />' . $announcement_thread;
+$extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread;
 ?>
