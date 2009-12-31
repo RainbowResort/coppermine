@@ -1,17 +1,19 @@
 <?php
-/**********************************************************************
-  Coppermine 1.5.x Plugin - CompressHTML v1.0
-  *********************************************************************
+/**************************************************
+  Coppermine 1.5.x Plugin - Compress HTML
+  *************************************************
   Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
-  *********************************************************************
+  *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
-  *********************************************************************
-  Plugin "CompressHTML"
-  $VERSION$=1.0
-  *********************************************************************/
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
   
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
