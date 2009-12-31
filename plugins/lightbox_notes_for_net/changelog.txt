@@ -20,6 +20,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-31 [M] Counted version up from 1.1 to 2.0 {GauGau}
+2009-12-31 [A] Added i18n for plugin configuration screen {GauGau}
 2009-12-31 [B] Fixed uninstall routine {GauGau}
 2009-12-31 [M] Removed unneeded files {GauGau}
 2009-12-31 [D] Added documentation {GauGau}

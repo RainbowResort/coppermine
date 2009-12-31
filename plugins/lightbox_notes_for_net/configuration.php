@@ -10,24 +10,17 @@
   $Date$
   **************************************************/
 
-$name='LightBox NotesFor.net';
+require_once('./plugins/lightbox_notes_for_net/init.inc.php');
+$name = $lang_plugin_lightbox_notes_for_net['display_name'];
+$configuration_link = '<a href="index.php?file=lightbox_notes_for_net/admin" class="admin_menu">' . sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']) . '</a> ';
+$documentation_link = '<a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm" class="admin_menu greybox">' . $lang_plugin_lightbox_notes_for_net['plugin_documentation'] . '</a> ';
+$announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62905.0.html" class="admin_menu">' . $lang_plugin_lightbox_notes_for_net['announcement_thread'] . '</a>';
+$extra_info = $configuration_link . $documentation_link . $announcement_thread;
+$install_info = $documentation_link . $announcement_thread;
+$author='Joe Carver ' . $lang_plugin_lightbox_notes_for_net['aka'] . ' i-imagine';
 
-$extra_info = <<<EOT
-<a href="index.php?file=lightbox_notes_for_net/admin" class="admin_menu">Configure LightBox Plugin</a>	
-<a href="plugins/lightbox_notes_for_net/docs/english.htm" class="admin_menu greybox">Plugin documentation</a>
-<a href="http://forum.coppermine-gallery.net/index.php/topic,62905.0.html" class="admin_menu">Plugin announcement</a>
-<br />Check the announcement thread for updates.
-EOT;
+$version='2.0';
 
-$author='Joe Carver aka i-imagine';
-
-$version='1.1';
-
-$description= <<< EOT
-
-This plugin will override the default popup for the fullsize picture and will show a LightBox instead.
-<br /> Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
-
-EOT;
+$description = $lang_plugin_lightbox_notes_for_net['description'];
 
 ?>
