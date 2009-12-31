@@ -9,6 +9,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-31 [A] Added svn keywords to non-binary files {GauGau}
 2009-12-31 [A] Added plugin to SVN repository {GauGau}
 2009-12-31 [A] Renamed plugin folder {GauGau}
 2009-12-31 [A] Moved files around {GauGau}
