@@ -69,7 +69,7 @@ $superCage = Inspekt::makeSuperCage();
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
-starttable('100%', '>Configure the settings of your LightBox plugin');
+starttable('100%', 'Configure the settings of your LightBox plugin', 2);
 echo <<< EOT
         <tr>
             <td class="tableb"> 
@@ -149,7 +149,9 @@ echo <<< EOT
             </td>
         </tr>			
         <tr>			
-            <td class="tableb" align="right">
+            <td class="tablef">
+            </td>
+            <td class="tablef">
                 <input type="submit" name="submit" value="Submit" /> 
             </td>
         </tr>
@@ -207,7 +209,6 @@ if ($superCage->post->keyExists('submit')) {
     exit;
 }
 
-endtable();
 
 pagefooter();
 
