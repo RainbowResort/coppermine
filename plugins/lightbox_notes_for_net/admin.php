@@ -69,143 +69,91 @@ $superCage = Inspekt::makeSuperCage();
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
-starttable("85%");
+starttable('100%', '>Configure the settings of your LightBox plugin');
 echo <<< EOT
-	<tr><td>
-	
-	<table border="0" cellspacing="2" cellpadding="2" width= "85%">
-			<tr>
-			<td><br /><b>Configure the settings of your LightBox plugin.</b></td>
-			</tr>
-			<tr>
-			<td></td>
-			</tr>
-			<tr>
-			<td> 
-			<hr> Show slideshow timer bar - <b>Will use more of visitor's cpu</b>
-			</td>
-			<td>
-			<br />
-			<select name="notimer" id="notimer">
-                 <option value="1" $sel_not>No timer bar</option>
-                 <option value="0" $sel_notb>Show timer bar</option>
-            </select>
-			</td>
-			</tr>
-			<tr>
-			<td> 
-			<hr> Return to last or first slide's page on exit
-			</td>
-			<td> 
-			<br />
-			<select name="exit" id="exit">
-                 <option value="1" $sel_ext>Return to last</option>
-                 <option value="0" $sel_extb>Return to first</option>
-            </select>
-			</td>
-			</tr>
-			<tr>
-			<td> 
-			<hr> Show image captions below titles
-			</td>
-			<td>
-			<br />
-			<select name="caption" id="caption">
-                 <option value="1" $sel_cap>Show captions</option>
-                 <option value="0" $sel_capb>No captions</option>
-            </select>
-			</td>
-			</tr>
-			<tr>
-			<td> 
-			<hr> Add attribute "nofollow" to LightBox links
-			</td>
-			<td>
-			<br />
-			<select name="nofollow" id="nofollow">
-                 <option value="1" $sel_fol>Add nofollow</option>
-                 <option value="0" $sel_folb>No nofollow</option>
-            </select>
-			</td>
-			</tr> 
-			<tr>			
-			<td>
-			<hr> Set slideshow timer interval<br />-  set in milliseconds - 1000 = 1 second 
-			</td>
-			</tr> 
-			<tr>		
-			<td class="tableb" align="right">Slideshow timer:</td>
-            <td>
-            <input type="text" name="slidetimer" class="textinput" size="3" value="$lb_tim" />ms
+        <tr>
+            <td class="tableb"> 
+                Show slideshow timer bar - <b>Will use more of visitor's cpu</b>
             </td>
-            </tr>
-			<tr>			
-			<td>
-			<hr> Set image swap time <br />-  set in milliseconds - 500 = 1/2 second
-			</td>
-			</tr> 
-			<tr>		
-			<td class="tableb" align="right">Swap time:</td>
-            <td>
-            <input type="text" name="sizespeed" class="textinput" size="3" value="$lb_spd" />ms
-            </td>
-            </tr>
-			<tr>			
-			<td>
-			<hr> Set width of border <br />-  Set in pixels
-			</td>
-			</tr> 
-			<tr>		
-			<td class="tableb" align="right">Border width:</td>
-            <td>
-            <input type="text" name="border" class="textinput" size="2" value="$lb_bor" />pixels
-            </td>
-            </tr>
-			<tr>			
-			<td>
-			<hr> Set number of files in album to list for Slideshow<br /> <b> 1 = All files in album</b> 
-			<br /> Large albums and galleries might want to limit to 500 or less
-			</td>
-			</tr> 
-			<tr>		
-			<td class="tableb" align="right">Files in piclist:</td>
-            <td>
-            <input type="text" name="maxpics" class="textinput" size="4" value="$lb_max" />files listed
-            </td>
-            </tr>			
-			<tr>
-			<td> </td>
-			</tr> 
-			<tr>
-			<td class="tableb" align="right">
-            </td>
-            <td>
-            </td>
-            </tr>	
-			<tr>
-			<td class="tableb" align="right"><br /></td>
-            </tr>
-            <tr>
             <td class="tableb">
+                <select name="notimer" id="notimer">
+                     <option value="1" $sel_not>No timer bar</option>
+                     <option value="0" $sel_notb>Show timer bar</option>
+                </select>
             </td>
-            <td>
-			</td>
-			</tr>
-			<tr>
-			<td class="tableb">
-			</td>
-			<td>
-			</td>
-			</tr>
-			<tr>			
-	       <td class="tableb" align="right"><br /><br />
-			<span>
-			<input name="update" type="hidden" id="update" value="1" />
-			<input type="submit" name="submit" value="Submit" /> 
-		</span>
-		</td>
-		</tr>
-		</td>		
+        </tr>
+        <tr>
+            <td class="tableb"> 
+                 Return to last or first slide's page on exit
+            </td>
+            <td class="tableb"> 
+                <select name="exit" id="exit">
+                    <option value="1" $sel_ext>Return to last</option>
+                    <option value="0" $sel_extb>Return to first</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tableb"> 
+                 Show image captions below titles
+            </td>
+            <td class="tableb">
+                <select name="caption" id="caption">
+                    <option value="1" $sel_cap>Show captions</option>
+                    <option value="0" $sel_capb>No captions</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tableb"> 
+                 Add attribute "nofollow" to LightBox links
+            </td>
+            <td class="tableb">
+                <select name="nofollow" id="nofollow">
+                     <option value="1" $sel_fol>Add nofollow</option>
+                     <option value="0" $sel_folb>No nofollow</option>
+                </select>
+            </td>
+        </tr> 
+        <tr>			
+            <td class="tableb">
+                 Set slideshow timer interval<br />-  set in milliseconds - 1000 = 1 second 
+            </td>
+            <td class="tableb">
+                <input type="text" name="slidetimer" class="textinput" size="3" value="$lb_tim" /> ms
+            </td>
+        </tr>
+        <tr>			
+            <td class="tableb">
+                 Set image swap time <br />-  set in milliseconds - 500 = 1/2 second
+            </td>
+            <td class="tableb">
+                <input type="text" name="sizespeed" class="textinput" size="3" value="$lb_spd" />ms
+            </td>
+        </tr>
+        <tr>			
+            <td class="tableb">
+                 Set width of border <br />-  Set in pixels
+            </td>
+            <td class="tableb">
+                <input type="text" name="border" class="textinput" size="2" value="$lb_bor" />pixels
+            </td>
+        </tr>
+        <tr>			
+            <td class="tableb">
+                 Set number of files in album to list for Slideshow<br /> <b> 1 = All files in album</b>.<br />
+                 Large albums and galleries might want to limit to 500 or less
+            </td>
+            <td class="tableb">
+                <input type="text" name="maxpics" class="textinput" size="4" value="$lb_max" />files listed
+            </td>
+        </tr>			
+        <tr>			
+            <td class="tableb" align="right">
+                <input type="submit" name="submit" value="Submit" /> 
+            </td>
+        </tr>
+        </td>		
 EOT;
 endtable();
 echo <<< EOT
@@ -213,7 +161,7 @@ echo <<< EOT
 EOT;
 
 //change values in the configuration table - minimal data filtering assumes admin use only
-if ($superCage->post->keyExists('update')) {
+if ($superCage->post->keyExists('submit')) {
     
     $lb_bor = $superCage->post->getInt('border');
     $lb_tim = $superCage->post->getInt('slidetimer');

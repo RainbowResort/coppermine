@@ -20,6 +20,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-12-31 [C] Cleaned up table construct for admin page (HTML-conformity!) {GauGau}
+2009-12-31 [C] Removed unneeded <hr>-tag {GauGau}
 2009-12-31 [C] Fixing code flaw in admin.php (starttable needs endtable!) {GauGau}
 2009-12-31 [C] Fixing nesting for form tag {GauGau}
 2009-12-31 [C] Fixing indentation of PHP code for admin screen {GauGau}
