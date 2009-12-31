@@ -1,24 +1,13 @@
-/**
- * Coppermine Photo Gallery
- *
- * Copyright (c) 2003-2009 Coppermine Dev Team
- * v1.1 originally written by Gregory DEMAR
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Coppermine version: 1.5.xx
- *
- * LightBox plugin ver 1.0 for Coppermine
- *
- * Plugin Written by Joe Carver - http://gallery.josephcarver.com/natural/ - http://i-imagine.net/artists/ - http://photos-by.joe-carver.com/
- * Based on plugin by jeepguy_1980 and mod. by Sander Weyens
- * 27 December 2009
- * 
- *  Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
- *
+/**************************************************
+  Coppermine 1.5.x Plugin - LightBox (NotesFor.net)
+  *************************************************
+  Copyright (c) 2009 Joe Carver and Helori Lamberty
+  *************************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  ********************************************
 [===========================================================================]
 [   Copyright (c) 2009, Helori LAMBERTY                                     ]
 [   All rights reserved.                                                    ]
@@ -52,7 +41,7 @@
 [   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH        ] 
 [   DAMAGE.                                                                 ]
 [===========================================================================]
-*/
+  **************************************************/
 
 (function($) {
     $.fn.lightBox = function(settings) {

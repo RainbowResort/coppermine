@@ -1,3 +1,14 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - LightBox (NotesFor.net)
+  *************************************************
+  Copyright (c) 2009 Joe Carver and Helori Lamberty
+  *************************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 Changelog
 =========
 [A] = Added new feature
@@ -9,11 +20,12 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2009-12-31 [A] Added svn keywords to non-binary files {GauGau}
-2009-12-31 [A] Added plugin to SVN repository {GauGau}
-2009-12-31 [A] Renamed plugin folder {GauGau}
-2009-12-31 [A] Moved files around {GauGau}
-2009-12-27 [A] Release Version 1.0 {Joe Carver}
+2009-12-31 [M] Added file headers {GauGau}
+2009-12-31 [M] Added svn keywords to non-binary files {GauGau}
+2009-12-31 [M] Added plugin to SVN repository {GauGau}
+2009-12-31 [M] Renamed plugin folder {GauGau}
+2009-12-31 [M] Moved files around {GauGau}
+2009-12-27 [M] Release Version 1.0 {Joe Carver}
 2009-12-27 [A] Added configuration page to plugin package {Joe Carver}
 2009-12-27 [A] Visual timer can now be set on/off (to save CPU) {Joe Carver}
 2009-12-27 [A] Added "nofollow" attribute - configurable {Joe Carver}
