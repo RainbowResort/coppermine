@@ -9,129 +9,103 @@
   $Date$
   **************************************************/
 
-/**
- * Coppermine Photo Gallery
+
+LightBox ver 1.0 for Coppermine
+Author: Joe Carver aka "i-imagine" 
+ ========
+ * LightBox plugin for Coppermine 1.5.x
  *
- * Copyright (c) 2003-2009 Coppermine Dev Team
- * v1.1 originally written by Gregory DEMAR
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Coppermine version: 1.5.xx
- *
- * LightBox plugin ver 1.0 for Coppermine
- *
- * Plugin Written by Joe Carver - http://gallery.josephcarver.com/natural/ - http://i-imagine.net/artists/ - http://photos-by.joe-carver.com/
+ * Plugin Written by Joe Carver 
+                                - http://gallery.josephcarver.com/natural/ 
+                                - http://i-imagine.net/artists/ 
+                                - http://photos-by.joe-carver.com/
  * Based on plugin by jeepguy_1980 and mod. by Sander Weyens
- * 27 December 2009
  * 
  *  Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
  *
-*/
+ ========
+
+This plugin will override the default popup that shows the fullsize picture and 
+will show a LightBox instead. Options to set include adding image captions, a "nofollow"
+attribute, border sizes and slideshow timing.
+
+It uses NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net which has been
+modified for Coppermibe 1.5.x by Joe Carver. Snips from the Coppermine 1.4.x LightBox Slideshow
+have been used for some of the modifications. The plugin also depends on the jsquery 
+built into cpg 1.5.x
+
+========
+
+To install:
+1) Download the zip file to your computer
+2) Log in as admin and install with Plugin Manager
+3) Enjoy it
+
+========
+
+All major functions can be changed through the plugin configuration page.
+
+1) Set visual slideshow timer bar. The plugin can show a counting timer for the 
+slideshow. It can be CPU intensive and slow the pages for your visitors.
+Default is OFF - no timer bar.
+
+2) Return on exit setting allows for the page to refresh with either the last 
+or the first slide seen. Default is last slide.
+
+3) Show image captions - default is yes. Some users that have very long captions
+might want to use no/off. The captions will occupy screen space that the image can use.
+
+4) Add atttribute "nofollow" to LightBox links. This will tell search engines not to 
+follow and list the links to help prevent listing excess duplicate content.
+Default is yes, add "nofollow".
+
+5) Set slideshow timer interval - set by millisecond. {6000 = 6 seconds, 7500 = 7.5 seconds)
+Should not be set to very short times to allow for next image preload. 
+Default is 6 seconds - 6000.
+
+6) Set image swap time - set by millisecond. (500 = 1/2 second) Too fast will make image change
+unpleasant. Default is 820.
+
+7) Set width of border in pixels. Default is 8.
+
+8) Set number of files in album to list for Slideshow. Will limit the number of links/files
+in Piclist (slideshow list) on each displayimage page. Large albums and/or galleries might 
+want to limit the value. For example: "Lastup" from the home page leads to all links 
+in a gallery. The corresponding displayimage.php page then would have all of those links listed
+for the LightBox.
+Default is 1 (all files)
+
+========
+
+To uninstall:
+
+1) Use Plugin Manager to uninstall
+
+========
+
+Credits:	
+
+1) jeepguy_1980 for LightBox plugin code
+
+2) Sander Weyens for LightBox .js mods and Coppermine mod.
+
+3) Helori LAMBERTY - NotesFor.net for NFLightBox 
+
+4) Timos Welt and Joachim Muller for EnlargeIt! counter.php
+
+========
 
 
-				LightBox ver 1.0 for Coppermine
-				Author: Joe Carver aka "i-imagine" 
-	 ========
-	 * Coppermine version: 1.5.x
-	 *
-	 * LightBox plugin ver 1.0 for Coppermine
-	 *
-	 * Plugin Written by Joe Carver - http://gallery.josephcarver.com/natural/ - http://i-imagine.net/artists/ - http://photos-by.joe-carver.com/
-	 * Based on plugin by jeepguy_1980 and mod. by Sander Weyens
-	 * 27 December 2009
-	 * 
-	 *  Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
-	 *
-	 ========
-	
-	This plugin will override the default popup that shows the fullsize picture and 
-	will show a LightBox instead. Options to set include adding image captions, a "nofollow"
-	attribute, border sizes and slideshow timing.
-	
-	It uses NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net which has been
-	modified for Coppermibe 1.5.x by Joe Carver. Snips from the Coppermine 1.4.x LightBox Slideshow
-	have been used for some of the modifications. The plugin also depends on the jsquery 
-	built into cpg 1.5.x
-	
-	========
-	
-	To install:
-	
-	1) Download the zip file to your computer
-	
-	2) Log in as admin and install with Plugin Manager
-	
-	3) Enjoy it
-	
-	========
-	
-	All major functions can be changed through the plugin configuration page.
-	
-		1) Set visual slideshow timer bar. The plugin can show a counting timer for the 
-		slideshow. It can be CPU intensive and slow the pages for your visitors.
-		Default is OFF - no timer bar.
-		
-		2) Return on exit setting allows for the page to refresh with either the last 
-		or the first slide seen. Default is last slide.
-		
-		3) Show image captions - default is yes. Some users that have very long captions
-		might want to use no/off. The captions will occupy screen space that the image can use.
-		
-		4) Add atttribute "nofollow" to LightBox links. This will tell search engines not to 
-		follow and list the links to help prevent listing excess duplicate content.
-		Default is yes, add "nofollow".
-		
-		5) Set slideshow timer interval - set by millisecond. {6000 = 6 seconds, 7500 = 7.5 seconds)
-		Should not be set to very short times to allow for next image preload. 
-		Default is 6 seconds - 6000.
-		
-		6) Set image swap time - set by millisecond. (500 = 1/2 second) Too fast will make image change
-		unpleasant. Default is 820.
-		
-		7) Set width of border in pixels. Default is 8.
-		
-		8) Set number of files in album to list for Slideshow. Will limit the number of links/files
-		in Piclist (slideshow list) on each displayimage page. Large albums and/or galleries might 
-		want to limit the value. For example: "Lastup" from the home page leads to all links 
-		in a gallery. The corresponding displayimage.php page then would have all of those links listed
-		for the LightBox.
-		Default is 1 (all files)
-	
-	========
-	
-	To uninstall:
+To Do:
 
-	1) Use Plugin Manager to uninstall
-	
-	========
-	
-	Credits:	
-	
-	1) jeepguy_1980 for LightBox plugin code
-	
-	2) Sander Weyens for LightBox .js mods and Coppermine mod.
-	
-	3) Helori LAMBERTY - NotesFor.net for NFLightBox 
-	
-	4) Timos Welt and Joachim Muller for EnlargeIt! counter.php
-	
-	========
+- nf.lightbox.css + .css for plugin needs work
 
-	
-		To Do:
-		
-		- nf.lightbox.css + .css for plugin needs work
-	
-		- config page 
-	
-	========
-	
-	*  Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
-	*  Copyright Notice to remain with file
+- config page 
+
+========
+
+*  Using NFLightbox Copyright (c) 2009, Helori LAMBERTY NotesFor.net
+*  Copyright Notice to remain with file
 
 [===========================================================================]
 [   Copyright (c) 2009, Helori LAMBERTY                                     ]
@@ -166,7 +140,6 @@
 [   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH        ] 
 [   DAMAGE.                                                                 ]
 [===========================================================================]
-*/
+
 	
-	========
-	end
+
