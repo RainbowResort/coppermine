@@ -30,7 +30,7 @@ $thisplugin->add_action('plugin_uninstall','im_uninstall');
 
 function include_js_maniplug() 
 {
-    global $JS, $CONFIG, $lang_plugin_im;
+    global $JS, $CONFIG, $lang_plugin_im, $CPG_PHP_SELF;
     require('./plugins/image_manipulation/init.inc.php');
 
 	$im_pages_array = array('displayimage.php');
