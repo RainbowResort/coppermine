@@ -33,7 +33,8 @@ function include_js_maniplug()
     global $JS, $CONFIG, $lang_plugin_im;
     require('./plugins/image_manipulation/init.inc.php');
 
-    if (defined('DISPLAYIMAGE_PHP')) 
+	$im_pages_array = array('displayimage.php');
+	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE)
     {  
         set_js_var('im_strlightness', $lang_plugin_im['im_strlightness']);
         set_js_var('im_strreset', $lang_plugin_im['im_strreset']);
