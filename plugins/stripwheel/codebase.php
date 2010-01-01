@@ -23,9 +23,9 @@ $thisplugin->add_action('page_start','include_js_wheelplug');
 
 
 function include_js_wheelplug() {
-  global $JS;
-	$im_pages_array = array('displayimage.php');
-	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE)
+  global $JS, $CPG_PHP_SELF;
+	$stripwheel_pages_array = array('displayimage.php');
+	if (in_array($CPG_PHP_SELF, $stripwheel_pages_array) == TRUE)
     {
     $JS['includes'][] = 'plugins/stripwheel/jquery.mousewheel.js';
     $JS['includes'][] = 'plugins/stripwheel/makewheel.js';
