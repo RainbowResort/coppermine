@@ -39,7 +39,7 @@ require ('./plugins/slider/include/load_sliderset.php');
 // include some stuff in page header
 function slider_head()
 {        
-global $template_header, $lang_plugin_slider, $CONFIG;
+global $template_header, $lang_plugin_slider, $CONFIG, $CPG_PHP_SELF;
     
     $slider_headcode = "
 <!-- Start Slider ".$lang_plugin_slider['version']." Headcode -->";
@@ -55,20 +55,26 @@ global $template_header, $lang_plugin_slider, $CONFIG;
 EOS;
 
 // only insert stuff if we're on album list page
- if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP')) 
- { 
+ $slider_pages_array = array('index.php');
+ if (in_array($CPG_PHP_SELF, $slider_pages_array) == TRUE)
+ {
  	 $template_header = str_replace('{META}','{META}'.$slider_headcode,$template_header);
  }
 
 }
 
 
-function slider_mainpage($matches)
+function slider_mainpage()
 {
-  // only insert stuff if we're on album list page
-  if (defined('INDEX_PHP') && !defined('DISPLAYIMAGE_PHP') && !defined('THUMBNAILS_PHP'))
-  { 
-        global $CONFIG,$lang_plugin_slider,$FORBIDDEN_SET,$SLIDERSET,$lang_meta_album_names,$META_ALBUM_SET;
+ global $CONFIG,$lang_plugin_slider,$FORBIDDEN_SET,$SLIDERSET,$lang_meta_album_names,$META_ALBUM_SET, $CPG_PHP_SELF,$matches;
+ 
+ // only insert stuff if we're on album list page
+ 
+ 
+ $slider_pages_array = array('index.php');
+ 
+ if (in_array($CPG_PHP_SELF, $slider_pages_array) == TRUE)
+ {
         if($matches[1] != 'slider') {
           return $matches;
         }
@@ -96,7 +102,8 @@ function slider_mainpage($matches)
   $slider_pics2='';
   $slider_pics3='';
   $slider_FORBIDDEN_SET = "";
-  if ($FORBIDDEN_SET != "") $slider_FORBIDDEN_SET = $FORBIDDEN_SET;
+  //if ($FORBIDDEN_SET != "") $slider_FORBIDDEN_SET = $FORBIDDEN_SET;
+  if ($FORBIDDEN_SET != "") $slider_FORBIDDEN_SET = "$FORBIDDEN_SET";
 
   // request string for meta album toprated
   if ($SLIDERSET['slider_album'] == "toprated") {
@@ -150,9 +157,9 @@ function slider_mainpage($matches)
       }
       else
       {
-       $slider_lien="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" alt=\"".$slider_pictitle."\" /></a>";
-       $slider_lien2="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" alt=\"".$slider_pictitle."\" /></a>";
-       $slider_lien3="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" alt=\"".$slider_pictitle."\" /></a>";
+       $slider_lien="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" onclick=\"copyspeed=0;\" alt=\"".$slider_pictitle."\" /></a>";
+       $slider_lien2="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" onclick=\"copyspeed=0;\" alt=\"".$slider_pictitle."\" /></a>";
+       $slider_lien3="<a href=\"displayimage.php?pid=$slider_key\"><img src=\"".$slider_file."\" border=\"0\" onclick=\"copyspeed=0;\" alt=\"".$slider_pictitle."\" /></a>";
       }
     // building javascript code
     $slider_pics .= $slider_lien."&nbsp;";

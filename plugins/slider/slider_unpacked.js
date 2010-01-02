@@ -44,7 +44,7 @@ function cpgslideplug_fillup()
 	cpgslid_getbrwsxy();
 	cpgslid_oldbrwsx=cpgslid_brwsx;
 	cpgslid_oldbrwsy=cpgslid_brwsy;
-	lefttime=setInterval("cpgslideplug_slideleft()",55)
+	lefttime=setInterval("cpgslideplug_slideleft()",75)
 }
 function cpgslideplug_resize()
 	{

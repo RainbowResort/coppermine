@@ -25,7 +25,7 @@ $lang_plugin_slider = array(
 'slider_bgcolor' => 'Couleur arrière plan (Background)(vide = transparant)',
 'display_name' => 'Slider Plugin',
 'main_title' => 'Slider Plugin',
-'version' => '$VERSION$=0.3',
+'version' => '0.5',
 'pluginmanager' => 'Plugin Manager',
 'slider_install' => 'Slider Installation',
 'install_button' => 'Installez maintenant',

@@ -25,7 +25,7 @@ $lang_plugin_slider = array(
 'slider_bgcolor' => 'Color de fondo (vacio = transparente)',
 'display_name' => 'PlugIn Deslizador',
 'main_title' => 'Slider PlugIn',
-'version' => '$VERSION$=0.3',
+'version' => '0.5',
 'pluginmanager' => 'Administrador de Plugins',
 'slider_install' => 'Instalacion del Deslizador',
 'install_button' => 'Instalar Ahora',

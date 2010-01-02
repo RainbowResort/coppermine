@@ -67,6 +67,11 @@ Don't try to contact the plugin author for support - post on the board publicly 
 Change log:
 -----------
 
+v0.5 (2010/01/02)
+-----------------
+- fixed: plugin didn't work together with other plugins
+- reduced animation speed to make IE8 work with it
+
 v0.4 (2009/12/04)
 -----------------
 * fixed: SQL error

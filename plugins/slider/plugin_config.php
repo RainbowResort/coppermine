@@ -67,7 +67,7 @@ if ($slider_superCage->post->keyExists('update')) {
 
 require('./plugins/slider/include/load_sliderset.php');
 
-starttable('100%', $lang_plugin_slider['main_title'].' - Version '.str_replace('$VERSION$=','',$lang_plugin_slider['version']), 3);
+starttable('100%', $lang_plugin_slider['main_title'].' - Version '.$lang_plugin_slider['version']);
 ?>
 
 <TR>

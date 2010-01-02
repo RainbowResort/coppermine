@@ -25,7 +25,7 @@ $lang_plugin_slider = array(
 'slider_bgcolor' => 'Background color (empty = transparent)',
 'display_name' => 'Slider PlugIn',
 'main_title' => 'Slider PlugIn',
-'version' => '$VERSION$=0.3',
+'version' => '0.5',
 'pluginmanager' => 'Plugin Manager',
 'slider_install' => 'Slider Installation',
 'install_button' => 'Install now',
