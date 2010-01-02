@@ -1,14 +1,14 @@
 <?php
-/**************************************************
+/*******************************************************
   Coppermine 1.5.x Plugin - LightBox (NotesFor.net)
-  *************************************************
-  Copyright (c) 2009 Joe Carver and Helori Lamberty
-  *************************************************
+  ******************************************************
+  Copyright (c) 2009-2010 Joe Carver and Helori Lamberty
+  ******************************************************
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-  **************************************************/
+  *****************************************************/
 
 require_once('./plugins/lightbox_notes_for_net/init.inc.php');
 pageheader(sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']));
@@ -70,7 +70,7 @@ $superCage = Inspekt::makeSuperCage();
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
-starttable('100%', sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']), 2, 'cpg_zebra');
+starttable('100%', $lightbox_notes_for_net_icon_array['configure'] . sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']), 2, 'cpg_zebra');
 echo <<< EOT
         <tr>
             <td> 
@@ -152,7 +152,7 @@ echo <<< EOT
             <td class="tablef">
             </td>
             <td class="tablef">
-                <button type="submit" class="button" name="submit" value="{$lang_plugin_lightbox_notes_for_net['submit']}">{$lang_plugin_lightbox_notes_for_net['submit']}</button> 
+                <button type="submit" class="button" name="submit" value="{$lang_plugin_lightbox_notes_for_net['submit']}">{$lightbox_notes_for_net_icon_array['ok']}{$lang_plugin_lightbox_notes_for_net['submit']}</button> 
             </td>
         </tr>
         </td>		

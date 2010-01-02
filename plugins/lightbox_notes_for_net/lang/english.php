@@ -1,14 +1,14 @@
 <?php
-/**************************************************
+/*******************************************************
   Coppermine 1.5.x Plugin - LightBox (NotesFor.net)
-  *************************************************
-  Copyright (c) 2009 Joe Carver and Helori Lamberty
-  *************************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/lightbox_notes_for_net/configuration.php $
-  $Revision: 6951 $
+  ******************************************************
+  Copyright (c) 2009-2010 Joe Carver and Helori Lamberty
+  ******************************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/lightbox_notes_for_net/admin.php $
+  $Revision: 6970 $
   $LastChangedBy: gaugau $
-  $Date: 2009-12-31 13:23:18 +0100 (Do, 31. Dez 2009) $
-  **************************************************/
+  $Date: 2009-12-31 15:57:05 +0100 (Do, 31. Dez 2009) $
+  *****************************************************/
   
 if (!defined('IN_COPPERMINE')) { 
     die('Not in Coppermine...');

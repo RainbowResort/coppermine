@@ -1,13 +1,13 @@
-/**************************************************
+/*******************************************************
   Coppermine 1.5.x Plugin - LightBox (NotesFor.net)
-  *************************************************
-  Copyright (c) 2009 Joe Carver and Helori Lamberty
-  *************************************************
+  ******************************************************
+  Copyright (c) 2009-2010 Joe Carver and Helori Lamberty
+  ******************************************************
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-  **************************************************/
+  *****************************************************/
   
 Changelog
 =========
@@ -20,6 +20,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-02 [M] Updated header information to reflect new year {GauGau}
+2010-01-02 [A] Added icons to plugin buttons {GauGau}
 2010-01-01 [A] Added classes to select tags on admin screen {GauGau}
 2010-01-01 [A] Added alternating lines to admin screen {GauGau}
 2010-01-01 [A] Added i18n to admin screen {GauGau}
