@@ -11,133 +11,181 @@
   *****************************************************/
 
 require_once('./plugins/lightbox_notes_for_net/init.inc.php');
-pageheader(sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']));
 
-if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
+if (!GALLERY_ADMIN_MODE) {
+    cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
+}
 
 global $lang_plugin_php, $CONFIG, $lang_common, $lang_pluginmgr_php, $lang_admin_php;
+if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'js/jquery.spinbutton.js';
+}
+if (in_array('plugins/lightbox_notes_for_net/admin.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'plugins/lightbox_notes_for_net/admin.js';
+}
+list($timestamp, $form_token) = getFormToken();
+pageheader(sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']));
 
-// variables for plugin
-$lb_bor  = $CONFIG['plugin_lightbox_nfn_border'];	
-$lb_tim  = $CONFIG['plugin_lightbox_nfn_slidetimer'];
-$lb_spd  = $CONFIG['plugin_lightbox_nfn_sizespeed'];
-$lb_not  = $CONFIG['plugin_lightbox_nfn_notimer'];			
-$lb_ext  = $CONFIG['plugin_lightbox_nfn_image_exit'];
-$lb_cap  = $CONFIG['plugin_lightbox_nfn_caption'];
-$lb_fol  = $CONFIG['plugin_lightbox_nfn_nofollow'];			
-$lb_max  = $CONFIG['plugin_lightbox_nfn_maxpics'];
+// get sanitized POST parameters
+if ($superCage->post->keyExists('submit')) {
+	//Check if the form token is valid
+	if(!checkFormToken()){
+		cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+	}
+  // Define the sanitization patterns
+  $sanitization_array = array(
+      'plugin_lightbox_nfn_border' => array('type' => 'int', 'min' => '0', 'max' => '99'),
+      'plugin_lightbox_nfn_sizespeed' => array('type' => 'int', 'min' => '0', 'max' => '2000'),
+      'plugin_lightbox_nfn_notimer' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_image_exit' => array('type' => 'int', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_caption' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_maxpics' => array('type' => 'int', 'min' => '1', 'max' => '3000'),
+      'plugin_lightbox_nfn_buttonset' => array('type' => 'int', 'min' => '0', 'max' => '1'),
+  );
+  $config_changes_counter = 0;
+  foreach ($sanitization_array as $san_key => $san_value) {
+      if (isset($CONFIG[$san_key]) == TRUE) { // only loop if config value is set --- start
+          if ($san_value['type'] == 'checkbox') { // type is checkbox --- start
+            if ($superCage->post->getInt($san_key) == $san_value['max'] && $CONFIG[$san_key] != $san_value['max']) {
+                $CONFIG[$san_key] = $san_value['max'];
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            } elseif($superCage->post->getInt($san_key) == $san_value['min'] && $CONFIG[$san_key] != $san_value['min']) {
+                $CONFIG[$san_key] = $san_value['min'];
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            } elseif($superCage->post->keyExists($san_key) != TRUE && $CONFIG[$san_key] != '0') {
+                $CONFIG[$san_key] = 0;
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                $config_changes_counter++;
+            }
+          } // type is checkbox --- end
+          if ($san_value['type'] == 'int') { // type is integer --- start
+              if ($superCage->post->getInt($san_key) <= $san_value['max'] && $superCage->post->getInt($san_key) >= $san_value['min'] && $superCage->post->getInt($san_key) != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $superCage->post->getInt($san_key);
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is integer --- end
+          if ($san_value['type'] == 'raw') { // type is raw --- start
+              if (isset($san_value['regex_ok']) == TRUE && preg_match($san_value['regex_ok'], $superCage->post->getRaw($san_key)) && $superCage->post->getRaw($san_key) != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $superCage->post->getRaw($san_key);
+				  if ($superCage->post->getRaw($san_key) == 'none') {
+					$CONFIG[$san_key] = '';
+				  }
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is raw --- end
+          if ($san_value['type'] == 'array') { // type is array --- start              
+          $evaluate_value = $superCage->post->getRaw($san_key);
+              if (is_array($evaluate_value) && isset($san_value['regex_ok']) == TRUE && isset($san_value['delimiter']) == TRUE) {
+                  $temp = '';
+                  for ($i = 0; $i <= count($evaluate_value); $i++) {
+                      if (preg_match($san_value['regex_ok'], $evaluate_value[$i])) {
+                          $temp .= $evaluate_value[$i] . $san_value['delimiter'];
+                      }
+                  }
+                  unset($evaluate_value);
+                  $evaluate_value = rtrim($temp, $san_value['delimiter']);
+                  unset($temp);
+              }
+              if ($evaluate_value != $CONFIG[$san_key]) {
+                  $CONFIG[$san_key] = $evaluate_value;
+                  cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
+                  $config_changes_counter++;
+              }
+          } // type is array --- end      } // only loop if config value is set --- end  }
+}
 
-$sel_not = '';	
-if ($lb_not  == '1') {
-   	$sel_not = 'selected="selected"';
-}
-$sel_notb = '';	
-if ($lb_not  == '0') {
-   	$sel_notb = 'selected="selected"';
+// Set the option output stuff 
+if ($CONFIG['plugin_lightbox_nfn_notimer'] == '1') {
+	$option_output['plugin_lightbox_nfn_notimer'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_lightbox_nfn_notimer'] = '';
 }
 
-$sel_ext = '';	
-if ($lb_ext  == '1') {
-   	$sel_ext = 'selected="selected"';
-}
-$sel_extb = '';	
-if ($lb_ext  == '0') {
-   	$sel_extb = 'selected="selected"';
+if ($CONFIG['plugin_lightbox_nfn_image_exit'] == '0') {
+	$option_output['plugin_lightbox_nfn_image_exit_0'] = 'checked="checked"';
+	$option_output['plugin_lightbox_nfn_image_exit_1'] = '';
+} elseif ($CONFIG['plugin_lightbox_nfn_image_exit'] == '1') {	$option_output['plugin_lightbox_nfn_image_exit_0'] = '';
+	$option_output['plugin_lightbox_nfn_image_exit_1'] = 'checked="checked"';
 }
 
-$sel_cap = '';	
-if ($lb_cap  == '1') {
-   	$sel_cap = 'selected="selected"';
-}
-$sel_capb = '';	
-if ($lb_cap  == '0') {
-   	$sel_capb = 'selected="selected"';
+if ($CONFIG['plugin_lightbox_nfn_caption'] == '1') {
+	$option_output['plugin_lightbox_nfn_caption'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_lightbox_nfn_caption'] = '';
 }
 
-$sel_fol = '';	
-if ($lb_fol  == '1') {
-   	$sel_fol = 'selected="selected"';
+if ($CONFIG['plugin_lightbox_nfn_buttonset'] == '0') {
+	$option_output['plugin_lightbox_nfn_buttonset_0'] = 'checked="checked"';
+	$option_output['plugin_lightbox_nfn_buttonset_1'] = '';
+} elseif ($CONFIG['plugin_lightbox_nfn_buttonset'] == '1') {	$option_output['plugin_lightbox_nfn_buttonset_0'] = '';
+	$option_output['plugin_lightbox_nfn_buttonset_1'] = 'checked="checked"';
 }
-$sel_folb = '';	
-if ($lb_fol  == '0') {
-   	$sel_folb = 'selected="selected"';
-}
-
-
-// Make form 
-$superCage = Inspekt::makeSuperCage();
 
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
 starttable('100%', $lightbox_notes_for_net_icon_array['configure'] . sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']), 2, 'cpg_zebra');
+if ($superCage->post->keyExists('submit')) {
+    echo <<< EOT
+	<tr>
+		<td class="tableh2" colspan="2">
+EOT;
+    if ($config_changes_counter > 0) {
+        msg_box('', $lang_plugin_lightbox_notes_for_net['settings_saved'], '', '', 'success');
+    } else {
+        msg_box('', $lang_plugin_lightbox_notes_for_net['no_changes'], '', '', 'validation');
+    }
+echo <<< EOT
+		</td>
+	</tr>
+EOT;
+}
 echo <<< EOT
         <tr>
             <td> 
                 {$lang_plugin_lightbox_notes_for_net['display_slideshow_timer_bar']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_timer_bar" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['slideshow_timer']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
-                <select name="notimer" id="notimer" class="listbox">
-                     <option value="1" $sel_not>No timer bar</option>
-                     <option value="0" $sel_notb>Show timer bar</option>
-                </select>
+                <input type="checkbox" name="plugin_lightbox_nfn_notimer" id="plugin_lightbox_nfn_notimer" class="checkbox" value="1" {$option_output['plugin_lightbox_nfn_notimer']} />
+                <label for="plugin_lightbox_nfn_notimer" class="clickable_option">{$lang_common['yes']}</label>
             </td>
         </tr>
         <tr>
             <td> 
-                 {$lang_plugin_lightbox_notes_for_net['on_exit_goto']}
+                 {$lang_plugin_lightbox_notes_for_net['on_exit_goto']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_exit" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['on_exit_goto']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td> 
-                <select name="exit" id="exit" class="listbox">
-                    <option value="1" $sel_ext>Return to last</option>
-                    <option value="0" $sel_extb>Return to first</option>
-                </select>
+                <input type="radio" name="plugin_lightbox_nfn_image_exit" id="plugin_lightbox_nfn_image_exit_0" class="radio" value="0" {$option_output['plugin_lightbox_nfn_image_exit_0']} /><label for="plugin_lightbox_nfn_image_exit_0" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['return_to_first']}</label>&nbsp;
+			    <input type="radio" name="plugin_lightbox_nfn_image_exit" id="plugin_lightbox_nfn_image_exit_1" class="radio" value="1" {$option_output['plugin_lightbox_nfn_image_exit_1']} /><label for="plugin_lightbox_nfn_image_exit_1" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['return_to_last']}</label>
             </td>
         </tr>
         <tr>
             <td> 
-                 {$lang_plugin_lightbox_notes_for_net['image_caption_below_title']}
+                 {$lang_plugin_lightbox_notes_for_net['image_caption_below_title']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_caption" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['image_caption_below_title']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
-                <select name="caption" id="caption" class="listbox">
-                    <option value="1" $sel_cap>Show captions</option>
-                    <option value="0" $sel_capb>No captions</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td> 
-                 {$lang_plugin_lightbox_notes_for_net['add_nofollow_attribute']}
-            </td>
-            <td>
-                <select name="nofollow" id="nofollow" class="listbox">
-                     <option value="1" $sel_fol>Add nofollow</option>
-                     <option value="0" $sel_folb>No nofollow</option>
-                </select>
-            </td>
-        </tr> 
-        <tr>			
-            <td>
-                 {$lang_plugin_lightbox_notes_for_net['slideshow_timer']} 
-            </td>
-            <td>
-                <input type="text" name="slidetimer" class="textinput" size="3" maxlength="3" value="$lb_tim" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+                <input type="checkbox" name="plugin_lightbox_nfn_caption" id="plugin_lightbox_nfn_caption" class="checkbox" value="1" {$option_output['plugin_lightbox_nfn_caption']} />
+                <label for="plugin_lightbox_nfn_caption" class="clickable_option">{$lang_common['yes']}</label>
             </td>
         </tr>
         <tr>			
             <td>
-                 {$lang_plugin_lightbox_notes_for_net['image_swap_time']}
+                 {$lang_plugin_lightbox_notes_for_net['image_swap_time']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_swap" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['image_swap_time']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
-                <input type="text" name="sizespeed" class="textinput" size="3" maxlength="3" maxlength="3" value="$lb_spd" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+                <input type="text" name="plugin_lightbox_nfn_sizespeed" id="plugin_lightbox_nfn_sizespeed" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_sizespeed']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
             </td>
         </tr>
         <tr>			
             <td>
-                 {$lang_plugin_lightbox_notes_for_net['border_width']}
+                 {$lang_plugin_lightbox_notes_for_net['border_width']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_border" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['border_width']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
-                <input type="text" name="border" class="textinput" size="3" maxlength="2" value="$lb_bor" /> {$lang_plugin_lightbox_notes_for_net['pixels']}
+                <input type="text" name="plugin_lightbox_nfn_border" id="plugin_lightbox_nfn_border" class="textinput" size="4" maxlength="2" value="{$CONFIG['plugin_lightbox_nfn_border']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['pixels']}
             </td>
         </tr>
         <tr>			
@@ -145,14 +193,25 @@ echo <<< EOT
                  {$lang_plugin_lightbox_notes_for_net['files_in_album_list']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_alblist" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['files_in_album_list']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
-                <input type="text" name="maxpics" class="textinput" size="3" maxlength="4" value="$lb_max" /> {$lang_plugin_lightbox_notes_for_net['files_listed']}
+                <input type="text" name="plugin_lightbox_nfn_maxpics" id="plugin_lightbox_nfn_maxpics" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_maxpics']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['files_listed']}
+            </td>
+        </tr>
+        <tr>
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['button_set']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_buttonset" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['button_set']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td> 
+                <input type="radio" name="plugin_lightbox_nfn_buttonset" id="plugin_lightbox_nfn_buttonset_0" class="radio" value="0" {$option_output['plugin_lightbox_nfn_buttonset_0']} /><label for="plugin_lightbox_nfn_buttonset_0" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['use_theme_buttons']}</label>&nbsp;
+			    <input type="radio" name="plugin_lightbox_nfn_buttonset" id="plugin_lightbox_nfn_buttonset_1" class="radio" value="1" {$option_output['plugin_lightbox_nfn_buttonset_1']} /><label for="plugin_lightbox_nfn_buttonset_1" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['use_plugin_buttons']}</label>
             </td>
         </tr>			
         <tr>			
             <td class="tablef">
             </td>
             <td class="tablef">
-                <button type="submit" class="button" name="submit" value="{$lang_plugin_lightbox_notes_for_net['submit']}">{$lightbox_notes_for_net_icon_array['ok']}{$lang_plugin_lightbox_notes_for_net['submit']}</button> 
+                <input type="hidden" name="form_token" value="{$form_token}" />
+    			<input type="hidden" name="timestamp" value="{$timestamp}" />
+    			<button type="submit" class="button" name="submit" value="{$lang_plugin_lightbox_notes_for_net['submit']}">{$lightbox_notes_for_net_icon_array['ok']}{$lang_plugin_lightbox_notes_for_net['submit']}</button> 
             </td>
         </tr>
         </td>		
@@ -162,56 +221,6 @@ echo <<< EOT
 </form>
 EOT;
 
-//change values in the configuration table - minimal data filtering assumes admin use only
-if ($superCage->post->keyExists('submit')) {
-    
-    $lb_bor = $superCage->post->getInt('border');
-    $lb_tim = $superCage->post->getInt('slidetimer');
-    $lb_spd = $superCage->post->getInt('sizespeed');
-    $lb_not = $superCage->post->getInt('notimer');
-    $lb_ext = $superCage->post->getRaw('exit');
-    $lb_cap = $superCage->post->getInt('caption');
-    $lb_fol = $superCage->post->getInt('nofollow');
-    $lb_max = $superCage->post->getInt('maxpics');  
-      
-    if ($lb_bor == '') {
-        cpg_die(ERROR, 'ERROR - BORDER FIELD EMPTY', __FILE__, __LINE__);
-    }
-    if ($lb_tim == '') {
-        cpg_die(ERROR, 'ERROR - TIMER FIELD EMPTY', __FILE__, __LINE__);
-    }
-    if ($lb_spd == '') {
-        cpg_die(ERROR, 'ERROR - RESIZE FIELD EMPTY', __FILE__, __LINE__);
-    }
-    if ($lb_max == '') {
-        cpg_die(ERROR, 'ERROR - MAX FILES FIELD EMPTY', __FILE__, __LINE__);
-    }
-    if ($lb_fol < 0) {
-        cpg_die(ERROR, 'ERROR - FOLLOW FIELD EMPTY', __FILE__, __LINE__);
-    }
-    if ($lb_cap < 0) {
-        cpg_die(ERROR, 'ERROR - CAPTION FIELD EMPTY', __FILE__, __LINE__);
-    }	
-    
-                
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_bor' WHERE name = 'plugin_lightbox_nfn_border'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_tim' WHERE name = 'plugin_lightbox_nfn_slidetimer'");	
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_spd' WHERE name = 'plugin_lightbox_nfn_sizespeed'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_not' WHERE name = 'plugin_lightbox_nfn_notimer'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_ext' WHERE name = 'plugin_lightbox_nfn_image_exit'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_cap' WHERE name = 'plugin_lightbox_nfn_caption'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_fol' WHERE name = 'plugin_lightbox_nfn_nofollow'");
-    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$lb_max' WHERE name = 'plugin_lightbox_nfn_maxpics'");		
-    
-    
-    cpgRedirectPage('index.php?file=lightbox_notes_for_net/admin', $lang_common['information'], 'LightBox plugin settings saved successfully', 1);
-    
-    exit;
-}
-
-
 pagefooter();
-
-ob_end_flush();
 
 ?>

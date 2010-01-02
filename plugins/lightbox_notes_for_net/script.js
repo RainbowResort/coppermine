@@ -7,7 +7,7 @@
   $Revision$
   $LastChangedBy$
   $Date$
-  *****************************************************/
+  *****************************************************
 [===========================================================================]
 [   Copyright (c) 2009, Helori LAMBERTY                                     ]
 [   All rights reserved.                                                    ]
@@ -42,6 +42,14 @@
 [   DAMAGE.                                                                 ]
 [===========================================================================]
   **************************************************/
+
+$(document).ready(function() {
+    $('#lightbox-container-image').css('padding', js_vars.plugin_lightbox_nfn_border);
+});
+
+$(function() {
+    $('a.lightbox').lightBox();
+});
 
 (function($) {
     $.fn.lightBox = function(settings) {
@@ -82,34 +90,34 @@
             // Configuration related to navigation
             fixedNavigation: false,
             // Configuration related to images
-            imageLoading: 'plugins/lightbox_notes_for_net/images/loading.gif',
-            imageBtnPrev: 'plugins/lightbox_notes_for_net/images/prev.png',
-            imageBtnNext: 'plugins/lightbox_notes_for_net/images/next.png',
-            imageBtnClose: 'plugins/lightbox_notes_for_net/images/close.png',
-            imageBlank: 'plugins/lightbox_notes_for_net/images/lightbox-blank.gif',
-            imageBtnBottomPrev: 'plugins/lightbox_notes_for_net/images/back_bot.png',
-            imageBtnBottomNext: 'plugins/lightbox_notes_for_net/images/start.png',
-            imageBtnPlay: 'plugins/lightbox_notes_for_net/images/start.png',
-            imageBtnStop: 'plugins/lightbox_notes_for_net/images/pause.png',
+            imageLoading: js_vars.plugin_lightbox_nfn_image_loading,
+            imageBtnPrev: js_vars.plugin_lightbox_nfn_image_btnprev,
+            imageBtnNext: js_vars.plugin_lightbox_nfn_image_btnnext,
+            imageBtnClose: js_vars.plugin_lightbox_nfn_image_btnclose,
+            imageBlank: 'images/spacer.gif',
+            imageBtnBottomPrev: js_vars.plugin_lightbox_nfn_image_btnbottomprev,
+            imageBtnBottomNext: js_vars.plugin_lightbox_nfn_image_btnbottomnext,
+            imageBtnPlay: js_vars.plugin_lightbox_nfn_image_btnplay,
+            imageBtnStop: js_vars.plugin_lightbox_nfn_image_btnstop,
             // Configuration related to container image box
-            // containerBorderSize: 8,
-            // containerResizeSpeed: 800,
+            containerBorderSize: js_vars.plugin_lightbox_nfn_border,
+            containerResizeSpeed: js_vars.plugin_lightbox_nfn_sizespeed,
 
             // Configuration related to texts in caption. For example: Image 2 of 8. You can alter either "Image" and "of" texts.
-            txtImage: 'Image',
-            txtOf: 'of',
-            txtPrev: '&nbsp;Previous',
-            txtNext: '&nbsp;Next',
+            txtImage: js_vars.lang_lightbox_nfn_image,
+            txtOf: js_vars.lang_lightbox_nfn_of,
+            txtPrev: js_vars.lang_lightbox_nfn_previous,
+            txtNext: js_vars.lang_lightbox_nfn_next,
             // Configuration related to keyboard navigation
-            keyToClose: '27',
+            keyToClose: 'c',
             keyToPrev: 'p',
             keyToNext: 'n',
 			//Go to last image's page 1 = yes || 0 = first image' page
-			// image_exit: 1,
+			image_exit: js_vars.plugin_lightbox_nfn_image_exit,
 			//Show the slideshow timer bar 1 = no show
-			// noshowTimer: 1, 
+			noshowTimer: js_vars.plugin_lightbox_nfn_notimer, 
             //Configuration related to slide show
-            // slideShowTimer: 5900,
+            slideShowTimer: js_vars.config_slideshow_interval,
             // Don´t alter these variables in any way
             step: 0,
             imageArray: [],

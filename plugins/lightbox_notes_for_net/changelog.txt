@@ -20,8 +20,16 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-02 [M] Counted version up from 2.1 to 2.2 {GauGau}
+2010-01-02 [A] Added option to select button sets {GauGau}
+2010-01-02 [O] Removed nofollow option (links to JS-driven content mustn't be spidered) {GauGau}
+2010-01-02 [A] Added spinbutton to admin screen {GauGau}
+2010-01-02 [A] Added i18n of JavaScript parts {GauGau}
+2010-01-02 [O] Removed option slideshow interval (such an option already exists in coppermine's core and subsequently doesn't make sense to configure independantly) {GauGau}
+2010-01-02 [B] Cleaned up page_meta call {GauGau}
 2010-01-02 [M] Updated header information to reflect new year {GauGau}
 2010-01-02 [A] Added icons to plugin buttons {GauGau}
+2010-01-01 [M] Counted version up from 2.0 to 2.1 {GauGau}
 2010-01-01 [A] Added classes to select tags on admin screen {GauGau}
 2010-01-01 [A] Added alternating lines to admin screen {GauGau}
 2010-01-01 [A] Added i18n to admin screen {GauGau}
