@@ -19,7 +19,7 @@ $extra_info = $configuration_link . $documentation_link . $announcement_thread;
 $install_info = $documentation_link . $announcement_thread;
 $author='Joe Carver ' . $lang_plugin_lightbox_notes_for_net['aka'] . ' i-imagine';
 
-$version='2.0';
+$version='2.1';
 
 $description = $lang_plugin_lightbox_notes_for_net['description'];
 

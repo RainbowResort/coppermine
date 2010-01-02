@@ -10,11 +10,12 @@
   $Date$
   **************************************************/
 
-pageheader('LightBox Configuration');
+require_once('./plugins/lightbox_notes_for_net/init.inc.php');
+pageheader(sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']));
 
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
 
-global $lang_plugin_php, $CONFIG, $lang_common, $lang_pluginmgr_php, $lang_admin_php, $icon_array;
+global $lang_plugin_php, $CONFIG, $lang_common, $lang_pluginmgr_php, $lang_admin_php;
 
 // variables for plugin
 $lb_bor  = $CONFIG['plugin_lightbox_nfn_border'];	
@@ -69,90 +70,89 @@ $superCage = Inspekt::makeSuperCage();
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
-starttable('100%', 'Configure the settings of your LightBox plugin', 2);
+starttable('100%', sprintf($lang_plugin_lightbox_notes_for_net['configure_plugin_x'], $lang_plugin_lightbox_notes_for_net['display_name']), 2, 'cpg_zebra');
 echo <<< EOT
         <tr>
-            <td class="tableb"> 
-                Show slideshow timer bar - <b>Will use more of visitor's cpu</b>
+            <td> 
+                {$lang_plugin_lightbox_notes_for_net['display_slideshow_timer_bar']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_timer_bar" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['slideshow_timer']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
-            <td class="tableb">
-                <select name="notimer" id="notimer">
+            <td>
+                <select name="notimer" id="notimer" class="listbox">
                      <option value="1" $sel_not>No timer bar</option>
                      <option value="0" $sel_notb>Show timer bar</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td class="tableb"> 
-                 Return to last or first slide's page on exit
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['on_exit_goto']}
             </td>
-            <td class="tableb"> 
-                <select name="exit" id="exit">
+            <td> 
+                <select name="exit" id="exit" class="listbox">
                     <option value="1" $sel_ext>Return to last</option>
                     <option value="0" $sel_extb>Return to first</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td class="tableb"> 
-                 Show image captions below titles
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['image_caption_below_title']}
             </td>
-            <td class="tableb">
-                <select name="caption" id="caption">
+            <td>
+                <select name="caption" id="caption" class="listbox">
                     <option value="1" $sel_cap>Show captions</option>
                     <option value="0" $sel_capb>No captions</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td class="tableb"> 
-                 Add attribute "nofollow" to LightBox links
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['add_nofollow_attribute']}
             </td>
-            <td class="tableb">
-                <select name="nofollow" id="nofollow">
+            <td>
+                <select name="nofollow" id="nofollow" class="listbox">
                      <option value="1" $sel_fol>Add nofollow</option>
                      <option value="0" $sel_folb>No nofollow</option>
                 </select>
             </td>
         </tr> 
         <tr>			
-            <td class="tableb">
-                 Set slideshow timer interval<br />-  set in milliseconds - 1000 = 1 second 
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['slideshow_timer']} 
             </td>
-            <td class="tableb">
-                <input type="text" name="slidetimer" class="textinput" size="3" value="$lb_tim" /> ms
-            </td>
-        </tr>
-        <tr>			
-            <td class="tableb">
-                 Set image swap time <br />-  set in milliseconds - 500 = 1/2 second
-            </td>
-            <td class="tableb">
-                <input type="text" name="sizespeed" class="textinput" size="3" value="$lb_spd" />ms
+            <td>
+                <input type="text" name="slidetimer" class="textinput" size="3" maxlength="3" value="$lb_tim" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
             </td>
         </tr>
         <tr>			
-            <td class="tableb">
-                 Set width of border <br />-  Set in pixels
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['image_swap_time']}
             </td>
-            <td class="tableb">
-                <input type="text" name="border" class="textinput" size="2" value="$lb_bor" />pixels
+            <td>
+                <input type="text" name="sizespeed" class="textinput" size="3" maxlength="3" maxlength="3" value="$lb_spd" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
             </td>
         </tr>
         <tr>			
-            <td class="tableb">
-                 Set number of files in album to list for Slideshow<br /> <b> 1 = All files in album</b>.<br />
-                 Large albums and galleries might want to limit to 500 or less
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['border_width']}
             </td>
-            <td class="tableb">
-                <input type="text" name="maxpics" class="textinput" size="4" value="$lb_max" />files listed
+            <td>
+                <input type="text" name="border" class="textinput" size="3" maxlength="2" value="$lb_bor" /> {$lang_plugin_lightbox_notes_for_net['pixels']}
+            </td>
+        </tr>
+        <tr>			
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['files_in_album_list']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_alblist" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['files_in_album_list']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="text" name="maxpics" class="textinput" size="3" maxlength="4" value="$lb_max" /> {$lang_plugin_lightbox_notes_for_net['files_listed']}
             </td>
         </tr>			
         <tr>			
             <td class="tablef">
             </td>
             <td class="tablef">
-                <input type="submit" name="submit" value="Submit" /> 
+                <button type="submit" class="button" name="submit" value="{$lang_plugin_lightbox_notes_for_net['submit']}">{$lang_plugin_lightbox_notes_for_net['submit']}</button> 
             </td>
         </tr>
         </td>		

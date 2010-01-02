@@ -20,6 +20,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-01 [A] Added classes to select tags on admin screen {GauGau}
+2010-01-01 [A] Added alternating lines to admin screen {GauGau}
+2010-01-01 [A] Added i18n to admin screen {GauGau}
 2009-12-31 [C] Cleaned up table construct for admin page (HTML-conformity!) {GauGau}
 2009-12-31 [C] Removed unneeded <hr>-tag {GauGau}
 2009-12-31 [C] Fixing code flaw in admin.php (starttable needs endtable!) {GauGau}
