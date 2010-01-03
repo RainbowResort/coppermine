@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Image manipulation
   *************************************************
-  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  Copyright (c) 2010 Timo Schewe (www.timos-welt.de)
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ require('./plugins/image_manipulation/init.inc.php');
 $name = $lang_plugin_im['display_name'];
 $description = $lang_plugin_im['description'];
 $author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
-$version = '1.1';
+$version = '1.2';
 $install_info = $lang_plugin_im['install_info'];
 $extra_info = $lang_plugin_im['extra_info'];
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62875.0.html" rel="external" class="admin_menu">'.$lang_plugin_im['announcement_thread'].'</a>';

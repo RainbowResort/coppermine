@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Image manipulation
   *************************************************
-  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  Copyright (c) 2010 Timo Schewe (www.timos-welt.de)
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
