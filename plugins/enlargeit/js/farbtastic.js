@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
-  Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
   $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/codebase.php $
   $Revision: 6739 $
   $LastChangedBy: gaugau $
-  $Date: 2009-11-16 19:44:39 +0100 (Mo, 16 Nov 2009) $
+  $Date: 2010-11-16 19:44:39 +0100 (Mo, 16 Nov 2010) $
   **************************************************/
 
 jQuery.fn.farbtastic = function (callback) {

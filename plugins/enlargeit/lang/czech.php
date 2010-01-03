@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
-  Copyright (c) 2009 Timos-Welt (www.timos-welt.de)
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
   *************************************************
   CZECH translation by Drahus (http://dc-foto.com/)
   *************************************************
@@ -14,7 +14,7 @@
   $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/enlargeit/codebase.php $
   $Revision: 6782 $
   $LastChangedBy: gaugau $
-  $Date: 2009-11-25 09:29:32 +0100 (Mi, 25 Nov 2009) $
+  $Date: 2010-11-25 09:29:32 +0100 (Mi, 25 Nov 2010) $
   **************************************************/
   
 if (!defined('IN_COPPERMINE')) { 

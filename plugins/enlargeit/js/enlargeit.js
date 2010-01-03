@@ -1,5 +1,5 @@
 /*  This comment MUST stay intact for legal use, so don't remove it. EnlargeIt! 
-v1.1 - (c) 2008 Timo Schewe - http://enlargeit.timos-welt.de This program is free 
+v1.1 - (c) 2010 Timo Schewe - http://enlargeit.timos-welt.de This program is free 
 software: you can redistribute it and/or modify it under the terms of the GNU 
 General Public License as published by the Free Software Foundation, either 
 version 3 of the License, or (at your option) any later version. See LICENSE.TXT 
