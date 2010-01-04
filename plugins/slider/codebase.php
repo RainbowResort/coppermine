@@ -28,39 +28,24 @@ $thisplugin->add_action('plugin_uninstall','slider_uninstall');
 $thisplugin->add_filter('plugin_block','slider_mainpage');
 
 // Add filter for page head
-$thisplugin->add_filter('page_meta','slider_head');
-
-global $SLIDERSET,$lang_plugin_slider;
-require ('./plugins/slider/include/init.inc.php');
-require ('./plugins/slider/include/load_sliderset.php');
+$thisplugin->add_action('page_start','slider_head');
 
 
 
 // include some stuff in page header
 function slider_head()
 {        
-global $template_header, $lang_plugin_slider, $CONFIG, $CPG_PHP_SELF;
-    
-    $slider_headcode = "
-<!-- Start Slider ".$lang_plugin_slider['version']." Headcode -->";
-    
-    $slider_headcode .= <<<EOS
+    global $SLIDERSET, $CONFIG, $CPG_PHP_SELF, $JS;
+    require ('./plugins/slider/include/load_sliderset.php');
 
-<script type="text/javascript" src="plugins/slider/slider.js"></script>
-<style type="text/css">
-  .sliderimg { cursor: pointer; }
-</style>
-<!-- End Slider Headcode -->
-
-EOS;
-
-// only insert stuff if we're on album list page
- $slider_pages_array = array('index.php');
- if (in_array($CPG_PHP_SELF, $slider_pages_array) == TRUE)
- {
- 	 $template_header = str_replace('{META}','{META}'.$slider_headcode,$template_header);
- }
-
+    // only insert stuff if we're on album list page
+    $slider_pages_array = array('index.php');
+    if (in_array($CPG_PHP_SELF, $slider_pages_array) == TRUE)
+    {
+         $JS['includes'][] = "plugins/slider/slider.js";
+         set_js_var('slider_copyspeed', $SLIDERSET['slider_speed']);
+         set_js_var('slider_autow', $SLIDERSET['slider_autowidth']); 
+    }
 }
 
 
@@ -69,10 +54,10 @@ function slider_mainpage()
  global $CONFIG,$lang_plugin_slider,$FORBIDDEN_SET,$SLIDERSET,$lang_meta_album_names,$META_ALBUM_SET, $CPG_PHP_SELF,$matches;
  
  // only insert stuff if we're on album list page
- 
+    require ('./plugins/slider/include/init.inc.php');
+    require ('./plugins/slider/include/load_sliderset.php');
  
  $slider_pages_array = array('index.php');
- 
  if (in_array($CPG_PHP_SELF, $slider_pages_array) == TRUE)
  {
         if($matches[1] != 'slider') {
@@ -89,11 +74,6 @@ function slider_mainpage()
                 <table border="0" <?php if ($SLIDERSET['slider_autowidth']) echo "width=\"100%\" ";?> id="slidergetwidth" cellspacing="0" cellpadding="0">
                    <tr>
                        <td align="left">
-                           <script type="text/javascript">
-                                var slideshowgap=2;
-                                var copyspeed=<?php echo $SLIDERSET['slider_speed'];?>;
-                                var realcopyspeed=<?php echo $SLIDERSET['slider_speed'];?>;
-                                var cpgslid_brwsx,cpgslid_brwsy,cpgslid_oldbrwsx,cpgslid_oldbrwsy;
 <?php
   // maximum pics to show
   $sliderlimit=$SLIDERSET['slider_numberofpics'];
@@ -151,9 +131,9 @@ function slider_mainpage()
     // link of pic
     
     if ($SLIDERSET['slider_useenlarge'] == 1) {
-       $slider_lien="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" />";
-       $slider_lien2="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" />";
-       $slider_lien3="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" />";
+       $slider_lien="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" style=\"cursor: pointer;\" />";
+       $slider_lien2="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" style=\"cursor: pointer;\" />";
+       $slider_lien3="<img src=\"".$slider_file."\" onclick=\"enlarge(this);\" longdesc=\"".$slider_imgfile."\" border=\"0\" name=\"".$slider_row['pid']."\" class=\"sliderimg\" alt=\"".$slider_pictitle."\" style=\"cursor: pointer;\" />";
       }
       else
       {
@@ -188,14 +168,7 @@ function slider_mainpage()
   //Max height of pics fixed
   $cpgslideplug_sliderheight = $max_height."px";
 
-?>                                var actualwidth='';
-                                var cross_slide;
-                                var cross_slide2;
-                                var slider_autowidth;
-                                <?php if ($SLIDERSET['slider_autowidth']) echo "var autowidth=1;"; else echo "var autowidth=0;";?>
-
-                                slid_addLoad(cpgslideplug_fillup);
-                           </script>
+?>
                                 <span id="slider_temp" style="visibility:visible;position:absolute;top:-100px;white-space:nowrap;left:-9000px;"><?php echo $slider_pics;?></span>
                                 <div id="slider_autow1" style="position:relative<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$SLIDERSET['slider_width']."px"; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;overflow:hidden;white-space:nowrap;">
                                       <div id="slider_autow2" style="white-space:nowrap;position:absolute<?php if (!$SLIDERSET['slider_autowidth']) { echo ';width:'.$SLIDERSET['slider_width']."px"; } ?>;height:<?php echo $cpgslideplug_sliderheight;?>;<?php if ($SLIDERSET['slider_bgcolor']) echo "background-color:".$SLIDERSET['slider_bgcolor'].";";?>">

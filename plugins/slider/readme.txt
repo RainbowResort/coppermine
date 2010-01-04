@@ -67,6 +67,10 @@ Don't try to contact the plugin author for support - post on the board publicly 
 Change log:
 -----------
 
+v0.6 (2010/xx/xx)
+-----------------
+- code cleanup
+
 v0.5 (2010/01/02)
 -----------------
 - fixed: plugin didn't work together with other plugins
