@@ -57,7 +57,7 @@ function annotate_meta($meta){
     if (GALLERY_ADMIN_MODE) {
         set_js_var('visitor_annotate_permission_level', 3);
     } else {
-        set_js_var('visitor_annotate_permission_level', annotate_get_level('    permissions'));
+        set_js_var('visitor_annotate_permission_level', annotate_get_level('permissions'));
     }
     set_js_var('visitor_annotate_user_id', USER_ID);
     set_js_var('annotate_notes_editable', annotate_notes_editable());
