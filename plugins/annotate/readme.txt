@@ -38,6 +38,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2009-01-05 [M] Counted plugin version up to v2.4 {eenemeenemuu}
+2009-01-05 [B] Fixed typo that prevented adding new annotations {eenemeenemuu}
 2009-12-22 [B] Fixed timestamp in meta album 'lastnotes' {eenemeenemuu}
 2009-12-22 [A] Added ajax live search to filter drop-down list {eenemeenemuu}
 2009-12-18 [M] Counted plugin version up to v2.3 {GauGau}

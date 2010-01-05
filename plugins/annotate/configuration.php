@@ -38,7 +38,7 @@ $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_js'], '<a href=
 $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_i18n'], '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
 $author .= '</ul>';
 
-$version = '2.3';
+$version = '2.4';
 
 $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="admin_menu">' . $annotate_icon_array['announcement'] . $lang_plugin_annotate['announcement_thread'] . '</a>';
 $extra_info .= '<a href="index.php?file=annotate/admin" class="admin_menu">' . $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'] . '</a> ';
