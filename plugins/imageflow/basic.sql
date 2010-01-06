@@ -1,0 +1,1 @@
+INSERT INTO `CPG_mod_imageflow` (imageflow_useenlarge,imageflow_pictype,imageflow_width,imageflow_intable,imageflow_numberofpics,imageflow_cache,imageflow_bgcolor,imageflow_procent,imageflow_skipportrait,imageflow_align,imageflow_topcorrect,imageflow_album) VALUES (0,'normal','870px',1,15,0,'000000','0.66',0,'center',0,'random');
