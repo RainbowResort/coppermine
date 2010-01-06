@@ -429,7 +429,7 @@
 			
 			if ($quality < 1 || $quality > 100)
 			{
-				$quality = 67;
+				$quality = 75;
 			}
 			
 			//	JPEG (the final parameter = the quality, 0 = terrible, 100 = pixel perfect)

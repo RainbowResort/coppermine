@@ -126,9 +126,9 @@ function imageflow_mainpage($matches)
       $imageflow_key=$imageflow_row['pid'];
       // path of pic, depending if intermediate image is there or not
       $imageflow_file=get_pic_url($imageflow_row,$IMAGEFLOWSET['imageflow_pictype']);
-      if (!cpgif_my_is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
+      if (!is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
       $imageflow_reflfile=get_pic_url($imageflow_row,'normal');
-      if (!cpgif_my_is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
+      if (!is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
       $imageflow_temppercent = $IMAGEFLOWSET['imageflow_procent'];
       if (($imageflow_row['pwidth']<$CONFIG['picture_width']) && ($imageflow_row['pheight']<$CONFIG['picture_width'])) $imageflow_temppercent = 1;
       // link of pic
@@ -192,9 +192,9 @@ function imageflow_mainpage($matches)
           $imageflow_key=$imageflow_row['pid'];
           // path of pic, depending if intermediate image is there or not
           $imageflow_file=get_pic_url($imageflow_row,$IMAGEFLOWSET['imageflow_pictype']);
-          if (!cpgif_my_is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
+          if (!is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
           $imageflow_reflfile=get_pic_url($imageflow_row,'normal');
-          if (!cpgif_my_is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
+          if (!is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
           $imageflow_temppercent = $IMAGEFLOWSET['imageflow_procent'];
           if (($imageflow_row['pwidth']<$CONFIG['picture_width']) && ($imageflow_row['pheight']<$CONFIG['picture_width'])) $imageflow_temppercent = 1;
           // link of pic
@@ -288,13 +288,4 @@ function imageflow_uninstall()
         return true;
 }
 
-// checking for file (Intermadiate) availablity
-function cpgif_my_is_file($chk_file)
-{
-    $test_wrong = array ("%28","%29","%C3%BC","%5B","%5D","%25","%23","%7E","%c2%A7","%21","%3D","%C2%B4");
-    $test_right = array ('(',')','#','[',']','%','#','~','§','!','=','´');
-    $chk_file = str_replace($test_wrong, $test_right, $chk_file);
-    if(is_file($chk_file)) return true;
-    else return false;
-}
 ?>
