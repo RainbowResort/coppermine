@@ -10,15 +10,17 @@
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.2
   $HeadURL$
-  $Revision: 3464 $
-  $LastChangedBy: gaugau $
-  $Date: 2007-02-06 08:59:38 +0100 (Di, 06 Feb 2007) $
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 $name = 'Search Engine Friendly URLs';
 $description = 'Makes SEF URLs for index, thumbnails, and displayimage.php. (Apache webserver only!)<br />Warning: this plugin is still experimental, there are known issues when using it. Test thoroughly and use at your own risk.<br />When getting unexpected results, disable the plugin and remove the .htaccess file the plugin creates manually (using your FTP app).';
 $author = 'Coppermine Development Team';
-$version = '1.2';
+$version = '1.3';
+$install_info = "If anything goes wrong when installing this plugin and you cannot access your gallery at all anymore, it's a good idea to remove the .htaccess file in the root of your gallery and deleting the plugin via FTP.";
+$extra_info = '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,42568.0.html" rel="external" title="Mirror support">SEF_URLs announcement thread</a></span>';
 ?>

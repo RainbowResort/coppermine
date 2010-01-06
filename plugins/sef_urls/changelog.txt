@@ -1,0 +1,32 @@
+/*************************
+  Coppermine Photo Gallery
+  ************************
+  Copyright (c) 2003-2007 Coppermine Dev Team
+  v1.1 originally written by Gregory DEMAR
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  ********************************************
+  Coppermine version: 1.5.2
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**********************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-01-06 [M] Increased version number to 1.3 {Timo}
+2010-01-06 [D] Added changelog file {Timo}
+2010-01-06 [B] Plugin wasn't working (one & too much in sef_urls_convert) {Timo}

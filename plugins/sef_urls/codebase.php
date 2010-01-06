@@ -10,11 +10,11 @@
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.0
+  Coppermine version: 1.5.2
   $HeadURL$
-  $Revision: 3405 $
-  $LastChangedBy: gaugau $
-  $Date: 2006-12-27 10:06:19 +0100 (Mi, 27 Dez 2006) $
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **********************************************/
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
@@ -38,7 +38,7 @@ $thisplugin->add_filter('page_html','sef_urls_convert');
 /**
  * Convert urls to search-engine friendly (SEF) urls
  */
-function sef_urls_convert(&$html) {
+function sef_urls_convert($html) {
 
     // Rewrite index.php?cat=[category]&page=[page] URLs to index-[category]-page-[page].html
     $html = preg_replace('/index\.php\?cat=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','index-$1-page-$3.html',$html);
@@ -91,8 +91,6 @@ function sef_urls_convert(&$html) {
     // Rewrite ratepic.php?pic=[position]&rate=[rate] URLs to ratepic-[position]-[rate].html
     $html = preg_replace('/ratepic\.php\?pic=([0-9]+)(\&|\&amp;)rate=([0-5])/i','ratepic-$1-$3.html',$html);
     
-
-
     // Return modified HTML
     return $html;
 }
