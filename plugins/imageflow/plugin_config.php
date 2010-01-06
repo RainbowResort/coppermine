@@ -51,6 +51,10 @@ if ($imageflow_superCage->post->keyExists('update')) {
   
   
   $imageflow_skipportrait = $imageflow_superCage->post->getInt('imageflow_skipportrait');
+  $imageflow_auto = $imageflow_superCage->post->getInt('imageflow_auto');
+  $imageflow_usewheel = $imageflow_superCage->post->getInt('imageflow_usewheel');
+  $imageflow_usekeys = $imageflow_superCage->post->getInt('imageflow_usekeys');
+  $imageflow_autotime = $imageflow_superCage->post->getInt('imageflow_autotime');
   $imageflow_align = $imageflow_superCage->post->getAlnum('imageflow_align');
   $imageflow_topcorrect = $imageflow_superCage->post->getInt('imageflow_topcorrect');
   $imageflow_album = $imageflow_superCage->post->getAlnum('imageflow_album');
@@ -67,8 +71,10 @@ if ($imageflow_superCage->post->keyExists('update')) {
   if($imageflow_topcorrect < -200) $imageflow_topcorrect = -200;
   if($imageflow_topcorrect > 400) $imageflow_topcorrect = 400;
   $imageflow_width = preg_replace("/\s+/", "", $imageflow_width);
+  if ($imageflow_autotime < 2) $imageflow_autotime = 2;
+  if ($imageflow_autotime > 20) $imageflow_autotime = 20;
   
-  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}mod_imageflow` SET imageflow_pictype=('$imageflow_pictype'), imageflow_useenlarge=($imageflow_useenlarge),imageflow_album=('$imageflow_album'),imageflow_procent=('$imageflow_procent'), imageflow_topcorrect=($imageflow_topcorrect), imageflow_width=('$imageflow_width'), imageflow_intable=($imageflow_intable), imageflow_numberofpics=($imageflow_numberofpics), imageflow_cache=($imageflow_cache), imageflow_bgcolor=('$imageflow_bgcolor'), imageflow_skipportrait=($imageflow_skipportrait), imageflow_align=('$imageflow_align')";
+  $s="UPDATE `{$CONFIG['TABLE_PREFIX']}mod_imageflow` SET imageflow_usewheel=($imageflow_usewheel),imageflow_usekeys=($imageflow_usekeys),imageflow_auto=($imageflow_auto),imageflow_autotime=($imageflow_autotime),imageflow_pictype=('$imageflow_pictype'), imageflow_useenlarge=($imageflow_useenlarge),imageflow_album=('$imageflow_album'),imageflow_procent=('$imageflow_procent'), imageflow_topcorrect=($imageflow_topcorrect), imageflow_width=('$imageflow_width'), imageflow_intable=($imageflow_intable), imageflow_numberofpics=($imageflow_numberofpics), imageflow_cache=($imageflow_cache), imageflow_bgcolor=('$imageflow_bgcolor'), imageflow_skipportrait=($imageflow_skipportrait), imageflow_align=('$imageflow_align')";
   cpg_db_query($s); 
     pageheader($lang_plugin_imageflow['display_name']);
     msg_box($lang_plugin_imageflow['display_name'], $lang_plugin_imageflow['update_success'], $lang_continue, 'index.php');
@@ -114,6 +120,38 @@ starttable('100%', $lang_plugin_imageflow['main_title'].' - '.$lang_plugin_image
           <td width="50%">
             <input id="imageflow_width" name="imageflow_width" type="int" value="<?php echo $IMAGEFLOWSET['imageflow_width']?>">
           </td>
+        </tr>
+        <tr>
+          <td align="right">
+          	<?php echo $lang_plugin_imageflow['imageflow_auto']?>&nbsp;&nbsp;</td>
+          <td><input name="imageflow_auto" type="radio" value="1" <?php if($IMAGEFLOWSET['imageflow_auto']) echo 'checked="checked"';?> id="imageflow_auto"/>
+            <?php echo $lang_plugin_imageflow['imageflow_yes']?>
+            <input name="imageflow_auto" type="radio" value="0" <?php if(!$IMAGEFLOWSET['imageflow_auto']) echo 'checked="checked"';?> id="imageflow_auto"/>
+            <?php echo $lang_plugin_imageflow['imageflow_no']?> 
+        </tr>
+        <tr>
+          <td width="50%" align="right">
+            <?php echo $lang_plugin_imageflow['imageflow_autotime']?>&nbsp;&nbsp;
+          </td>
+          <td width="50%">
+            <input id="imageflow_autotime" name="imageflow_autotime" type="int" value="<?php echo $IMAGEFLOWSET['imageflow_autotime']?>">
+          </td>
+        </tr>        
+        <tr>
+          <td align="right">
+          	<?php echo $lang_plugin_imageflow['imageflow_usewheel']?>&nbsp;&nbsp;</td>
+          <td><input name="imageflow_usewheel" type="radio" value="1" <?php if($IMAGEFLOWSET['imageflow_usewheel']) echo 'checked="checked"';?> id="imageflow_usewheel"/>
+            <?php echo $lang_plugin_imageflow['imageflow_yes']?>
+            <input name="imageflow_usewheel" type="radio" value="0" <?php if(!$IMAGEFLOWSET['imageflow_usewheel']) echo 'checked="checked"';?> id="imageflow_usewheel"/>
+            <?php echo $lang_plugin_imageflow['imageflow_no']?> 
+        </tr>
+        <tr>
+          <td align="right">
+          	<?php echo $lang_plugin_imageflow['imageflow_usekeys']?>&nbsp;&nbsp;</td>
+          <td><input name="imageflow_usekeys" type="radio" value="1" <?php if($IMAGEFLOWSET['imageflow_usekeys']) echo 'checked="checked"';?> id="imageflow_usekeys"/>
+            <?php echo $lang_plugin_imageflow['imageflow_yes']?>
+            <input name="imageflow_usekeys" type="radio" value="0" <?php if(!$IMAGEFLOWSET['imageflow_usekeys']) echo 'checked="checked"';?> id="imageflow_usekeys"/>
+            <?php echo $lang_plugin_imageflow['imageflow_no']?> 
         </tr>
         <tr>
           <td width="50%" align="right">

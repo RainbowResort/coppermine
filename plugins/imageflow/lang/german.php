@@ -45,5 +45,9 @@ $lang_plugin_imageflow = array(
 'imageflow_normalsize' => 'Bild in Zwischengr&ouml;sse',
 'imageflow_fullsize' => 'Bild in voller Gr&ouml;sse',
 'enlargeoptions' => 'EnlargeIt! Optionen',
+'imageflow_auto' => 'Automatische Animation',
+'imageflow_autotime' => 'Zeit f&uuml;r automatische Animation in Sekunden',
+'imageflow_usewheel' => 'Steuerung mit dem Mausrad',
+'imageflow_usekeys' => 'Steuerung mit den Pfeiltasten',
 );
 ?>

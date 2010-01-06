@@ -50,6 +50,11 @@ global $IMAGEFLOWSET,$CONFIG, $CPG_PHP_SELF, $JS,$template_header;
 	        $JS['includes'][] = "plugins/imageflow/js/imageflow.js";
         }
 
+        set_js_var('cpgif_auto', $IMAGEFLOWSET['imageflow_auto']);
+        set_js_var('cpgif_autotime', $IMAGEFLOWSET['imageflow_autotime']);
+        set_js_var('cpgif_usewheel', $IMAGEFLOWSET['imageflow_usewheel']);
+        set_js_var('cpgif_usekeys', $IMAGEFLOWSET['imageflow_usekeys']);
+
         $imageflow_headcode = '<link rel="stylesheet" title="Standard" href="plugins/imageflow/js/screen.css" type="text/css" media="screen" />';
         $imageflow_headcode.='<style type="text/css">';
         $imageflow_headcode.='  #imageflow{background-color:#'.$IMAGEFLOWSET['imageflow_bgcolor'].';width:'.$IMAGEFLOWSET['imageflow_width'].';}';

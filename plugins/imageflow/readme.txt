@@ -17,11 +17,12 @@
 
 What it does:
 -------------
-Displays a coverflowish JavaScript animation of a meta album on main page.
+Displays a coverflowish JavaScript animation of a meta album on main page with EnlargeIt! integration.
 The animation can be controlled by:
  - click on a pic
- - arrow keys
- - double click or single click on active pic opens intermediate page
+ - arrow keys (can be deactivated on config page)
+ - mouse wheel (can be deactivated on config page)
+ - double click or single click on active pic opens intermediate page or enlarges pic
 No flash needed, so every modern browser works.
 This plugin has been created for cpg1.4.x.
 

@@ -22,6 +22,11 @@
  */
 
 
+var cpgif_auto = 1;
+var cpgif_autotime = 4;
+var cpgif_usewheel = 1;
+var cpgif_usekeys = 1;
+
 /* Configuration variables */
 var cpgif_conf_reflection_p = 0.4;         // Sets the height of the reflection in % of the source image 
 var cpgif_conf_focus = 3;                  // Sets the numbers of images on each side of the focussed one
@@ -287,17 +292,63 @@ function cpgif_hide(cpgif_id)
 /* Hide loading bar, show content and initialize mouse event listening after loading */
 function startimageflow()
 {
+    cpgif_auto        = parseInt(js_vars.cpgif_auto);
+    cpgif_usewheel    = parseInt(js_vars.cpgif_usewheel);
+    cpgif_usekeys     = parseInt(js_vars.cpgif_usekeys);
+    cpgif_autotime    = parseInt(js_vars.cpgif_autotime);
 	if(document.getElementById(cpgif_conf_imageflow))
 	{
 		cpgif_hide(cpgif_conf_loading);
 		cpgif_refresh(true);
 		cpgif_show(cpgif_conf_images);
 		cpgif_show(cpgif_conf_scrollbar);
-		// cpgif_initMouseWheel();
+		if (cpgif_usewheel) cpgif_initMouseWheel();
 		cpgif_initMouseDrag();
 		cpgif_glideTo( -450, 3);
+		if (cpgif_auto) setInterval('cpgif_autorun()',cpgif_autotime*1000);
+		if (cpgif_usewheel) 
+		{ document.onkeydown = function(cpgif_event)
+           {
+	       var cpgif_charCode  = cpgif_getKeyCode(cpgif_event);
+	       switch (cpgif_charCode)
+	          {
+		       /* Right arrow key */
+		      case 39:
+			     cpgif_handle(-1);
+			     break;
+		
+		      /* Left arrow key */
+		      case 37:
+			     cpgif_handle(1);
+			     break;
+	         }
+          };
+        }
 	}
 }
+
+function cpgif_autorun()
+{
+    			var cpgif_change = false;
+			if(cpgif_caption_id < (cpgif_max-1))
+			{
+				cpgif_target = cpgif_target - cpgif_xstep;
+				cpgif_new_caption_id = cpgif_caption_id + 1;
+				cpgif_change = true;
+			}
+			else
+			    { 
+			      cpgif_target = 0;
+			      cpgif_new_caption_id  = 0;
+			      cpgif_change = true;
+			    }
+	if (cpgif_change == true)
+	{
+		cpgif_glideTo(cpgif_target, cpgif_new_caption_id);
+	}
+
+}
+
 
 /* Refresh ImageFlow on window resize */
 window.onresize = function()
@@ -433,21 +484,5 @@ function cpgif_getKeyCode(cpgif_event)
 	return cpgif_event.keyCode;
 }
 
-document.onkeydown = function(cpgif_event)
-{
-	var cpgif_charCode  = cpgif_getKeyCode(cpgif_event);
-	switch (cpgif_charCode)
-	{
-		/* Right arrow key */
-		case 39:
-			cpgif_handle(-1);
-			break;
-		
-		/* Left arrow key */
-		case 37:
-			cpgif_handle(1);
-			break;
-	}
-};
 
 cpgif_addLoad(startimageflow);
