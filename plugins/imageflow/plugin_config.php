@@ -100,7 +100,7 @@ function change() {
 </script>
 
 <?php
-starttable('100%', $lang_plugin_imageflow['main_title'].' - '.$lang_plugin_imageflow['version'].'<font size=1 color=red> by <a href="http://www.timos-welt.de">Timos-Welt</font> - <a href="pluginmgr.php" class="admin_menu">'.$lang_plugin_imageflow['pluginmanager'].'</a>', 3);
+starttable('100%', $lang_plugin_imageflow['main_title'].' - '.$lang_plugin_imageflow['version'].'<font size=1 color=red> by <a href="http://www.timos-welt.de">Timos Schewe</font>', 3);
 ?>
 
 <TR>

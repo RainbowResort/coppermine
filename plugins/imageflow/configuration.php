@@ -19,5 +19,5 @@ $description='Shows a coverflowish animation on Album list page with EnlargeIt! 
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
 $version='1.0';
 $configuration_link = 
-$extra_info = '<a href="index.php?file=imageflow/plugin_config" class="admin_menu">Imageflow Configuration</a>';
+$extra_info = '<a href="index.php?file=imageflow/plugin_config" class="admin_menu">Imageflow Configuration</a> <a href="http://forum.coppermine-gallery.net/index.php/topic,63118.0.html" class="admin_menu">Imageflow announcement thread</a>';
 ?>

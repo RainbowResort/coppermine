@@ -22,6 +22,7 @@ The animation can be controlled by:
  - click on a pic
  - arrow keys (can be deactivated on config page)
  - mouse wheel (can be deactivated on config page)
+ - automatic by time (one step forward every ... seconds)
  - double click or single click on active pic opens intermediate page or enlarges pic
 No flash needed, so every modern browser works.
 This plugin has been created for cpg1.4.x.
@@ -66,7 +67,7 @@ How to enable:
 
 How to configure:
 -----------------
-* Use the additional button 'Imageflow' in admin menu.
+* Use the button in plugin manager.
 
 
 =========================================================================
