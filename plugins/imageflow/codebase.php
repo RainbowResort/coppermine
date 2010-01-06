@@ -140,19 +140,19 @@ function imageflow_mainpage($matches)
 
     if ($IMAGEFLOWSET['imageflow_useenlarge']) {
       if ($imgflow_fixedsize == 0) {
-        $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"  class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" />";
+        $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"  class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" style=\"-ms-interpolation-mode:bicubic;\" />";
       } else
       {
-   	    $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"   class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" />";
+   	    $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"   class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" style=\"-ms-interpolation-mode:bicubic;\" />";
    	  }
     }
     else
     {
       if ($imgflow_fixedsize == 0) {
-        $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" />";
+        $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" style=\"-ms-interpolation-mode:bicubic;\" />";
       } else
       {
-   	    $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" />";
+   	    $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" style=\"-ms-interpolation-mode:bicubic;\" />";
    	  } 
     }
    	
@@ -205,19 +205,19 @@ function imageflow_mainpage($matches)
           // link of pic
           if ($IMAGEFLOWSET['imageflow_useenlarge']) {
             if ($imgflow_fixedsize == 0) {
-              $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"    class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" />";
+              $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"    class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" style=\"-ms-interpolation-mode:bicubic;\" />";
             } else
             {
-   	          $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"   class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" />";
+   	          $imageflow_lien="<img src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"".$imageflow_file."\"   class=\"imgflowimg\" name=\"".$imageflow_row['pid']."\" alt=\"".$imageflow_row['title']."\" id=\"iflowpic".$i."\" title=\"\" style=\"-ms-interpolation-mode:bicubic;\" />";
    	        }
          }
          else
          {
          if ($imgflow_fixedsize == 0) {
-           $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" />";
+           $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;procent=".$imageflow_temppercent."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" style=\"-ms-interpolation-mode:bicubic;\" />";
            } else
            {
-   	         $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" />";
+   	         $imageflow_lien="<img class=\"imgflowimg\" src=\"plugins/imageflow/js/reflect.php?bgc=".$IMAGEFLOWSET['imageflow_bgcolor']."&amp;fixed=".$imgflow_fixedsize."&amp;cache=".$IMAGEFLOWSET['imageflow_cache']."&amp;img=".$imageflow_reflfile."\" longdesc=\"displayimage.php?pid=".$imageflow_key."\"  alt=\"".$imageflow_row['title']."\" style=\"-ms-interpolation-mode:bicubic;\" />";
    	       } 
          }
 
