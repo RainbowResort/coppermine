@@ -25,7 +25,7 @@
 $name = 'Remote Videos';
 $description = 'Upload videos from video file hosters to your gallery (YouTube, Google, Yahoo!, ...)';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.1';
+$version = '1.2';
 
 $announcement_icon = cpg_fetch_icon('announcement', 1);
 $config_icon = cpg_fetch_icon('config', 1);

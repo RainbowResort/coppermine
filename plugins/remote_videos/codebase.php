@@ -79,7 +79,7 @@ function remote_videos_get_hoster() {
 
 function remote_videos_html_replace($params, $pic_html) {
     global $CONFIG, $CURRENT_PIC_DATA;
-    $check_result = preg_match($params['search_pattern'], file_get_contents($CURRENT_PIC_DATA['url']), $video_id);
+    $check_result = preg_match($params['search_pattern'], file_get_contents(urldecode($CURRENT_PIC_DATA['url'])), $video_id);
     if ($check_result == "1") {
         $row = mysql_fetch_array(cpg_db_query("SELECT pwidth, pheight FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = '{$CURRENT_PIC_DATA['pid']}'"), MYSQL_ASSOC);
         $pwidth = $row['pwidth'];
