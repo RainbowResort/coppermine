@@ -70,7 +70,7 @@ function imageflow_head()
 
 function imageflow_mainpage()
 { 
-    global $CONFIG, $lang_plugin_imageflow, $matches, $RESTRICTEDWHERE, $IMAGEFLOWSET,$lang_meta_album_names, $META_ALBUM_SET;
+    global $CONFIG, $lang_plugin_imageflow, $matches, $FORBIDDEN_SET, $IMAGEFLOWSET,$lang_meta_album_names, $META_ALBUM_SET;
     require('./plugins/imageflow/include/init.inc.php');
     require('./plugins/imageflow/include/load_imageflowset.php');
     if($matches[1] != 'imageflow') {
