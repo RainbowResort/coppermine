@@ -91,10 +91,6 @@ Background color        The background color of Imageflow. Use hex value without
 Skip pics in portrait   If set, Imageflow only uses pics where width > height
   orientation
 
-Show Imageflow in       If you select 'Yes', a standard table will be drawn around Imageflow
-  standard table of     with the title of the selected meta album. Please test carefully if
-  the theme             everything is displayed correctly in different browsers if you select 'Yes'!
-
 Show pics from which    Select 'Random Files', 'Last additions', 'Most viewed' or 'Top rated'
   meta album
 
