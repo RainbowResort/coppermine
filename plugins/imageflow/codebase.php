@@ -96,7 +96,7 @@ function imageflow_mainpage()
   // request of your database
   $imageflow_pics='';
   $imageflow_FORBIDDEN_SET = "";
-  if ($FORBIDDEN_SET != "") $imageflow_FORBIDDEN_SET = "$FORBIDDEN_SET";
+  if ($FORBIDDEN_SET) $imageflow_FORBIDDEN_SET = "$FORBIDDEN_SET";
   
   // request string for meta album toprated
   if ($IMAGEFLOWSET['imageflow_album'] == "toprated") {
@@ -132,9 +132,9 @@ function imageflow_mainpage()
       $imageflow_key=$imageflow_row['pid'];
       // path of pic, depending if intermediate image is there or not
       $imageflow_file=get_pic_url($imageflow_row,$IMAGEFLOWSET['imageflow_pictype']);
-      if (!file_exists($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
+      if (!(strpos($imageflow_file,'thumb_nopic') === FALSE)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
       $imageflow_reflfile=get_pic_url($imageflow_row,'normal');
-      if (!file_exists($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
+      if (!(strpos($imageflow_reflfile,'thumb_nopic') === FALSE)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
       $imageflow_temppercent = $IMAGEFLOWSET['imageflow_procent'];
       if (($imageflow_row['pwidth']<$CONFIG['picture_width']) && ($imageflow_row['pheight']<$CONFIG['picture_width'])) $imageflow_temppercent = 1;
       // link of pic
@@ -198,9 +198,9 @@ function imageflow_mainpage()
           $imageflow_key=$imageflow_row['pid'];
           // path of pic, depending if intermediate image is there or not
           $imageflow_file=get_pic_url($imageflow_row,$IMAGEFLOWSET['imageflow_pictype']);
-          if (!is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
+          if (!(strpos($imageflow_file,'thumb_nopic') === FALSE)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
           $imageflow_reflfile=get_pic_url($imageflow_row,'normal');
-          if (!is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
+          if (!(strpos($imageflow_reflfile,'thumb_nopic') === FALSE)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
           $imageflow_temppercent = $IMAGEFLOWSET['imageflow_procent'];
           if (($imageflow_row['pwidth']<$CONFIG['picture_width']) && ($imageflow_row['pheight']<$CONFIG['picture_width'])) $imageflow_temppercent = 1;
           // link of pic

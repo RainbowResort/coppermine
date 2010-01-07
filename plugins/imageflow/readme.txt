@@ -135,6 +135,11 @@ Don't try to contact the plugin author for support - post on the board publicly 
 
 =========================================================================
 
+v1.1 (2010/01/07)
+-----------------
+- fixed: correct handling for $matches
+- fixed: a not-found-icon was displayed for pics without intermediate version
+
 
 v1.0 (2010/01/06)
 -----------------
