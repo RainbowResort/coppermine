@@ -15,8 +15,8 @@
   $Date$
   **************************************************/
   
+
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
-include_once ('./plugins/imageflow/include/init.inc.php');
 
 // Add plugin_install action
 $thisplugin->add_action('plugin_install','imageflow_install');
@@ -31,13 +31,14 @@ $thisplugin->add_filter('plugin_block','imageflow_mainpage');
 $thisplugin->add_filter('page_meta','imageflow_head');
 
 global $IMAGEFLOWSET;
-require('./plugins/imageflow/include/load_imageflowset.php');
+
 
 
 // include some stuff in page header (css things that are needed for Imageflow)
 function imageflow_head()
 {        
-global $IMAGEFLOWSET,$CONFIG, $CPG_PHP_SELF, $JS,$template_header;
+    global $IMAGEFLOWSET,$CONFIG, $CPG_PHP_SELF, $JS,$template_header;
+    require('./plugins/imageflow/include/load_imageflowset.php');
 
     $imageflow_pages_array = array('index.php');
     if (in_array($CPG_PHP_SELF, $imageflow_pages_array) == TRUE)
@@ -67,20 +68,20 @@ global $IMAGEFLOWSET,$CONFIG, $CPG_PHP_SELF, $JS,$template_header;
 }
 
 
-function imageflow_mainpage($matches)
+function imageflow_mainpage()
 { 
-        global $CONFIG, $lang_plugin_imageflow, $FORBIDDEN_SET, $IMAGEFLOWSET,$lang_meta_album_names, $META_ALBUM_SET;
-        if($matches[1] != 'imageflow') {
-          return $matches;
-        }
-        require ('./plugins/imageflow/include/init.inc.php');
-        echo "<!-- Start Imageflow PlugIn ".$lang_plugin_imageflow['version']." -->\n";
+    global $CONFIG, $lang_plugin_imageflow, $matches, $RESTRICTEDWHERE, $IMAGEFLOWSET,$lang_meta_album_names, $META_ALBUM_SET;
+    require('./plugins/imageflow/include/init.inc.php');
+    require('./plugins/imageflow/include/load_imageflowset.php');
+    if($matches[1] != 'imageflow') {
+        return $matches;
+    }
+    echo "<!-- Start Imageflow PlugIn ".$lang_plugin_imageflow['version']." -->\n";
 
-        if ($IMAGEFLOWSET['imageflow_align'] == "center") echo "<center>
+    if ($IMAGEFLOWSET['imageflow_align'] == "center") echo "<center>
         ";
 
-
-  if ($IMAGEFLOWSET['imageflow_intable']) echo"<div id=\"imgflowcontainer\" style=\"width:".$IMAGEFLOWSET['imageflow_width'].";\">
+    if ($IMAGEFLOWSET['imageflow_intable']) echo"<div id=\"imgflowcontainer\" style=\"width:".$IMAGEFLOWSET['imageflow_width'].";\">
   ";
 ?>
             <div id="imageflow"> 
@@ -131,9 +132,9 @@ function imageflow_mainpage($matches)
       $imageflow_key=$imageflow_row['pid'];
       // path of pic, depending if intermediate image is there or not
       $imageflow_file=get_pic_url($imageflow_row,$IMAGEFLOWSET['imageflow_pictype']);
-      if (!is_file($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
+      if (!file_exists($imageflow_file)) $imageflow_file=get_pic_url($imageflow_row,'fullsize');
       $imageflow_reflfile=get_pic_url($imageflow_row,'normal');
-      if (!is_file($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
+      if (!file_exists($imageflow_reflfile)) $imageflow_reflfile=get_pic_url($imageflow_row,'fullsize');
       $imageflow_temppercent = $IMAGEFLOWSET['imageflow_procent'];
       if (($imageflow_row['pwidth']<$CONFIG['picture_width']) && ($imageflow_row['pheight']<$CONFIG['picture_width'])) $imageflow_temppercent = 1;
       // link of pic
@@ -288,9 +289,9 @@ function imageflow_install()
 // Unnstall and drop settings table
 function imageflow_uninstall()
 {
-        global $CONFIG;
-        cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}mod_imageflow");
-        return true;
+    global $CONFIG;
+    cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}mod_imageflow");
+    return true;
 }
 
 ?>
