@@ -34,4 +34,30 @@ if (file_exists("./plugins/image_manipulation/docs/{$CONFIG['lang']}.htm")) {
     $documentation_file = 'english';
 }
 
+if ($CONFIG['enable_menu_icons'] >= 1) {
+    $image_manipulation_icon_array['reset'] = '<img src="./plugins/image_manipulation/images/icons/reset.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['sepia'] = '<img src="./plugins/image_manipulation/images/icons/sepia.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['black_and_white'] = '<img src="./plugins/image_manipulation/images/icons/bw.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['flip_horizontally'] = '<img src="./plugins/image_manipulation/images/icons/fliph2.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['flip_vertically'] = '<img src="./plugins/image_manipulation/images/icons/flipv2.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['invert'] = '<img src="./plugins/image_manipulation/images/icons/invert.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['emboss'] = '<img src="./plugins/image_manipulation/images/icons/emboss.png" border="0" width="16" height="16" alt="" class="icon" />';
+	$image_manipulation_icon_array['blur'] = '<img src="./plugins/image_manipulation/images/icons/blur.png" border="0" width="16" height="16" alt="" class="icon" />';
+} else {
+    $image_manipulation_icon_array['reset'] = '';
+	$image_manipulation_icon_array['sepia'] = '';
+	$image_manipulation_icon_array['black_and_white'] = '';
+	$image_manipulation_icon_array['flip_horizontally'] = '';
+	$image_manipulation_icon_array['flip_vertically'] = '';
+	$image_manipulation_icon_array['invert'] = '';
+	$image_manipulation_icon_array['emboss'] = '';
+	$image_manipulation_icon_array['blur'] = '';
+}
+
+$image_manipulation_icon_array['submit'] = cpg_fetch_icon('ok', 1);
+$image_manipulation_icon_array['announcement'] = cpg_fetch_icon('announcement', 1);
+$image_manipulation_icon_array['documentation'] = cpg_fetch_icon('documentation', 1);
+$image_manipulation_icon_array['config'] = cpg_fetch_icon('config', 1);
+
+
 ?>

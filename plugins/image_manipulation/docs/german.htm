@@ -33,53 +33,68 @@
     });
 </script>
 </head>
-    <body>
-<h1>Plugin für CPG 1.5.x: Image Manipulation</h1>
-<h2>Worum geht's?</h2>
+<body>
+<a name="header"></a><h1>Plugin für CPG 1.5.x: Image Manipulation<a href="#header" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h1>
+
+<a name="purpose"></a><h2>Worum geht's?<a href="#purpose" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 <p> Dieses PlugIn ermöglicht es dem Besucher, non-destruktiv die Bilder auf der Seite displayimage.php zu verändern. Je nach Konfiguration des PlugIns werden die Einstellungen für jedes Bild in einem Cookie auf dem Computer des Besuchers gespeichert (besucht er dasselbe Bild später erneut, so sind seine Einstellungen wieder da), und die URL wird dynamisch angepasst (gibt der Besucher also den Link an jemand anders weiter, so sieht der das Bild mit dem Einstellungen, die er bevorzugte). Dieses PlugIn fügt etwa 30 KByte an Javascript zur Seite hinzu.</p>
 
-<p><b>Verfügbare Effekte im Kompatibilitätsmodus oder falls der Besucher den IE als Browser benutzt</b><br /><br />
-<ul>
-<li>Helligkeit (LED-Regler)</li>
-<li>Original</li>
-<li>Weichzeichnen</li>
-<li>S/W</li>
-<li>Negativ</li>
-<li>Relief</li>
-<li>Spiegeln hori</li>
-<li>Spiegeln vert</li>
-</ul></p>
+<a name="configuration"></a><h2>Einstellungen<a href="#configuration" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 
-<p><b>Verfügbare Effekte mit abgeschalteten Kompatibilitätsmodus und falls der Besucher nicht den IE als Browser benutzt</b><br /><br />
-<ul>
-<li>Helligkeit (LED-Regler)</li>
-<li>Kontrast (LED-Regler)</li>
-<li>Sättigung (LED-Regler)</li>
-<li>Schärfe (LED-Regler)</li>
-<li>Original</li>
-<li>Sepia</li>
-<li>Spiegeln vert</li>
-<li>Spiegeln hori</li>
-<li>Negativ</li>
-<li>Relief</li>
-<li>Weichzeichnen</li>
-</ul></p>
+<div class="indent">
+    <a name="configuration_compatible_mode"></a><h3>Kompatiblen Modus benutzen<a href="#configuration_compatible_mode" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	<div class="indent">
+		<a name="configuration_compatible_mode_available"></a><h4>Verfügbare Effekte im Kompatibilitätsmodus oder falls der Besucher den IE als Browser benutzt<a href="#configuration_compatible_mode_available" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<ul>
+			<li>Helligkeit (LED-Regler)</li>
+			<li>Original</li>
+			<li>Weichzeichnen</li>
+			<li>S/W</li>
+			<li>Negativ</li>
+			<li>Relief</li>
+			<li>Spiegeln horizontal</li>
+			<li>Spiegeln vertikal</li>
+		</ul>
 
-<h2>Browser-Kompatibilität</h2>
-<p>Die Effekte funktionieren mit<br /><br />
-<ul>
-<li>IE 5.5+</li>
-<li>Opera 9.5+</li>
-<li>Firefox 2+</li>
-<li>Chrome 3+</li>
-<li>die meisten anderen Browser sollten ebenfalls funktionieren oder zumindest problemlos weiterarbeiten</li></ul></p>
 
-<h2>Bitte beachten:</h2>
-<p><ul><li>Dieses PlugIn funktioniert nur dann, wenn 'Transparente Grafik &uuml;ber dem tats&auml;chlichen Bild einf&uuml;gen, um Bilderdiebstahl zu reduzieren' in den Galerie-Einstellungen deaktiviert ist.</li>
-<li>Dieses PlugIn und das PlugIn 'mirror' dürfen nicht zugleich benutzt werden.</li>
-<li>Die neuen Schaltflächen sind nur für Benutzer verfügbar, die Javascript aktiviert haben. Alle anderen sehen nichts.</li>
-<li>Es ist empfohlen, den Kompatibilitätsmodus zu benutzen. Tust du das nicht, so hängt es vom Browser des Besuchers ab, welche Effekte verfügbar sind.</li>
-<li>Benutze die Konfigurations-Seite, die du über den Plugin-Manager erreichst, um Kompatibilitätsmodus, die Benutzung von Cookies und URL-Werten einzustellen.</li></ul></p>
+		<a name="configuration_compatible_mode_unavailable"></a><h4>Verfügbare Effekte mit abgeschalteten Kompatibilitätsmodus und falls der Besucher nicht den IE als Browser benutzt<a href="#configuration_compatible_mode_unavailable" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<ul>
+			<li>Helligkeit (LED-Regler)</li>
+			<li>Kontrast (LED-Regler)</li>
+			<li>Sättigung (LED-Regler)</li>
+			<li>Schärfe (LED-Regler)</li>
+			<li>Original</li>
+			<li>Sepia</li>
+			<li>Spiegeln vertikal</li>
+			<li>Spiegeln horizontal</li>
+			<li>Negativ</li>
+			<li>Relief</li>
+			<li>Weichzeichnen</li>
+		</ul>
+	</div>
+	<a name="configuration_compatible_mode_end"></a>
+</div>
+
+<a name="compatibility"></a><h2>Browser-Kompatibilität<a href="#compatibility" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+Die Effekte funktionieren mit
+<ul>
+	<li>IE 5.5+</li>
+	<li>Opera 9.5+</li>
+	<li>Firefox 2+</li>
+	<li>Chrome 3+</li>
+	<li>die meisten anderen Browser sollten ebenfalls funktionieren oder zumindest problemlos weiterarbeiten</li>
+</ul>
+
+
+<a name="notes"></a><h2>Bitte beachten<a href="#notes" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<ul>
+	<li>Dieses PlugIn funktioniert nur dann, wenn 'Transparente Grafik über dem tatsächlichen Bild einfügen, um Bilderdiebstahl zu reduzieren' in den Galerie-Einstellungen deaktiviert ist.</li>
+	<li>Dieses PlugIn und das PlugIn 'mirror' dürfen nicht zugleich benutzt werden.</li>
+	<li>Die neuen Schaltflächen sind nur für Benutzer verfügbar, die Javascript aktiviert haben. Alle anderen sehen nichts.</li>
+	<li>Es ist empfohlen, den Kompatibilitätsmodus zu benutzen. Tust du das nicht, so hängt es vom Browser des Besuchers ab, welche Effekte verfügbar sind.</li>
+	<li>Benutze die Konfigurations-Seite, die du über den Plugin-Manager erreichst, um Kompatibilitätsmodus, die Benutzung von Cookies und URL-Werten einzustellen.</li>
+</ul>
+
 
 </body>
 </html>

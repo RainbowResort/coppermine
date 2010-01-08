@@ -33,53 +33,66 @@
     });
 </script>
 </head>
-    <body>
-<h1>Plugin for CPG 1.5.x: Image Manipulation</h1>
-<h2>What's this?</h2>
+<body>
+<a name="header"></a><h1>Plugin for CPG 1.5.x: Image Manipulation<a href="#header" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h1>
+
+<a name="purpose"></a><h2>What's this?<a href="#purpose" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 <p>This plugin allows the visitor to non-destructively manipulate pictures using new buttons on displayimage.php. Depending on the plugin configuration, the settings for each picture may be saved in a cookie on the visitor's computer (so if a picture is visited again, the old settings will be applied), and the URL may change accordingly (so if the visitor passes on the link, the recepient will see the pic just as the visitor likes it). Check the demo to see what all this means. The plugin will add ~30 kbyte of javascript to the page (slightly less in compatible mode).</p>
 
-<p><b>Available effects with compatible mode 'on' or visitor uses IE</b><br /><br />
-<ul>
-<li>brightness (LED slider)</li>
-<li>reset</li>
-<li>blur</li>
-<li>b/w</li>
-<li>invert</li>
-<li>emboss</li>
-<li>flip vertically</li>
-<li>flip horizontally</li>
-</ul></p>
+<a name="configuration"></a><h2>Configuration<a href="#configuration" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 
-<p><b>Available effects with compatible mode 'off' and visitor doesn't use IE</b><br /><br />
-<ul>
-<li>brightness (LED slider)</li>
-<li>contrast (LED slider)</li>
-<li>saturation (LED slider)</li>
-<li>sharpness (LED slider)</li>
-<li>reset</li>
-<li>sepia</li>
-<li>flip vert</li>
-<li>flip hori</li>
-<li>invert</li>
-<li>emboss</li>
-<li>blur</li>
-</ul></p>
+<div class="indent">
+    <a name="configuration_compatible_mode"></a><h3>Use compatible mode<a href="#configuration_compatible_mode" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	<div class="indent">
+		<a name="configuration_compatible_mode_available"></a><h4>Available effects with compatible mode 'on' or visitor uses IE<a href="#configuration_compatible_mode_available" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<ul>
+			<li>brightness (LED slider)</li>
+			<li>reset</li>
+			<li>blur</li>
+			<li>b/w</li>
+			<li>invert</li>
+			<li>emboss</li>
+			<li>flip vertically</li>
+			<li>flip horizontally</li>
+		</ul>
 
-<h2>Browser compatibility</h2>
-<p>The effects work fine with<br /><br />
-<ul>
-<li>IE 5.5+</li>
-<li>Opera 9.5+</li>
-<li>Firefox 2+</li>
-<li>Chrome 3+</li>
-<li>most other modern browsers should work, too or fall back without crashing</li></ul></p>
 
-<h2>Please note:</h2>
-<p><ul><li>This plugin will only work if 'Insert a transparent overlay to minimize image theft' is deactivated.</li>
-<li>This plugin and the plugin 'mirror' may not be used at the same time.</li>
-<li>The buttons will only be available for visitors with javascript turned on. Others won't notice a thing.</li>
-<li>It is highly recommended to use compatible mode. If you don't, it depends on the visitor's browser which effects will be available.</li>
-<li>Use the config page to set up compatible mode, use of URL values and cookies.</li></ul></p>
+		<a name="configuration_compatible_mode_unavailable"></a><h4>Available effects with compatible mode 'off' and visitor doesn't use IE<a href="#configuration_compatible_mode_unavailable" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		<ul>
+			<li>brightness (LED slider)</li>
+			<li>contrast (LED slider)</li>
+			<li>saturation (LED slider)</li>
+			<li>sharpness (LED slider)</li>
+			<li>reset</li>
+			<li>sepia</li>
+			<li>flip vertically</li>
+			<li>flip horizontally</li>
+			<li>invert</li>
+			<li>emboss</li>
+			<li>blur</li>
+		</ul>
+	</div>
+	<a name="configuration_compatible_mode_end"></a>
+</div>
+
+<a name="compatibility"></a><h2>Browser compatibility<a href="#compatibility" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+The effects work fine with
+<ul>
+	<li>IE 5.5+</li>
+	<li>Opera 9.5+</li>
+	<li>Firefox 2+</li>
+	<li>Chrome 3+</li>
+	<li>most other modern browsers should work, too or fall back without crashing</li>
+</ul>
+
+<a name="notes"></a><h2>Please note<a href="#notes" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<ul>
+	<li>This plugin will only work if 'Insert a transparent overlay to minimize image theft' is deactivated.</li>
+	<li>This plugin and the plugin 'mirror' may not be used at the same time.</li>
+	<li>The buttons will only be available for visitors with javascript turned on. Others won't notice a thing.</li>
+	<li>It is highly recommended to use compatible mode. If you don't, it depends on the visitor's browser which effects will be available.</li>
+	<li>Use the config page to set up compatible mode, use of URL values and cookies.</li>
+</ul>
 
 </body>
 </html>

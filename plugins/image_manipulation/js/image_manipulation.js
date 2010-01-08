@@ -33,42 +33,30 @@ function im_init()
      {
         im_useurlvalues    = parseInt(js_vars.im_useurlvalues);
         im_usecookies      = parseInt(js_vars.im_usecookies);
-        im_strlightness    = js_vars.im_strlightness;
-        im_strreset    = js_vars.im_strreset;
-        im_strbw    = js_vars.im_strbw;
-        im_strsepia    = js_vars.im_strsepia;
-        im_strflipv    = js_vars.im_strflipv;
-        im_strsharpen    = js_vars.im_strsharpen;
-        im_strfliph    = js_vars.im_strfliph;
-        im_strinvert    = js_vars.im_strinvert;
-        im_stremboss    = js_vars.im_stremboss;
-        im_strblur    = js_vars.im_strblur;
-        im_strcontrast    = js_vars.im_strcontrast;
-        im_strsatur    = js_vars.im_strsatur;
     
         // create btn div
         im_btn = document.createElement('div');
-        var im_btnsuffix = 'im_setit();" class="admin_menu" style="cursor:pointer;margin-top:4px;" type="button">'
+        var im_btnsuffix = 'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'
        
         // create 1 or 3 LED sliders depending on compatible mode
-        if (im_isie || im_compatible) im_btn.innerHTML = im_makeled(im_strlightness,'brig','im_lightval');
+        if (im_isie || im_compatible) im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
         else
         {
-            im_btn.innerHTML = im_makeled(im_strlightness,'brig','im_lightval');
-            im_btn.innerHTML += im_makeled(im_strcontrast,'cont','im_contrastval');
-            im_btn.innerHTML += im_makeled(im_strsatur,'satu','im_saturval');
-            im_btn.innerHTML += im_makeled(im_strsharpen,'shar','im_sharpenval');
+            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
+            im_btn.innerHTML += im_makeled(js_vars.im_strcontrast,'cont','im_contrastval');
+            im_btn.innerHTML += im_makeled(js_vars.im_strsatur,'satu','im_saturval');
+            im_btn.innerHTML += im_makeled(js_vars.im_strsharpen,'shar','im_sharpenval');
         }
     
         // create buttons and use sepia instead of b/w if not in IE and not compatible mode
-        im_btn.innerHTML += '<input value="'+im_strreset+'" class="admin_menu" type="button" style="cursor:pointer;" onclick="im_reset();">';
-        if (im_isie || im_compatible) { im_btn.innerHTML += ' <input id="but_bw" value="'+im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; '+im_btnsuffix; }
-        else { im_btn.innerHTML += ' <input value="'+im_strsepia+'" id="but_sepia" onclick="im_issepia = (im_issepia) ? 0 : 1; '+im_btnsuffix; }
-        im_btn.innerHTML += ' <input value="'+im_strfliph+'" id="but_fliph" onclick="im_isfliph = (im_isfliph) ? 0 : 1; '+im_btnsuffix;
-        im_btn.innerHTML += ' <input value="'+im_strflipv+'" id="but_flipv" onclick="im_isflipv = (im_isflipv) ? 0 : 1; '+im_btnsuffix;
-        im_btn.innerHTML += ' <input value="'+im_strinvert+'" id="but_invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; '+im_btnsuffix;
-        im_btn.innerHTML += ' <input value="'+im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+im_btnsuffix;
-        im_btn.innerHTML += ' <input value="'+im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+im_btnsuffix;
+        im_btn.innerHTML += '<button value="'+js_vars.im_strreset+'" class="button" type="button" onclick="im_reset();">'+js_vars.im_icon_reset+js_vars.im_strreset+'</button>';
+        if (im_isie || im_compatible) { im_btn.innerHTML += ' <button id="but_bw" value="'+js_vars.im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_bw+js_vars.im_strbw+'</button>'; }
+        else { im_btn.innerHTML += ' <button value="'+js_vars.im_strsepia+'" id="but_sepia" onclick="im_issepia = (im_issepia) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_sepia+js_vars.im_strsepia+'</button>'; }
+        im_btn.innerHTML += ' <button value="'+js_vars.im_strfliph+'" id="but_fliph" onclick="im_isfliph = (im_isfliph) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_fliph+js_vars.im_strfliph+'</button>';
+        im_btn.innerHTML += ' <button value="'+js_vars.im_strflipv+'" id="but_flipv" onclick="im_isflipv = (im_isflipv) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_flipv+js_vars.im_strflipv+'</button>';
+        im_btn.innerHTML += ' <button value="'+js_vars.im_strinvert+'" id="but_invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_invert+js_vars.im_strinvert+'</button>';
+        im_btn.innerHTML += ' <button value="'+js_vars.im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_emboss+js_vars.im_stremboss+'</button>';
+        im_btn.innerHTML += ' <button value="'+js_vars.im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_blur+js_vars.im_strblur+'</button>';
        
         // add div to page
         $('.display_media').append(im_btn);
