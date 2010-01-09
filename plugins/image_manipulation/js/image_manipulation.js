@@ -190,7 +190,7 @@ function im_showled(im_value,im_elid)
 // set one button state
 function im_showbtn(im_value,im_elid)
 {
-    var im_mybuttns = document.getElementsByTagName('input');
+    var im_mybuttns = document.getElementsByTagName('button');
     for(var im_i=0;im_i<im_mybuttns.length;im_i++)
     {
         if (im_mybuttns[im_i].id == im_elid) 
