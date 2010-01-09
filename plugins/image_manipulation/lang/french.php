@@ -32,7 +32,6 @@ $lang_plugin_image_manipulation['extra_info'] = 'Ce plugin ne fonctionne que si 
 $lang_plugin_image_manipulation['announcement_thread'] = 'Sujet d\'annonce';
 $lang_plugin_image_manipulation['im_configuration'] = 'Configuration du plugin Image Manipulation';
 $lang_plugin_image_manipulation['plugin_config'] = 'Configuration du plugin';
-$lang_plugin_image_manipulation['usecompatible'] = 'Utiliser un mode compatible';
 $lang_plugin_image_manipulation['usecookies'] = 'Utiliser les cookies';
 $lang_plugin_image_manipulation['useurlvalues'] = 'Utiliser les valeurs d\'URL';
 $lang_plugin_image_manipulation['im_documentation'] = 'Documentation du plugin Image Manipulation';

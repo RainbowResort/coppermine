@@ -21,67 +21,124 @@ if (!defined('IN_COPPERMINE')) {
 }
 
 // Add js files
-$thisplugin->add_action('page_start','include_js_maniplug');
+$thisplugin->add_action('page_start','image_manipulation_include_js');
 
 // Add plugin_install action
-$thisplugin->add_action('plugin_install','im_install');
+$thisplugin->add_action('plugin_install','image_manipulation_install');
 
 // Add plugin_uninstall action
-$thisplugin->add_action('plugin_uninstall','im_uninstall');
+$thisplugin->add_action('plugin_uninstall','image_manipulation_uninstall');
 
 
-function include_js_maniplug() 
+function image_manipulation_include_js() 
 {
     global $JS, $CONFIG, $lang_plugin_image_manipulation, $CPG_PHP_SELF;
     require('./plugins/image_manipulation/init.inc.php');
 
-	$im_pages_array = array('displayimage.php');
-	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE)
-    {  
-        set_js_var('im_strlightness', $lang_plugin_image_manipulation['brightness']);
-        set_js_var('im_strreset', $lang_plugin_image_manipulation['reset']);
-        set_js_var('im_strbw', $lang_plugin_image_manipulation['black_and_white']);
-        set_js_var('im_strsepia', $lang_plugin_image_manipulation['sepia']);
-        set_js_var('im_strflipv', $lang_plugin_image_manipulation['flip_vertically']);
-        set_js_var('im_strfliph', $lang_plugin_image_manipulation['flip_horizontally']);
-        set_js_var('im_strinvert', $lang_plugin_image_manipulation['invert']);
-        set_js_var('im_stremboss', $lang_plugin_image_manipulation['emboss']);
-        set_js_var('im_strblur', $lang_plugin_image_manipulation['blur']);
-        set_js_var('im_strcontrast', $lang_plugin_image_manipulation['contrast']);
-        set_js_var('im_strsatur', $lang_plugin_image_manipulation['saturation']);
-        set_js_var('im_strsharpen', $lang_plugin_image_manipulation['sharpness']);
+    $im_pages_array = array('displayimage.php');
+	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE && $CONFIG['transparent_overlay'] != '1') {  
+        if ($CONFIG['plugin_image_manipulation_reset'] == '1') {
+            set_js_var('im_strreset', $lang_plugin_image_manipulation['reset']);
+        } else {
+            set_js_var('im_strreset', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_bw_sepia'] == '1') {
+            set_js_var('im_strbw', $lang_plugin_image_manipulation['black_and_white']);
+            set_js_var('im_strsepia', $lang_plugin_image_manipulation['sepia']);
+        } else {
+            set_js_var('im_strbw', '');
+            set_js_var('im_strsepia', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_flip_v'] == '1') {
+            set_js_var('im_strflipv', $lang_plugin_image_manipulation['flip_vertically']);
+        } else {
+            set_js_var('im_strflipv', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_flip_h'] == '1') {
+            set_js_var('im_strfliph', $lang_plugin_image_manipulation['flip_horizontally']);
+        } else {
+            set_js_var('im_strfliph', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_invert'] == '1') {
+            set_js_var('im_strinvert', $lang_plugin_image_manipulation['invert']);
+        } else {
+            set_js_var('im_strinvert', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_emboss'] == '1') {
+            set_js_var('im_stremboss', $lang_plugin_image_manipulation['emboss']);
+        } else {
+            set_js_var('im_stremboss', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_blur'] == '1') {
+            set_js_var('im_strblur', $lang_plugin_image_manipulation['blur']);
+        } else {
+            set_js_var('im_strblur', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_brightness'] == '1') {
+            set_js_var('im_strlightness', $lang_plugin_image_manipulation['brightness']);
+        } else {
+            set_js_var('im_strlightness', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_contrast'] == '1') {
+            set_js_var('im_strcontrast', $lang_plugin_image_manipulation['contrast']);
+        } else {
+            set_js_var('im_strcontrast', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_saturation'] == '1') {
+            set_js_var('im_strsatur', $lang_plugin_image_manipulation['saturation']);
+        } else {
+            set_js_var('im_strsatur', '');
+        }
+        if ($CONFIG['plugin_image_manipulation_sharpness'] == '1') {
+            set_js_var('im_strsharpen', $lang_plugin_image_manipulation['sharpness']);
+        } else {
+            set_js_var('im_strsharpen', '');
+        }
         set_js_var('im_useurlvalues', $CONFIG['plugin_image_manipulation_urlvalues']);
         set_js_var('im_usecookies', $CONFIG['plugin_image_manipulation_cookies']);
-		set_js_var('im_icon_reset', $image_manipulation_icon_array['reset']);
-		set_js_var('im_icon_sepia', $image_manipulation_icon_array['sepia']);
-		set_js_var('im_icon_fliph', $image_manipulation_icon_array['flip_horizontally']);
-		set_js_var('im_icon_flipv', $image_manipulation_icon_array['flip_vertically']);
-		set_js_var('im_icon_invert', $image_manipulation_icon_array['invert']);
-		set_js_var('im_icon_bw', $image_manipulation_icon_array['black_and_white']);
-		set_js_var('im_icon_emboss', $image_manipulation_icon_array['emboss']);
-		set_js_var('im_icon_blur', $image_manipulation_icon_array['blur']);
+        set_js_var('im_icon_reset', $image_manipulation_icon_array['reset']);
+        set_js_var('im_icon_bw', $image_manipulation_icon_array['black_and_white']);
+        set_js_var('im_icon_sepia', $image_manipulation_icon_array['sepia']);
+        set_js_var('im_icon_flipv', $image_manipulation_icon_array['flip_vertically']);
+        set_js_var('im_icon_fliph', $image_manipulation_icon_array['flip_horizontally']);
+        set_js_var('im_icon_invert', $image_manipulation_icon_array['invert']);
+        set_js_var('im_icon_emboss', $image_manipulation_icon_array['emboss']);
+        set_js_var('im_icon_blur', $image_manipulation_icon_array['blur']);
 
-        if ($CONFIG['plugin_image_manipulation_compatible'] == '1')
-        {
-        	$JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
-        }
-        else
-        {
+        $client_array = cpg_determine_client();
+
+        if (in_array($client_array['browser'], array('IE8', 'IE7', 'IE6', 'IE5.5', 'IE5')) == TRUE) {
+            $JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
+        } elseif ($CONFIG['plugin_image_manipulation_contrast'] != '1' &&
+                  $CONFIG['plugin_image_manipulation_saturation'] != '1' &&
+                  $CONFIG['plugin_image_manipulation_sharpness'] != '1'
+                  ) {
+        	        $JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
+        } else {
         	$JS['includes'][] = "./plugins/image_manipulation/js/pixastic.js";
         }
-        
         $JS['includes'][] = "./plugins/image_manipulation/js/image_manipulation.js";
     }
 }
 
 
 // install
-function im_install() {
+function image_manipulation_install() {
     global $CONFIG;
 	// Add the config options for the plugin
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_compatible', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_cookies', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_urlvalues', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_reset', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_bw_sepia', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_flip_v', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_flip_h', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_invert', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_emboss', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_blur', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_brightness', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_contrast', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_saturation', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_sharpness', '1')");
 	// The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', {$CONFIG['transparent_overlay']})");
 	// This plugin only works if image_overlay is off, so let's turn it off if it's on
@@ -94,17 +151,27 @@ function im_install() {
 
 
 // uninstall and drop settings table
-function im_uninstall() {
+function image_manipulation_uninstall() {
     global $CONFIG;
     // Restore the state of the transparent overlay if needed
 	if ($CONFIG['plugin_image_manipulation_overlay'] != '0') {
 		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value={$CONFIG['plugin_image_manipulation_overlay']} WHERE name='transparent_overlay'");
 	}
 	// Delete the plugin config records
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_compatible'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_cookies'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_urlvalues'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_overlay'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_reset'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_bw_sepia'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_flip_v'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_flip_h'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_invert'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_emboss'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_blur'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_brightness'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_contrast'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_saturation'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_sharpness'");
     return true;
 }
 

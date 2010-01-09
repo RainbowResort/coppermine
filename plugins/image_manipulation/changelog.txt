@@ -25,8 +25,14 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-09 [M] Version count updated to 1.5 {GauGau}
+2010-01-09 [A] Added icons to config screen {GauGau}
+2010-01-09 [A] Added check for transparent overlay setting to config screen {GauGau}
+2010-01-09 [O] Renamed functions to make sure that the name doesn't collide with other plugins {GauGau}
+2010-01-09 [A] Added config options to enable or disable each control independantly {GauGau}
+2010-01-09 [B] Fixed bug where config changes didn't stick {GauGau}
 2010-01-09 [M] Version count updated to 1.4 {Timo}
-2010-01-09 [B] Buttons didn't show their state anymore {Timo}
+2010-01-09 [B] Fixed broken feature "highlight active buttons in red" (Buttons didn't show their state anymore) {Timo}
 2010-01-08 [A] Added icons {GauGau}
 2010-01-08 [O] Renamed some language array index names for clarification {GauGau}
 2010-01-08 [O] Removed unneeded variable definitions from JS file {GauGau}

@@ -29,8 +29,7 @@ var im_oldhash, im_pid;
 // page is ready loaded
 function im_init()
 {
-     if ($('.image')[0])
-     {
+     if ($('.image')[0]) {
         im_useurlvalues    = parseInt(js_vars.im_useurlvalues);
         im_usecookies      = parseInt(js_vars.im_usecookies);
     
@@ -39,9 +38,9 @@ function im_init()
         var im_btnsuffix = 'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'
        
         // create 1 or 3 LED sliders depending on compatible mode
-        if (im_isie || im_compatible) im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
-        else
-        {
+        if (im_isie || im_compatible) {
+            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
+        } else {
             im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
             im_btn.innerHTML += im_makeled(js_vars.im_strcontrast,'cont','im_contrastval');
             im_btn.innerHTML += im_makeled(js_vars.im_strsatur,'satu','im_saturval');
@@ -49,14 +48,33 @@ function im_init()
         }
     
         // create buttons and use sepia instead of b/w if not in IE and not compatible mode
-        im_btn.innerHTML += '<button value="'+js_vars.im_strreset+'" class="button" type="button" onclick="im_reset();">'+js_vars.im_icon_reset+js_vars.im_strreset+'</button>';
-        if (im_isie || im_compatible) { im_btn.innerHTML += ' <button id="but_bw" value="'+js_vars.im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_bw+js_vars.im_strbw+'</button>'; }
-        else { im_btn.innerHTML += ' <button value="'+js_vars.im_strsepia+'" id="but_sepia" onclick="im_issepia = (im_issepia) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_sepia+js_vars.im_strsepia+'</button>'; }
-        im_btn.innerHTML += ' <button value="'+js_vars.im_strfliph+'" id="but_fliph" onclick="im_isfliph = (im_isfliph) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_fliph+js_vars.im_strfliph+'</button>';
-        im_btn.innerHTML += ' <button value="'+js_vars.im_strflipv+'" id="but_flipv" onclick="im_isflipv = (im_isflipv) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_flipv+js_vars.im_strflipv+'</button>';
-        im_btn.innerHTML += ' <button value="'+js_vars.im_strinvert+'" id="but_invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_invert+js_vars.im_strinvert+'</button>';
-        im_btn.innerHTML += ' <button value="'+js_vars.im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_emboss+js_vars.im_stremboss+'</button>';
-        im_btn.innerHTML += ' <button value="'+js_vars.im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_blur+js_vars.im_strblur+'</button>';
+        if (js_vars.im_strreset != '') {
+            im_btn.innerHTML += '<button value="'+js_vars.im_strreset+'" class="button" type="button" onclick="im_reset();">'+js_vars.im_icon_reset+js_vars.im_strreset+'</button>';
+        }
+        if (im_isie || im_compatible) { 
+            if (js_vars.im_strbw != '') {
+                im_btn.innerHTML += ' <button id="but_bw" value="'+js_vars.im_strbw+'" onclick="im_isbw = (im_isbw) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_bw+js_vars.im_strbw+'</button>';
+            } 
+        } else { 
+            if (js_vars.im_strsepia != '') {
+                im_btn.innerHTML += ' <button value="'+js_vars.im_strsepia+'" id="but_sepia" onclick="im_issepia = (im_issepia) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_sepia+js_vars.im_strsepia+'</button>';
+            } 
+        }
+        if (js_vars.im_strfliph != '') {
+            im_btn.innerHTML += ' <button value="'+js_vars.im_strfliph+'" id="but_fliph" onclick="im_isfliph = (im_isfliph) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_fliph+js_vars.im_strfliph+'</button>';
+        }
+        if (js_vars.im_strflipv != '') {
+            im_btn.innerHTML += ' <button value="'+js_vars.im_strflipv+'" id="but_flipv" onclick="im_isflipv = (im_isflipv) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_flipv+js_vars.im_strflipv+'</button>';
+        }
+        if (js_vars.im_strinvert != '') {
+            im_btn.innerHTML += ' <button value="'+js_vars.im_strinvert+'" id="but_invert" onclick="im_isinvert = (im_isinvert) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_invert+js_vars.im_strinvert+'</button>';
+        }
+        if (js_vars.im_stremboss != '') {
+            im_btn.innerHTML += ' <button value="'+js_vars.im_stremboss+'" id="but_emboss" onclick="im_isemboss = (im_isemboss) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_emboss+js_vars.im_stremboss+'</button>';
+        }
+        if (js_vars.im_strblur != '') {
+            im_btn.innerHTML += ' <button value="'+js_vars.im_strblur+'" id="but_blur" onclick="im_isblur = (im_isblur) ? 0 : 1; '+'im_setit();" class="button" style="cursor:pointer;margin-top:4px;" type="button">'+js_vars.im_icon_blur+js_vars.im_strblur+'</button>';
+        }
        
         // add div to page
         $('.display_media').append(im_btn);
@@ -166,13 +184,19 @@ function im_seturl()
 // create LED slider
 function im_makeled(im_buttonstring,im_idstring,im_valstring)
 {
-    im_tempstr = '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' &#150; </span>';
+    if (im_buttonstring == '') {
+        im_tempstr = '<div style="display:none;">';
+    } else {
+        im_tempstr = '<div>';
+    }
+    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' &#150; </span>';
     for(var im_i=-9;im_i<10;im_i++)
     {
         im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
     }
     im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
-    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_buttonstring+'</span><br/>';   
+    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_buttonstring+'</span>';
+    im_tempstr += '</div>';   
     return im_tempstr;
 }
 
@@ -197,7 +221,7 @@ function im_showbtn(im_value,im_elid)
         {   
             if (im_value)
             {
-                if (typeof im_mybuttns[im_i].oldbrd == 'undefined') im_mybuttns[im_i].oldbrd = im_mybuttns[im_i].style.borderColor; im_mybuttns[im_i].style.borderColor='#ff0000';
+                if (typeof im_mybuttns[im_i].oldbrd == 'undefined') im_mybuttns[im_i].oldbrd = im_mybuttns[im_i].style.borderColor; im_mybuttns[im_i].style.borderColor='#FF0000';
             }
             else
             {

@@ -32,7 +32,6 @@ $lang_plugin_image_manipulation['extra_info'] = 'This plugin will only work if \
 $lang_plugin_image_manipulation['announcement_thread'] = 'Announcement thread';
 $lang_plugin_image_manipulation['im_configuration'] = 'Image Manipulation configuration';
 $lang_plugin_image_manipulation['plugin_config'] = 'Plugin config';
-$lang_plugin_image_manipulation['usecompatible'] = 'Use compatible mode';
 $lang_plugin_image_manipulation['usecookies'] = 'Use cookies';
 $lang_plugin_image_manipulation['useurlvalues'] = 'Use URL values';
 $lang_plugin_image_manipulation['im_documentation'] = 'Image Manipulation documentation';
@@ -48,4 +47,9 @@ $lang_plugin_image_manipulation['blur'] = 'Blur';
 $lang_plugin_image_manipulation['contrast'] = 'Contrast';
 $lang_plugin_image_manipulation['saturation'] = 'Saturation';
 $lang_plugin_image_manipulation['sharpness'] = 'Sharpness';
+$lang_plugin_image_manipulation['enable_the_following_buttons'] = 'Enable the following buttons';
+$lang_plugin_image_manipulation['enable_the_following_controls'] = 'Enable the following controls';
+$lang_plugin_image_manipulation['black_and_white_or_sepia'] = 'Black and white or sepia';
+$lang_plugin_image_manipulation['doesnt_work_in_ie'] = 'doesn\'t work in IE';
+$lang_plugin_image_manipulation['transparent_overlay_warning'] = 'The config setting &quot;Insert a transparent overlay to minimize image theft&quot; has been enabled, which will keep this plugin from working as expected!';
 ?>

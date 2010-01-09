@@ -41,9 +41,19 @@ if ($superCage->post->keyExists('submit')) {
 	}
 	// Define the sanitization patterns
 	$sanitization_array = array(
-	  'plugin_image_manipulation_compatible' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
 	  'plugin_image_manipulation_cookies' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
 	  'plugin_image_manipulation_urlvalues' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_reset' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_bw_sepia' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_flip_v' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_flip_h' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_invert' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_emboss' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_blur' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_brightness' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_contrast' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_saturation' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_image_manipulation_sharpness' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
 	);
 	$config_changes_counter = 0;
 	foreach ($sanitization_array as $san_key => $san_value) {
@@ -108,12 +118,6 @@ if ($superCage->post->keyExists('submit')) {
 // display config page
 
 // Set the option output stuff 
-if ($CONFIG['plugin_image_manipulation_compatible'] == '1') {
-	$option_output['plugin_image_manipulation_compatible'] = 'checked="checked"';
-} else { 
-	$option_output['plugin_image_manipulation_compatible'] = '';
-}
-
 if ($CONFIG['plugin_image_manipulation_cookies'] == '1') {
 	$option_output['plugin_image_manipulation_cookies'] = 'checked="checked"';
 } else { 
@@ -123,10 +127,74 @@ if ($CONFIG['plugin_image_manipulation_cookies'] == '1') {
 if ($CONFIG['plugin_image_manipulation_urlvalues'] == '1') {
 	$option_output['plugin_image_manipulation_urlvalues'] = 'checked="checked"';
 } else { 
-	$option_output['plugin_image_manipulation_urlvalues'] = 'checked="checked"';
+	$option_output['plugin_image_manipulation_urlvalues'] = '';
 }
 
+if ($CONFIG['plugin_image_manipulation_reset'] == '1') {
+	$option_output['plugin_image_manipulation_reset'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_reset'] = '';
+}
 
+if ($CONFIG['plugin_image_manipulation_bw_sepia'] == '1') {
+	$option_output['plugin_image_manipulation_bw_sepia'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_bw_sepia'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_flip_v'] == '1') {
+	$option_output['plugin_image_manipulation_flip_v'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_flip_v'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_flip_h'] == '1') {
+	$option_output['plugin_image_manipulation_flip_h'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_flip_h'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_invert'] == '1') {
+	$option_output['plugin_image_manipulation_invert'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_invert'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_emboss'] == '1') {
+	$option_output['plugin_image_manipulation_emboss'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_emboss'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_blur'] == '1') {
+	$option_output['plugin_image_manipulation_blur'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_blur'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_brightness'] == '1') {
+	$option_output['plugin_image_manipulation_brightness'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_brightness'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_contrast'] == '1') {
+	$option_output['plugin_image_manipulation_contrast'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_contrast'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_saturation'] == '1') {
+	$option_output['plugin_image_manipulation_saturation'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_saturation'] = '';
+}
+
+if ($CONFIG['plugin_image_manipulation_sharpness'] == '1') {
+	$option_output['plugin_image_manipulation_sharpness'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_image_manipulation_sharpness'] = '';
+}
 
 pageheader($lang_plugin_image_manipulation['display_name']);
 list($timestamp, $form_token) = getFormToken();
@@ -138,6 +206,10 @@ echo <<< EOT
 	<tr>
 		<td class="tablef" colspan="3" >
 EOT;
+if ($CONFIG['transparent_overlay'] == '1') {
+    $transparent_overlay_help = cpg_display_help('f=configuration.htm&amp;as=admin_image_transparent_overlay_start&amp;ae=admin_image_transparent_overlay_end&amp;top=1', '800', '600');
+    msg_box('', $lang_plugin_image_manipulation['transparent_overlay_warning'] . ' ' . $transparent_overlay_help, '', '', 'error');
+}
 if ($superCage->post->keyExists('submit')) {
     if ($config_changes_counter > 0) {
         msg_box('', $lang_plugin_image_manipulation['update_success'], '', '', 'success');
@@ -155,15 +227,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_image_manipulation_compatible" class="clickable_option">{$lang_plugin_image_manipulation['usecompatible']}</label> <a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_compatible_mode" class="greybox" title="{$lang_plugin_image_manipulation['usecompatible']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
-		</td>
-		<td colspan="1">
-			<input type="checkbox" name="plugin_image_manipulation_compatible" id="plugin_image_manipulation_compatible" class="checkbox" value="1" {$option_output['plugin_image_manipulation_compatible']} /><label for="plugin_image_manipulation_compatible" class="clickable_option">{$lang_common['yes']}</label>
-		</td>
-	</tr>
-	<tr>
-		<td valign="top">
-			<label for="plugin_image_manipulation_cookies" class="clickable_option">{$lang_plugin_image_manipulation['usecookies']}</label>
+			<label for="plugin_image_manipulation_cookies" class="clickable_option">{$lang_plugin_image_manipulation['usecookies']}</label> <a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_cookies" class="greybox" title="{$lang_plugin_image_manipulation['usecookies']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td colspan="1">
 			<input type="checkbox" name="plugin_image_manipulation_cookies" id="plugin_image_manipulation_cookies" class="checkbox" value="1" {$option_output['plugin_image_manipulation_cookies']} /><label for="plugin_image_manipulation_cookies" class="clickable_option">{$lang_common['yes']}</label>
@@ -176,6 +240,78 @@ echo <<< EOT
 		<td colspan="1">
 			<input type="checkbox" name="plugin_image_manipulation_urlvalues" id="plugin_image_manipulation_urlvalues" class="checkbox" value="1" {$option_output['plugin_image_manipulation_urlvalues']} /><label for="plugin_image_manipulation_urlvalues" class="clickable_option">{$lang_common['yes']}</label>
 		</td>
+	</tr>
+	<tr>
+	    <td rowspan="7" valign="top">
+	        {$lang_plugin_image_manipulation['enable_the_following_buttons']}
+	    </td>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_reset" id="plugin_image_manipulation_reset" class="checkbox" value="1" {$option_output['plugin_image_manipulation_reset']} />
+	        <label for="plugin_image_manipulation_reset" class="clickable_option">{$image_manipulation_icon_array['reset']}{$lang_plugin_image_manipulation['reset']}</label> <a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_reset" class="greybox" title="{$lang_plugin_image_manipulation['reset']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_bw_sepia" id="plugin_image_manipulation_bw_sepia" class="checkbox" value="1" {$option_output['plugin_image_manipulation_bw_sepia']} />
+	        <label for="plugin_image_manipulation_bw_sepia" class="clickable_option">{$image_manipulation_icon_array['sepia']}{$lang_plugin_image_manipulation['black_and_white_or_sepia']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_flip_v" id="plugin_image_manipulation_flip_v" class="checkbox" value="1" {$option_output['plugin_image_manipulation_flip_v']} />
+	        <label for="plugin_image_manipulation_flip_v" class="clickable_option">{$image_manipulation_icon_array['flip_vertically']}{$lang_plugin_image_manipulation['flip_vertically']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_flip_h" id="plugin_image_manipulation_flip_h" class="checkbox" value="1" {$option_output['plugin_image_manipulation_flip_h']} />
+	        <label for="plugin_image_manipulation_flip_h" class="clickable_option">{$image_manipulation_icon_array['flip_horizontally']}{$lang_plugin_image_manipulation['flip_horizontally']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_invert" id="plugin_image_manipulation_invert" class="checkbox" value="1" {$option_output['plugin_image_manipulation_invert']} />
+	        <label for="plugin_image_manipulation_invert" class="clickable_option">{$image_manipulation_icon_array['invert']}{$lang_plugin_image_manipulation['invert']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_emboss" id="plugin_image_manipulation_emboss" class="checkbox" value="1" {$option_output['plugin_image_manipulation_emboss']} />
+	        <label for="plugin_image_manipulation_emboss" class="clickable_option">{$image_manipulation_icon_array['emboss']}{$lang_plugin_image_manipulation['emboss']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_blur" id="plugin_image_manipulation_blur" class="checkbox" value="1" {$option_output['plugin_image_manipulation_blur']} />
+	        <label for="plugin_image_manipulation_blur" class="clickable_option">{$image_manipulation_icon_array['blur']}{$lang_plugin_image_manipulation['blur']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td rowspan="4" valign="top">
+	        {$lang_plugin_image_manipulation['enable_the_following_controls']}
+	    </td>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_brightness" id="plugin_image_manipulation_brightness" class="checkbox" value="1" {$option_output['plugin_image_manipulation_brightness']} />
+	        <label for="plugin_image_manipulation_brightness" class="clickable_option">{$image_manipulation_icon_array['brightness']}{$lang_plugin_image_manipulation['brightness']}</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_contrast" id="plugin_image_manipulation_contrast" class="checkbox" value="1" {$option_output['plugin_image_manipulation_contrast']} />
+	        <label for="plugin_image_manipulation_contrast" class="clickable_option">{$image_manipulation_icon_array['contrast']}{$lang_plugin_image_manipulation['contrast']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_saturation" id="plugin_image_manipulation_saturation" class="checkbox" value="1" {$option_output['plugin_image_manipulation_saturation']} />
+	        <label for="plugin_image_manipulation_saturation" class="clickable_option">{$image_manipulation_icon_array['saturation']}{$lang_plugin_image_manipulation['saturation']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+	    </td>
+	</tr>
+	<tr>
+	    <td>
+	        <input type="checkbox" name="plugin_image_manipulation_sharpness" id="plugin_image_manipulation_sharpness" class="checkbox" value="1" {$option_output['plugin_image_manipulation_sharpness']} />
+	        <label for="plugin_image_manipulation_sharpness" class="clickable_option">{$image_manipulation_icon_array['sharpness']}{$lang_plugin_image_manipulation['sharpness']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+	    </td>
 	</tr>
 	<tr>
 		<td class="tablef" colspan="3">
