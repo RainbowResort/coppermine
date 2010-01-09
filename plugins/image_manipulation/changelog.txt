@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-09 [B] Buttons didn't show their state anymore {Timo}
 2010-01-08 [A] Added icons {GauGau}
 2010-01-08 [O] Renamed some language array index names for clarification {GauGau}
 2010-01-08 [O] Removed unneeded variable definitions from JS file {GauGau}
