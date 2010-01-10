@@ -39,12 +39,12 @@ function im_init()
        
         // create 1 or 3 LED sliders depending on compatible mode
         if (im_isie || im_compatible) {
-            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
+            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval',js_vars.im_icon_brightness);
         } else {
-            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval');
-            im_btn.innerHTML += im_makeled(js_vars.im_strcontrast,'cont','im_contrastval');
-            im_btn.innerHTML += im_makeled(js_vars.im_strsatur,'satu','im_saturval');
-            im_btn.innerHTML += im_makeled(js_vars.im_strsharpen,'shar','im_sharpenval');
+            im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval',js_vars.im_icon_brightness);
+            im_btn.innerHTML += im_makeled(js_vars.im_strcontrast,'cont','im_contrastval',js_vars.im_icon_contrast);
+            im_btn.innerHTML += im_makeled(js_vars.im_strsatur,'satu','im_saturval',js_vars.im_icon_saturation);
+            im_btn.innerHTML += im_makeled(js_vars.im_strsharpen,'shar','im_sharpenval',js_vars.im_icon_sharpen);
         }
     
         // create buttons and use sepia instead of b/w if not in IE and not compatible mode
@@ -182,22 +182,21 @@ function im_seturl()
 }
 
 // create LED slider
-function im_makeled(im_buttonstring,im_idstring,im_valstring)
+function im_makeled(im_buttonstring,im_idstring,im_valstring,im_iconblub)
 {
-    if (im_buttonstring == '') {
-        im_tempstr = '<div style="display:none;">';
-    } else {
-        im_tempstr = '<div>';
-    }
-    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' &#150; </span>';
+    var im_tempstr = '';
+    if (im_buttonstring) 
+    {
+    im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' '+im_iconblub+' &#150; </button><span></span>';
     for(var im_i=-9;im_i<10;im_i++)
     {
         im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
     }
     im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
-    im_tempstr += '<span class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_buttonstring+'</span>';
-    im_tempstr += '</div>';   
+    im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_iconblub+' '+im_buttonstring+'</button><br />';
     return im_tempstr;
+    }
+    else return '';
 }
 
 

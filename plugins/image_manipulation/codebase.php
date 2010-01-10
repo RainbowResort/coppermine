@@ -104,6 +104,10 @@ function image_manipulation_include_js()
         set_js_var('im_icon_invert', $image_manipulation_icon_array['invert']);
         set_js_var('im_icon_emboss', $image_manipulation_icon_array['emboss']);
         set_js_var('im_icon_blur', $image_manipulation_icon_array['blur']);
+        set_js_var('im_icon_brightness', $image_manipulation_icon_array['brightness']);
+        set_js_var('im_icon_contrast', $image_manipulation_icon_array['contrast']);
+        set_js_var('im_icon_saturation', $image_manipulation_icon_array['saturation']);
+        set_js_var('im_icon_sharpness', $image_manipulation_icon_array['sharpness']);
 
         $client_array = cpg_determine_client();
 
