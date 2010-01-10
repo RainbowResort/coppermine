@@ -203,7 +203,8 @@ function im_makeled(im_buttonstring,im_idstring,im_valstring,im_iconblub)
 // lighten one LED chain
 function im_showled(im_value,im_elid)
 {
-    if (isNaN(document.getElementById(im_elid+'-9')))
+    //alert (document.getElementById(im_elid+'-9'));
+    if (document.getElementById(im_elid+'-9') != null)
     {
         for(var im_i=-9;im_i<11;im_i++)
         {
