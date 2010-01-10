@@ -187,14 +187,14 @@ function im_makeled(im_buttonstring,im_idstring,im_valstring,im_iconblub)
     var im_tempstr = '';
     if (im_buttonstring) 
     {
-    im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' '+im_iconblub+' &#150; </button><span></span>';
-    for(var im_i=-9;im_i<10;im_i++)
-    {
-        im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
-    }
-    im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
-    im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_iconblub+' '+im_buttonstring+'</button><br />';
-    return im_tempstr;
+        im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;">'+im_buttonstring+' '+im_iconblub+' &#150; </button><span></span>';
+        for(var im_i=-9;im_i<10;im_i++)
+        {
+            im_tempstr += '<a style="height:10px;border-bottom-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:0px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+im_i+'" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
+        }
+        im_tempstr += '<a style="height:10px;border-width:1px;border-style:solid;text-decoration:none;border-color:#222233;cursor:pointer" id="'+im_idstring+'10" onclick="'+im_valstring+' = parseInt(this.id.substr(4)); im_setit();">&nbsp;</a>';
+        im_tempstr += '<button class="admin_menu" style="border:none;background-color:transparent;background-image:none;"> + '+im_iconblub+' '+im_buttonstring+'</button><br />';
+        return im_tempstr;
     }
     else return '';
 }
@@ -203,10 +203,13 @@ function im_makeled(im_buttonstring,im_idstring,im_valstring,im_iconblub)
 // lighten one LED chain
 function im_showled(im_value,im_elid)
 {
-    for(var im_i=-9;im_i<11;im_i++)
+    if (isNaN(document.getElementById(im_elid+'-9')))
     {
-        if (im_value >= im_i) document.getElementById(im_elid+im_i).style.backgroundColor = '#bbbbff';
-        else document.getElementById(im_elid+im_i).style.backgroundColor = '#444455';
+        for(var im_i=-9;im_i<11;im_i++)
+        {
+            if (im_value >= im_i) document.getElementById(im_elid+im_i).style.backgroundColor = '#bbbbff';
+            else document.getElementById(im_elid+im_i).style.backgroundColor = '#444455';
+        }
     }
 }
 
