@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-10 [O] Added source file and compressed JS file to save bandwidth {Timo}
+2010-01-10 [B] Fixed missing semicolons in JS source code {Timo}
 2010-01-10 [B] Invert was executed differently in IE and other Browsers making the URL feature useless {Timo}
 2010-01-10 [M] Version count updated to 1.6 {Timo}
 2010-01-10 [A] Added icons for LED sliders {Timo}
