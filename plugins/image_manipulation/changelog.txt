@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-10 [B] Invert was executed differently in IE and other Browsers making the URL feature useless {Timo}
 2010-01-10 [M] Version count updated to 1.6 {Timo}
 2010-01-10 [A] Added icons for LED sliders {Timo}
 2010-01-09 [M] Version count updated to 1.5 {GauGau}

@@ -125,8 +125,8 @@ function im_setit()
     if (im_isbw) $('.image').pixastic('desaturate');
     if (im_isblur) $('.image').pixastic('blur');
     if (im_isemboss) $('.image').pixastic('emboss', {greyLevel:170,direction:'topleft',strength:1.0});
-    // invert must be before lighten in IE and compatible mode
-    if (im_isinvert && (im_isie || im_compatible)) $('.image').pixastic('invert');
+    // invert must be before lighten in IE
+    if (im_isinvert) $('.image').pixastic('invert');
     // apply lighten (IE and compatible mode) or lighten, saturation, sharpen
     if (im_isie || im_compatible)
     {
@@ -142,8 +142,6 @@ function im_setit()
         if (im_saturval != 0) $('.image').pixastic('hsl', {hue:0,saturation:im_saturval*10,lightness:0});
         if (im_sharpenval != -9) $('.image').pixastic('sharpen', {amount:(im_sharpenval+9)/30});
     }
-    // invert at the end for best effect, but only if not IE and not compatible mode
-    if (im_isinvert && !im_isie && !im_compatible) $('.image').pixastic('invert');
     
     // correct URL value and save cookie
     im_seturl();
