@@ -15,14 +15,10 @@
   **************************************************/
   
 // variables
-var im_useurlvalues;
-var im_usecookies;
-var im_strlightness, im_strreset, im_strbw, im_strsepia, im_strflipv, im_strsharpen;
-var im_strfliph, im_strinvert, im_stremboss, im_strblur, im_strcontrast, im_strsatur;
+var im_useurlvalues, im_usecookies;
 var im_isflipv,im_isfliph,im_issepia,im_isbw,im_lightval;
 var im_contrastval,im_isemboss,im_isinvert,im_isblur;
-var im_ispoint,im_saturval;
-var im_sharpenval;
+var im_saturval,im_sharpenval;
 var im_isie = Pixastic.Client.isIE();
 var im_oldhash, im_pid;
 
@@ -100,7 +96,7 @@ function im_init()
         if (im_useurlvalues && !im_cookieval) im_getvalues();
         else if (!im_cookieval) im_reset();
         im_oldhash = window.location.hash;
-        if (im_useurlvalues) setInterval(im_checkstate, 250);
+        if (im_useurlvalues) setInterval(im_checkstate, 200);
      }
 }
 

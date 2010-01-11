@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-11 [M] Removed unused variables from JS {Timo}
 2010-01-11 [M] Version count updated to 1.7 {GauGau}
 2010-01-11 [A] Added install check for incompatibilities {GauGau
 2010-01-10 [O] Added source file and compressed JS file to save bandwidth {Timo}
