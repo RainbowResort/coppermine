@@ -20,20 +20,15 @@ if (!defined('IN_COPPERMINE')) {
 	die('Not in Coppermine...');
 }
 
-// Add js files
-$thisplugin->add_action('page_start','image_manipulation_include_js');
-
-// Add plugin_install action
-$thisplugin->add_action('plugin_install','image_manipulation_install');
-
-// Add plugin_uninstall action
-$thisplugin->add_action('plugin_uninstall','image_manipulation_uninstall');
-
+$thisplugin->add_action('page_start','image_manipulation_include_js'); // Add js files
+$thisplugin->add_action('plugin_install','image_manipulation_install'); // Add plugin_install action
+$thisplugin->add_action('plugin_uninstall','image_manipulation_uninstall'); // Add plugin_uninstall action
+$thisplugin->add_action('plugin_configure','image_manipulation_configure');
 
 function image_manipulation_include_js() 
 {
     global $JS, $CONFIG, $lang_plugin_image_manipulation, $CPG_PHP_SELF;
-    require('./plugins/image_manipulation/init.inc.php');
+    require_once('./plugins/image_manipulation/init.inc.php');
 
     $im_pages_array = array('displayimage.php');
 	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE && $CONFIG['transparent_overlay'] != '1') {  
@@ -129,6 +124,25 @@ function image_manipulation_include_js()
 // install
 function image_manipulation_install() {
     global $CONFIG;
+    $superCage = Inspekt::makeSuperCage();
+    
+    // Check for the mirror plugin
+	if (($plugin_id = CPGPluginAPI::installed('mirror')) !== false) {
+		 return 1;
+	}
+	
+	// Check for the transparent overlay
+	if ($CONFIG['transparent_overlay'] != '0') {
+		 if ($superCage->post->keyExists('image_manipulation_continue_anyway') == TRUE && $superCage->post->getInt('image_manipulation_continue_anyway') == 1) {
+            // The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall	        cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', {$CONFIG['transparent_overlay']})");
+	        // This plugin only works if image_overlay is off, so let's turn it off if it's on
+		     $CONFIG['transparent_overlay'] = '0';
+		     cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='0' WHERE name='transparent_overlay'");
+		 } else {
+		    return 1;
+		}
+	}
+	
 	// Add the config options for the plugin
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_cookies', '1')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_urlvalues', '1')");
@@ -143,13 +157,7 @@ function image_manipulation_install() {
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_contrast', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_saturation', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_sharpness', '1')");
-	// The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', {$CONFIG['transparent_overlay']})");
-	// This plugin only works if image_overlay is off, so let's turn it off if it's on
-	if ($CONFIG['transparent_overlay'] != '0') {
-		$CONFIG['transparent_overlay'] = 0;
-		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='0' WHERE name='transparent_overlay'");
-	}
+	
     return true;
 }
 
@@ -179,5 +187,45 @@ function image_manipulation_uninstall() {
     return true;
 }
 
+function image_manipulation_configure() {
+    global $CONFIG, $CPG_PLUGINS, $lang_plugin_image_manipulation;
+    require('./plugins/image_manipulation/init.inc.php');
+    $icon_array['ok'] = cpg_fetch_icon('ok', 1);
+    $icon_array['cancel'] = cpg_fetch_icon('cancel', 1);
+    $allow_continue = 1;
+    echo <<< EOT
+    <form action="" method="post" name="image_manipulation_config" id="image_manipulation_config">
+        <ul>
+EOT;
+    if ($CONFIG['transparent_overlay'] != '0') {
+        echo <<< EOT
+            <li>{$lang_plugin_image_manipulation['transparent_overlay_warning']}
+            {$lang_plugin_image_manipulation['continue_will_disable_warning']}
+            {$lang_plugin_image_manipulation['do_not_turn_on_again']}</li>
+EOT;
+    }
+    if (($plugin_id = CPGPluginAPI::installed('mirror')) !== false) {
+        $warning_coexist = sprintf($lang_plugin_image_manipulation['plugins_cant_coexist'], '<em>Mirror</em>');
+        echo <<< EOT
+            <li>{$warning_coexist}</li>
+EOT;
+        $allow_continue = 0;
+    }
+    echo <<< EOT
+        </ul>
+EOT;
+    if ($allow_continue == 1) {
+        echo <<< EOT
+        <input type="hidden" name="image_manipulation_continue_anyway" id="image_manipulation_continue_anyway" value="1" />
+        <button type="submit" class="button" name="submit" value="{$lang_plugin_image_manipulation['continue_anyway']}">{$icon_array['ok']}{$lang_plugin_image_manipulation['continue_anyway']}</button>
+EOT;
+    }
+    echo <<< EOT
+        <a href="pluginmgr.php" class="admin_menu">{$icon_array['cancel']}{$lang_plugin_image_manipulation['cancel']}</a>
+EOT;
+    echo <<< EOT
+    </form>
+EOT;
+}
 
 ?>

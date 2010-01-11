@@ -52,4 +52,9 @@ $lang_plugin_image_manipulation['enable_the_following_controls'] = 'Folgende Sch
 $lang_plugin_image_manipulation['black_and_white_or_sepia'] = 'Schwarzweiß oder Sepia';
 $lang_plugin_image_manipulation['doesnt_work_in_ie'] = 'funktioniert nicht im IE';
 $lang_plugin_image_manipulation['transparent_overlay_warning'] = 'Die Einstellung &quot;Transparente Grafik über dem tatsächlichen Bild einfügen, um Bilderdiebstahl zu reduzieren&quot; ist aktiviert, was verhindert, dass dieses Plugin reibungslos funktionieren kann!';
+$lang_plugin_image_manipulation['continue_will_disable_warning'] = 'Falls Du trotzdem fortfährst wird diese Option deaktiviert werden.';
+$lang_plugin_image_manipulation['do_not_turn_on_again'] = 'Aktiviere sie nicht erneut, solange Du dieses Plugins benutzt.';
+$lang_plugin_image_manipulation['plugins_cant_coexist'] = 'Das Plugin %s ist installiert, das nicht gleichzeitig mit diesem Plugin betrieben werden kann. Kehre zum Plugin-Manager zurück und deinstalliere dort das andere Plugin, bevor Du dieses Plugin installierst.';
+$lang_plugin_image_manipulation['cancel'] = 'Abbrechen';
+$lang_plugin_image_manipulation['continue_anyway'] = 'Weiter';
 ?>

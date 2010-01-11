@@ -52,4 +52,10 @@ $lang_plugin_image_manipulation['enable_the_following_controls'] = 'Enable the f
 $lang_plugin_image_manipulation['black_and_white_or_sepia'] = 'Black and white or sepia';
 $lang_plugin_image_manipulation['doesnt_work_in_ie'] = 'doesn\'t work in IE';
 $lang_plugin_image_manipulation['transparent_overlay_warning'] = 'The config setting &quot;Insert a transparent overlay to minimize image theft&quot; has been enabled, which will keep this plugin from working as expected!';
+$lang_plugin_image_manipulation['doesnt_work_in_ie'] = 'doesn\'t work in IE';
+$lang_plugin_image_manipulation['continue_will_disable_warning'] = 'If you decide to continue, that option will be disabled for you.';
+$lang_plugin_image_manipulation['do_not_turn_on_again'] = 'Don\'t turn it back on while using this plugin.';
+$lang_plugin_image_manipulation['plugins_cant_coexist'] = 'You have installed the plugin %s that can\'t be run at the same time with this plugin. Return to the plugin manager and uninstall that other plugin first before installing this plugin.';
+$lang_plugin_image_manipulation['cancel'] = 'Cancel';
+$lang_plugin_image_manipulation['continue_anyway'] = 'Continue anyway';
 ?>
