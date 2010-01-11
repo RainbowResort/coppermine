@@ -16,10 +16,16 @@
   **************************************************/
 
 
-$name='Mirror - add mirror reflection to image on displayimage.php';
-$description="Will only work if 'Insert a transparent overlay to minimize image theft' is deactivated.";
-$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timos Schewe</a>';
-$version='1.1';
-$install_info = "This plugin requires no configuration.";
-$extra_info = '<span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php/topic,62636.0.html" rel="external" title="Mirror support">Mirror support</a></span>';
+$name = 'Mirror';
+$description = 'Add a mirror reflection to the image on displayimage.php';
+$author = '<a href="http://www.timos-welt.de" rel="external" class="external">Timos Schewe</a>';
+$version = '1.2';
+$mirror_icon_announcement = cpg_fetch_icon('announcement', 1);
+$announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62636.0.html" rel="external" class="admin_menu">' . $mirror_icon_announcement . 'Announcement thread</a>';
+$install_info = 'This plugin requires no configuration.';
+if ($CONFIG['transparent_overlay'] != '0') {
+    $install_info .= 'Will only work if \'Insert a transparent overlay to minimize image theft\' is deactivated.';
+}
+$install_info .= '<br />' . $announcement_thread;
+$extra_info = $announcement_thread;
 ?>
