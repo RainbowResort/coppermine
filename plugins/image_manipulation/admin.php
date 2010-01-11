@@ -235,7 +235,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			<label for="plugin_image_manipulation_urlvalues" class="clickable_option">{$lang_plugin_image_manipulation['useurlvalues']}</label>
+			<label for="plugin_image_manipulation_urlvalues" class="clickable_option">{$lang_plugin_image_manipulation['useurlvalues']}</label> <a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_url" class="greybox" title="{$lang_plugin_image_manipulation['useurlvalues']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td colspan="1">
 			<input type="checkbox" name="plugin_image_manipulation_urlvalues" id="plugin_image_manipulation_urlvalues" class="checkbox" value="1" {$option_output['plugin_image_manipulation_urlvalues']} /><label for="plugin_image_manipulation_urlvalues" class="clickable_option">{$lang_common['yes']}</label>
@@ -244,6 +244,7 @@ echo <<< EOT
 	<tr>
 	    <td rowspan="7" valign="top">
 	        {$lang_plugin_image_manipulation['enable_the_following_buttons']}
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button" class="greybox" title="{$lang_plugin_image_manipulation['enable_the_following_buttons']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_reset" id="plugin_image_manipulation_reset" class="checkbox" value="1" {$option_output['plugin_image_manipulation_reset']} />
@@ -253,64 +254,74 @@ echo <<< EOT
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_bw_sepia" id="plugin_image_manipulation_bw_sepia" class="checkbox" value="1" {$option_output['plugin_image_manipulation_bw_sepia']} />
-	        <label for="plugin_image_manipulation_bw_sepia" class="clickable_option">{$image_manipulation_icon_array['sepia']}{$lang_plugin_image_manipulation['black_and_white_or_sepia']}</label>
+	        <label for="plugin_image_manipulation_bw_sepia" class="clickable_option">{$image_manipulation_icon_array['sepia']}{$lang_plugin_image_manipulation['black_and_white_or_sepia']}</label> <a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_bw_sepia" class="greybox" title="{$lang_plugin_image_manipulation['black_and_white_or_sepia']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_flip_v" id="plugin_image_manipulation_flip_v" class="checkbox" value="1" {$option_output['plugin_image_manipulation_flip_v']} />
 	        <label for="plugin_image_manipulation_flip_v" class="clickable_option">{$image_manipulation_icon_array['flip_vertically']}{$lang_plugin_image_manipulation['flip_vertically']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_flip_vertically" class="greybox" title="{$lang_plugin_image_manipulation['flip_vertically']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_flip_h" id="plugin_image_manipulation_flip_h" class="checkbox" value="1" {$option_output['plugin_image_manipulation_flip_h']} />
 	        <label for="plugin_image_manipulation_flip_h" class="clickable_option">{$image_manipulation_icon_array['flip_horizontally']}{$lang_plugin_image_manipulation['flip_horizontally']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_flip_horizontally" class="greybox" title="{$lang_plugin_image_manipulation['flip_horizontally']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_invert" id="plugin_image_manipulation_invert" class="checkbox" value="1" {$option_output['plugin_image_manipulation_invert']} />
 	        <label for="plugin_image_manipulation_invert" class="clickable_option">{$image_manipulation_icon_array['invert']}{$lang_plugin_image_manipulation['invert']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_invert" class="greybox" title="{$lang_plugin_image_manipulation['invert']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_emboss" id="plugin_image_manipulation_emboss" class="checkbox" value="1" {$option_output['plugin_image_manipulation_emboss']} />
 	        <label for="plugin_image_manipulation_emboss" class="clickable_option">{$image_manipulation_icon_array['emboss']}{$lang_plugin_image_manipulation['emboss']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_emboss" class="greybox" title="{$lang_plugin_image_manipulation['emboss']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_blur" id="plugin_image_manipulation_blur" class="checkbox" value="1" {$option_output['plugin_image_manipulation_blur']} />
 	        <label for="plugin_image_manipulation_blur" class="clickable_option">{$image_manipulation_icon_array['blur']}{$lang_plugin_image_manipulation['blur']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_button_blur" class="greybox" title="{$lang_plugin_image_manipulation['blur']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td rowspan="4" valign="top">
 	        {$lang_plugin_image_manipulation['enable_the_following_controls']}
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_controls" class="greybox" title="{$lang_plugin_image_manipulation['enable_the_following_controls']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_brightness" id="plugin_image_manipulation_brightness" class="checkbox" value="1" {$option_output['plugin_image_manipulation_brightness']} />
 	        <label for="plugin_image_manipulation_brightness" class="clickable_option">{$image_manipulation_icon_array['brightness']}{$lang_plugin_image_manipulation['brightness']}</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_controls_brightness" class="greybox" title="{$lang_plugin_image_manipulation['brightness']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_contrast" id="plugin_image_manipulation_contrast" class="checkbox" value="1" {$option_output['plugin_image_manipulation_contrast']} />
 	        <label for="plugin_image_manipulation_contrast" class="clickable_option">{$image_manipulation_icon_array['contrast']}{$lang_plugin_image_manipulation['contrast']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_controls_contrast" class="greybox" title="{$lang_plugin_image_manipulation['contrast']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_saturation" id="plugin_image_manipulation_saturation" class="checkbox" value="1" {$option_output['plugin_image_manipulation_saturation']} />
 	        <label for="plugin_image_manipulation_saturation" class="clickable_option">{$image_manipulation_icon_array['saturation']}{$lang_plugin_image_manipulation['saturation']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_controls_saturation" class="greybox" title="{$lang_plugin_image_manipulation['saturation']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
 	    <td>
 	        <input type="checkbox" name="plugin_image_manipulation_sharpness" id="plugin_image_manipulation_sharpness" class="checkbox" value="1" {$option_output['plugin_image_manipulation_sharpness']} />
 	        <label for="plugin_image_manipulation_sharpness" class="clickable_option">{$image_manipulation_icon_array['sharpness']}{$lang_plugin_image_manipulation['sharpness']} ({$lang_plugin_image_manipulation['doesnt_work_in_ie']})</label>
+			<a href="plugins/image_manipulation/docs/{$documentation_file}.htm#configuration_controls_sharpness" class="greybox" title="{$lang_plugin_image_manipulation['sharpness']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	</tr>
 	<tr>
