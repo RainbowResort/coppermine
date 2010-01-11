@@ -8,10 +8,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/js/image_manipulation.js $
-  $Revision: 7036 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-10 23:22:20 +0100 (So, 10. Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
   
 // variables
