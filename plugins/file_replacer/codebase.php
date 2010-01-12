@@ -142,6 +142,10 @@ function file_replacer_page_start() {
     
                 cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET filesize = '$image_filesize', total_filesize = '$total_filesize', pwidth = '$width', pheight = '$height' WHERE pid = '$pid' LIMIT 1");
 
+                if ($superCage->post->keyExists('update_timestamp')) {
+                    cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET ctime = '".time()."' WHERE pid = '$pid' LIMIT 1");
+                }
+
                 if ($CONFIG['read_exif_data']) {
                     include("include/exif_php.inc.php");
                     exif_parse_file($image);
@@ -168,10 +172,18 @@ function file_replacer_page_start() {
             echo <<< EOT
                 <tr>
                     <td class="tableb" valign="top">
-                        {$lang_plugin_file_replacer['browse']}: 
+                        {$lang_plugin_file_replacer['browse']}
                     </td>
                     <td class="tableb" valign="top">
                         <input type="file" name="fileupload" size="40" class="listbox" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableb" valign="top">
+                        {$lang_plugin_file_replacer['update_timestamp']}
+                    </td>
+                    <td class="tableb" valign="top">
+                        <input type="checkbox" name="update_timestamp" />
                     </td>
                 </tr>
                 <tr>

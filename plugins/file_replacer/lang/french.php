@@ -28,5 +28,6 @@ $lang_plugin_file_replacer['upload'] = 'Télécharger';
 $lang_plugin_file_replacer['description'] = 'Autoriser les fichiers à être remplacés par un fichier de remplacement';
 $lang_plugin_file_replacer['announcement_thread'] = 'Sujet d\'annonce';
 $lang_plugin_file_replacer['author'] = 'Créer par %s pour cpg1.4.x - Porté sur cpg1.5.x et internationnalisé par %s';
+$lang_plugin_file_replacer['update_timestamp'] = 'Actualiser horodateur';
 
 ?>
