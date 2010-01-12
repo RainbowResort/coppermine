@@ -85,7 +85,7 @@ function slideshowit_page_start()
 	global $lang_plugin_slideshowit;
 
 	if (GALLERY_ADMIN_MODE) {
-    	slideshowit_add_config_button('index.php?file=slideshowit/plugin_config',$lang_plugin_slideshowit['slideshowit_manager'],'',$lang_plugin_slideshowit['slideshowit_manager']);
+    	slideshowit_add_config_button('index.php?file=slideshowit/admin',$lang_plugin_slideshowit['slideshowit_manager'],'',$lang_plugin_slideshowit['slideshowit_manager']);
     } 
 }
 //if (!GALLERY_ADMIN_MODE) die('Access denied');

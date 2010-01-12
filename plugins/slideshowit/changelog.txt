@@ -26,6 +26,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-12 [O] Renamed configuration file {GauGau}
 2010-01-12 [O] Modified file headers {GauGau}
 2010-01-12 [M] Added plugin to subversion repository {GauGau}
 2010-01-12 [M] Counted version up from 1.1 to 1.2 {GauGau}

@@ -27,7 +27,7 @@ $version='1.2';
 $extra_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td class="admin_menu"><a href="index.php?file=slideshowit/plugin_config" title="Go to Configure slideshowit">Go directly to slideshowit Manager</a></td>
+        <td class="admin_menu"><a href="index.php?file=slideshowit/admin" title="Go to Configure slideshowit">Go directly to slideshowit Manager</a></td>
     </tr>
     </table>
 EOT;
