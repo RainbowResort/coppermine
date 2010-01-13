@@ -8,10 +8,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/configuration.php $
-  $Revision: 6991 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-03 18:50:24 +0100 (So, 03 Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 Changelog
@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-13 [D] Updated German documentation (rest) {Timo}
 2010-01-11 [D] Updated German documentation (partially) {GauGau}
 2010-01-11 [D] Updated English documentation {GauGau}
 2010-01-11 [M] Removed unused variables from JS {Timo}
