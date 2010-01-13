@@ -40,7 +40,7 @@ function im_init()
             im_btn.innerHTML = im_makeled(js_vars.im_strlightness,'brig','im_lightval',js_vars.im_icon_brightness);
             im_btn.innerHTML += im_makeled(js_vars.im_strcontrast,'cont','im_contrastval',js_vars.im_icon_contrast);
             im_btn.innerHTML += im_makeled(js_vars.im_strsatur,'satu','im_saturval',js_vars.im_icon_saturation);
-            im_btn.innerHTML += im_makeled(js_vars.im_strsharpen,'shar','im_sharpenval',js_vars.im_icon_sharpen);
+            im_btn.innerHTML += im_makeled(js_vars.im_strsharpen,'shar','im_sharpenval',js_vars.im_icon_sharpness);
         }
     
         // create buttons and use sepia instead of b/w if not in IE and not compatible mode
