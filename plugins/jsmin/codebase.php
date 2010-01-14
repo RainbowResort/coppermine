@@ -114,10 +114,10 @@ function compr_js()
             require 'packer/class.JavaScriptPacker.php';
             for ($i = 0; $i < $js_arraycount; $i++) 
             {
-               $JScontent = file_get_contents($JS['includes'][$i]);
                $JShash = md5($JS['includes'][$i].$compr_JS_algo);
                if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
                {
+                   $JScontent = file_get_contents($JS['includes'][$i]);
                    $JSpacker = new JavaScriptPacker($JScontent, 62, true, false);
                    $JSpackedcontent = $JSpacker->pack();
                    $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
@@ -132,10 +132,10 @@ function compr_js()
             require 'jsmin/jsmin.php';
             for ($i = 0; $i < $js_arraycount; $i++) 
             {
-               $JScontent = file_get_contents($JS['includes'][$i]);
                $JShash = md5($JS['includes'][$i].$compr_JS_algo);
                if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
                {
+                   $JScontent = file_get_contents($JS['includes'][$i]);
                    $JSpackedcontent = JSMin::minify($JScontent);
                    $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
                    fwrite($JSnewfile,$JSpackedcontent);
