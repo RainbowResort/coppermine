@@ -24,96 +24,101 @@ $thisplugin->add_action('page_start','compr_js');
 function compr_js() 
 {
    global $JS,$LINEBREAK;
-   $compr_JS_algo = 4;  // algorithm for JS compression 0 = just merge in one file, 1 = merge in one file and use packer, 2 = merge in one file and use jsmin,
-                        // 3 = keep different files and use packer, 4 = keep different files and use jsmin (recommended)
+   $compr_JS_algo = 4;  // algorithm for JS compression:
+                        // 0 = just merge in one file
+                        // 1 = merge in one file and use packer
+                        // 2 = merge in one file and use jsmin,
+                        // 3 = keep different files and use packer
+                        // 4 = keep different files and use jsmin (recommended)
    $JSstring = '';
    $JScontent = '';
+
    if (!GALLERY_ADMIN_MODE) 
    {
        $js_arraycount = count($JS['includes']);
-
-
+       switch ($compr_JS_algo)
        {
-
-           if ($compr_JS_algo == 0)
+       
+       // case 0: just merge in one file
+       case 0:
+           for ($i = 0; $i < $js_arraycount; $i++) 
            {
-				       for ($i = 0; $i < $js_arraycount; $i++) 
-				       {
-				           $JSstring .= $JS['includes'][$i];
-				       }
-				       $JShash = md5($JSstring.$compr_JS_algo);
-
-               // generate new file 
-               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
-               {
-				           for ($i = 0; $i < $js_arraycount; $i++) 
-				           {
-				               $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
-				               $JSstring .= $JS['includes'][$i];
-				           }
-
-				           $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
-				           fwrite($JSnewfile,$JScontent);
-				           fclose($JSnewfile);
-		           }
-		           $JS['includes'] = array();
-		           $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+               $JSstring .= $JS['includes'][$i];
            }
-           if ($compr_JS_algo == 1)
-           {
-				       for ($i = 0; $i < $js_arraycount; $i++) 
-				       {
-				           $JSstring .= $JS['includes'][$i];
-				       }
-				       $JShash = md5($JSstring.$compr_JS_algo);
+           $JShash = md5($JSstring.$compr_JS_algo);
 
-               // generate new file 
-               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+           // generate new file 
+           if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+           {
+               for ($i = 0; $i < $js_arraycount; $i++) 
                {
-				          for ($i = 0; $i < $js_arraycount; $i++) 
-				          {
-				              $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
-				          }
-		              require 'packer/class.JavaScriptPacker.php';
-		              $JSpacker = new JavaScriptPacker($JScontent, 62, true, false);
-		              $JSpackedcontent = $JSpacker->pack();
-		              $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
-		              fwrite($JSnewfile,$JSpackedcontent);
-		              fclose($JSnewfile);
+                   $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
+               }
+
+               $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+               fwrite($JSnewfile,$JScontent);
+               fclose($JSnewfile);
+           }
+           $JS['includes'] = array();
+           $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+           break;
+       
+       // case 1: merge in one file and use packer to compress
+       case 1:
+           for ($i = 0; $i < $js_arraycount; $i++) 
+           {
+               $JSstring .= $JS['includes'][$i];
+           }
+           $JShash = md5($JSstring.$compr_JS_algo);
+
+           // generate new file 
+           if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+           {
+              for ($i = 0; $i < $js_arraycount; $i++) 
+              {
+                  $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
               }
-              $JS['includes'] = array();
-              $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+              require 'packer/class.JavaScriptPacker.php';
+              $JSpacker = new JavaScriptPacker($JScontent, 62, true, false);
+              $JSpackedcontent = $JSpacker->pack();
+              $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+              fwrite($JSnewfile,$JSpackedcontent);
+              fclose($JSnewfile);
           }
-           if ($compr_JS_algo == 2)
-           {
-				       for ($i = 0; $i < $js_arraycount; $i++) 
-				       {
-				           $JSstring .= $JS['includes'][$i];
-				       }
-				       $JShash = md5($JSstring.$compr_JS_algo);
+          $JS['includes'] = array();
+          $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+          break;
 
-               // generate new file 
-               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
-               {
-			             for ($i = 0; $i < $js_arraycount; $i++) 
-			             {
-			                 $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
-			                 
-			             }
-                   require 'jsmin/jsmin.php';
-                   $JSpackedcontent = JSMin::minify($JScontent);
-		               $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
-		               fwrite($JSnewfile,$JSpackedcontent);
-		               fclose($JSnewfile);
-             }
-             $JS['includes'] = array();
-             $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
-          }
-           if ($compr_JS_algo == 3)
+       // case 2: merge in one file and use jsmin to compress
+       case 2:
+           for ($i = 0; $i < $js_arraycount; $i++) 
            {
-            require 'packer/class.JavaScriptPacker.php';
-            for ($i = 0; $i < $js_arraycount; $i++) 
-            {
+               $JSstring .= $JS['includes'][$i];
+           }
+           $JShash = md5($JSstring.$compr_JS_algo);
+
+           // generate new file 
+           if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+           {
+               for ($i = 0; $i < $js_arraycount; $i++) 
+               {
+                   $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
+               }
+               require 'jsmin/jsmin.php';
+               $JSpackedcontent = JSMin::minify($JScontent);
+               $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+               fwrite($JSnewfile,$JSpackedcontent);
+               fclose($JSnewfile);
+         }
+         $JS['includes'] = array();
+         $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+         break;
+         
+       // case 3: use packer to compress each file
+       case 3:
+           require 'packer/class.JavaScriptPacker.php';
+           for ($i = 0; $i < $js_arraycount; $i++) 
+           {
                $JShash = md5($JS['includes'][$i].$compr_JS_algo);
                if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
                {
@@ -125,25 +130,25 @@ function compr_js()
                    fclose($JSnewfile);
                }
                $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js';
-             }
-           }
-           if ($compr_JS_algo == 4)
-           {
-            require 'jsmin/jsmin.php';
-            for ($i = 0; $i < $js_arraycount; $i++) 
-            {
-               $JShash = md5($JS['includes'][$i].$compr_JS_algo);
-               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
-               {
-                   $JScontent = file_get_contents($JS['includes'][$i]);
-                   $JSpackedcontent = JSMin::minify($JScontent);
-                   $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
-                   fwrite($JSnewfile,$JSpackedcontent);
-                   fclose($JSnewfile);
-               }
-               $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js';
-            }
           }
+          break;
+
+       // case 4: use JSmin to compress each file (standard setting)
+       case 4:
+           require 'jsmin/jsmin.php';
+           for ($i = 0; $i < $js_arraycount; $i++) 
+           {
+              $JShash = md5($JS['includes'][$i].$compr_JS_algo);
+              if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+              {
+                  $JScontent = file_get_contents($JS['includes'][$i]);
+                  $JSpackedcontent = JSMin::minify($JScontent);
+                  $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+                  fwrite($JSnewfile,$JSpackedcontent);
+                  fclose($JSnewfile);
+              }
+              $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js';
+           }
        }
    }
 }
