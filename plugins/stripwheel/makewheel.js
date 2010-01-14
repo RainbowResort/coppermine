@@ -28,7 +28,7 @@
               }
               return false;
           });
-      try { $('#filmstrip').css("cursor", 'url(plugins/stripwheel/mousescroll.cur),e-resize')} catch(woschd_err) {}
+      try { $('#filmstrip').css("cursor", 'url(plugins/stripwheel/mousescroll.cur),e-resize');} catch(woschd_err) {}
 
     });
   });
