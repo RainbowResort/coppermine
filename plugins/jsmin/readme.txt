@@ -17,7 +17,7 @@
 
 What's this?
 ------------
-This plugin combines all javascript files into one and compresses it by removing unneeded stuff. The compressed files will be cached. Normally this plugin will make your gallery access faster for visitors. If you update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager. The folder plugins/jsmin/cache must be readable by visitors, and it must be writable by php (usually chmod to 755). This plugin has no effect in admin mode, log off to see it working.
+This plugin compresses the javascript files by removing unneeded stuff. The compressed files will be cached. Normally this plugin will make your gallery access faster for visitors. If you update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager. The folder plugins/jsmin/cache must be readable by visitors, and it must be writable by php (usually chmod to 755). This plugin has no effect in admin mode, log off to see it working.
 
 
 PLEASE READ THIS !!!
