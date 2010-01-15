@@ -32,7 +32,8 @@ PLEASE READ THIS !!!
 How to install:
 ---------------
 1. Upload folder jsmin to your plugins folder.
-2. Install via plugin manager.
+2. The folder plugins/jsmin/cache must be readable by visitors via http, and it must be writable by php (usually chmod to 755).
+3. Install via plugin manager.
 
 
 How to uninstall:
@@ -40,8 +41,9 @@ How to uninstall:
 1. Uninstall via plugin manager.
 2. Remove folder jsmin from your plugins folder.
 
-Tweaking
---------
+
+Tweaking:
+---------
 If you open codebase.php with a text editor, you'll find a variable named $compr_JS_algo. This allows you to tweak this plugin, but you do that on your own - noone will support you. Try out and test carefully to find the most efficient setting for your gallery.
 $compr_JS_algo = 0: 
 All javascript files will be merged into one single file to reduce the number of http requests. Will speed up access a bit but doesn't save a single byte of bandwidth.
