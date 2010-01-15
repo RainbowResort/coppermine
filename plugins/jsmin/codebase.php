@@ -24,12 +24,14 @@ $thisplugin->add_action('page_start','compr_js');
 function compr_js() 
 {
    global $JS,$LINEBREAK;
-   $compr_JS_algo = 4;  // algorithm for JS compression:
+   $compr_JS_algo = 6;  // algorithm for JS compression:
                         // 0 = just merge in one file
                         // 1 = merge in one file and use packer
-                        // 2 = merge in one file and use jsmin,
+                        // 2 = merge in one file and use jsmin (recommended)
                         // 3 = keep different files and use packer
                         // 4 = keep different files and use jsmin (recommended)
+                        // 5 = keep different files and use jsmin with gzip for browsers that support it (recommended)
+                        // 6 = merge in one file and use jsmin with gzip for browsers that support it (recommended)
    $JSstring = '';
    $JScontent = '';
 
@@ -149,6 +151,104 @@ function compr_js()
               }
               $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js';
            }
+           break;
+
+       // case 5: use JSmin with gzip for FF to compress each file
+       case 5:
+           require 'jsmin/jsmin.php';
+           // gzip works with Firefox, Opera, Chrome
+           $client_array = cpg_determine_client();
+           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome')) == TRUE) 
+           {
+               for ($i = 0; $i < $js_arraycount; $i++) 
+               {
+                  $JShash = md5($JS['includes'][$i].$compr_JS_algo);
+                  if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js.gz'))
+                  {
+                      $JScontent = file_get_contents($JS['includes'][$i]);
+                      $JSpackedcontent = JSMin::minify($JScontent);
+                      $JSgzipcontent = gzencode($JSpackedcontent);
+                      $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js.gz',"w+");
+                      fwrite($JSnewfile,$JSgzipcontent);
+                      fclose($JSnewfile);
+                  }
+                  $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js.gz';
+               }
+           }
+           else
+           // Other browsers get JSmin without gzip
+           {
+              for ($i = 0; $i < $js_arraycount; $i++) 
+              {
+                  $JShash = md5($JS['includes'][$i].$compr_JS_algo);
+                  if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+                  {
+                      $JScontent = file_get_contents($JS['includes'][$i]);
+                      $JSpackedcontent = JSMin::minify($JScontent);
+                      $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+                      fwrite($JSnewfile,$JSpackedcontent);
+                      fclose($JSnewfile);
+                  }
+                  $JS['includes'][$i] = 'plugins/jsmin/cache/'.$JShash.'.js';
+              }
+          }
+          break;
+
+       // case 6: merge in one file and use jsmin with gzip to compress
+       case 6:
+           require 'jsmin/jsmin.php';
+           // gzip works with Firefox, Opera, Chrome
+           $client_array = cpg_determine_client();
+           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome')) == TRUE) 
+           {
+
+               for ($i = 0; $i < $js_arraycount; $i++) 
+               {
+                   $JSstring .= $JS['includes'][$i];
+               }
+               $JShash = md5($JSstring.$compr_JS_algo);
+    
+               // generate new file 
+               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js.gz'))
+               {
+                   for ($i = 0; $i < $js_arraycount; $i++) 
+                   {
+                       $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
+                   }
+                   $JSpackedcontent = JSMin::minify($JScontent);
+                   $JSgzipcontent = gzencode($JSpackedcontent);
+                   $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js.gz',"w+");
+                   fwrite($JSnewfile,$JSgzipcontent);
+                   fclose($JSnewfile);
+               }
+               $JS['includes'] = array();
+               $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js.gz';
+           }
+           else
+           {
+               // Other browsers get JSmin without gzip
+               for ($i = 0; $i < $js_arraycount; $i++) 
+               {
+                   $JSstring .= $JS['includes'][$i];
+               }
+               $JShash = md5($JSstring.$compr_JS_algo);
+    
+               // generate new file 
+               if (!file_exists('plugins/jsmin/cache/'.$JShash.'.js'))
+               {
+                   for ($i = 0; $i < $js_arraycount; $i++) 
+                   {
+                       $JScontent .= file_get_contents($JS['includes'][$i]).$LINEBREAK;
+                   }
+                   $JSpackedcontent = JSMin::minify($JScontent);
+                   $JSnewfile = fopen('plugins/jsmin/cache/'.$JShash.'.js',"w+");
+                   fwrite($JSnewfile,$JSpackedcontent);
+                   fclose($JSnewfile);
+               }
+               $JS['includes'] = array();
+               $JS['includes'][] ='plugins/jsmin/cache/'.$JShash.'.js';
+         }
+         break;
        }
    }
 }
