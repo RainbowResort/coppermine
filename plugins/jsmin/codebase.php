@@ -35,7 +35,7 @@ function compr_js($js_includes)
    $JSstring = '';
    $JScontent = '';
 
-   if (GALLERY_ADMIN_MODE) 
+   if (!GALLERY_ADMIN_MODE) 
    {
        $js_arraycount = count($js_includes);
        switch ($compr_JS_algo)
