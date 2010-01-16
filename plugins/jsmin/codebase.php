@@ -135,7 +135,7 @@ function compr_js()
           }
           break;
 
-       // case 4: use JSmin to compress each file (standard setting)
+       // case 4: use JSmin to compress each file
        case 4:
            require 'jsmin/jsmin.php';
            for ($i = 0; $i < $js_arraycount; $i++) 
@@ -156,7 +156,8 @@ function compr_js()
        // case 5: use JSmin with gzip for FF to compress each file
        case 5:
            require 'jsmin/jsmin.php';
-           // gzip works with Firefox, Opera, Chrome
+           // gzip works with Firefox, Opera, Chrome, IE7+
+           // but browser must be setup to accept gzip encoding
            $client_array = cpg_determine_client();
            $jsserver = Inspekt::makeSuperCage();
            $jsacceptencoding = $jsserver->server->getRaw('HTTP_ACCEPT_ENCODING');
@@ -178,7 +179,7 @@ function compr_js()
                }
            }
            else
-           // Other browsers get JSmin without gzip
+           // other browsers get JSmin without gzip
            {
               for ($i = 0; $i < $js_arraycount; $i++) 
               {
@@ -199,7 +200,8 @@ function compr_js()
        // case 6: merge in one file and use jsmin with gzip to compress
        case 6:
            require 'jsmin/jsmin.php';
-           // gzip works with Firefox, Opera, Chrome
+           // gzip works with Firefox, Opera, Chrome, IE7+
+           // but browser must be setup to accept gzip encoding
            $client_array = cpg_determine_client();
            $jsserver = Inspekt::makeSuperCage();
            $jsacceptencoding = $jsserver->server->getRaw('HTTP_ACCEPT_ENCODING');
@@ -230,7 +232,7 @@ function compr_js()
            }
            else
            {
-               // Other browsers get JSmin without gzip
+               // other browsers get JSmin without gzip
                for ($i = 0; $i < $js_arraycount; $i++) 
                {
                    $JSstring .= $JS['includes'][$i];
