@@ -71,6 +71,7 @@ Change log:
 v0.4 (2010/01/16)
 -----------------
 Using new plugin hook (thanks Andre)
+Added check if zlib is available in php for algo 5 + 6
 
 v0.3 (2010/01/16)
 -----------------
