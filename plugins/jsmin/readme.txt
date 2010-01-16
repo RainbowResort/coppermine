@@ -56,9 +56,9 @@ Keep the different javascript files and use Packer by Dean Edwards to compress t
 $compr_JS_algo = 4: 
 Keep the different javascript files and use JSmin to compress them individually. Saves 15-20% bandwidth. Safest and most compatible setting that will always work.
 $compr_JS_algo = 5: 
-Keep the different javascript files and use JSmin to compress them individually a bit. Afterwards use gzip compression for browsers that reliably support this. Saves 50-60% bandwidth with Firefox, Opera and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
+Keep the different javascript files and use JSmin to compress them individually a bit. Afterwards use gzip compression for browsers that reliably support this. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
 $compr_JS_algo = 6: 
-All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin and afterwards coompressed using gzip for browsers that reliably support it. Saves 50-60% bandwidth with Firefox, Opera and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
+All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin and afterwards coompressed using gzip for browsers that reliably support it. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
 
 
 
