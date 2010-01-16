@@ -158,7 +158,9 @@ function compr_js()
            require 'jsmin/jsmin.php';
            // gzip works with Firefox, Opera, Chrome
            $client_array = cpg_determine_client();
-           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome', 'IE8')) == TRUE && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) 
+           $jsserver = Inspekt::makeSuperCage();
+           $jsacceptencoding = $jsserver->server->getRaw('HTTP_ACCEPT_ENCODING');
+           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome', 'IE8', 'IE7')) == TRUE && substr_count($jsacceptencoding, 'gzip'))
            {
                for ($i = 0; $i < $js_arraycount; $i++) 
                {
@@ -199,7 +201,9 @@ function compr_js()
            require 'jsmin/jsmin.php';
            // gzip works with Firefox, Opera, Chrome
            $client_array = cpg_determine_client();
-           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome', 'IE8')) == TRUE && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip'))
+           $jsserver = Inspekt::makeSuperCage();
+           $jsacceptencoding = $jsserver->server->getRaw('HTTP_ACCEPT_ENCODING');
+           if (in_array($client_array['browser'], array('Firefox', 'Opera', 'Chrome', 'IE8', 'IE7')) == TRUE && substr_count($jsacceptencoding, 'gzip'))
            {
 
                for ($i = 0; $i < $js_arraycount; $i++) 
