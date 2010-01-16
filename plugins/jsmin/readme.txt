@@ -68,6 +68,10 @@ All javascript files will be merged into one single file to reduce the number of
 Change log:
 -----------
 
+v0.3 (2010/01/16)
+-----------------
+Added check if browser supports gzip encoding for algorithm 5 + 6
+
 v0.2 (2010/01/15)
 -----------------
 added two new algorithms with gzip compression for browsers that support it
