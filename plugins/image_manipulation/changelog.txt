@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-16 [B] Fixed broken uninstall queries related to transparent overlay preservation {GauGau}
 2010-01-15 [O] Removed compressed JS file because JSmin plugin is available {Timo}
 2010-01-15 [B] Controls were visible in slideshow {Timo}
 2010-01-15 [M] Version count updated to 1.9 {Timo}

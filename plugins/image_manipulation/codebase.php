@@ -132,9 +132,9 @@ function image_manipulation_install() {
 	}
 	
 	// Check for the transparent overlay
-	if ($CONFIG['transparent_overlay'] != '0') {
-		 if ($superCage->post->keyExists('image_manipulation_continue_anyway') == TRUE && $superCage->post->getInt('image_manipulation_continue_anyway') == 1) {
-            // The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall	        cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', {$CONFIG['transparent_overlay']})");
+	if ($CONFIG['transparent_overlay'] == '1') {
+		 if ($superCage->post->keyExists('image_manipulation_continue_anyway') == TRUE && $superCage->post->getInt('image_manipulation_continue_anyway') == '1') {
+            // The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall	        cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', '1')");
 	        // This plugin only works if image_overlay is off, so let's turn it off if it's on
 		     $CONFIG['transparent_overlay'] = '0';
 		     cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='0' WHERE name='transparent_overlay'");
@@ -166,8 +166,8 @@ function image_manipulation_install() {
 function image_manipulation_uninstall() {
     global $CONFIG;
     // Restore the state of the transparent overlay if needed
-	if ($CONFIG['plugin_image_manipulation_overlay'] != '0') {
-		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value={$CONFIG['plugin_image_manipulation_overlay']} WHERE name='transparent_overlay'");
+	if ($CONFIG['plugin_image_manipulation_overlay'] == '1') {
+		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='1' WHERE name='transparent_overlay'");
 	}
 	// Delete the plugin config records
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_cookies'");
