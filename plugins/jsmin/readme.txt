@@ -20,15 +20,6 @@ What's this?
 This plugin compresses the javascript files by removing unneeded stuff. The compressed files will be cached. Normally this plugin will make your gallery access faster for visitors. If you update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager. The folder plugins/jsmin/cache must be readable by visitors, and it must be writable by php (usually chmod to 755). This plugin has no effect in admin mode, log off to see it working.
 
 
-PLEASE READ THIS !!!
---------------------
-1. This plugin MUST be the last in the chain. Move it all the way down in
-   plugin manager.
-2. NEVER EVER ask for support on the CPG forums when this plugin is active.
-   Supporters will probably refuse to help you because of the unreadable
-   source code.
-
-
 How to install:
 ---------------
 1. Upload folder jsmin to your plugins folder.
@@ -57,8 +48,8 @@ $compr_JS_algo = 4:
 Keep the different javascript files and use JSmin to compress them individually. Saves 15-20% bandwidth. Safest and most compatible setting that will always work.
 $compr_JS_algo = 5: 
 Keep the different javascript files and use JSmin to compress them individually a bit. Afterwards use gzip compression for browsers that reliably support this. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
-$compr_JS_algo = 6: 
-All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin and afterwards coompressed using gzip for browsers that reliably support it. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
+$compr_JS_algo = 6 (default):
+All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin and afterwards coompressed using gzip for browsers that reliably support it. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support. If your PHP version doesn't support zlib, this algorithm will behave like algorithm 2.
 
 
 
