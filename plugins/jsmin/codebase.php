@@ -92,7 +92,7 @@ function compr_js($js_includes)
 	               }
 	               $js_includes = array();
 	               $js_includes[] = $js_jquery;
-	               $js_includes[] ='plugins/jsmin/cache/'.$JShash.'.js.gz';
+	               if ($JShash != 'cfcd208495d565ef66e7dff9f98764da') $js_includes[] ='plugins/jsmin/cache/'.$JShash.'.js.gz';
              }
              else
              {
@@ -134,7 +134,7 @@ function compr_js($js_includes)
                    fwrite($JSnewfile,$JSpackedcontent);
                    fclose($JSnewfile);
                  }
-                 $js_query = 'plugins/jsmin/cache/'.$JShash.'.js';
+                 $js_jquery = 'plugins/jsmin/cache/'.$JShash.'.js';
                  unset($js_includes[array_search('js/scripts.js',$js_includes)]);
                  unset($js_includes[array_search('js/jquery.greybox.js',$js_includes)]);
                  unset($js_includes[array_search('js/jquery.elastic.js',$js_includes)]);
@@ -159,8 +159,8 @@ function compr_js($js_includes)
 	                   fclose($JSnewfile);
 	               }
 	               $js_includes = array();
-	               $js_includes[] = $js_query;
-	               $js_includes[] ='plugins/jsmin/cache/'.$JShash.'.js';
+	               $js_includes[] = $js_jquery;
+	               if ($JShash != 'cfcd208495d565ef66e7dff9f98764da') $js_includes[] ='plugins/jsmin/cache/'.$JShash.'.js';
              }
              else
              {
