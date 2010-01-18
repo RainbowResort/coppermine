@@ -26,6 +26,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-18 [A] Added working example to configuration screen {GauGau}
 2010-01-18 [M] Added SVN:keywords properties {GauGau}
 2010-01-18 [M] Added plugin to subversion repository {GauGau}
 2010-01-18 [A] Added config screen {GauGau}

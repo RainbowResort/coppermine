@@ -45,6 +45,6 @@ $fetchcontent_icon_array['submit'] = cpg_fetch_icon('ok', 1);
 $fetchcontent_icon_array['announcement'] = cpg_fetch_icon('announcement', 1);
 $fetchcontent_icon_array['documentation'] = cpg_fetch_icon('documentation', 1);
 $fetchcontent_icon_array['config'] = cpg_fetch_icon('config', 1);
-
+$fetchcontent_icon_array['info'] = cpg_fetch_icon('info', 1);
 
 ?>

@@ -24,12 +24,15 @@ if (!GALLERY_ADMIN_MODE) {
 
 
 if ($superCage->get->keyExists('pretty')) {
-    pageheader('Test');
+    pageheader('Info');
+	$pretty_explain = 'Remove the URL parameter "pretty" to output this page without embedding it into coppermine\'s theme.';
+} else {
+	$pretty_explain = 'Use the URL parameter "pretty" to embedd the output into coppermine\'s output.';
 }
 
 echo <<< EOT
 This page will output all kinds of information that is available and populated about the visitor of this page - play with and by logging in and out or changing permissions.<br />
-Use the URL parameter "pretty" to embedd the output into coppermine's output.
+{$pretty_explain}
 
 <h1>array $<b></b>USER</h1>
 <textarea rows="5" class="textinput" style="width:100%">

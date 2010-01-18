@@ -35,7 +35,7 @@ $size_array = array(1 => 'thumbnail', 2 => 'intermediate', 3 => 'full-size');
 // Sanitize URL address parameters
 if ($superCage->get->keyExists('pid')) {
     $pid = $superCage->get->getInt('pid'); // pid = (integer) pid of the image
-} elseif ($superCage->get->keyExists('album') && $superCage->get->keyExists('meta')) {
+} elseif ($superCage->get->keyExists('album') && $superCage->get->keyExists('meta') && $superCage->get->testAlpha('meta') && $superCage->get->getInt('album')) {
     // album = integer number of the album; only together with the specification of the meta album  
     // (not implemented yet)
     if ($superCage->get->testAlpha('album')) {
@@ -43,13 +43,20 @@ if ($superCage->get->keyExists('pid')) {
     } else {
         $album = $superCage->get->getInt('album');
     }
-    // meta = meta image type, either
-    //                 random / r
-    //                 lastup / u
-    //                 toprated / t
-    //                 mostviewed / v
-    // (not implemented yet)
+    $allowed_meta_array = array('random', 'lastup', 'toprated', 'mostviewed');
     $fetchcontent_meta = $superCage->get->getAlpha('meta');
+	if (in_array($superCage->get->getAlpha('meta'), $allowed_meta_array) == TRUE) {
+		$fetchcontent_meta = $superCage->get->getAlpha('meta');
+	} else {
+		$output_denied++;
+		if ($CONFIG['plugin_fetchcontent_enable_logging'] != 0) {
+			$denial_reason_array[] = 'Plugin fetchcontent: wrong parameter for meta specified by user ' . $USER_DATA['user_name'] . ' (ID ' . USER_ID . ', groups ' . implode(',', $USER_DATA['groups']) . '), remote IP address: ' . $superCage->server->getRaw('REMOTE_ADDR') . $referer;
+		}
+	}
+	echo $album;
+	echo '<hr />';
+	echo $fetchcontent_meta;
+	die;
 } else {
     $output_denied++;
     if ($CONFIG['plugin_fetchcontent_enable_logging'] != 0) {
