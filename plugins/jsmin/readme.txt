@@ -1,5 +1,5 @@
 /**************************************************
-  Coppermine 1.5.x Plugin - JSMin
+  Coppermine 1.5.x Plugin - JSmin
   *************************************************
   Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -17,7 +17,7 @@
 
 What's this?
 ------------
-This plugin compresses the javascript files by removing unneeded stuff. The compressed files will be cached. Normally this plugin will make your gallery access faster for visitors. If you update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager. The folder plugins/jsmin/cache must be readable by visitors, and it must be writable by php (usually chmod to 755). This plugin has no effect in admin mode, log off to see it working.
+This plugin compresses the javascript files. The compressed files will be cached. Normally this plugin will make your gallery access faster for visitors. If you update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager. The folder plugins/jsmin/cache must be readable by visitors, and it must be writable by php (usually chmod to 755). This plugin has no effect in admin mode, log off to see it working.
 
 
 How to install:
@@ -58,6 +58,14 @@ All javascript files will be merged into one single file to reduce the number of
 
 Change log:
 -----------
+
+v1.0 (2010/01/18)
+-----------------
+added new algorithm that has the optimal balance between
+- few http requests (always exactly 2 per page)
+- optimal compression
+added docs
+stable release
 
 v0.4 (2010/01/16)
 -----------------

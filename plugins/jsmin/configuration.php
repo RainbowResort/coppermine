@@ -15,11 +15,11 @@
   $Date$
   **************************************************/
   
-$name='JSMin';
-$description='<p>THIS PLUGIN MUST BE THE LAST IN THE CHAIN! MOVE ALL WAY DOWNWARDS IN PLUGIN MANAGER! This plugin combines all javascript files to one and removes unneeded stuff (e. g. comments).</p>';
-$author='<a href="http://www.timos-welt.de"  rel="external" class="external">Timos-Welt</a>';
-$version='0.4';
+$name='JSmin';
+$description='<p>This plugin combines all javascript files of the gallery pages to two compressed ones by removing unneeded stuff (e. g. comments) and using zlib functionality where possible.</p>';
+$author='<a href="http://www.timos-welt.de" rel="external" class="external">Timo Schewe</a>';
+$version='1.0';
 $install_info = "There's nothing to configure after installation.";
-$extra_info = '<span class="admin_menu external"><a href="plugins/jsmin/cache/clearcache.php" rel="external" title="Clear Cache">Clear cache</a></span> <span class="admin_menu external"><a href="http://forum.coppermine-gallery.net/index.php" rel="external" title="JSmin Support">JSmin Support</a></span>'
-    . '<p>This plugin MUST be the last one in the chain! Move it all the way downwards in plugin manager. This plugin has no effect in admin mode, log off to see it working.</p>';
+$extra_info = '<a class="admin_menu" href="plugins/jsmin/docs/english.htm" title="Documentation">JSmin Documentation</a> <a class="admin_menu" href="plugins/jsmin/cache/clearcache.php" title="Clear Cache">Clear cache</a> <a class="admin_menu" href="http://forum.coppermine-gallery.net/index.php/topic,63223.0.html" title="JSmin Support">JSmin Support</a>'
+    . '<p>This plugin has no effect in admin mode, log off to see it working.</p>';
 ?>
