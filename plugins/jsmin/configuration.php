@@ -18,7 +18,7 @@
 $name='JSmin';
 $description='<p>This plugin combines all javascript files of the gallery pages to two compressed ones by removing unneeded stuff (e. g. comments) and using zlib functionality where possible.</p>';
 $author='<a href="http://www.timos-welt.de" rel="external" class="external">Timo Schewe</a>';
-$version='1.0';
+$version='1.1';
 $install_info = "There's nothing to configure after installation.";
 $extra_info = '<a class="admin_menu" href="plugins/jsmin/docs/english.htm" title="Documentation">JSmin Documentation</a> <a class="admin_menu" href="plugins/jsmin/cache/clearcache.php" title="Clear Cache">Clear cache</a> <a class="admin_menu" href="http://forum.coppermine-gallery.net/index.php/topic,63223.0.html" title="JSmin Support">JSmin Support</a>'
     . '<p>This plugin has no effect in admin mode, log off to see it working.</p>';

@@ -33,24 +33,9 @@ How to uninstall:
 2. Remove folder jsmin from your plugins folder.
 
 
-Tweaking:
----------
-If you open codebase.php with a text editor, you'll find a variable named $compr_JS_algo. This allows you to tweak this plugin, but you do that on your own - noone will support you. Try out and test carefully to find the most efficient setting for your gallery.
-$compr_JS_algo = 0: 
-All javascript files will be merged into one single file to reduce the number of http requests. Will speed up access a bit but doesn't save a single byte of bandwidth.
-$compr_JS_algo = 1: 
-All javascript files will be merged into one single file. This one will be compressed using Packer by Dean Edwards. Very efficient, but this one makes great demands on the javascript files - they have to be syntactically absolutely correct (currently the cpg1.5.x files are not), and it's not allowed that packer has been already used before on the same files, so the setting won't work at the moment. For future use.
-$compr_JS_algo = 2: 
-All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin. Will speed up access and saves 15-20% bandwidth.
-$compr_JS_algo = 3: 
-Keep the different javascript files and use Packer by Dean Edwards to compress them individually. Very efficient, but this one makes great demands on the javascript files - they have to be syntactically absolutely correct (currently the cpg1.5.x files are not), and it's not allowed that packer has been already used, so the setting won't work at the moment. For future use.
-$compr_JS_algo = 4: 
-Keep the different javascript files and use JSmin to compress them individually. Saves 15-20% bandwidth. Safest and most compatible setting that will always work.
-$compr_JS_algo = 5: 
-Keep the different javascript files and use JSmin to compress them individually a bit. Afterwards use gzip compression for browsers that reliably support this. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support.
-$compr_JS_algo = 6 (default):
-All javascript files will be merged into one single file to reduce the number of http requests. This single file is compressed with JSmin and afterwards coompressed using gzip for browsers that reliably support it. Saves 50-60% bandwidth with Firefox, Opera, IE7+ and Chrome. With other browsers at least 15-20% of bandwidth are saved. You will need PHP with zlib support. If your PHP version doesn't support zlib, this algorithm will behave like algorithm 2.
-
+Maintenance:
+------------
+If you ever update your gallery or any plugins that add javascript stuff, it is very important to manually clear the cache using the button in plugin manager.
 
 
 =========================================================================
@@ -58,6 +43,10 @@ All javascript files will be merged into one single file to reduce the number of
 
 Change log:
 -----------
+
+v1.1 (2010/01/19)
+-----------------
+code clean up
 
 v1.0 (2010/01/18)
 -----------------
