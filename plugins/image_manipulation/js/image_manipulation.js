@@ -238,19 +238,9 @@ function im_reset()
 }
 
 // add to window.onload
-function im_addLoad(im_func)
-{
-    var im_oldonload = window.onload;
-    if (typeof window.onload != 'undefined')
-      { window.onload = im_func; }
-    else
-      { window.onload = function() 
-          {
-              if (im_oldonload) { im_oldonload(); }
-              im_func();
-          };
-      }
-}
+function im_addLoad(im_func) { var im_oldonload = window.onload; if (typeof window.onload != 'function') { window.onload = im_func; } else { window.onload = function() { if (im_oldonload) { im_oldonload(); } im_func(); }; } }
+
+
 
 // get values from URL
 function im_getvalues()
