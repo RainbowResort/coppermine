@@ -4,7 +4,7 @@
 <title>FetchContent plugin for cpg1.5.x</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="language" content="en" />
-<meta name="copyright" content="Timo Schewe" />
+<meta name="copyright" content="Coppermine dev team" />
 <meta name="description" content="" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta name="MSSmartTagsPreventParsing" content="true" />
@@ -40,7 +40,7 @@
 <p>Display content taken from coppermine on non-coppermine-driven pages. Might later become the successor of cpmFetch.</p>
 
 <a name="requirements"></a><h2>Minimum requirements<a href="#requirements" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
--
+There are currently no minimum requirements for the usage of this plugin other than having a coppermine gallery up-and-running. This may change later for particular features.
 
 <a name="install"></a><h2>Install and uninstall<a href="#install" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 Install/uninstall this plugin as any other plugin, using the plugin manager. There are no particular install/uninstall steps that differ from "regular" plugins.
@@ -56,44 +56,61 @@ On the plugin configuration screen you can enable or disable how the plugin work
 	<div class="indent">
     
 		<a name="configuration_image_image_denied"></a><h4>Deny access action<a href="#configuration_image_image_denied" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-<pre>// Specifiy what should happen if the visitor is denied to see the image
-// Possible options: 0 - output nothing at all, resulting in a broken image
-//                   1 - Display a blank, 1x1 pixel image (recommended, default)
-//                   2 - Display a placeholder image that tells the visitor
-//                       about being denied to view the image he requested
-//                   3 - try to display the image no matter what, ignoring 
-//                       permissions (troubleshooting only!)</pre>
+        Specifiy what should happen if the visitor is denied to see the image.<br />
+        Available options:
+        <ul>
+            <li>Output nothing at all, resulting in a broken image</li>
+            <li>Display a blank, 1x1 pixel image (recommended, default)</li>
+            <li>Display a placeholder image that tells the visitor about being denied to view the image he requested</li>
+            <li>try to display the image no matter what, ignoring permissions (troubleshooting only!)</li>
+        </ul>
 		
 		<a name="configuration_image_check_referer"></a><h4>Check referer<a href="#configuration_image_check_referer" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-<pre>// Specify if the referer should be checked (not implemented yet)
-// Possible options: 0 - don't check
-//                   1 - only allow the domain that the gallery resides on
-//                   string - list of allowed domains, separated with a pipe (|)</pre>
+        Specify if the referer should be checked (Option has not been implemented yet, that's why it's currently greyed out)<br />
+        Possible options:
+        <ul>
+            <li>No, don't check referer</li>
+            <li>Only allow the domain that the gallery resides on</li>
+            <li>List of allowed domains, separated with a pipe (|)</li>
+        </ul>
 		
 		<a name="configuration_image_enable_logging"></a><h4>Enable logging<a href="#configuration_image_enable_logging" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-<pre>// Specify if the actions of this plugin should be logged
-// Possible options: 0 - don't log
-//                   1 - only log errors
-//                   2 - log everything</pre>
-		
+        Specify if the actions of this plugin should be logged.<br />
+        Possible options:
+        <ul>
+            <li>No, don't log</li>
+            <li>Only log errors</li>
+            <li>Log everything</li>
+        </ul>
+        
 		<a name="configuration_image_non_image"></a><h4>Allow other files than images<a href="#configuration_image_non_image" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-<pre>// Specify if non-images should be allowed to be fetched as well
-// Possible options: 0 - don't allow non-images
-//                   1 - allowed, but only if URL parameter "filetype" is explicitely set to
-//                       'document', 'audio', 'movie' or 'any'
-//                   2 - allowed, but only if URL parameter "imageonly" is NOT set
-//                   3 - allowed without further checking</pre>
+        Specify if non-images should be allowed to be fetched as well.<br />
+        Possible options:
+        <ul>
+            <li>No, don't allow non-images.</li>
+            <li>Allowed, but only if URL parameter "filetype" is explicitely set to 'document', 'audio', 'movie' or 'any'</li>
+            <li>Allowed, but only if URL parameter "imageonly" is NOT set</li>
+            <li>Allowed without further checking</li>
+        </ul>
 		
 		<a name="configuration_image_debug"></a><h4>Fetchcontent debugging<a href="#configuration_image_debug" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-<pre>// Set to 1 during debugging (i.e. if you're a coder and you're developing this plugin).
-// Possible options: 0 - debugging off
-//                   1 - debugging on: there will be no header redirection. 
-//                       Instead, there will be output echoed.
-//                       Only makes sense when going to http://yoursite.tld/your_coppermine_folder/?file=fetchcontent/image&pid=XXX directly in the browser's address bar.</pre>		
+        Enable this option during debugging (i.e. if you're a coder and you're developing this plugin). When enabled, there will be no header redirection. Instead, there will be output echoed. Only makes sense when going to <tt class="code">http://yoursite.tld/your_coppermine_folder/?file=fetchcontent/image&pid=XXX</tt> directly in the browser's address bar.<br />
+        Regular users (non-developers) should keep this option off you will need coding skills to understand the output.
 	
 	</div>
 	
 </div>
+
+<a name="todo"></a><h2>To-do<a href="#todo" title="Link to this section"><img src="../../../docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
+<p>This plugin just is at the very start of it's development and doesn't do anything really usefull yet. It is meant to be later a replacement for the popular cpmFetch add-on, using the plugin of coppermine and thus ending newbie agony. There are a lot of features that come to mind that one could implement:</p>
+<ul>
+    <li>Option to create redirection images with text on them that contain real error messages, using GD2 and TrueType</li>
+    <li>Option to actually hide the location of individual images or even secure the albums folder against web access by fetching the images dynamically (will be an enourmous resource-eater)</li>
+    <li>Stats recording: take into account the hits counter from the core</li>
+    <li>Code creation page: an interface for newbies that generates code ready to be copied and pasted into the external page with an intuitive interface with checkboxes and radio buttons.</li>
+    <li>Generate RSS feeds</li>
+    <li>Off-site content syndication: allow gallery owners to hand out keys (similar to the akismet API keys or google maps api keys) that correlate to a specific third-party domain. This should allow the owners of that third-party site to display content taken from the gallery, but should keep unauthorized copycats from lifting the content syndication code to their site.</li>
+</ul>
 
 </body>
 </html>

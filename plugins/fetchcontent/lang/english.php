@@ -48,6 +48,7 @@ $lang_plugin_fetchcontent['allowed_if_filetype_set'] = 'Allowed, but only if URL
 $lang_plugin_fetchcontent['allowed_if_imageonly_not_set'] = 'Allowed, but only if URL parameter "imageonly" is NOT set';
 $lang_plugin_fetchcontent['allowed_no_matter_what'] = 'Allowed no matter what';
 $lang_plugin_fetchcontent['debugging'] = 'Fetchcontent debugging';
+$lang_plugin_fetchcontent['example_file'] = 'example file';
 
 
 

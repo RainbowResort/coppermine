@@ -16,7 +16,6 @@
   $Date$
   *******************************************************/
   
-// http://localhost/~gaugau/cpg15x/?file=fetchcontent/image&pid=34
 if (!defined('IN_COPPERMINE')) { // Make sure this page is not being accessed directly 
     die('Not in Coppermine...');
 }

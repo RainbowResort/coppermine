@@ -31,7 +31,17 @@ mysql_free_result($result);
 
 $extra_info = <<< EOT
 {$lang_plugin_fetchcontent['extra_info_create_file']}<br />
-<textarea class="textinput" style="width:100%;font-family:'Courier New',Courier, monospace;" rows="1" cols="50">&lt;img src="{$CONFIG['site_url']}?file=fetchcontent/image&pid={$fetchcontent_random_pid}&amp;size=1" border="1" alt="" /&gt;</textarea><br />
+<input type="text" class="textinput" style="width:100%;font-family:'Courier New',Courier, monospace;" value="&lt;img src=&quot;{$CONFIG['site_url']}?file=fetchcontent/image&pid={$fetchcontent_random_pid}&amp;size=1&quot; border=&quot;1&quot; alt=&quot;&quot; /&gt;" /><br />
+<textarea class="textinput" style="width:100%;font-family:'Courier New',Courier, monospace;" rows="5">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr"&gt;
+&lt;head&gt;
+&lt;title&gt;{$lang_plugin_fetchcontent['display_name']} {$lang_plugin_fetchcontent['example_file']}&lt;/title&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script src="{$CONFIG['site_url']}?file=fetchcontent/js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
 EOT;
 $install_info = '';
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63166.0.html" rel="external" class="admin_menu">' . $fetchcontent_icon_array['announcement'] . $lang_plugin_fetchcontent['announcement_thread'] . '</a>';

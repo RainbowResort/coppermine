@@ -26,6 +26,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-19 [M] Version count updated to 0.3 {GauGau}
+2010-01-19 [D] Added todo list to docs {GauGau}
+2010-01-19 [A] Added first draft of file that will fetch the JavaScript {GauGau}
 2010-01-18 [A] Added working example to configuration screen {GauGau}
 2010-01-18 [M] Added SVN:keywords properties {GauGau}
 2010-01-18 [M] Added plugin to subversion repository {GauGau}
