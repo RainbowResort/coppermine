@@ -13,7 +13,13 @@ class topic_controller extends Controller {
             cpg_die(ERROR, Lang::item('error.wrong_topic_id'), __FILE__, __LINE__);
         }
         if (!$authorizer->can_access_topic($vars['topic_id'])) {
-            cpg_die(ERROR, Lang::item('error.access_denied'), __FILE__, __LINE__);
+            $superCage = Inspekt::makeSuperCage();
+            $redirect = 'login.php';
+            if ($matches = $superCage->server->getMatched('QUERY_STRING', '/^[a-zA-Z0-9&=_\/.-]+$/')) {
+                $redirect .= '?force_login=1&referer='.urlencode('displayimage.php?'.$matches[0]);
+            }
+            header("Location: $redirect");
+            exit();
         }
         $this->forum->add_view($vars['topic_id']);
         $vars['nagavitor'] = $this->forum->get_nagavitor();
