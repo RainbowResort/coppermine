@@ -30,16 +30,34 @@ if ($superCage->get->testAlpha('album')) {
     $album = $superCage->get->getInt('album');
 }
 
+if ($album == '') {
+	$album = 'lastup'; // Default is lastuploaded
+}
+
+if ($superCage->get->keyExists('cat')) {
+	$cat = $superCage->get->getInt('cat');
+} else {
+	$cat = '';
+}
+
 if ($superCage->get->keyExists('cols') && $superCage->get->getInt('cols')) {
     $thumbcols = $superCage->get->getInt('cols');
 } else {
     $thumbcols = $CONFIG['thumbcols'];
 }
 
+if ($thumbcols > $CONFIG['plugin_fetchcontent_max_cols']) {
+	$thumbcols = $CONFIG['plugin_fetchcontent_max_cols'];
+}
+
 if ($superCage->get->keyExists('rows') && $superCage->get->getInt('rows')) {
     $thumbrows = $superCage->get->getInt('rows');
 } else {
     $thumbrows = $CONFIG['thumbrows'];
+}
+
+if ($thumbrows > $CONFIG['plugin_fetchcontent_max_rows']) {
+	$thumbrows = $CONFIG['plugin_fetchcontent_max_rows'];
 }
 
 if ($superCage->get->keyExists('tableid') && $superCage->get->getAlnum('tableid')) {
@@ -58,16 +76,11 @@ if ($superCage->get->keyExists('size')) {
     }
 }
 
-$display_array = fetchcontent_display_thumbnails($album, $superCage->get->getInt('cat'), 1, $thumbcols, $thumbrows, FALSE);
-/*
-echo '<pre>';
-print_r($display_array);
-echo '</pre>';
-die;
-*/
+if ($superCage->get->keyExists('search')) {
+    $search = $superCage->get->getAlpha('search');
+}
 
-
-
+$display_array = fetchcontent_display_thumbnails($album, $cat, 1, $thumbcols, $thumbrows, FALSE);
 
 $loopCounter = 1;
 echo <<< EOT
@@ -107,9 +120,21 @@ EOT;
 			// Wrap the link around the image if applicable
 			if ($size == 1 && $superCage->get->keyExists('nolink') != TRUE) {
 			    $link_target = $CONFIG['site_url'] . 'displayimage.php?';
-			    $link_target .= 'album=' . $display_array['thumb_list'][$loopCounter]['aid'] . '&amp;';
-			    if ($superCage->get->keyExists('cat')) {
+				if (is_int($album) != TRUE) { // We have a meta album here
+					if ($album == 'lastup' || $album == 'topn' || $album == 'toprated' || $album == 'lastcom' || $album == 'lasthits' || $album == 'search') {
+						$link_target .= 'album=' . $album . '&amp;';
+						if ($cat == '') {
+							$cat = 0;
+						}
+					}
+				} else {
+					$link_target .= 'album=' . $display_array['thumb_list'][$loopCounter]['aid'] . '&amp;';
+				}
+			    if ($cat != '') {
 			        $link_target .= 'cat=' . $superCage->get->getInt('cat') . '&amp;';
+			    }
+				if ($display_array['thumb_list'][$loopCounter]['msg_id'] != '') {
+			        $link_target .= 'msg_id=' . $display_array['thumb_list'][$loopCounter]['msg_id'] . '&amp;';
 			    }
 			    $link_target .= 'pid=' . $display_array['thumb_list'][$loopCounter]['pid'];
 			    $link_target .= '#top_display_media';

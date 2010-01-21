@@ -49,6 +49,10 @@ $lang_plugin_fetchcontent['allowed_if_imageonly_not_set'] = 'Allowed, but only i
 $lang_plugin_fetchcontent['allowed_no_matter_what'] = 'Allowed no matter what';
 $lang_plugin_fetchcontent['debugging'] = 'Fetchcontent debugging';
 $lang_plugin_fetchcontent['example_file'] = 'example file';
+$lang_plugin_fetchcontent['fetching_several_files'] = 'Fetching several files';
+$lang_plugin_fetchcontent['overall_settings'] = 'Overall Settings';
+$lang_plugin_fetchcontent['max_cols'] = 'Maximum number of table columns';
+$lang_plugin_fetchcontent['max_rows'] = 'Maximum number of table rows';
 
 
 

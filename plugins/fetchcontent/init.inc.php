@@ -21,11 +21,11 @@ if (!defined('IN_COPPERMINE')) {
 }
 
 // Define the default language array (English)
-require ("./plugins/fetchcontent/lang/english.php");
+require ('./plugins/fetchcontent/lang/english.php');
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
-if (file_exists("./plugins/fetchcontent/lang/{$CONFIG['lang']}.php")) {
-    require ("./plugins/fetchcontent/lang/{$CONFIG['lang']}.php");
+if (file_exists('./plugins/fetchcontent/lang/'.$CONFIG['lang'].'.php')) {
+    require ('./plugins/fetchcontent/lang/'.$CONFIG['lang'].'.php');
 } 
 
 // Determine the help file link

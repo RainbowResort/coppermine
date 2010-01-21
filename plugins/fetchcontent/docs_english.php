@@ -46,6 +46,24 @@ After installing the plugin you can access the plugin's configuration screen at 
 On the plugin configuration screen you can enable or disable how the plugin works.
 
 <div class="indent">
+	<a name="configuration_overall"></a><h3>Overall Settings<a href="#configuration_overall" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	The following options apply for all components of the plugin.
+	<div class="indent">
+		<a name="configuration_overall_enable_logging"></a><h4>Enable logging<a href="#configuration_overall_enable_logging" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Specify if the actions of this plugin should be logged.<br />
+        Possible options:
+        <ul>
+            <li>No, don't log</li>
+            <li>Only log errors</li>
+            <li>Log everything</li>
+        </ul>
+		
+		<a name="configuration_overall_debug"></a><h4>Fetchcontent debugging<a href="#configuration_overall_debug" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        Enable this option during debugging (i.e. if you're a coder and you're developing this plugin). When enabled, there will be no header redirection. Instead, there will be output echoed. Only makes sense when going to <tt class="code">{$CONFIG['site_url']}?file=fetchcontent/image&pid={$fetchcontent_random_pid}&amp;size=1</tt> directly in the browser's address bar.<br />
+        Regular users (non-developers) should keep this option off you will need coding skills to understand the output.
+		
+	</div>
+	
 	<a name="configuration_image"></a><h3>Individual file (image) settings<a href="#configuration_image" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 	The following options apply for individual images / files fetched by the script.
 	
@@ -70,15 +88,6 @@ On the plugin configuration screen you can enable or disable how the plugin work
             <li>List of allowed domains, separated with a pipe (|)</li>
         </ul>
 		
-		<a name="configuration_image_enable_logging"></a><h4>Enable logging<a href="#configuration_image_enable_logging" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        Specify if the actions of this plugin should be logged.<br />
-        Possible options:
-        <ul>
-            <li>No, don't log</li>
-            <li>Only log errors</li>
-            <li>Log everything</li>
-        </ul>
-        
 		<a name="configuration_image_non_image"></a><h4>Allow other files than images<a href="#configuration_image_non_image" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
         Specify if non-images should be allowed to be fetched as well.<br />
         Possible options:
@@ -89,9 +98,18 @@ On the plugin configuration screen you can enable or disable how the plugin work
             <li>Allowed without further checking</li>
         </ul>
 		
-		<a name="configuration_image_debug"></a><h4>Fetchcontent debugging<a href="#configuration_image_debug" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
-        Enable this option during debugging (i.e. if you're a coder and you're developing this plugin). When enabled, there will be no header redirection. Instead, there will be output echoed. Only makes sense when going to <tt class="code">{$CONFIG['site_url']}?file=fetchcontent/image&pid={$fetchcontent_random_pid}&amp;size=1</tt> directly in the browser's address bar.<br />
-        Regular users (non-developers) should keep this option off you will need coding skills to understand the output.
+	</div>
+	
+	<a name="configuration_several"></a><h3>Fetching several files<a href="#configuration_several" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	The following options apply when fetching several files.
+	<div class="indent">
+		<p class="cpg_message_success">The fetchcontent script has got the potential to read an infinite number of records from the coppermine database. Allowing a high number of records to be fetched increases the risk that the fetchcontent plugin will be abused to leech the content of your site. That's why you can (and should) limit the number of records that fetchcontent can pull by setting the max. columns and rows to a value that makes sense for your own usage.</p>
+		
+		<a name="configuration_several_cols"></a><h4>Maximum number of table columns<a href="#configuration_several_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The maximum number of columns. Default is the number of columns you have set in coppermine's config.
+		
+		<a name="configuration_several_rows"></a><h4>Maximum number of table rows<a href="#configuration_several_rows" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+		The maximum number of rows. Default is the number of rows you have set in coppermine's config.
 	</div>
 </div>
 
@@ -110,7 +128,7 @@ On the plugin configuration screen you can enable or disable how the plugin work
 
 <div class="indent">
 
-	<a name="usage_images"></a><h3>Fetching individual images<a href="#usage_images" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	<a name="usage_several"></a><h3>Fetching several files<a href="#usage_several" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 	<div class="indent">
     	Create a test file anywhere (inside the coppermine folder or outside of it) and add this content:<br />
     	<textarea class="cpg_code smallcode" rows="9" style="width:80%;">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
@@ -127,13 +145,27 @@ On the plugin configuration screen you can enable or disable how the plugin work
         Replace the content placeholder line with
         <textarea class="cpg_code smallcode" rows="1" style="width:80%;">&lt;script src="{$CONFIG['site_url']}?file=fetchcontent/js&amp;album=random" type="text/javascript"&gt;&lt;/script&gt;</textarea>
         
-        <a name="usage_images_params"></a><h4>Parameters<a href="#usage_images_params" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+        <a name="usage_several_params"></a><h4>Parameters<a href="#usage_several_params" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
             <div class="indent">
                 You can control the behaviour of the script to a certain extent by adding parameters to the URL. To add more parameters, use the ampersand sign (<tt class="code">&amp;</tt>) to add more parameters to the string:
-                <a name="usage_images_params_cols"></a><h5>cols<a href="#usage_images_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+                <a name="usage_several_params_album"></a><h5>album<a href="#usage_several_params_album" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+				<p>Specify the album that the files should be fetched from. Similarly to the core coppermine files you can specify both the album ID (aid) as well as the name of the meta album.</p>
+				Available meta albums:
+				<ul>
+					<li>random</li>
+					<li>lastup</li>
+					<li>topn</li>
+					<li>toprated</li>
+					<li>lastcom</li>
+					<li>lasthits</li>
+					<li>lastalb</li>
+					<li>search</li>
+				</ul>
+				
+				<a name="usage_several_params_cols"></a><h5>cols<a href="#usage_several_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
                 The number of table columns returned. Default is the number of columns you specified in coppermine's config record &quot;<a href="docs/en/configuration.htm#admin_thumbnail_columns">Number of columns on thumbnail page</a>&quot;
                 
-                <a name="usage_images_params_rows"></a><h5>rows<a href="#usage_images_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
+                <a name="usage_several_params_rows"></a><h5>rows<a href="#usage_several_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
                 The number of table rows returned. Default is the number of rows you specified in coppermine's config record &quot;<a href="docs/en/configuration.htm#admin_thumbnail_rows">Number of rows on thumbnail page</a>&quot;
             </div>
     </div>

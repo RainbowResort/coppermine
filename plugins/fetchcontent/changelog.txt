@@ -27,6 +27,8 @@ Changelog
 *********************************************
 
 2010-01-21 [M] Version count updated to 0.4 {GauGau}
+2010-01-21 [A] Added max col and max row setting {GauGau}
+2010-01-21 [M] Version count updated to 0.4 {GauGau}
 2010-01-21 [A] Added example stylesheet definition {GauGau}
 2010-01-21 [A] Turned docs from HTML to PHP files to drop placeholders {GauGau}
 2010-01-20 [M] Version count updated to 0.3 {GauGau}

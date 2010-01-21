@@ -43,6 +43,8 @@ function fetchcontent_install() {
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_enable_logging', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_non_image', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_debug', '0')");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_cols', {$CONFIG['thumbcols']})");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_rows', {$CONFIG['thumbrows']})");
 	
     return true;
 }
@@ -56,6 +58,8 @@ function fetchcontent_install() {
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_enable_logging'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_non_image'");
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_debug'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_cols'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_rows'");
 
     return true;
 }

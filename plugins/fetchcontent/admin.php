@@ -16,7 +16,16 @@
   $Date$
   *******************************************************/
 
-require_once('./plugins/fetchcontent/configuration.php');
+require('./plugins/fetchcontent/configuration.php');
+require('./plugins/fetchcontent/init.inc.php');
+
+if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'js/jquery.spinbutton.js';
+}
+
+if (in_array('plugins/fetchcontent/admin.js', $JS['includes']) != TRUE) {
+	$JS['includes'][] = 'plugins/fetchcontent/admin.js';
+}
 
 // create Inspekt supercage
 $superCage = Inspekt::makeSuperCage();
@@ -39,6 +48,8 @@ if ($superCage->post->keyExists('submit')) {
 	  'plugin_fetchcontent_enable_logging' => array('type' => 'int', 'min' => '0', 'max' => '2'),
 	  'plugin_fetchcontent_non_image' => array('type' => 'int', 'min' => '0', 'max' => '3'),
 	  'plugin_fetchcontent_debug' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+	  'plugin_fetchcontent_max_cols' => array('type' => 'int', 'min' => '1', 'max' => '20'),
+	  'plugin_fetchcontent_max_rows' => array('type' => 'int', 'min' => '1', 'max' => '100'),
 	);
 	// Todo: come up with the regex for the domainlist
 	$config_changes_counter = 0;
@@ -103,7 +114,27 @@ if ($superCage->post->keyExists('submit')) {
 
 // display config page
 
-// Set the option output stuff 
+// Set the option output stuff
+if ($CONFIG['plugin_fetchcontent_enable_logging'] == '0') {
+	$option_output['plugin_fetchcontent_enable_logging_0'] = 'checked="checked"';
+	$option_output['plugin_fetchcontent_enable_logging_1'] = '';
+	$option_output['plugin_fetchcontent_enable_logging_2'] = '';
+} elseif ($CONFIG['plugin_fetchcontent_enable_logging'] == '1') { 
+	$option_output['plugin_fetchcontent_enable_logging_0'] = '';
+	$option_output['plugin_fetchcontent_enable_logging_1'] = 'checked="checked"';
+	$option_output['plugin_fetchcontent_enable_logging_2'] = '';
+} else { 
+	$option_output['plugin_fetchcontent_enable_logging_0'] = '';
+	$option_output['plugin_fetchcontent_enable_logging_1'] = '';
+	$option_output['plugin_fetchcontent_enable_logging_2'] = 'checked="checked"';
+}
+
+if ($CONFIG['plugin_fetchcontent_debug'] == '1') {
+	$option_output['plugin_fetchcontent_debug'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_fetchcontent_debug'] = '';
+}
+
 if ($CONFIG['plugin_fetchcontent_image_denied'] == '0') {
 	$option_output['plugin_fetchcontent_image_denied_0'] = 'checked="checked"';
 	$option_output['plugin_fetchcontent_image_denied_1'] = '';
@@ -140,20 +171,6 @@ if ($CONFIG['plugin_fetchcontent_check_referer'] == '0') {
 	$option_output['plugin_fetchcontent_check_referer_2'] = 'checked="checked"';
 }
 
-if ($CONFIG['plugin_fetchcontent_enable_logging'] == '0') {
-	$option_output['plugin_fetchcontent_enable_logging_0'] = 'checked="checked"';
-	$option_output['plugin_fetchcontent_enable_logging_1'] = '';
-	$option_output['plugin_fetchcontent_enable_logging_2'] = '';
-} elseif ($CONFIG['plugin_fetchcontent_enable_logging'] == '1') { 
-	$option_output['plugin_fetchcontent_enable_logging_0'] = '';
-	$option_output['plugin_fetchcontent_enable_logging_1'] = 'checked="checked"';
-	$option_output['plugin_fetchcontent_enable_logging_2'] = '';
-} else { 
-	$option_output['plugin_fetchcontent_enable_logging_0'] = '';
-	$option_output['plugin_fetchcontent_enable_logging_1'] = '';
-	$option_output['plugin_fetchcontent_enable_logging_2'] = 'checked="checked"';
-}
-
 if ($CONFIG['plugin_fetchcontent_non_image'] == '0') {
 	$option_output['plugin_fetchcontent_non_image_0'] = 'checked="checked"';
 	$option_output['plugin_fetchcontent_non_image_1'] = '';
@@ -176,12 +193,8 @@ if ($CONFIG['plugin_fetchcontent_non_image'] == '0') {
 	$option_output['plugin_fetchcontent_non_image_3'] = 'checked="checked"';
 }
 
-if ($CONFIG['plugin_fetchcontent_debug'] == '1') {
-	$option_output['plugin_fetchcontent_debug'] = 'checked="checked"';
-} else { 
-	$option_output['plugin_fetchcontent_debug'] = '';
-}
-
+$option_output['plugin_fetchcontent_max_cols'] = '';
+$option_output['plugin_fetchcontent_max_rows'] = '';
 
 
 pageheader($lang_plugin_fetchcontent['display_name']);
@@ -204,9 +217,34 @@ if ($superCage->post->keyExists('submit')) {
 	echo <<< EOT
 	{$lang_plugin_fetchcontent['display_name']} &copy; Coppermine dev team
     {$announcement_thread}
+	{$documentation_link}
+	{$configuration_link}
 EOT;
 }
 echo <<< EOT
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" colspan="2" class="tableh1">
+		    {$lang_plugin_fetchcontent['overall_settings']}
+		</td>
+	</tr>
+	<tr>
+	    <td valign="top">
+	        {$lang_plugin_fetchcontent['enable_logging']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_overall_enable_logging" class="greybox" title="{$lang_plugin_fetchcontent['enable_logging']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+	    </td>
+	    <td valign="top">
+            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_0" class="radio" value="0" {$option_output['plugin_fetchcontent_enable_logging_0']} /><label for="plugin_fetchcontent_enable_logging_0" class="clickable_option">{$lang_common['no']}</label><br />
+            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_1" class="radio" value="1" {$option_output['plugin_fetchcontent_enable_logging_1']} /><label for="plugin_fetchcontent_enable_logging_1" class="clickable_option">{$lang_plugin_fetchcontent['errors_only']}</label><br />
+            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_2" class="radio" value="2" {$option_output['plugin_fetchcontent_enable_logging_2']} /><label for="plugin_fetchcontent_enable_logging_2" class="clickable_option">{$lang_plugin_fetchcontent['log_anything']}</label>
+	    </td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_plugin_fetchcontent['debugging']}</label> <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_overall_debug" class="greybox" title="{$lang_plugin_fetchcontent['debugging']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
+		<td valign="top">
+			<input type="checkbox" name="plugin_fetchcontent_debug" id="plugin_fetchcontent_debug" class="checkbox" value="1" {$option_output['plugin_fetchcontent_debug']} /><label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_common['yes']}</label>
 		</td>
 	</tr>
 	<tr>
@@ -216,7 +254,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 	    <td valign="top">
-	        {$lang_plugin_fetchcontent['deny_access_action']} <a href="plugins/fetchcontent/docs/{$documentation_file}.htm#configuration_image_image_denied" class="greybox" title="{$lang_plugin_fetchcontent['deny_access_action']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+	        {$lang_plugin_fetchcontent['deny_access_action']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_image_image_denied" class="greybox" title="{$lang_plugin_fetchcontent['deny_access_action']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	    <td valign="top">
             <input type="radio" name="plugin_fetchcontent_image_denied" id="plugin_fetchcontent_image_denied_0" class="radio" value="0" {$option_output['plugin_fetchcontent_image_denied_0']} /><label for="plugin_fetchcontent_image_denied_0" class="clickable_option">{$lang_plugin_fetchcontent['output_nothing']}</label><br />
@@ -227,7 +265,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 		<td valign="top">
-			{$lang_plugin_fetchcontent['check_referer']} <a href="plugins/fetchcontent/docs/{$documentation_file}.htm#configuration_image_check_referer" class="greybox" title="{$lang_plugin_fetchcontent['check_referer']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+			{$lang_plugin_fetchcontent['check_referer']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_image_check_referer" class="greybox" title="{$lang_plugin_fetchcontent['check_referer']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td valign="top">
             <input type="radio" name="plugin_fetchcontent_check_referer" id="plugin_fetchcontent_check_referer_0" class="radio" value="0" {$option_output['plugin_fetchcontent_check_referer_0']} disabled="disabled" /><label for="plugin_fetchcontent_check_referer_0" class="clickable_option">{$lang_common['no']}</label><br />
@@ -238,17 +276,7 @@ echo <<< EOT
 	</tr>
 	<tr>
 	    <td valign="top">
-	        {$lang_plugin_fetchcontent['enable_logging']} <a href="plugins/fetchcontent/docs/{$documentation_file}.htm#configuration_image_enable_logging" class="greybox" title="{$lang_plugin_fetchcontent['enable_logging']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
-	    </td>
-	    <td valign="top">
-            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_0" class="radio" value="0" {$option_output['plugin_fetchcontent_enable_logging_0']} /><label for="plugin_fetchcontent_enable_logging_0" class="clickable_option">{$lang_common['no']}</label><br />
-            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_1" class="radio" value="1" {$option_output['plugin_fetchcontent_enable_logging_1']} /><label for="plugin_fetchcontent_enable_logging_1" class="clickable_option">{$lang_plugin_fetchcontent['errors_only']}</label><br />
-            <input type="radio" name="plugin_fetchcontent_enable_logging" id="plugin_fetchcontent_enable_logging_2" class="radio" value="2" {$option_output['plugin_fetchcontent_enable_logging_2']} /><label for="plugin_fetchcontent_enable_logging_2" class="clickable_option">{$lang_plugin_fetchcontent['log_anything']}</label>
-	    </td>
-	</tr>
-	<tr>
-	    <td valign="top">
-	        {$lang_plugin_fetchcontent['allow_non_images']} <a href="plugins/fetchcontent/docs/{$documentation_file}.htm#configuration_image_image_denied" class="greybox" title="{$lang_plugin_fetchcontent['allow_non_images']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+	        {$lang_plugin_fetchcontent['allow_non_images']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_image_image_denied" class="greybox" title="{$lang_plugin_fetchcontent['allow_non_images']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 	    </td>
 	    <td valign="top">
             <input type="radio" name="plugin_fetchcontent_non_image" id="plugin_fetchcontent_non_image_0" class="radio" value="0" {$option_output['plugin_fetchcontent_non_image_0']} /><label for="plugin_fetchcontent_non_image_0" class="clickable_option">{$lang_common['no']}</label><br />
@@ -258,11 +286,24 @@ echo <<< EOT
 	    </td>
 	</tr>
 	<tr>
-		<td valign="top">
-			<label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_plugin_fetchcontent['debugging']}</label> <a href="plugins/fetchcontent/docs/{$documentation_file}.htm#configuration_image_debug" class="greybox" title="{$lang_plugin_fetchcontent['debugging']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		<td valign="top" colspan="2" class="tableh1">
+		    {$lang_plugin_fetchcontent['fetching_several_files']}
 		</td>
+	</tr>
+	<tr>
 		<td valign="top">
-			<input type="checkbox" name="plugin_fetchcontent_debug" id="plugin_fetchcontent_debug" class="checkbox" value="1" {$option_output['plugin_fetchcontent_debug']} /><label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_common['yes']}</label>
+			{$lang_plugin_fetchcontent['max_cols']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_several_cols" class="greybox" title="{$lang_plugin_fetchcontent['max_cols']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
+		<td>
+			<input type="text" name="plugin_fetchcontent_max_cols" id="plugin_fetchcontent_max_cols" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_fetchcontent_max_cols']}" {$option_output['plugin_fetchcontent_max_cols']} />
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{$lang_plugin_fetchcontent['max_rows']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_several_rows" class="greybox" title="{$lang_plugin_fetchcontent['max_rows']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+		</td>
+		<td>
+			<input type="text" name="plugin_fetchcontent_max_rows" id="plugin_fetchcontent_max_rows" class="textinput spin-button" size="2" maxlength="2" value="{$CONFIG['plugin_fetchcontent_max_rows']}" {$option_output['plugin_fetchcontent_max_rows']} />
 		</td>
 	</tr>
 	<tr>
