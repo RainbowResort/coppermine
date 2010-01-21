@@ -63,11 +63,7 @@ if ($superCage->get->keyExists('pid')) {
     }
 }
 
-// size = what should be returned, in analogy to the access_level, either
-//        1 = thumbnail
-//        2 = normal/intermediate
-//        3 = fullsize
-//                 
+// size = what should be returned, in analogy to the access_level, either 1 = thumbnail, 2 = normal/intermediate, 3 = fullsize
 $size = 1; // Default is 1, i.e. thumbnail access
 if ($superCage->get->keyExists('size')) {
     if ($superCage->get->getInt('size') == 2) {

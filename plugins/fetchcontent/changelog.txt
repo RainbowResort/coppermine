@@ -26,6 +26,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-21 [M] Version count updated to 0.4 {GauGau}
+2010-01-21 [A] Added example stylesheet definition {GauGau}
+2010-01-21 [A] Turned docs from HTML to PHP files to drop placeholders {GauGau}
+2010-01-20 [M] Version count updated to 0.3 {GauGau}
+2010-01-20 [O] Progressed with core files {GauGau}
 2010-01-19 [M] Version count updated to 0.3 {GauGau}
 2010-01-19 [D] Added todo list to docs {GauGau}
 2010-01-19 [A] Added first draft of file that will fetch the JavaScript {GauGau}

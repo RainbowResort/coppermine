@@ -20,7 +20,18 @@ if (!defined('IN_COPPERMINE')) {
 	die('Not in Coppermine...');
 }
 
+$superCage = Inspekt::makeSuperCage();
+
 $thisplugin->add_action('plugin_install','fetchcontent_install'); // Add plugin_install action$thisplugin->add_action('plugin_uninstall','fetchcontent_uninstall'); // Add plugin_uninstall action
+
+if ($superCage->get->keyExists('file')) {
+    if ($matched = $superCage->get->getMatched('file', "/^([a-zA-Z0-9_\-]+)(\/{0,1}?)([a-zA-Z0-9_\-]+)$/")) {
+        require_once('./plugins/fetchcontent/configuration.php');
+		if ($matched[0] == 'fetchcontent/docs_' . $documentation_file ) {
+			$thisplugin->add_filter('page_meta','fetchcontent_meta');
+		}
+    }
+}
 
 // install
 function fetchcontent_install() {
@@ -47,6 +58,16 @@ function fetchcontent_install() {
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_debug'");
 
     return true;
+}
+
+function fetchcontent_meta($meta) {
+	$meta = <<< EOT
+<link rel="stylesheet" href="docs/style/style.css" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="docs/style/screen.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="docs/style/print.css" media="print" />
+{$meta}
+EOT;
+	return $meta;
 }
 
 ?>

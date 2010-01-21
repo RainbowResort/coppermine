@@ -29,7 +29,7 @@ if (file_exists("./plugins/fetchcontent/lang/{$CONFIG['lang']}.php")) {
 } 
 
 // Determine the help file link
-if (file_exists("./plugins/fetchcontent/docs/{$CONFIG['lang']}.htm")) {
+if (file_exists("./plugins/fetchcontent/docs_{$CONFIG['lang']}.php")) {
     $documentation_file = $CONFIG['lang'];
 } else {
     $documentation_file = 'english';

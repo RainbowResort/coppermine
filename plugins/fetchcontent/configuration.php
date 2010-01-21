@@ -20,10 +20,10 @@ require_once('./plugins/fetchcontent/init.inc.php');
 
 $name = $lang_plugin_fetchcontent['display_name'];
 $description = $lang_plugin_fetchcontent['description'];
-$name = 'FetchContent';
-$description = 'Display content taken from coppermine on non-coppermine-driven pages. Might later become the successor of cpmFetch';
-$author = 'Joachim Müller, later hopefully Bill Chmura (vuud), Coppermine dev team';
-$version = '0.3';
+$name = $lang_plugin_fetchcontent['display_name'];
+$description = $lang_plugin_fetchcontent['description'];
+$author = 'Joachim Müller';
+$version = '0.4';
 
 $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']} AS r INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = r.aid $RESTRICTEDWHERE AND approved = 'YES' AND ((filename LIKE '%.jpg') OR (filename LIKE '%.png') OR (filename LIKE '%.gif')) ORDER BY RAND() LIMIT 1");
 list($fetchcontent_random_pid) = mysql_fetch_row($result);
@@ -39,7 +39,7 @@ $extra_info = <<< EOT
 &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;script src="{$CONFIG['site_url']}?file=fetchcontent/js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="{$CONFIG['site_url']}?file=fetchcontent/js&album=random" type="text/javascript"&gt;&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</textarea>
 EOT;
@@ -47,7 +47,7 @@ $install_info = '';
 $announcement_thread = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63166.0.html" rel="external" class="admin_menu">' . $fetchcontent_icon_array['announcement'] . $lang_plugin_fetchcontent['announcement_thread'] . '</a>';
 $configuration_link = '<a href="index.php?file=fetchcontent/admin" class="admin_menu">' . $fetchcontent_icon_array['config'] . $lang_plugin_fetchcontent['configuration'] . '</a>';
 $info_link = '<a href="index.php?file=fetchcontent/info&amp;pretty" class="admin_menu">' . $fetchcontent_icon_array['info'] . $lang_plugin_fetchcontent['info'] . '</a>';
-$documentation_link = '<a href="plugins/fetchcontent/docs/' . $documentation_file  . '.htm" class="admin_menu">' . $fetchcontent_icon_array['documentation'] . $lang_plugin_fetchcontent['documentation'] . '</a>';
+$documentation_link = '<a href="index.php?file=fetchcontent/docs_' . $documentation_file  . '" class="admin_menu">' . $fetchcontent_icon_array['documentation'] . $lang_plugin_fetchcontent['documentation'] . '</a>';
 $install_info .= '<br />' . $announcement_thread . '&nbsp;' . $documentation_link;
 $extra_info .= '<br />' . $configuration_link . '&nbsp;' . $announcement_thread . '&nbsp;' . $documentation_link . '&nbsp;' . $info_link;
 
