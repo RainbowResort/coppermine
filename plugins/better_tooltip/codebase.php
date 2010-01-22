@@ -24,7 +24,8 @@ $thisplugin->add_filter('thumb_html_title','modify_title');
 function modify_title($row_data)
 {
     // replace standard tooltip with pic title
-    return $row_data['title'];
+    if ($row_data['title']) return $row_data['title'];
+    else return $row_data['filename'];
 }
 
 
