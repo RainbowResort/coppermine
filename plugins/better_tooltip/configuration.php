@@ -20,5 +20,5 @@ $description='Replaces the standard thumb title (the tooltip that appears if you
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
 $version='0.1';
 $install_info = "This plugin requires no configuration.";
-$extra_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63369.0.html" rel="external" class="admin_menu">Announcement thread</a>'';
+$extra_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63369.0.html" rel="external" class="admin_menu">Announcement thread</a>';
 ?>
