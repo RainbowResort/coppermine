@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Better Tooltip
+  Coppermine 1.5.x Plugin - alternative_tooltip
   *************************************************
   Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -18,8 +18,8 @@
 $name='Better Tooltip';
 $description='Replaces the standard thumb title (the tooltip that appears if you hold your mouse pointer over a thumbnail) with the image title.';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='0.3';
-$plugin_cpg_version = array('min' => '1.5');
+$version='0.4';
+$plugin_cpg_version = array('min' => '1.5.3');
 $install_info = "This plugin requires no configuration.";
 $extra_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63369.0.html" rel="external" class="admin_menu">Announcement thread</a>';
 ?>
