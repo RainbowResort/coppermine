@@ -1,3 +1,19 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - Imageflow
+  *************************************************
+  Copyright (c) 2010 Timo Schewe (www.timos-welt.de)
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
 /*
  * Pixastic - JavaScript Image Processing Library
  * Copyright (c) 2008 Jacob Seidelin, jseidelin@nihilogic.dk, http://blog.nihilogic.dk/

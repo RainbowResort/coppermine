@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - thumb_rotate
+  *************************************************
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 require_once './plugins/thumb_rotate/init.inc.php';
 $thumb_rotate_init_array = thumb_rotate_initialize();
 $lang_plugin_thumb_rotate = $thumb_rotate_init_array['language']; 
@@ -12,8 +28,8 @@ $author = sprintf($lang_plugin_thumb_rotate['author'],
     '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>',
     '<a href="http://acko.net/dev/farbtastic/" rel="external" class="external">Steven Wittens</a>');
     
-$version = '2.2';
-
+$version = '2.1';
+$plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     {$lang_plugin_thumb_rotate['resources_warning']}<br />
     <a href="index.php?file=thumb_rotate/index" class="admin_menu">{$thumb_rotate_icon_array['config']}{$lang_plugin_thumb_rotate['config']}</a>&nbsp;

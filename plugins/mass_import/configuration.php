@@ -1,21 +1,19 @@
 <?php
-/*************************
-  mass_import Plugin for cpg1.5.x
-  ************************
-  Copyright (c) 2003-2009 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - mass_import
+  *************************************************
+  Copyright (c) 2010 Nibbler
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
@@ -34,7 +32,7 @@ $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=23938">Paul Van Rompay</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
 $version = '3.3';
-
+$plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu external">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>&nbsp;
     <a href="index.php?file=mass_import/import" class="admin_menu" title="{$lang_plugin_mass_import['description']}">{$mass_import_icon_array['menu']}{$lang_plugin_mass_import['admin_title']}</a>

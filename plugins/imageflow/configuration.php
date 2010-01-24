@@ -14,10 +14,12 @@
   $LastChangedBy$
   $Date$
   **************************************************/
+  
 $name='Imageflow';
 $description='Shows a coverflowish animation on Album list page with EnlargeIt! integration';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='1.1';
+$version='1.2';
+$plugin_cpg_version = array('min' => '1.5');
 $configuration_link = 
 $extra_info = '<a href="index.php?file=imageflow/plugin_config" class="admin_menu">Imageflow Configuration</a> <a href="http://forum.coppermine-gallery.net/index.php/topic,63118.0.html" class="admin_menu">Imageflow announcement thread</a>';
 ?>

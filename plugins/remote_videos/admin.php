@@ -1,26 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - remote_videos
+  *************************************************
+  Copyright (c) 2009-2010 eenemeenemuu
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - Remote Videos
-  ********************************************
-  Copyright (c) 2009 eenemeenemuu
-**********************************************/
+  **************************************************/
 
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);

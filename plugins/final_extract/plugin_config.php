@@ -1,26 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - final_extract
+  *************************************************
+  Copyright (c) 2009 Donnovan Bray
+  *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
+  the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.4.8
-  $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
-  $Revision: 1.3 $
-  $Author: donnoman $
-  $Date: 2005/12/08 05:46:49 $
-**********************************************/
-/**********************************************
-Modified By BMossavari 
-- Add menu option to remove each part
-- Add config page
-**********************************************/
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/admin.php $
+  $Revision: 7043 $
+  $LastChangedBy: gaugau $
+  $Date: 2010-01-11 19:26:53 +0100 (Mo, 11. Jan 2010) $
+  **************************************************/
 
 require('include/init.inc.php');
 

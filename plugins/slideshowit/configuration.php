@@ -10,10 +10,10 @@
   Foundation; either version 3 of the License, or (at 
   your option) any later version.
   *****************************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/configuration.php $
-  $Revision: 6991 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-03 18:50:24 +0100 (So, 03 Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   ****************************************************/
   
 $name='slideshowit';
@@ -22,8 +22,8 @@ $description .= 'To enable this plugin, you will have to add "slideshowit" to "t
 $description .= ' The setting should look like "slideshowit/breadcrumb/catlist/alblist" or similar. For details, review the documentation that comes with coppermine.';
 
 $author='<a href="http://www.genefyoung.com">Gene F. Young</a>';
-$version='1.2';
-
+$version='1.4';
+$plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <table border="0" cellspacing="0" cellpadding="0">
     <tr>

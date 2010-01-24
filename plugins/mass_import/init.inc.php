@@ -1,21 +1,19 @@
 <?php
-/*************************
-  mass_import Plugin for cpg1.5.x
-  ************************
-  Copyright (c) 2003-2009 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - mass_import
+  *************************************************
+  Copyright (c) 2010 Nibbler
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mass_import/configuration.php $
-  $Revision: 6490 $
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mirror/codebase.php $
+  $Revision: 7039 $
   $LastChangedBy: gaugau $
-  $Date: 2009-08-19 10:44:55 +0200 (Mi, 19 Aug 2009) $
-**********************************************/
+  $Date: 2010-01-11 09:55:27 +0100 (Mo, 11. Jan 2010) $
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');

@@ -1,5 +1,20 @@
 <?php
-
+/**************************************************
+  Coppermine 1.5.x Plugin - forum
+  *************************************************
+  Copyright (c) 2010 foulu (Le Hoai Phuong), eenemeenemuu
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 $CONFIG['TABLE_FR_CATEGORIES']    = $CONFIG['TABLE_PREFIX'].'fr_categories';
 $CONFIG['TABLE_FR_BOARDS']        = $CONFIG['TABLE_PREFIX'].'fr_boards';
 $CONFIG['TABLE_FR_TOPICS']        = $CONFIG['TABLE_PREFIX'].'fr_topics';

@@ -14,22 +14,19 @@
   $LastChangedBy$
   $Date$
   **************************************************/
-
   
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+if (!defined('IN_COPPERMINE')) { 
+    die('Not in Coppermine...');
+}
 
 // Add plugin_install action
 $thisplugin->add_action('plugin_install','slider_install');
-
 // Add plugin_uninstall action
 $thisplugin->add_action('plugin_uninstall','slider_uninstall');
-
 // Add search display action
 $thisplugin->add_filter('plugin_block','slider_mainpage');
-
 // Add filter for page head
 $thisplugin->add_action('page_start','slider_head');
-
 
 
 // include some stuff in page header

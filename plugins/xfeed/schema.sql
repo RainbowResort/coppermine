@@ -1,4 +1,22 @@
-CREATE TABLE IF NOT EXISTS `CPG_plugin_xfeeds` (
+#/**************************************************
+#  Coppermine 1.5.x Plugin - xfeed
+#  *************************************************
+#  Copyright (c) 2008 lee (www.mininoteuser.com)
+#  Plugin for CPG 1.4 created by Lee
+#  Ported to CPG 1.5.x by Aditya Mooley <adityamooley@sanisoft.com>
+#  *************************************************
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  ********************************************
+#  $HeadURL$
+#  $Revision$
+#  $LastChangedBy$
+#  $Date$
+#  **************************************************/
+  
+  CREATE TABLE IF NOT EXISTS `CPG_plugin_xfeeds` (
     `xfd_rss_button` int(2) NOT NULL default '1',
 	`xfd_standard` int(2) NOT NULL default '1',
 	`xfd_google` int(2) NOT NULL default '1',

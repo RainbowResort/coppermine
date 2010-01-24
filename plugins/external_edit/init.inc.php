@@ -1,22 +1,19 @@
 <?php
-/**************************
-  Plugin "External Edit"
-  *************************
-  Copyright (c) Joachim Müller
-  For Coppermine Photo Gallery cpg1.5.x
-
+/**************************************************
+  Coppermine 1.5.x Plugin - external_edit
+  *************************************************
+  Copyright (c) 2009 Joachim Müller
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-    
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-
-
-**********************************************/
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 

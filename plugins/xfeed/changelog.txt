@@ -1,0 +1,32 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - xfeed
+  *************************************************
+  Copyright (c) 2008 lee (www.mininoteuser.com)
+  Plugin for CPG 1.4 created by Lee
+  Ported to CPG 1.5.x by Aditya Mooley <adityamooley@sanisoft.com>
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-01-24 [M] Increased plugin version counter {GauGau}
+2010-01-24 [M] Added minimum version info {GauGau}
+2010-01-24 [M] Added changelog file {GauGau}

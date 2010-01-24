@@ -1,4 +1,15 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - monitorcalibrationbar
+  *************************************************
+  Copyright (c) 2010 Joachim Müller
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/slider/codebase.php $
+  $Revision: 6994 $
+  $LastChangedBy: timoswelt $
+  $Date: 2010-01-04 10:54:19 +0100 (Mo, 04. Jan 2010) $
+  **************************************************/
+
 $lang_plugin_moncalb['config_name'] = 'Monitor Calibration Bar';
 $lang_plugin_moncalb['config_description'] = 'Display a bar that allows the end user to calibrate the brightness settings of the monitor for optimal gallery impression. Recommended for photography sites.';
 $lang_plugin_moncalb['picinfo_heading'] = 'Monitor Calibration';

@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - XFeeds $VERSION$=1.3
+  Coppermine 1.5.x Plugin - xfeed
   *************************************************
   Copyright (c) 2008 lee (www.mininoteuser.com)
   Plugin for CPG 1.4 created by Lee
@@ -10,6 +10,11 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/xfeed/configuration.php $
+  $Revision: 6989 $
+  $LastChangedBy: timoswelt $
+  $Date: 2010-01-03 14:03:16 +0100 (So, 03. Jan 2010) $
   **************************************************/
 
 //require('include/init.inc.php');

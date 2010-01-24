@@ -1,3 +1,19 @@
+#/**************************************************
+#  Coppermine 1.5.x Plugin - newsletter
+#  *************************************************
+#  Copyright (c) 2009-2010 Joachim Müller
+#  *************************************************
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  ********************************************
+#  $HeadURL$
+#  $Revision$
+#  $LastChangedBy$
+#  $Date$
+#  **************************************************/
+
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_guest_subscriptions', '0');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_salutation_for_guests', 'Dear subscriber,');
 INSERT IGNORE INTO CPG_config ( `name` , `value` ) VALUES ('plugin_newsletter_from_email', 'ADMIN_EMAIL');

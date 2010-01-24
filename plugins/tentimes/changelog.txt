@@ -25,4 +25,6 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-24 [M] Increased plugin version counter {GauGau}
+2010-01-24 [M] Added minimum version info {GauGau}
 2010-01-20 [M] First release {Timo}

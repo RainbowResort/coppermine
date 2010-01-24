@@ -20,7 +20,8 @@ require('./plugins/image_manipulation/init.inc.php');
 $name = 'Ten Times';
 $description = 'Allows a visitor to view 10 files, then forces registration or login';
 $author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
-$version = '1.0';
+$version = '1.1';
+$plugin_cpg_version = array('min' => '1.5');
 $install_info = '';;
 $extra_info = '';
 ?>

@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - forum
+  *************************************************
+  Copyright (c) 2010 foulu (Le Hoai Phuong), eenemeenemuu
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
 // copyright
 $fr_copyright = "<div class=\"footer\" align=\"center\"><a href=\"http://cpgsf.amfcvn.net/forum.php\">Coppermine Simple Forum ".$CONFIG['fr_version']."</a> &#169; <a href=\"http://forum.coppermine-gallery.net/index.php?action=profile;u=3924\">foulu</a> :: Sponsored by <a href=\"http://haophong.vn\">banh xe day tay</a></div>";
 $template_footer = str_replace('Coppermine Photo Gallery</a></div>', 'Coppermine Photo Gallery</a></div>' . $fr_copyright, $template_footer);

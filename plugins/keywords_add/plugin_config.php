@@ -1,25 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - keywords_add
+  *************************************************
+  Copyright (c) coppermine dev team
+  *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
+  the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.4.8
-  $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
-  $Revision: 1.3 $
-  $Author: donnoman $
-  $Date: 2005/12/08 05:46:49 $
-**********************************************/
-/**********************************************
-Modified by Frantz for Keywords add plugin
-2006/10/08
-**********************************************/
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mirror/codebase.php $
+  $Revision: 7039 $
+  $LastChangedBy: gaugau $
+  $Date: 2010-01-11 09:55:27 +0100 (Mo, 11. Jan 2010) $
+  **************************************************/
 
 require('include/init.inc.php');
 

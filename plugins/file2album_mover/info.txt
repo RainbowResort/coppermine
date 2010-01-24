@@ -1,5 +1,22 @@
+/********************************************************
+  Coppermine 1.5.x plugin - file2album_mover
+  *******************************************************
+  Copyright (c) 2010 M. van Gorkom
+  *******************************************************
+  This program is free software; you can redistribute 
+  it and/or modify it under the terms of the GNU General
+  Public License as published by the Free Software
+  Foundation; either version 3 of the License, or 
+  (at your option) any later version.
+  *******************************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  *******************************************************/
+  
 Name:        File2AlbumMover
-Application: Coppermine 1.4B
+Application: Coppermine 1.5.x
 
 My Name:     M. van Gorkom
 Mail:        geflopt666@hotmail.com

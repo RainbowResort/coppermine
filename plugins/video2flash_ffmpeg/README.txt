@@ -1,18 +1,19 @@
-/***************************************************
-  Video to Flash Plugin for Coppermine Photo Gallery
-  **************************************************
-
-  License: This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+/**************************************************
+  Coppermine 1.5.x Plugin - video2flash_ffmpeg
+  *************************************************
+  Copyright (c) 2010 Abbas Ali
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
-  Plugin version: 1.0
-  $Author: Abbas Ali (abbas@coppermine-gallery.net) $
-  $Date: Tue, 7th Jul 2009 $
-**********************************************/
-
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 This plugin requires ffmpeg (with mp3 codec) [http://ffmpeg.mplayerhq.hu] pre-installed and working on your server. 
 Please DO NOT ask for support on installing or configuring ffmpeg. If you don't have ffmpeg or can't install ffmpeg on your server then this plugin is not meant for you.
 

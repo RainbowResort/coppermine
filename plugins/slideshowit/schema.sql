@@ -9,10 +9,10 @@
 #  Foundation; either version 3 of the License, or (at 
 #  your option) any later version.
 #  *****************************************************
-#  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/configuration.php $
-#  $Revision: 6991 $
-#  $LastChangedBy: timoswelt $
-#  $Date: 2010-01-03 18:50:24 +0100 (So, 03 Jan 2010) $
+#  $HeadURL$
+#  $Revision$
+#  $LastChangedBy$
+#  $Date$
 #  ****************************************************/
 #
 

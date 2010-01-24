@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - thumb_rotate
+  *************************************************
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
 $lang_plugin_thumb_rotate['config_name'] = 'Thumb Rotate';
 $lang_plugin_thumb_rotate['config_description'] = 'Stellt Thumbnails leicht verdreht dar, wie in einem Comic.'; 
 $lang_plugin_thumb_rotate['resources_warning'] = 'Die gedrehten Thumbnails werden zwischengespeichert. Trotzdem geht dieses Plugin ein wenig verschwenderisch mit der Rechenleistung auf dem Server um und sollte deshalb nicht in großen Galerien oder auf langsamen Servern eingesetzt werden. Wenn es zu Leistungsproblemen kommen sollte, dann schalte dieses Plugin ab! Dieses Plugin befindet sich derzeit bestenfalls im Beta-Stadium.';

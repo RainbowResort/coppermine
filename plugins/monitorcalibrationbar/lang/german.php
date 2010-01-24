@@ -1,4 +1,15 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - monitorcalibrationbar
+  *************************************************
+  Copyright (c) 2010 Joachim Müller
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/slider/codebase.php $
+  $Revision: 6994 $
+  $LastChangedBy: timoswelt $
+  $Date: 2010-01-04 10:54:19 +0100 (Mo, 04. Jan 2010) $
+  **************************************************/
+
 $lang_plugin_moncalb['config_name'] = 'Monitorkalibrierungs-Funktionsleiste';
 $lang_plugin_moncalb['config_description'] = 'Zeigt eine Funktionsleiste an, die es dem Besucher ermöglicht, die Helligkeits- und Kontrasteinstellungen des Monitors einigermassen genau einzustellen, um eine optimale Darstellung der Galerie-Bilder zu ermöglichen. Empfohlen für Seiten zum Thema Fotografie.';
 $lang_plugin_moncalb['picinfo_heading'] = 'Monitor kalibrieren';

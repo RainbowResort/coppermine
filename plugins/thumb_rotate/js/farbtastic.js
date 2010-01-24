@@ -1,4 +1,18 @@
-// $Id: farbtastic.js,v 1.2 2007/01/08 22:53:01 unconed Exp $
+/**************************************************
+  Coppermine 1.5.x Plugin - thumb_rotate
+  *************************************************
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
 // Farbtastic 1.2
 
 jQuery.fn.farbtastic = function (callback) {

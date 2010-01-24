@@ -1,22 +1,24 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
+/********************************************************
+  Coppermine 1.5.x plugin - file2album_mover
+  *******************************************************
+  Copyright (c) 2010 M. van Gorkom
+  *******************************************************
+  This program is free software; you can redistribute 
+  it and/or modify it under the terms of the GNU General
+  Public License as published by the Free Software
+  Foundation; either version 3 of the License, or 
   (at your option) any later version.
-  ********************************************
-  Coppermine version: 1.4.1
-  $Source: /cvsroot/coppermine/devel/plugins/sample/codebase.php,v $
-  $Revision: 1.8 $
-  $Author: oddeveloper $
-  $Date: 2005/02/20 10:30:05 $
-**********************************************/
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+  *******************************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  *******************************************************/
+  
+if (!defined('IN_COPPERMINE')) [
+    die('Not in Coppermine...');
+}
 $COUNT_FILES=0;
 require('include/init.inc.php');
 include('configuration.php');

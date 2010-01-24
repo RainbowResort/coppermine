@@ -1,29 +1,23 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2005 Coppermine Dev Team
-  v1.1 originaly written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - keywords_add
+  *************************************************
+  Copyright (c) coppermine dev team
+  *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
+  the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  Coppermine version: 1.4.9
-  $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
-  $Revision: 1.3 $
-  $Author: Frantz $
-  $Date: 2006/10/06 05:46:49 $
-**********************************************/
-/**********************************************
-Modified by Frantz for Keywords add plugin
-2006/10/08
-Version 1.0
-**********************************************/
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/mirror/codebase.php $
+  $Revision: 7039 $
+  $LastChangedBy: gaugau $
+  $Date: 2010-01-11 09:55:27 +0100 (Mo, 11. Jan 2010) $
+  **************************************************/
 
 $name='Keywords_add';
 $description='Add Keywords, picture title, picture description and other custom fields contain for all files in a selected album';
 $author='Frantz';
-$version='1.1';
+$version='1.2';
+$plugin_cpg_version = array('min' => '1.5');
 ?>

@@ -1,21 +1,19 @@
 <?php
-/*************************
-  mass_import Plugin for cpg1.5.x
-  ************************
-  Copyright (c) 2003-2009 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - mass_import
+  *************************************************
+  Copyright (c) 2010 Nibbler
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
 	die('Not in Coppermine...');

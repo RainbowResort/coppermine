@@ -1,19 +1,20 @@
 <?php
-/******************************
-  Coppermine Plugin "File Move"
-  *****************************
+/********************************************************
+  Coppermine 1.5.x plugin - file_move
+  *******************************************************
   Copyright (c) 2003-2009 François Keller
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-  ********************************************
-  Coppermine version: 1.5.x
-  $Source: /cvsroot/cpg-contrib/master_template/codebase.php,v $
-  $Revision: 1.3 $
-  $Author: donnoman $
-  $Date: 2005/12/08 05:46:49 $
-**********************************************/
+  *******************************************************
+  This program is free software; you can redistribute 
+  it and/or modify it under the terms of the GNU General
+  Public License as published by the Free Software
+  Foundation; either version 3 of the License, or 
+  (at your option) any later version.
+  *******************************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/file_move/lang/configuration.php $
+  $Revision: 7107 $
+  $LastChangedBy: gaugau $
+  $Date: 2010-01-21 19:24:13 +0100 (Do, 21. Jan 2010) $
+  *******************************************************/
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 

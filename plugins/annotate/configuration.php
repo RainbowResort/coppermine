@@ -1,20 +1,19 @@
 <?php
 /**************************************************
-  Picture Annotation (annotate) plugin for cpg1.5.x
+  Coppermine 1.5.x Plugin - Picture Annotation (annotate)
   *************************************************
   Copyright (c) 2003-2009 Coppermine Dev Team
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
   *************************************************
-  Coppermine version: 1.5.x
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**************************************************/
+  **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
@@ -38,8 +37,8 @@ $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_js'], '<a href=
 $author .= '<li>' . sprintf($lang_plugin_annotate['plugin_credit_i18n'], '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>') . '</li>' . $LINEBREAK;
 $author .= '</ul>';
 
-$version = '2.4';
-
+$version = '2.5';
+$plugin_cpg_version = array('min' => '1.5');
 $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,60622.0.html" rel="external" class="admin_menu">' . $annotate_icon_array['announcement'] . $lang_plugin_annotate['announcement_thread'] . '</a>';
 $extra_info .= '<a href="index.php?file=annotate/admin" class="admin_menu">' . $annotate_icon_array['configure'] . $lang_plugin_annotate['configure_plugin'] . '</a> ';
 $extra_info .= '<a href="index.php?plugin=annotate&amp;update_database" class="admin_menu">' . $annotate_icon_array['update_database'] . $lang_plugin_annotate['update_database'] . '</a> ';

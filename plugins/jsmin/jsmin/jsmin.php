@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - JSMin
+  *************************************************
+  Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/jsmin/configuration.php $
+  $Revision: 7094 $
+  $LastChangedBy: timoswelt $
+  $Date: 2010-01-19 14:20:17 +0100 (Di, 19. Jan 2010) $
+  **************************************************/
+
 /**
  * This is simply jsmin.php backported to PHP4.
  *

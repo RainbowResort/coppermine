@@ -1,19 +1,18 @@
-## **************************************************
-##  Picture Annotation (annotate) plugin for cpg1.5.x
-##  *************************************************
-##  Copyright (c) 2003-2009 Coppermine Dev Team
-##
-##  This program is free software; you can redistribute it and/or modify
-##  it under the terms of the GNU General Public License version 3
-##  as published by the Free Software Foundation.
-##
-##  *************************************************
-##  Coppermine version: 1.5.x
-##  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/annotate/codebase.php $
-##  $Revision: 6675 $
-##  $LastChangedBy: gaugau $
-##  $Date: 2009-10-12 17:29:23 +0200 (Mo, 12. Okt 2009) $
-## ***************************************************
+#/**************************************************
+#  Coppermine 1.5.x Plugin - Picture Annotation (annotate)
+#  *************************************************
+#  Copyright (c) 2003-2009 Coppermine Dev Team
+#  *************************************************
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  ********************************************
+#  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/better_tooltip/configuration.php $
+#  $Revision: 7117 $
+#  $LastChangedBy: eenemeenemuu $
+#  $Date: 2010-01-23 18:19:46 +0100 (Sa, 23. Jan 2010) $
+#  **************************************************/
 
 CREATE TABLE IF NOT EXISTS `CPG_plugin_annotate` (
   nid smallint(5) unsigned NOT NULL auto_increment,

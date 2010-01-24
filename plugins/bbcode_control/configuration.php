@@ -1,26 +1,19 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2008 Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - bbcode_control
+  *************************************************
+  Copyright (c) 2010 eenemeenemuu
+  *************************************************
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3
-  as published by the Free Software Foundation.
-
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
   ********************************************
-  Coppermine version: 1.5.x
   $HeadURL$
   $Revision$
   $LastChangedBy$
   $Date$
-**********************************************/
-/*********************************************
-  Coppermine Plugin - BBCode Control
-  ********************************************
-  Copyright (c) 2008-2009 eenemeenemuu
-**********************************************/
+  **************************************************/
 
 global $CONFIG, $enabled_languages_array, $lang_gallery_admin_menu;
 // language detection
@@ -31,7 +24,8 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/bb
 }
 
 $name = 'BBCode Control';
-$version = '1.5';
+$version = '1.7';
+$plugin_cpg_version = array('min' => '1.5');
 $description = <<< EOT
 <ul>
     <li>{$lang_plugin_bbcode_control['description_new_codes']}</li>

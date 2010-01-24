@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - newsletter
+  *************************************************
+  Copyright (c) 2009-2010 Joachim Müller
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 require_once './plugins/newsletter/init.inc.php';
 $newsletter_init_array = newsletter_initialize();
 $lang_plugin_newsletter = $newsletter_init_array['language']; 
@@ -11,7 +27,7 @@ $author = sprintf($lang_plugin_newsletter['author'],
     '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
 
 $version = '0.16';
-
+$plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="index.php?file=newsletter/admin" class="admin_menu">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>&nbsp;
     <a href="index.php?file=newsletter/catlist" class="admin_menu">{$newsletter_icon_array['catlist']}{$lang_plugin_newsletter['newsletter_categories']}</a>&nbsp;

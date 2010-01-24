@@ -1,15 +1,20 @@
-/*! Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
- * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- * Thanks to: http://adomas.org/javascript-mouse-wheel/ for some pointers.
- * Thanks to: Mathias Bank(http://www.mathias-bank.de) for a scope bug fix.
- *
- * Version: 3.0.2
- * 
- * Requires: 1.2.2+
- */
-
-
+/**************************************************
+  Coppermine 1.5.x Plugin - Mouse wheel support for filmstrip
+  *************************************************
+  Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
+  Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+  and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+  Thanks to: http://adomas.org/javascript-mouse-wheel/ for some pointers.
+  Thanks to: Mathias Bank(http://www.mathias-bank.de) for a scope bug fix.
+  Version: 3.0.2
+  Requires: 1.2.2+
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/stripwheel/makewheel.js $
+  $Revision: 7057 $
+  $LastChangedBy: timoswelt $
+  $Date: 2010-01-14 15:57:29 +0100 (Do, 14. Jan 2010) $
+  **************************************************/
+  
 
 (function($) {
 

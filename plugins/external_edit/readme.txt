@@ -1,9 +1,24 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - external_edit
+  *************************************************
+  Copyright (c) 2009 Joachim Müller
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+  
 Plugins for the Coppermine Photo Gallery are add-ons that use the plugin interface of Coppermine.
 Read up the documentation that comes with Coppermine to find out more, e.g. how to install a plugin.
 
 Coppermine version: cpg1.5.x
 Plugin name: External Edit
-Plugin version: 2.3
 Plugin author: Joachim Müller (GauGau)
 Plugin announcement thread: http://forum.coppermine-gallery.net/index.php/topic,60173.0.html
 

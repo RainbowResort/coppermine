@@ -1,4 +1,20 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - newsletter
+  *************************************************
+  Copyright (c) 2009-2010 Joachim Müller
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
 function newsletter_initialize() {
     global $CONFIG, $JS, $lang_plugin_newsletter, $newsletter_icon_array;
     $superCage = Inspekt::makeSuperCage();

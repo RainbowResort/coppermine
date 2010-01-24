@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Thumb Rotate
+  Coppermine 1.5.x Plugin - thumb_rotate
   *************************************************
   Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
   *************************************************
@@ -8,6 +8,11 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 // This is an outdated file that just exists in the package to make sure that the

@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - XFeeds $VERSION$=1.3
+  Coppermine 1.5.x Plugin - xfeed
   *************************************************
   Copyright (c) 2008 lee (www.mininoteuser.com)
   Plugin for CPG 1.4 created by Lee
@@ -10,10 +10,11 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 // WARNING : No user servicable parts below here
