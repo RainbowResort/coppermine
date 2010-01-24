@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/better_tooltip/configuration.php $
-  $Revision: 7120 $
-  $LastChangedBy: gaugau $
-  $Date: 2010-01-24 21:57:04 +0100 (So, 24. Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 $name='Better Tooltip';
