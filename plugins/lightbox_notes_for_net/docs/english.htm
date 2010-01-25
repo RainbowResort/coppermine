@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 <head>
-<title>LightBox (NotesFor.net) plugin for cpg1.5.x</title>
+<title>LightBox (NotesFor.net) v2.4 plugin for cpg1.5.x</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="language" content="en" />
 <meta name="copyright" content="Joachim Müller" />
@@ -80,10 +80,6 @@ attribute, border sizes and slideshow timing.</p>
         Show image captions - default is yes. Some users that have very long captions might want to use no/off. The captions will occupy screen space that the image can use.
     </li>
     <li>         
-        <a name="config_swap"></a><h3>Image swap time<a href="#config_swap" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
-        Container resize speed - (integer): specify the resize duration of container image. Set image swap time - set by millisecond. (1000 milliseconds = 1 second). Too fast will make image change unpleasant. Default is 820.<br />
-    </li>
-    <li>         
         <a name="config_border"></a><h3>Border width<a href="#config_border" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
         Set width of border in pixels. Default is 8.
     </li>
@@ -125,6 +121,31 @@ attribute, border sizes and slideshow timing.</p>
                 <img src="../images/loading.gif" border="0" width="32" height="32" alt="" class="icon" />
             </li>
         </ul>
+    </li>
+	<li>         
+        <a name="config_corner"></a><h3>Rounded corners<a href="#config_corner" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Show/add rounded corners to image container. No corners will use less cpu for vistors and show smoother
+		transitions.<br />
+    </li>	
+    <li>         
+        <a name="config_fade"></a><h3>Hide resize<a href="#config_fade" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Hide resize animation - use fading for image change.<br />
+    </li>
+	    <li>         
+        <a name="config_timer"></a><h3>Slideshow timer<a href="#config_timer" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Slideshow timer interval - (integer). Note: Animation and fade times are subtracted from the slideshow timer. <br />
+    </li>
+    <li>         
+        <a name="config_swap"></a><h3>Image swap time<a href="#config_swap" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Container resize speed - (integer): specify the resize animation duration of container image. Set image swap time - set by millisecond. (1000 milliseconds = 1 second). Too fast will make image change unpleasant. Default is 820.<br />
+    </li>	
+	<li>         
+        <a name="config_fadein"></a><h3>Image fade in<a href="#config_fadein" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Fade in time for image into container - (integer).<br />
+    </li>
+    <li>         
+        <a name="config_fadeout"></a><h3>Container fade in/out<a href="#config_fadeout" title="Link to this section"><img src="../images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+        Fade out/in duration when hide animation is set to yes - (integer).<br />
     </li>
 </ul>
 

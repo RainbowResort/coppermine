@@ -20,6 +20,32 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-25 [M] Counted version up from 2.4 to 2.5 {GauGau}
+2010-01-25 [M] Re-added SVN header data {GauGau}
+2010-01-25 [O] Changed stylesheet layout {GauGau}
+2010-01-24 [M] Counted version up from 2.3 to 2.4 {Joe Carver}
+2010-01-24 [O] configuration.php add version check array {Joe Carver}
+2010-01-24 [C] remove info. fom svn fields {Joe Carver}
+2010-01-12 [M] Counted version up from 2.2 to 2.3 {Joe Carver}
+2010-01-12 [A] scripts.js add fadeTo function to image container {Joe Carver}
+2010-01-12 [A] scripts.js add fadeIn function to image {Joe Carver}
+2010-01-12 [A] scripts.js add option to select no animation {Joe Carver}
+2010-01-12 [A] scripts.js add option to select no curved corners {Joe Carver}
+2010-01-12 [O] scripts.js change sequence of nav. and caption {Joe Carver}
+2010-01-12 [O] scripts.js re-enable slideshow interval as config - required as part of this plugin {Joe Carver}
+2010-01-12 [M] codebase.php plugin buttons selected as default {Joe Carver}
+2010-01-12 [A] codebase.php add new options to variables list and db {Joe Carver}
+2010-01-12 [O] codebase.php add script command and .css to page <head> {Joe Carver}
+2010-01-12 [B] codebase.php change path for cpg image set {Joe Carver}
+2010-01-12 [C] style.css change button location {Joe Carver}
+2010-01-12 [O] style.css change container div for caption {Joe Carver}
+2010-01-12 [A] german.php add new lang. strings (need trranslation) {Joe Carver}
+2010-01-12 [A] english.php add new lang. strings {Joe Carver}
+2010-01-12 [B] admin.php re-enable slideshow interval as config. {Joe Carver}
+2010-01-12 [A] admin.php add nw config options {Joe Carver}
+2010-01-12 [C] admin.php change layout/sequence of selections {Joe Carver}
+2010-01-12 [O] admin.js change count interval for spin buttons {Joe Carver}
+2010-01-12 [A] admin.js add buttons for new options {Joe Carver}
 2010-01-02 [M] Counted version up from 2.1 to 2.2 {GauGau}
 2010-01-02 [A] Added option to select button sets {GauGau}
 2010-01-02 [O] Removed nofollow option (links to JS-driven content mustn't be spidered) {GauGau}

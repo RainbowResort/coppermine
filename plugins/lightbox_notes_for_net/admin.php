@@ -41,7 +41,13 @@ if ($superCage->post->keyExists('submit')) {
       'plugin_lightbox_nfn_caption' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
       'plugin_lightbox_nfn_maxpics' => array('type' => 'int', 'min' => '1', 'max' => '3000'),
       'plugin_lightbox_nfn_buttonset' => array('type' => 'int', 'min' => '0', 'max' => '1'),
+	  'plugin_lightbox_nfn_nocorner' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_fade_swap' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_slidetime' => array('type' => 'int', 'min' => '1', 'max' => '9999'),
+      'plugin_lightbox_nfn_imagefade' => array('type' => 'int', 'min' => '1', 'max' => '3000'),
+      'plugin_lightbox_nfn_containerfade' => array('type' => 'int', 'min' => '1', 'max' => '3000'),	  
   );
+  
   $config_changes_counter = 0;
   foreach ($sanitization_array as $san_key => $san_value) {
       if (isset($CONFIG[$san_key]) == TRUE) { // only loop if config value is set --- start
@@ -95,7 +101,9 @@ if ($superCage->post->keyExists('submit')) {
                   cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG[$san_key]}' WHERE name='$san_key'");
                   $config_changes_counter++;
               }
-          } // type is array --- end      } // only loop if config value is set --- end  }
+          } // type is array --- end
+      } // only loop if config value is set --- end
+  }
 }
 
 // Set the option output stuff 
@@ -108,7 +116,8 @@ if ($CONFIG['plugin_lightbox_nfn_notimer'] == '1') {
 if ($CONFIG['plugin_lightbox_nfn_image_exit'] == '0') {
 	$option_output['plugin_lightbox_nfn_image_exit_0'] = 'checked="checked"';
 	$option_output['plugin_lightbox_nfn_image_exit_1'] = '';
-} elseif ($CONFIG['plugin_lightbox_nfn_image_exit'] == '1') {	$option_output['plugin_lightbox_nfn_image_exit_0'] = '';
+} elseif ($CONFIG['plugin_lightbox_nfn_image_exit'] == '1') {
+	$option_output['plugin_lightbox_nfn_image_exit_0'] = '';
 	$option_output['plugin_lightbox_nfn_image_exit_1'] = 'checked="checked"';
 }
 
@@ -121,10 +130,23 @@ if ($CONFIG['plugin_lightbox_nfn_caption'] == '1') {
 if ($CONFIG['plugin_lightbox_nfn_buttonset'] == '0') {
 	$option_output['plugin_lightbox_nfn_buttonset_0'] = 'checked="checked"';
 	$option_output['plugin_lightbox_nfn_buttonset_1'] = '';
-} elseif ($CONFIG['plugin_lightbox_nfn_buttonset'] == '1') {	$option_output['plugin_lightbox_nfn_buttonset_0'] = '';
+} elseif ($CONFIG['plugin_lightbox_nfn_buttonset'] == '1') {
+	$option_output['plugin_lightbox_nfn_buttonset_0'] = '';
 	$option_output['plugin_lightbox_nfn_buttonset_1'] = 'checked="checked"';
 }
 
+if ($CONFIG['plugin_lightbox_nfn_nocorner'] == '1') {
+	$option_output['plugin_lightbox_nfn_nocorner'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_lightbox_nfn_nocorner'] = '';
+}
+if ($CONFIG['plugin_lightbox_nfn_fade_swap'] == '1') {
+	$option_output['plugin_lightbox_nfn_fade_swap'] = 'checked="checked"';
+} else { 
+	$option_output['plugin_lightbox_nfn_fade_swap'] = '';
+}
+
+$superCage = Inspekt::makeSuperCage();
 echo <<< EOT
 <form name="cpgform" id="cpgform" action="{$_SERVER['REQUEST_URI']}" method="post">
 EOT;
@@ -174,14 +196,6 @@ echo <<< EOT
         </tr>
         <tr>			
             <td>
-                 {$lang_plugin_lightbox_notes_for_net['image_swap_time']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_swap" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['image_swap_time']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
-            </td>
-            <td>
-                <input type="text" name="plugin_lightbox_nfn_sizespeed" id="plugin_lightbox_nfn_sizespeed" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_sizespeed']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
-            </td>
-        </tr>
-        <tr>			
-            <td>
                  {$lang_plugin_lightbox_notes_for_net['border_width']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_border" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['border_width']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
             </td>
             <td>
@@ -204,7 +218,57 @@ echo <<< EOT
                 <input type="radio" name="plugin_lightbox_nfn_buttonset" id="plugin_lightbox_nfn_buttonset_0" class="radio" value="0" {$option_output['plugin_lightbox_nfn_buttonset_0']} /><label for="plugin_lightbox_nfn_buttonset_0" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['use_theme_buttons']}</label>&nbsp;
 			    <input type="radio" name="plugin_lightbox_nfn_buttonset" id="plugin_lightbox_nfn_buttonset_1" class="radio" value="1" {$option_output['plugin_lightbox_nfn_buttonset_1']} /><label for="plugin_lightbox_nfn_buttonset_1" class="clickable_option">{$lang_plugin_lightbox_notes_for_net['use_plugin_buttons']}</label>
             </td>
-        </tr>			
+        </tr>
+        <tr>
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['show_corner']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_corner" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['show_corner']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="checkbox" name="plugin_lightbox_nfn_nocorner" id="plugin_lightbox_nfn_nocorner" class="checkbox" value="1" {$option_output['plugin_lightbox_nfn_nocorner']} />
+                <label for="plugin_lightbox_nfn_nocorner" class="clickable_option">{$lang_common['yes']}</label>
+            </td>
+        </tr>	
+        <tr>
+            <td> 
+                 {$lang_plugin_lightbox_notes_for_net['swap_by_fade']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_fade" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['swap_by_fade']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td> 
+                <input type="checkbox" name="plugin_lightbox_nfn_fade_swap" id="plugin_lightbox_nfn_fade_swap" class="checkbox" value="1" {$option_output['plugin_lightbox_nfn_fade_swap']} />
+                <label for="plugin_lightbox_nfn_fade_swap" class="clickable_option">{$lang_common['yes']}</label>
+            </td>
+        </tr>	
+        <tr>			
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['slideshow_timer']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_timer" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['slideshow_timer']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="text" name="plugin_lightbox_nfn_slidetime" id="plugin_lightbox_nfn_slidetime" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_slidetime']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+            </td>
+        </tr>
+        <tr>			
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['image_swap_time']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_swap" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['image_swap_time']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="text" name="plugin_lightbox_nfn_sizespeed" id="plugin_lightbox_nfn_sizespeed" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_sizespeed']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+            </td>
+        </tr>		
+        <tr>			
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['image_fadein']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_fadein" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['image_fadein']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="text" name="plugin_lightbox_nfn_imagefade" id="plugin_lightbox_nfn_imagefade" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_imagefade']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+            </td>
+        </tr>
+        <tr>			
+            <td>
+                 {$lang_plugin_lightbox_notes_for_net['container_fadeout']} <a href="plugins/lightbox_notes_for_net/docs/{$documentation_file}.htm#config_fadeout" class="greybox" title="{$lang_plugin_lightbox_notes_for_net['container_fadeout']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+            </td>
+            <td>
+                <input type="text" name="plugin_lightbox_nfn_containerfade" id="plugin_lightbox_nfn_containerfade" class="textinput" size="4" maxlength="4" value="{$CONFIG['plugin_lightbox_nfn_containerfade']}" style="text-align:right;" /> {$lang_plugin_lightbox_notes_for_net['milliseconds']}
+            </td>
+        </tr>	
         <tr>			
             <td class="tablef">
             </td>
@@ -216,6 +280,21 @@ echo <<< EOT
         </tr>
         </td>		
 EOT;
+/*
+$lang_plugin_lightbox_notes_for_net['show_corner'] = 'Show/add rounded corners';
+$lang_plugin_lightbox_notes_for_net['swap_by_fade'] = 'Swap images by fade in/out';
+$lang_plugin_lightbox_notes_for_net['slideshow_timer'] = 'Set slideshow timer interval';
+$lang_plugin_lightbox_notes_for_net['image_fadein'] = 'Fade in time for image into container';
+$lang_plugin_lightbox_notes_for_net['container_fadeout'] = 'Fade out/in duration for static (Classic style)';
+
+	  'plugin_lightbox_nfn_nocorner' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_fade_swap' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
+      'plugin_lightbox_nfn_slidetime' => array('type' => 'int', 'min' => '1', 'max' => '9999'),
+      'plugin_lightbox_nfn_imagefade' => array('type' => 'int', 'min' => '1', 'max' => '3000'),
+      'plugin_lightbox_nfn_containerfade' => array('type' => 'int', 'min' => '1', 'max' => '3000'),	
+*/
+
+
 endtable();
 echo <<< EOT
 </form>

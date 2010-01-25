@@ -41,14 +41,15 @@
 [   USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH        ] 
 [   DAMAGE.                                                                 ]
 [===========================================================================]
-  **************************************************/
+**************************************************/
 
 $(document).ready(function() {
-    $('#lightbox-container-image').css('padding', js_vars.plugin_lightbox_nfn_border);
-});
-
-$(function() {
-    $('a.lightbox').lightBox();
+    var options = {
+    containerResizeSpeed: js_vars.plugin_lightbox_nfn_sizespeed, 
+    imageFade: js_vars.plugin_lightbox_nfn_imagefade, 
+    inFade: js_vars.plugin_lightbox_nfn_containerfade, 
+    swapFade: js_vars.plugin_lightbox_nfn_fade_swap};
+     $('a.lightbox').lightBox(options);
 });
 
 (function($) {
@@ -81,7 +82,7 @@ $(function() {
         ///		22: slideShowTimer - (integer) number of milliseconds to change image by default 5000.
         ///		00: image_exit - (integer) //Go to last image's page 1 = yes || 0 = first image' page.
 		///		01: noshowTimer - (integer) //Show the slideshow timer bar
-        ///	</param>
+		///	</param>
         ///	<returns type="jQuery" />
         settings = jQuery.extend({
             // Configuration related to overlay
@@ -99,9 +100,6 @@ $(function() {
             imageBtnBottomNext: js_vars.plugin_lightbox_nfn_image_btnbottomnext,
             imageBtnPlay: js_vars.plugin_lightbox_nfn_image_btnplay,
             imageBtnStop: js_vars.plugin_lightbox_nfn_image_btnstop,
-            // Configuration related to container image box
-            containerBorderSize: js_vars.plugin_lightbox_nfn_border,
-            containerResizeSpeed: js_vars.plugin_lightbox_nfn_sizespeed,
 
             // Configuration related to texts in caption. For example: Image 2 of 8. You can alter either "Image" and "of" texts.
             txtImage: js_vars.lang_lightbox_nfn_image,
@@ -112,12 +110,28 @@ $(function() {
             keyToClose: 'c',
             keyToPrev: 'p',
             keyToNext: 'n',
-			//Go to last image's page 1 = yes || 0 = first image' page
+
+			//Go to last image from slide set page 1 = yes || 0 = first image
 			image_exit: js_vars.plugin_lightbox_nfn_image_exit,
-			//Show the slideshow timer bar 1 = no show
-			noshowTimer: js_vars.plugin_lightbox_nfn_notimer, 
-            //Configuration related to slide show
-            slideShowTimer: js_vars.config_slideshow_interval,
+			//Show the slideshow timer bar 1 = no show 
+			noshowTimer: js_vars.plugin_lightbox_nfn_notimer,
+			
+            // Configuration related to container image box
+			// Border width
+            containerBorderSize: js_vars.plugin_lightbox_nfn_border,
+			// Add rounded corners to border			
+			showRound: js_vars.plugin_lightbox_nfn_nocorner,
+			// Animation on/off
+			swapFade: js_vars.plugin_lightbox_nfn_fade_swap,
+			// Slideshow timer interval 
+            slideShowTimer: js_vars.plugin_lightbox_nfn_slidetime,	
+			// Animation and swap speed			
+            containerResizeSpeed: js_vars.plugin_lightbox_nfn_sizespeed,
+			// Fade in time for image into container
+			imageFade: js_vars.plugin_lightbox_nfn_imagefade,
+			// Fade time for no animation
+			inFade: js_vars.plugin_lightbox_nfn_containerfade,
+			
             // Don´t alter these variables in any way
             step: 0,
             imageArray: [],
@@ -125,6 +139,10 @@ $(function() {
             activeImage: 0
         }, settings);
 
+		// set background to opaque for no animation setting
+		if (settings.swapFade == 1) {		
+		settings.overlayOpacity = 1.0;
+		}
 		
         // Caching the jQuery object with all elements matched
         var jQueryMatchedObj = this; // This, in this context, refer to jQuery object
@@ -162,20 +180,33 @@ $(function() {
                 settings.activeImage++;
             }
             // Call the function that prepares image exibition
+						if (settings.swapFade == 1) {			
+				//$('#lightbox-container-image-box').fadeTo(settings.inFade, 1.00);	
+			};
             _set_image_to_view();
         }
-
+	
         function _set_interface() {
             // Apply the HTML markup into body tag changed for timer display
-			if (settings.noshowTimer == 1) {
-			$('body').append('<div id="jquery-overlay" /><div id="jquery-box"><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image-box-top"></div><div id="lightbox-container-image"><img id="lightbox-image"/></div><div id="lightbox-nav" style="display: block;"><a id="lightbox-nav-btnPrev" href="#" title="' + settings.txtPrev + '" /><a id="lightbox-nav-btnNext" href="#" title="' + settings.txtNext + '" /></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-description"></span><span id="lightbox-image-details-currentNumber"></span>&nbsp;&nbsp;<div id="lightbox-container-image-box-top-left"><img src="' + settings.imageBtnPlay + '"></div><div id="lightbox-container-image-box-top-right"><img src="' + settings.imageBtnClose + '"></div></div></div></div>');
-            } else if  (settings.noshowTimer == 0) {
+			if (settings.noshowTimer == 0) {
+			$('body').append('<div id="jquery-overlay" /><div id="jquery-box"><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image-box-top"></div><div id="lightbox-container-image"><img id="lightbox-image"/></div><div id="lightbox-nav" style="display: block;"><a id="lightbox-nav-btnPrev" href="#" title="' + settings.txtPrev + '" /><a id="lightbox-nav-btnNext" href="#" title="' + settings.txtNext + '" /></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-description"></span><span id="lightbox-image-details-currentNumber"></span><div id="lightbox-container-image-box-top-left"><img src="' + settings.imageBtnPlay + '"></div><div id="lightbox-container-image-box-top-right"><img src="' + settings.imageBtnClose + '"></div></div></div></div>');
+            } else if  (settings.noshowTimer == 1) {
 			$('body').append('<div id="jquery-overlay" /><div id="jquery-box"><div id="jquery-lightbox"><div id="lightbox-container-image-box"><div id="lightbox-container-image-box-top"><div id="lightbox-container-image-box-top-middle"></div></div><div id="lightbox-container-image"><img id="lightbox-image"/></div><div id="lightbox-nav" style="display: block;"><a id="lightbox-nav-btnPrev" href="#" title="' + settings.txtPrev + '" /><a id="lightbox-nav-btnNext" href="#" title="' + settings.txtNext + '" /></div><div id="lightbox-loading" style="display: none;"><a id="lightbox-loading-link" href="#"><img src="' + settings.imageLoading + '"></a></div></div><div id="lightbox-container-image-data-box"><div id="lightbox-container-image-data"><span id="lightbox-image-details-caption"></span><span id="lightbox-image-details-description"></span><span id="lightbox-image-details-currentNumber"></span>&nbsp;&nbsp;<div id="lightbox-container-image-box-top-left"><img src="' + settings.imageBtnPlay + '"></div><div id="lightbox-container-image-box-top-right"><img src="' + settings.imageBtnClose + '"></div></div></div></div>');
                 }			
-			$('#lightbox-container-image-box').corner();
-            $('#lightbox-container-image-data-box').corner();
 
-            // Get page sizes
+			// Config. - set rounded corners
+			if (settings.showRound == 1) {			
+			$('#lightbox-container-image-box,').corner();
+            $('#lightbox-container-image-data-box').corner();	
+			};
+			
+            // Possible config. set size of empty box for first image			
+			$('#lightbox-container-image-box').css({
+                width: 250,
+                height: 250,
+            });
+
+			// Get page sizes
             var arrPageSizes = getPageSize();
             // Style overlay and show it
             $('#jquery-overlay').css({
@@ -246,17 +277,20 @@ $(function() {
             settings.step = settings.step + 1
             $("#lightbox-container-image-box-top-middle").reportprogress(settings.step, Math.round(settings.slideShowTimer / 125)); if (settings.step == Math.round(settings.slideShowTimer / 125)) {
                 settings.step = 0;
-                settings.activeImage = settings.activeImage + 1;
+				if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);
+			};		
+	             settings.activeImage = settings.activeImage + 1;
                 if (settings.imageArray.length <= settings.activeImage) {
                     settings.activeImage = 0;
                 }
                 $('#lightbox-container-image-box-top-left img').stopTime("timer");
+
                 _set_image_to_view(true);
             }
         }
         /**
         * Prepares image exibition; doing a image´s preloader to calculate it´s size
-        *
         */
         function _set_image_to_view(timer) {
             // Show the loading
@@ -272,7 +306,7 @@ $(function() {
             objImagePreloader.onload = function() {
                 $('#lightbox-image').attr('src', settings.imageArray[settings.activeImage][0]);
 			
-                // Perfomance an effect in the image container resizing it
+                // Perfoma an effect in the image container resizing it
                 _resize_container_image_box(objImagePreloader.width, objImagePreloader.height);
 								
                 //	clear onLoad, IE behaves irratically with animated gifs otherwise
@@ -286,28 +320,17 @@ $(function() {
             }
         };
 		
-	//
-	
-
-
 	/*function resizeImageAndContainer(intImageWidth, intImageHeight) {
 		/*  changed
-        *
-        * Perfomance an effect in the image container resizing it
+        * Perform an effect in the image container resizing it
         *
         * @param integer intImageWidth The image´s width that will be showed
         * @param integer intImageHeight The image´s height that will be showed
         */
-		
 // getPageSize()
-
 // Returns array with page width, height and window width, height
-
 // Core code from - quirksmode.com
-
 // Edit for Firefox by pHaez
-
-//
 
 function getPageSize(){
 	var xScroll, yScroll;
@@ -381,9 +404,11 @@ function getPageSize(){
             // Diferences
             var intDiffW = intCurrentWidth - intWidth;
             var intDiffH = intCurrentHeight - intHeight;
-            // Perfomance the effect
+
+            // Perfom the effect
             $('#lightbox-container-image-box').animate({ width: intWidth, height: intHeight }, settings.containerResizeSpeed, function() { _show_image(); });
-            if ((intDiffW == 0) && (intDiffH == 0)) {
+            
+			if ((intDiffW == 0) && (intDiffH == 0)) {
                 if ($.browser.msie) {
                     ___pause(250);
                 } else {
@@ -397,35 +422,34 @@ function getPageSize(){
         };
         /**
         * Show the prepared image
-        *
-        */
+        **/
         function _show_image() {
             $('#lightbox-loading').hide();
-            $('#lightbox-image').fadeIn(function() {
-                _show_image_data();
-                _set_navigation();
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 1.00);	
+			};				
+            $('#lightbox-image').fadeIn((settings.imageFade), function() {
+				_show_image_data();				
 				});
 			_add_hit_count();
             _preload_neighbor_images();
         };
-		
-        /**
+		/**
         * Add hit to counter
         */		
 		function _add_hit_count() {
 		if (settings.imageArray[settings.activeImage][4]) {		
 		var picid = (settings.imageArray[settings.activeImage][4]);
-		var url = ("index.php?file=lightbox_notes_for_net/counter&a=" + picid);
+		var url = ("index.php?file=a_light_box/counter&a=" + picid);
 		}		
 		$.get(url);
         }
 		
         /*
         * Show the image information
-        *
         */
         function _show_image_data() {
-            $('#lightbox-container-image-data-box').slideDown('fast');
+			$('#lightbox-container-image-data-box').slideDown(1000);
             $('#lightbox-image-details-caption').hide();
             if (settings.imageArray[settings.activeImage][1]) {
                 $('#lightbox-image-details-caption').html(settings.imageArray[settings.activeImage][1]).show();
@@ -436,21 +460,31 @@ function getPageSize(){
                 $('#lightbox-image-details-description').html(settings.imageArray[settings.activeImage][3]).show();
             }
             // If we have a image set, display 'Image X of X'
+			$('#lightbox-image-details-currentNumber').hide();
             if (settings.imageArray.length > 1) {
                 $('#lightbox-image-details-currentNumber').html(settings.txtImage + ' ' + (settings.activeImage + 1) + ' ' + settings.txtOf + ' ' + settings.imageArray.length).show();
             }
+			// Slideshow buttons
+			$('#lightbox-container-image-box-top-left').show();
+			$('#lightbox-container-image-box-top-right').show();
+			
             $('#lightbox-container-image-box-top').show();
-        }
+						
+                var arrPageSizes =getPageSize();               
+			   $('#jquery-overlay').css({
+                    height: arrPageSizes[1]
+                });	
+				
+			_set_navigation();
+			}
         /**
         * Display the button navigations
-        *
         */
         function _set_navigation() {
             $('#lightbox-nav').show();
-
             // Instead to define this configuration in CSS file, we define here. And it´s need to IE. Just.
            // Change here
-		   $('#lightbox-container-image-nav-box').slideDown('fast');			
+		   $('#lightbox-container-image-nav-box').slideDown('slow');			
             $('#lightbox-nav-btnPrev,#lightbox-nav-btnNext').css({ 'background': 'transparent url(' + settings.imageBlank + ') no-repeat' });
 
             // Show the prev button, if not the first image in set
@@ -473,13 +507,15 @@ function getPageSize(){
             }
             else
                 $('#lightbox-image-details-previous-image, #lightbox-image-details-previous-text').hide();
-
             // Show the prev button, if not the first image in set
             if (settings.activeImage != 0) {
                 if (settings.fixedNavigation) {
                     $('#lightbox-nav-btnPrev').css({ 'background': 'url(' + settings.imageBtnPrev + ') left 50% no-repeat' })
 						.unbind()
 						.bind('click', function() {
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);	
+			};
 						    settings.activeImage = settings.activeImage - 1;
 						    _set_image_to_view();
 						    return false;
@@ -491,6 +527,9 @@ function getPageSize(){
                     }, function() {
                         $(this).css({ 'background': 'transparent url(' + settings.imageBlank + ') no-repeat' });
                     }).show().bind('click', function() {
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);	
+			};
                         settings.activeImage = settings.activeImage - 1;
                         _set_image_to_view();
                         return false;
@@ -498,7 +537,7 @@ function getPageSize(){
                 }
             }
 
-            // Show the next button, if not the last image in set
+            // Show the next button, if not the last image in set - 
             if (settings.activeImage != (settings.imageArray.length - 1)) {
                 if (settings.fixedNavigation) {
                     $('#lightbox-image-details-next-image, #lightbox-image-details-next-text').unbind()
@@ -524,6 +563,10 @@ function getPageSize(){
                     $('#lightbox-nav-btnNext').css({ 'background': 'url(' + settings.imageBtnNext + ') right 50% no-repeat' })
 						.unbind()
 						.bind('click', function() {
+
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);	
+			};
 						    settings.activeImage = settings.activeImage + 1;
 						    _set_image_to_view();
 						    return false;
@@ -535,7 +578,10 @@ function getPageSize(){
                     }, function() {
                         $(this).css({ 'background': 'transparent url(' + settings.imageBlank + ') no-repeat' });
                     }).show().bind('click', function() {
-                        settings.activeImage = settings.activeImage + 1;
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);
+			};
+			            settings.activeImage = settings.activeImage + 1;
                         _set_image_to_view();
                         return false;
                     });
@@ -547,7 +593,6 @@ function getPageSize(){
 
         /**
         * Enable a support to keyboard navigation
-        *
         */
         function _enable_keyboard_navigation() {
             $(document).keydown(function(objEvent) {
@@ -556,14 +601,12 @@ function getPageSize(){
         }
         /**
         * Disable the support to keyboard navigation
-        *
         */
         function _disable_keyboard_navigation() {
             $(document).unbind();
         }
         /**
         * Perform the keyboard actions
-        *
         * change escape to keycode 27
 		*/   
         function _keyboard_action(objEvent) {
@@ -587,6 +630,9 @@ function getPageSize(){
             if ((key == settings.keyToPrev) || (keycode == 37)) {
                 // If we´re not showing the first image, call the previous
                 if (settings.activeImage != 0) {
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);	
+			};
                     settings.activeImage = settings.activeImage - 1;
                     _set_image_to_view();
                     _disable_keyboard_navigation();
@@ -596,6 +642,9 @@ function getPageSize(){
             if ((key == settings.keyToNext) || (keycode == 39)) {
                 // If we´re not showing the last image, call the next
                 if (settings.activeImage != (settings.imageArray.length - 1)) {
+			if (settings.swapFade == 1) {			
+				$('#lightbox-container-image-box').fadeTo(settings.inFade, 0.00);	
+			};
                     settings.activeImage = settings.activeImage + 1;
                     _set_image_to_view();
                     _disable_keyboard_navigation();
@@ -604,7 +653,6 @@ function getPageSize(){
         }
         /**
         * Preload prev and next images being showed
-        *
         */
         function _preload_neighbor_images() {
             if ((settings.imageArray.length - 1) > settings.activeImage) {
@@ -618,17 +666,15 @@ function getPageSize(){
         }
         /**
         * Remove jQuery lightBox plugin HTML markup
-        *
         */
         function _finish() {
             $('#jquery-lightbox').remove();
             $('#jquery-overlay').fadeOut(function() { $('#jquery-overlay').remove(); });
 			// change here 			
 			var go_to_last = settings.image_exit;
-			if(go_to_last && settings.imageArray[settings.activeImage][2] != null){
+			if((go_to_last == 1) && settings.imageArray[settings.activeImage][2] != null){
 
 			window.location = settings.imageArray[settings.activeImage][2];
-
 		}
 			
             // Show some elements to avoid conflict with overlay in IE. These elements appear above the overlay.
@@ -637,9 +683,6 @@ function getPageSize(){
         /**
         / THIRD FUNCTION removed - changed removed to use different method
         * getPageSize() by quirksmode.com
-        *
-        * @return Array Return an array with page width, height and window width, height
-        
         / THIRD FUNCTION
         * getPageScroll() by quirksmode.com
         *
@@ -662,7 +705,6 @@ function getPageSize(){
         };
         /**
         * Stop the code execution from a escified time in milisecond
-        *
         */
         function ___pause(ms) {
             var date = new Date();
@@ -674,7 +716,6 @@ function getPageSize(){
         return this.unbind('click').click(_initialize);
     };
 })(jQuery);                        // Call and execute the function immediately passing the jQuery object
-
 
 /*
 [===========================================================================]

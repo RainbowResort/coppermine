@@ -20,5 +20,9 @@ $lang_plugin_lightbox_notes_for_net['plugin_documentation'] = 'Plugin-Dokumentat
 $lang_plugin_lightbox_notes_for_net['announcement_thread'] = 'Anküdigungs-Thread';
 $lang_plugin_lightbox_notes_for_net['aka'] = 'alias';
 $lang_plugin_lightbox_notes_for_net['description'] = 'Dieses Plugin ersetzt das normale Pop-Up für das Vollbild mit einer Lightbox.';
-
+// Lines below added without translation
+$lang_plugin_lightbox_notes_for_net['show_corner'] = 'Show/add rounded corners';
+$lang_plugin_lightbox_notes_for_net['swap_by_fade'] = 'Hide animation';
+$lang_plugin_lightbox_notes_for_net['image_fadein'] = 'Fade in time for image into container';
+$lang_plugin_lightbox_notes_for_net['container_fadeout'] = 'Fade out/in duration for Hide animation only';
 ?>
