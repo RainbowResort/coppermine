@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/image_manipulation/admin.php $
-  $Revision: 7043 $
-  $LastChangedBy: gaugau $
-  $Date: 2010-01-11 19:26:53 +0100 (Mo, 11. Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 require('include/init.inc.php');

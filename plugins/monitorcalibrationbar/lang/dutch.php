@@ -4,10 +4,10 @@
   *************************************************
   Copyright (c) 2010 Joachim Müller
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/slider/codebase.php $
-  $Revision: 6994 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-04 10:54:19 +0100 (Mo, 04. Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 $lang_plugin_moncalb['config_name'] = 'Monitor Calibratie Bar';

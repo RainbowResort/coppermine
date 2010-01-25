@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/album_fav_boxes/admin.php $
-  $Revision: 6793 $
-  $LastChangedBy: gaugau $
-  $Date: 2009-11-26 18:23:33 +0100 (Do, 26. Nov 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');

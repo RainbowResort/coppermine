@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/slider/codebase.php $
-  $Revision: 6994 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-04 10:54:19 +0100 (Mo, 04. Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) { 
