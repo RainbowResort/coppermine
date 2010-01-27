@@ -1,0 +1,58 @@
+/* - if you use the modpack, then these additional style elements should already be in your style.css
+   - that's the colors I use for the classic theme
+   - you can have a look at the oranje and tentacle modpack theme for other color shemes
+*/
+
+/* shop admin, my orders active/ archive bar (not to see if pms_linecolor1+2 are missing in the css ) */
+.pms_linecolor1
+{
+background-color: #0E72A4;
+font-size: 10px;
+}
+
+.pms_linecolor2
+{
+background-color: #71ACCA;
+font-size: 10px;
+}
+
+/* td background color in shop admin */
+.alt1, .alt1Active
+{
+	background-color: #F8FAFC;
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+
+.alt2, .alt2Active
+{
+	background-color: #cacaca;
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+
+/* margin paid/sent icons in my orders and admin */
+.pms_legend
+{
+        margin: 10px;
+}
+
+/* shop admin, mny orders panel where the active/ archive bar is on */
+.panel
+{
+	background: #F8FAFC;
+	color: #000000;
+	padding: 10px;
+	border: 2px outset;
+}
+
+.panelsurround
+{
+	background: #cacaca;
+	color: #000000;
+}
+
+/* used for the small font in admin and my orders */
+.smallfont
+{
+font-size: 10px;
+}
+

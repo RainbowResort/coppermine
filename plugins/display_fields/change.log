@@ -1,0 +1,10 @@
+v1.02 - 2006/06/18 - 12:42 GMT
+* added manual sorting of fields with setting in codebase.php
+* TO DO: add this to web-based configuration panel
+
+v1.01 - 2006/02/04 - 14:50 GMT
+* added bb_decode to album description
+* added check so if album description is blank, "Album Description" is not shown
+
+v1.0 - 2006/02/03 - 19:58 GMT
+* initial release: choose & filter picture & album fields to display

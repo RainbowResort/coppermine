@@ -1,0 +1,330 @@
+============================================= v1.0 - 2006/09/23 - 15:00 GMT
+
+* initial release; 
+
+
+============================================= v1.1 - 2006/09/24 - 14:30 GMT
+
+fixes:
+=======
+- changing the "str_ireplace" with "str_replace" for php4 compatibility on codebase.php
+- better regular exp  !!!
+
+
+============================================= v1.2 - 2006/09/24 - 16:30 GMT
+
+fixes:
+=======
+- issue with  non-image files fixed
+
+
+============================================= v2.0 - 2006/09/27 - 05:10 GMT
+
+
+New features:
+=============
+- Has it's own Control panel on admin mode
+- Option to set boredr style (4 new style added)
+- Option to disable it under admin mode
+- Option to add a link to intermadiate page (look to lang/english.php for changing the name of link)
+- Multi-language
+
+Next release will have:
+=======================
+- Option to add image title to caption
+- Option to add close link to caption
+- Option to add more HTML code to caption
+
+
+fixes:
+=======
+- No fixese !!!
+
+
+============================================= v2.1 - 2006/09/28 - 08:10 GMT
+
+
+New features:
+=============
+- Option to add close link to caption
+- Option to select which image to show under slide (intermadiate / full)
+- Option to select where should apply the plugin (index & meta album only / all pages)
+- French language Added
+
+Next release will have:
+=======================
+- Option to add image title to caption
+- Option to add more HTML code to caption
+
+
+fixes:
+=======
+- Some typo fixes
+
+
+============================================= v2.2 - 2006/10/02 - 04:15 GMT
+
+
+New features:
+=============
+- Option to SEF compatibility
+- Italian language Added (Thanks to Lontano)
+
+Next release will have:
+=======================
+- Option to add image title to caption
+- Option to add more HTML code to caption
+
+
+fixes:
+=======
+- work with custom thumbnails
+- Some typo fixes
+
+
+============================================= v2.3 - 2006/10/15 - 07:45 GMT
+
+
+New features:
+=============
+- Valid XHTML
+- Option to add Title to caption
+- Spanish language Added (Thanks to Quinti)
+- Custom loading title ( could be set on lang file ) - suggested by Quinti
+- Custom restore title ( could be set on lang file ) - suggested by Quinti
+- Custom cancel loading title ( could be set on lang file )
+- Better config !
+
+
+Next release will have:
+=======================
+- Option to add more HTML code to caption
+
+
+fixes:
+=======
+- Some typo on lang file fixes
+
+Known Issue:
+=======
+- Image view will not count
+- Will not work if you have custom title on thumbnails!
+
+
+============================================= v2.4 - 2007/10/25 - 18:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+New features:
+=============
+- German language added
+- Latest version of highslide.js by Torstein Hnsi (3.2.10), this will give you
+  - better optics
+  - better browser compatibility
+  - animation uses less resources, especially with IE
+  - fixed memory leak with IE
+  For more information about changes of the java script, see http://vikjavev.no/highslide
+- All css stuff is now in include/highslide.css to make it easier to adapt the optics
+  to your own needs
+
+Missing features from prev. version:
+====================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+
+Fixes:
+=======
+- Fixed invalid XHTML if one thumbnail was diplayed twice on index page
+  (e. g. in last uploaded _and_ top rated) by using $iCaptionCounter variable
+  to avoid equal id attributes.
+- Now compatible with funny file names if you want. Previous versions would not 
+  open intermediate but full size picture if filename contained special
+  characters (e. g. space, (, ), [, ] ...) - Coppermine can cope with these
+  file names, so the plug in should as well. There's an additional option
+  on the configuration page now to force highslide to always open the inter-
+  mediate size. Better way would be to use an alternative to is_file, but I didn't
+  find one. Come on you PHP experts! ;)
+- highslide.js is delivered in a packed and unpacked version to save load time.
+  If you want to do changes (e. g. change the slide parameters), use the un-
+  packed version and rename it to highslide.js
+- Parameter 'Apply to index & meta albums' and 'Apply to all pages' were wrong
+  way round; changed these in the language files.
+
+Known Issue:
+=======
+- Image view will still not count
+- Will not work if you have custom title on thumbnails!
+- Slightly different optics between IE, Firefox and Opera when using Caption (CSS problem?)
+
+
+
+============================================= v2.5 - 2007/10/27 - 17:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+New features:
+=============
+- New Option to count views via Highslide as real views, so picture counter increases
+  accordingly (experimental)
+  IMPORTANT: For this to work, you MUST copy hscnt.php to your gallery root!
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+
+Fixes:
+=======
+- Slightly different optics between IE, Firefox and Opera when using Caption (fixed)
+
+Known Issue:
+============
+- Parameter 'Apply to index & meta albums' and 'Apply to all pages' are wrong
+  way round when not in SEF compatibility mode
+- Will not work if you have custom title on thumbnails!
+
+
+
+
+============================================= v3.0 - 2007/10/29 - 22:30 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+New features:
+=============
+- Shorter URLs when 'count slide views as real views' turned on
+- New config page with graphical color selection
+- File names with special characters won't prevent loading of intermediate pictures
+  (experimental)
+- New layout 'Beleved'
+- Selectable animation speed and resolution
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+- I have no idea of JavaScript, so I simply can't do that. If you know JavaScript, feel free
+  to change these beasts and mail them to me ( Timo at timos-welt.de ).
+
+Fixes:
+======
+- Parameter 'Apply to index & meta albums' and 'Apply to all pages' were wrong
+  way round when not in SEF compatibility mode - fixed
+- Broken links to authors on config page - fixed
+- Option 'Count views via Highslide as real views' used to count several times
+  with Opera browser. In Opera, the picture counter was increased the 1st time 
+  when loading the thumbnail page without doing anything else, the 2nd time when
+  clicking on a thumb to enlarge it, the 3rd time when clicking on the enlarged
+  pic to reduce it to thumb size. From now on, Opera users will not be
+  counted via HighSlide at all, preventing false statistics. I have checked
+  several other browsers (IE, FF, Safari) - none of them behaves this way - fixed
+- Invalid XHTML with certain file names - fixed
+- Moving 'loading' animation is finally back
+
+
+Known Issues:
+=============
+- Will not work if you have custom title on thumbnails!
+- If 'Link to intermediate' is set to 'yes', and visitor clicks on 'detail' link, 
+  image counter will increase again, so his view will be counted twice.
+
+
+
+
+============================================= v3.01 - 2007/10/31 - 18:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+New features:
+=============
+- Bunch of new rounded layouts in different colors 
+- Preview function and quite some JavaScript stuff on config page
+
+Fixes:
+======
+- Bad performance using Opera with 'count hs views as real views' turned on - fixed
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+- I have no idea of JavaScript, so I simply can't do that. If you know JavaScript, feel free
+  to change these beasts and mail them to me ( Timo at timos-welt.de ).
+  
+  
+Known Issues:
+=============
+- Will not work if you have custom title on thumbnails!
+- If 'Link to intermediate' is set to 'yes', and visitor clicks on 'detail' link, 
+  image counter will increase again, so his view will be counted twice.
+  
+  
+  
+============================================= v3.02 - 2008/03/20 - 01:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+
+New features:
+=============
+- control bar implemented
+
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+- I have no idea of JavaScript, so I simply can't do that. If you know JavaScript, feel free
+  to change these beasts and mail them to me ( Timo at timos-welt.de ).
+
+  
+Known Issues:
+=============
+- Will not work if you have custom title on thumbnails!
+- If 'Link to intermediate' is set to 'yes', and visitor clicks on 'detail' link, 
+  image counter will increase again, so his view will be counted twice.
+
+
+
+============================================= v3.03 - 2008/03/31 - 01:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+
+New features:
+=============
+- full compatible with plugins 'Imageflow' and 'Slider'
+
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+- I have no idea of JavaScript, so I simply can't do that. If you know JavaScript, feel free
+  to change these beasts and mail them to me ( Timo at timos-welt.de ).
+
+  
+Known Issues:
+=============
+- Will not work if you have custom title on thumbnails!
+- If 'Link to intermediate' is set to 'yes', and visitor clicks on 'detail' link, 
+  image counter will increase again, so his view will be counted twice.
+
+
+
+============================================= v3.04 - 2008/06/25 - 01:00 GMT
+by Timos-Welt (http://www.timos-welt.de)
+
+
+Fixes:
+======
+- Fixed php short tags in hscnt.php
+
+
+Still missing features from v 2.3:
+==================================
+- I did _not_ change function and variable names in highslide.js to cpghs_... - if the plug in
+  gives you javascript errors, please use v2.3 instead!
+- I have no idea of JavaScript, so I simply can't do that. If you know JavaScript, feel free
+  to change these beasts and mail them to me ( Timo at timos-welt.de ).
+
+  
+Known Issues:
+=============
+- Will not work if you have custom title on thumbnails!
+- If 'Link to intermediate' is set to 'yes', and visitor clicks on 'detail' link, 
+  image counter will increase again, so his view will be counted twice.

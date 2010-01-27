@@ -1,0 +1,314 @@
+
+              ---------------------------------
+                     Play YouTube movies
+                 with CPG 1.4.x + EnlargeIt!
+              ---------------------------------
+              These instructions are taken from
+              the mod 'Displaying videos from
+              Youtube in Coppermine' by Nibbler
+
+(http://forum.coppermine-gallery.net/index.php/topic,37962.0.html)
+
+
+-----------------------------------------------------------------
+
+ This is a modification to allow a CPG 1.4.x gallery with active 
+ EnlargeIt! to play YouTube movies.
+
+ To use this mod, you have to ensure that
+ a) PHP URL fopen is enabled in your server config
+ b) regular URI uploads work correctly, right permissions etc.
+
+ The mod allows you to embed Youtube videos in your Coppermine
+ gallery. A new section appears on the upload page where you enter
+ the URL of the video. Coppermine will use the video thumbnail
+ and title/caption/keywords from Youtube when adding the video.
+
+-----------------------------------------------------------------
+
+
+File to be changed: upload.php
+------------------------------
+
+
+Step 1: Add this code near the top of upload.php after the 
+        comments (you can skip this step if you have PHP5)
+
+--- begin code ---
+
+  if (!function_exists('file_put_contents')) {
+    function file_put_contents($n,$d) {
+      $f=@fopen($n,"w");
+      if (!$f) {
+        return false;
+      } else {
+        fwrite($f,$d);
+        fclose($f);
+        return true;
+      }
+    }
+  }
+
+--- end code ---
+
+
+Step 2: Find this
+
+--- begin code ---
+
+            // Add the control device.
+            $form_array[] = array('control', 'phase_1', 4);
+
+--- end code ---
+
+before it, add
+           
+--- begin code ---
+
+           // Youtube
+           if (USER_ID) {
+              $form_array[] = 'Youtube uploads';
+              $form_array[] = array('', 'YT_array[]', 0, 256, 3);
+              $form_array[] = 'Note: YouTube videos must be added in the form http://www.youtube.com/watch?v=xxxxxxxxxxx';
+  }
+
+--- end code ---
+
+
+Step 3: Find this
+
+--- begin code ---
+
+//Now we must prepare the inital form for adding the pictures to the database, and we must move them to their final location.
+         
+--- end code ---
+
+before it, add
+         
+--- begin code ---
+
+    // youtube
+    
+   $YT_array = count($_POST['YT_array']);
+
+  if ($YT_array) {
+     $YT_failure_array = array();
+
+     for ($counter = 0; $counter < $YT_array; $counter++) {
+
+       // Create the failure ordinal for ordering the report of failed uploads.
+
+      $failure_cardinal = $counter + 1;
+
+      $failure_ordinal = ''.$failure_cardinal.'. ';
+            
+      $YT_URI = $_POST['YT_array'][$counter];
+
+      if (!$YT_URI) continue;
+      
+
+      if (preg_match('/youtube\.com\/watch\?v=(.*)/', $YT_URI, $matches)){
+
+        $vid = $matches[1];
+                     
+        $xurl = "http://gdata.youtube.com/feeds/api/videos/$vid";
+                     
+        $xdata = file_get_contents($xurl);
+
+        file_put_contents($CONFIG['fullpath'] . "edit/yt_$vid.xml", $xdata);
+
+        // todo: parse the xml properly
+        //if (preg_match('/<thumbnail_url>(.*)<\/thumbnail_url>/', $xdata, $xmatches)){
+        
+          $thumbnail = "http://img.youtube.com/vi/$vid/0.jpg";
+          
+          $rh = fopen($thumbnail, 'rb');
+          $wh = fopen($CONFIG['fullpath'] . "edit/yt_$vid.jpg", 'wb');
+  
+  
+              while (!feof($rh)) fwrite($wh, fread($rh, 1024));
+  
+          fclose($rh);
+          fclose($wh);
+       
+          $escrow_array[] = array('actual_name'=>"youtube_$vid.jpg", 'temporary_name'=> "yt_$vid.jpg");
+              
+             } else {
+                 $YT_failure_array[] = array( 'failure_ordinal'=>$failure_ordinal, 'URI_name'=> $YT_URI, 'error_code'=> 'Failed to find video');
+             }
+         }
+     } 
+
+--- end code ---
+
+     
+Step 4: Find this
+
+--- begin code ---
+     
+     $zip_error_count = count($zip_failure_array);
+
+--- end code ---
+
+After, add
+
+--- begin code ---
+     
+      $YT_error_count = count($YT_failure_array);
+
+--- end code ---
+
+     
+Step 5: Find this
+
+--- begin code ---
+    
+        // Create error report if we have errors.
+    if (($file_error_count + $URI_error_count + $zip_error_count) > 0) {
+
+--- end code ---
+
+Change to
+
+--- begin code ---
+   
+        // Create error report if we have errors.
+    if (($file_error_count + $URI_error_count + $zip_error_count + $YT_error_count) > 0) {
+
+--- end code ---
+     
+
+Step 6: Find this
+
+--- begin code ---
+     
+             // Close the error report table.
+        endtable()
+
+--- end code ---
+
+before it, add
+       
+--- begin code ---
+      
+                // Look for YT upload errors.
+        if ($YT_error_count > 0) {
+
+            // There are URI upload errors. Generate the section label.
+            form_label("YT errors:");
+            echo "<tr><td>URI</td><td>Error message</td></tr>";
+
+            // Cycle through the file upload errors.
+            for ($i=0; $i < $YT_error_count; $i++) {
+
+                // Print the error ordinal, file name, and error code.
+                echo "<tr><td>{$YT_failure_array[$i]['failure_ordinal']} {$YT_failure_array[$i]['URI_name']}</td><td>{$YT_failure_array[$i]['error_code']}</td></tr>";
+
+            }
+
+        }
+
+--- end code ---
+       
+       
+Step 7: Find this
+
+--- begin code ---
+        
+                $form_array = array(
+        sprintf($lang_upload_php['max_fsize'], $CONFIG['max_upl_size']),
+        array($lang_upload_php['album'], 'album', 2),
+        array('MAX_FILE_SIZE', $max_file_size, 4),
+        array($lang_upload_php['picture'], 'userpicture', 1, 1),
+        array($lang_upload_php['pic_title'], 'title', 0, 255, 1),
+        array($captionLabel, 'caption', 3, $CONFIG['max_img_desc_length']),
+        array($lang_upload_php['keywords'], 'keywords', 0, 255, 1),
+        array('event', 'picture', 4)
+        );
+
+--- end code ---
+
+Change to
+       
+--- begin code ---
+        
+        if (preg_match('/^youtube_(.*)\.jpg$/', $file_set[0], $ytmatches)){
+
+         $vid = $ytmatches[1];
+
+  $xdata = file_get_contents($CONFIG['fullpath'] . "edit/yt_$vid.xml");
+
+
+        // todo: parse the xml properly
+        preg_match("/<media:description type='plain'>(.*)<\/media:description>/s", $xdata, $xmatches);
+        $description = substr($xmatches[1], 0, $CONFIG['max_img_desc_length']);
+  
+        // todo: parse the xml properly
+        preg_match('/<media:keywords>(.*)<\/media:keywords>/s', $xdata, $xmatches);
+        $keywords = $xmatches[1];
+              
+        // todo: parse the xml properly
+        preg_match("/<media:title type='plain'>(.*)<\/media:title>/s", $xdata, $xmatches);
+        $title = substr($xmatches[1], 0, 255);
+
+
+                $form_array = array(
+        array($lang_upload_php['album'], 'album', 2),
+        array($lang_upload_php['pic_title'], 'title', 0, 255, 1, $title),
+        array($captionLabel, 'caption', 3, $CONFIG['max_img_desc_length'], $description),
+        array($lang_upload_php['keywords'], 'keywords', 0, 255, 1, $keywords),
+      array('control', 'phase_2', 4),
+      array('unique_ID', $_POST['unique_ID'], 4), 
+        );
+        
+    
+    } else {
+
+                $form_array = array(
+        sprintf($lang_upload_php['max_fsize'], $CONFIG['max_upl_size']),
+        array($lang_upload_php['album'], 'album', 2),
+        array('MAX_FILE_SIZE', $max_file_size, 4),
+        array($lang_upload_php['picture'], 'userpicture', 1, 1),
+        array($lang_upload_php['pic_title'], 'title', 0, 255, 1),
+        array($captionLabel, 'caption', 3, $CONFIG['max_img_desc_length']),
+        array($lang_upload_php['keywords'], 'keywords', 0, 255, 1),
+        array('event', 'picture', 4)
+        );
+
+}
+
+--- end code ---
+
+
+--------------------------------------------------------------
+ The next step is optional. You only need to do this, if you
+ want to be able to play Youtube movies _without_ the 
+ EnlargeIt! plugin!, too.
+--------------------------------------------------------------
+
+ 
+Step 8: Open file theme.php of your theme. If you can't find 
+        this code, copy theme_html_picture() over from sample 
+        theme and then apply the change.
+
+        
+Step 9: Find this
+
+--- begin code ---
+
+ if (isset($image_size['reduced'])) {
+
+--- end code ---
+
+Change to
+
+--- begin code ---
+ 
+      if (preg_match('/^youtube_(.*)\.jpg$/', $CURRENT_PIC_DATA['filename'], $ytmatches)){
+      
+        $vid = $ytmatches[1];
+          $pic_html = '<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/'. $vid . '"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/'. $vid . '" type="application/x-shockwave-flash" wmode="transparent" width="480" height="385"></embed></object><br />';
+      
+      } elseif (isset($image_size['reduced'])) {
+
+--- end code ---

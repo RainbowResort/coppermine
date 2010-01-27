@@ -1,0 +1,5 @@
+v1.01 - 2006/06/21 - 16:04 GMT
+* remove date from 'lastup', 'lastupby', and 'lastalb'
+
+v1.00 - 2006/03/29 - 04:31 GMT
+* initial release: remove date from 'favpics' caption
