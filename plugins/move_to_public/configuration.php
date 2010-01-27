@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - move_to_public
   *************************************************
-  Copyright (c) 2010 Borzoo Mossavari (Sami)
+  Copyright (c) 2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
-	die('Not in Coppermine...');
+    die('Not in Coppermine...');
 }
 
 require_once './plugins/move_to_public/init.inc.php';
@@ -27,7 +27,7 @@ $move_to_public_icon_array = $move_to_public_init_array['icon'];
 $name = $lang_plugin_move_to_public['name'];
 $description = $lang_plugin_move_to_public['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278">eenemeenemuu</a>';
-$version='2.1';
+$version='2.2';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$move_to_public_icon_array['announcement']}{$lang_plugin_move_to_public['announcement_thread']}</a>&nbsp;

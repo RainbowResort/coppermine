@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - move_to_public
   *************************************************
-  Copyright (c) 2010 Borzoo Mossavari (Sami)
+  Copyright (c) 2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

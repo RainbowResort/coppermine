@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - move_to_public
   *************************************************
-  Copyright (c) 2010 Borzoo Mossavari (Sami)
+  Copyright (c) 2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@ Read up the documentation that comes with Coppermine to find out more, e.g. how 
 Coppermine version: cpg1.5.x
 Plugin name: Move user albums to public category
 Plugin version: 2.0
-Plugin author: Borzoo Mossavari (Sami)
-Plugin announcement thread: http://forum.coppermine-gallery.net/index.php/topic,54935.0.html
+Plugin author: eenemeenemuu
+Plugin announcement thread: http://forum.coppermine-gallery.net/index.php/topic,62360.0.html
 
 
 Because so many people ask how they can move user albums to public categories, I made a little plugin.

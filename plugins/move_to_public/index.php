@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - move_to_public
   *************************************************
-  Copyright (c) 2010 Borzoo Mossavari (Sami)
+  Copyright (c) 2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
-	die('Not in Coppermine...');
+    die('Not in Coppermine...');
 }
 
 require_once './plugins/move_to_public/init.inc.php';
