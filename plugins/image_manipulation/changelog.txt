@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-28 [M] Version count updated to 2.2 {Timo}
+2010-01-28 [B] Reduced number of cookies to 1/100 to make Firefox work {Timo}
 2010-01-15 [M] Version count updated to 2.0 {Timo}
 2010-01-17 [C] Replaced <button> tags for sliders {eenemeenemuu}
 2010-01-16 [B] Fixed broken uninstall queries related to transparent overlay preservation {GauGau}
