@@ -50,30 +50,6 @@ Support
 =======
 The scope of support for this tool is limited. Basically, it comes as-is.
 
-Changelog
-=========
-[A] = Added new feature
-[B] = Bugfix (fix something that wasn't working as expected)
-[C] = Cosmetical fix (layout, typo etc.)
-[D] = Documentation improvements
-[M] = Maintenance works
-[O] = Optimization of code
-[S] = Security fix (issues that are related to security)
-*********************************************
-
-2009-08-20 [M] First public release of the plugin for cpg1.5.x (plugin version 3.3) {GauGau}
-2009-08-20 [D] Added screenshot to install information {GauGau}
-2009-08-20 [O] I18n of configuration file {GauGau}
-2009-08-19 [A] Addeded spin button {GauGau}
-2009-08-19 [A] Addeded German language file {GauGau}
-2009-08-19 [A] Added menu icons {GauGau}
-2009-08-19 [C] Converted admin menu entry function for cpg1.5.x {GauGau}
-2009-08-18 [B] Inspectified form {GauGau}
-2009-08-18 [C] Spiced up form {GauGau}
-2009-08-18 [M] Added SVN header {GauGau}
-2009-08-18 [M] Renamed plugin folder from CPGMassImport to mass_import to respect naming conventions {GauGau}
-2009-08-18 [M] Increased plugin version count from 2.0 to 3.0 to reflect the in-depth changes {GauGau}
-
 Todo
 ====
 
