@@ -31,7 +31,7 @@ $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=15025">Flux</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=23938">Paul Van Rompay</a>, ';
 $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2">Joachim Müller</a>';
-$version = '3.3';
+$version = '3.4';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu external">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>&nbsp;

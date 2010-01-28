@@ -1,0 +1,30 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - mass_import
+  *************************************************
+  Copyright (c) 2010 Nibbler
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-01-28 [M] Counted plugin version up from 3.3 to 3.4 {GauGau}
+2010-01-28 [A] Added Finnish language file {GauGau}
+2010-01-28 [M] Added changelog {GauGau}
