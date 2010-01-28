@@ -16,17 +16,14 @@
 $name='Google Analytics';
 $description='This plugin adds <a href="http://www.google.com/analytics/" rel="external" class="external">Google Analytics</a>\'s tracking code to every page if you aren\'t logged in as admin. An additional cookie based exclusion is also available after the installation of this plugin.';
 $author='<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=56739" rel="external" class="external">papukaija</a>, v1.1 by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">André</a>';
-$version='1.3';
+$version='1.4';
+$plugin_cpg_version = array('min' => '1.5');
 /*
  * $install_info is displayed with the title of a plugin that is NOT installed and
  * can be used to present extra information.
  */
 $install_info = <<<EOT
-    <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td>Existing users: Please remember to clean up your template, master_template plugin or anycontent.php before installing this plugin.</td>
-    </tr>
-    </table>
+
 EOT;
 /*
  * $extra_info is displayed with the title of a plugin that IS installed and
