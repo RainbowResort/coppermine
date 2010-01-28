@@ -67,9 +67,11 @@ Don't try to contact the plugin author for support - post on the board publicly 
 Change log:
 -----------
 
-v0.6 (2010/xx/xx)
+v0.7 (2010/xx/xx)
 -----------------
 - code cleanup
+- fixed add onload bug in js
+- removed packed version of script because JSMin plugin is available
 
 v0.5 (2010/01/02)
 -----------------
