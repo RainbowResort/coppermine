@@ -15,11 +15,11 @@
   $Date$
   **************************************************/
 
-$name='Better Tooltip';
+$name='Filename to tooltip';
 $description='Replaces the standard thumb title (the tooltip that appears if you hold your mouse pointer over a thumbnail) with the image title.';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='0.4';
-$plugin_cpg_version = array('min' => '1.5.3');
+$version='0.5';
+$plugin_cpg_version = array('min' => '1.5');
 $install_info = "This plugin requires no configuration.";
 $extra_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63369.0.html" rel="external" class="admin_menu">Announcement thread</a>';
 ?>
