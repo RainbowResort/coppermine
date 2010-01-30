@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 function flf_create_directory() {
 		if (file_exists("histograms")) {
 			// directory exists
@@ -79,7 +79,7 @@ function flf_create_table($tablename) {
 function flf_enter_base_config() {
 		global $CONFIG, $thisplugin;
 		if (!$CONFIG['flf_histotag_tablename']) {	
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_tablename','flf_histotag')";
+			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_tablename','plugin_flf_histotag')";
 			cpg_db_query($sql);
 		}
 		if (!$CONFIG['flf_histotag_mapwidth']) {

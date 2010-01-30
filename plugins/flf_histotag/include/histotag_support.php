@@ -1,4 +1,7 @@
 <?php
+
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 if (file_exists("./plugins/xfeed/lang/{$CONFIG['lang']}.php")) {
     require "./plugins/flf_histotag/lang/{$CONFIG['lang']}.php";
 } else {
@@ -169,6 +172,7 @@ function renderGeoButton($template_img_navbar) {
     	$geo_title = $flf_lang_var['click_link'];
         $geo_icon = "geo.png";
         $geo_icon_hover = "geo.png";
+        /*
         $geo_button = "
         <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
             <a href=\"$geo_tgt\" rel=\"lyteframe\" rev=\"width: {$CONFIG['flf_histotag_lyteboxwidth']}px; height: {$CONFIG['flf_histotag_lyteboxheight']}px; \" class=\"navmenu_pic\" title=\"{$flf_lang_var['notice']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"geo_ico\" /></a>
@@ -178,6 +182,20 @@ function renderGeoButton($template_img_navbar) {
             $('#fav_lnk').mouseout(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon'); } );
         </script>
     ";
+        */
+        $geo_button="
+        <script type=\"text/javascript\" src=\"plugins/flf_histotag/include/greybox_rightsize.js\"></script>
+         <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
+            <a href=\"$geo_tgt\"  flfwidth=\"{$CONFIG['flf_histotag_lyteboxwidth']}\" flfheight=\"{$CONFIG['flf_histotag_lyteboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['notice']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"geo_ico\" /></a>
+        </td>
+                <script type=\"text/javascript\">
+		            $('#fav_lnk').mouseover(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
+		            $('#fav_lnk').mouseout(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon'); } );
+		
+					            </script>
+
+  			  ";
+        
         
      } else {
      	if ($CONFIG['flf_histotag_show_geo_no_geotag']=='1') {
@@ -241,7 +259,7 @@ function GenerateLinkToMap($CoppermineID) {
 				$flf_longitude =degree2decimal($long_hour."h".$long_min."m".$long_sec."s".$array['exif_GPS_GPSLongitudeRef']);
 				$flf_latitude=degree2decimal($lat_hour."h".$lat_min."m".$lat_sec."s".$array['exif_GPS_GPSLatitudeRef']);
 				$maplink = <<<EOT
-	plugins/flf_histotag/include/map.php?width={$CONFIG['flf_histotag_mapwidth']}&height={$CONFIG['flf_histotag_mapheight']	}&apiKey={$CONFIG['flf_histotag_apikey']	}&latitude={$flf_latitude}&longitude={$flf_longitude}
+	plugins/flf_histotag/include/histotag_map.php?width={$CONFIG['flf_histotag_mapwidth']}&height={$CONFIG['flf_histotag_mapheight']	}&apiKey={$CONFIG['flf_histotag_apikey']	}&latitude={$flf_latitude}&longitude={$flf_longitude}
 EOT;
 				$returnvalues[0]=$maplink;}
 			else {

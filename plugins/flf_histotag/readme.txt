@@ -1,6 +1,6 @@
 
 
-flf histotag for Coppermine - version 0.9ß
+flf histotag for Coppermine - version 1.1
 
 requires COPPERMINE version 1.5.2 (tell me, if it works with older versions)
 
@@ -37,18 +37,57 @@ Credits
 - Credits to Doug Pillow for the geodata conversion algorithm http://www.weberdev.com/get_example-3548.html
 - Credits to eenemeenemuu for his fav_button Plugin that showed me how to add buttons to the navbar
 - The function to generate the histograms was adapted from the Pixelpost addon by Kevin Crafts http://blog.kevincrafts.com/
+
+==============================================================================================================
+History
+==============================================================================================================
+
+v0.9	Initial release
+v1.0	Security issues fixed, update new language method; thanks to 'GauGau' for this
+v1.1	- Renamed files according to coding conventions
+		- Changed Tablename according to naming conventions
+		- Removed lytebox for displaying pictures, substituted with greybox - thanks to 'TimosWelt' for the hint
+		- Histograms are now being generated on demand only when the histogram button
+		  is clicked. This way the system doesn't get cluttered with histograms that
+		  noone is interested in seeing. Downside: first time to call the histogram takes
+		  some time.
+		- Changed Histogram quality to 75% to get smaller filesizes
+		  
+
+
 ==============================================================================================================
 Installation & Configuration
 ==============================================================================================================
 Install plugin with COPPERMINE Plugin Manager.
-Edit /plugins/plugins/flf_histotag/include/plugins/flf_histotag_configuration.php before first running the tool!
+Edit configuration before first running the tool!
 
-You need to have your own GOOGLE MAP API KEY before you can use this map. If you don't yet have one, get yours
+You need to have your own GOOGLE MAP API KEY before you can use the map functoin. If you don't yet have one, get yours
 free at http://code.google.com/apis/maps/ 
 and enter it into the appropriate variable. ('apikey')
 
 All other options should be self explanatory.
 
+==============================================================================================================
+Upgrading
+=============================================================================================================
+Upgrading from Version <v1.1
+- As I changed the tablename you either need to manually rename the old table in mysql:
+  old name: flf_histotag
+  new name: plugin_flf_histotag
+  mysql command: RENAME TABLE <Coppermine_prefix>flf_histotag TO <Coppermine_prefix>plugin_flf_histotag
+  Update the Config table to resemble the new table:
+  UPDATE <COPPERMINE_PREFIX>_config SET value='plugin_flf_histotag' where name='flf_histotag_tablename';
+UPDATE coppermine_config SET value='plugin_flf_histotag' where name='flf_histotag_tablename';
+RENAME TABLE coppermine_flf_histotag TO coppermine_plugin_flf_histotag
+
+  
+- Copy and overwrite all files in the folder
+  Alternative: Uninstall the plugin, the table will be dropped. Install the new version and reinitialize the
+  data by using the plugin admin function provided. Note: If you use image manipulation upon upload, your
+  original Exif data may no longer be available in the files on your albums: If that is the case, re-initializing
+  the table will not be an option to you :-(
+  
+  
 								 
 								 
 ==============================================================================================================
@@ -88,8 +127,8 @@ Things on my To-Do-List
 - Supply standalone script to generate all histograms on disk (avoid Timeout)
 - give user the chance to change tablename
 - supply pure text file for initial sql configuration (not in plugins/install.inc.php)
-- generate histograms on the fly only when clicking the "show histogram" button (currently created, when no
-  histogram is found upon loading)
+- add Configuration for map type (Satellite/Map/Hybrid)
+- add Configuration for Jpeg Compression histogram
 
 ==============================================================================================================
 

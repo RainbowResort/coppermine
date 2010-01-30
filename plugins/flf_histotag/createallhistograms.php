@@ -5,7 +5,7 @@
 	global $CONFIG, $flf_lang_var;
 	if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['perm_denied'], __FILE__, __LINE__);
 	pageheader('Create all Histogrrams for all Images!');
-	require_once('include/histogram_support.inc.php');
+	require_once('include/histotag_histogram_support.php');
 	starttable("90%");
 	
 	print $flf_lang_var['createallhistograms'];
