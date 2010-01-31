@@ -189,17 +189,21 @@ function generateAllHistograms() {
 	// TODO: DO something about max execution time!
     global $CONFIG, $flf_lang_var;
 	$insertedvalues=0;
-    $result = cpg_db_query("SELECT t.pid, t.filepath, t.filename FROM {$CONFIG['TABLE_PICTURES']} t WHERE t.pid not in (SELECT pid from  {$CONFIG['TABLE_PREFIX']}{$CONFIG['plugins/flf_histotag_tablename']} );");
+    set_time_limit(500);
+    $result = cpg_db_query("SELECT t.pid, t.filepath, t.filename FROM {$CONFIG['TABLE_PICTURES']} t ");
     while ($row = mysql_fetch_assoc($result)) {
     
         $calldata['pid'] = $row['pid'];
         $calldata['filepath'] = $row['filepath'];
         $calldata['filename'] = $row['filename'];
-
-		$success=makeHistogram('albums/'.$calldata['filepath'],$calldata['filename'],$calldata['pid']);
-		if ($success) {
-			$insertedvalues++;
+		if (!file_exists('histograms/hist_'.$calldata['pid'].'_'.$calldata['filename'])) {
+			$success=makeHistogram('albums/'.$calldata['filepath'],$calldata['filename'],$calldata['pid']);
+			if ($success) {
+				echo ".";
+				$insertedvalues++;
+			}
 		}
+	
 		
     }
     return $insertedvalues;

@@ -1,6 +1,6 @@
 
 
-flf histotag for Coppermine - version 1.1
+flf histotag for Coppermine - version 1.2
 
 requires COPPERMINE version 1.5.2 (tell me, if it works with older versions)
 
@@ -33,7 +33,6 @@ Leave your email-address and I'll send you a thank-you picture of your bricks in
 Credits
 ==============================================================================================================
 - This plugin for Coppermine was inspired and is in part based upon "easyMap for Pixelpost" by http://maximee.de
-- To display the map, lytebox is used. Lytebox is (c) by http://www.dolem.com/lytebox/
 - Credits to Doug Pillow for the geodata conversion algorithm http://www.weberdev.com/get_example-3548.html
 - Credits to eenemeenemuu for his fav_button Plugin that showed me how to add buttons to the navbar
 - The function to generate the histograms was adapted from the Pixelpost addon by Kevin Crafts http://blog.kevincrafts.com/
@@ -52,7 +51,8 @@ v1.1	- Renamed files according to coding conventions
 		  noone is interested in seeing. Downside: first time to call the histogram takes
 		  some time.
 		- Changed Histogram quality to 75% to get smaller filesizes
-		  
+v1.2 	fixed a bug when uploading images with no exif data
+		fixed a bug when trying to generate all histograms 
 
 
 ==============================================================================================================
@@ -113,12 +113,12 @@ If activated a histogram is created upon upload of an image. The settings are fu
 All histograms are stored in a directory call "histograms" and have a filename 
 	hist_<coppermine_id><original filename>.jpg
 If you want to generate histograms for all the images inside your database, i provided a function in the
-plugin manager page. However, since Timeouts of your webserver may occur, this function is not 
-very reliable. I'll have to think of something better in the future. To compensate this, you can
-activate an option to generate the histograms upon displaying of an image. Downside: First visitor
-to your image takes longer to show the image, Upside: No unnecessary histograms included.
-This feature will be tweaked some more in future versions.
-
+plugin manager page. However please note, that since Timeouts of your webserver may occur, this function is not 
+very reliable! I'll have to think of something better in the future. I don't recommend using this
+feature. You should consider using the "on-the-fly"-generation. You can activate it from the plugin's config
+screen.
+Downside: First visitor to look at the histogram has to wait, until it is generated. 
+Upside: No unnecessary histograms generated.
 
 ==============================================================================================================
 Things on my To-Do-List

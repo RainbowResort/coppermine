@@ -37,7 +37,7 @@ $extra_info = <<<EOT
 EOT;
 
 
-$version='1.1';
+$version='1.2';
 $plugin_cpg_version = array('min' => '1.5');
 
 ?>

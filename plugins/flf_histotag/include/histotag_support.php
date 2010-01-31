@@ -131,8 +131,8 @@ function extractExifsAndImport($CoppermineData) {
 	$exif_exif_imageuniqueid."','".
 	$exif_ifd0_model."','".
 	$exif_ifd0_xresolution."','".
-	$exif_ifd0_yresolution."',".
-	$exif_ifd0_resolutionunit.",'".
+	$exif_ifd0_yresolution."','".
+	$exif_ifd0_resolutionunit."','".
 	$exif_ifd0_software."','".
 	$exif_ifd0_datetime."','".
 	$exif_ifd0_ycbcrpositioning."','".
