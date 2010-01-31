@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-01-31 [M] Increased plugin version counter to 0.6 {GauGau}
+2010-01-31 [B] Using newly-introduced plugin hooks requires the minimum requirement variable $plugin_cpg_version['min'] to be modified as well! {GauGau}
 2010-01-29 [M] Increased plugin version counter to 0.5 {Timo}
 2010-01-29 [A] Added second hook for thumbs in film strip {Timo}
 2010-01-24 [M] Renamed plugin from better_tooltip (too biased) to filename2tooltip {GauGau}
