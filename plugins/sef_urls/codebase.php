@@ -38,6 +38,9 @@ $thisplugin->add_filter('page_html','sef_urls_convert');
  */
 function sef_urls_convert($html) {
 
+    // Rewrite index.php?cat=0 URLs to index.html
+    $html = preg_replace('/index\.php\?cat=0/i','/index.html',$html);
+
     // Rewrite index.php?cat=[category]&page=[page] URLs to index-[category]-page-[page].html
     $html = preg_replace('/index\.php\?cat=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','index-$1-page-$3.html',$html);
 

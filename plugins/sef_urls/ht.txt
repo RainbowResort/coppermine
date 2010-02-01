@@ -27,6 +27,8 @@ RewriteEngine on
 #
 # Rewrite index urls
 #
+RewriteRule index.html(.*) index.php [NC]
+
 RewriteRule index-([0-9]*)\.html(.*) index.php?cat=$1$2 [NC]
 
 RewriteRule index-([0-9]*)-page-([0-9]*)\.html(.*) index.php?cat=$1&page=$2$3 [NC]
