@@ -120,7 +120,7 @@ RewriteRule slideshow-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayi
 # Rewrite displayimage urls
 #
 
-RewriteRule displayimage-lastcom-([0-9]*)-([0-9]*)-([0-9]*)-page-([0-9]*).html(.*) displayimage.php?album=lastcom&cat=$1&pid=$2&msg_id=$3&page=$4$5 [NC]
+RewriteRule displayimage-lastcom-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-page-([\-]?[0-9]+).html(.*) displayimage.php?album=lastcom&cat=$1&pid=$2&msg_id=$3&page=$4$5 [NC]
 
 RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4&msg_id=$5&page=$6$7 [NC]
 
