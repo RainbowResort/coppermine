@@ -25,6 +25,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-02-02 [A] Added known issues text file {Timo}
+2010-02-02 [A] Added localisation support for german language {Timo}
+2010-02-02 [B] Fixed a lot of URLs {Timo}
+2010-02-02 [M] Increased version number to 1.6 {Timo}
 2010-02-01 [M] Increased version number to 1.5 {Timo}
 2010-02-01 [A] index.php?cat=0 is now replaced by index.html {Timo}
 2010-01-06 [M] Increased version number to 1.3 {Timo}

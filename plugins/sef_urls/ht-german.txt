@@ -25,17 +25,67 @@ RewriteEngine on
 #RewriteBase /YOUR_COPPERMINE_ROOT
 
 #
+# Language translation
+#
+
+RewriteRule suche.html(.*) search.php$1 [NC]
+
+RewriteRule kontakt.html(.*) contact.php$1 [NC]
+
+RewriteRule (.*)beste(.*) $1toprated$2 [NC]
+
+RewriteRule (.*)beliebteste(.*) $1topn$2 [NC]
+
+RewriteRule (.*)kommentiertvon(.*) $1lastcomby$2 [NC]
+
+RewriteRule (.*)kommentierte(.*) $1lastcom$2 [NC]
+
+RewriteRule (.*)seite(.*) $1page$2 [NC]
+
+RewriteRule (.*)benutzerliste(.*) $1usermgr$2 [NC]
+
+RewriteRule (.*)benutzer(.*) $1profile$2 [NC]
+
+RewriteRule (.*)uebersicht(.*) $1thumbnails$2 [NC]
+
+RewriteRule (.*)bild(.*) $1displayimage$2 [NC]
+
+RewriteRule (.*)neuestevon(.*) $1lastupby$2 [NC]
+
+RewriteRule (.*)neueste(.*) $1lastup$2 [NC]
+
+RewriteRule (.*)diaschau(.*) $1slideshow$2 [NC]
+
+RewriteRule (.*)suche(.*) $1search$2 [NC]
+
+RewriteRule (.*)oben(.*) $1top_display_media$2 [NC]
+
+RewriteRule (.*)sortierung(.*) $1sort$2 [NC]
+
+
+#
+# Rewrite usrmgr urls
+#
+
+RewriteRule usermgr-page-([0-9]*).html(.*) usermgr.php?page=$1$2 [NC]
+
+RewriteRule usermgr.html(.*) usermgr.php$1 [NC]
+
+#
 # Rewrite index urls
 #
-RewriteRule index.html(.*) index.php [NC]
+
+RewriteRule index.html(.*) index.php$1 [NC]
 
 RewriteRule index-([0-9]*)\.html(.*) index.php?cat=$1$2 [NC]
 
 RewriteRule index-([0-9]*)-page-([0-9]*)\.html(.*) index.php?cat=$1&page=$2$3 [NC]
 
+
 #
 # Rewrite thumbnail urls
 #
+
 RewriteRule thumbnails-lastupby-([0-9]+)\.html(.*) thumbnails.php?album=lastupby&uid=$1$2 [NC]
 
 RewriteRule thumbnails-lastcomby-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&uid=$1$2 [NC]
@@ -45,8 +95,6 @@ RewriteRule thumbnails-lastupby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbn
 RewriteRule thumbnails-lastcomby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&cat=$1&uid=$2&page=$3$4 [NC]
 
 RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2$3 [NC]
-
-RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)-sort-([a-z]*)\.html(.*) thumbnails.php?album=$1&page=$2&sort=$3$4 [NC]
 
 RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&page=$2$3 [NC]
 
@@ -58,24 +106,37 @@ RewriteRule thumbnails-search-(.*)\.html(.*) thumbnails.php?album=search&search=
 
 
 #
+# Rewrite slideshow urls
+#
+
+RewriteRule slideshow-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&msg_id=$4&slideshow=$5$6 [NC]
+
+RewriteRule slideshow-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&slideshow=$4$5 [NC]
+
+RewriteRule slideshow-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2&slideshow=$3$4 [NC]
+
+
+#
 # Rewrite displayimage urls
 #
+
+RewriteRule displayimage-lastcom-([0-9]*)-([0-9]*)-([0-9]*)-page-([0-9]*).html(.*) displayimage.php?album=lastcom&cat=$1&pid=$2&msg_id=$3&page=$4$5 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4&msg_id=$5&page=$6$7 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4$5 [NC]
+
 RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3$4 [NC]
 
 RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2$3 [NC]
 
 RewriteRule displayimage-([0-9]+)\.html(.*) displayimage.php?pid=$1$2 [NC]
 
-RewriteRule slideshow-([0-9]+)-([\-]?[0-9]+)-([0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2&slideshow=$3$4 [NC]
-
-RewriteRule slideshow-([a-z]+)-([\-]?[0-9]+)-([0-9]+)-([0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&slideshow=$4$5 [NC]
 
 #
-# Rewrite users' profiles
+# Rewrite users profiles
 #
+
+RewriteRule profile-op-([a-z0-9_]+)\.html(.*) profile.php?op=$1 [NC]
+
 RewriteRule profile-([0-9]+)\.html(.*) profile.php?uid=$1$2 [NC]
-
-#
-# Rewrite Rate this file
-#
-RewriteRule ratepic-([0-9]+)-([0-5])\.html(.*) ratepic.php?pic=$1&rate=$2$3 [NC]
