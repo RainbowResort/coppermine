@@ -24,6 +24,7 @@ The following URLs can not be re-written:
 - sidebar.php
 - thumbnails.php displaying search results for free text search (keywords work fine)
 - addfav.php
+- thumbnails.php if sort options are used
 
 
 German localisation:
