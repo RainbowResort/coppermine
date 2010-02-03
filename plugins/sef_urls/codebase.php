@@ -45,7 +45,6 @@ function sef_urls_convert($html) {
     {
         $str_thumbnails = 'uebersicht';
         $str_displayimage = 'bild';
-        $str_slideshow = 'diaschau';
         $str_toprated = 'beste';
         $str_topn = 'beliebteste';
         $str_lastcomby = 'kommentiertvon';
@@ -58,13 +57,11 @@ function sef_urls_convert($html) {
         $str_contact = 'kontakt';
         $str_tdm = 'oben';
         $str_usermgr = 'benutzerliste';
-        $str_sort = 'sortierung';
     }
     else
     {
         $str_thumbnails = 'thumbnails';
         $str_displayimage = 'displayimage';
-        $str_slideshow = 'slideshow';
         $str_toprated = 'toprated';
         $str_topn = 'topn';
         $str_lastcomby = 'lastcomby';
@@ -77,7 +74,6 @@ function sef_urls_convert($html) {
         $str_contact = 'contact';
         $str_tdm = 'top_display_media';
         $str_usermgr = 'usermgr';
-        $str_sort = 'sort';
     }
 
     // Rewrite usermgr.php
@@ -102,9 +98,6 @@ function sef_urls_convert($html) {
 
     // Rewrite displayimage.php
     $html = preg_replace('/displayimage\.php\?album=lastcom(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-lastcom-$2-$4-$6-'.$str_page.'-$8.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)slideshow=([\-0-9]+)/i',$str_slideshow.'-$1-$3-$5-$7.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)slideshow=([\-0-9]+)/i',$str_slideshow.'-$1-$3-$5-$7-$9.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)slideshow=([\-0-9]+)/i',$str_slideshow.'-$1-$3-$5.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastcomby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastcomby.'-$2-$4-$6-$8-$10.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastupby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastupby.'-$2-$4-$6.html',$html);
     $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3-$5.html',$html);

@@ -15,16 +15,25 @@
   **************************************************/
 
 
-The following URLs can not be re-written:
------------------------------------------
+The following URLs will not be re-written:
+------------------------------------------
 
-- displayimage.php when stopping the slideshow
-- login.php and logout.php
-- all URLs that are only available to admins
+- slideshow URLs 
+  (not relevant for search engines because button is added via javascript)
+- displayimage.php when stopping the slideshow 
+  (not relevant for search engines because slideshow needs javascript)
+- login.php and logout.php 
+  (no problem because a search engine will never log in)
+- all URLs that are only available to admins 
+  (no problem because a search engine will never log in)
 - sidebar.php
+  (not relevant because a search engine bot is no browser)
 - thumbnails.php displaying search results for free text search (keywords work fine)
+  (no problem because a search engine does no free text searches)
 - addfav.php
+  (no problem because a search engine has no favorites)
 - thumbnails.php if sort options are used
+  (not relevant for search engines because sort buttons are added via javascript)
 
 
 German localisation:

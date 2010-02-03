@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-02-03 [O] Removed sort string from german htaccess (not used) {Timo}
+2010-02-03 [O] Removed slideshow rules - not relevant for search engines {Timo}
 2010-02-02 [A] Added known issues text file {Timo}
 2010-02-02 [A] Added localisation support for german language {Timo}
 2010-02-02 [B] Fixed a lot of URLs {Timo}
