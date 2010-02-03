@@ -58,6 +58,40 @@ function sef_urls_convert($html) {
         $str_tdm = 'oben';
         $str_usermgr = 'benutzerliste';
     }
+    else if ($sef_language == 'french')
+    {
+        $str_thumbnails = 'apercu';
+        $str_displayimage = 'image';
+        $str_toprated = 'tresbien';
+        $str_topn = 'populaire';
+        $str_lastcomby = 'commentairede';
+        $str_lastcom = 'commentaire';
+        $str_page = 'page';
+        $str_profile = 'client';
+        $str_lastupby = 'neuvede';
+        $str_lastup = 'neuve';
+        $str_search = 'recherche';
+        $str_contact = 'contacter';
+        $str_tdm = 'enhaut';
+        $str_usermgr = 'fichierclient';
+    }
+    else if ($sef_language == 'spanish')
+    {
+        $str_thumbnails = 'resumen';
+        $str_displayimage = 'cromo';
+        $str_toprated = 'mejor';
+        $str_topn = 'querido';
+        $str_lastcomby = 'comentarde';
+        $str_lastcom = 'comentar';
+        $str_page = 'pagina';
+        $str_profile = 'usuario';
+        $str_lastupby = 'nuevode';
+        $str_lastup = 'nuevo';
+        $str_search = 'busca';
+        $str_contact = 'contacto';
+        $str_tdm = 'alto';
+        $str_usermgr = 'usuariolistado';
+    }
     else
     {
         $str_thumbnails = 'thumbnails';

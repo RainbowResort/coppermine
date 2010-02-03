@@ -25,12 +25,40 @@ RewriteEngine on
 #RewriteBase /YOUR_COPPERMINE_ROOT
 
 #
-# Search and contact
+# Language translation
 #
 
-RewriteRule search.html(.*) search.php$1 [NC]
+RewriteRule busca.html(.*) search.php$1 [NC]
 
-RewriteRule contact.html(.*) contact.php$1 [NC]
+RewriteRule contacto.html(.*) contact.php$1 [NC]
+
+RewriteRule (.*)mejor(.*) $1toprated$2 [NC]
+
+RewriteRule (.*)querido(.*) $1topn$2 [NC]
+
+RewriteRule (.*)comentarde(.*) $1lastcomby$2 [NC]
+
+RewriteRule (.*)comentar(.*) $1lastcom$2 [NC]
+
+RewriteRule (.*)pagina(.*) $1page$2 [NC]
+
+RewriteRule (.*)usuariolistado(.*) $1usermgr$2 [NC]
+
+RewriteRule (.*)usuario(.*) $1profile$2 [NC]
+
+RewriteRule (.*)resumen(.*) $1thumbnails$2 [NC]
+
+RewriteRule (.*)cromo(.*) $1displayimage$2 [NC]
+
+RewriteRule (.*)nuevode(.*) $1lastupby$2 [NC]
+
+RewriteRule (.*)nuevo(.*) $1lastup$2 [NC]
+
+RewriteRule (.*)presentacion(.*) $1slideshow$2 [NC]
+
+RewriteRule (.*)busca(.*) $1search$2 [NC]
+
+RewriteRule (.*)alto(.*) $1top_display_media$2 [NC]
 
 
 #
