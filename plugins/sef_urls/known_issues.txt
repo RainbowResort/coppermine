@@ -47,4 +47,4 @@ and change both lines to
 $sef_language = 'german'; or $sef_language = 'french'; or $sef_language = 'spanish';
 Then install plugin again and overwrite existing .htaccess.
 
-Please note that french and spanish support are experimental. Please report in the announcement thread if they work correctly.
+Please note that french and spanish support are experimental.

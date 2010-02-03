@@ -61,11 +61,11 @@ function sef_urls_convert($html) {
     else if ($sef_language == 'french')
     {
         $str_thumbnails = 'apercu';
-        $str_displayimage = 'image';
+        $str_displayimage = 'photo';
         $str_toprated = 'tresbien';
         $str_topn = 'populaire';
-        $str_lastcomby = 'commentairede';
-        $str_lastcom = 'commentaire';
+        $str_lastcomby = 'comentairede';
+        $str_lastcom = 'comentaire';
         $str_page = 'page';
         $str_profile = 'client';
         $str_lastupby = 'neuvede';
