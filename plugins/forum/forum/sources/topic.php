@@ -32,7 +32,7 @@ class topic_controller extends Controller {
             $superCage = Inspekt::makeSuperCage();
             $redirect = 'login.php';
             if ($matches = $superCage->server->getMatched('QUERY_STRING', '/^[a-zA-Z0-9&=_\/.-]+$/')) {
-                $redirect .= '?force_login=1&referer='.urlencode('displayimage.php?'.$matches[0]);
+                $redirect .= '?force_login=1&referer='.urlencode('forum.php?'.$matches[0]);
             }
             header("Location: $redirect");
             exit();
