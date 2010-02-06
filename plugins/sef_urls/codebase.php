@@ -116,9 +116,9 @@ function sef_urls_convert($html) {
 
     // Rewrite index.php
     $html = preg_replace('/index\.php\?cat=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','index-$1-'.$str_page.'-$3.html',$html);
-    $html = preg_replace('/index\.php\?cat=0/i','/index.html',$html);
+    $html = preg_replace('/index\.php\?cat=0/i','index.html',$html);
     $html = preg_replace('/index\.php\?cat=([0-9]+)/i','index-$1.html',$html);
-    $html = preg_replace('/index\.php/i','/index.html',$html);
+    $html = preg_replace('/index\.php/i','index.html',$html);
     
     // Rewrite thumbnails.php
     $html = preg_replace('/thumbnails\.php\?album=lastupby(\&|\&amp;)uid=([0-9]+)/i',$str_thumbnails.'-'.$str_lastupby.'-$2.html',$html);
