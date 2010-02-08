@@ -6,6 +6,33 @@ $apiKey = $_GET["apiKey"];
 $image = $_GET["image"];
 $width = $_GET["width"];
 $height = $_GET["height"];
+$type=$_GET["type"];
+$maptype="";
+switch ($type) {
+    case 1:
+        $maptype='G_SATELLITE_MAP';
+        break;
+    case 2:
+        $maptype='G_NORMAL_MAP';
+        break;
+    case 3:
+        $maptype='G_HYBRID_MAP';;
+        break;
+    case 4:
+        $maptype='G_PHYSICAL_MAP';;
+        break;
+    case 5:
+        $maptype='G_SATELLITE_3D_MAP';;
+        break;        
+        
+        default:
+        $maptype='G_SATELLITE_MAP';
+}
+
+
+
+
+
 echo <<<EOT
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -13,7 +40,7 @@ echo <<<EOT
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>easyMap for Pixelpost</title>
+<title>flf histotag for coppermine</title>
 <script type="text/javascript">
       var KillAlerts = true;
       var realAlert = alert;
@@ -34,7 +61,9 @@ display:block;
 function load() {	 
       if (GBrowserIsCompatible()) {
         var histotag_map = new GMap2(document.getElementById("histotag_map"));
-        histotag_map.setMapType(G_SATELLITE_MAP);
+        histotag_map.setMapType($maptype);
+        
+       // histotag_map.setMapType(G_SATELLITE_MAP);
         histotag_map.addControl(new GLargeMapControl());
 				histotag_map.addControl(new GMapTypeControl());
 				histotag_map.addControl(new GOverviewMapControl());

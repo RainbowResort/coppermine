@@ -12,20 +12,23 @@ if (file_exists("./plugins/xfeed/lang/{$CONFIG['lang']}.php")) {
 function generateAllExifsIntoTable() {
     global $CONFIG, $flf_lang_var;
 	$insertedvalues=0;
-    $result = cpg_db_query("SELECT t.pid, t.filepath, t.filename FROM {$CONFIG['TABLE_PICTURES']} t WHERE t.pid not in (SELECT pid from  {$CONFIG['TABLE_PREFIX']}{$CONFIG['flf_histotag_tablename']} );");
+	$testedimages=0;
+    $result = cpg_db_query("SELECT t.pid, t.filepath, t.filename FROM {$CONFIG['TABLE_PICTURES']} t WHERE t.pid not in (SELECT pid from  {$CONFIG['TABLE_PREFIX']}plugin_flf_histotag );");
     while ($row = mysql_fetch_assoc($result)) {
     
         $calldata['pid'] = $row['pid'];
         $calldata['filepath'] = $row['filepath'];
         $calldata['filename'] = $row['filename'];
-
+        $testedimages++;
 		$success=extractExifsAndImport($calldata);
 		if ($success) {
 			$insertedvalues++;
 		}
 		
     }
-    return $insertedvalues;
+    $returnvalue[0]=$testedimages;
+    $returnvalue[1]=$insertedvalues;
+    return $returnvalue;
 }
 
 function deleteExifData($CoppermineData) {
@@ -33,7 +36,7 @@ function deleteExifData($CoppermineData) {
 	// TODO: Check if Data exists first!
 	global $CONFIG, $flf_lang_var;
 	$id= $CoppermineData['pid'];
-	$sql_delete="DELETE FROM {$CONFIG['TABLE_PREFIX']}{$CONFIG['flf_histotag_tablename']} where pid='{$id}'";
+	$sql_delete="DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_flf_histotag where pid='{$id}'";
 	$vResult = cpg_db_query($sql_delete);
     mysql_free_result($vResult);	
 	
@@ -49,14 +52,6 @@ function extractExifsAndImport($CoppermineData) {
 
 	//TODO: Check if header is present!
 	
-	/*foreach ($exif as $key => $section) {
-	    foreach ($section as $name => $val) {
-	        echo "$key.$name: $val<br />\n";
-	    }
-	}
-	*/
-	
-	//$exif_gps_gpsversion=$exif['GPSVersion'];
 	$exif_gps_gpsversion='';
 	$exif_gps_gpslatituderef=$exif['GPSLatitudeRef'];
 	$exif_gps_gpslatitude_1=$exif['GPSLatitude'][0];
@@ -97,9 +92,8 @@ function extractExifsAndImport($CoppermineData) {
 	$exif_ifd0_gpsifdpointer=$exif['GPS_IFD_Pointer'];
 	
 
-	//TODO: Complete!
-	// TODO: Parametrize correctly
-	$sql_insert="INSERT into {$CONFIG['TABLE_PREFIX']}{$CONFIG['flf_histotag_tablename']} VALUES ('".
+
+	$sql_insert="INSERT into {$CONFIG['TABLE_PREFIX']}plugin_flf_histotag  VALUES ('".
 	$id."','".
 	$exif_gps_gpsversion."','".
 	$exif_gps_gpslatituderef."','".
@@ -143,15 +137,21 @@ function extractExifsAndImport($CoppermineData) {
 	$vResult = cpg_db_query($sql_insert);
     if ($vResult) {
     	mysql_free_result($vResult);
-    	return true;
-   		 }
+    	if ($exif_gps_gpslatitude_1) {
+    		return true;
+   			
+    	}
+    	else {
+    		return false; // false to tell that even though data has been identified, the geodata is missing
+    	}
+    	 }
     	else{
     		mysql_free_result($vResult);
     		return false;
     	}
     
    
-		//TODO: Make sure to output results!
+
 		
 	
 	
@@ -172,21 +172,11 @@ function renderGeoButton($template_img_navbar) {
     	$geo_title = $flf_lang_var['click_link'];
         $geo_icon = "geo.png";
         $geo_icon_hover = "geo.png";
-        /*
-        $geo_button = "
-        <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
-            <a href=\"$geo_tgt\" rel=\"lyteframe\" rev=\"width: {$CONFIG['flf_histotag_lyteboxwidth']}px; height: {$CONFIG['flf_histotag_lyteboxheight']}px; \" class=\"navmenu_pic\" title=\"{$flf_lang_var['notice']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"geo_ico\" /></a>
-        </td>
-        <script type=\"text/javascript\">
-            $('#fav_lnk').mouseover(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
-            $('#fav_lnk').mouseout(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon'); } );
-        </script>
-    ";
-        */
+
         $geo_button="
-        <script type=\"text/javascript\" src=\"plugins/flf_histotag/include/greybox_rightsize.js\"></script>
+        <script type=\"text/javascript\" src=\"plugins/flf_histotag/js/greybox_rightsize.js\"></script>
          <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
-            <a href=\"$geo_tgt\"  flfwidth=\"{$CONFIG['flf_histotag_lyteboxwidth']}\" flfheight=\"{$CONFIG['flf_histotag_lyteboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['notice']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"geo_ico\" /></a>
+            <a href=\"$geo_tgt\"  flfwidth=\"{$CONFIG['plugin_flf_histotag_mapboxwidth']}\" flfheight=\"{$CONFIG['plugin_flf_histotag_mapboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['notice']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"geo_ico\" /></a>
         </td>
                 <script type=\"text/javascript\">
 		            $('#fav_lnk').mouseover(function() { $('#fav_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
@@ -198,7 +188,7 @@ function renderGeoButton($template_img_navbar) {
         
         
      } else {
-     	if ($CONFIG['flf_histotag_show_geo_no_geotag']=='1') {
+     	if ($CONFIG['plugin_flf_histotag_geosupport']=='1') {
      		// show button only if parameter is set, otherwise: no button!
      		    $geo_tgt="#top_display_media";
 		        $geo_title = $flf_lang_var['no_data'];
@@ -239,7 +229,7 @@ function GenerateLinkToMap($CoppermineID) {
 	// Then generate link to open new map
 	// New map is being generated with code from map.php
 	global $CONFIG, $flf_lang_var;
-	$query="select * from {$CONFIG['TABLE_PREFIX']}{$CONFIG['flf_histotag_tablename']} where pid='{$CoppermineID}'";
+	$query="select * from {$CONFIG['TABLE_PREFIX']}plugin_flf_histotag where pid='{$CoppermineID}'";
 	$vResult = cpg_db_query($query);
 	$array = mysql_fetch_assoc($vResult);
 	
@@ -259,7 +249,7 @@ function GenerateLinkToMap($CoppermineID) {
 				$flf_longitude =degree2decimal($long_hour."h".$long_min."m".$long_sec."s".$array['exif_GPS_GPSLongitudeRef']);
 				$flf_latitude=degree2decimal($lat_hour."h".$lat_min."m".$lat_sec."s".$array['exif_GPS_GPSLatitudeRef']);
 				$maplink = <<<EOT
-	plugins/flf_histotag/include/histotag_map.php?width={$CONFIG['flf_histotag_mapwidth']}&height={$CONFIG['flf_histotag_mapheight']	}&apiKey={$CONFIG['flf_histotag_apikey']	}&latitude={$flf_latitude}&longitude={$flf_longitude}
+	plugins/flf_histotag/include/histotag_map.php?width={$CONFIG['plugin_flf_histotag_mapwidth']}&height={$CONFIG['plugin_flf_histotag_mapheight']	}&apiKey={$CONFIG['plugin_flf_histotag_apikey']	}&latitude={$flf_latitude}&longitude={$flf_longitude}&type={$CONFIG['plugin_flf_histotag_mapmode']}
 EOT;
 				$returnvalues[0]=$maplink;}
 			else {

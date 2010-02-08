@@ -1,6 +1,6 @@
 
 
-flf histotag for Coppermine - version 1.2
+flf histotag for Coppermine - version 1.3 - released 2010-02-06
 
 requires COPPERMINE version 1.5.2 (tell me, if it works with older versions)
 
@@ -36,24 +36,42 @@ Credits
 - Credits to Doug Pillow for the geodata conversion algorithm http://www.weberdev.com/get_example-3548.html
 - Credits to eenemeenemuu for his fav_button Plugin that showed me how to add buttons to the navbar
 - The function to generate the histograms was adapted from the Pixelpost addon by Kevin Crafts http://blog.kevincrafts.com/
-
+- The configuration screen uses the farbtastic color picker by Steven Wittens http://acko.net/dev/farbtastic
 ==============================================================================================================
 History
 ==============================================================================================================
 
-v0.9	Initial release
-v1.0	Security issues fixed, update new language method; thanks to 'GauGau' for this
-v1.1	- Renamed files according to coding conventions
-		- Changed Tablename according to naming conventions
-		- Removed lytebox for displaying pictures, substituted with greybox - thanks to 'TimosWelt' for the hint
-		- Histograms are now being generated on demand only when the histogram button
-		  is clicked. This way the system doesn't get cluttered with histograms that
-		  noone is interested in seeing. Downside: first time to call the histogram takes
-		  some time.
-		- Changed Histogram quality to 75% to get smaller filesizes
-v1.2 	fixed a bug when uploading images with no exif data
-		fixed a bug when trying to generate all histograms 
+v1.3	[A] complete rewrite of the configuration screen
+		[A] added function to delete all histograms in the system in case you don't want them anymore or need to regenerate		
+		[A] added parameter for image quality of histograms (1-100) in %; less quality makes smaller file size
+		[A] added options to change the Google map style (satellite, regular etc.)
+		[O] Histograms are no longer stored inside the histograms folder; instead they are stored in the same
+		    folder the picture resides in.
+		[C] changed all parameters names according to coding conventions
+		[C] sanitized the passing of the pid-parameter to the display-histogram function; thanks to GauGau for the hint
+		[C] removed setting for changing tablename
+		[C] changed configuration options for geosupport so it is clearer, what they mean.
+		[D] eliminated most of the language-specific texts
+v1.2 	[B] fixed a bug when uploading images with no exif data
+		[B] fixed a bug when trying to generate all histograms 
+v1.1	[C] Renamed files according to coding conventions
+		[C] Changed Tablename according to naming conventions
+		[C] Removed lytebox for displaying pictures, substituted with greybox - thanks to 'TimosWelt' for the hint
+		[A] Histograms are now being generated on demand only when the histogram button
+		    is clicked. This way the system doesn't get cluttered with histograms that
+		    noone is interested in seeing. Downside: first time to call the histogram takes
+		    some time.
+		[A] Changed Histogram quality to 75% to get smaller filesizes
+v1.0	[S] Security issues fixed, update new language method; thanks to 'GauGau' for this
+v0.9	    Initial release
 
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
 
 ==============================================================================================================
 Installation & Configuration
@@ -61,7 +79,7 @@ Installation & Configuration
 Install plugin with COPPERMINE Plugin Manager.
 Edit configuration before first running the tool!
 
-You need to have your own GOOGLE MAP API KEY before you can use the map functoin. If you don't yet have one, get yours
+You need to have your own GOOGLE MAP API KEY before you can use the map function. If you don't yet have one, get yours
 free at http://code.google.com/apis/maps/ 
 and enter it into the appropriate variable. ('apikey')
 
@@ -70,14 +88,20 @@ All other options should be self explanatory.
 ==============================================================================================================
 Upgrading
 =============================================================================================================
+Upgrading from Version v1.2
+- The histograms folder is no longer needed. I recommend throwing the folder away and re-generating all histograms
+  from the admin plugin screen
+- As all the parameters names have changed you should uninstall the older versions before installing 1.3
+
+
 Upgrading from Version <v1.1
 - As I changed the tablename you either need to manually rename the old table in mysql:
   old name: flf_histotag
   new name: plugin_flf_histotag
   mysql command: RENAME TABLE <Coppermine_prefix>flf_histotag TO <Coppermine_prefix>plugin_flf_histotag
   Update the Config table to resemble the new table:
-  UPDATE <COPPERMINE_PREFIX>_config SET value='plugin_flf_histotag' where name='flf_histotag_tablename';
-UPDATE coppermine_config SET value='plugin_flf_histotag' where name='flf_histotag_tablename';
+  UPDATE <COPPERMINE_PREFIX>_config SET value='plugin_flf_histotag' where name='plugin_flf_histotag_table';
+UPDATE coppermine_config SET value='plugin_flf_histotag' where name='plugin_flf_histotag_table';
 RENAME TABLE coppermine_flf_histotag TO coppermine_plugin_flf_histotag
 
   
@@ -86,7 +110,8 @@ RENAME TABLE coppermine_flf_histotag TO coppermine_plugin_flf_histotag
   data by using the plugin admin function provided. Note: If you use image manipulation upon upload, your
   original Exif data may no longer be available in the files on your albums: If that is the case, re-initializing
   the table will not be an option to you :-(
-  
+ 
+- Follow additional instructions as described in upgrading from version 1.2 
   
 								 
 								 
@@ -110,10 +135,10 @@ a link.
 
 Histogram support
 If activated a histogram is created upon upload of an image. The settings are fully configurable. 
-All histograms are stored in a directory call "histograms" and have a filename 
-	hist_<coppermine_id><original filename>.jpg
-If you want to generate histograms for all the images inside your database, i provided a function in the
-plugin manager page. However please note, that since Timeouts of your webserver may occur, this function is not 
+All histograms are stored in the directory the actual photos reside in and have a filename 
+	hist_{coppermine_id}{original filename}.jpg
+If you want to generate histograms for all the images inside your database, I provided a function in the
+plugin manager page. However please note, that since timeouts of your webserver may occur, this function is not 
 very reliable! I'll have to think of something better in the future. I don't recommend using this
 feature. You should consider using the "on-the-fly"-generation. You can activate it from the plugin's config
 screen.
@@ -123,12 +148,11 @@ Upside: No unnecessary histograms generated.
 ==============================================================================================================
 Things on my To-Do-List
 ==============================================================================================================
-- currently you can only use the histogram feature if you also use the geobutton feature
+- add screen when uninstalling to decide what to do with table, config values, histograms. Currently
+  the table + config values are deleted upon uninstallation, the histograms remain on disk!
 - Supply standalone script to generate all histograms on disk (avoid Timeout)
-- give user the chance to change tablename
 - supply pure text file for initial sql configuration (not in plugins/install.inc.php)
-- add Configuration for map type (Satellite/Map/Hybrid)
-- add Configuration for Jpeg Compression histogram
+
 
 ==============================================================================================================
 

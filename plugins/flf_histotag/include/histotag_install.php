@@ -1,32 +1,10 @@
 <?php
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
-function flf_create_directory() {
-		if (file_exists("histograms")) {
-			// directory exists
-			if (!is_writable("histograms")) {
-				// Directory is not writable
-				echo "Directory 'histograms' exists but is not writable!";
-				return false;
-			}
-			return true;
-		}
-		else 
-		{
-			// directory does not exist
-			mkdir ("histograms",0775);	
-			if (!is_writable("histograms")) {
-				echo "Directory 'histograms' created but it is not writable!";
-				return false;
-			}
-			return true;	
-		}
-	return true;
 
-}
-function flf_create_table($tablename) {
+function flf_create_table() {
 		global $CONFIG, $thisplugin;
 
-	    // TODO: Read sql-Install-Statement from include/install.sql
+		$tablename='plugin_flf_histotag';
 	    $sql = "DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}{$tablename}";
 	    cpg_db_query($sql);	
 		
@@ -78,93 +56,87 @@ function flf_create_table($tablename) {
 }
 function flf_enter_base_config() {
 		global $CONFIG, $thisplugin;
-		if (!$CONFIG['flf_histotag_tablename']) {	
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_tablename','plugin_flf_histotag')";
-			cpg_db_query($sql);
-		}
-		if (!$CONFIG['flf_histotag_mapwidth']) {
-		$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_mapwidth','640')";
+		
+		if (!$CONFIG['plugin_flf_histotag_histoquality']) {
+		$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histoquality','100')";
 		cpg_db_query($sql); }
 		
-		if (!$CONFIG['flf_histotag_mapheight']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_mapheight','480')";
+		if (!$CONFIG['plugin_flf_histotag_mapwidth']) {
+		$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_mapwidth','640')";
+		cpg_db_query($sql); }
+		
+		if (!$CONFIG['plugin_flf_histotag_mapheight']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_mapheight','480')";
 		cpg_db_query($sql);		}
 
-		if (!$CONFIG['flf_histotag_lyteboxwidth']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_lyteboxwidth','650')";
+		if (!$CONFIG['plugin_flf_histotag_mapboxwidth']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_mapboxwidth','650')";
 		cpg_db_query($sql);		}
 
-		if (!$CONFIG['flf_histotag_lyteboxheight']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_lyteboxheight','490')";
+		if (!$CONFIG['plugin_flf_histotag_mapboxheight']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_mapboxheight','490')";
 		cpg_db_query($sql);		}
 
-		if (!$CONFIG['flf_histotag_apikey']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_apikey','ENTER YOUR PERSONAL GOOGLE MAPS API KEY')";
+		if (!$CONFIG['plugin_flf_histotag_apikey']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_apikey','ENTER YOUR PERSONAL GOOGLE MAPS API KEY')";
 	cpg_db_query($sql);		}
 	
-		if (!$CONFIG['flf_histotag_show_geo_button']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_show_geo_button','1')";
-		cpg_db_query($sql);	}
-	
-		if (!$CONFIG['flf_histotag_show_geo_no_geotag']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histotag_show_geo_no_geotag','1')";
-			cpg_db_query($sql);	}
-
-		if (!$CONFIG['flf_histogram_use_hist_feature']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_use_hist_feature','1')";
+		if (!$CONFIG['plugin_flf_histotag_createonupload']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_createonupload','1')";
 		cpg_db_query($sql);			}
 
-		if (!$CONFIG['flf_histogram_show_hist_button']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_show_hist_button','1')";
+		if (!$CONFIG['plugin_flf_histotag_histotype']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histotype','1')";
 		cpg_db_query($sql);		}
 
-		if (!$CONFIG['flf_histogram_show_hist_if_no_hist']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_show_hist_if_no_hist','1')";
-		cpg_db_query($sql);		}
-
-		if (!$CONFIG['flf_histogram_type']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_type','combined')";
-		cpg_db_query($sql);		}
-
-		if (!$CONFIG['flf_histogram_width']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_width','256')";
+		if (!$CONFIG['plugin_flf_histotag_histowidth']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histowidth','256')";
 		cpg_db_query($sql);		}
 	
-		if (!$CONFIG['flf_histogram_color']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histogram_color','#151515')";
+		if (!$CONFIG['plugin_flf_histotag_histocolor']) {
+			$sql = "insert  IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histocolor','#151515')";
 		cpg_db_query($sql);		}
 
-		if (!$CONFIG['flf_histo_lyteboxwidth']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histo_lyteboxwidth','300')";
+		if (!$CONFIG['plugin_flf_histotag_histoboxwidth']) {
+			$sql = "insert  IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histoboxwidth','300')";
 		cpg_db_query($sql);
 				}
 
-		if (!$CONFIG['flf_histo_lyteboxheight']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histo_lyteboxheight','200')";
+		if (!$CONFIG['plugin_flf_histotag_histoboxheight']) {
+			$sql = "insert IGNORE  into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histoboxheight','200')";
 		cpg_db_query($sql);
 				}
 
-		if (!$CONFIG['flf_histo_onthefly']) {
-			$sql = "insert into {$CONFIG['TABLE_CONFIG']} values ('flf_histo_onthefly','1')";
+			if (!$CONFIG['plugin_flf_histotag_mapmode']) {
+			$sql = "insert IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_mapmode','1')";
+		cpg_db_query($sql);
+		}
+		
+		if (!$CONFIG['plugin_flf_histotag_geosupport']) {
+			$sql = "insert IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_geosupport','1')";
 		cpg_db_query($sql);
 		}
 
-	
+		if (!$CONFIG['plugin_flf_histotag_histosupport']) {
+			$sql = "insert IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_histosupport','2')";
+		cpg_db_query($sql);
+		}
 		
 		
 		return true;
 	
 }
 
-function flf_delete_table($tablename) {
-		global $CONFIG, $thisplugin;
+function flf_delete_table() {
+		global $CONFIG, $thisplugin;		
+		$tablename='plugin_flf_histotag';
 		$sql = "DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}{$tablename}";
 	    cpg_db_query($sql);	
 	    return true;
 }
 function flf_delete_base_config() {
 		global $CONFIG, $thisplugin;
-		  $sql = "DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name like 'flf_%'";
+		  $sql = "DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name like 'plugin_flf_histotag_%'";
 	      cpg_db_query($sql);	
 	   return true;
 }

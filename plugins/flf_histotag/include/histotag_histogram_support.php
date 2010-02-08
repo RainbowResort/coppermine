@@ -5,13 +5,16 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 function deleteHistogram($filepath, $filename, $pid) {
 	// TODO: Validate!
 	// attempt to delete histogram
-	$hist_name='histograms\hist_$pid_$filename';
+	$hist_name='albums/'.$filepath.'hist_'.$pid.'_'.$filename;
+	
 	if (file_exists($hist_name)) {
 	// File exists
 		unlink ($hist_name);
+		return true;
 	}
 	else {
 		// file does not exist
+		return false;
 	}
 
 
@@ -27,7 +30,7 @@ function checkandcreatehistogram($pid) {
      $row = mysql_fetch_assoc($result);
      if(($row['filepath']&&$row['filename'])) {
      	// valid image exists
-     	$hist_filename='histograms/hist_'.$pid.'_'.$row['filename'];
+     	$hist_filename='albums/'.$row['filepath'].'hist_'.$pid.'_'.$row['filename'];
      	// check if histogram already exists;
      	if (file_exists($hist_filename)) {
      		// histogram already exists
@@ -50,8 +53,9 @@ function renderHistoButton($template_img_navbar) {
     global $CONFIG, $CURRENT_PIC_DATA, $FAVPICS, $REFERER, $lang_picinfo, $flf_lang_var;
     $pid=$CURRENT_PIC_DATA['pid'];
     $filename=$CURRENT_PIC_DATA['filename'];
+	$filepath=$CURRENT_PIC_DATA['filepath'];
     $ref = $REFERER ? "&amp;referer=$REFERER" : '';
-    $hist_filename='histograms/hist_'.$pid.'_'.$filename;
+    $hist_filename='albums/'.$filepath.'hist_'.$pid.'_'.$filename;
     $geo_tgt=$hist_filename;
     /* Algorithm to change to on-demand-generation:
      * 1. Check whether histo_onthefly = 1
@@ -61,7 +65,7 @@ function renderHistoButton($template_img_navbar) {
      *      2.    Check wheter histogram exists
      *      3. 	  If exists: Link to the page
      *      4. 	  If it does not exist: 
-     *      	5. Check wheter to show button at all (Parameter flf_histogram_show_hist_if_no_hist)
+     *      	5. Check wheter to show button at all (Parameter plugin_flf_histotag_showemptyhisto)
      *             6. If true: Show button, otherwise skip.
      *      
      *      
@@ -70,22 +74,47 @@ function renderHistoButton($template_img_navbar) {
      */
     $showhistobutton=false;
     $linklive=false;
-    if ($CONFIG['flf_histo_onthefly']=='1') {
-    	// always show button because we generate on the fly if necessary
-    	$showhistobutton=true;
-    	$linklive=true;
+    	switch ($CONFIG['plugin_flf_histotag_histosupport']) {
+	    case 1:
+	    	// show if histogram present, show blank if no histogram
+	    	if (file_exists($hist_filename)==false) {
+	    		 $linklive=false;
+	    	}
+	    	else {
+	    		$linklive=true;	    		
+	    	}	
+	    	$showhistobutton=true;
 
-    }
-    else {
-    	if (file_exists($hist_filename)==false) {
-    		// No histogram available yet - check if empty button should be displayed
-    		 	if ($CONFIG['flf_histogram_show_hist_if_no_hist']=='1') {
-    		 		$showhistobutton=true;
-    		 		$linklive=false;	
-    		 	}
-    	}
-    	
-    }
+	        break;
+	    case 2:
+	    	// always show + on-demand generation
+	    	$showhistobutton=true;
+	    	$linklive=true;
+	    	break;
+	    case 3:
+	    	//show live button if histogram is present, no button if no histogram;
+			if (file_exists($hist_filename)==false) {
+	    		 $linklive=false;
+	    		 $showhistobutton=false;
+	    	}
+	    	else {
+	    		$showhistobutton=true;
+	    		$linklive=true;	    		
+	    	}	
+	    	break;
+	    case 4: 
+	    	// no button at all (just here to complete cases; will never be called 
+	         $showhistobutton=false;
+ 			 $linklive=false;
+ 			 break;
+	    	
+	    default:
+	         $showhistobutton=false;
+ 			 $linklive=false;
+	    	break;
+    	} 	
+    
+    
     
     if ($showhistobutton) {
     	if ($linklive) {
@@ -93,12 +122,12 @@ function renderHistoButton($template_img_navbar) {
     		    $geo_title = $flf_lang_var['histo_click_link'];
 		        $geo_icon = "histo.png";
 		        $geo_icon_hover = "histo.png";
-		        $_SESSION['flfhisto_pid'] = $CURRENT_PIC_DATA['pid'];
+		        // $_SESSION['flfhisto_pid'] = $CURRENT_PIC_DATA['pid'];
 		        $geo_button = "
 		               
-		        <script type=\"text/javascript\" src=\"plugins/flf_histotag/include/greybox_rightsize.js\"></script>
+		        <script type=\"text/javascript\" src=\"plugins/flf_histotag/js/greybox_rightsize.js\"></script>
 		         <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
-		            <a href=\"index.php?file=flf_histotag/histotag_histogram_display\"  flfwidth=\"{$CONFIG['flf_histo_lyteboxwidth']}\" flfheight=\"{$CONFIG['flf_histo_lyteboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['histo_click_link']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"histo_ico\" /></a>
+		            <a href=\"index.php?file=flf_histotag/histotag_histogram_display&pid={$CURRENT_PIC_DATA['pid']}\"  flfwidth=\"{$CONFIG['plugin_flf_histotag_histoboxwidth']}\" flfheight=\"{$CONFIG['plugin_flf_histotag_histoboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['histo_click_link']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"histo_ico\" /></a>
 		        </td>
 		        <script type=\"text/javascript\">
 		            $('#histo_lnk').mouseover(function() { $('#histo_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
@@ -126,55 +155,7 @@ function renderHistoButton($template_img_navbar) {
     	}
     	
     }
-    /*
-    if (file_exists($hist_filename)==false && ($CONFIG['flf_histo_onthefly']=='1')) {
-   		// file does not exist but should be generated now
-   		makeHistogram('albums/'.$CURRENT_PIC_DATA['filepath'],$filename,$pid);
-   		
-    }
-    
    
-    if (file_exists($hist_filename)) {
-    	// Histogram found 
-    	
-    	$geo_title = $flf_lang_var['histo_click_link'];
-        $geo_icon = "histo.png";
-        $geo_icon_hover = "histo.png";
-        $geo_button = "
-               
-        <script type=\"text/javascript\" src=\"plugins/flf_histotag/include/greybox_rightsize.js\"></script>
-         <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
-            <a href=\"plugins/flf_histotag/include/histotag_histogram_display.php?histogram=$geo_tgt\"  flfwidth=\"{$CONFIG['flf_histo_lyteboxwidth']}\" flfheight=\"{$CONFIG['flf_histo_lyteboxheight']}\" class=\"flfbox\" title=\"{$flf_lang_var['histo_click_link']}\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"histo_ico\" /></a>
-        </td>
-        <script type=\"text/javascript\">
-            $('#histo_lnk').mouseover(function() { $('#histo_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
-            $('#histo_lnk').mouseout(function() { $('#histo_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon'); } );
-        </script>
-    ";
-        
-     } else {
-     	// TODO: Correct!
-     	if ($CONFIG['flf_histogram_show_hist_if_no_hist']=='1') {
-     		// show button only if parameter is set, otherwise: no button!
-     		    $geo_tgt="#top_display_media";
-		        $geo_title = $flf_lang_var['histo_no_data'];
-		        $geo_icon = "nohisto.png";
-		        $geo_icon_hover = "nogeo.png";
-		        $geo_button = "
-		        <td align=\"center\" valign=\"middle\" class=\"navmenu\" width=\"42\">
-		            <a href=\"$geo_tgt\" class=\"navmenu_pic\" title=\"$geo_title\" id=\"geo_lnk\"><img src=\"plugins/flf_histotag/images/$geo_icon\" border=\"0\" align=\"middle\" alt=\"$geo_title\" id=\"histo_ico\" /></a>
-		        </td>
-		        <script type=\"text/javascript\">
-		            $('#histo_lnk').mouseover(function() { $('#histo_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon_hover'); } );
-		            $('#histo_lnk').mouseout(function() { $('#histo_ico').attr('src', 'plugins/flf_histotag/images/$geo_icon'); } );
-		        </script>
-		    ";
-     	}
-
-  	   } 
-
-    */
-    
     
     $search = substr_count($template_img_navbar, "<!-- BEGIN pic_info_button -->") > 0 ? "<!-- BEGIN pic_info_button -->" : "<!-- BEGIN slideshow_button -->";
 
@@ -196,10 +177,10 @@ function generateAllHistograms() {
         $calldata['pid'] = $row['pid'];
         $calldata['filepath'] = $row['filepath'];
         $calldata['filename'] = $row['filename'];
-		if (!file_exists('histograms/hist_'.$calldata['pid'].'_'.$calldata['filename'])) {
+		if (!file_exists('albums/'.$calldata['filepath'].'hist_'.$calldata['pid'].'_'.$calldata['filename'])) {
 			$success=makeHistogram('albums/'.$calldata['filepath'],$calldata['filename'],$calldata['pid']);
 			if ($success) {
-				echo ".";
+	
 				$insertedvalues++;
 			}
 		}
@@ -208,7 +189,27 @@ function generateAllHistograms() {
     }
     return $insertedvalues;
 }
-
+function deleteAllHistograms() {
+    global $CONFIG, $flf_lang_var;
+	$deletedvalues=0;
+    $result = cpg_db_query("SELECT t.pid, t.filepath, t.filename FROM {$CONFIG['TABLE_PICTURES']} t ");
+    while ($row = mysql_fetch_assoc($result)) {
+    
+        $calldata['pid'] = $row['pid'];
+        $calldata['filepath'] = $row['filepath'];
+        $calldata['filename'] = $row['filename'];
+		if (file_exists('albums/'.$calldata['filepath'].'hist_'.$calldata['pid'].'_'.$calldata['filename'])) {
+			$success=deletehistogram($calldata['filepath'],$calldata['filename'],$calldata['pid']);
+			if ($success) {
+	
+				$deletedvalues++;
+			}
+		}
+	
+		
+    }
+    return $deletedvalues;
+}
 
 function makeHistogram($filepath, $filename, $pid) {
 	// set_time_limit(500);
@@ -222,7 +223,7 @@ function makeHistogram($filepath, $filename, $pid) {
 	$barwidth = 1;
 	$iscolor = false;
 	$im = ImageCreateFromJpeg($source_file); 
-	$color = $CONFIG['flf_histogram_color'];
+	$color = $CONFIG['plugin_flf_histotag_histocolor'];
 	$imgw = imagesx($im);
 	$imgh = imagesy($im);
 	$n = $imgw*$imgh;
@@ -271,7 +272,7 @@ function makeHistogram($filepath, $filename, $pid) {
 	
 	//CREATE HISTOGRAM IMAGE
   // TODO: internationalize!
-	if(($CONFIG['flf_histogram_type'] == 'combined') or ($iscolor == false)) {
+	if(($CONFIG['plugin_flf_histotag_histotype'] == '1') or ($iscolor == false)) {
 		$imR = imagecreatetruecolor(256, 100)
 		or die ("Cannot Initialize new GD image stream");
 	} else {
@@ -313,7 +314,7 @@ function makeHistogram($filepath, $filename, $pid) {
 	    $histoClipB = (1.0 - $lerpB)*$sHistoB[255] + $lerpB*$sHistoB[250];
 	    $histoClip = max($histoClipR, $histoClipG, $histoClipB);
 	    
-	    if ($CONFIG['flf_histogram_type'] == 'combined')
+	    if ($CONFIG['plugin_flf_histotag_histotype'] == '1')
 	    {
 	      // COMBINED COLOR HISTOGRAM
 	      imagefilledrectangle($imR, 0, 0, 256, 100, $back);
@@ -423,12 +424,12 @@ function makeHistogram($filepath, $filename, $pid) {
 	
 	// SAVE HISTOGRAM AND DESTROY RESOURCE
 
-	if(is_writable("histograms")) {
-		touch("histograms/hist_$file");
+
+		touch($filepath.'hist_'.$file);
 		
 		
-		if($CONFIG['flf_histogram_width'] != 256) {
-	        $newW = $CONFIG['flf_histogram_width'];
+		if($CONFIG['plugin_flf_histotag_histowidth'] != 256) {
+	        $newW = $CONFIG['plugin_flf_histotag_histowidth'];
 	        $scale = $newW / 256;
 	        
 	        $width = imagesx($imR);
@@ -460,16 +461,13 @@ function makeHistogram($filepath, $filename, $pid) {
 		
 		
 		
-		imagejpeg($imR,"histograms/hist_$file", 75);
-		$histogram = "histograms/hist_$file";
+		imagejpeg($imR,$filepath.'hist_'.$file, $CONFIG['plugin_flf_histotag_histoquality']);
+		$histogram = $filepath.'hist_'.$file;
 		chmod($histogram,0644);
 		imagedestroy($imR);
 		$perms = fileperms("histograms");
 		$retvar=true;
-	} else {
-		$retvar=false;
-		echo '<div class="content"><h4>Histogram NOT Created! Check Directory(../histograms) Permissions</h4></div>';
-	}
+
 	
 	
 return $retvar;

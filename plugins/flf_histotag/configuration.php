@@ -17,27 +17,29 @@
  * 28 January 2010
 */
 
-$name='flf histotag - geotag and histogram support for Coppermine';
+require_once('init.inc.php');
+GLOBAL $flf_lang_var;
 
-$description='Adds full geotagging and histogram support for Coppermine, includes link to Googlemaps';
+$name=$flf_lang_var['name'];
 
-
+$description=$flf_lang_var['description'];
 
 
 
 $author='Florian Lechner (<a href="http://www.lounge-lizard.org/cms/" target="_blank" rel="external" class="external">www.lounge-lizard.org</a>)';
 
 $extra_info = <<<EOT
-<a href="index.php?file=flf_histotag/flf_histotag_config" class="admin_menu">Configure flf histotag Plugin</a>	
-<a href="index.php?file=flf_histotag/readme" class="admin_menu">Plugin Readme File</a>
-<a href="index.php?file=flf_histotag/createall" class="admin_menu">Gather exif from all files!</a>
-<a href="index.php?file=flf_histotag/createallhistograms" class="admin_menu">Generate all histograms (DANGER!)</a>
-<a href="http://forum.coppermine-gallery.net/index.php/topic,63486.0.html rel="external" class="admin_menu" target="_blank">Announcement thread</a>
+<a href="index.php?file=flf_histotag/configure" class="admin_menu">{$flf_lang_var['config']}</a>	
+<a href="index.php?file=flf_histotag/readme" class="admin_menu">{$flf_lang_var['readme']}</a>
+<a href="index.php?file=flf_histotag/createall" class="admin_menu">{$flf_lang_var['getallgeo']}</a>
+<a href="index.php?file=flf_histotag/createallhistograms" class="admin_menu">{$flf_lang_var['getallhistos']}</a>
+<a href="index.php?file=flf_histotag/deleteallhistograms" class="admin_menu">{$flf_lang_var['deleteallhistograms']}</a>
+<a href="http://forum.coppermine-gallery.net/index.php/topic,63486.0.html rel="external" class="admin_menu" target="_blank">{$flf_lang_var['supportthread']}</a>
 
 EOT;
 
 
-$version='1.2';
+$version='1.3';
 $plugin_cpg_version = array('min' => '1.5');
 
 ?>
