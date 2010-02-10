@@ -8,7 +8,7 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 global $CONFIG, $flf_lang_var;
-require('./plugins/flf_histotag/include/histotag_support.php');
+require_once('./plugins/flf_histotag/include/histotag_support.php');
 
 $thisplugin->add_filter('add_file_data_success','generate_exif_entry');
 $thisplugin->add_filter('after_delete_file','delete_exif_entry');
@@ -25,7 +25,7 @@ $thisplugin->add_action('plugin_install','flf_histotag_install');
 $thisplugin->add_action('plugin_uninstall','flf_histotag_uninstall');
 function flf_histotag_install($data){
 	
-	require('./plugins/flf_histotag/include/histotag_install.php');
+	require_once('./plugins/flf_histotag/include/histotag_install.php');
 
 	$retval = flf_create_table();
 	if ($retval) {
@@ -38,7 +38,7 @@ function flf_histotag_install($data){
 }
 
 function flf_histotag_uninstall($data){
-		require('./plugins/flf_histotag/include/histotag_install.php');
+		require_once('./plugins/flf_histotag/include/histotag_install.php');
 		global $CONFIG, $thisplugin;
 		$tablename=$CONFIG['TABLE_PREFIX'].'plugin_flf_histotag'; 
 		// TODO: Security check -- really delete table?
@@ -68,7 +68,7 @@ function navbuttoncheck ($template_img_navbar) {
 
 
 function hist_button ($template_img_navbar) {
-    	 require('./plugins/flf_histotag/include/histotag_histogram_support.php');
+    	 require_once('./plugins/flf_histotag/include/histotag_histogram_support.php');
 		 $result=renderHistoButton($template_img_navbar);	
 		return $result;
 }
@@ -104,7 +104,7 @@ function generate_exif_entry($html) {
    if ($CONFIG['plugin_flf_histotag_createonupload']=='1') 
    {
     // load the functions	
-   	require('./plugins/flf_histotag/include/histotag_histogram_support.php');
+   	require_once('./plugins/flf_histotag/include/histotag_histogram_support.php');
     // create the histogram
     makeHistogram('albums/'.$html['filepath'],$html['filename'], $html['pid']);
     
@@ -115,7 +115,7 @@ function generate_exif_entry($html) {
 function delete_exif_entry($html) {
 	global $CONFIG;
 	deleteExifData($html);
-   	require('./plugins/flf_histotag/include/histotag_histogram_support.php');
+   	require_once('./plugins/flf_histotag/include/histotag_histogram_support.php');
     // delete the histogram
     deletehistogram('albums/'.$html['filepath'],$html['filename'], $html['pid']);    
 	return $html;
@@ -299,7 +299,43 @@ function flf_histotag_configure() {
 	        $option_output['plugin_flf_histotag_geosupport_1'] = 'checked="checked"';
 	        break;
 	}   
-	      
+
+     if ($superCage->post->keyExists('plugin_flf_histotag_imagesource') == TRUE  && $superCage->post->getInt('plugin_flf_histotag_imagesource') != $CONFIG['plugin_flf_histotag_imagesource']) {
+    	$CONFIG['plugin_flf_histotag_imagesource'] = $superCage->post->getInt('plugin_flf_histotag_imagesource');
+    	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_flf_histotag_imagesource']}' WHERE name='plugin_flf_histotag_imagesource'";
+    	cpg_db_query($query);
+    	$config_changes_counter++;
+    	$dump_cache++;
+    }
+    
+	switch ($CONFIG['plugin_flf_histotag_imagesource']) {
+	    case 1:
+	   		$option_output['plugin_flf_histotag_imagesource_2'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_3'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_1'] = 'checked="checked"';
+	        break;
+	    case 2:
+	   		$option_output['plugin_flf_histotag_imagesource_1'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_3'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_2'] = 'checked="checked"';
+	        break;
+	    case 3:
+	   		$option_output['plugin_flf_histotag_imagesource_2'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_1'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_3'] = 'checked="checked"';
+	        break;
+	        
+	        
+	     default:
+	   		$option_output['plugin_flf_histotag_imagesource_2'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_3'] = '';
+	        $option_output['plugin_flf_histotag_imagesource_1'] = 'checked="checked"';
+	        break;
+	}   
+
+
+
+	
       if ($superCage->post->keyExists('plugin_flf_histotag_histosupport') == TRUE  && $superCage->post->getInt('plugin_flf_histotag_histosupport') != $CONFIG['plugin_flf_histotag_histosupport']) {
     	$CONFIG['plugin_flf_histotag_histosupport'] = $superCage->post->getInt('plugin_flf_histotag_histosupport');
     	$query = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_flf_histotag_histosupport']}' WHERE name='plugin_flf_histotag_histosupport'";
@@ -462,19 +498,19 @@ function flf_histotag_configure() {
 				  height: 101px;
 				}
 				.farbtastic .wheel {
-				  background: url(plugins/thumb_rotate/images/wheel.png) no-repeat;
+				  background: url(plugins/flf_histotag/images/wheel.png) no-repeat;
 				  width: 195px;
 				  height: 195px;
 				}
 				.farbtastic .overlay {
-				  background: url(plugins/thumb_rotate/images/mask.png) no-repeat;
+				  background: url(plugins/flf_histotag/images/mask.png) no-repeat;
 				}
 				.farbtastic .marker {
 				  width: 17px;
 				  height: 17px;
 				  margin: -8px 0 0 -8px;
 				  overflow: hidden; 
-				  background: url(plugins/thumb_rotate/images/marker.png) no-repeat;
+				  background: url(plugins/flf_histotag/images/marker.png) no-repeat;
 				}
     		</style>
     		<script type="text/javascript">
@@ -660,7 +696,28 @@ EOT;
                         	</td>
                     </tr>
  					
- 					
+ 					<tr>
+                        <td valign="top" class="tableb tableb_alternate">
+                            {$flf_lang_var['imagesource']}
+                        </td>
+                        <td valign="top" class="tableb tableb_alternate">
+                        	<input type="radio" name="plugin_flf_histotag_imagesource" id="plugin_flf_histotag_imagesource_1" class="checkbox" value="1" {$option_output['plugin_flf_histotag_imagesource_1']} /> 
+                        	<label for="plugin_flf_histotag_imagesource_1"> {$flf_lang_var['imagesource_1']}</label>
+                        	<br />
+                        	<input type="radio" name="plugin_flf_histotag_imagesource" id="plugin_flf_histotag_imagesource_2" class="checkbox" value="2" {$option_output['plugin_flf_histotag_imagesource_2']} /> 
+                        	<label for="plugin_flf_histotag_imagesource_2"> {$flf_lang_var['imagesource_2']}</label>
+                        	<br />
+                        	<input type="radio" name="plugin_flf_histotag_imagesource" id="plugin_flf_histotag_imagesource_3" class="checkbox" value="3" {$option_output['plugin_flf_histotag_imagesource_3']} /> 
+                        	<label for="plugin_flf_histotag_imagesource_3"> {$flf_lang_var['imagesource_3']}</label>
+                        	<br />
+             
+                        	
+                        	
+                        	
+                        	
+                        	
+                        	</td>
+                    </tr>
  					
  					
  					

@@ -37,10 +37,20 @@ Credits
 - Credits to eenemeenemuu for his fav_button Plugin that showed me how to add buttons to the navbar
 - The function to generate the histograms was adapted from the Pixelpost addon by Kevin Crafts http://blog.kevincrafts.com/
 - The configuration screen uses the farbtastic color picker by Steven Wittens http://acko.net/dev/farbtastic
+- The wonderful images supplied with this plugin come from http://www.famfamfam.com/lab/icons/silk/
 ==============================================================================================================
 History
 ==============================================================================================================
-
+v1.4    [B] fixed a bug that left some pictures without geobutton even though geodata exists
+		[B] fixed a bug regarding include files
+		[B] fixed the link to the farbtastic colorpicker images in the config screen
+		[A] centered the histogram during output
+		[A] Using intermediate or thumbnail size images for the histogram calculation in case they exist. This dramatically
+		    increases performance, the output quality is not really affected that much when using the intermediate image.
+			It does however make a bigger difference when using the thumbnails. Decide for yourself: accuracy vs. speed
+		[A] added a setting in the configuration screen for the above option
+		[M] Changed the icons supplied with the plugins to "Silk icon set" by www.famfamfam.com
+		[B] Fixed a bug that plugin information did not show in plugin manager, when plugin not yet installed
 v1.3	[A] complete rewrite of the configuration screen
 		[A] added function to delete all histograms in the system in case you don't want them anymore or need to regenerate		
 		[A] added parameter for image quality of histograms (1-100) in %; less quality makes smaller file size
@@ -88,11 +98,13 @@ All other options should be self explanatory.
 ==============================================================================================================
 Upgrading
 =============================================================================================================
+Upgrading from Version v1.3
+- Add new parameter manually into database insert IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_imagesource','1')
+  or uninstall old version & install v1.4 using plugin manager
 Upgrading from Version v1.2
 - The histograms folder is no longer needed. I recommend throwing the folder away and re-generating all histograms
   from the admin plugin screen
 - As all the parameters names have changed you should uninstall the older versions before installing 1.3
-
 
 Upgrading from Version <v1.1
 - As I changed the tablename you either need to manually rename the old table in mysql:
@@ -151,7 +163,6 @@ Things on my To-Do-List
 - add screen when uninstalling to decide what to do with table, config values, histograms. Currently
   the table + config values are deleted upon uninstallation, the histograms remain on disk!
 - Supply standalone script to generate all histograms on disk (avoid Timeout)
-- supply pure text file for initial sql configuration (not in plugins/install.inc.php)
 
 
 ==============================================================================================================

@@ -69,4 +69,9 @@ $flf_lang_var['supportthread']='Follow the thread to this plugin at the Coppermi
 $flf_lang_var['toggle_color_picker'] = 'Color picker on/off';
 $flf_lang_var['type'] = 'Type';
 $flf_lang_var['window_title'] = 'powered by flf histotag';
+$flf_lang_var['imagesource'] = 'Image used for generation of histogram';
+$flf_lang_var['imagesource_1'] = 'Original image (slowest method, biggest accuracy)';
+$flf_lang_var['imagesource_2'] = 'Image in intermediate size (only if avaialable; better performance for acceptable loss in accuracy)';
+$flf_lang_var['imagesource_3'] = 'Thumbnail (fastest method, smallest accuracy)';
+
 ?>

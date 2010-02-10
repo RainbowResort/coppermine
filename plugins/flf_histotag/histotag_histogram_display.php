@@ -1,6 +1,6 @@
 <?php
 define('IN_COPPERMINE', true);
-//require('./include/init.inc.php');
+//require_once('./include/init.inc.php');
 require ("include/histotag_histogram_support.php");
 	global $CURRENT_PIC_DATA, $_GET;
 	    $superCage = Inspekt::makeSuperCage();
@@ -11,7 +11,7 @@ if ($pid) {
 	
 	if ($filename) {
 	
-	echo "<img src=\"./$filename\">";
+	echo "<div style=\"text-align:center\"><img src=\"./$filename\"></div>";
 
 	}
 	else {

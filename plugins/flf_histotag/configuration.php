@@ -18,8 +18,9 @@
 */
 
 require_once('init.inc.php');
-flf_histotag_initialize();
 GLOBAL $flf_lang_var;
+$return=flf_histotag_initialize();
+$flf_lang_var=$return['language'];
 
 $name=$flf_lang_var['name'];
 
@@ -35,12 +36,12 @@ $extra_info = <<<EOT
 <a href="index.php?file=flf_histotag/createall" class="admin_menu">{$flf_lang_var['getallgeo']}</a>
 <a href="index.php?file=flf_histotag/createallhistograms" class="admin_menu">{$flf_lang_var['getallhistos']}</a>
 <a href="index.php?file=flf_histotag/deleteallhistograms" class="admin_menu">{$flf_lang_var['deleteallhistograms']}</a>
-<a href="http://forum.coppermine-gallery.net/index.php/topic,63486.0.html" rel="external" class="admin_menu">{$flf_lang_var['supportthread']}</a>
+<a href="http://forum.coppermine-gallery.net/index.php/topic,63486.0.html rel="external" class="admin_menu" target="_blank">{$flf_lang_var['supportthread']}</a>
 
 EOT;
 
 
-$version='1.3';
+$version='1.4';
 $plugin_cpg_version = array('min' => '1.5');
 
 ?>

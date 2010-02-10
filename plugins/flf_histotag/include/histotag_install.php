@@ -122,7 +122,10 @@ function flf_enter_base_config() {
 		cpg_db_query($sql);
 		}
 		
-		
+		if (!$CONFIG['plugin_flf_histotag_imagesource']) {
+			$sql = "insert IGNORE into {$CONFIG['TABLE_CONFIG']} values ('plugin_flf_histotag_imagesource','1')";
+		cpg_db_query($sql);
+		}
 		return true;
 	
 }

@@ -218,7 +218,33 @@ function makeHistogram($filepath, $filename, $pid) {
 	global $CONFIG;
 	$coppermineid=$pid;
 	$source_file = $filepath.$filename;
-	// TODO: Check if Histogram already exists; if so: skip!
+	
+	switch ($CONFIG['plugin_flf_histotag_imagesource']) {
+	
+		Case '2':
+			if (file_exists($filepath.$CONFIG['normal_pfx'].$filename)){
+				// Intermediate file exists
+				// use this one for faster calculations
+				$source_file=$filepath.$CONFIG['normal_pfx'].$filename;
+			}
+			break;
+		
+		Case '3':
+			if (file_exists($filepath.$CONFIG['thumb_pfx'].$filename)){
+				// Thumbnail file exists
+				// use this one for fastest calculations
+				$source_file=$filepath.$CONFIG['thumb_pfx'].$filename;
+			}
+			break;
+		
+		Default:
+			// Do nothing --> regular filename already used 
+			// Same as option '1'
+			break;
+		
+	}
+	
+
 	$maxheight = 100;
 	$barwidth = 1;
 	$iscolor = false;

@@ -70,4 +70,8 @@ $flf_lang_var['getallhistos']='Für alle Bilder Histogramme erzeugen';
 $flf_lang_var['supportthread']='Thread zu diesem Plugin im Coppermine-Forum';
 $flf_lang_var['deleteallhistograms']='Alle Histogramme löschen';
 $flf_lang_var['deleteallhistograms_success'] = 'Histogramme wurden gelöscht';
+$flf_lang_var['imagesource'] = 'Basis für die Histogrammberechnung';
+$flf_lang_var['imagesource_1'] = 'Originalbild (langsamste Variante, größte Genauigkeit)';
+$flf_lang_var['imagesource_2'] = 'Bild in Zwischengröße (falls vorhanden; schneller; akzeptable Genauigkeit)';
+$flf_lang_var['imagesource_3'] = 'Thumbnail (schnellste Variante, größte Ungenauigkeit)';
 ?>

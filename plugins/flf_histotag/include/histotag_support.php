@@ -244,7 +244,7 @@ function GenerateLinkToMap($CoppermineID) {
 			$long_min=flf_calc($array['exif_GPS_GPSLongitude_2']);
 			$long_sec=flf_calc($array['exif_GPS_GPSLongitude_3']);	
 			
-			if ($lat_hour && $lat_min && $lat_sec && $long_hour && $long_min & $long_sec) {
+			if ($lat_hour && $lat_min && $lat_sec && $long_hour && $long_min && $long_sec) {
 
 				$flf_longitude =degree2decimal($long_hour."h".$long_min."m".$long_sec."s".$array['exif_GPS_GPSLongitudeRef']);
 				$flf_latitude=degree2decimal($lat_hour."h".$lat_min."m".$lat_sec."s".$array['exif_GPS_GPSLatitudeRef']);
