@@ -21,8 +21,14 @@ if (!defined('IN_COPPERMINE')) {
 
 $lang_plugin_more_meta_albums['more_meta_albums'] = 'More meta albums';
 $lang_plugin_more_meta_albums['description'] = 'Adds new meta albums to your gallery.';
+$lang_plugin_more_meta_albums['announcement_thread'] = 'Announcement thread';
 $lang_plugin_more_meta_albums['mostcom_title'] = 'Most comments';
 $lang_plugin_more_meta_albums['mostvot_title'] = 'Most votes';
-$lang_plugin_more_meta_albums['announcement_thread'] = 'Announcement thread';
+$lang_plugin_more_meta_albums['image_title'] = 'All pictures';
+$lang_plugin_more_meta_albums['movie_title'] = 'All videos';
+$lang_plugin_more_meta_albums['audio_title'] = 'All audio files';
+$lang_plugin_more_meta_albums['documents_title'] = 'All documents';
+$lang_plugin_more_meta_albums['landscape_title'] = 'Landscape format';
+$lang_plugin_more_meta_albums['portrait_title'] = 'Portrait format';
 
 ?>
