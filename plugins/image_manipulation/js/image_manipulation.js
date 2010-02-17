@@ -25,7 +25,7 @@ var im_oldhash, im_pid;
 // page is ready loaded
 function im_init()
 {
-     if ($('.image')[0] && typeof(js_vars.run_slideshow) == 'undefined') {
+     if ($('.image:not([src*="images/thumbs/"])')[0] && typeof(js_vars.run_slideshow) == 'undefined') {
         im_useurlvalues    = parseInt(js_vars.im_useurlvalues);
         im_usecookies      = parseInt(js_vars.im_usecookies);
     
@@ -82,23 +82,23 @@ function im_init()
             im_pid = parseInt(js_vars.picture_id);
             if (!isNaN(im_pid)) 
             {
-              	// one cookie for 400 PIDs
-					    	im_cookienumber = Math.floor(im_pid/400);
-					    	im_cookiestring = im_readCookie('im_'+im_cookienumber);
-					    	if (!im_cookiestring) im_cookiestring = '';
-					    	// split cookie string by delimiter to array
-					    	im_cookiesplitted = im_cookiestring.split('_');
-					    	var im_isinthere = false;
-					    	// check if PID is already in cookie
-					    	for (i=1; i<=im_cookiesplitted.length ; i=i+2)
-					    	{
-					    		if (im_cookiesplitted[i] == im_pid.toString(36))
-					    		{
-					    			// get value for PID
-					    			im_cookieval = parseInt(im_cookiesplitted[i+1],36) + 90909000;
-					    			im_isinthere = true;
-					    		}
-					    	}
+                // one cookie for 400 PIDs
+                            im_cookienumber = Math.floor(im_pid/400);
+                            im_cookiestring = im_readCookie('im_'+im_cookienumber);
+                            if (!im_cookiestring) im_cookiestring = '';
+                            // split cookie string by delimiter to array
+                            im_cookiesplitted = im_cookiestring.split('_');
+                            var im_isinthere = false;
+                            // check if PID is already in cookie
+                            for (i=1; i<=im_cookiesplitted.length ; i=i+2)
+                            {
+                                if (im_cookiesplitted[i] == im_pid.toString(36))
+                                {
+                                    // get value for PID
+                                    im_cookieval = parseInt(im_cookiesplitted[i+1],36) + 90909000;
+                                    im_isinthere = true;
+                                }
+                            }
                 if (im_cookieval)
                 {
                     im_splitvalue(im_cookieval);
@@ -189,33 +189,33 @@ function im_seturl()
     // save cookie
     if (im_usecookies) 
     {
-    	// one cookie for 400 PIDs
-    	im_cookienumber = Math.floor(im_pid/400);
-    	im_cookiestring = im_readCookie('im_'+im_cookienumber);
-    	if (!im_cookiestring) im_cookiestring = '';
-    	// split string by delimiter to array
-    	im_cookiesplitted = im_cookiestring.split('_');
-    	var im_isinthere = false;
-    	// check if PID is in cookie
-    	for (i=1; i<=im_cookiesplitted.length ; i=i+2)
-    	{
-    		if (im_cookiesplitted[i] == im_pid.toString(36))
-    		{
-    			// pid is there so replace it
-    			im_cookiesplitted[i+1] = im_urlvalue.toString(36);
-    			im_isinthere = true;
-    		}
-    	}
-    	if (im_isinthere == false && im_urlvalue) 
-    	{
-    		// pid is not there so add to array
-    		im_cookiesplitted.push(im_pid.toString(36));
-    		im_cookiesplitted.push(im_urlvalue.toString(36));
-    	}
-    	// convert array to string
-    	im_cookiestring = im_cookiesplitted.join('_');
-    	// save cookie
-    	im_createCookie('im_'+im_cookienumber,im_cookiestring);
+        // one cookie for 400 PIDs
+        im_cookienumber = Math.floor(im_pid/400);
+        im_cookiestring = im_readCookie('im_'+im_cookienumber);
+        if (!im_cookiestring) im_cookiestring = '';
+        // split string by delimiter to array
+        im_cookiesplitted = im_cookiestring.split('_');
+        var im_isinthere = false;
+        // check if PID is in cookie
+        for (i=1; i<=im_cookiesplitted.length ; i=i+2)
+        {
+            if (im_cookiesplitted[i] == im_pid.toString(36))
+            {
+                // pid is there so replace it
+                im_cookiesplitted[i+1] = im_urlvalue.toString(36);
+                im_isinthere = true;
+            }
+        }
+        if (im_isinthere == false && im_urlvalue) 
+        {
+            // pid is not there so add to array
+            im_cookiesplitted.push(im_pid.toString(36));
+            im_cookiesplitted.push(im_urlvalue.toString(36));
+        }
+        // convert array to string
+        im_cookiestring = im_cookiesplitted.join('_');
+        // save cookie
+        im_createCookie('im_'+im_cookienumber,im_cookiestring);
     }
 }
 

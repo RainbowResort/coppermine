@@ -17,21 +17,23 @@
 
   
 if (!defined('IN_COPPERMINE')) {
-	die('Not in Coppermine...');
+    die('Not in Coppermine...');
 }
 
-$thisplugin->add_action('page_start','image_manipulation_include_js'); // Add js files
 $thisplugin->add_action('plugin_install','image_manipulation_install'); // Add plugin_install action
 $thisplugin->add_action('plugin_uninstall','image_manipulation_uninstall'); // Add plugin_uninstall action
 $thisplugin->add_action('plugin_configure','image_manipulation_configure');
 
+if (defined('DISPLAYIMAGE_PHP')) {
+    $thisplugin->add_action('page_start','image_manipulation_include_js'); // Add js files
+}
+
 function image_manipulation_include_js() 
 {
-    global $JS, $CONFIG, $lang_plugin_image_manipulation, $CPG_PHP_SELF;
+    global $JS, $CONFIG, $lang_plugin_image_manipulation;
     require_once('./plugins/image_manipulation/init.inc.php');
 
-    $im_pages_array = array('displayimage.php');
-	if (in_array($CPG_PHP_SELF, $im_pages_array) == TRUE && $CONFIG['transparent_overlay'] != '1') {  
+    if ($CONFIG['transparent_overlay'] != '1') {
         if ($CONFIG['plugin_image_manipulation_reset'] == '1') {
             set_js_var('im_strreset', $lang_plugin_image_manipulation['reset']);
         } else {
@@ -112,9 +114,9 @@ function image_manipulation_include_js()
                   $CONFIG['plugin_image_manipulation_saturation'] != '1' &&
                   $CONFIG['plugin_image_manipulation_sharpness'] != '1'
                   ) {
-        	        $JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
+                    $JS['includes'][] = "./plugins/image_manipulation/js/pixastic_compatible.js";
         } else {
-        	$JS['includes'][] = "./plugins/image_manipulation/js/pixastic.js";
+            $JS['includes'][] = "./plugins/image_manipulation/js/pixastic.js";
         }
         $JS['includes'][] = "./plugins/image_manipulation/js/image_manipulation.js";
     }
@@ -127,26 +129,26 @@ function image_manipulation_install() {
     $superCage = Inspekt::makeSuperCage();
     
     // Check for the mirror plugin
-	if (($plugin_id = CPGPluginAPI::installed('mirror')) !== false) {
-		 return 1;
-	}
-	
-	// Check for the transparent overlay
-	if ($CONFIG['transparent_overlay'] == '1') {
-		 if ($superCage->post->keyExists('image_manipulation_continue_anyway') == TRUE && $superCage->post->getInt('image_manipulation_continue_anyway') == '1') {
+    if (($plugin_id = CPGPluginAPI::installed('mirror')) !== false) {
+         return 1;
+    }
+    
+    // Check for the transparent overlay
+    if ($CONFIG['transparent_overlay'] == '1') {
+         if ($superCage->post->keyExists('image_manipulation_continue_anyway') == TRUE && $superCage->post->getInt('image_manipulation_continue_anyway') == '1') {
             // The pre-install status of the transparent overlay setting is being stored inside another field and get's restored on uninstall	        
             cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_overlay', '1')");
-	        // This plugin only works if image_overlay is off, so let's turn it off if it's on
-		     $CONFIG['transparent_overlay'] = '0';
-		    cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='0' WHERE name='transparent_overlay'");
-		 } else {
-		    return 1;
-		}
-	}
-	
-	// Add the config options for the plugin
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_cookies', '1')");
-	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_urlvalues', '1')");
+            // This plugin only works if image_overlay is off, so let's turn it off if it's on
+             $CONFIG['transparent_overlay'] = '0';
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='0' WHERE name='transparent_overlay'");
+         } else {
+            return 1;
+        }
+    }
+    
+    // Add the config options for the plugin
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_cookies', '1')");
+    cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_urlvalues', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_reset', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_bw_sepia', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_flip_v', '1')");
@@ -158,7 +160,7 @@ function image_manipulation_install() {
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_contrast', '0')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_saturation', '0')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_image_manipulation_sharpness', '0')");
-	
+    
     return true;
 }
 
@@ -167,14 +169,14 @@ function image_manipulation_install() {
 function image_manipulation_uninstall() {
     global $CONFIG;
     // Restore the state of the transparent overlay if needed
-	if ($CONFIG['plugin_image_manipulation_overlay'] == '1') {
-		cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='1' WHERE name='transparent_overlay'");
-	}
-	// Delete the plugin config records
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_cookies'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_urlvalues'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_overlay'");
-	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_reset'");
+    if ($CONFIG['plugin_image_manipulation_overlay'] == '1') {
+        cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='1' WHERE name='transparent_overlay'");
+    }
+    // Delete the plugin config records
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_cookies'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_urlvalues'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_overlay'");
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_reset'");
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_bw_sepia'");
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_flip_v'");
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_image_manipulation_flip_h'");

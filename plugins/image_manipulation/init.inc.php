@@ -36,30 +36,30 @@ if (file_exists("./plugins/image_manipulation/docs/{$CONFIG['lang']}.htm")) {
 
 if ($CONFIG['enable_menu_icons'] >= 1) {
     $image_manipulation_icon_array['reset'] = '<img src="./plugins/image_manipulation/images/icons/reset.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['sepia'] = '<img src="./plugins/image_manipulation/images/icons/sepia.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['black_and_white'] = '<img src="./plugins/image_manipulation/images/icons/bw.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['flip_horizontally'] = '<img src="./plugins/image_manipulation/images/icons/fliph.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['flip_vertically'] = '<img src="./plugins/image_manipulation/images/icons/flipv.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['invert'] = '<img src="./plugins/image_manipulation/images/icons/invert.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['emboss'] = '<img src="./plugins/image_manipulation/images/icons/emboss.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['blur'] = '<img src="./plugins/image_manipulation/images/icons/blur.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['brightness'] = '<img src="./plugins/image_manipulation/images/icons/brightness.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['contrast'] = '<img src="./plugins/image_manipulation/images/icons/contrast.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['saturation'] = '<img src="./plugins/image_manipulation/images/icons/saturation.png" border="0" width="16" height="16" alt="" class="icon" />';
-	$image_manipulation_icon_array['sharpness'] = '<img src="./plugins/image_manipulation/images/icons/sharpness.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['sepia'] = '<img src="./plugins/image_manipulation/images/icons/sepia.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['black_and_white'] = '<img src="./plugins/image_manipulation/images/icons/bw.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['flip_horizontally'] = '<img src="./plugins/image_manipulation/images/icons/fliph.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['flip_vertically'] = '<img src="./plugins/image_manipulation/images/icons/flipv.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['invert'] = '<img src="./plugins/image_manipulation/images/icons/invert.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['emboss'] = '<img src="./plugins/image_manipulation/images/icons/emboss.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['blur'] = '<img src="./plugins/image_manipulation/images/icons/blur.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['brightness'] = '<img src="./plugins/image_manipulation/images/icons/brightness.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['contrast'] = '<img src="./plugins/image_manipulation/images/icons/contrast.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['saturation'] = '<img src="./plugins/image_manipulation/images/icons/saturation.png" border="0" width="16" height="16" alt="" class="icon" />';
+    $image_manipulation_icon_array['sharpness'] = '<img src="./plugins/image_manipulation/images/icons/sharpness.png" border="0" width="16" height="16" alt="" class="icon" />';
 } else {
     $image_manipulation_icon_array['reset'] = '';
-	$image_manipulation_icon_array['sepia'] = '';
-	$image_manipulation_icon_array['black_and_white'] = '';
-	$image_manipulation_icon_array['flip_horizontally'] = '';
-	$image_manipulation_icon_array['flip_vertically'] = '';
-	$image_manipulation_icon_array['invert'] = '';
-	$image_manipulation_icon_array['emboss'] = '';
-	$image_manipulation_icon_array['blur'] = '';
-	$image_manipulation_icon_array['brightness'] = '';
-	$image_manipulation_icon_array['contrast'] = '';
-	$image_manipulation_icon_array['saturation'] = '';
-	$image_manipulation_icon_array['sharpness'] = '';
+    $image_manipulation_icon_array['sepia'] = '';
+    $image_manipulation_icon_array['black_and_white'] = '';
+    $image_manipulation_icon_array['flip_horizontally'] = '';
+    $image_manipulation_icon_array['flip_vertically'] = '';
+    $image_manipulation_icon_array['invert'] = '';
+    $image_manipulation_icon_array['emboss'] = '';
+    $image_manipulation_icon_array['blur'] = '';
+    $image_manipulation_icon_array['brightness'] = '';
+    $image_manipulation_icon_array['contrast'] = '';
+    $image_manipulation_icon_array['saturation'] = '';
+    $image_manipulation_icon_array['sharpness'] = '';
 }
 
 $image_manipulation_icon_array['submit'] = cpg_fetch_icon('ok', 1);

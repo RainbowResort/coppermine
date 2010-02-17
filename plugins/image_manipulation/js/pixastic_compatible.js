@@ -109,5 +109,5 @@ data[pix1]=255;if((data[pix2-=4]=data[pix2]*mul)>255)
 data[pix2]=255;}
 return true;}else if(Pixastic.Client.isIE()){var img=params.image;if(amount<0){img.style.filter+=" light()";img.filters[img.filters.length-1].addAmbient(255,255,255,100*-amount);}else if(amount>0){img.style.filter+=" light()";img.filters[img.filters.length-1].addAmbient(255,255,255,100);img.filters[img.filters.length-1].addAmbient(255,255,255,100*amount);}
 return true;}},checkSupport:function(){return(Pixastic.Client.hasCanvasImageData()||Pixastic.Client.isIE());}}
-	
-var im_compatible   = 1;
+
+var im_compatible = 1;

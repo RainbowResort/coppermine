@@ -16,7 +16,7 @@
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) { 
-	die('Not in Coppermine...'); 
+    die('Not in Coppermine...'); 
 }
 $lang_plugin_image_manipulation['display_name'] = 'Manipulation d\'images';
 $lang_plugin_image_manipulation['update_success'] = 'La configuration a été mise à jour correctement; vos changements ont été sauvegardés.';
