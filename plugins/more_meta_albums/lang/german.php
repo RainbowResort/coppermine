@@ -30,5 +30,6 @@ $lang_plugin_more_meta_albums['audio_title'] = 'Alle Audiodateien';
 $lang_plugin_more_meta_albums['documents_title'] = 'Alle Dokumente';
 $lang_plugin_more_meta_albums['landscape_title'] = 'Querformat';
 $lang_plugin_more_meta_albums['portrait_title'] = 'Hochformat';
+$lang_plugin_more_meta_albums['newalb_title'] = 'Neueste Alben';
 
 ?>

@@ -36,6 +36,14 @@ function mma_page_start() {
 }
 
 
+// Add 'album' type
+$thisplugin->add_filter('theme_thumbnails_album_types', 'mma_album_types');
+function mma_album_types($album_types) {
+    $album_types['albums'][] = 'newalb';
+    return $album_types;
+}
+
+
 // Meta album get_pic_pos
 $thisplugin->add_filter('meta_album_get_pic_pos','mma_get_pic_pos');
 function mma_get_pic_pos($album) {
@@ -100,6 +108,26 @@ function mma_get_pic_pos($album) {
                 list($pos) = mysql_fetch_row($result);
                 mysql_free_result($result);
             return strval($pos);
+            break;
+
+        case 'newalb': // New albums
+            $query = "SELECT ctime FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = $pid";
+            $result = cpg_db_query($query);
+            $ctime = mysql_result($result, 0);
+            mysql_free_result($result);
+
+            $query = "SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES' 
+                AND p.pid = r.thumb 
+                AND ctime > $ctime 
+                OR ctime = $ctime AND pid < $pid";
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset, array('ctime'));
             break;
 
         case 'mostcom': // Most commented files
@@ -245,6 +273,35 @@ function mma_meta_album($meta) {
             mysql_free_result($result);
 
             build_caption($rowset);
+            break;
+
+        case 'newalb': // New albums
+            $album_name = cpg_fetch_icon('last_created', 2)." ".$lang_plugin_more_meta_albums['newalb_title'];
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
+
+            $query = "SELECT pid FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND p.pid = r.thumb ";
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
+
+            $query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES' 
+                AND p.pid = r.thumb 
+                ORDER BY ctime DESC
+                {$meta['limit']}";
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset, array('ctime'));
             break;
 
         case 'mostcom': // Most commented files
