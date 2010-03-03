@@ -1,0 +1,12 @@
+**********************
+Version 2.0 by Frantz (01.02.2007)
+**********************
+Changes:
+Adding possibility to choose the way for displaying keywords:
+- Searching from the keyword list (initial plugin)
+- Searching by keyword initial
+
+**********************
+version 1.0 by Frantz (12.31.2006)
+**********************
+initial release

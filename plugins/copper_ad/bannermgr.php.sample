@@ -1,0 +1,189 @@
+<?php
+/**************************************************
+  Coppermine 1.4.x Plugin - Copper ad
+  *************************************************
+  Copyright (c) 2006 Borzoo Mossavari
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  *************************************************
+  This is a simple Advertisement plugin without statistics
+  or any kind of log.
+  this will give you flash/picture/HTML banner
+  By using FRAME technology
+  ***************************************************/
+  
+define('IN_COPPERMINE', true);
+require('include/init.inc.php');
+if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+require('plugins/copper_ad/include/init.inc.php');
+if($lang_text_dir=='ltr') {
+	$align="left";
+	$direction="ltr";
+}else {
+	$align="right";
+	$direction="rtl";
+}
+$advid=$_GET['id'];
+$action=$_GET['act'];
+?>
+<script language="javascript" type="text/javascript">
+function change() {
+advkind=document.getElementById("adver_kind").value;
+if(advkind==3) {
+	document.getElementById("html_tbl").style.display='block';
+	document.getElementById("picture_tbl").style.display='none';
+	document.getElementById("picflash_tbl").style.display='none';
+	} else if(advkind==1){
+		document.getElementById("picture_tbl").style.display='block';
+		document.getElementById("html_tbl").style.display='none';
+		document.getElementById("picflash_tbl").style.display='block';
+	} else if(advkind==2){
+		document.getElementById("html_tbl").style.display='none';
+		document.getElementById("picture_tbl").style.display='none';
+		document.getElementById("picflash_tbl").style.display='block';
+	}
+}
+onload=change;
+</script>
+<?php 
+// Start of Edit Banner code
+if($action=="edit" or isset($_POST['update_config'])) { 
+	pageheader($lang_plugin_copperad_manage['display_name']);
+	starttable('100%', 'Advertisement manager - '.$lang_plugin_copperad['version'].'<font size=1 color=red> By <a href=\"http://www.myprj.com\">BMossavari at gmail dot com</a></font>- <a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>', 1);
+// Input changes to database
+	if(isset($_POST['update_config'])) {
+		$name_up=addslashes($_POST['adver_name']);
+		$kind_up=addslashes($_POST['adver_kind']);
+		$stat_up=addslashes($_POST['adver_stat']);
+		$address_up=addslashes($_POST['adver_address']);
+		$linkto_up=addslashes($_POST['adver_linkto']);
+		$height_up=addslashes($_POST['adver_height']);
+		$width_up=addslashes($_POST['adver_width']);
+		$alt_up=addslashes($_POST['adver_alt']);
+		$html_up=addslashes($_POST['adver_html']);
+		$advid_up=addslashes($_POST['adver_id']);
+		$sql="UPDATE `{$CONFIG['TABLE_PLUGIN_COPPERAD']}` SET name='$name_up', kind='$kind_up', stat='$stat_up', address='$address_up', height='$height_up', width='$width_up', linkto='$linkto_up', alt='$alt_up', html='$html_up' WHERE adv_id='$advid_up'";
+		$result=cpg_db_query($sql);
+	}
+		
+//Create a list of banner setting
+	$sql="SELECT * FROM `{$CONFIG['TABLE_PLUGIN_COPPERAD']}` WHERE adv_id='$advid'";
+	$result=cpg_db_query($sql);
+?>
+
+<TR>
+  <TD class=tableh2 colSpan=3><?php while ($row=mysql_fetch_assoc($result)) {?>
+    <B>Banner Setting (id=<?php echo $row['adv_id']?>)</B></TD>
+</TR>
+<TR>
+  <TD><TABLE class=maintable id=section0 cellSpacing=1 cellPadding=0 width="100%" align=center border=0>
+      <form action="<?php $_SERVER['PHP_SELF']?>" method="post">
+        <TR>
+          <TD width="25%" align="<?php echo $align ?>" dir="<?php echo $direction ?>" class="tableb"><strong><?php echo $lang_plugin_copperad_manage['list_name']; ?></strong> :
+            <input value="<?php echo (stripslashes($row['name']));?>" name="adver_name" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_name" maxlength="255" class="textinput" size="30"/></TD>
+        </TR>
+        <TR>
+          <TD align="<?php echo $align ?>" dir="<?php echo $direction ?>" class="tableb"><strong><?php echo $lang_plugin_copperad_manage['list_status']; ?></strong> :
+            <select name="adver_stat" id="adver_stat">
+              <option value="1" <?php if($row['stat']==1) echo "selected=\"selected\""; ?>>Enable</option>
+              <option value="0" <?php if($row['stat']==0) echo "selected=\"selected\""; ?>>Disable</option>
+            </select></TD>
+        </TR>
+        <TR>
+          <TD align="<?php echo $align ?>" dir="<?php echo $direction ?>" class="tableb"><strong><?php echo $lang_plugin_copperad_manage['list_kind']; ?></strong> :
+            <select name="adver_kind" id="adver_kind" onChange="return change();">
+              <option value="1" <?php if($row['kind']==1) echo "selected=\"selected\""; ?>>Picture</option>
+              <option value="2" <?php if($row['kind']==2) echo "selected=\"selected\""; ?>>Flash</option>
+              <option value="3" <?php if($row['kind']==3) echo "selected=\"selected\""; ?>>HTML</option>
+            </select></TD>
+        </TR>
+        <TR>
+          <TD align="<?php echo $align ?>" dir="<?php echo $direction ?>" class="tableb"><table width="100%" border="0" cellpadding="0" cellspacing="0" id="html_tbl">
+              <tr>
+                <td width="30"><strong><?php echo $lang_plugin_copperad_manage['list_html']; ?></strong> : </td>
+                <td width="419"><textarea name="adver_html" cols="64" rows="5" id="adver_html" wrap="virtual" dir="<?php echo $direction ?>" align="<?php echo $align ?>"><?php echo (stripslashes($row['html']));?> 
+                      </textarea></td>
+                <td width="535"><strong><?php echo $lang_plugin_copperad_manage['list_html_des']; ?></strong></td>
+              </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td><strong><?php echo $lang_plugin_copperad_manage['list_height']; ?></strong> :
+                  <input value="<?php echo (stripslashes($row['height']));?>" name="adver_height" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_height" maxlength="255" class="textinput" size="35"/></td>
+              </tr>
+              <tr>
+                <td><strong><?php echo $lang_plugin_copperad_manage['list_width']; ?></strong> :
+                  <input value="<?php echo (stripslashes($row['width']));?>" name="adver_width" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_width" maxlength="255" class="textinput" size="35"/></td>
+              </tr>
+            </table>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="picflash_tbl">
+              <tr>
+                <td><strong><?php echo $lang_plugin_copperad_manage['list_address']; ?></strong> :
+                  <input value="<?php echo (stripslashes($row['address']));?>" name="adver_address" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_address" maxlength="255" class="textinput" size="35"/></td>
+              </tr>
+            </table>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="picture_tbl">
+              <tr>
+                <td><strong><?php echo $lang_plugin_copperad_manage['list_linkto']; ?></strong> :
+                  <input value="<?php echo (stripslashes($row['linkto']));?>" name="adver_linkto" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_linkto" maxlength="255" class="textinput" size="32" /></td>
+              </tr>
+              <tr>
+                <td><strong><?php echo $lang_plugin_copperad_manage['list_alt']; ?></strong> :
+                  <input value="<?php echo (stripslashes($row['alt']));?>" name="adver_alt" dir="<?php echo $direction ?>" align="<?php echo $align ?>" id="adver_alt" maxlength="255" class="textinput" size="32" /></td>
+              </tr>
+            </table></TD>
+        </TR>
+        <TR>
+          <TD class="tableb" align="center"><br />
+            <input name="adver_id" type="hidden" value="<?php echo $row['adv_id']?>" id="adver_id"/>
+                  <INPUT class=button type=submit value="<?php echo $lang_plugin_copperad_manage['list_submit']; ?>" name=update_config>
+                  &nbsp;&nbsp;
+                  <INPUT class=button onClick="return confirm('<?php echo $lang_plugin_copperad_manage['list_restore']; ?>');" type=submit value="<?php echo $lang_plugin_copperad_manage['list_restore']; ?>" name=restore_config></TD>
+        </TR>
+      </form>
+    </TABLE>
+  </TD><?php }?>
+</TR>
+<?php
+ endtable();
+ pagefooter();
+	  mysql_free_result($result);
+}// End Of edit banner code
+// Start of Delete Banner
+else if($action=="delete") {
+		pageheader($lang_plugin_copperad_delete['display_name']);
+	starttable('100%', 'Advertisement manager - '.$lang_plugin_copperad['version'].'<font size=1 color=red> By <a href=\"http://www.myprj.com\">BMossavari at gmail dot com</a></font>- <a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>', 1);
+// Delete given banner
+	//check the given adver id
+	$sql="SELECT adv_id FROM `{$CONFIG['TABLE_PLUGIN_COPPERAD']}` WHERE adv_id='$advid'";
+	$result=cpg_db_query($sql);
+	$row=mysql_fetch_assoc($result);
+	$sql="SELECT COUNT(adv_id) FROM `{$CONFIG['TABLE_PLUGIN_COPPERAD']}`";
+	$result2=cpg_db_query($sql);
+	$row2=mysql_fetch_assoc($result2);
+	if($row['adv_id']!=$advid or $row2['COUNT(adv_id)']<=1) {
+		cpg_die(ERROR, $lang_plugin_copperad_delete['cant_delete'], __FILE__, __LINE__);
+	} else {
+		$sql="DELETE FROM `{$CONFIG['TABLE_PLUGIN_COPPERAD']}` WHERE adv_id='$advid'";
+		cpg_db_query($sql);
+		echo <<< EOT
+		<TR>
+          <TD class=tableh2 colSpan=3><h2>{$lang_plugin_copperad_delete['delete_okey']}</h2></TD>
+        </TR>
+EOT;
+		} ?>
+</TBODY>
+</TABLE>
+<?php
+endtable();
+ pagefooter();
+	  mysql_free_result($result);
+	  mysql_free_result($result2);
+}// End of delete banner
+else {
+	cpg_die(ERROR, $lang_plugin_copperad_delete['nothing_do'], __FILE__, __LINE__);
+}
+?>

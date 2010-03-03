@@ -1,0 +1,68 @@
+v1.0 - 2006/06/26 - 14:00 GMT
+* initial release; add advertisement to gallery with iframe technology without any report and log
+
+v1.1 - 2006/06/26 - 4:00 GMT
+
+fixes
+=====
+- some typo issue solved,found by PAVER
+- delete proccess bug solved ,found by tfischer
+
+
+v1.2 - 2006/06/26 - 12:10 GMT
+
+fixes
+=====
+- error on "schema.sql" (ENGINE=>TYPE) fix , found by PYAP
+- some theme issue on plugin configuration & managment fix,found by myself !!!
+
+New
+=====
+- add Readme.txt
+- French translation by PYAP
+
+
+v1.2.1 - 2006/06/26 - 14:23 GMT
+
+fixes
+=====
+- error on fallback lang files fix , found by myself!!!
+
+New
+=====
+-  iframe will use Height & width of banner, suggested by PYAP
+
+Known Issue
+=====
+- did not work with ModPack (CPG moded by Stramm)
+- after sys menu & after sub menu both have bugs on some standard theme
+
+v1.2.2 (Stable) - 2006/06/28 - 10:15 GMT
+
+New
+=====
+-  Now you can Enable/Disable banners,suggested by tfischer
+-  This is stable version
+
+v1.2.3 (Stable) - 2006/06/29 - 17:00 GMT
+
+fixes
+=====
+-   loosing previous setting after upgrad , found by tfischer
+-   forgoten debug string , found by tfischer
+-   forgoten heghit & width for HTML ,found by tfischer
+
+Known Issue
+=====
+- after sys menu & after sub menu both have bugs on some standard theme
+
+v1.2.4 (Stable) - 2006/08/06 - 05:30 GMT
+
+fixes
+=====
+-   Bug in Uninstallation system , found by GordonRaboud
+
+
+Known Issue
+=====
+- after sys menu & after sub menu both have bugs on some standard theme

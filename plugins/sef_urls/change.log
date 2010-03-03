@@ -1,0 +1,159 @@
+Search Engine Friendly URLs
+
+History
+
+v1.44 (2008.11.19) (Makc666)
+
+- Fixed a misprint in History description for v1.43
+
+- Fixed a misprint in ht.txt lines:
+*** FROM ***
+---------------------------------
+RewriteRule thumbnails-search-(.*)\.html thumbnails.php?album=search&search=$1 [NC]
+---------------------------------
+*** TO ***
+---------------------------------
+RewriteRule search-thumbnails-(.*)\.html thumbnails.php?album=search&search=$1 [NC]
+---------------------------------
+
+=================================
+
+v1.43 (2008.10.27) (Makc666)
+
+- Fixed a misprint in codebase.php lines:
+*** FROM ***
+---------------------------------
+$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i','search-thumbnails-$2.html',$htm
+---------------------------------
+*** TO ***
+---------------------------------
+$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i','search-thumbnails-$2.html',$html);
+---------------------------------
+
+=================================
+
+v1.42 (2008.10.17) (Makc666)
+
+- Changed in file ht.txt line:
+*** FROM ***
+---------------------------------
+RewriteRule thumbnails-search-(.*)\.html thumbnails.php?album=search&search=$1 [NC]
+---------------------------------
+*** TO ***
+---------------------------------
+RewriteRule search-thumbnails-(.*)\.html thumbnails.php?album=search&search=$1 [NC]
+---------------------------------
+
+- Changed in file codebase.php lines:
+*** FROM ***
+---------------------------------
+// Rewrite thumbnails.php?album=search&search=[searchterm] URLs to thumbnails-search-[searchterm].html
+$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i','thumbnails-search-$2.html',$htm
+---------------------------------
+*** TO ***
+---------------------------------
+// Rewrite thumbnails.php?album=search&search=[searchterm] URLs to search-thumbnails-[searchterm].html
+$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i','search-thumbnails-$2.html',$htm
+---------------------------------
+
+=================================
+
+v1.41 (2008.10.16) (Makc666)
+
+- Changed in file ht.txt quantifier '*' to '+' for all instances, because quantifier '+' means > 1
+More you can read here http://httpd.apache.org/docs/1.3/mod/mod_rewrite.html#RewriteRule
+This change just a cosmetic one
+
+- Move in file ht.txt the line of code
+---------------------------------
+RewriteRule thumbnails-search-(.*)\.html thumbnails.php?album=search&search=$1 [NC]
+---------------------------------
+from line #58 to line #42
+not to conflict with another rule
+
+=================================
+
+v1.4 (2008.10.13) (Makc666)
+
+- Lines added to: codebase.php
+---------------------------------
+// Rewrite thumbnails.php?album=lastupby&cat=[category]&uid=[userid]&page=[page] URLs to thumbnails-lastupby-[category]-[userid]-page-[page].html
+$html = preg_replace('/thumbnails\.php\?album=lastupby(\&|\&amp;)cat=([0-9]+)(\&|\&amp;)uid=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','thumbnails-lastupby-$2-$4-page-$6.html',$html);
+
+// Rewrite thumbnails.php?album=lastcomby&cat=[category]&uid=[userid]&page=[page] URLs to thumbnails-lastcomby-[category]-[userid]-page-[page].html
+$html = preg_replace('/thumbnails\.php\?album=lastcomby(\&|\&amp;)cat=([0-9]+)(\&|\&amp;)uid=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','thumbnails-lastcomby-$2-$4-page-$6.html',$html);
+---------------------------------
+
+- Lines added to: ht.txt
+---------------------------------
+RewriteRule thumbnails-lastupby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html thumbnails.php?album=lastupby&cat=$1&uid=$2&page=$3 [NC]
+RewriteRule thumbnails-lastcomby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html thumbnails.php?album=lastcomby&cat=$1&uid=$2&page=$3 [NC]
+---------------------------------
+
+- Lines changed in: ht.txt
+*** FROM ***
+---------------------------------
+RewriteRule thumbnails-lastupby-([a-z0-9]*)\.html thumbnails.php?album=lastupby&uid=$1 [NC]
+RewriteRule thumbnails-lastcomby-([a-z0-9]*)\.html thumbnails.php?album=lastcomby&uid=$1 [NC]
+---------------------------------
+*** TO ***
+---------------------------------
+RewriteRule thumbnails-lastupby-([0-9]+)\.html thumbnails.php?album=lastupby&uid=$1 [NC]
+RewriteRule thumbnails-lastcomby-([0-9]+)\.html thumbnails.php?album=lastcomby&uid=$1 [NC]
+---------------------------------
+
+=================================
+
+v1.3 (2008.06.03) (Makc666)
+
+- Lines added to: codebase.php
+---------------------------------
+// Rewrite thumbnails.php?album=lastupby&uid=[userid] URLs to thumbnails-lastupby-[userid].html
+$html = preg_replace('/thumbnails\.php\?album=lastupby(\&|\&amp;)uid=([0-9]+)/i','thumbnails-lastupby-$2.html',$html);
+
+// Rewrite thumbnails.php?album=lastcomby&uid=[userid] URLs to thumbnails-lastcomby-[userid].html
+$html = preg_replace('/thumbnails\.php\?album=lastcomby(\&|\&amp;)uid=([0-9]+)/i','thumbnails-lastcomby-$2.html',$html);
+
+// Rewrite displayimage.php?album=lastupby&cat=[category]&pos=[position]&uid=[userid] URLs to displayimage-lastupby-[category]-[position]-[userid].html
+$html = preg_replace('/displayimage\.php\?album=lastupby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pos=([\-0-9]+)(\&|\&amp;)uid=([0-9]+)/i','displayimage-lastupby-$2-$4-$6.html',$html);
+
+// Rewrite displayimage.php?album=lastcomby&cat=[category]&pos=[position]&uid=[userid] URLs to displayimage-lastcomby-[category]-[position]-[userid].html
+$html = preg_replace('/displayimage\.php\?album=lastcomby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pos=([\-0-9]+)(\&|\&amp;)uid=([0-9]+)/i','displayimage-lastcomby-$2-$4-$6.html',$html);
+
+// Rewrite displayimage.php?pid=[position]&fullsize=1 URLs to displayimage-[position]-fullsize.html
+$html = preg_replace('/displayimage\.php\?pid=([\-0-9]+)(\&|\&amp;)fullsize=1/i','displayimage-$1-fullsize.html',$html);
+
+// Rewrite profile.php?uid=[userid] URLs to profile-[userid].html
+$html = preg_replace('/profile\.php\?uid=([0-9]+)/i','profile-$1.html',$html);
+
+// Rewrite ratepic.php?pic=[position]&rate=[rate] URLs to ratepic-[position]-[rate].html
+$html = preg_replace('/ratepic\.php\?pic=([0-9]+)(\&|\&amp;)rate=([0-5])/i','ratepic-$1-$3.html',$html);
+---------------------------------
+
+- Lines added to: ht.txt
+---------------------------------
+RewriteRule thumbnails-lastupby-([a-z0-9]*)\.html thumbnails.php?album=lastupby&uid=$1 [NC]
+RewriteRule thumbnails-lastcomby-([a-z0-9]*)\.html thumbnails.php?album=lastcomby&uid=$1 [NC]
+RewriteRule displayimage-lastupby-([\-]?[0-9]+)-([\-]?[0-9]+)-([0-9]+)\.html displayimage.php?album=lastupby&cat=$1&pos=$2&uid=$3 [NC]
+RewriteRule displayimage-lastcomby-([\-]?[0-9]+)-([\-]?[0-9]+)-([0-9]+)\.html displayimage.php?album=lastcomby&cat=$1&pos=$2&uid=$3 [NC]
+RewriteRule displayimage-([\-]?[0-9]+)-fullsize\.html displayimage.php?pid=$1&fullsize=1 [NC]
+RewriteRule profile-([0-9]*)\.html profile.php?uid=$1 [NC]
+RewriteRule ratepic-([0-9]*)-([0-5])\.html ratepic.php?pic=$1&rate=$2 [NC]
+---------------------------------
+
+=================================
+
+v1.2 (2006.10.03) (Makc666)
+
+- Lines added to: codebase.php
+--------------------------------
+// Rewrite thumbnails.php?album=[album]&page=[category] URLs to thumbnails-[album]-page-[page].html
+$html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)page=([0-9]+)/i','thumbnails-$1-page-$3.html',$html);
+---------------------------------
+
+- Lines added to: ht.txt
+---------------------------------
+RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)-sort-([a-z]*)\.html thumbnails.php?album=$1&page=$2&sort=$3 [NC]
+---------------------------------
+
+=================================

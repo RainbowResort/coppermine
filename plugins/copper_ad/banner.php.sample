@@ -1,0 +1,87 @@
+<?php
+/**************************************************
+  Coppermine 1.4.x Plugin - Copper ad
+  *************************************************
+  Copyright (c) 2006 Borzoo Mossavari
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  *************************************************
+  This is a simple Advertisement plugin without statistics
+  or any kind of log.
+  this will give you flash/picture/HTML banner
+  By using FRAME technology
+  ***************************************************/
+
+define('IN_COPPERMINE', true);
+require('include/init.inc.php');
+global $CONFIG;
+$sql="SELECT * FROM ".$CONFIG['TABLE_PREFIX']."plugin_copperad where showd=0 and stat=1 ORDER BY adv_id";
+$result=cpg_db_query($sql);
+if(mysql_num_rows($result)>0) {
+	$row=mysql_fetch_assoc($result);
+	$advid=$row['adv_id'];
+	$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."plugin_copperad SET showd=1 and stat=1 where adv_id=".$advid;
+	cpg_db_query($sql);
+	// height and width adjustment proccess
+	$row2=mysql_fetch_assoc($result); 
+	$advheight=$row2['height'];
+	$advwidth=$row2['width'];
+	if (isset($advwidth)) {
+		$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."copperad_config SET value=".$advheight." where name='height'";
+		cpg_db_query($sql);
+		$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."copperad_config SET value=".$advwidth." where name='width'";
+		cpg_db_query($sql);
+	}
+	//End of height and width adjusting
+if(mysql_num_rows($result)<=1) {
+		$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."plugin_copperad SET showd=0";
+		cpg_db_query($sql);
+		// height and width adjustment proccess
+		$sql="SELECT * FROM ".$CONFIG['TABLE_PREFIX']."plugin_copperad where showd=0 and stat=1 ORDER BY adv_id";
+		$result=cpg_db_query($sql);
+		$row2=mysql_fetch_assoc($result); 
+		$advheight=$row2['height'];
+		$advwidth=$row2['width'];
+		if (isset($advwidth)) {
+			$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."copperad_config SET value=".$advheight." where name='height'";
+			cpg_db_query($sql);
+			$sql="UPDATE ".$CONFIG['TABLE_PREFIX']."copperad_config SET value=".$advwidth." where name='width'";
+			cpg_db_query($sql);
+		}
+	//End of height and width adjusting
+
+	}
+	$adv_kind=$row['kind'];
+	switch($adv_kind) {
+		case 1:
+		$code="<a href=\"".$row['linkto']."\" target=\"_blank\"><img src=\"".$row['address']."\" width=\"".$row['width']."\" height=\"".$row['height']."\" border=\"0\" alt=\"".$row['alt']."\"/></a>";
+		break;
+		case 2:
+		$code="<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0\" width=\"".$row['width']."\" height=\"".$row['height']."\"><param name=\"movie\" value=\"".$row['address']."\" /><param name=\"quality\" value=\"high\" /><embed src=\"".$row['address']."\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" width=\"".$row['width']."\" height=\"".$row['height']."\"></embed></object>";
+		break;
+		case 3:
+		$code3="".str_replace("&lt;","<",$row['html'])."";
+		$code2="".str_replace("&gt;",">",$code3)."";
+		$code="".str_replace("&quot;","\"",$code2)."";
+		break;
+		default:
+		$code="Error!!!!!";
+		break;
+	}
+}
+mysql_free_result($result);
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>advertisement</title>
+</head>
+
+<body bgcolor="<?php echo $COPPERAD['banner_bg'] ?>">
+<center><?php echo $code; ?></center>
+</body>
+</html>
