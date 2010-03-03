@@ -9,6 +9,6 @@
 $name='Avatar Maker Plugin';
 $description='Create avatars from your gallery picture';
 $author='foulu foulu_bk@yahoo.com <a href="http://ffgalleries.net" target="_blank">http://ffgalleries.net</a>';
-$version='1.2';
-
+$version='1.3';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

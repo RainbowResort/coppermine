@@ -16,5 +16,6 @@
 $name='HighSlide';
 $description='Skip Intermediate Page and show full page on the page.';
 $author='<a href="mailto:bmossavari@gmail.com">Sami(BMossavari)</a> at <a href="http://myprj.com" target="_blank">My Project</a> and <a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='3.04';
+$version='3.5';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

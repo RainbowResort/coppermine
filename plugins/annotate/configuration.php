@@ -14,4 +14,5 @@
 $name='Picture annotation';
 $description='Add text annotations to your images.';
 $author='Nibbler <nibbler@coppermine-gallery.net>';
-$version='1.1';
+$version='1.2';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');

@@ -18,5 +18,6 @@
 $name='Mosaic';
 $description='Pluginized (Google-) Mosaic.';
 $author='Stramm stramm@gmx.net <a href="http://stramm.st.funpic.org" target="_blank">stramm.st.funpic.org</a>';
-$version='1.0';
+$version='1.1';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

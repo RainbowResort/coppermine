@@ -13,5 +13,6 @@
 $name='Advanced Thumbnail Captions';
 $description='Advanced control of thumbnail captions (only remove date so far).';
 $author='Paver';
-$version='1.01';
+$version='1.2';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

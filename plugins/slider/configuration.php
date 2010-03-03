@@ -19,5 +19,6 @@
 $name='Slider';
 $description='Shows a JavaScript slider on album list page with EnlargeIt! integration';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a> based on a mod by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=39050">pbasmo</a>';
-$version='2.15';
+$version='2.16';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

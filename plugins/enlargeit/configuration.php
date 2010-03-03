@@ -18,5 +18,6 @@
 $name='EnlargeIt!';
 $description='EnlargeIt! - AJAX GUI for Coppermine 1.4';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='2.15';
+$version='2.16';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

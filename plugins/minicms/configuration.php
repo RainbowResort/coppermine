@@ -21,7 +21,8 @@ global $CONFIG;
 $name='MiniCMS';
 $description='MiniCMS provides a small content management system within the Coppermine Picture Gallery application that enables the admin to add textual content to existing coppermine pages and to add new pages with the look and feel of the existing ones.';
 $author='Donnoman@donovanbray.com';
-$version='1.9';
+$version='1.10';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 
 if (file_exists("plugins/minicms/lang/{$CONFIG['lang']}.php")) {
   require "plugins/minicms/lang/{$CONFIG['lang']}.php";

@@ -13,5 +13,6 @@
 $name='Display Fields';
 $description='A plugin to choose which picture & album fields to display.';
 $author='Paver';
-$version='1.02';
+$version='1.3';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

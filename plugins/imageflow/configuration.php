@@ -18,5 +18,6 @@
 $name='Imageflow';
 $description='Shows a coverflowish animation on Album list page with EnlargeIt! integration';
 $author='<a href="http://www.timos-welt.de">Timos-Welt</a>';
-$version='2.08';
+$version='2.9';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

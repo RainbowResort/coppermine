@@ -18,5 +18,6 @@
 $name='Photo Shop';
 $description='Photo Shop adds a possibility to sell images on your Coppermine Photo Gallery.';
 $author='Stramm stramm@gmx.net <a href="http://stramm.st.funpic.org" target="_blank">stramm.st.funpic.org</a>';
-$version='1.4.0';
+$version='1.4.1';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>

@@ -16,7 +16,8 @@
 $name='BrainFeeder for Coppermine 1.4x';
 $description='RSS publishing';
 $author='Hallvard Natvik';
-$version='1.0 RC';
+$version='1.1 RC';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 
 /*
  * $extra_info is displayed with the title of a plugin that is NOT installed and

@@ -26,5 +26,6 @@
 $name='Active Search';
 $description='Add a AJAX base search to your gallery (search album\'s title and file\'s title)';
 $author='<a href="http://coppermine-gallery.net/forum/index.php?action=profile;u=14716" target="_blank">BMossavari</a>';
-$version='1.0.0 (Beta)';
+$version='1.1';
+$plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>
