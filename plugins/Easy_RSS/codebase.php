@@ -21,7 +21,7 @@ $thisplugin->add_filter('gallery_footer','easyrss_footer');
 
 function easyrss_install() {
     global $CONFIG, $lang_plugin_easyrss_config;
-    require ('plugins/Easy_RSS/include/init.inc.php');
+    require ('plugins/easy_rss/include/init.inc.php');
 
     if($_POST['submit'] == $lang_plugin_easyrss_config['button_install']) {
 
@@ -31,6 +31,9 @@ function easyrss_install() {
         $title = "title";
         switch($_POST['title'])
         {
+            case "filename":
+                $title = "filename";
+                break;
             case "caption":
                 $title = "caption";
                 break;
@@ -73,7 +76,7 @@ function easyrss_install() {
         cpg_db_query($sql);
 
 	if(!file_exists("rss.php"))
-	    copy("plugins/Easy_RSS/rss.php","rss.php");
+	    copy("plugins/easy_rss/rss.php","rss.php");
 
         return true;
     } else {
@@ -83,13 +86,14 @@ function easyrss_install() {
 
 function easyrss_configure() {
     global $lang_plugin_easyrss, $lang_plugin_easyrss_config;
-    require ('plugins/Easy_RSS/include/init.inc.php');
+    require ('plugins/easy_rss/include/init.inc.php');
 
     echo <<< EOT
     {$lang_plugin_easyrss_config['question_title']}<br />
     <form action="{$_SERVER['REQUEST_URI']}" method="post">
         <input type="radio" name="title" value="title" checked>{$lang_plugin_easyrss['label_title']}<br />
-        <input type="radio" name="title" value="caption">{$lang_plugin_easyrss['label_caption']}<br /><br />
+        <input type="radio" name="title" value="caption">{$lang_plugin_easyrss['label_caption']}<br />
+        <input type="radio" name="title" value="filename">{$lang_plugin_easyrss['label_filename']}<br /><br />
 	{$lang_plugin_easyrss_config['question_num']}
 	<input type="text" name="num" size="3" value="10"><br /><br />
 	{$lang_plugin_easyrss_config['question_show']}<br />
@@ -118,7 +122,7 @@ function easyrss_uninstall() {
 
 function easyrss_cleanup($action) {
     global $lang_plugin_customhome_config;
-    require ('plugins/Easy_RSS/include/init.inc.php');
+    require ('plugins/easy_rss/include/init.inc.php');
 
     if ($action === 1) {
         echo <<< EOT
@@ -151,16 +155,13 @@ EOT;
 
 function easyrss_header() {
     global $CONFIG,$lang_plugin_easyrss;
-    require ('plugins/Easy_RSS/include/init.inc.php');
+    require ('plugins/easy_rss/include/init.inc.php');
 
     if($CONFIG['plugin_easyrss_showmeta'] && 
                 in_array($_SERVER[SCRIPT_NAME],array('index.php','thumbnails.php','displayimage.php'))) {
         global $CONFIG;
         $album=$_GET['album'];
         $cat=$_GET['cat'];
-
-	if(isset($cat) && $cat < 10000)
-	    return;
 
 	$name = "";
 	if(is_numeric($album)) {
@@ -173,6 +174,9 @@ function easyrss_header() {
 		} else {
 		    $name = $CONFIG[gallery_name]. " - " . get_username($cat-10000);
 		}
+	} else if(isset($cat) && $cat < 0) {
+		$name = get_album_name(-$cat);
+		$name = $CONFIG[gallery_name]. " - " . $name['name'];
 	} else
 	    $name = $CONFIG[gallery_name];
     
@@ -181,11 +185,13 @@ function easyrss_header() {
         $html .= ' href="'.$CONFIG[ecards_more_pic_target].'rss.php';
         if($album)
             $html .= "?album=".$album;
+	else
+		$html .= "?album=lastup";
         if($cat)
             if($cat > 10000)
     	    $html .= "?album=lastupby&uid=".($cat-10000);
     	else
-                $html .= "?cat=".$cat;
+                $html .= "&cat=".$cat;
         $html .="\" />";
 
         return $html;
@@ -194,7 +200,7 @@ function easyrss_header() {
 
 function easyrss_footer($html) {
     global $CONFIG,$lang_plugin_easyrss;
-    require ('plugins/Easy_RSS/include/init.inc.php');
+    require ('plugins/easy_rss/include/init.inc.php');
 
     if(($CONFIG['plugin_easyrss_showrss'] || $CONFIG['plugin_easyrss_showgoogle']) &&
                 in_array($_SERVER[SCRIPT_NAME],array('index.php','thumbnails.php','displayimage.php'))) {
@@ -202,24 +208,24 @@ function easyrss_footer($html) {
         $album=$_GET['album'];
         $cat=$_GET['cat'];
 
-	if(isset($cat) && $cat < 10000)
-	    return $html;
-
 	$feed = str_replace("http://","",$CONFIG[ecards_more_pic_target])."rss.php";
         if($album)
             $feed .= "?album=".$album;
+	else
+		$feed .= "?album=lastup";
+
         if($cat)
             if($cat > 10000)
     	    $feed .= "?album=lastupby&uid=".($cat-10000);
     	else
-                $feed .= "?cat=".$cat;
+                $feed .= "&cat=".$cat;
     
         $html .= "<center>\n";
 
 	if($CONFIG['plugin_easyrss_showrss']) {
 	    $html .= '<img src="images/spacer.gif" border=0 width=12 height=17>';
 	    $rss_ico = '<a href="http://'.$feed.'">';
-	    $rss_ico .= '<img src="plugins/Easy_RSS/rss.gif" border=0 alt="'.$lang_plugin_easyrss['alt_rss_feed'].'"></a>';
+	    $rss_ico .= '<img src="plugins/easy_rss/rss.gif" border=0 alt="'.$lang_plugin_easyrss['alt_rss_feed'].'"></a>';
 	    $html .= "$rss_ico\n";
 	    $html .= '<img src="images/spacer.gif" border=0 width=12 height=17>';
 	}

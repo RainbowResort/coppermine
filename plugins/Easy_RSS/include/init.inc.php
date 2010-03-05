@@ -16,7 +16,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
 
-if (file_exists("plugins/Easy_RSS/lang/{$CONFIG['lang']}.php")) {
-  require "plugins/Easy_RSS/lang/{$CONFIG['lang']}.php";
-} else require 'plugins/Easy_RSS/lang/english.php';
+if (file_exists("plugins/easy_rss/lang/{$CONFIG['lang']}.php")) {
+  require "plugins/easy_rss/lang/{$CONFIG['lang']}.php";
+} else require 'plugins/easy_rss/lang/english.php';
 ?>

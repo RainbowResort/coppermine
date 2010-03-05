@@ -15,6 +15,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 $lang_plugin_easyrss = array(
   'label_title'   => 'Titel',
   'label_caption' => 'Korte beschrijving',
+  'label_filename' => 'filename',
   'last_additions'=> 'Laatste toevoegingen',
   'alt_rss_feed'  => 'RSS',
   'alt_google'    => 'Toevoegen aan Google',

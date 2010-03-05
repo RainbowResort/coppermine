@@ -19,7 +19,7 @@ define('INDEX_PHP', true);
 
 global $CONFIG,$ALBUM_SET,$META_ALBUM_SET,$CURRENT_CAT_NAME,$FORBIDDEN_SET_DATA,$lang_plugin_easyrss;
 require('include/init.inc.php');
-require('plugins/Easy_RSS/include/init.inc.php');
+require('plugins/easy_rss/include/init.inc.php');
 
 //How many items you want to show in RSS feed
 $thumb_per_page = $CONFIG[plugin_easyrss_num];
@@ -52,15 +52,23 @@ if(!isset($album)){
      $album = 'lastup';
 }
 
-/*
-if ((isset($_GET['cat']) && $_GET['cat'] > 1)){ 
+
+if ((isset($_GET['cat']) && $_GET['cat'] > 0)){ 
      $cat = $_GET['cat'];
-     $album_name_keyword = get_album_name($cat);
+     $album_name_keyword = easyrss_get_cat_name($cat);
+     $CURRENT_CAT_NAME = $album_name_keyword['name'];
+     
+     get_meta_album_set($cat,$META_ALBUM_SET);
+}
+
+
+if ((isset($_GET['cat']) && $_GET['cat'] < 0)){ 
+     $cat = $_GET['cat'];
+     $album_name_keyword = get_album_name(-$cat);
      $CURRENT_CAT_NAME = $album_name_keyword['title'];
      
-     $META_ALBUM_SET = "AND aid IN (".$cat.")".$ALBUM_SET;
+     $META_ALBUM_SET = "AND aid IN (".-$cat.")".$ALBUM_SET;
 }
-*/
 
 //Changes these to point to your site if the following is not giving correct results.
 $link_url = $CONFIG['ecards_more_pic_target']."displayimage.php?pos=-";
@@ -79,7 +87,7 @@ $rssHeader = <<<EOT
     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 >
 <channel>
-    <title>$CONFIG[gallery_name]</title>
+    <title>$CONFIG[gallery_name]: $CONFIG[gallery_description] - $album_name</title>
     <link>$CONFIG[ecards_more_pic_target]</link>
     <description>$CONFIG[gallery_description] - $album_name</description>
     <generator>$CONFIG[ecards_more_pic_target]rss.php</generator>

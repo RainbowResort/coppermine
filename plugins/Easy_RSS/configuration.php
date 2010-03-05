@@ -13,6 +13,6 @@
 $name='Easy RSS';
 $description='This adds an RSS feed of latest updates to the gallery and albums.';
 $author='Brent Gerig';
-$version='1.2';
+$version='1.3';
 $plugin_cpg_version = array('min' => '1.4', 'max' => '1.4.99');
 ?>
