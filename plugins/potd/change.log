@@ -1,0 +1,33 @@
+﻿************************
+Coppermine Photo Gallery
+************************
+Copyright (c) 2003-2010 Coppermine Dev Team
+v1.0 originally written by Gregory Demar
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 3
+as published by the Free Software Foundation.
+********************************************
+Coppermine version: 1.4.x
+$HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/CHANGELOG.txt $
+$Revision: 7277 $
+$Author: gaugau $
+$Date: 2010-03-05 09:50:14 +0100 (Fr, 05. Mär 2010) $
+*********************************************
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-03-07 [M] Counted plugin version up {GauGau}
+2010-03-07 [M] Added plugin minimum version requirements array {GauGau}
+2010-03-07 [M] Added plugin to svn repository {GauGau}
+2006-10-04 [M] The functions.inc.php hack (to add in the 'meta_album' plugin hook) has been fixed to function properly {Paver}
+2006-10-03 [M] Commented out artifacts that were not relevant to this plugin (from previously copied sample plugins) {Paver}
+2006-10-03 [M] Initial beta release; plugin version of Casper's mod/hack: thread ID 14600 {Paver}

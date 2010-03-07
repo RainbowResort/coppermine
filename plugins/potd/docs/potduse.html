@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Coppermine Picture-of-the-Day Plugin</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+
+<style type=text/css>
+
+body {
+        font-size: 12px; background: #FFFD65; margin: 2%; color: black; font-family: verdana, arial, helvetica, sans-serif;
+        scrollbar-face-color: #DEE3E7;
+        scrollbar-highlight-color: #FFFFFF;
+        scrollbar-shadow-color: #DEE3E7;
+        scrollbar-3dlight-color: #D1D7DC;
+        scrollbar-arrow-color:  #006699;
+        scrollbar-track-color: #EFEFEF;
+        scrollbar-darkshadow-color: #98AAB1;
+}
+td {
+        font-size: 12px
+}
+h1 {
+        font-weight: bolder; font-size: 24px; color: #0E72A4; line-height: 120%; font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; text-decoration: none
+}
+h2 {
+        font-size: 20px; color: #0E72A4; font-family: Arial, Helvetica, sans-serif; text-decoration: none;
+}
+h3 {
+        font-weight: bolder; font-size: 16px; font-family: Verdana, Arial, Helvetica, sans-serif; text-decoration: none; color: #0E72A4;
+}
+h4 {
+        font-weight: bold; font-size: 14px; font-family: Verdana, Arial, Helvetica, sans-serif; text-decoration: none; color: #0E72A4;
+}
+p {
+        font-size: 12px; margin: 10px 10px 0px 0px; font-family: Verdana, Arial, Helvetica, sans-serif
+}
+pre {
+        border-right: #999999 1px solid; padding-right: 5px; border-top: #999999 1px solid; padding-left: 5px; font-size: 12px; padding-bottom: 5px; margin: 10px 10px 0px 0px; border-left: #999999 1px solid; padding-top: 5px; border-bottom: #999999 1px solid; font-style: normal; font-family: "Courier New", Courier, mono; background-color: #E0E0E0
+}
+ul {
+        padding-right: 0px; padding-left: 0px; padding-bottom: 0px; margin: 10px 0px 10px 5px; padding-top: 0px
+}
+ul.content {
+        padding-right: 0px; padding-left: 0px; padding-bottom: 0px; margin: 5px 5px 0px 0px; padding-top: 0px
+}
+li {
+        padding-right: 0px; margin-top: 4px; padding-left: 0px; list-style-position: outside; margin-bottom: 4px; padding-bottom: 0px; margin-left: 10px; padding-top: 0px; list-style-type: disc
+}
+li.content {
+        padding-right: 0px; margin-top: 0px; padding-left: 0px; list-style-position: outside; margin-bottom: 5px; padding-bottom: 0px; margin-left: 10px; padding-top: 0px; list-style-type: none;
+}
+hr {
+        border-right: #000000 0px solid; border-top: #000000 1px solid; border-left: #000000 0px solid; border-bottom: #000000 0px solid; height: 0px
+}
+.navbar {
+        font-weight: bold; font-size: 10px; background: url(/coppermine/themes/pixel-rave-blue100/images/nav-bar-button.gif) #72a5cc no-repeat; vertical-align: middle; color: #A5C6DF; font-family: Arial, Helvetica, sans-serif
+}
+a.navbar {
+        display: block; vertical-align: middle; width: 100px; color: #A5C6DF; line-height: 25px; position: relative; height: 25px; text-align: center; text-decoration: none
+}
+a.navbar:hover {
+        color: #ffffff; text-decoration: none
+}
+
+a.external {
+        background: transparent url('pics/link.gif') 100% 50% no-repeat;
+        padding-right: 10px;
+}
+
+.back {
+        margin-top: 10px; font-size: 10px; margin-bottom: 10px
+}
+.important { color: red }
+.menu1 {font-weight:bolder;font-stretch:expanded;font-size:120%}
+.menu2 {font-weight:bold;font-stretch:normal;font-size:100%}
+.menu3 {font-weight:normal;font-stretch:condensed }
+.code {
+        font-size: 12px; font-style: normal; font-family: "Courier New", Courier, mono; background-color: #E0E0E0
+}
+.border1 {
+        border-right: #999999 1px solid; padding-right: 5px; border-top: #999999 1px solid; padding-left: 5px; font-size: 12px; padding-bottom: 5px; margin: 10px 10px 0px 0px; border-left: #999999 1px solid; padding-top: 5px; border-bottom: #999999 1px solid;
+          }
+.quote
+{
+        color: #000000;
+        background-color: #C3B8D0;
+        border: 1px solid #000000;
+        margin: 1px;
+        padding: 1px;
+        font-size: x-small;
+}
+</style>
+</head>
+
+<body>
+<H1>Coppermine Picture-of-the-Day/Week Plugin</H1>
+Originally written as a mod/hack by <a href="http://coppermine-gallery.net/forum/index.php?action=profile;u=563">Casper</a><br />
+Converted to a 1.4.x plugin by <a href="http://coppermine-gallery.net/forum/index.php?action=profile;u=23938">Paver</a>
+<H3>How to set the photo of the day/week.</H3>
+First, you need to remove the previous photo set as the POTD/W.
+<br /><br />
+In admin mode, browse to the albums list which contains the photo, and click on the 'Edit files' button next to the album thumb.
+<br /><br />
+<img src="images/1.jpg" border="0">
+<br /><br />
+Now find the edit section for the previous POTD/W.  Click in the relevent 'move to archive' box.
+<br /><br />
+<img src="images/2.jpg" border="0">
+<br /><br />
+Now make sure you click the 'Apply Modifications' button at the bottom of the page
+<br /><br />
+Now browse to the edit files area of the album the new POTD/W is in, and set the new POTD/W the same way.
+<br /><br />
+<img src="images/3.jpg" border="0">
+<br /><br />
+Again, make sure you 'Apply modifications'.
+<br /><br />
+The pic is now set, and will display wherever you have set it to display.
+
+<br /><br />
+<hr />
+<h3>There are various ways to display the photo of the day or week.</h3>
+
+To display it on the gallery index page, simply enter your config admin page, and add 'potd' or 'potw' (or both) to the 'Contents of main page'.				
+<br /><br />
+You can view the image in its own page, by browsing to:<br />
+'<b>/gallery_url/index.php?file=potd/week</b>' or '<b>/gallery_url/index.php?file=potd/day</b>',<br />
+where you will see it as a normal gallery page;
+
+<br /><br />
+To show these images within pages outside the gallery, use:<br />
+'<b>/gallery_url/plugins/potd/showdaypic.php</b>' or '<b>/gallery_url/plugins/potd/showweekpic.php</b>'
+<br /><br />
+Example, I use this code, to show this on a site home page:<br />
+
+<pre>    &lt;iframe src="gallery/plugins/potd/showdaypic.php" width="440px" height="530px" frameborder="1" align="center" valign="middle"&gt;
+    &lt;/iframe&gt;
+</pre><br />
+And this is the result:<br /><br />
+<img src="images/5.jpg" border="0">
+
+
+<br /><br />
+Included are also 2 files which let you call thumbnails, rather than the normal size image:<br />
+'<b>/gallery_url/plugins/potd/daythumb.php</b>' and '<b>/gallery_url/plugins/potd/weekthumb.php</b>'<br />
+These can be used in exactly the same way as above to call into an iframe or directly.
+<br /><br />
+Well, that's it, enjoy.<br>
+<br /><br />
+
+
+
+
+
+</body>
+</html>
