@@ -25,7 +25,6 @@ $lang_plugin_final_extract = array(
   'page_failure'  => 'Impossible de mettre à jour les parametres.',		// Page failure message
   'install_note'  => 'Utilisez le bouton du menu Administrateur pour configurer le plugin.',	// Note about configuring plugin
   'install_click' => 'Cliquez sur le bouton pour installer le plugin.',	// Message to install plugin
-  'version'       => 'Ver 2.3',
   'group_name'      => 'Selectionnez le groupe d\'utilisateur',
   'home_block'      => 'Accueil',
   'login_block'     => 's\'identifier',
@@ -58,6 +57,7 @@ $lang_plugin_final_extract_manage= array(
 	'list_stat'   => 'Effacer', 
 	'list_chstat' => 'Sauvegarder les changements',
 	'list_chkall' => 'Sélectionner tout', // CPA 1.2.2
+	'list_unchkall' => 'Sélectionner rien',
 	'list_check'  => 'Sélection',
 );
 // Delete

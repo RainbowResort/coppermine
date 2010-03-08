@@ -25,7 +25,6 @@ $lang_plugin_final_extract = array(
   'page_failure'    => 'Unable to update settings.',		// Page failure message
   'install_note'    => 'Configure plugin using button on Admin toolbar.',	// Note about configuring plugin
   'install_click'   => 'Click button to install plugin.',	// Message to install plugin
-  'version'         => 'Ver 2.3',
   'group_name'      => 'Select User Group',
   'home_block'      => 'Home',
   'login_block'     => 'Login',
@@ -58,6 +57,7 @@ $lang_plugin_final_extract_manage= array(
 	'list_stat'   => 'Remove', 
 	'list_chstat' => 'Save the changes',
 	'list_chkall' => 'Check All', // CPA 1.2.2
+	'list_unchkall' => 'Uncheck All',
 	'list_check'  => 'Select',
 );
 // Delete

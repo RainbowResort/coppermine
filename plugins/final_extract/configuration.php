@@ -15,9 +15,19 @@
   $Date$
   **************************************************/
 
+if (file_exists("plugins/final_extract/lang/{$CONFIG['lang']}.php")) {
+  require "plugins/final_extract/lang/{$CONFIG['lang']}.php";
+} else {require "plugins/final_extract/lang/english.php";}
+
 $name = 'Final_Extract';
 $description = 'Removes specified template blocks from final output with Usergroup Option';
-$author = 'Donnoman@donovanbray.com from <a href="http://cpg-contrib.org" rel="external" class="external">cpg-contrib.org</a> <strong>Modified by:</strong> BMossvari at gmail dot com <a href="http://www.myprj.com/" rel="external" class="external">Myprj.com</a><br />Modified by:Frantz';
-$version = '2.4';
+$author = <<< EOT
+    Donnoman@donovanbray.com from cpg-contrib.org<br />
+    Modified by: <a href="http://www.myprj.com/" rel="external" class="external">Borzoo Mossavari</a> (aka Sami)<br />
+    Modified by: Frantz
+EOT;
+$extra_info .= 'Configure this plugin using the admin menu item <a href="index.php?file=final_extract/admin" class="admin_menu">Final extract</a>';
+$version = '2.5';
 $plugin_cpg_version = array('min' => '1.5');
+$final_extract_icon_array['ok'] = cpg_fetch_icon('ok', 1); 
 ?>

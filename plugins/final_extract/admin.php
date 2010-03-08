@@ -15,7 +15,7 @@
   $Date$
   **************************************************/
 
-require('include/init.inc.php');
+require('configuration.php');
 
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 if($lang_text_dir=='ltr') {
@@ -26,27 +26,29 @@ if($lang_text_dir=='ltr') {
 	$direction="rtl";
 }
 
+$superCage = Inspekt::makeSuperCage();
+
 // Check for change status Final extract 2.3
-if (isset($_POST['change_stat'])) {
+if ($superCage->post->keyExists('change_stat')) {
 //set new values for bloc status
-$groupid=$_POST['groupid'];
+$groupid = $superCage->post->getInt('groupid');
 //test if this usergroup exist in the FINAL_EXTRACT_CONFIG table:
 $sql="select group_id FROM `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` WHERE `group_id`=$groupid";
 $result=cpg_db_query($sql);
 $row=mysql_num_rows($result);
 $home=0;$login=0;$my_gallery=0;$upload_pic=0;$album_list=0;$lastup=0;$lastcom=0;$topn=0;$toprated=0;$favpics=0;$search=0;$my_profile=0;
-	if($_POST['home']<>"")$home=1;
-	if($_POST['login']<>"")$login=1;	
-	if($_POST['my_gallery']<>"")$my_gallery=1;
-	if($_POST['upload_pic']<>"")$upload_pic=1;
-	if($_POST['album_list']<>"")$album_list=1;
-	if($_POST['lastup']<>"")$lastup=1;
-	if($_POST['lastcom']<>"")$lastcom=1;
-	if($_POST['topn']<>"")$topn=1;
-	if($_POST['toprated']<>"")$toprated=1;
-	if($_POST['favpics']<>"")$favpics=1;
-	if($_POST['search']<>"")$search=1;
-	if($_POST['my_profile']<>"")$my_profile=1;
+	if($superCage->post->keyExists('home'))$home=1;
+	if($superCage->post->keyExists('login'))$login=1;	
+	if($superCage->post->keyExists('my_gallery'))$my_gallery=1;
+	if($superCage->post->keyExists('upload_pic'))$upload_pic=1;
+	if($superCage->post->keyExists('album_list'))$album_list=1;
+	if($superCage->post->keyExists('lastup'))$lastup=1;
+	if($superCage->post->keyExists('lastcom'))$lastcom=1;
+	if($superCage->post->keyExists('topn'))$topn=1;
+	if($superCage->post->keyExists('toprated'))$toprated=1;
+	if($superCage->post->keyExists('favpics'))$favpics=1;
+	if($superCage->post->keyExists('search'))$search=1;
+	if($superCage->post->keyExists('my_profile'))$my_profile=1;
 if ($row==FALSE){
 	$sql="INSERT INTO `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}`VALUE($groupid,$home,$login,$my_gallery,$upload_pic,$album_list,$lastup,$lastcom,$topn,$toprated,$favpics,$search,$my_profile)";
 	cpg_db_query($sql);
@@ -54,11 +56,11 @@ if ($row==FALSE){
 else{	
 	$sql="UPDATE `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` SET `home`=$home,`login`=$login,`my_gallery`=$my_gallery,`upload_pic`=$upload_pic,`album_list`=$album_list,`lastup`=$lastup,`lastcom`=$lastcom,`topn`=$topn,`toprated`=$toprated,`favpics`=$favpics,`search`=$search,`my_profile`=$my_profile  WHERE Group_Id=$groupid";
 	cpg_db_query($sql);
-	unset($_POST['change_stat']);
+	//unset($_POST['change_stat']);
 	$cnt=count($_POST)-1;
 	if($cnt <=0) {
 		pageheader($lang_plugin_final_extract['display_name']);
-        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['nothing_changed'], $lang_continue, 'index.php?file=final_extract/plugin_config');
+        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['nothing_changed'], $lang_common['continue'], 'index.php?file=final_extract/admin');
 		pagefooter();
 		exit;
 	} }/*else {
@@ -74,7 +76,7 @@ else{
 		}
 		cpg_db_query($sql);*/
 		pageheader($lang_plugin_final_extract['display_name']);
-        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['success'], $lang_continue, 'index.php?file=final_extract/plugin_config');
+        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['success'], $lang_common['continue'], 'index.php?file=final_extract/admin');
 		pagefooter();
 		exit;
 	}
@@ -109,7 +111,14 @@ function check_all(formname) {
 	i+=1;
  }
 }
-//onload = change;
+
+function uncheck_all(formname) {
+ i=0;
+ while(document.getElementById(formname).elements[i]) {
+	document.getElementById(formname).elements[i].checked="";
+	i+=1;
+ }
+}
 </script>
 <?php
 //create usergroup dropdown list
@@ -117,7 +126,7 @@ $sql="SELECT group_id,group_name FROM `{$CONFIG['TABLE_USERGROUPS']}`";
 $result=cpg_db_query($sql);
 $usergroup=isset($_POST['usergroup']) ? $_POST['usergroup'] : '';
 
-starttable('100%', 'Final Extract - '.$lang_plugin_final_extract['version'].'<font size=1 color=red> By <a href=\"http://www.myprj.com\">BMossavari at gmail dot com</a></font>- <a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>', 3);
+starttable('100%', 'Final Extract - v'.$version, 3);
 ?>
 <form id='username' name='username' action='<?php echo $_SERVER['REQUEST_URI']?>' method='post'>
 <tr>
@@ -163,7 +172,7 @@ $row2=mysql_fetch_array($result2);
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['home_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="home" type="checkbox"   <?php if($row2['home']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="home" type="checkbox"   <?php if($row2['home']==1) { echo 'checked="checked"';} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['login_block'];?></td>
@@ -217,7 +226,9 @@ $row2=mysql_fetch_array($result2);
 	</table>
 </td></tr><tr>
 	
-        <td align="center" class="tableb"><input type="hidden" name="groupid" value="<?php echo $groupid;?>"><input class="button" type="submit" value="<?php echo $lang_plugin_final_extract_manage['list_chstat']; ?>" name="change_stat" />
+        <td align="center" class="tableb"><input type="hidden" name="groupid" value="<?php echo $groupid;?>">
+        <input class="button" type="submit" value="<?php echo $lang_plugin_final_extract_manage['list_chstat']; ?>" name="change_stat" />
+        <input class="button" type="button" value="<?php echo $lang_plugin_final_extract_manage['list_unchkall']; ?>" name="restore_config" onclick="return uncheck_all('blocks');">
         </td>
       </tr></form>
 <?php
