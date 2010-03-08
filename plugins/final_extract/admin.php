@@ -15,9 +15,9 @@
   $Date$
   **************************************************/
 
-require('configuration.php');
-
 if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+require ('plugins/final_extract/configuration.php');
+
 if($lang_text_dir=='ltr') {
 	$align="left";
 	$direction="ltr";
@@ -25,60 +25,93 @@ if($lang_text_dir=='ltr') {
 	$align="right";
 	$direction="rtl";
 }
-
-$superCage = Inspekt::makeSuperCage();
+$req_uri = $superCage->server->getMatched('REQUEST_URI', '/([^\/]+\.php)$/');
 
 // Check for change status Final extract 2.3
-if ($superCage->post->keyExists('change_stat')) {
-//set new values for bloc status
-$groupid = $superCage->post->getInt('groupid');
+
+if ($superCage->post->keyExists('change_stat')){
+	$change_stat=$superCage->post->getAlnum('change_stat');
+	//set new values for bloc status
+
+	$groupid=$superCage->post->getInt('groupid');
+	$nbcheck=$superCage->post->getInt('nb');
 //test if this usergroup exist in the FINAL_EXTRACT_CONFIG table:
-$sql="select group_id FROM `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` WHERE `group_id`=$groupid";
-$result=cpg_db_query($sql);
-$row=mysql_num_rows($result);
-$home=0;$login=0;$my_gallery=0;$upload_pic=0;$album_list=0;$lastup=0;$lastcom=0;$topn=0;$toprated=0;$favpics=0;$search=0;$my_profile=0;
-	if($superCage->post->keyExists('home'))$home=1;
-	if($superCage->post->keyExists('login'))$login=1;	
-	if($superCage->post->keyExists('my_gallery'))$my_gallery=1;
-	if($superCage->post->keyExists('upload_pic'))$upload_pic=1;
-	if($superCage->post->keyExists('album_list'))$album_list=1;
-	if($superCage->post->keyExists('lastup'))$lastup=1;
-	if($superCage->post->keyExists('lastcom'))$lastcom=1;
-	if($superCage->post->keyExists('topn'))$topn=1;
-	if($superCage->post->keyExists('toprated'))$toprated=1;
-	if($superCage->post->keyExists('favpics'))$favpics=1;
-	if($superCage->post->keyExists('search'))$search=1;
-	if($superCage->post->keyExists('my_profile'))$my_profile=1;
-if ($row==FALSE){
-	$sql="INSERT INTO `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}`VALUE($groupid,$home,$login,$my_gallery,$upload_pic,$album_list,$lastup,$lastcom,$topn,$toprated,$favpics,$search,$my_profile)";
-	cpg_db_query($sql);
+	$sql="select group_id FROM `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` WHERE `group_id`=$groupid";
+	$result=cpg_db_query($sql);
+	$row=mysql_num_rows($result);
+	$home=0;$login=0;$my_gallery=0;$upload_pic=0;$album_list=0;$lastup=0;$lastcom=0;$topn=0;$toprated=0;$favpics=0;$search=0;$my_profile=0;
+	$cnt=0;
+	if($superCage->post->getAlpha('home')<>""){
+		$home=1;
+		$cnt++;
 	}
-else{	
-	$sql="UPDATE `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` SET `home`=$home,`login`=$login,`my_gallery`=$my_gallery,`upload_pic`=$upload_pic,`album_list`=$album_list,`lastup`=$lastup,`lastcom`=$lastcom,`topn`=$topn,`toprated`=$toprated,`favpics`=$favpics,`search`=$search,`my_profile`=$my_profile  WHERE Group_Id=$groupid";
-	cpg_db_query($sql);
-	//unset($_POST['change_stat']);
-	$cnt=count($_POST)-1;
-	if($cnt <=0) {
-		pageheader($lang_plugin_final_extract['display_name']);
-        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['nothing_changed'], $lang_common['continue'], 'index.php?file=final_extract/admin');
-		pagefooter();
-		exit;
-	} }/*else {
+	if($superCage->post->getAlpha('login')<>""){
+		$login=1;
+		$cnt++;
+	}	
+	if($superCage->post->getAlpha('my_gallery')<>""){
+		$my_gallery=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('upload_pic')<>""){
+		$upload_pic=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('album_list')<>""){
+		$album_list=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('lastup')<>""){
+		$lastup=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('lastcom')<>""){
+		$lastcom=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('topn')<>""){
+		$topn=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('toprated')<>""){
+		$toprated=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('favpics')<>""){
+		$favpics=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('search')<>""){
+		$search=1;
+		$cnt++;
+	}
+	if($superCage->post->getAlpha('my_profile')<>""){
+		$my_profile=1;
+		$cnt++;
+	}
+	if ($row==FALSE){
+		$sql="INSERT INTO `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}`VALUE($groupid,$home,$login,$my_gallery,$upload_pic,$album_list,$lastup,$lastcom,$topn,$toprated,$favpics,$search,$my_profile)";
+		cpg_db_query($sql);
+	}else{	
+		$sql="UPDATE `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` SET `home`=$home,`login`=$login,`my_gallery`=$my_gallery,`upload_pic`=$upload_pic,`album_list`=$album_list,`lastup`=$lastup,`lastcom`=$lastcom,`topn`=$topn,`toprated`=$toprated,`favpics`=$favpics,`search`=$search,`my_profile`=$my_profile  WHERE Group_Id=$groupid";
+		cpg_db_query($sql);
 		
-		$sql="UPDATE `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` SET value=1 WHERE";
-		$i=0;
-		foreach ($_POST as $key=>$value) {
-			if($value=="1") {
-				 $i+=1;
-				 if($i==$cnt) { $sql=$sql." name='$key'";} 
-				 else if ($i<$cnt){ $sql=$sql." name='$key' or ";}
-			}
-		}
-		cpg_db_query($sql);*/
-		pageheader($lang_plugin_final_extract['display_name']);
-        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['success'], $lang_common['continue'], 'index.php?file=final_extract/admin');
-		pagefooter();
+		unset($chang_stat);
+		
+		if($cnt==$nbcheck) {
+			
+			pageheader($lang_plugin_final_extract['display_name']);
+       	 	msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['nothing_changed'], $lang_continue, 'index.php?file=final_extract/plugin_config');
+			pagefooter();
+		
 		exit;
+		} 
+			} 
+		
+		pageheader($lang_plugin_final_extract['display_name']);
+        msg_box($lang_plugin_final_extract['display_name'], $lang_plugin_final_extract_delete['success'], $lang_continue, 'index.php?file=final_extract/plugin_config');
+		pagefooter();
+			exit;
 	}
 
 pageheader($lang_plugin_final_extract['display_name']);
@@ -111,24 +144,20 @@ function check_all(formname) {
 	i+=1;
  }
 }
-
-function uncheck_all(formname) {
- i=0;
- while(document.getElementById(formname).elements[i]) {
-	document.getElementById(formname).elements[i].checked="";
-	i+=1;
- }
-}
+//onload = change;
 </script>
 <?php
 //create usergroup dropdown list
 $sql="SELECT group_id,group_name FROM `{$CONFIG['TABLE_USERGROUPS']}`";
 $result=cpg_db_query($sql);
-$usergroup=isset($_POST['usergroup']) ? $_POST['usergroup'] : '';
-
-starttable('100%', 'Final Extract - v'.$version, 3);
+if($superCage->post->keyExists('usergroup')){
+	$usergroup=$superCage->post->getAlpha('usergroup');
+}else{
+	$usergroup='';
+}
+starttable('100%', 'Final Extract v'.$version, 3);
 ?>
-<form id='username' name='username' action='<?php echo $_SERVER['REQUEST_URI']?>' method='post'>
+<form id='username' name='username' action='<?php echo $req_uri ?>' method='post'>
 <tr>
 	<td class="tableh2" align="rigth"><?php  echo $lang_plugin_final_extract['group_name']; ?>:
 	<select name='usergroup' >
@@ -148,8 +177,9 @@ starttable('100%', 'Final Extract - v'.$version, 3);
 </tr>
 </form>
 <?php
+
 //if usergroup selected
-if($usergroup<>""){
+if($usergroup<>''){
 //extract groupid from the selected usergroup
 $sql3="SELECT group_id,group_name FROM `{$CONFIG['TABLE_USERGROUPS']}`WHERE group_name = '$usergroup'";
 $result3=cpg_db_query($sql3);
@@ -161,62 +191,62 @@ $groupid=$row3['group_id'];
 $sql2="SELECT * FROM `{$CONFIG['TABLE_FINAL_EXTRACT_CONFIG']}` WHERE group_id LIKE'$groupid'";
 $result2=cpg_db_query($sql2);
 $row2=mysql_fetch_array($result2);
-
+$nb=0
 
 ?>
-<tr><td><form id="" name="" action="<?php echo $_SERVER['REQUEST_URI']?>" method="POST">
+<tr><td><form id="blocks" name="blocks" action="<?php echo $req_uri ?>" method="POST">
 	<table class="maintable" id="section0" cellSpacing="1" cellPadding="0" width="50%" align="center" border="0">
 		<tr>			
               		<td width="70%" align="<?php echo $align ?>" dir="<?php echo $direction ?>" class=tableb><strong><?php echo $lang_plugin_final_extract_manage['list_name']; ?></strong></td>
-              		<td width="10%" align="center" vAlign=top class=tableb><strong><?php echo $lang_plugin_final_extract_manage['list_check']; ?></strong></td>
+              		<td width="10%" align="center" valign=top class=tableb><strong><?php echo $lang_plugin_final_extract_manage['list_check']; ?></strong></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['home_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="home" type="checkbox"   <?php if($row2['home']==1) { echo 'checked="checked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="home" type="checkbox"   <?php if($row2['home']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['login_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="login" type="checkbox"  <?php if($row2['login']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="login" type="checkbox"  <?php if($row2['login']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['my_galery_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="my_gallery" type="checkbox"  <?php if($row2['my_gallery']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="my_gallery" type="checkbox"  <?php if($row2['my_gallery']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['upload_pic_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="upload_pic" type="checkbox"  <?php if($row2['upload_pic']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="upload_pic" type="checkbox"  <?php if($row2['upload_pic']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             		<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['album_list_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="album_list" type="checkbox"   <?php if($row2['album_list']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="album_list" type="checkbox"   <?php if($row2['album_list']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['lastup_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="lastup" type="checkbox"   <?php if($row2['lastup']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="lastup" type="checkbox"   <?php if($row2['lastup']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['lastcom_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="lastcom" type="checkbox"  <?php if($row2['lasctom']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="lastcom" type="checkbox"  <?php if($row2['lasctom']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['topn_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="topn" type="checkbox"   <?php if($row2['topn']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="topn" type="checkbox"   <?php if($row2['topn']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['toprated_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="toprated" type="checkbox"   <?php if($row2['toprated']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="toprated" type="checkbox"   <?php if($row2['toprated']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['favpics_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="favpics" type="checkbox"   <?php if($row2['favpics']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="favpics" type="checkbox"   <?php if($row2['favpics']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['search_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="search" type="checkbox"  <?php if($row2['search']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="search" type="checkbox"  <?php if($row2['search']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
 		<tr>
             		<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>"><?php echo $lang_plugin_final_extract['my_profile_block'];?></td>
-            		<td align="center" valign=top class=tableb><input name="my_profile" type="checkbox"  <?php if($row2['my_profile']==1) { echo 'checked="cheked"';} ?>/></td>
+            		<td align="center" valign=top class=tableb><input name="my_profile" type="checkbox"  <?php if($row2['my_profile']==1) { echo 'checked="cheked"';$nb++;} ?>/></td>
             	</tr>
             	<tr>
                 	<td class=tableb align="<?php echo $align ?>" dir="<?php echo $direction ?>">&nbsp;</td>
@@ -226,9 +256,7 @@ $row2=mysql_fetch_array($result2);
 	</table>
 </td></tr><tr>
 	
-        <td align="center" class="tableb"><input type="hidden" name="groupid" value="<?php echo $groupid;?>">
-        <input class="button" type="submit" value="<?php echo $lang_plugin_final_extract_manage['list_chstat']; ?>" name="change_stat" />
-        <input class="button" type="button" value="<?php echo $lang_plugin_final_extract_manage['list_unchkall']; ?>" name="restore_config" onclick="return uncheck_all('blocks');">
+        <td align="center" class="tableb"><input type="hidden" name="groupid" value="<?php echo $groupid;?>"><input type="hidden" name="nb" value="<?php echo $nb;?>"><input class="button" type="submit" value="<?php echo $lang_plugin_final_extract_manage['list_chstat']; ?>" name="change_stat" />
         </td>
       </tr></form>
 <?php
