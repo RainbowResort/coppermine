@@ -66,17 +66,18 @@ function external_edit_menu_file($data)
         } else {
             $locale = 'en-US';
         }
-        $data['menu'] .= ' <a href="';
-        $data['menu'] .= 'http://fotoflexer.com/API/API_Loader_v1_01.php';
-        //$data['menu'] .= '?ff_image_url=' . urlencode($CONFIG['site_url'].$CONFIG['fullpath'].$data['filepath'].$data['filename']);
-        $data['menu'] .= '?ff_image_url=' . urlencode('http://osterburken.net/galerie/albums/konzert/05/just_rock/gg02.jpg'); // Comment out the line above and uncomment this line for testing purposes
-        $data['menu'] .= '&amp;ff_callback_url=' . urlencode($CONFIG['site_url'] . 'index.php?file=external_edit/index') . '%26t=' . $token;
-        $data['menu'] .= '&amp;ff_cancel_url=' . urlencode($CONFIG['site_url'] . 'displayimage.php?pid=' . $data['pid']);
-        $data['menu'] .= '&amp;ff_lang=' . $locale;
-        $data['menu'] .= '"  class="admin_menu greyboxfull" title="'.$lang_plugin_external_edit['edit_file_explain'].'">';
-        $data['menu'] .= $external_edit_icon_array['fotoflexer'];
-        $data['menu'] .= $lang_plugin_external_edit['edit_file'];
-        $data['menu'] .= '</a>';
+        $menu_button = ' <a href="';
+        $menu_button .= 'http://fotoflexer.com/API/API_Loader_v1_01.php';
+        //$menu_button .= '?ff_image_url=' . urlencode($CONFIG['site_url'].$CONFIG['fullpath'].$data['filepath'].$data['filename']);
+        $menu_button .= '?ff_image_url=' . urlencode('http://osterburken.net/galerie/albums/konzert/05/just_rock/gg02.jpg'); // Comment out the line above and uncomment this line for testing purposes
+        $menu_button .= '&amp;ff_callback_url=' . urlencode($CONFIG['site_url'] . 'index.php?file=external_edit/index') . '%26t=' . $token;
+        $menu_button .= '&amp;ff_cancel_url=' . urlencode($CONFIG['site_url'] . 'displayimage.php?pid=' . $data['pid']);
+        $menu_button .= '&amp;ff_lang=' . $locale;
+        $menu_button .= '"  class="admin_menu greyboxfull" title="'.$lang_plugin_external_edit['edit_file_explain'].'">';
+        $menu_button .= $external_edit_icon_array['fotoflexer'];
+        $menu_button .= $lang_plugin_external_edit['edit_file'];
+        $menu_button .= '</a>';
+        $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;
 }

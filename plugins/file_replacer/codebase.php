@@ -205,7 +205,8 @@ function file_replacer_file_data($data) {
             require_once "./plugins/file_replacer/lang/{$CONFIG['lang']}.php";
         }
         $file_replacer_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/alb_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $data['menu'] .= " <a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a>";
+        $menu_button = "<li><a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a></li>";
+        $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;
 }

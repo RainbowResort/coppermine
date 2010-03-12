@@ -112,7 +112,8 @@ function custom_thumb_file_data($data) {
             require_once "./plugins/custom_thumb/lang/{$CONFIG['lang']}.php";
         }
         $custom_thumb_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/file_approval.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $data['menu'] .= " <a href=\"?custom_thumb_pid={$data['pid']}\" class=\"admin_menu\">{$custom_thumb_menu_icon}{$lang_plugin_custom_thumb['custom_thumbnail']}</a>";
+        $menu_button = "<li><a href=\"?custom_thumb_pid={$data['pid']}\" class=\"admin_menu\">{$custom_thumb_menu_icon}{$lang_plugin_custom_thumb['custom_thumbnail']}</a></li>";
+        $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;
 }

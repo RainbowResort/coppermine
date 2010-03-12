@@ -69,6 +69,8 @@ function annotate_file_data($data){
     // Determine if the visitor is allowed to have that button
     if (annotate_get_level('permissions') >= 2) {
 
+        $menu_buttons = "";
+
         // list existing annotations of the currently viewed album
         $btns_person = "";
         if (annotate_get_level('display_notes') == 1) {
@@ -115,11 +117,11 @@ EOT;
         if ($CONFIG['plugin_annotate_type'] > 0) {
             // free text
             if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
-                $data['menu'] .= <<< EOT
+                $menu_buttons .= <<< EOT
                 <script type="text/javascript">
-                    document.write(' <a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
+                    document.write('<li><a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
                     document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
-                    document.write('</a>');
+                    document.write('</a></li>');
                 </script>
 EOT;
             }
@@ -130,29 +132,29 @@ EOT;
                 while ($row = mysql_fetch_row($result)) {
                     $select_options .= "<option value=\"{$row[0]}\">{$row[0]}</option>";
                 }
-                $data['menu'] .= <<< EOT
+                $menu_buttons .= <<< EOT
                 <script type="text/javascript">
-                    document.write('<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button');
+                    document.write('<li>&nbsp;<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
                     $livesearch_script
                 </script>
 EOT;
             }
-        } else { 
+        } else {
             // user list
             $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
             $result = mysql_query("SELECT user_id, user_name FROM {$CONFIG['TABLE_USERS']} ORDER BY user_name ASC");
             while ($row = mysql_fetch_assoc($result)) {
                 $select_options .= "<option value=\"{$row['user_name']}\">{$row['user_name']}</option>";
             }
-            $data['menu'] .= <<< EOT
+            $menu_buttons .= <<< EOT
             <script type="text/javascript">
-                document.write('<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button');
+                document.write('<li>&nbsp;<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
                 $livesearch_script
             </script>
 EOT;
         }
     }
-        
+
     if (is_image($data['filename'])) {
         if (function_exists(panorama_viewer_is_360_degree_panorama)) {
             // disable on 360° panoramas
@@ -256,7 +258,7 @@ EOT;
                     <span title=\"{$lang_plugin_annotate['annotations_album']}\">($annotations_album)</span>
                     <span title=\"{$lang_plugin_annotate['annotated_pics']}\">($annotated_pics)</span>
                 ";
-                $data['menu'] .= $annotation_stats;
+                $menu_buttons .= '<li>&nbsp;'.$annotation_stats.'</li>';
             }
         }
 
@@ -328,6 +330,8 @@ function ajax_delete(note){
 EOT;
 
     }
+
+    $data['menu'] = str_replace('</ul>', $menu_buttons.'</ul>', $data['menu']);
 
     return $data;
 }
