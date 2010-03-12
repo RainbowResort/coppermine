@@ -21,7 +21,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 // Meta album titles
 $thisplugin->add_action('page_start','mma_page_start');
 function mma_page_start() {
-    global $CONFIG, $lang_meta_album_names, $lang_plugin_more_meta_albums;
+    global $CONFIG, $lang_meta_album_names, $lang_plugin_more_meta_albums, $valid_meta_albums;
 
     require_once "./plugins/more_meta_albums/lang/english.php";
     if ($CONFIG['lang'] != 'english' && file_exists("./plugins/more_meta_albums/lang/{$CONFIG['lang']}.php")) {
@@ -30,7 +30,9 @@ function mma_page_start() {
 
     foreach($lang_plugin_more_meta_albums as $key => $value) {
         if (substr($key, -6) == "_title") {
-            $lang_meta_album_names[substr($key, 0, count($key)-7)] = $value;
+            $meta_album_name = substr($key, 0, count($key)-7);
+            $lang_meta_album_names[$meta_album_name] = $value;
+            $valid_meta_albums[] = $meta_album_name;
         }
     }
 }

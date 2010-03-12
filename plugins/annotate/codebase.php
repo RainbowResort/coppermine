@@ -153,8 +153,9 @@ EOT;
         }
     }
         
-    if (is_image($data['filename'])){
+    if (is_image($data['filename'])) {
         if (function_exists(panorama_viewer_is_360_degree_panorama)) {
+            // disable on 360° panoramas
             if (panorama_viewer_is_360_degree_panorama()) {
                 return $data;
             }
@@ -482,7 +483,7 @@ EOT;
 
 // Meta album titles, custom pages
 function annotate_page_start() {
-    global $lang_meta_album_names, $CONFIG;
+    global $CONFIG, $lang_meta_album_names, $valid_meta_albums;
 
     require_once './plugins/annotate/init.inc.php';
     $annotate_init_array = annotate_initialize();
@@ -493,6 +494,9 @@ function annotate_page_start() {
 
     $lang_meta_album_names['lastnotes'] = $lang_plugin_annotate['lastnotes'];
     $lang_meta_album_names['shownotes'] = $lang_plugin_annotate['shownotes']." '$note'";
+
+    $valid_meta_albums[] = 'lastnotes';
+    $valid_meta_albums[] = 'shownotes';
 
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->getAlpha('plugin') == "annotate" && $superCage->get->keyExists('delete_orphans')) {
