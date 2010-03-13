@@ -46,7 +46,29 @@ if ($superCage->post->keyExists('submit')) {
         }
         cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '{$CONFIG['allowed_mov_types']}' WHERE name = 'allowed_mov_types'");
     }
-    
+
+    function remote_videos_save_value($name) {
+        if (!GALLERY_ADMIN_MODE) {
+            global $lang_errors;
+            cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+        }
+        global $CONFIG;
+        $superCage = Inspekt::makeSuperCage();
+        $new_value = $superCage->post->getInt($name);
+        
+        if ($new_value >= 0) {
+            if (!isset($CONFIG[$name])) {
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES('$name', '$new_value')");
+                $CONFIG[$name] = $new_value;
+            } elseif ($new_value != $CONFIG[$name]) {
+                cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '$new_value' WHERE name = '$name'");
+                $CONFIG[$name] = $new_value;
+            }
+        }
+    }
+    remote_videos_save_value('remote_video_movie_width');
+    remote_videos_save_value('remote_video_movie_height');
+
     starttable("100%", $lang_common['information']);
     echo "
         <tr>
@@ -65,13 +87,13 @@ starttable("100%", "Remote Videos - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 echo "
     <tr>
         <td class=\"tableb\" width=\"200\">
-            Hoster
+            <strong>Hoster</strong>
         </td>
         <td class=\"tableb\" width=\"200\">
-            Extension
+            <strong>Extension</strong>
         </td>
         <td class=\"tableb\">
-            Allow new uploads
+            <strong>Allow new uploads</strong>
         </td>
     </tr>
 ";
@@ -117,8 +139,29 @@ echo "
         </td>
     </tr>
 ";
+endtable();
 
-
+$movie_width = $CONFIG['remote_video_movie_width'] ? $CONFIG['remote_video_movie_width'] : 0;
+$movie_height = $CONFIG['remote_video_movie_height'] ? $CONFIG['remote_video_movie_height'] : 0;
+starttable("100%", "Overwrite default video dimensions", 2);
+echo <<<EOT
+    <tr>
+        <td class="tableb" width="200">
+            Width (0 = use default)
+        </td>
+        <td class="tableb">
+            <input type="input" class="textinput" size="5" name="remote_video_movie_width" value="$movie_width" /> px
+        </td>
+    </tr>
+    <tr>
+        <td class="tableb" width="200">
+            Height (0 = use default) 
+        </td>
+        <td class="tableb">
+            <input type="input" class="textinput" size="5" name="remote_video_movie_height" value="$movie_height" /> px
+        </td>
+    </tr>
+EOT;
 endtable();
 
 list($timestamp, $form_token) = getFormToken();

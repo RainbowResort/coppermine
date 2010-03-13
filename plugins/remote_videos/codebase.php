@@ -78,8 +78,13 @@ function remote_videos_html_replace($params, $pic_html) {
         $pwidth = $row['pwidth'];
         $pheight = $row['pheight'];
         if ($pwidth == 0 || $pheight == 0) {
-            $pwidth = $params['default_width'];
-            $pheight = $params['default_height'];
+            if ($CONFIG['remote_video_movie_width'] == 0 || $CONFIG['remote_video_movie_width'] == 0) {
+                $pwidth = $params['default_width'];
+                $pheight = $params['default_height'];
+            } else {
+                $pwidth = $CONFIG['remote_video_movie_width'];
+                $pheight = $CONFIG['remote_video_movie_height'] + $params['player_height'];
+            }
         } else {
             $pheight += $params['player_height'];
         }
