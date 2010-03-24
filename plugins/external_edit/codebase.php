@@ -91,7 +91,7 @@ function external_edit_create_token($data) {
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_external_edit WHERE time < $time");
     
     // come up with a unique message id
-    $token_id = md5(uniqid());
+    $token_id = md5(uniqid(''));
 
     // write the message to the database
     $user_id = USER_ID;
