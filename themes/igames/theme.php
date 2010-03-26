@@ -209,7 +209,7 @@ function starttable($width = '-1', $title = '', $title_colspan = '1', $zebra_cla
                 <td>
                         <table width="100%" cellspacing="0" cellpadding="0" class="tableh1a">
                                 <tr>
-                                        <td><img src='themes/igames/images/box_left_icon.gif' hspace="5" alt="" /> </td>
+                                        <td><img src="themes/igames/images/box_left_icon.gif" hspace="5" alt="" /> </td>
                                         <td  class="tableh1a" width="95%">$title</td>
                                         <td width="5%"> &nbsp; </td>
                                 </tr>
