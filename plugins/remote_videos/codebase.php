@@ -221,7 +221,7 @@ function remote_videos_other_media($pic_html) {
                 'default_width'  => 608,
                 'default_height' => 356,
                 'player'         => 'http://www.dailymotion.com/swf/{MATCH_1}',
-                'player_height'  => 21,
+                'player_height'  => 0,
             );
             return remote_videos_html_replace($params, $pic_html);
         break;
