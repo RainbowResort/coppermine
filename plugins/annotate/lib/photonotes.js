@@ -421,7 +421,6 @@ PhotoNote.prototype.CreateElements = function()
     
     var buttonsDiv = document.createElement('div');
     var newButtonOK = document.createElement('button');
-    newButtonOK.type='button';
     newButtonOK.className = 'button';
     newButtonOK.value = js_vars.lang_annotate_save;
     newButtonOK.innerHTML = js_vars.icon_annotate_ok + js_vars.lang_annotate_save;
@@ -458,7 +457,6 @@ PhotoNote.prototype.CreateElements = function()
     buttonsDiv.appendChild(newButtonOK);
 
     var newButtonCancel = document.createElement('button');
-    newButtonCancel.type = 'button';
     newButtonCancel.className = 'button';
     newButtonCancel.value = js_vars.lang_annotate_cancel;
     newButtonCancel.innerHTML = js_vars.icon_annotate_cancel + js_vars.lang_annotate_cancel;
@@ -469,7 +467,6 @@ PhotoNote.prototype.CreateElements = function()
     buttonsDiv.appendChild(newButtonCancel);
 
     var newButtonDelete = document.createElement('button');
-    newButtonDelete.type='button';
     newButtonDelete.className = 'button';
     newButtonDelete.value = js_vars.lang_annotate_delete;
     newButtonDelete.innerHTML = js_vars.icon_annotate_delete + js_vars.lang_annotate_delete;
