@@ -37,6 +37,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-04-14 [B] Fixed button display for regular users {eenemeenemuu}
 2010-03-12 [C] Adjusted plugin to integrate to new file menu (buttonlist) {eenemeenemuu}
 2010-03-12 [A] Adjusted plugin to populate valid_meta_albums array (thread ID 63977) {eenemeenemuu}
 2010-01-24 [A] Added minimum version info {GauGau}
