@@ -44,27 +44,27 @@ function plugin_dst_xml_read() {
 }
 
 function plugin_dst_datetime_update($dst_array) {
-	global $CONFIG;
-	foreach ($dst_array as $value) {
-		if ($CONFIG['plugin_dst_country'] == $value['country']) {
-			$datetime = date('Y-m-d H:i:s');
-			$previoustime = '';
-			foreach ($value['data'] as $selected_array) {
-				$starttime = current($selected_array);
-				$endtime = next($selected_array);
-				if ($datetime >= $starttime && $datetime <= $endtime) {
-					// We have a winner - it's currently DST and we have a time zone difference
-					$CONFIG['plugin_dst_datetime'] = $endtime;
-					$CONFIG['plugin_dst_on'] = '1';
-				} elseif ($datetime > $previoustime && $datetime < $starttime) { // We're out of the DST time range, i.e. in winter on the norther hemisphere
-					$CONFIG['plugin_dst_datetime'] = $starttime;
-					$CONFIG['plugin_dst_on'] = '0';
-				}
-				$previoustime = $endtime;
-			}
-			cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_dst_datetime']}' WHERE name='plugin_dst_datetime'");
-			cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_dst_on']}' WHERE name='plugin_dst_on'");
-		}
-	}
+    global $CONFIG;
+    foreach ($dst_array as $value) {
+        if ($CONFIG['plugin_dst_country'] == $value['country']) {
+            $datetime = date('Y-m-d H:i:s');
+            $previoustime = '';
+            foreach ($value['data'] as $selected_array) {
+                $starttime = current($selected_array);
+                $endtime = next($selected_array);
+                if ($datetime >= $starttime && $datetime <= $endtime) {
+                    // We have a winner - it's currently DST and we have a time zone difference
+                    $CONFIG['plugin_dst_datetime'] = $endtime;
+                    $CONFIG['plugin_dst_on'] = '1';
+                } elseif ($datetime > $previoustime && $datetime < $starttime) { // We're out of the DST time range, i.e. in winter on the norther hemisphere
+                    $CONFIG['plugin_dst_datetime'] = $starttime;
+                    $CONFIG['plugin_dst_on'] = '0';
+                }
+                $previoustime = $endtime;
+            }
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_dst_datetime']}' WHERE name='plugin_dst_datetime'");
+            cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value='{$CONFIG['plugin_dst_on']}' WHERE name='plugin_dst_on'");
+        }
+    }
 }
 ?>

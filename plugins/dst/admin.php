@@ -21,7 +21,7 @@ if (!defined('IN_COPPERMINE')) {
 
 require_once "./plugins/dst/lang/english.php";
 if ($CONFIG['lang'] != 'english' && file_exists("./plugins/dst/lang/{$CONFIG['lang']}.php")) {
-	require_once "./plugins/dst/lang/{$CONFIG['lang']}.php";
+    require_once "./plugins/dst/lang/{$CONFIG['lang']}.php";
 }
 
 pageheader($lang_plugin_dst['configuration']);

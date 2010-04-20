@@ -35,4 +35,5 @@ $lang_plugin_dst['you_have_selected_x_as_country'] = 'You have selected %s as yo
 $lang_plugin_dst['submit'] = 'Submit';
 $lang_plugin_dst['no_daylight_saving_time'] = 'No daylight saving time';
 $lang_plugin_dst['plugin_is_installed_and_interferes'] = 'The %s plugin is currently installed and interferes with this config setting.';
+
 ?>
