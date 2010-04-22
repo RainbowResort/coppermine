@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - Daylight saving time
+  Coppermine 1.5.x Plugin - Daylight saving time 
   *************************************************
   Copyright (c) 2010 eenemeenemuu
   *************************************************
