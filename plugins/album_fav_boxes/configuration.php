@@ -34,10 +34,10 @@ $lightbox_lang = $lightbox['lang'];
 $name        = $lightbox_lang['plugin_name'];
 $description = $lightbox_lang['plugin_description'];
 $author      = 'Nibbler';
-$version     = '2.4';
-$plugin_cpg_version = array('min' => '1.5');
+$version     = '2.5';
+$plugin_cpg_version = array('min' => '1.5', 'max' => '1.5.2');
 $announcement_button = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60278.0.html" class="admin_menu external">{$album_fav_boxes_icon_array['announcement']}{$lightbox['lang']['Announcement thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60278.0.html" class="admin_menu">{$album_fav_boxes_icon_array['announcement']}{$lightbox['lang']['Announcement thread']}</a>
 EOT;
 $config_button = <<<EOT
     <a href="index.php?file=album_fav_boxes/admin" class="admin_menu">{$album_fav_boxes_icon_array['config']}{$lightbox['lang']['Configuration']}</a>
