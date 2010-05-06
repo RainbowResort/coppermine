@@ -18,13 +18,21 @@
 if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
+
+// Include the language filerequire ('./plugins/geoip/lang/english.php');
+if (file_exists("./plugins/geoip/lang/{$CONFIG['lang']}.php")) {
+    require ("./plugins/geoip/lang/{$CONFIG['lang']}.php");
+}
+
 $geoip_icon_array['announcement'] = cpg_fetch_icon('announcement', 1);
-$name = 'Geo IP Lookup';
-$description = 'Looks up the countries to the IP addresses your visitors come from and displays a flag icon next to each IP address (admin-only feature).';
+
+$name = $lang_plugin_geoip['plugin_name'];
+$description = $lang_plugin_geoip['plugin_description'];
 $author = 'Joachim Müller';
-$version = '1.0';
+$version = '1.1';
 $plugin_cpg_version = array('min' => '1.5.4');
-$install_info = 'This plugin is using the free API and database from <a href="http://maxmind.com/" rel="external" class="external">maxmind.com</a> that has been released under GNU GPL. The lookup is not 100% accurate, but should work for most setups. The lookup will of course burn additional CPU cycles, so don\'t install this plugin it if you don\'t have the needed resources available on your server.<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,64820.0.html" rel="external" class="admin_menu">' . $geoip_icon_array['announcement'] . 'Announcement thread</a>'; 
+$install_info = $lang_plugin_geoip['plugin_details'];
+$install_info .= '<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,64820.0.html" rel="external" class="admin_menu">' . $geoip_icon_array['announcement'] . $lang_plugin_geoip['announcement_thread'] . '</a>'; 
 $extra_info .= $install_info;
 
 
