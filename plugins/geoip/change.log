@@ -25,5 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-05-07 [A] Added support for lookup on city scope {GauGau}
+2010-05-07 [A] Added config screen {GauGau}
 2010-05-06 [A] Added i18n {GauGau}
 2010-05-04 [M] Initial creation of plugin {GauGau}

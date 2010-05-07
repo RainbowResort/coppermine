@@ -19,25 +19,60 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
+// Add plugin_install action$thisplugin->add_action('plugin_install','plugin_geoip_install');
+
+// Add plugin_uninstall action$thisplugin->add_action('plugin_uninstall','plugin_geoip_uninstall');
+
+
 if (GALLERY_ADMIN_MODE) {
-	include_once('plugins/geoip/geoip.inc.php');
+	if ($CONFIG['plugin_geoip_scope'] == '1' && file_exists("./plugins/geoip/GeoLiteCity.dat")) {
+        include_once('plugins/geoip/geoipcity.inc.php');
+        include_once('plugins/geoip/geoipregionvars.php');
+	} else {
+	    include_once('plugins/geoip/geoip.inc.php');
+	}
 	$thisplugin->add_filter('ip_information','plugin_geoip_flag');
 }
 
+// install
+function plugin_geoip_install() {
+    global $CONFIG;
+	// Add the config options for the plugin	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_geoip_scope', '0')");    return true;
+}
+
+// uninstall and drop settingsfunction plugin_geoip_uninstall() {
+    global $CONFIG;
+	$superCage = Inspekt::makeSuperCage();
+    if (!checkFormToken()) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
+    }
+    // Delete the plugin config records	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_geoip_scope'");    return true;
+}
 
 function plugin_geoip_flag($ip) {  
-	$gi = geoip_open('plugins/geoip/GeoIP.dat',GEOIP_STANDARD);
-	if ($ip == '') {
-		$return = '';
-	} else {
-		$country_code = geoip_country_code_by_addr($gi, $ip);
-		if ($country_code != '' && file_exists('images/flags/' . strtolower($country_code) . '.png') == TRUE) {
-			$return = '<img src="images/flags/' . strtolower($country_code) . '.png" border="0" width="16" height="11" alt="" title="' . geoip_country_name_by_addr($gi, $ip) . ' (' . $country_code . ')" style="margin-left:1px;" />';
+	global $CONFIG;
+	$return = '';
+	if ($ip != '') {
+		if ($CONFIG['plugin_geoip_scope'] == '1' && file_exists("./plugins/geoip/GeoLiteCity.dat")) {
+		    $gi = geoip_open('plugins/geoip/GeoLiteCity.dat',GEOIP_STANDARD);
+		    $record = geoip_record_by_addr($gi, $ip);
+    		if ($record->country_code != '' && file_exists('images/flags/' . strtolower($record->country_code) . '.png') == TRUE) {
+    			$return = '<img src="images/flags/' . strtolower($record->country_code) . '.png" border="0" width="16" height="11" alt="" title="' . geoip_country_name_by_addr($gi, $ip) . '" style="margin-left:1px;" />';
+    		}
+    		if ($record->city != '') {
+    			$return .= $record->city;
+    		}
+		    geoip_close($gi);
 		} else {
-			$return = '';
+    		$gi = geoip_open('plugins/geoip/GeoIP.dat',GEOIP_STANDARD);
+    		$country_code = geoip_country_code_by_addr($gi, $ip);
+    		if ($country_code != '' && file_exists('images/flags/' . strtolower($country_code) . '.png') == TRUE) {
+    			$return = '<img src="images/flags/' . strtolower($country_code) . '.png" border="0" width="16" height="11" alt="" title="' . geoip_country_name_by_addr($gi, $ip) . '" style="margin-left:1px;" />';
+    		}
+    		geoip_close($gi);
 		}
 	}
-	geoip_close($gi);
 	return $return;
 }
 

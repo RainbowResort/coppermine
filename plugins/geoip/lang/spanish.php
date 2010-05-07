@@ -21,12 +21,12 @@ if (!defined('IN_COPPERMINE')) {
 
 //Language file strings
 $lang_plugin_geoip['plugin_name'] = 'Geo IP Lookup';
-$lang_plugin_geoip['plugin_description'] = 'Looks up the countries to the IP addresses your visitors come from and displays a flag icon next to each IP address (admin-only feature).';
-$lang_plugin_geoip['plugin_details'] = 'The lookup is not 100% accurate, but should work for most setups. The lookup will of course burn additional CPU cycles, so don\'t install this plugin it if you don\'t have the needed resources available on your server.';
-$lang_plugin_geoip['announcement_thread'] = 'Announcement thread';
+$lang_plugin_geoip['plugin_description'] = 'Busca los países de los visitantes usando su IP y muestra el icono de su bandera junto a la dirección IP (funcionalidad sólo para administradores).';
+$lang_plugin_geoip['plugin_details'] = 'La búsqueda no tiene precisión 100%, pero debería ser correcta para la mayoría de los casos. La búsqueda en base de datos consumirá ciclos extra de CPU, por lo que no es recomendable instalar este plugin si tu servidor no tiene recursos suficientes.';
+$lang_plugin_geoip['announcement_thread'] = 'Hebra de anuncio en el foro';
 $lang_plugin_geoip['plugin_code'] = 'Plugin code';
-$lang_plugin_geoip['api_and_database'] = 'API and database';
-$lang_plugin_geoip['released_under_gnu_gpl'] = 'released under GNU GPL';
+$lang_plugin_geoip['api_and_database'] = 'API y la base de datos';
+$lang_plugin_geoip['released_under_gnu_gpl'] = 'liberados bajo licencia GNU GPL';
 $lang_plugin_geoip['city_lookup'] = 'To enable the IP address lookup by city, you need to download an %s, un-archive it and upload it to your webserver into the folder that corresponds to %s, which will eat up approximately 30 MB of extra webspace. The additional file hasn\'t been bundled with the plugin for file space saving reasons.';
 $lang_plugin_geoip['additional_file'] = 'additional file';
 $lang_plugin_geoip['download_city_database'] = 'Download additional GeoLite City file';
