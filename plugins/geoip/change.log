@@ -25,6 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-05-07 [A] Added German language file {GauGau}
+2010-05-07 [A] Updated Spanish language file {GauGau}
 2010-05-07 [A] Added support for lookup on city scope {GauGau}
 2010-05-07 [A] Added config screen {GauGau}
 2010-05-06 [A] Added i18n {GauGau}
