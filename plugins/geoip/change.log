@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-05-07 [M] Counted version number up to 1.3 {GauGau}
 2010-05-07 [A] Added German language file {GauGau}
 2010-05-07 [A] Updated Spanish language file {GauGau}
 2010-05-07 [A] Added support for lookup on city scope {GauGau}
