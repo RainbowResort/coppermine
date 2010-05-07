@@ -34,7 +34,7 @@ $description = $lang_plugin_geoip['plugin_description'];
 $author = $lang_plugin_geoip['plugin_code'] . ': <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>';
 $author .= '<br />' . $lang_plugin_geoip['api_and_database'] . ': <a href="http://www.maxmind.com/app/php" rel="external" class="external">Maxmind</a> (' . $lang_plugin_geoip['released_under_gnu_gpl'] . ')';
 $version = '1.2';
-$plugin_cpg_version = array('min' => '1.5.1');
+$plugin_cpg_version = array('min' => '1.5.4');
 $explain = $lang_plugin_geoip['plugin_details'];
 $link .= '<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,64820.0.html" rel="external" class="admin_menu">' . $geoip_icon_array['announcement'] . $lang_plugin_geoip['announcement_thread'] . '</a>'; 
 if (!file_exists("./plugins/geoip/GeoLiteCity.dat")) {
