@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/tentimes/configuration.php $
-  $Revision: 7150 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-28 12:10:58 +0100 (Do, 28 Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
  

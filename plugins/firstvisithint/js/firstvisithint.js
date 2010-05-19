@@ -8,10 +8,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/tentimes/js/tentimes.js $
-  $Revision: 7101 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-01-20 13:54:24 +0100 (Mi, 20 Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
   
 // page is ready loaded

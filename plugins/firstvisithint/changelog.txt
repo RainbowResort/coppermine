@@ -8,10 +8,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/tentimes/changelog.txt $
-  $Revision: 7119 $
-  $LastChangedBy: gaugau $
-  $Date: 2010-01-24 21:39:28 +0100 (So, 24 Jan 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 Changelog
