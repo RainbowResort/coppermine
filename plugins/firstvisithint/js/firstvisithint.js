@@ -15,37 +15,37 @@
   **************************************************/
   
 // page is ready loaded
-function tt_init()
+function fvh_init()
 {
-	var tt_numviews = tt_readCookie('cpg_firstvisit');
-	if (!tt_numviews)
+	var fvh_numviews = fvh_readCookie('cpg_firstvisit');
+	if (!fvh_numviews)
 	{
-	  tt_createCookie('cpg_firstvisit',1);
+	  fvh_createCookie('cpg_firstvisit',1);
 	  GB_show('','index.php?file=firstvisithint/message');
     }
 }
 
 
 // add to window.onload
-function tt_addLoad(tt_func) { var tt_oldonload = window.onload; if (typeof window.onload != 'function') { window.onload = tt_func; } else { window.onload = function() { if (tt_oldonload) { tt_oldonload(); } tt_func(); }; } }
+function fvh_addLoad(fvh_func) { var fvh_oldonload = window.onload; if (typeof window.onload != 'function') { window.onload = fvh_func; } else { window.onload = function() { if (fvh_oldonload) { fvh_oldonload(); } fvh_func(); }; } }
 
-function tt_createCookie(tt_name,tt_value) {
-    var tt_date = new Date();
-    tt_date.setTime(tt_date.getTime()+86400000);
-    var tt_expires = "; expires="+tt_date.toGMTString();
-    document.cookie = tt_name+"="+tt_value+tt_expires+"; path=/";
+function fvh_createCookie(fvh_name,fvh_value) {
+    var fvh_date = new Date();
+    fvh_date.setTime(fvh_date.getTime()+86400000);
+    var fvh_expires = "; expires="+fvh_date.toGMTString();
+    document.cookie = fvh_name+"="+fvh_value+fvh_expires+"; path=/";
 }
 
-function tt_readCookie(tt_name) {
-    var tt_nameEQ = tt_name + "=";
-    var tt_ca = document.cookie.split(';');
-    for(var i=0;i < tt_ca.length;i++) 
+function fvh_readCookie(fvh_name) {
+    var fvh_nameEQ = fvh_name + "=";
+    var fvh_ca = document.cookie.split(';');
+    for(var i=0;i < fvh_ca.length;i++) 
     {
-        var tt_c = tt_ca[i];
-        while (tt_c.charAt(0)==' ') tt_c = tt_c.substring(1,tt_c.length);
-        if (tt_c.indexOf(tt_nameEQ) == 0) return tt_c.substring(tt_nameEQ.length,tt_c.length);
+        var fvh_c = fvh_ca[i];
+        while (fvh_c.charAt(0)==' ') fvh_c = fvh_c.substring(1,fvh_c.length);
+        if (fvh_c.indexOf(fvh_nameEQ) == 0) return fvh_c.substring(fvh_nameEQ.length,fvh_c.length);
     }
     return null;
 }
 
-tt_addLoad(tt_init);
+fvh_addLoad(fvh_init);
