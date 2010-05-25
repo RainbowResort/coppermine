@@ -20,6 +20,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-05-25 [M] Updated JW Player to version 5.1.897 {eenemeenemuu}
 2009-12-30 [M] Version count updated to 1.4 {eenemeenemuu}
 2009-12-30 [A] Internationalization {eenemeenemuu}
 2009-12-30 [M] Updated JW Player to version 5.0.753 {eenemeenemuu}
