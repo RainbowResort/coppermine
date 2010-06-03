@@ -80,7 +80,7 @@ function annotate_file_data($data){
                     SELECT DISTINCT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n
                     INNER JOIN {$CONFIG['TABLE_PICTURES']} p
                     ON p.pid = n.pid
-                    WHERE p.aid = {$superCage->get->getInt('album')}
+                    WHERE p.aid = ".$superCage->get->getInt('album')."
                     ORDER BY note
                 ");
 
@@ -251,8 +251,8 @@ EOT;
             $superCage = Inspekt::MakeSuperCage();
             if ($superCage->get->testInt('album')) {
                 $annotations_pic = $nr_notes;
-                $annotated_pics = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.pid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = {$superCage->get->getInt('album')}"));
-                $annotations_album = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.nid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = {$superCage->get->getInt('album')}"));
+                $annotated_pics = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.pid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = ".$superCage->get->getInt('album')));
+                $annotations_album = mysql_num_rows(cpg_db_query("SELECT DISTINCT n.nid FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_PICTURES']} p ON p.pid = n.pid WHERE p.aid = ".$superCage->get->getInt('album')));
                 $annotation_stats = "
                     <span title=\"{$lang_plugin_annotate['annotations_pic']}\">($annotations_pic)</span>
                     <span title=\"{$lang_plugin_annotate['annotations_album']}\">($annotations_album)</span>
@@ -637,15 +637,15 @@ EOT;
             }
             if ($superCage->get->keyExists('batch_rename')) {
                 if (strlen($superCage->post->getRaw('note_new')) < 1) {
-                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=0&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=0&note_old=".$superCage->post->getRaw('note_old')."&note_new=".$superCage->post->getRaw('note_new'));
                 } else {
                     cpg_db_query("UPDATE {$CONFIG['TABLE_PREFIX']}plugin_annotate SET note = '".addslashes(addslashes($superCage->post->getRaw('note_new')))."' WHERE note = '".addslashes(addslashes($superCage->post->getRaw('note_old')))."'");
-                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=1&note_old={$superCage->post->getRaw('note_old')}&note_new={$superCage->post->getRaw('note_new')}");
+                    header("Location: index.php?plugin=annotate&manage&batch_rename&status=1&note_old=".$superCage->post->getRaw('note_old')."&note_new=".$superCage->post->getRaw('note_new'));
                 }
             }
             if ($superCage->get->keyExists('batch_delete')) {
                 cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate WHERE note = '".addslashes(addslashes($superCage->post->getRaw('note_old')))."'");
-                header("Location: index.php?plugin=annotate&manage&batch_delete&status=1&note_old={$superCage->post->getRaw('note_old')}");
+                header("Location: index.php?plugin=annotate&manage&batch_delete&status=1&note_old=".$superCage->post->getRaw('note_old'));
             }
         }
 
