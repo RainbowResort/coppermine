@@ -66,7 +66,7 @@ if ($superCage->post->keyExists('submit')) { // The form has been submit
     }
     if ($superCage->post->keyExists('category')) {
         // Populate the database variables
-        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET({$superCage->post->getInt('category')},category_list) > 0 AND subscriber_active = 'YES'");
+        $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_newsletter_subscriptions WHERE FIND_IN_SET(".$superCage->post->getInt('category').",category_list) > 0 AND subscriber_active = 'YES'");
         $loopCounter = 0;
         while ($row = mysql_fetch_assoc($result)) {
             $newsletter_subscriptions_by_cat[$loopCounter]['subscriber_id']     = $row['subscriber_id'];
@@ -79,11 +79,11 @@ if ($superCage->post->keyExists('submit')) { // The form has been submit
         mysql_free_result($result);
         // Write the mailing record
         cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_newsletter_mailings 
-                      SET subject='{$superCage->post->getRaw('subject')}',
-                          salutation='{$superCage->post->getRaw('salutation')}',
-                          body='{$superCage->post->getRaw('body')}',
+                      SET subject='".$superCage->post->getRaw('subject')."',
+                          salutation='".$superCage->post->getRaw('salutation')."',
+                          body='".$superCage->post->getRaw('body')."',
                           date_sent='" . time() . "',
-                          category_id='{$superCage->post->getInt('category')}',
+                          category_id='".$superCage->post->getInt('category')."',
                           completed=0,
                           recipients='{$loopCounter}'");
         $mailing_id = mysql_insert_id();

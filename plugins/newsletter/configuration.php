@@ -26,7 +26,7 @@ $description = $lang_plugin_newsletter['config_description'] . '<br />' . $lang_
 $author = sprintf($lang_plugin_newsletter['author'],
     '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
 
-$version = '0.16';
+$version = '0.17';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="index.php?file=newsletter/admin" class="admin_menu">{$newsletter_icon_array['config']}{$lang_plugin_newsletter['config']}</a>&nbsp;
