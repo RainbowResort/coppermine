@@ -291,7 +291,8 @@ function codebase_sys_user_button($href, $title, $target, $link, $before = 'home
         "{{$uc_before}_TITLE}" => $title,      
         "{{$uc_before}_TGT}"   => $href,
     );
-    $new_button="<!-- BEGIN $link -->".template_eval($button, $params)."<!-- END $link -->\n";
+    $new_button = "<!-- BEGIN $link -->".template_eval($button, $params)."<!-- END $link -->\n";
+    $new_button = preg_replace('/<ul>.*<\/ul>/s', '', $new_button);
     template_extract_block($template_sys_menu, $before, "<!-- BEGIN $before -->" . $button . "<!-- END $before -->\n" . $new_button);
 }
 
