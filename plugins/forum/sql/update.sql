@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `CPG_fr_notify` (
 ) TYPE=MyISAM;
 
 INSERT INTO `CPG_config` (name, value) VALUES ('fr_time_online_checking', 5);
-UPDATE `CPG_config` SET value='2.0/Beta/5' where name='fr_version';
+UPDATE `CPG_config` SET value='2.0/Beta/5a' where name='fr_version';
 
 CREATE TABLE IF NOT EXISTS `CPG_fr_badwords` (
   `word_id` int(10) NOT NULL auto_increment,

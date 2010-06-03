@@ -151,11 +151,11 @@ function codebase_configure($stop = TRUE) {
     codebase_query('Performing database updates', $install_sql_file);
     codebase_query('Performing database updates', $update_sql_file);
     if ($stop) {
-        echo <<< EOT
-        <form action="{$superCage->server->getEscaped('REQUEST_URI')}" method="post">
-            <input class="button" type="submit" name="submit" value="{$lang_common['go']}" name="submit" />
+        echo '
+        <form action="'.$superCage->server->getEscaped('REQUEST_URI').'" method="post">
+            <input class="button" type="submit" name="submit" value="'.$lang_common['go'].'" name="submit" />
         </form>
-EOT;
+';
     }
 }
 
@@ -182,8 +182,8 @@ function codebase_cleanup($action) {
     global $lang_common;
     $superCage = Inspekt::makeSuperCage();
     if ($action === 1) {
+        echo '<form action="'.$superCage->server->getEscaped('REQUEST_URI').'" method="post">';
         echo <<< EOT
-        <form action="{$superCage->server->getEscaped('REQUEST_URI')}" method="post">
         <table class="maintable" width="100%" border="0" cellspacing="1" cellpadding="0">
             <tr><td class="tableh1"><b>Do you want to drop the plugin's current database ?</b></td></tr>
             <tr><td class="tableb">

@@ -21,6 +21,6 @@ $author      = '<a href="http://forum.coppermine-gallery.net/index.php?action=pr
 $version     = '2.1 BETA';
 $plugin_cpg_version = array('min' => '1.5');
 
-$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,TODO.0.html" rel="external" class="admin_menu external">'.cpg_fetch_icon('announcement', 1).'Announcement thread for '.$name.' plugin</a>';
+$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,TODO.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
 
 ?>
