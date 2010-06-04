@@ -35,6 +35,6 @@ $extra_info = <<<EOT
 EOT;
 $install_info = <<<EOT
     
-    {$lang_plugin_move_to_public['install_info']}<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu external">{$move_to_public_icon_array['announcement']}{$lang_plugin_move_to_public['announcement_thread']}</a>
+    {$lang_plugin_move_to_public['install_info']}<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$move_to_public_icon_array['announcement']}{$lang_plugin_move_to_public['announcement_thread']}</a>
 EOT;
 ?>

@@ -34,11 +34,11 @@ $extra_info = <<<EOT
     <a href="index.php?file=newsletter/subscribe" class="admin_menu">{$newsletter_icon_array['subscribe']}{$lang_plugin_newsletter['subscribe']}</a>&nbsp;
     <a href="index.php?file=newsletter/mailing" class="admin_menu">{$newsletter_icon_array['mailing']}{$lang_plugin_newsletter['create_mailing']}</a>&nbsp;
     <a href="index.php?file=newsletter/archive" class="admin_menu" title="{$lang_plugin_newsletter['browse_archived_mailings']}">{$newsletter_icon_array['archive']}{$lang_plugin_newsletter['archive']}</a>&nbsp;
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu external">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>&nbsp;
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>&nbsp;
 EOT;
 
 $install_info = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu external">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60336.0.html" title="&laquo;{$lang_plugin_newsletter['config_name']}&raquo; - {$lang_plugin_newsletter['announcement_thread']}" class="admin_menu">{$newsletter_icon_array['announcement']}{$lang_plugin_newsletter['announcement_thread']}</a>
     As the plugin is still in a very early stage, please don't ask questions yet.
 EOT;
 ?>

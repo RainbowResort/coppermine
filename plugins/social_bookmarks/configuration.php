@@ -30,12 +30,12 @@ $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $version = '1.6';
 $plugin_cpg_version = array('min' => '1.5');
 $install_info = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu external">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>&nbsp;
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>&nbsp;
     
 EOT;
 $extra_info .= <<<EOT
     <a href="index.php?file=social_bookmarks/admin" class="admin_menu">{$social_bookmarks_icon_array['configure']}{$lang_plugin_social_bookmarks['config']}</a>&nbsp;
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu external">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,61671.0.html" class="admin_menu">{$social_bookmarks_icon_array['announcement']}{$lang_plugin_social_bookmarks['announcement_thread']}</a>
 
 EOT;
 ?>

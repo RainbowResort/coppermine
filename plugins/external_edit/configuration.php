@@ -26,11 +26,11 @@ $author = sprintf($lang_plugin_external_edit['author'],
 $version = '2.4';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60173.0.html" title="&laquo;{$lang_plugin_external_edit['plugin_name']}&raquo; - {$lang_plugin_external_edit['announcement_thread']}" class="admin_menu external">{$external_edit_icon_array['announcement']}{$lang_plugin_external_edit['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60173.0.html" title="&laquo;{$lang_plugin_external_edit['plugin_name']}&raquo; - {$lang_plugin_external_edit['announcement_thread']}" class="admin_menu">{$external_edit_icon_array['announcement']}{$lang_plugin_external_edit['announcement_thread']}</a>
 EOT;
 
 $install_info = <<<EOT
     {$lang_plugin_external_edit['plugin_description_detail']}<br />&nbsp;<br />
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,60173.0.html" title="&laquo;{$lang_plugin_external_edit['plugin_name']}&raquo; - {$lang_plugin_external_edit['announcement_thread']}" class="admin_menu external">{$external_edit_icon_array['announcement']}{$lang_plugin_external_edit['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,60173.0.html" title="&laquo;{$lang_plugin_external_edit['plugin_name']}&raquo; - {$lang_plugin_external_edit['announcement_thread']}" class="admin_menu">{$external_edit_icon_array['announcement']}{$lang_plugin_external_edit['announcement_thread']}</a>
 EOT;
 ?>

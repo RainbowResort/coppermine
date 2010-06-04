@@ -29,11 +29,11 @@ $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     {$lang_plugin_filetypes_editor['plugin_extra']}
     <a href="index.php?file=filetypes_editor/editor" class="admin_menu">{$filetypes_editor_icon_array['filetype']}{$lang_plugin_filetypes_editor['config_name']}</a><br />
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,59917.0.html" title="&laquo;{$lang_plugin_filetypes_editor['plugin_name']}&raquo; - {$lang_plugin_filetypes_editor['announcement_thread']}" class="admin_menu external">{$filetypes_editor_icon_array['announcement']}{$lang_plugin_filetypes_editor['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,59917.0.html" title="&laquo;{$lang_plugin_filetypes_editor['plugin_name']}&raquo; - {$lang_plugin_filetypes_editor['announcement_thread']}" class="admin_menu">{$filetypes_editor_icon_array['announcement']}{$lang_plugin_filetypes_editor['announcement_thread']}</a>
 EOT;
 
 $install_info=<<<EOT
     {$lang_plugin_filetypes_editor['plugin_description_detail']}<br />&nbsp;<br />
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,59917.0.html" title="&laquo;{$lang_plugin_filetypes_editor['plugin_name']}&raquo; - {$lang_plugin_filetypes_editor['announcement_thread']}" class="admin_menu external">{$filetypes_editor_icon_array['announcement']}{$lang_plugin_filetypes_editor['announcement_thread']}</a>
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,59917.0.html" title="&laquo;{$lang_plugin_filetypes_editor['plugin_name']}&raquo; - {$lang_plugin_filetypes_editor['announcement_thread']}" class="admin_menu">{$filetypes_editor_icon_array['announcement']}{$lang_plugin_filetypes_editor['announcement_thread']}</a>
 EOT;
 ?>

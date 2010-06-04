@@ -34,11 +34,11 @@ $author.= '<a href="http://forum.coppermine-gallery.net/index.php?action=profile
 $version = '3.4';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
-    <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu external">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>&nbsp;
+    <a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>&nbsp;
     <a href="index.php?file=mass_import/import" class="admin_menu" title="{$lang_plugin_mass_import['description']}">{$mass_import_icon_array['menu']}{$lang_plugin_mass_import['admin_title']}</a>
 EOT;
 $install_info = <<<EOT
     <a href="javascript:;" onclick="MM_openBrWindow('plugins/mass_import/images/screenshot.png','','scrollbars=yes,toolbar=no,status=no,resizable=yes,width=661,height=330')"><img src="plugins/mass_import/images/thumb_screenshot.png" border="0" width="128" height="64" alt="" align="right" style="padding-left:10px;" /></a>
-    {$lang_plugin_mass_import['install_info']}<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu external">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>
+    {$lang_plugin_mass_import['install_info']}<br />&nbsp;<br /><a href="http://forum.coppermine-gallery.net/index.php/topic,61281.0.html" class="admin_menu">{$mass_import_icon_array['announcement']}{$lang_plugin_mass_import['announcement_thread']}</a>
 EOT;
 ?>
