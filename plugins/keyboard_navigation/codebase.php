@@ -1,8 +1,8 @@
 <?php
 /**************************************************
-  Coppermine 1.5.x Plugin - keyword_navigation
+  Coppermine 1.5.x Plugin - keyboard_navigation
   *************************************************
-  Copyright (c) 2009 eenemeenemuu
+  Copyright (c) 2009-2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -22,41 +22,7 @@ if (defined('DISPLAYIMAGE_PHP')) {
 }
 
 function keyboard_navigation($template_img_navbar) {
-    $js = <<<EOT
-    <script type="text/javascript">
-        var sthhasfocus;
-        $(document).ready(function() {
-            $('.textinput').focus(function () {sthhasfocus = true;}).blur(function () {sthhasfocus = false;});
-            $('select').focus(function () {sthhasfocus = true;}).blur(function () {sthhasfocus = false;});
-            $(document).keydown(function(e) {
-                if (!e) {
-                    e = window.event;
-                }
-                if (e.which) {
-                    kcode = e.which;
-                } else if (e.keyCode) {
-                    kcode = e.keyCode;
-                }
-                if (sthhasfocus != true) {
-                    if(kcode == 37 && $('#prev').attr('title') != '') {
-                        window.location = $('.navmenu_pic img[src*=prev]').parent().attr('href');
-                    }
-                    if(kcode == 39 && $('#next').attr('title') != '') {
-                        window.location = $('.navmenu_pic img[src*=next]').parent().attr('href');
-                    }
-                    if(kcode == 38) {
-                        window.location = $('.navmenu_pic img[src*=thumb]').parent().attr('href');
-                    }
-                    if(kcode == 40) {
-                        blocking('picinfo','yes', 'block');
-                        return false;
-                    }
-                }
-            });
-        });
-    </script>
-EOT;
-
+    $js = '<script type="text/javascript" src="plugins/keyboard_navigation/keydown.js"></script>';
     return $template_img_navbar.$js;
 }
 
