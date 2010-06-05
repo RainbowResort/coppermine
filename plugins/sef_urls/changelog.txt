@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-06-05 [A] Added speaking URLs functionality, showing pic title or filename in URL {Timo}
 2010-02-03 [M] Increased version number to 1.8 {Timo}
 2010-02-03 [A] Added experimental localisation support for french and spanish {Timo}
 2010-02-03 [M] Increased version number to 1.7 {Timo}

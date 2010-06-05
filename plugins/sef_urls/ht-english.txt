@@ -85,11 +85,11 @@ RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-(
 
 RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4$5 [NC]
 
-RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3$4 [NC]
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+).*\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3$4 [NC]
 
-RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&pid=$2$3 [NC]
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+).*\.html(.*) displayimage.php?album=$1&pid=$2$3 [NC]
 
-RewriteRule displayimage-([0-9]+)\.html(.*) displayimage.php?pid=$1$2 [NC]
+RewriteRule displayimage-([0-9]+).*\.html(.*) displayimage.php?pid=$1$2 [NC]
 
 
 #

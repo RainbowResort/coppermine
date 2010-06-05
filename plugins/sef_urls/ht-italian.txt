@@ -8,10 +8,10 @@
 ##  the Free Software Foundation; either version 3 of the License, or
 ##  (at your option) any later version.
 ##  ********************************************
-##  $HeadURL$
-##  $Revision$
-##  $LastChangedBy$
-##  $Date$
+##  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/sef_urls/ht-german.txt $
+##  $Revision: 7191 $
+##  $LastChangedBy: timoswelt $
+##  $Date: 2010-02-03 10:03:30 +0100 (Mi, 03. Feb 2010) $
 ##  **************************************************/
 
 #Options FollowSymLinks SymLinksIfOwnerMatch
@@ -28,35 +28,35 @@ RewriteEngine on
 # Language translation
 #
 
-RewriteRule suche.html(.*) search.php$1 [NC]
+RewriteRule cerca.html(.*) search.php$1 [NC]
 
-RewriteRule kontakt.html(.*) contact.php$1 [NC]
+RewriteRule contatti.html(.*) contact.php$1 [NC]
 
-RewriteRule (.*)beste(.*) $1toprated$2 [NC]
+RewriteRule (.*)migliore(.*) $1toprated$2 [NC]
 
-RewriteRule (.*)beliebteste(.*) $1topn$2 [NC]
+RewriteRule (.*)popolari(.*) $1topn$2 [NC]
 
-RewriteRule (.*)kommentiertvon(.*) $1lastcomby$2 [NC]
+RewriteRule (.*)osservazionedi(.*) $1lastcomby$2 [NC]
 
-RewriteRule (.*)kommentierte(.*) $1lastcom$2 [NC]
+RewriteRule (.*)osservazione(.*) $1lastcom$2 [NC]
 
-RewriteRule (.*)seite(.*) $1page$2 [NC]
+RewriteRule (.*)pagina(.*) $1page$2 [NC]
 
-RewriteRule (.*)benutzerliste(.*) $1usermgr$2 [NC]
+RewriteRule (.*)listautenti(.*) $1usermgr$2 [NC]
 
-RewriteRule (.*)benutzer(.*) $1profile$2 [NC]
+RewriteRule (.*)profilo(.*) $1profile$2 [NC]
 
-RewriteRule (.*)uebersicht(.*) $1thumbnails$2 [NC]
+RewriteRule (.*)miniature(.*) $1thumbnails$2 [NC]
 
-RewriteRule (.*)bild(.*) $1displayimage$2 [NC]
+RewriteRule (.*)mostra(.*) $1displayimage$2 [NC]
 
-RewriteRule (.*)neuestevon(.*) $1lastupby$2 [NC]
+RewriteRule (.*)novitadi(.*) $1lastupby$2 [NC]
 
-RewriteRule (.*)neueste(.*) $1lastup$2 [NC]
+RewriteRule (.*)novita(.*) $1lastup$2 [NC]
 
-RewriteRule (.*)suche(.*) $1search$2 [NC]
+RewriteRule (.*)cerca(.*) $1search$2 [NC]
 
-RewriteRule (.*)oben(.*) $1top_display_media$2 [NC]
+RewriteRule (.*)inalto(.*) $1top_display_media$2 [NC]
 
 
 #

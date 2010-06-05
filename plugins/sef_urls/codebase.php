@@ -34,11 +34,15 @@ $thisplugin->add_filter('page_html','sef_urls_convert');
 
 
 /**
- * Convert urls to search-engine friendly (SEF) urls
+ * Convert urls to search-engine friendly (SEF) and speaking urls
  */
 function sef_urls_convert($html) {
+    global $CONFIG;
     
-    $sef_language = 'english';
+    // Configure here
+    $sef_language            = 'english';   // set to english, german, french, italian or spanish
+    $speakingurl_placeholder = '-9b6o4';   // set to '' (empty string) to disable speaking URL functionality
+    $number_of_url_chars     = 30;         // max number of chars in speaking URL functionality
     
     // Language translation
     if ($sef_language == 'german')
@@ -92,6 +96,23 @@ function sef_urls_convert($html) {
         $str_tdm = 'alto';
         $str_usermgr = 'usuariolistado';
     }
+    else if ($sef_language == 'italian')
+    {
+        $str_thumbnails = 'miniature';
+        $str_displayimage = 'mostra';
+        $str_toprated = 'migliore';
+        $str_topn = 'popolari';
+        $str_lastcomby = 'osservazionedi';
+        $str_lastcom = 'osservazione';
+        $str_page = 'pagina';
+        $str_profile = 'profilo';
+        $str_lastupby = 'novitadi';
+        $str_lastup = 'novita';
+        $str_search = 'cerca';
+        $str_contact = 'contacto';
+        $str_tdm = 'inalto';
+        $str_usermgr = 'listautenti';
+    }
     else
     {
         $str_thumbnails = 'thumbnails';
@@ -112,13 +133,13 @@ function sef_urls_convert($html) {
 
     // Rewrite usermgr.php
     $html = preg_replace('/usermgr\.php\?page=([0-9]+)/i',$str_usermgr.'-'.$str_page.'-$1.html',$html);
-    $html = preg_replace('/usermgr\.php/i',$str_usermgr.'.html',$html);
+    $html = str_replace('usermgr.php',$str_usermgr.'.html',$html);
 
     // Rewrite index.php
     $html = preg_replace('/index\.php\?cat=([0-9]+)(\&|\&amp;)page=([0-9]+)/i','index-$1-'.$str_page.'-$3.html',$html);
     $html = preg_replace('/index\.php\?cat=0/i','index.html',$html);
     $html = preg_replace('/index\.php\?cat=([0-9]+)/i','index-$1.html',$html);
-    $html = preg_replace('/index\.php/i','index.html',$html);
+    $html = str_replace('index.php','index.html',$html);
     
     // Rewrite thumbnails.php
     $html = preg_replace('/thumbnails\.php\?album=lastupby(\&|\&amp;)uid=([0-9]+)/i',$str_thumbnails.'-'.$str_lastupby.'-$2.html',$html);
@@ -134,11 +155,31 @@ function sef_urls_convert($html) {
     $html = preg_replace('/displayimage\.php\?album=lastcom(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-lastcom-$2-$4-$6-'.$str_page.'-$8.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastcomby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastcomby.'-$2-$4-$6-$8-$10.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastupby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastupby.'-$2-$4-$6.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3-$5.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=search(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-'.$str_search.'-$2.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3.html',$html);
-    $html = preg_replace('/displayimage\.php\?pid=([0-9]+)/i',$str_displayimage.'-$1.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3-$5'.$speakingurl_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=search(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-'.$str_search.'-$2'.$speakingurl_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3'.$speakingurl_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?pid=([0-9]+)/i',$str_displayimage.'-$1'.$speakingurl_placeholder.'.html',$html);
     
+    // speaking URL functionality
+    if ($speakingurl_placeholder)
+    {
+        $searchstring = "#-([0-9]+)".$speakingurl_placeholder."#i";
+        preg_match_all($searchstring, $html, $foundit, PREG_SET_ORDER);
+        foreach($foundit as $nexturl) 
+        {
+            $current_picid = $nexturl[1];
+            $titles_result = cpg_db_query("SELECT filename, title FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = $current_picid LIMIT 1");
+            $the_pic = mysql_fetch_array($titles_result);
+            mysql_free_result($titles_result);
+            if ($the_pic['title']) $urlname = $the_pic['title'];
+            else $urlname = $the_pic['filename'];
+            $urlname = str_replace(' ','_',$urlname);
+            $urlname = str_replace('.','_',$urlname);
+            $urlname = preg_replace('/[^A-Za-z0-9_]/', '', $urlname);
+            $html = str_replace($nexturl[0],'-'.$nexturl[1].'-_'.substr($urlname,0,$number_of_url_chars).'_',$html);
+        }
+    }
+
     // Rewrite profile.php
     $html = preg_replace('/profile\.php\?uid=([0-9]+)/i',$str_profile.'-$1.html',$html);
     $html = preg_replace('/profile\.php\?op=([a-z0-9_]+)/i',$str_profile.'-op-$1.html',$html);
@@ -146,17 +187,17 @@ function sef_urls_convert($html) {
     // language specific replacements
     if ($sef_language != 'english')
     { 
-        $html = preg_replace('/-toprated/i','-'.$str_toprated,$html);
-        $html = preg_replace('/-topn/i','-'.$str_topn,$html);
-        $html = preg_replace('/-lastcom/i','-'.$str_lastcom,$html);
-        $html = preg_replace('/-lastup/i','-'.$str_lastup,$html);
-        $html = preg_replace('/top_display_media/i',$str_tdm,$html);
-        $html = preg_replace('/'.$str_displayimage.'-search-/i',$str_displayimage.'-'.$str_search.'-',$html);
+        $html = str_replace('-toprated','-'.$str_toprated,$html);
+        $html = str_replace('-topn','-'.$str_topn,$html);
+        $html = str_replace('-lastcom','-'.$str_lastcom,$html);
+        $html = str_replace('-lastup','-'.$str_lastup,$html);
+        $html = str_replace('top_display_media',$str_tdm,$html);
+        $html = str_replace($str_displayimage.'-search-',$str_displayimage.'-'.$str_search.'-',$html);
     }
     
     // contact and search.php
-    $html = preg_replace('/contact.php/i',$str_contact.'.html',$html);
-    $html = preg_replace('/search.php/i',$str_search.'.html',$html);
+    $html = str_replace('contact.php',$str_contact.'.html',$html);
+    $html = str_replace('search.php',$str_search.'.html',$html);
     
     // albums in cat=0
     $html = preg_replace('/'.$str_thumbnails.'-([a-z0-9]+)-0\.html/i',$str_thumbnails.'-$1.html',$html);
