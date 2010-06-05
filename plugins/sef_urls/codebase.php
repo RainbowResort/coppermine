@@ -190,7 +190,12 @@ function sef_urls_convert($html) {
             $urlname = str_replace('%26quot%3B','',$urlname);
             $urlname = str_replace('%26%23039%3B','',$urlname);
             $urlname = preg_replace('/%[A-Za-z0-9]{2}/', '', $urlname);
-            $html = str_replace($nexturl[0],'-'.$nexturl[1].'-_'.substr($urlname,0,$number_of_url_chars).'_',$html);
+            $urlname = '_'.$urlname.'_';
+            while (stristr($urlname, '__'))
+            {
+                $urlname=(str_replace("__", "_", $urlname));
+            }
+            $html = str_replace($nexturl[0],'-'.$nexturl[1].'-'.substr($urlname,0,$number_of_url_chars),$html);
         }
     }
 
