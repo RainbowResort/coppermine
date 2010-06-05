@@ -42,7 +42,7 @@ function sef_urls_convert($html) {
     // Configure here
     $sef_language            = 'english';   // set to english, german, french, italian or spanish
     $speakingurl_placeholder = '-9b6o4';   // set to '' (empty string) to disable speaking URL functionality
-    $number_of_url_chars     = 30;         // max number of chars in speaking URL functionality
+    $number_of_url_chars     = 40;         // max number of chars in speaking URL functionality
     
     // Language translation
     if ($sef_language == 'german')
@@ -175,7 +175,21 @@ function sef_urls_convert($html) {
             else $urlname = $the_pic['filename'];
             $urlname = str_replace(' ','_',$urlname);
             $urlname = str_replace('.','_',$urlname);
-            $urlname = preg_replace('/[^A-Za-z0-9_]/', '', $urlname);
+            $urlname = str_replace('-','_',$urlname);
+            $urlname = rawurlencode($urlname);
+            if ($sef_language == 'german')
+            {
+              $urlname = str_replace('%C3%B6','oe',$urlname);
+              $urlname = str_replace('%C3%BC','ue',$urlname);
+              $urlname = str_replace('%C3%9F','ss',$urlname);
+              $urlname = str_replace('%C3%A4','ae',$urlname);
+              $urlname = str_replace('%C3%9C','Ue',$urlname);
+              $urlname = str_replace('%C3%84','Ae',$urlname);
+              $urlname = str_replace('%C3%96','Oe',$urlname);
+            }
+            $urlname = str_replace('%26quot%3B','',$urlname);
+            $urlname = str_replace('%26%23039%3B','',$urlname);
+            $urlname = preg_replace('/%[A-Za-z0-9]{2}/', '', $urlname);
             $html = str_replace($nexturl[0],'-'.$nexturl[1].'-_'.substr($urlname,0,$number_of_url_chars).'_',$html);
         }
     }

@@ -25,7 +25,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2010-06-05 [O] Improved performance (moving preg_replace to str_replace where possible) {Timo}
+2010-06-05 [A] Nicer german umlauts in URL {Timo}
+2010-06-05 [O] Improved performance replacing preg_replace by str_replace where possible) {Timo}
 2010-06-05 [A] Added support for italian transliteration {Timo}
 2010-06-05 [A] Added speaking URLs functionality, showing pic title or filename in URL {Timo}
 2010-02-03 [M] Increased version number to 1.8 {Timo}
