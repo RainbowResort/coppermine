@@ -17,7 +17,6 @@
 This plugin is known to cause issues when used together with these other plugins:
 ---------------------------------------------------------------------------------
 
-- flf_flashcloud
 - Custom Thumbnail for cpg1.5.x
 
 

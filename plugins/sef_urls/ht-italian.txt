@@ -8,10 +8,10 @@
 ##  the Free Software Foundation; either version 3 of the License, or
 ##  (at your option) any later version.
 ##  ********************************************
-##  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/sef_urls/ht-german.txt $
-##  $Revision: 7191 $
-##  $LastChangedBy: timoswelt $
-##  $Date: 2010-02-03 10:03:30 +0100 (Mi, 03. Feb 2010) $
+##  $HeadURL$
+##  $Revision$
+##  $LastChangedBy$
+##  $Date$
 ##  **************************************************/
 
 #Options FollowSymLinks SymLinksIfOwnerMatch
@@ -97,6 +97,8 @@ RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=
 RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2&page=$3$4 [NC]
 
 RewriteRule thumbnails-([0-9a-z]*)\.html(.*) thumbnails.php?album=$1$2 [NC]
+
+RewriteRule thumbnails-search-keyword-(.*)\.html(.*) thumbnails.php?album=search&keywords=on&search=$1$2 [NC]
 
 RewriteRule thumbnails-search-(.*)\.html(.*) thumbnails.php?album=search&search=$1$2 [NC]
 

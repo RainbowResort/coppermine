@@ -98,6 +98,8 @@ RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)-page-([0-9]*)\.html(.*) thumbna
 
 RewriteRule thumbnails-([0-9a-z]*)\.html(.*) thumbnails.php?album=$1$2 [NC]
 
+RewriteRule thumbnails-search-keyword-(.*)\.html(.*) thumbnails.php?album=search&keywords=on&search=$1$2 [NC]
+
 RewriteRule thumbnails-search-(.*)\.html(.*) thumbnails.php?album=search&search=$1$2 [NC]
 
 
