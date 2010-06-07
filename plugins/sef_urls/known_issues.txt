@@ -14,6 +14,12 @@
   $Date$
   **************************************************/
 
+This plugin is known to cause issues when used together with these other plugins:
+---------------------------------------------------------------------------------
+
+- flf_flashcloud
+- Custom Thumbnail for cpg1.5.x
+
 
 The following URLs will not be re-written:
 ------------------------------------------
@@ -36,15 +42,15 @@ The following URLs will not be re-written:
   (not relevant for search engines because sort buttons are added via javascript)
 
 
-German/french/spanish localisation:
------------------------------------
+German/french/spanish/italian localisation:
+-------------------------------------------
 
 !!!DANGER! Only do this if you know exactly what you are doing!!!!
 
-To change english short URLs to german/french/spanish SEF URLs, first uninstall the plugin. Then open codebase.php and find this line (it's twice in there):
+To change english short URLs to german/french/spanish/italian SEF URLs, first uninstall the plugin. Then open codebase.php and find this line (it's twice in there):
 $sef_language = 'english';
 and change both lines to
-$sef_language = 'german'; or $sef_language = 'french'; or $sef_language = 'spanish';
+$sef_language = 'german'; or $sef_language = 'french'; or $sef_language = 'spanish'; or $sef_language = 'italian';
 Then install plugin again and overwrite existing .htaccess.
 
 Please note that french and spanish support are experimental.
