@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-06-09 [A] Added speaking URLs functionality for thumbnail pages and user profiles {Timo}
 2010-06-07 [B] Fixed keyword search URLs {Timo}
 2010-06-05 [C] Removed multiple underscores {Timo}
 2010-06-05 [A] Nicer german umlauts in URL {Timo}

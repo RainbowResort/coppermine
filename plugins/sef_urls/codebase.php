@@ -40,9 +40,11 @@ function sef_urls_convert($html) {
     global $CONFIG;
     
     // Configure here
-    $sef_language            = 'english';   // set to english, german, french, italian or spanish
-    $speakingurl_placeholder = '-9b6o4';   // set to '' (empty string) to disable speaking URL functionality
-    $number_of_url_chars     = 42;         // max number of chars in speaking URL functionality
+    $sef_language              = 'english';  // set to english, german, french, italian or spanish
+    $speakingpic_placeholder   = '-9b6o4';  // set to '' (empty string) to disable speaking URL functionality for files
+	$speakingalbum_placeholder = '-65o4c';  // set to '' (empty string) to disable speaking URL functionality for albums
+	$speakinguser_placeholder  = '-89occ';  // set to '' (empty string) to disable speaking URL functionality for users
+    $number_of_url_chars       = 42;        // max number of chars in speaking URL functionality
     
     // Language translation
     if ($sef_language == 'german')
@@ -150,21 +152,26 @@ function sef_urls_convert($html) {
 	$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)keywords=on(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-keyword-$3.html',$html);
     $html = preg_replace('/thumbnails\.php\?search=([^"]+)(\&|\&amp;)album=search/i',$str_thumbnails.'-'.$str_search.'-$1.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-$2.html',$html);
-    $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)/i',$str_thumbnails.'-$1.html',$html);
+    $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)/i',$str_thumbnails.'-$1'.$speakingalbum_placeholder.'.html',$html);
 
     // Rewrite displayimage.php
     $html = preg_replace('/displayimage\.php\?album=lastcom(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-lastcom-$2-$4-$6-'.$str_page.'-$8.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastcomby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)(\&|\&amp;)msg_id=([\-0-9]+)(\&|\&amp;)page=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastcomby.'-$2-$4-$6-$8-$10.html',$html);
     $html = preg_replace('/displayimage\.php\?album=lastupby(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)(\&|\&amp;)uid=([\-0-9]+)/i',$str_displayimage.'-'.$str_lastupby.'-$2-$4-$6.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3-$5'.$speakingurl_placeholder.'.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=search(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-'.$str_search.'-$2'.$speakingurl_placeholder.'.html',$html);
-    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3'.$speakingurl_placeholder.'.html',$html);
-    $html = preg_replace('/displayimage\.php\?pid=([0-9]+)/i',$str_displayimage.'-$1'.$speakingurl_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3-$5'.$speakingpic_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=search(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-'.$str_search.'-$2'.$speakingpic_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?album=([a-z0-9]+)(\&|\&amp;)pid=([\-0-9]+)/i',$str_displayimage.'-$1-$3'.$speakingpic_placeholder.'.html',$html);
+    $html = preg_replace('/displayimage\.php\?pid=([0-9]+)/i',$str_displayimage.'-$1'.$speakingpic_placeholder.'.html',$html);
+
+    // Rewrite profile.php
+    $html = preg_replace('/profile\.php\?uid=([0-9]+)/i',$str_profile.'-$1'.$speakinguser_placeholder.'.html',$html);
+    $html = preg_replace('/profile\.php\?op=([a-z0-9_]+)/i',$str_profile.'-op-$1.html',$html);
+
     
-    // speaking URL functionality
-    if ($speakingurl_placeholder)
+    // speaking URL functionality for files
+    if ($speakingpic_placeholder)
     {
-        $searchstring = "#-([0-9]+)".$speakingurl_placeholder."#i";
+        $searchstring = "#-([0-9]+)".$speakingpic_placeholder."#i";
         preg_match_all($searchstring, $html, $foundit, PREG_SET_ORDER);
         foreach($foundit as $nexturl) 
         {
@@ -200,10 +207,82 @@ function sef_urls_convert($html) {
         }
     }
 
-    // Rewrite profile.php
-    $html = preg_replace('/profile\.php\?uid=([0-9]+)/i',$str_profile.'-$1.html',$html);
-    $html = preg_replace('/profile\.php\?op=([a-z0-9_]+)/i',$str_profile.'-op-$1.html',$html);
-    
+    // speaking URL functionality for albums
+    if ($speakingalbum_placeholder)
+    {
+        $searchstring = "#-([0-9]+)".$speakingalbum_placeholder."#i";
+        preg_match_all($searchstring, $html, $foundit, PREG_SET_ORDER);
+        foreach($foundit as $nexturl) 
+        {
+            $current_albid = $nexturl[1];
+            $titles_result = cpg_db_query("SELECT title FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = $current_albid LIMIT 1");
+            $the_alb = mysql_fetch_array($titles_result);
+            mysql_free_result($titles_result);
+            $urlname = $the_alb['title'];
+            $urlname = str_replace(' ','_',$urlname);
+            $urlname = str_replace('.','_',$urlname);
+            $urlname = str_replace('-','_',$urlname);
+            $urlname = rawurlencode($urlname);
+            if ($sef_language == 'german')
+            {
+              $urlname = str_replace('%C3%B6','oe',$urlname);
+              $urlname = str_replace('%C3%BC','ue',$urlname);
+              $urlname = str_replace('%C3%9F','ss',$urlname);
+              $urlname = str_replace('%C3%A4','ae',$urlname);
+              $urlname = str_replace('%C3%9C','Ue',$urlname);
+              $urlname = str_replace('%C3%84','Ae',$urlname);
+              $urlname = str_replace('%C3%96','Oe',$urlname);
+            }
+            $urlname = str_replace('%26quot%3B','',$urlname);
+            $urlname = str_replace('%26%23039%3B','',$urlname);
+            $urlname = preg_replace('/%[A-Za-z0-9]{2}/', '', $urlname);
+            $urlname = '_'.$urlname.'_';
+            while (stristr($urlname, '__'))
+            {
+                $urlname=(str_replace("__", "_", $urlname));
+            }
+            $html = str_replace($nexturl[0],'-'.$nexturl[1].'-'.substr($urlname,0,$number_of_url_chars),$html);
+        }
+    }
+
+    // speaking URL functionality for users
+    if ($speakinguser_placeholder)
+    {
+        $searchstring = "#-([0-9]+)".$speakinguser_placeholder."#i";
+        preg_match_all($searchstring, $html, $foundit, PREG_SET_ORDER);
+        foreach($foundit as $nexturl) 
+        {
+            $current_userid = $nexturl[1];
+            $titles_result = cpg_db_query("SELECT user_name FROM {$CONFIG['TABLE_USERS']} WHERE user_id = $current_userid LIMIT 1");
+            $the_user = mysql_fetch_array($titles_result);
+            mysql_free_result($titles_result);
+            $urlname = $the_user['user_name'];
+            $urlname = str_replace(' ','_',$urlname);
+            $urlname = str_replace('.','_',$urlname);
+            $urlname = str_replace('-','_',$urlname);
+            $urlname = rawurlencode($urlname);
+            if ($sef_language == 'german')
+            {
+              $urlname = str_replace('%C3%B6','oe',$urlname);
+              $urlname = str_replace('%C3%BC','ue',$urlname);
+              $urlname = str_replace('%C3%9F','ss',$urlname);
+              $urlname = str_replace('%C3%A4','ae',$urlname);
+              $urlname = str_replace('%C3%9C','Ue',$urlname);
+              $urlname = str_replace('%C3%84','Ae',$urlname);
+              $urlname = str_replace('%C3%96','Oe',$urlname);
+            }
+            $urlname = str_replace('%26quot%3B','',$urlname);
+            $urlname = str_replace('%26%23039%3B','',$urlname);
+            $urlname = preg_replace('/%[A-Za-z0-9]{2}/', '', $urlname);
+            $urlname = '_'.$urlname.'_';
+            while (stristr($urlname, '__'))
+            {
+                $urlname=(str_replace("__", "_", $urlname));
+            }
+            $html = str_replace($nexturl[0],'-'.$nexturl[1].'-'.substr($urlname,0,$number_of_url_chars),$html);
+        }
+    }
+	
     // language specific replacements
     if ($sef_language != 'english')
     { 
