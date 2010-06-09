@@ -152,6 +152,7 @@ function sef_urls_convert($html) {
 	$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)keywords=on(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-keyword-$3.html',$html);
     $html = preg_replace('/thumbnails\.php\?search=([^"]+)(\&|\&amp;)album=search/i',$str_thumbnails.'-'.$str_search.'-$1.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-$2.html',$html);
+    $html = str_replace('thumbnails.php?album=favpics',$str_thumbnails.'-favpics.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)/i',$str_thumbnails.'-$1'.$speakingalbum_placeholder.'.html',$html);
 
     // Rewrite displayimage.php
