@@ -61,7 +61,7 @@ function sef_urls_convert($html) {
         $str_lastup = 'neueste';
         $str_search = 'suche';
         $str_contact = 'kontakt';
-        $str_tdm = 'oben';
+        $str_tdm = '#oben';
         $str_usermgr = 'benutzerliste';
     }
     else if ($sef_language == 'french')
@@ -78,7 +78,7 @@ function sef_urls_convert($html) {
         $str_lastup = 'neuve';
         $str_search = 'recherche';
         $str_contact = 'contacter';
-        $str_tdm = 'enhaut';
+        $str_tdm = '#enhaut';
         $str_usermgr = 'fichierclient';
     }
     else if ($sef_language == 'spanish')
@@ -95,7 +95,7 @@ function sef_urls_convert($html) {
         $str_lastup = 'nuevo';
         $str_search = 'busca';
         $str_contact = 'contacto';
-        $str_tdm = 'alto';
+        $str_tdm = '#alto';
         $str_usermgr = 'usuariolistado';
     }
     else if ($sef_language == 'italian')
@@ -112,7 +112,7 @@ function sef_urls_convert($html) {
         $str_lastup = 'novita';
         $str_search = 'cerca';
         $str_contact = 'contacto';
-        $str_tdm = 'inalto';
+        $str_tdm = '#inalto';
         $str_usermgr = 'listautenti';
     }
     else
@@ -129,7 +129,7 @@ function sef_urls_convert($html) {
         $str_lastup = 'lastup';
         $str_search = 'search';
         $str_contact = 'contact';
-        $str_tdm = 'top_display_media';
+        $str_tdm = '#top_display_media';
         $str_usermgr = 'usermgr';
     }
 
@@ -148,7 +148,7 @@ function sef_urls_convert($html) {
     $html = preg_replace('/thumbnails\.php\?album=lastcomby(\&|\&amp;)uid=([0-9]+)/i',$str_thumbnails.'-'.$str_lastcomby.'-$2.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)page=([0-9]+)/i',$str_thumbnails.'-$1-$3-'.$str_page.'-$5.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)/i',$str_thumbnails.'-$1-$3.html',$html);
-    $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)page=([0-9]+)/i',$str_thumbnails.'-$1-'.$str_page.'-$3.html',$html);
+    $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)page=([0-9]+)/i',$str_thumbnails.'-'.$str_page.'-$3-$1'.$speakingalbum_placeholder.'.html',$html);
 	$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)keywords=on(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-keyword-$3.html',$html);
     $html = preg_replace('/thumbnails\.php\?search=([^"]+)(\&|\&amp;)album=search/i',$str_thumbnails.'-'.$str_search.'-$1.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-$2.html',$html);
@@ -291,7 +291,7 @@ function sef_urls_convert($html) {
         $html = str_replace('-topn','-'.$str_topn,$html);
         $html = str_replace('-lastcom','-'.$str_lastcom,$html);
         $html = str_replace('-lastup','-'.$str_lastup,$html);
-        $html = str_replace('top_display_media',$str_tdm,$html);
+        $html = str_replace('#top_display_media',$str_tdm,$html);
         $html = str_replace($str_displayimage.'-search-',$str_displayimage.'-'.$str_search.'-',$html);
     }
     

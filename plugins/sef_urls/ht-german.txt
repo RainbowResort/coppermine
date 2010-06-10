@@ -92,7 +92,7 @@ RewriteRule thumbnails-lastcomby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumb
 
 RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2$3 [NC]
 
-RewriteRule thumbnails-([a-z0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&page=$2$3 [NC]
+RewriteRule thumbnails-page-([0-9]*)-([a-z0-9]*).*\.html(.*) thumbnails.php?album=$2&page=$1$3 [NC]
 
 RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2&page=$3$4 [NC]
 
