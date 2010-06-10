@@ -24,6 +24,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-06-10 [C] Fixed wrapping of some buttons {Timo}
 2010-06-08 [B] Reference to csshover3.htc of curve theme {Timo}
 2010-03-26 [M] Added changelog {GauGau}
 2010-03-26 [M] Added theme to SVN repository {GauGau}
