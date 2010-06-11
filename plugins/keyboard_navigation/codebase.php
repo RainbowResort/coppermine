@@ -18,12 +18,11 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 if (defined('DISPLAYIMAGE_PHP')) {
-    $thisplugin->add_filter('theme_img_navbar','keyboard_navigation');
+    $thisplugin->add_action('page_start', 'keyboard_navigation');
 }
 
-function keyboard_navigation($template_img_navbar) {
-    $js = '<script type="text/javascript" src="plugins/keyboard_navigation/keydown.js"></script>';
-    return $template_img_navbar.$js;
+function keyboard_navigation() {
+    js_include('plugins/keyboard_navigation/keydown.js');
 }
 
 ?>
