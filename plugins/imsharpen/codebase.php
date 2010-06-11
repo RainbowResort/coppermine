@@ -21,11 +21,14 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 // Add filter for resizing images
 $thisplugin->add_filter('image_sharpen','imsharpen_sharpen');
 
-function imsharpen_sharpen($new_size)
-{
+function imsharpen_sharpen($new_size) {
     global $CONFIG;
-    $sharpen = 0;
-    if ($CONFIG['picture_width'] == $new_size || $CONFIG['thumb_width'] == $new_size) $sharpen = 1;
+    $new_size = $new_size[1];
+    if ($CONFIG['picture_width'] == $new_size || $CONFIG['thumb_width'] == $new_size) {
+        $sharpen = 1;
+    } else {
+        $sharpen = 0;
+    }
     return $sharpen;
 }
 
