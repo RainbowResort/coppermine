@@ -29,7 +29,7 @@ function imsharpen_sharpen($new_size) {
     } else {
         $sharpen = 0;
     }
-    return $sharpen;
+    return array($sharpen);
 }
 
 
