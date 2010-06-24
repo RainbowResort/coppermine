@@ -796,7 +796,7 @@ function newsletter_registration_activation($act_key) {
 }
 
 function newsletter_profile($profile_data) {
-    print_r($profile_data);
+    //print_r($profile_data);
 }
 
 function newsletter_form_list($data) {
