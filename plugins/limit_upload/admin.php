@@ -40,7 +40,7 @@ if ($superCage->post->keyExists('submit')) {
         }
     }
 
-    if (array_key_exists($superCage->post->getAlpha('time_limit'), $lang_plugin_limit_upload['time_limit_values'])) {
+    if (array_key_exists($superCage->post->getAlpha('time_limit'), $lang_plugin_limit_upload['upload_limit_values'])) {
         cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = '".$superCage->post->getAlpha('time_limit')."' WHERE name = 'limit_upload_time_limit'");
     }
 
@@ -66,6 +66,7 @@ foreach ($lang_plugin_limit_upload['upload_limit_values'] as $key => $value) {
     $selected = $time_limit == $key ? 'selected="selected"' : '';
     $time_limit_options .= "<option value=\"$key\" $selected>$value</option>";
 }
+$submit_icon = cpg_fetch_icon('ok', 1);
 echo <<<EOT
     <tr>
         <td class="tableb">
@@ -74,6 +75,9 @@ echo <<<EOT
         <td class="tableb">
             <input type="input" class="listbox" size="5" name="upload_limit" value="$upload_limit" /> <select class="listbox" name="time_limit">$time_limit_options</select>
         </td>
+        <td class="tableb">
+            <button value="{$lang_common['apply_changes']}" name="submit" class="button" type="submit">{$submit_icon}{$lang_common['apply_changes']}</button>
+        </td>
     </tr>
 EOT;
 endtable();
@@ -81,6 +85,5 @@ endtable();
 list($timestamp, $form_token) = getFormToken();
 echo "<input type=\"hidden\" name=\"form_token\" value=\"{$form_token}\" />";
 echo "<input type=\"hidden\" name=\"timestamp\" value=\"{$timestamp}\" />";
-echo "<input type=\"submit\" value=\"{$lang_common['apply_changes']}\" name=\"submit\" class=\"button\" /> ";
 pagefooter();
 ?>

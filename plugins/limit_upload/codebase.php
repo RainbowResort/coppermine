@@ -46,7 +46,7 @@ function limit_upload_page_start() {
                 require_once "./plugins/limit_upload/lang/{$CONFIG['lang']}.php";
             }
 
-            $error = sprintf($lang_plugin_limit_upload['limit_reached_x'], $CONFIG['limit_upload_upload_limit'], $lang_plugin_limit_upload['time_limit_values'][$CONFIG['limit_upload_time_limit']]);
+            $error = sprintf($lang_plugin_limit_upload['limit_reached_x'], $CONFIG['limit_upload_upload_limit'], $lang_plugin_limit_upload['upload_limit_values'][$CONFIG['limit_upload_time_limit']]);
 
             if ($CONFIG['limit_upload_time_limit'] != 'total') {
                 // TODO: determine end of current hour/day/week/month/year and adjust the query
@@ -68,7 +68,7 @@ function limit_upload_page_start() {
 }
 
 
-$thisplugin->add_action('plugin_install','limit_upload_install');
+$thisplugin->add_action('plugin_install', 'limit_upload_install');
 
 function limit_upload_install () {
     global $CONFIG;
@@ -79,7 +79,7 @@ function limit_upload_install () {
 }
 
 
-$thisplugin->add_action('plugin_uninstall','limit_upload_uninstall');
+$thisplugin->add_action('plugin_uninstall', 'limit_upload_uninstall');
 
 function limit_upload_uninstall () {
     global $CONFIG;
