@@ -1,0 +1,31 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - Limit upload
+  *************************************************
+  Copyright (c) 2010 eenemeenemuu
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+  **************************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-06-07 [A] Added spinbutton {GauGau}
+2010-06-07 [A] Added button icon {GauGau}
+2010-06-07 [M] Counted version number up to 0.2 {GauGau}
+2010-06-07 [M] Added changelog (this file) {GauGau}

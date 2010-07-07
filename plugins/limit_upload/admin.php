@@ -24,6 +24,15 @@ if ($CONFIG['lang'] != 'english' && file_exists("./plugins/limit_upload/lang/{$C
     require_once "./plugins/limit_upload/lang/{$CONFIG['lang']}.php";
 }
 
+$plugin_limit_upload_icon_array['submit'] = cpg_fetch_icon('ok', 1);
+
+if (in_array('js/jquery.spinbutton.js', $JS['includes']) != TRUE) {
+    $JS['includes'][] = 'js/jquery.spinbutton.js';
+}
+
+$JS['includes'][] = 'plugins/limit_upload/script.js';
+
+
 pageheader($lang_plugin_limit_upload['limit_upload']." - ".$lang_gallery_admin_menu['admin_lnk']);
 $superCage = Inspekt::makeSuperCage();
 global $lang_common;
@@ -45,18 +54,18 @@ if ($superCage->post->keyExists('submit')) {
     }
 
     starttable("100%", $lang_common['information']);
-    echo "
+    echo <<< EOT
         <tr>
-            <td class=\"tableb\" width=\"200\">
+            <td class="tableb" width="200">
                 {$lang_plugin_limit_upload['saved']}
             </td>
         </tr>
-    ";
+EOT;
     endtable();
-    echo "<br />";
+    echo '<br />';
 }
 
-echo "<form action=\"index.php?file=limit_upload/admin\" method=\"post\">";
+echo '<form action="index.php?file=limit_upload/admin" method="post">';
 
 starttable("100%", $lang_plugin_limit_upload['limit_upload']." - ".$lang_gallery_admin_menu['admin_lnk'], 3);
 
@@ -73,7 +82,7 @@ echo <<<EOT
             {$lang_plugin_limit_upload['upload_limit']}
         </td>
         <td class="tableb">
-            <input type="input" class="listbox" size="5" name="upload_limit" value="$upload_limit" /> <select class="listbox" name="time_limit">$time_limit_options</select>
+            <input type="input" class="listbox" size="5" name="upload_limit" id="plugin_limit_upload_files" value="$upload_limit" /> <select class="listbox" name="time_limit">$time_limit_options</select>
         </td>
         <td class="tableb">
             <button value="{$lang_common['apply_changes']}" name="submit" class="button" type="submit">{$submit_icon}{$lang_common['apply_changes']}</button>
