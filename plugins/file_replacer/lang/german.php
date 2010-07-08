@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - file_replacer
   *************************************************
-  Copyright (c) 2009 Nibbler, eenemeenemuu
+  Copyright (c) 2010 Nibbler, eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
