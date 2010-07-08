@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - sef_urls
   *************************************************
-  Copyright (c) 2003-2007 Coppermine Dev Team
+  Copyright (c) 2003-2010 Coppermine Dev Team
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -15,7 +15,9 @@
   $Date$
   **************************************************/
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
+if (!defined('IN_COPPERMINE')) {
+    die('Not in Coppermine...');
+}
 
 // Add plugin_install action
 $thisplugin->add_action('plugin_install','sef_urls_install');

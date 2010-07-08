@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - sef_urls
   *************************************************
-  Copyright (c) 2003-2007 Coppermine Dev Team
+  Copyright (c) 2003-2010 Coppermine Dev Team
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-07-08 [A] Started i18n of plugin {GauGau}
 2010-06-10 [O] Further improved speaking URLs for albums {Timo}
 2010-06-09 [B] Fixed search bug {Timo}
 2010-06-09 [B] Fixed display bug for favpics album {Timo}
