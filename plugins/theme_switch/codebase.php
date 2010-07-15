@@ -69,7 +69,7 @@ function theme_switch_page_start() {
         $mobile_browser++;
     }
 
-    if($mobile_browser == 0) {
+    if($mobile_browser > 0) {
         $mobile_browser_theme = 'water_drop';
         if (!$superCage->get->keyExists('theme') && $CONFIG['theme'] != $mobile_browser_theme) {
             $USER['theme'] = $mobile_browser_theme;
