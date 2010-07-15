@@ -23,7 +23,7 @@ $lang_plugin_limit_upload['limit_upload'] = 'Limit upload';
 $lang_plugin_limit_upload['description'] = 'Limit user uploads to a total number or a set amount per period';
 $lang_plugin_limit_upload['announcement_thread'] = 'Announcement thread';
 $lang_plugin_limit_upload['limit_reached_x'] = 'You\'ve reached the upload limit of %s files %s.';
-$lang_plugin_limit_upload['limit_reached_wait'] = 'You have to wait %s hour(s) before uploading another file.';
+$lang_plugin_limit_upload['limit_reached_wait'] = 'You have to wait %s %s before uploading another file.';
 $lang_plugin_limit_upload['saved'] = 'Your settings have been saved.';
 $lang_plugin_limit_upload['upload_limit'] = 'Upload limit (files total or per period of time)';
 $lang_plugin_limit_upload['upload_limit_values'] = array (
@@ -34,5 +34,6 @@ $lang_plugin_limit_upload['upload_limit_values'] = array (
     'month' => 'per month (30 days)',
     'year' => 'per year (365 days)'
 );
+$lang_plugin_limit_upload['time_units'] = array('minute(s)', 'hour(s)', 'day(s)', 'week(s)');
 
 ?>

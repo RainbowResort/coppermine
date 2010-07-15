@@ -25,9 +25,10 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2010-06-08 [M] Counted version number up to v0.3 {GauGau}
-2010-06-08 [M] Packaged and released v0.2 {GauGau}
-2010-06-07 [A] Added spinbutton {GauGau}
-2010-06-07 [A] Added button icon {GauGau}
-2010-06-07 [M] Counted version number up to 0.2 {GauGau}
-2010-06-07 [M] Added changelog (this file) {GauGau}
+2010-07-15 [B] Fixed waiting time calculation for error message {eenemeenemuu}
+2010-07-08 [M] Counted version number up to v0.3 {GauGau}
+2010-07-08 [M] Packaged and released v0.2 {GauGau}
+2010-07-07 [A] Added spinbutton {GauGau}
+2010-07-07 [A] Added button icon {GauGau}
+2010-07-07 [M] Counted version number up to 0.2 {GauGau}
+2010-07-07 [M] Added changelog (this file) {GauGau}

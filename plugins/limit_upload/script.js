@@ -8,12 +8,12 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/limit_upload/admin.php $
-  $Revision: 7745 $
-  $LastChangedBy: eenemeenemuu $
-  $Date: 2010-07-06 15:03:42 +0200 (Di, 06. Jul 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
   **************************************************/
 
 $(document).ready(function() {
-	$("#plugin_limit_upload_files").SpinButton({min: -1,max: 500});
+    $("#plugin_limit_upload_files").SpinButton({min: -1,max: 500});
 });

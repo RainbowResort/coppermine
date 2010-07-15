@@ -23,7 +23,7 @@ $lang_plugin_limit_upload['limit_upload'] = 'Upload begrenzen';
 $lang_plugin_limit_upload['description'] = 'Begrenzt den Benutzerupload auf eine bestimmte Anzahl insgesamt oder pro Zeitraum';
 $lang_plugin_limit_upload['announcement_thread'] = 'Ankündigungs-Thema';
 $lang_plugin_limit_upload['limit_reached_x'] = 'Du hast das Uploadlimit von %s Dateien %s erreicht.';
-$lang_plugin_limit_upload['limit_reached_wait'] = 'Du musst %s Stunde(n) warten, bevor du weitere Dateien hochladen darfst.';
+$lang_plugin_limit_upload['limit_reached_wait'] = 'Du musst %s %s warten, bevor du weitere Dateien hochladen darfst.';
 $lang_plugin_limit_upload['saved'] = 'Deine Einstellungen wurden gespeichert.';
 $lang_plugin_limit_upload['upload_limit'] = 'Uploadlimit (Dateien insgesamt oder pro Zeitspanne)';
 $lang_plugin_limit_upload['upload_limit_values'] = array (
@@ -34,5 +34,6 @@ $lang_plugin_limit_upload['upload_limit_values'] = array (
     'month' => 'pro Monat (30 Tage)',
     'year' => 'pro Jahr (365 Tage)'
 );
+$lang_plugin_limit_upload['time_units'] = array('Minute(n)', 'Stunde(n)', 'Tag(e)', 'Woche(n)');
 
 ?>

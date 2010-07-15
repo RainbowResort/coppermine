@@ -25,18 +25,21 @@ if (defined('DB_INPUT_PHP')) {
 }
 
 function limit_upload_page_start() {
-    if (!GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0) {
+    if (GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0) {
         global $CONFIG;
 
-        switch($CONFIG['limit_upload_upload_limit']) {
+        switch($CONFIG['limit_upload_time_limit']) {
             // TODO: determine beginning of current hour/day/week/month/year and adjust the calculation
-            case 'hour': $sql_and = ' AND ctime > '.time()-(60*60); break;
-            case 'day': $sql_and = ' AND ctime > '.time()-(24*60*60); break;
-            case 'week': $sql_and = ' AND ctime > '.time()-(7*24*60*60); break;
-            case 'month': $sql_and = ' AND ctime > '.time()-(30*24*60*60); break;
-            case 'year': $sql_and = ' AND ctime > '.time()-(365*24*60*60); break;
-            default: $sql_and = ''; break;
+            case 'total': $multiplicator = -1; break;
+            case 'hour': $multiplicator = 1; break;
+            case 'day': $multiplicator = 24; break;
+            case 'week': $multiplicator = 7*24; break;
+            case 'month': $multiplicator = 30*24; break;
+            case 'year': $multiplicator = 365*24; break;
+            default: $multiplicator = false; break;
         }
+
+        $sql_and = $multiplicator > 0 ? ' AND ctime > '. (time() - $multiplicator * 60*60) : '';
 
         $count = mysql_result(cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_PICTURES']} WHERE owner_id = ".USER_ID.$sql_and), 0);
         if ($count >= $CONFIG['limit_upload_upload_limit']) {
@@ -48,13 +51,23 @@ function limit_upload_page_start() {
 
             $error = sprintf($lang_plugin_limit_upload['limit_reached_x'], $CONFIG['limit_upload_upload_limit'], $lang_plugin_limit_upload['upload_limit_values'][$CONFIG['limit_upload_time_limit']]);
 
-            if ($CONFIG['limit_upload_time_limit'] != 'total') {
+            if ($multiplicator > 0) {
                 // TODO: determine end of current hour/day/week/month/year and adjust the query
-                // TODO: more precise waiting time calculation with different units
-                $last_upload = mysql_result(cpg_db_query("SELECT MAX(ctime) FROM {$CONFIG['TABLE_PICTURES']} WHERE owner_id = ".USER_ID), 0);
-                $wait = ceil( (time() - $last_upload) / 3600);
+                $last_upload = mysql_result(cpg_db_query("SELECT ctime FROM {$CONFIG['TABLE_PICTURES']} WHERE owner_id = ".USER_ID." ORDER BY ctime DESC LIMIT ".($CONFIG['limit_upload_upload_limit']-1).", 1"), 0);
+                $wait_time = ($last_upload + $multiplicator * 60*60 - time()) / 60; // minutes
+
+                $unit_helper = array(60, 24, 7, 1);
+
+                $i = 0;
+                foreach ($lang_plugin_limit_upload['time_units'] as $unit) {
+                    if (ceil($wait_time) < $unit_helper[$i]) {
+                        break;
+                    }
+                    $wait_time /= $unit_helper[$i++];
+                }
+
                 $error .= '<br /> ';
-                $error .= sprintf($lang_plugin_limit_upload['limit_reached_wait'], $wait);
+                $error .= sprintf($lang_plugin_limit_upload['limit_reached_wait'], ceil($wait_time), $unit);
             }
 
             if ($superCage->post->keyExists('process')) {
