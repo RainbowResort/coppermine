@@ -100,7 +100,7 @@ echo "
 
 foreach(remote_videos_get_hoster() as $key => $value) {
     global $CONFIG;
-    $checked = strpos($CONFIG['allowed_mov_types'], $key) ? "checked=\"checked\" " : "";
+    $checked = is_numeric(strpos($CONFIG['allowed_mov_types'], $key)) ? "checked=\"checked\" " : "";
     echo "
         <tr>
             <td class=\"tableb\" width=\"200\">
