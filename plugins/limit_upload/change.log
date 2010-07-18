@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-07-18 [A] Added Spanish language file (user contribution) {eenemeenemuu}
 2010-07-15 [B] Fixed waiting time calculation for error message {eenemeenemuu}
 2010-07-08 [M] Counted version number up to v0.3 {GauGau}
 2010-07-08 [M] Packaged and released v0.2 {GauGau}

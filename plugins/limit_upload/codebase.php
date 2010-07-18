@@ -25,7 +25,7 @@ if (defined('DB_INPUT_PHP')) {
 }
 
 function limit_upload_page_start() {
-    if (GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0) {
+    if (!GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0) {
         global $CONFIG;
 
         switch($CONFIG['limit_upload_time_limit']) {
