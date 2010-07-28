@@ -20,10 +20,13 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $thisplugin->add_filter('token_criteria', 'token_modifier_criteria');
 
 function token_modifier_criteria($criteria) {
-    $remove = array('ip_addr', 'browser');
-    foreach($remove as $key) {
-        unset($criteria[$key]);
-    }
+    global $raw_ip;
+
+    $superCage = Inspekt::makeSuperCage();
+
+    $criteria['ip_addr'] = $raw_ip;
+    $criteria['browser'] = $superCage->server->getRaw('HTTP_USER_AGENT');
+
     return $criteria;
 }
 

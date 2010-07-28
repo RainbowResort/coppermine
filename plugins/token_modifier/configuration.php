@@ -16,9 +16,9 @@
 **************************************************/
 
 $name = 'Form token modifier';
-$description = 'Creates form tokens with only server side criteria.';
+$description = 'Adds client side values (ip address and browser agent) to the form token generator. This generates a super secure form token.';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.0';
+$version = '2.0';
 $plugin_cpg_version = array('min' => '1.5.7');
 $extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,66044.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
 
