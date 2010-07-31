@@ -25,8 +25,8 @@ function custom_thumb_page_start() {
     global $CONFIG, $lang_errors;
     $superCage = Inspekt::makeSuperCage();
 
-    if ($superCage->get->keyExists('custom_thumb_pid')) {
-        $pid = $superCage->get->getInt('custom_thumb_pid');
+    if ($superCage->get->keyExists('custom_thmb_id')) {
+        $pid = $superCage->get->getInt('custom_thmb_id');
         $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = p.aid WHERE p.pid = '$pid' LIMIT 1");
         $row = mysql_fetch_assoc($result);
 
@@ -112,7 +112,7 @@ function custom_thumb_file_data($data) {
             require_once "./plugins/custom_thumb/lang/{$CONFIG['lang']}.php";
         }
         $custom_thumb_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/file_approval.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $menu_button = "<li><a href=\"?custom_thumb_pid={$data['pid']}\" class=\"admin_menu\">{$custom_thumb_menu_icon}{$lang_plugin_custom_thumb['custom_thumbnail']}</a></li>";
+        $menu_button = "<li><a href=\"displayimage.php?custom_thmb_id={$data['pid']}\" class=\"admin_menu\">{$custom_thumb_menu_icon}{$lang_plugin_custom_thumb['custom_thumbnail']}</a></li>";
         $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;
