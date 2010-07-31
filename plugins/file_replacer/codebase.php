@@ -18,15 +18,15 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $thisplugin->add_action('page_start','file_replacer_page_start');
-$thisplugin->add_filter('file_data','file_replacer_file_data');
+$thisplugin->add_filter('file_data','file_replacer_id_data');
 
 
 function file_replacer_page_start() {
     global $CONFIG, $lang_errors;
     $superCage = Inspekt::makeSuperCage();
 
-    if ($superCage->get->keyExists('replacer_pid')) {
-        $pid = $superCage->get->getInt('replacer_pid');
+    if ($superCage->get->keyExists('replacer_id')) {
+        $pid = $superCage->get->getInt('replacer_id');
         $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = p.aid WHERE p.pid = '$pid' LIMIT 1");
         $row = mysql_fetch_assoc($result);
 
@@ -196,7 +196,7 @@ EOT;
 }
 
 
-function file_replacer_file_data($data) {
+function file_replacer_id_data($data) {
     global $CONFIG, $CURRENT_ALBUM_DATA;
 
     if ((USER_ADMIN_MODE && $CURRENT_ALBUM_DATA['category'] == FIRST_USER_CAT + USER_ID) || ($CONFIG['users_can_edit_pics'] && $data['owner_id'] == USER_ID && USER_ID != 0) || GALLERY_ADMIN_MODE) {
@@ -205,7 +205,7 @@ function file_replacer_file_data($data) {
             require_once "./plugins/file_replacer/lang/{$CONFIG['lang']}.php";
         }
         $file_replacer_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/alb_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $menu_button = "<li><a href=\"?replacer_pid={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a></li>";
+        $menu_button = "<li><a href=\"displayimage.php?replacer_id={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a></li>";
         $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;

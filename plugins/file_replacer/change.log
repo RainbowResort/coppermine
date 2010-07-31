@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-07-31 [B] Made it work with SEF_URL plugin {Timo}
 2010-07-08 [M] Added changelog (this file) {GauGau}
 2010-07-08 [M] Counted version number up to 1.6 {GauGau}
 2010-07-08 [M] Updated year in copyright header {GauGau}
