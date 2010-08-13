@@ -322,6 +322,7 @@ class admin_controller extends Controller {
             'fr_avatar_size'          => Config::item('fr_gap_time'),
             'fr_signature_max_size'   => Config::item('fr_gap_time'),
             'fr_time_online_checking' => Config::item('fr_time_online_checking'),
+            'fr_msg_icons'            => Config::item('fr_msg_icons')
         );
         $errors = array();
         if ($this->validate->post->keyExists('submit')) {

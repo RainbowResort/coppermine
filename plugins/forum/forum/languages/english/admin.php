@@ -69,4 +69,5 @@ $lang = Array(
     'signature_max_size'   => 'Maximum character allowed in signature (0 to disable)',
     'new_board_success'    => 'New board "%s" was created successful.',
     'time_online_checking' => 'Time to check ative user (minutes)',
+    'enable_message_icons' => 'Use message icons'
 );

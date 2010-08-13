@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `CPG_fr_messages` (
   `modified_time` int(10) NOT NULL default '0',
   `modified_name` tinytext NOT NULL,
   `body` text NOT NULL,
-  `icon` varchar(16) NOT NULL default 'xx',
+  `icon` varchar(16) NOT NULL default '1',
   PRIMARY KEY  (`msg_id`)
 ) TYPE=MyISAM;
 

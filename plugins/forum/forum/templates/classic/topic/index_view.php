@@ -146,10 +146,12 @@ echo table::tds(array(
     array('class'=>'tableb', 'width'=>'30%', 'text'=>Lang::item('topic.subject')),
     array('class'=>'tableb', 'width'=>'70%', 'text'=>form::text('subject', Lang::item('topic.re').$topic_name)),
 ));
-echo table::tds(array(
-    array('class'=>'tableb', 'text'=>Lang::item('topic.message_icon')),
-    array('class'=>'tableb', 'text'=>forum::generate_message_icons('icon', $icons, 'icon1')),
-));
+if (Config::item('fr_msg_icons') == 1) {
+    echo table::tds(array(
+        array('class'=>'tableb', 'text'=>Lang::item('topic.message_icon')),
+        array('class'=>'tableb', 'text'=>forum::generate_message_icons('icon', $icons, 'icon1')),
+    ));
+}
 echo table::tds(array(
     array('class'=>'tableb', 'text'=>NBSP),
     array('class'=>'tableb', 'text'=>forum::generate_bbcode_tags('fastreply', 'body')),

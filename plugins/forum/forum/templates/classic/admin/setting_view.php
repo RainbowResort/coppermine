@@ -49,6 +49,10 @@ echo table::tds(array(
     array('class'=>'tableb', 'width'=>'50%', 'text'=>form::yesno('fr_guest_post', Config::item('fr_guest_post'))),
 ));
 echo table::tds(array(
+    array('class'=>'tableb', 'width'=>'50%', 'text'=>Lang::item('admin.enable_message_icons')),
+    array('class'=>'tableb', 'width'=>'50%', 'text'=>form::yesno('fr_msg_icons', Config::item('fr_msg_icons'))),
+));
+echo table::tds(array(
     array('class'=>'tableb', 'width'=>'50%', 'text'=>Lang::item('admin.time_online_checking')),
     array('class'=>'tableb', 'width'=>'50%', 'text'=>form::text('fr_time_online_checking', Config::item('fr_time_online_checking'))),
 ));

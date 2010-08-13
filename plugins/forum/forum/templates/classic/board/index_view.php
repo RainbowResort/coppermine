@@ -77,11 +77,17 @@ echo table::tds(array(
 foreach ($topics as $topic) {
     $buffer = '';
     $buffer .= table::open(array());
-    $buffer .= table::tds(array(
-        array('text'=>html::img($topic['icon'])),
-        array('text'=>NBSP),
-        array('text'=>html::topic_anchor($topic['id'], $topic['name'])),
-    ));
+    if (Config::item('fr_msg_icons') == 1) {
+        $buffer .= table::tds(array(
+            array('text'=>html::img($topic['icon'])),
+            array('text'=>NBSP),
+            array('text'=>html::topic_anchor($topic['id'], $topic['name'])),
+        ));
+    } else {
+        $buffer .= table::tds(array(
+            array('text'=>html::topic_anchor($topic['id'], $topic['name'])),
+        ));
+    }
     $buffer .= table::close();
     echo table::tds(array(
         array('class'=>'tableb', 'width'=>'0%', 'align'=>'center', 'text'=> html::img($topic['status'])),

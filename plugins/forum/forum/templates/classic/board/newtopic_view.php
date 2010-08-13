@@ -50,10 +50,12 @@ print table::tds(array(
     array('class'=>'tableb', 'width'=>'30%', 'text'=>Lang::item('topic.subject')),
     array('class'=>'tableb', 'width'=>'70%', 'text'=>form::text('subject', $form['subject'])),
 ));
-print table::tds(array(
-    array('class'=>'tableb', 'text'=>Lang::item('topic.message_icon')),
-    array('class'=>'tableb', 'text'=>forum::generate_message_icons('icon', $icons, $form['icon'])),
-));
+if (Config::item('fr_msg_icons') == 1) {
+    print table::tds(array(
+        array('class'=>'tableb', 'text'=>Lang::item('topic.message_icon')),
+        array('class'=>'tableb', 'text'=>forum::generate_message_icons('icon', $icons, $form['icon'])),
+    ));
+}
 print table::tds(array(
     array('class'=>'tableb', 'text'=>NBSP),
     array('class'=>'tableb', 'text'=>forum::generate_bbcode_tags('newtopic', 'body')),

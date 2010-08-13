@@ -79,6 +79,7 @@ class message_controller extends Controller {
                 'modified_time'   => USER_ID,
                 'modified_name'   => USER_NAME,
             );
+            if (Config::item('fr_msg_icons') == 0 && $data['icon'] == '') $data['icon'] = 'icon1';
             if ($data['subject'] == '') $errors[] = Lang::item('error.empty_subject');
             if ($data['icon'] == '')    $errors[] = Lang::item('error.no_msg_icon');
             if ($data['body'] == '')    $errors[] = Lang::item('error.empty_body');

@@ -116,6 +116,7 @@ class board_controller extends Controller {
                 'poster_ip'       => Config::item('hdr_ip'),
                 'smileys_enabled' => 1,
             );
+            if (Config::item('fr_msg_icons') == 0 && $data['icon'] == '') $data['icon'] = 'icon1';
             if ($data['subject'] == '') $errors[] = Lang::item('error.empty_subject');
             if ($data['icon'] == '')    $errors[] = Lang::item('error.no_msg_icon');
             if ($data['body'] == '')    $errors[] = Lang::item('error.empty_body');

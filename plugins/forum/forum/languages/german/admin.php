@@ -69,4 +69,5 @@ $lang = Array(
     'signature_max_size'   => 'Maximale Anzahl von Buchstaben in der Signatur (0 zum deaktivieren)',
     'new_board_success'    => 'Neues Forum "%s" wurde erfolgreich erstellt.',
     'time_online_checking' => 'Zeit um aktive Benutzer zu erkennen (Minuten)',
+    'enable_message_icons' => 'Benutze Symbole für Nachrichten'
 );
