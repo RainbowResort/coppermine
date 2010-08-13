@@ -35,6 +35,7 @@ DELETE FROM `CPG_config` WHERE name = 'fr_gap_time';
 DELETE FROM `CPG_config` WHERE name = 'fr_time_online_checking';
 DELETE FROM `CPG_config` WHERE name = 'fr_avatar_size';
 DELETE FROM `CPG_config` WHERE name = 'fr_signature_max_size';
+DELETE FROM `CPG_config` WHERE name = 'fr_msg_icons';
 
 ALTER TABLE `CPG_users` DROP `fr_avatar`;
 ALTER TABLE `CPG_users` DROP `fr_signature`;
