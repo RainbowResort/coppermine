@@ -165,6 +165,7 @@ function codebase_uninstall() {
     if (!$superCage->post->keyExists('drop')) {
         return 1;
     }
+    @unlink('forum.php');
     if ($superCage->post->getInt('drop') == 0) {
         return true;
     } else {

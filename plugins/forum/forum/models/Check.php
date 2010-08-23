@@ -192,7 +192,12 @@ class check_model extends Model {
                 }
             } else {
                 if (Config::item('fr_guest_post') == 1) {
-                    return TRUE;
+                    $authorizer = check_model::getInstance();                
+                    if ($authorizer->is_locked($topic_id)) {
+                        return FALSE;
+                    } else {
+                        return TRUE;
+                    }
                 } else {
                     return FALSE;
                 }
