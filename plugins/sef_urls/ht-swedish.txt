@@ -1,0 +1,129 @@
+##/**************************************************
+##  Coppermine 1.5.x Plugin - sef_urls
+##  *************************************************
+##  Copyright (c) 2003-2007 Coppermine Dev Team
+##  *************************************************
+##  This program is free software; you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation; either version 3 of the License, or
+##  (at your option) any later version.
+##  ********************************************
+##  $HeadURL$
+##  $Revision$
+##  $LastChangedBy$
+##  $Date$
+##  **************************************************/
+
+#Options FollowSymLinks SymLinksIfOwnerMatch
+
+RewriteEngine on
+
+#  Uncomment the following line if your webserver's
+#  URL is not directly related to physical file paths.
+#  Update "YOUR_COPPERMINE_ROOT" (just / for root)
+
+#RewriteBase /YOUR_COPPERMINE_ROOT
+
+#
+# Language translation
+#
+
+RewriteRule soek.html(.*) search.php$1 [NC]
+
+RewriteRule kontakt.html(.*) contact.php$1 [NC]
+
+RewriteRule (.*)topplista(.*) $1toprated$2 [NC]
+
+RewriteRule (.*)mestvisade(.*) $1topn$2 [NC]
+
+RewriteRule (.*)kommenteradeav(.*) $1lastcomby$2 [NC]
+
+RewriteRule (.*)kommenterade(.*) $1lastcom$2 [NC]
+
+RewriteRule (.*)sida(.*) $1page$2 [NC]
+
+RewriteRule (.*)anvaendarlista(.*) $1usermgr$2 [NC]
+
+RewriteRule (.*)anvaendare(.*) $1profile$2 [NC]
+
+RewriteRule (.*)oeverblick(.*) $1thumbnails$2 [NC]
+
+RewriteRule (.*)bild(.*) $1displayimage$2 [NC]
+
+RewriteRule (.*)senasteav(.*) $1lastupby$2 [NC]
+
+RewriteRule (.*)senaste(.*) $1lastup$2 [NC]
+
+RewriteRule (.*)soek(.*) $1search$2 [NC]
+
+RewriteRule (.*)upp(.*) $1top_display_media$2 [NC]
+
+
+#
+# Rewrite usrmgr urls
+#
+
+RewriteRule usermgr-page-([0-9]*).html(.*) usermgr.php?page=$1$2 [NC]
+
+RewriteRule usermgr.html(.*) usermgr.php$1 [NC]
+
+#
+# Rewrite index urls
+#
+
+RewriteRule index.html(.*) index.php$1 [NC]
+
+RewriteRule index-([0-9]*)\.html(.*) index.php?cat=$1$2 [NC]
+
+RewriteRule index-([0-9]*)-page-([0-9]*)\.html(.*) index.php?cat=$1&page=$2$3 [NC]
+
+
+#
+# Rewrite thumbnail urls
+#
+
+RewriteRule thumbnails-lastupby-([0-9]+)\.html(.*) thumbnails.php?album=lastupby&uid=$1$2 [NC]
+
+RewriteRule thumbnails-lastcomby-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&uid=$1$2 [NC]
+
+RewriteRule thumbnails-lastupby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbnails.php?album=lastupby&cat=$1&uid=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-lastcomby-([0-9]+)-([0-9]+)-page-([0-9]+)\.html(.*) thumbnails.php?album=lastcomby&cat=$1&uid=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2$3 [NC]
+
+RewriteRule thumbnails-page-([0-9]*)-([a-z0-9]*).*\.html(.*) thumbnails.php?album=$2&page=$1$3 [NC]
+
+RewriteRule thumbnails-([a-z0-9]*)-([\-]?[0-9]*)-page-([0-9]*)\.html(.*) thumbnails.php?album=$1&cat=$2&page=$3$4 [NC]
+
+RewriteRule thumbnails-search-keyword-(.*)\.html(.*) thumbnails.php?album=search&keywords=on&search=$1$2 [NC]
+
+RewriteRule thumbnails-search-(.*)\.html(.*) thumbnails.php?album=search&search=$1$2 [NC]
+
+RewriteRule thumbnails-([0-9a-z]*).*\.html(.*) thumbnails.php?album=$1$2 [NC]
+
+
+#
+# Rewrite displayimage urls
+#
+
+RewriteRule displayimage-lastcom-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-page-([\-]?[0-9]+).html(.*) displayimage.php?album=lastcom&cat=$1&pid=$2&msg_id=$3&page=$4$5 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4&msg_id=$5&page=$6$7 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+)\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3&uid=$4$5 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+)-([\-]?[0-9]+).*\.html(.*) displayimage.php?album=$1&cat=$2&pid=$3$4 [NC]
+
+RewriteRule displayimage-([a-z0-9]+)-([\-]?[0-9]+).*\.html(.*) displayimage.php?album=$1&pid=$2$3 [NC]
+
+RewriteRule displayimage-([0-9]+).*\.html(.*) displayimage.php?pid=$1$2 [NC]
+
+
+#
+# Rewrite users profiles
+#
+
+RewriteRule profile-op-([a-z0-9_]+)\.html(.*) profile.php?op=$1 [NC]
+
+RewriteRule profile-([0-9]+).*\.html(.*) profile.php?uid=$1$2 [NC]

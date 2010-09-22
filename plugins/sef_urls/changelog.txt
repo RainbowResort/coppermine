@@ -25,6 +25,9 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-09-22 [A] Added Swedish translation {eenemeenemuu}
+2010-09-22 [B] Fixed typo in configuration.php {eenemeenemuu}
+2010-09-22 [O] Replaced 'else if' with 'elseif' for language selection {eenemeenemuu}
 2010-07-08 [A] Started i18n of plugin {GauGau}
 2010-06-10 [O] Further improved speaking URLs for albums {Timo}
 2010-06-09 [B] Fixed search bug {Timo}

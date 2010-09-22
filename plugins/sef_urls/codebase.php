@@ -44,13 +44,12 @@ function sef_urls_convert($html) {
     // Configure here
     $sef_language              = 'english';  // set to english, german, french, italian or spanish
     $speakingpic_placeholder   = '-9b6o4';  // set to '' (empty string) to disable speaking URL functionality for files
-	$speakingalbum_placeholder = '-65o4c';  // set to '' (empty string) to disable speaking URL functionality for albums
-	$speakinguser_placeholder  = '-89occ';  // set to '' (empty string) to disable speaking URL functionality for users
+    $speakingalbum_placeholder = '-65o4c';  // set to '' (empty string) to disable speaking URL functionality for albums
+    $speakinguser_placeholder  = '-89occ';  // set to '' (empty string) to disable speaking URL functionality for users
     $number_of_url_chars       = 42;        // max number of chars in speaking URL functionality
     
     // Language translation
-    if ($sef_language == 'german')
-    {
+    if ($sef_language == 'german') {
         $str_thumbnails = 'uebersicht';
         $str_displayimage = 'bild';
         $str_toprated = 'beste';
@@ -65,9 +64,7 @@ function sef_urls_convert($html) {
         $str_contact = 'kontakt';
         $str_tdm = '#oben';
         $str_usermgr = 'benutzerliste';
-    }
-    else if ($sef_language == 'french')
-    {
+    } elseif ($sef_language == 'french') {
         $str_thumbnails = 'apercu';
         $str_displayimage = 'photo';
         $str_toprated = 'tresbien';
@@ -82,9 +79,7 @@ function sef_urls_convert($html) {
         $str_contact = 'contacter';
         $str_tdm = '#enhaut';
         $str_usermgr = 'fichierclient';
-    }
-    else if ($sef_language == 'spanish')
-    {
+    } elseif ($sef_language == 'spanish') {
         $str_thumbnails = 'resumen';
         $str_displayimage = 'cromo';
         $str_toprated = 'mejor';
@@ -99,9 +94,7 @@ function sef_urls_convert($html) {
         $str_contact = 'contacto';
         $str_tdm = '#alto';
         $str_usermgr = 'usuariolistado';
-    }
-    else if ($sef_language == 'italian')
-    {
+    } elseif ($sef_language == 'italian') {
         $str_thumbnails = 'miniature';
         $str_displayimage = 'mostra';
         $str_toprated = 'migliore';
@@ -116,9 +109,22 @@ function sef_urls_convert($html) {
         $str_contact = 'contacto';
         $str_tdm = '#inalto';
         $str_usermgr = 'listautenti';
-    }
-    else
-    {
+    } elseif ($sef_language == 'swedish') {
+        $str_thumbnails = 'miniatyrer';
+        $str_displayimage = 'bild';
+        $str_toprated = 'topplista';
+        $str_topn = 'mestvisade';
+        $str_lastcomby = 'kommenteradeav';
+        $str_lastcom = 'kommenterade';
+        $str_page = 'sida';
+        $str_profile = 'anvaendare';
+        $str_lastupby = 'senasteav';
+        $str_lastup = 'senaste';
+        $str_search = 'soek';
+        $str_contact = 'kontakt';
+        $str_tdm = 'upp';
+        $str_usermgr = 'anvaendarlista';
+    } else {
         $str_thumbnails = 'thumbnails';
         $str_displayimage = 'displayimage';
         $str_toprated = 'toprated';
@@ -151,7 +157,7 @@ function sef_urls_convert($html) {
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)(\&|\&amp;)page=([0-9]+)/i',$str_thumbnails.'-$1-$3-'.$str_page.'-$5.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)cat=([\-0-9]+)/i',$str_thumbnails.'-$1-$3.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=([a-z0-9]+)(\&|\&amp;)page=([0-9]+)/i',$str_thumbnails.'-'.$str_page.'-$3-$1'.$speakingalbum_placeholder.'.html',$html);
-	$html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)keywords=on(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-keyword-$3.html',$html);
+    $html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)keywords=on(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-keyword-$3.html',$html);
     $html = preg_replace('/thumbnails\.php\?search=([^"]+)(\&|\&amp;)album=search/i',$str_thumbnails.'-'.$str_search.'-$1.html',$html);
     $html = preg_replace('/thumbnails\.php\?album=search(\&|\&amp;)search=([^"]+)/i',$str_thumbnails.'-'.$str_search.'-$2.html',$html);
     $html = str_replace('thumbnails.php?album=favpics',$str_thumbnails.'-favpics.html',$html);
@@ -285,7 +291,7 @@ function sef_urls_convert($html) {
             $html = str_replace($nexturl[0],'-'.$nexturl[1].'-'.substr($urlname,0,$number_of_url_chars),$html);
         }
     }
-	
+    
     // language specific replacements
     if ($sef_language != 'english')
     { 

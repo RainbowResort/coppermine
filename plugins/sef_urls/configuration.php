@@ -35,7 +35,7 @@ $plugin_cpg_version = array('min' => '1.5');
 $announcement_thread_link = <<< EOT
 <a href="http://forum.coppermine-gallery.net/index.php/topic,42568.0.html" rel="external" class="admin_menu">{$lang_plugin_sef_urls['announcement_thread']}</a>
 EOT;
-$configuration_link = 'a href="">' . sprintf($lang_plugin_sef_urls['configure_x'], $lang_plugin_sef_urls['name']) . '</a>';
+$configuration_link = '<a href="">' . sprintf($lang_plugin_sef_urls['configure_x'], $lang_plugin_sef_urls['name']) . '</a>';
 $install_info = <<< EOT
 {$lang_plugin_sef_urls['recovery_instructions']}<br />
 {$announcement_thread_link}
