@@ -68,8 +68,8 @@ function external_edit_menu_file($data)
         }
         $menu_button = ' <a href="';
         $menu_button .= 'http://fotoflexer.com/API/API_Loader_v1_01.php';
-        //$menu_button .= '?ff_image_url=' . urlencode($CONFIG['site_url'].$CONFIG['fullpath'].$data['filepath'].$data['filename']);
-        $menu_button .= '?ff_image_url=' . urlencode('http://osterburken.net/galerie/albums/konzert/05/just_rock/gg02.jpg'); // Comment out the line above and uncomment this line for testing purposes
+        $menu_button .= '?ff_image_url=' . urlencode($CONFIG['site_url'].$CONFIG['fullpath'].$data['filepath'].$data['filename']);
+        //$menu_button .= '?ff_image_url=' . urlencode('http://osterburken.net/galerie/albums/konzert/05/just_rock/gg02.jpg'); // Comment out the line above and uncomment this line for testing purposes
         $menu_button .= '&amp;ff_callback_url=' . urlencode($CONFIG['site_url'] . 'index.php?file=external_edit/index') . '%26t=' . $token;
         $menu_button .= '&amp;ff_cancel_url=' . urlencode($CONFIG['site_url'] . 'displayimage.php?pid=' . $data['pid']);
         $menu_button .= '&amp;ff_lang=' . $locale;
