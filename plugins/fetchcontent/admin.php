@@ -203,27 +203,33 @@ echo <<< EOT
 <form action="index.php?file=fetchcontent/admin" method="post" name="im_settings">
 EOT;
 starttable('100%', $fetchcontent_icon_array['config'] . $lang_plugin_fetchcontent['configuration'] . ': ' . $lang_plugin_fetchcontent['display_name'] . ' v' . $version, 3, 'cpg_zebra');
-echo <<< EOT
+
+if ($superCage->post->keyExists('submit')) {
+    echo <<< EOT
 	<tr>
 		<td class="tablef" colspan="3" >
 EOT;
-if ($superCage->post->keyExists('submit')) {
     if ($config_changes_counter > 0) {
         msg_box('', $lang_plugin_fetchcontent['update_success'], '', '', 'success');
     } else {
         msg_box('', $lang_plugin_fetchcontent['no_changes'], '', '', 'validation');
     }
-} else {
-	echo <<< EOT
-	{$lang_plugin_fetchcontent['display_name']} &copy; Coppermine dev team
-    {$announcement_thread}
-	{$documentation_link}
-	{$configuration_link}
-EOT;
-}
-echo <<< EOT
+    echo <<< EOT
 		</td>
 	</tr>
+EOT;
+} 
+	echo <<< EOT
+	<tr>
+		<td class="tablef" colspan="3" >
+        	{$lang_plugin_fetchcontent['display_name']} &copy; Coppermine dev team
+            {$announcement_thread}
+        	{$documentation_link}
+        	{$configuration_link}
+		</td>
+	</tr>
+EOT;
+echo <<< EOT
 	<tr>
 		<td valign="top" colspan="2" class="tableh1">
 		    {$lang_plugin_fetchcontent['overall_settings']}
