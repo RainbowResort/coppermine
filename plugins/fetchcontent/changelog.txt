@@ -26,6 +26,16 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-09-27 [A] Added German language file {GauGau}
+2010-09-27 [D] Slight documentation improvements {GauGau}
+2010-09-27 [O] Added menu to admin.php permanently {GauGau}
+2010-09-27 [M] Version count updated to 0.7 {GauGau}
+2010-01-24 [O] Added minimum version info {GauGau}
+2010-01-21 [M] Counted version up to 0.6 {GauGau}
+2010-01-21 [O] Added admin.js {GauGau}
+2010-01-21 [A] Added search meta album {GauGau}
+2010-01-21 [A] Added config options {GauGau}
+2010-01-21 [M] Counted version up to 0.5 {GauGau}
 2010-01-21 [M] Version count updated to 0.4 {GauGau}
 2010-01-21 [A] Added max col and max row setting {GauGau}
 2010-01-21 [M] Version count updated to 0.4 {GauGau}
