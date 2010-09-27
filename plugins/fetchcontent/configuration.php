@@ -23,7 +23,7 @@ $description = $lang_plugin_fetchcontent['description'];
 $name = $lang_plugin_fetchcontent['display_name'];
 $description = $lang_plugin_fetchcontent['description'];
 $author = 'Joachim Müller';
-$version = '0.6';
+$version = '0.7';
 $plugin_cpg_version = array('min' => '1.5');
 $result = cpg_db_query("SELECT pid FROM {$CONFIG['TABLE_PICTURES']} AS r INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = r.aid $RESTRICTEDWHERE AND approved = 'YES' AND ((filename LIKE '%.jpg') OR (filename LIKE '%.png') OR (filename LIKE '%.gif')) ORDER BY RAND() LIMIT 1");
 list($fetchcontent_random_pid) = mysql_fetch_row($result);
