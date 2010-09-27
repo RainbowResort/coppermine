@@ -45,6 +45,17 @@ function fetchcontent_install() {
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_debug', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_cols', {$CONFIG['thumbcols']})");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_rows', {$CONFIG['thumbrows']})");
+	// Add the table
+	$query = <<< EOT
+        CREATE TABLE IF NOT EXISTS {$CONFIG['TABLE_PREFIX']}plugin_fetchcontent (
+          pid mediumint(10) NOT NULL default '0',
+          imgtype VARCHAR(32),
+          filename varchar(255) NOT NULL default '',
+          width smallint(6) NOT NULL default '0',
+          height smallint(6) NOT NULL default '0'
+        ) TYPE=MyISAM COMMENT='Contains the info for the temporary files';
+EOT;
+    cpg_db_query($query);
 	
     return true;
 }
@@ -60,6 +71,18 @@ function fetchcontent_install() {
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_debug'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_cols'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_rows'");
+	// Delete temporary files
+    $handle = opendir('plugins/fetchcontent/images');
+    while (false !== ($file = readdir($handle))) {
+        if ($file != '.' && $file != '..' && $file != 'normal_access_denied.png' && $file != 'thumb_access_denied.png') {
+            list($delete_result,$debug_output) = cpg_folder_file_delete('plugins/fetchcontent/images' . $file);
+        }
+    }
+    closedir($handle);
+
+	// Drop the temporary files table
+	$query = "DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_fetchcontent";
+    cpg_db_query($query);
 
     return true;
 }
