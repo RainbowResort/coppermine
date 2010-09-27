@@ -142,7 +142,7 @@ On the plugin configuration screen you can enable or disable how the plugin work
     &lt;/body&gt;
     &lt;/html&gt;</textarea><br />
     
-        Replace the content placeholder line with
+        Replace the content placeholder line (<tt class="code smallcode">This line represents the content area where you need to paste the examples below in.</tt>) with
         <textarea class="cpg_code smallcode" rows="1" style="width:80%;">&lt;script src="{$CONFIG['site_url']}?file=fetchcontent/js&amp;album=random" type="text/javascript"&gt;&lt;/script&gt;</textarea>
         
         <a name="usage_several_params"></a><h4>Parameters<a href="#usage_several_params" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
@@ -163,10 +163,12 @@ On the plugin configuration screen you can enable or disable how the plugin work
 				</ul>
 				
 				<a name="usage_several_params_cols"></a><h5>cols<a href="#usage_several_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
-                The number of table columns returned. Default is the number of columns you specified in coppermine's config record &quot;<a href="docs/en/configuration.htm#admin_thumbnail_columns">Number of columns on thumbnail page</a>&quot;
+                The number of table columns returned. Default is the number of columns you specified in coppermine's config record &quot;<a href="docs/en/configuration.htm#admin_thumbnail_columns">Number of columns on thumbnail page</a>&quot;. 
+                This value can't be higher than what you have specified as &quot;<a href="#configuration_several_cols">Maximum number of table columns</a>". If you (or a malevolent leecher) specifies a larger number, the setting for the maximum number of columns will apply instead.
                 
                 <a name="usage_several_params_rows"></a><h5>rows<a href="#usage_several_params_cols" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h5>
                 The number of table rows returned. Default is the number of rows you specified in coppermine's config record &quot;<a href="docs/en/configuration.htm#admin_thumbnail_rows">Number of rows on thumbnail page</a>&quot;
+                This value can't be higher than what you have specified as &quot;<a href="#configuration_several_rows">Maximum number of table rows</a>". If you (or a malevolent leecher) specifies a larger number, the setting for the maximum number of rows will apply instead.
             </div>
     </div>
 
