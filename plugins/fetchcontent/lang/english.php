@@ -53,7 +53,10 @@ $lang_plugin_fetchcontent['fetching_several_files'] = 'Fetching several files';
 $lang_plugin_fetchcontent['overall_settings'] = 'Overall Settings';
 $lang_plugin_fetchcontent['max_cols'] = 'Maximum number of table columns';
 $lang_plugin_fetchcontent['max_rows'] = 'Maximum number of table rows';
-
+$lang_plugin_fetchcontent['caching'] = 'Caching';
+$lang_plugin_fetchcontent['hide_location'] = 'Hide the location of individual files';
+$lang_plugin_fetchcontent['images_only'] = 'Images only';
+$lang_plugin_fetchcontent['all_file_types'] = 'All file types';
 
 
 ?>

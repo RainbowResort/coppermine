@@ -36,24 +36,37 @@ if ($superCage->get->keyExists('file')) {
 // install
 function fetchcontent_install() {
     global $CONFIG;
-    $url = parse_url($CONFIG['site_url']);
 	// Add the config options for the plugin	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_image_denied', '2')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_check_referer', '0')");
+	$url = parse_url($CONFIG['site_url']);
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_domainlist', '{$url['host']}')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_enable_logging', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_non_image', '1')");
     cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_debug', '0')");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_cols', {$CONFIG['thumbcols']})");
 	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_max_rows', {$CONFIG['thumbrows']})");
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_hide_location', '0')");
+	$cachefolder = 'fetchcontent';
+	$loopcounter = '';
+	while (file_exists($CONFIG['fullpath'] . $cachefolder . $loopcounter) == TRUE) {
+	    $loopcounter++;
+	}
+	$CONFIG['plugin_fetchcontent_cachefolder'] = $cachefolder . $loopcounter;
+	unset($cachefolder);
+    @mkdir($CONFIG['fullpath'] . $CONFIG['plugin_fetchcontent_cachefolder'], $CONFIG['default_dir_mode']);
+    @chmod($CONFIG['fullpath'] . $CONFIG['plugin_fetchcontent_cachefolder'], $CONFIG['default_dir_mode']);
+	cpg_db_query("INSERT IGNORE INTO {$CONFIG['TABLE_CONFIG']} (`name`, `value`) VALUES ('plugin_fetchcontent_cachefolder', '{$CONFIG['plugin_fetchcontent_cachefolder']}')");
 	// Add the table
 	$query = <<< EOT
         CREATE TABLE IF NOT EXISTS {$CONFIG['TABLE_PREFIX']}plugin_fetchcontent (
           pid mediumint(10) NOT NULL default '0',
-          imgtype VARCHAR(32),
-          filename varchar(255) NOT NULL default '',
+          imgtype enum('thumbnail','intermediate', 'full-size') NOT NULL default 'thumbnail',
+          filepath varchar(255) NOT NULL default '',
           width smallint(6) NOT NULL default '0',
-          height smallint(6) NOT NULL default '0'
-        ) TYPE=MyISAM COMMENT='Contains the info for the temporary files';
+          height smallint(6) NOT NULL default '0',
+          filesize int(11) NOT NULL default '0',
+          timestamp int(11) NOT NULL default '0'
+        ) TYPE=MyISAM COMMENT='Contains the info for the temporary files of the fetchcontent plugin';
 EOT;
     cpg_db_query($query);
 	
@@ -71,14 +84,17 @@ EOT;
     cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_debug'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_cols'");
 	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_max_rows'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_hide_location'");
+	cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'plugin_fetchcontent_cachefolder'");
 	// Delete temporary files
-    $handle = opendir('plugins/fetchcontent/images');
-    while (false !== ($file = readdir($handle))) {
-        if ($file != '.' && $file != '..' && $file != 'normal_access_denied.png' && $file != 'thumb_access_denied.png') {
-            list($delete_result,$debug_output) = cpg_folder_file_delete('plugins/fetchcontent/images' . $file);
-        }
-    }
-    closedir($handle);
+	$loopCounter = 0;
+	$result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_fetchcontent");
+	while ($row = mysql_fetch_assoc($result)) {
+		cpg_folder_file_delete($CONFIG['fullpath'] . $CONFIG['plugin_fetchcontent_cachefolder']. $row['filepath']);
+		$loopCounter++;
+	}
+	// Delete temporary folder
+	@rmdir($CONFIG['fullpath'] . $CONFIG['plugin_fetchcontent_cachefolder']);
 
 	// Drop the temporary files table
 	$query = "DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_fetchcontent";

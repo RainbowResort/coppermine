@@ -100,6 +100,22 @@ On the plugin configuration screen you can enable or disable how the plugin work
 		
 	</div>
 	
+	<a name="configuration_caching"></a><h3>Caching<a href="#configuration_caching" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+	 
+	<div class="indent">
+	    <p>This plugin can obfuscate the location of the actual files inside Coppermine, fetching cached temporary copies of the files instead. This way, you can make sure that privileged visitors who can access files can't give away the "secret" location of the file to unprivileged visitors.</p>
+	    <p>It doesn't make sense to enable this option if your gallery is free for all anyway.</p>
+	    <p class="cpg_message_warning">Caching can have an enormous impact on the performance and the resources consumption: creating the temporary files has got a serious impact on your server's resources. Keeping a huge cache has got a serious impact on your webspace consumption - in the worst case, your webspace usage will double!</p>
+	    <a name="configuration_caching_hide_location"></a><h4>Hide the location of individual files<a href="#configuration_caching_hide_location" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+	    Determins what files will be cached in the first place.<br />
+	    Possible options:
+	    <ul>
+	        <li>No - don't hide the location, i.e. turn caching off</li>
+	        <li>Images only</li>
+	        <li>All file types (not recommended) - this will enable caching for non-image files as well (i.e. multimedia files), which can have a dramatic impact on resources and webspace consumption if you have large multimedia files in your gallery that will be copied around if this option is applied</li>
+	    </ul>
+	</div>
+	
 	<a name="configuration_several"></a><h3>Fetching several files<a href="#configuration_several" title="Link to this section"><img src="docs/en/images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 	The following options apply when fetching several files.
 	<div class="indent">

@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-09-28 [A] Added cache to obfuscate file locations {GauGau}
+2010-09-28 [M] Version count updated to 0.7 {GauGau}
 2010-09-27 [A] Added German language file {GauGau}
 2010-09-27 [D] Slight documentation improvements {GauGau}
 2010-09-27 [O] Added menu to admin.php permanently {GauGau}

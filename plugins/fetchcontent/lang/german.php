@@ -53,7 +53,10 @@ $lang_plugin_fetchcontent['fetching_several_files'] = 'Mehrere Dateien abholen';
 $lang_plugin_fetchcontent['overall_settings'] = 'Gesamt-Einstellungen';
 $lang_plugin_fetchcontent['max_cols'] = 'Maximale Anzahl von Tabellen-Spalten';
 $lang_plugin_fetchcontent['max_rows'] = 'Maximale Anzahl von Tabellen-Zeilen';
-
+$lang_plugin_fetchcontent['caching'] = 'Temporäre Dateien';
+$lang_plugin_fetchcontent['hide_location'] = 'Adresse der einzelnen Dateien verschleiern';
+$lang_plugin_fetchcontent['images_only'] = 'Nur Bilder';
+$lang_plugin_fetchcontent['all_file_types'] = 'Alle Dateitypen';
 
 
 ?>

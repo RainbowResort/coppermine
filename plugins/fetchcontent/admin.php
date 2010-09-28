@@ -47,6 +47,7 @@ if ($superCage->post->keyExists('submit')) {
 	  'plugin_fetchcontent_domainlist' => array('type' => 'raw', 'regex_ok' => '/^[a-z]+$/'),
 	  'plugin_fetchcontent_enable_logging' => array('type' => 'int', 'min' => '0', 'max' => '2'),
 	  'plugin_fetchcontent_non_image' => array('type' => 'int', 'min' => '0', 'max' => '3'),
+	  'plugin_fetchcontent_hide_location' => array('type' => 'int', 'min' => '0', 'max' => '2'),
 	  'plugin_fetchcontent_debug' => array('type' => 'checkbox', 'min' => '0', 'max' => '1'),
 	  'plugin_fetchcontent_max_cols' => array('type' => 'int', 'min' => '1', 'max' => '20'),
 	  'plugin_fetchcontent_max_rows' => array('type' => 'int', 'min' => '1', 'max' => '100'),
@@ -193,6 +194,20 @@ if ($CONFIG['plugin_fetchcontent_non_image'] == '0') {
 	$option_output['plugin_fetchcontent_non_image_3'] = 'checked="checked"';
 }
 
+if ($CONFIG['plugin_fetchcontent_hide_location'] == '0') {
+	$option_output['plugin_fetchcontent_hide_location_0'] = 'checked="checked"';
+	$option_output['plugin_fetchcontent_hide_location_1'] = '';
+	$option_output['plugin_fetchcontent_hide_location_2'] = '';
+} elseif ($CONFIG['plugin_fetchcontent_hide_location'] == '1') { 
+	$option_output['plugin_fetchcontent_hide_location_0'] = '';
+	$option_output['plugin_fetchcontent_hide_location_1'] = 'checked="checked"';
+	$option_output['plugin_fetchcontent_hide_location_2'] = '';
+} else { 
+	$option_output['plugin_fetchcontent_hide_location_0'] = '';
+	$option_output['plugin_fetchcontent_hide_location_1'] = '';
+	$option_output['plugin_fetchcontent_hide_location_2'] = 'checked="checked"';
+}
+
 $option_output['plugin_fetchcontent_max_cols'] = '';
 $option_output['plugin_fetchcontent_max_rows'] = '';
 
@@ -250,7 +265,7 @@ echo <<< EOT
 			<label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_plugin_fetchcontent['debugging']}</label> <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_overall_debug" class="greybox" title="{$lang_plugin_fetchcontent['debugging']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
 		</td>
 		<td valign="top">
-			<input type="checkbox" name="plugin_fetchcontent_debug" id="plugin_fetchcontent_debug" class="checkbox" value="1" {$option_output['plugin_fetchcontent_debug']} /><label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_common['yes']}</label>
+			<input type="checkbox" name="plugin_fetchcontent_debug" id="plugin_fetchcontent_debug" class="checkbox" value="1" {$option_output['plugin_fetchcontent_debug']} /><label for="plugin_fetchcontent_debug" class="clickable_option">{$lang_common['yes']} ({$lang_plugin_fetchcontent['not_recommended']})</label>
 		</td>
 	</tr>
 	<tr>
@@ -289,6 +304,21 @@ echo <<< EOT
             <input type="radio" name="plugin_fetchcontent_non_image" id="plugin_fetchcontent_non_image_1" class="radio" value="1" {$option_output['plugin_fetchcontent_non_image_1']} /><label for="plugin_fetchcontent_non_image_1" class="clickable_option">{$lang_plugin_fetchcontent['allowed_if_filetype_set']} ({$lang_plugin_fetchcontent['recommended']})</label><br />
             <input type="radio" name="plugin_fetchcontent_non_image" id="plugin_fetchcontent_non_image_2" class="radio" value="2" {$option_output['plugin_fetchcontent_non_image_2']} /><label for="plugin_fetchcontent_non_image_2" class="clickable_option">{$lang_plugin_fetchcontent['allowed_if_imageonly_not_set']}</label><br />
             <input type="radio" name="plugin_fetchcontent_non_image" id="plugin_fetchcontent_non_image_3" class="radio" value="3" {$option_output['plugin_fetchcontent_non_image_3']} /><label for="plugin_fetchcontent_non_image_3" class="clickable_option">{$lang_plugin_fetchcontent['allowed_no_matter_what']} ({$lang_plugin_fetchcontent['not_recommended']})</label>
+	    </td>
+	</tr>
+	<tr>
+		<td valign="top" colspan="2" class="tableh1">
+		    {$lang_plugin_fetchcontent['caching']}
+		</td>
+	</tr>
+	<tr>
+	    <td valign="top">
+	        {$lang_plugin_fetchcontent['hide_location']} <a href="index.php?file=fetchcontent/docs_{$documentation_file}#configuration_caching_hide_location" class="greybox" title="{$lang_plugin_fetchcontent['hide_location']}"><img src="images/help.gif" width="13" height="11" border="0" alt="" /></a>
+	    </td>
+	    <td valign="top">
+            <input type="radio" name="plugin_fetchcontent_hide_location" id="plugin_fetchcontent_hide_location_0" class="radio" value="0" {$option_output['plugin_fetchcontent_hide_location_0']} /><label for="plugin_fetchcontent_hide_location_0" class="clickable_option">{$lang_common['no']}</label><br />
+            <input type="radio" name="plugin_fetchcontent_hide_location" id="plugin_fetchcontent_hide_location_1" class="radio" value="1" {$option_output['plugin_fetchcontent_hide_location_1']} disabled="disabled" /><label for="plugin_fetchcontent_hide_location_1" class="clickable_option">{$lang_plugin_fetchcontent['images_only']}</label><br />
+            <input type="radio" name="plugin_fetchcontent_hide_location" id="plugin_fetchcontent_hide_location_2" class="radio" value="2" {$option_output['plugin_fetchcontent_hide_location_2']} disabled="disabled" /><label for="plugin_fetchcontent_hide_location_2" class="clickable_option">{$lang_plugin_fetchcontent['all_file_types']} ({$lang_plugin_fetchcontent['not_recommended']})</label>
 	    </td>
 	</tr>
 	<tr>
