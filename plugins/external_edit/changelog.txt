@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - external_edit
   *************************************************
-  Copyright (c) 2009 Joachim Müller
+  Copyright (c) 2010 Joachim Müller
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,7 +25,11 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-10-15 [A] Added Italian language file (user contribution) {GauGau}
+2010-10-15 [M] Updated file header info to reflect year {GauGau}
+2010-10-15 [M] Counted version up to 2.5 {GauGau}
 2009-06-19 [M] Added SVN header data {GauGau}
+2009-06-19 [M] Counted version up to 2.4 {GauGau}
 2009-06-18 [B] Fixed icon display bug {eenemeenemuu}
 2009-06-18 [M] Added plugin to SVN repository {GauGau}
 2009-06-18 [M] Release of plugin version 2.3 {GauGau}

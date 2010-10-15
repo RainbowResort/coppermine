@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - external_edit
   *************************************************
-  Copyright (c) 2009 Joachim Müller
+  Copyright (c) 2010 Joachim Müller
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ $name = $lang_plugin_external_edit['plugin_name'];
 $description = sprintf($lang_plugin_external_edit['plugin_description'], '<a href="http://fotoflexer.com/" rel="external" class="external">Fotoflexer.com</a>');
 $author = sprintf($lang_plugin_external_edit['author'], 
                   '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=2" rel="external" class="external">Joachim Müller</a>');
-$version = '2.4';
+$version = '2.5';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="http://forum.coppermine-gallery.net/index.php/topic,60173.0.html" title="&laquo;{$lang_plugin_external_edit['plugin_name']}&raquo; - {$lang_plugin_external_edit['announcement_thread']}" class="admin_menu">{$external_edit_icon_array['announcement']}{$lang_plugin_external_edit['announcement_thread']}</a>

@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - external_edit
   *************************************************
-  Copyright (c) 2009 Joachim Müller
+  Copyright (c) 2010 Joachim Müller
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
