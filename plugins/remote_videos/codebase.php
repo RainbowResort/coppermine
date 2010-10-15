@@ -21,6 +21,71 @@ $thisplugin->add_action('plugin_install','remote_videos_install');
 $thisplugin->add_action('plugin_uninstall','remote_videos_uninstall');
 $thisplugin->add_filter('html_other_media','remote_videos_other_media');
 
+if (defined('THUMBNAILS_PHP') && USER_CAN_UPLOAD_PICTURES) {
+    $thisplugin->add_filter('post_breadcrumb','remote_videos_post_breadcrumb');
+}
+
+
+function remote_videos_upload_permission($aid) {
+
+    global $CONFIG, $USER_DATA;
+
+    // check if user can upload to the current album
+    if (!GALLERY_ADMIN_MODE) {
+        $row = mysql_fetch_assoc(cpg_db_query("SELECT uploads, owner FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = $aid LIMIT 1"));
+        if ($row['owner'] == USER_ID) {
+            return TRUE;
+        } elseif ($row['uploads'] == 'YES') {
+            $result = cpg_db_query("SELECT can_upload_pictures FROM {$CONFIG['TABLE_USERGROUPS']} WHERE group_id IN (".implode(',', $USER_DATA['groups']).")");
+            while ($row = mysql_fetch_assoc($result)) {
+                if ($row['can_upload_pictures']) {
+                    return TRUE;
+                    break;
+                }
+            }
+            mysql_free_result($result);
+        } else {
+            return FALSE;
+        }
+    } else {
+        return TRUE;
+    }
+}
+
+
+function remote_videos_post_breadcrumb() {
+
+    $superCage = Inspekt::makeSuperCage();
+    $album = $superCage->get->getInt('album');
+
+    if (remote_videos_upload_permission($album)) {
+        global $CONFIG, $lang_main_menu;
+
+        $options = "";
+        foreach(remote_videos_get_hoster() as $key => $value) {
+            if (is_numeric(strpos($CONFIG['allowed_mov_types'], $key))) {
+                $options .= "<option value=\"$key\">$value</option>";
+            }
+        }
+
+        if ($options != "") {
+            $options = "<option disabled=\"disabled\" selected=\"selected\">-- Select --</option>".$options;
+            $form = <<< EOT
+                <form method="post" action="index.php?file=remote_videos/add_video">
+                    <input type="hidden" name="album" value="$album" />
+                    <select name="extension" class="listbox">$options</select>
+                    <input type="text" name="filename" class="textinput" />
+                    <input name="url" type="text" class="textinput"/>
+                    <input type="submit" class="button" value="{$lang_main_menu['upload_pic_lnk']}" />
+                </form>
+EOT;
+            starttable('100%', $form);
+            endtable();
+            echo '<img src="images/spacer.gif" width="1" height="7" alt="" />';
+        }
+    }
+}
+
 
 function remote_videos_install() {
     global $CONFIG;
