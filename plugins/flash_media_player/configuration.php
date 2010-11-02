@@ -18,7 +18,7 @@ if ($CONFIG['lang'] != 'english' && file_exists("./plugins/flash_media_player/la
 $name = 'Flash Media Player';
 $description = sprintf($lang_plugin_flash_media_player['description'], '<a href="http://www.longtailvideo.com/players/jw-flv-player/" rel="external" class="external">JW Media Player</a>');
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.6';
+$version = '1.7';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,62704.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).$lang_plugin_flash_media_player['announcement_thread'].'</a><br />';
 $install_info .= $lang_plugin_flash_media_player['install_info'];

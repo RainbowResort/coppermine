@@ -60,6 +60,20 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
         $player .= "&frontcolor={$style['color']}";
         $player .= "&lightcolor={$style['color']}";
 
+        // Use skin if available
+        if ($handle = opendir('plugins/flash_media_player/')) {
+            $skins = array();
+            while (false !== ($file = readdir($handle))) {
+                if ($file != 'player.swf' && stripos($file, '.swf')) {
+                    $skins[] = $file;
+                }
+            }
+            closedir($handle);
+            if (count($skins) == 1) {
+                $player .= "&skin=plugins/flash_media_player/".$skins[0];
+            }
+        }
+
         $pic_html = <<< EOT
             <object type="{$CURRENT_PIC_DATA['mime']}" width="{$CURRENT_PIC_DATA['pwidth']}" height="{$CURRENT_PIC_DATA['pheight']}" data="$player">
             <param name="movie" value="$player" />
