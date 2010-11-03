@@ -342,7 +342,7 @@ function mma_meta_album($meta) {
             break;
 
         case 'mostvot': // Most voted files
-            $album_name = cpg_fetch_icon('top_rated', 2)." ".$lang_plugin_more_meta_albums['mostcom_title'];
+            $album_name = cpg_fetch_icon('top_rated', 2)." ".$lang_plugin_more_meta_albums['mostvot_title'];
             if ($CURRENT_CAT_NAME) {
                 $album_name .= " - $CURRENT_CAT_NAME";
             }
