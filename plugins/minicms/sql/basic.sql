@@ -71,5 +71,5 @@ ALTER TABLE `CPG_cms` DROP `pos`;
 
 # Write this dbver to the config table
 # This should match the DBVER constant in init.inc.php
-UPDATE CPG_cms_config SET value='1.4.8' WHERE name='dbver';
+UPDATE CPG_cms_config SET value='1.5.8' WHERE name='dbver';
 
