@@ -35,6 +35,17 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/mi
     include('plugins/minicms/lang/'.$lang.'.php');
 }
 
+$superCage = Inspekt::makeSuperCage();
+
+$req_array=array('album', 'file', 'id', 'conid', 'type', 'cat');
+foreach ($req_array as $cnf_item) {
+    if ($superCage->get->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->get->getRaw($cnf_item);
+    }
+    if ($superCage->post->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->post->getRaw($cnf_item);
+    }
+}
 
 $CONFIG['TABLE_CMS'] = $CONFIG['TABLE_PREFIX'] . "cms";
 $CONFIG['TABLE_CMS_CONFIG'] = $CONFIG['TABLE_PREFIX'] . "cms_config";
@@ -57,19 +68,19 @@ $MINICMS['conTypebyName']=array_flip($MINICMS['conType']);
 if (defined('DISPLAYIMAGE_PHP')) {
     $MINICMS['type']=$MINICMS['conTypebyName']['img'];
 } elseif (defined('THUMBNAILS_PHP')) {
-    $MINICMS['conid']=isset($_REQUEST['album']) ? (int)$_REQUEST['album'] : -1;
+    $MINICMS['conid']=isset($request['album']) ? (int)$request['album'] : -1;
     $MINICMS['type']=$MINICMS['conTypebyName']['thumb'];
-} elseif (isset($_REQUEST['file']) && $_REQUEST['file'] =='minicms/cms') {
-    if (isset($_REQUEST['id'])) {
-        $MINICMS['ID']=(int)$_REQUEST['id'];
+} elseif (isset($request['file']) && $request['file'] =='minicms/cms') {
+    if (isset($request['id'])) {
+        $MINICMS['ID']=(int)$request['id'];
         $MINICMS['conid']='';
         $MINICMS['type']='';
     } else {
-      $MINICMS['conid']=(int)$_REQUEST['conid'];
-      $MINICMS['type']=(int)$_REQUEST['type'];
+      $MINICMS['conid']=(int)$request['conid'];
+      $MINICMS['type']=(int)$request['type'];
     }
 } else {
-    $MINICMS['conid']=isset($_REQUEST['cat']) ? (int)$_REQUEST['cat'] : 0;
+    $MINICMS['conid']=isset($request['cat']) ? (int)$request['cat'] : 0;
     $MINICMS['type']=$MINICMS['conTypebyName']['cat'];
 }
 

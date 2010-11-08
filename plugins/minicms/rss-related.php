@@ -27,23 +27,33 @@ require('include/init.inc.php');
 
 if ($MINICMS['rss_enabled']==0) die($lang_minicms['no_rss']);
 
-if (isset($_REQUEST['id'])) {
-	$ID = (int)$_REQUEST['id'];
+$req_array=array('id', 'conid', 'type', 'keyword', 'size');
+foreach ($req_array as $cnf_item) {
+    if ($superCage->get->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->get->getRaw($cnf_item);
+    }
+    if ($superCage->post->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->post->getRaw($cnf_item);
+    }
 }
-if (isset($_REQUEST['conid'])) {
-	$MINICMS['conid'] = (int)$_REQUEST['conid'];
+
+if (isset($request['id'])) {
+    $ID = (int)$request['id'];
 }
-if (isset($_REQUEST['type'])) {
-	$MINICMS['type'] = (int)$_REQUEST['type'];
+if (isset($request['conid'])) {
+    $MINICMS['conid'] = (int)$request['conid'];
+}
+if (isset($request['type'])) {
+    $MINICMS['type'] = (int)$request['type'];
 }
 if (!isset($cat)) { // makes sure we don't get in a loop and can't navigate the gallery when forwarding index.php
     $cat=0;
 }
-if (isset($_REQUEST['keyword'])) {
-	$keyword = addslashes($_REQUEST['keyword']);
+if (isset($request['keyword'])) {
+    $keyword = addslashes($request['keyword']);
 }
-if (isset($_REQUEST['size'])) {
-	$MINICMS['related_size'] = (array_key_exists($_REQUEST['size'],$lang_minicms_config_related_size)) ? $_REQUEST['size'] : $MINICMS['related_size'];
+if (isset($request['size'])) {
+    $MINICMS['related_size'] = (array_key_exists($request['size'],$lang_minicms_config_related_size)) ? $request['size'] : $MINICMS['related_size'];
 }
 
 if (isset($ID)) {
@@ -72,7 +82,7 @@ $order ="ORDER BY modified DESC ";
 $query = "SELECT *, C.title as title, unix_timestamp(modified) as modified FROM {$CONFIG['TABLE_CMS']} as C , {$CONFIG['TABLE_PICTURES']} as P WHERE conid=pid AND $query $forbidden_set_string $order;";
 $result = cpg_db_query($query);
 if (!mysql_num_rows($result))
-	cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
+    cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
 $cms=mysql_fetch_array($result);
 mysql_data_seek($result,0); //put the pointer back to the first entry
 
@@ -120,15 +130,15 @@ while ($cms=mysql_fetch_array($result)) {
 EOT;
 
     $cms['content'] = htmlentities(strip_tags(html_entity_decode(stripslashes($cms['content'])))); //used to reverse Coppermines init.inc.php gpc processing
-		//if description is longer than setting, add elipses after truncating text
-		if (strlen($cms['content']) > $MINICMS['rss_description_length']) {
-			$cms['content'] = substr($cms['content'],0,$MINICMS['rss_description_length']).'...';
-		}
+        //if description is longer than setting, add elipses after truncating text
+        if (strlen($cms['content']) > $MINICMS['rss_description_length']) {
+            $cms['content'] = substr($cms['content'],0,$MINICMS['rss_description_length']).'...';
+        }
 
- 		//if config allows, include image in rss feed
-	  if ($MINICMS['rss_include_image']==1) {
-			$rss_image = "&lt;img src=&quot;{$CONFIG['ecards_more_pic_target']}{$cms['thumb_url']}&quot; border=&quot;0&quot; align=&quot;left&quot;  alt=&quot;&quot; &gt;";
-			}
+        //if config allows, include image in rss feed
+      if ($MINICMS['rss_include_image']==1) {
+            $rss_image = "&lt;img src=&quot;{$CONFIG['ecards_more_pic_target']}{$cms['thumb_url']}&quot; border=&quot;0&quot; align=&quot;left&quot;  alt=&quot;&quot; &gt;";
+            }
 
     print <<<EOT
 

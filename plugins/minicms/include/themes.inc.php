@@ -29,7 +29,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 // define('HTML_EDITOR','fckeditor'); //default
 define('HTML_EDITOR',$MINICMS['editor']); //use the configured editor
 
-if (isset($_REQUEST['file'])&& stristr($_REQUEST['file'],'minicms/cms_edit')) {
+if (isset($request['file'])&& stristr($request['file'],'minicms/cms_edit')) {
     require 'plugins/minicms/include/'.HTML_EDITOR.'_edit.inc.php';
 }
 

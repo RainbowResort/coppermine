@@ -26,23 +26,33 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 require('include/init.inc.php');
 //require 'plugins/minicms/include/init.inc.php';
 
-if (isset($_REQUEST['id'])) {
-    $ID = (int)$_REQUEST['id'];
+$req_array=array('id', 'conid', 'type', 'keyword', 'size');
+foreach ($req_array as $cnf_item) {
+    if ($superCage->get->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->get->getRaw($cnf_item);
+    }
+    if ($superCage->post->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->post->getRaw($cnf_item);
+    }
 }
-if (isset($_REQUEST['conid'])) {
-    $MINICMS['conid'] = (int)$_REQUEST['conid'];
+
+if (isset($request['id'])) {
+    $ID = (int)$request['id'];
 }
-if (isset($_REQUEST['type'])) {
-    $MINICMS['type'] = (int)$_REQUEST['type'];
+if (isset($request['conid'])) {
+    $MINICMS['conid'] = (int)$request['conid'];
+}
+if (isset($request['type'])) {
+    $MINICMS['type'] = (int)$request['type'];
 }
 if (!isset($cat)) { // makes sure we don't get in a loop and can't navigate the gallery when forwarding index.php
     $cat=0;
 }
-if (isset($_REQUEST['keyword'])) {
-    $keyword = addslashes($_REQUEST['keyword']);
+if (isset($request['keyword'])) {
+    $keyword = addslashes($request['keyword']);
 }
-if (isset($_REQUEST['size'])) {
-    $MINICMS['related_size'] = (array_key_exists($_REQUEST['size'],$lang_minicms_config_related_size)) ? $_REQUEST['size'] : $MINICMS['related_size'];
+if (isset($request['size'])) {
+    $MINICMS['related_size'] = (array_key_exists($request['size'],$lang_minicms_config_related_size)) ? $request['size'] : $MINICMS['related_size'];
 }
 
 if (isset($ID)) {

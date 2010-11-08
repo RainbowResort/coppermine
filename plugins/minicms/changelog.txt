@@ -26,6 +26,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 ***************************************************/
 
+2010-11-08 [A] Made fully compatible to cpg1.5.x {eenemeenemuu}
 2010-11-08 [M] Added halnat's version to svn repository {eenemeenemuu}
 2009-12-20 [M] Initial release for CPG 1.5.x {halnat}
 2009-11-03 [M] Release of plugin MiniCMS {GauGau}
