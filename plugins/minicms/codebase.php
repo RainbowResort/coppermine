@@ -46,15 +46,15 @@ $thisplugin->add_filter('plugin_block','minicms_plugin_block');
 
 function minicms_template_html ()
 {
-	//place additional minicms tags in the templates.
-	//search page
+    //place additional minicms tags in the templates.
+    //search page
 }
 
 function minicms_page_html ()
 {
-	//extract all minicms tags
-	//render them to string or array
-	//replace them in the stream
+    //extract all minicms tags
+    //render them to string or array
+    //replace them in the stream
 }
 
 function minicms_plugin_block($content)
@@ -137,8 +137,8 @@ function minicms_page_start()
   } */
 
   if (GALLERY_ADMIN_MODE) {
-	  minicms_add_admin_button('index.php?file=minicms/cms_admin',$lang_minicms['admin_title'],'',$lang_minicms['admin_title']);
-	  //minicms_add_admin_button('index.php?file=minicms/cms_config',$lang_minicms['config_title'],'',$lang_minicms['config_title']);
+      minicms_add_admin_button('index.php?file=minicms/cms_admin',$lang_minicms['admin_title'],'',$lang_minicms['admin_title']);
+      //minicms_add_admin_button('index.php?file=minicms/cms_config',$lang_minicms['config_title'],'',$lang_minicms['config_title']);
   }
 }
 
@@ -148,7 +148,7 @@ function minicms_install()
     // Install
     //if ($_REQUEST['submit']=='Go!') {
     global $superCage;
-    $action = $superCage->post->getAlnum('submit');
+    $action = $superCage->post->getRaw('submit');
     if ($action == 'Go') {
         return true;
 

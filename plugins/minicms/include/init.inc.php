@@ -24,14 +24,17 @@
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
-define('MINICMS_DBVER','1.4.8');
+define('MINICMS_DBVER','1.5.8');
 
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
 
-if (file_exists("plugins/minicms/lang/{$CONFIG['lang']}.php")) {
-  require_once "plugins/minicms/lang/{$CONFIG['lang']}.php";
-} else require_once 'plugins/minicms/lang/english.php';
+$lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
+include('plugins/minicms/lang/english.php');
+if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/minicms/lang/'.$lang.'.php')) {
+    include('plugins/minicms/lang/'.$lang.'.php');
+}
+
 
 $CONFIG['TABLE_CMS'] = $CONFIG['TABLE_PREFIX'] . "cms";
 $CONFIG['TABLE_CMS_CONFIG'] = $CONFIG['TABLE_PREFIX'] . "cms_config";

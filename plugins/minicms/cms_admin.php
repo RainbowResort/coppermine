@@ -27,16 +27,16 @@ $req_array=array('referer','up','submit','down','delete','id','id2','cpos','titl
 
 $superCage = Inspekt::makeSuperCage($strict);    
 foreach ($req_array as $cnf_item) {
-    if ($val=$superCage->get->getAlnum($cnf_item)) {
-        $request[$cnf_item]=$val;
+    if ($superCage->get->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->get->getRaw($cnf_item);
     }
-    if ($val=$superCage->post->getAlnum($cnf_item)) {
-        $request[$cnf_item]=$val;
+    if ($superCage->post->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->post->getRaw($cnf_item);
     }
 }
 
 if (!(GALLERY_ADMIN_MODE))
-	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 
 if (isset($request['referer'])) {
     $referer = urlencode($request['referer']);
@@ -59,20 +59,20 @@ if(isset($request['submit'])){
     } else {
         $cms['cpos']=0;
     }
-	$query="INSERT INTO {$CONFIG['TABLE_CMS']} SET title = '$title',conid='0',cpos='{$cms['cpos']}',type='3'";
-	$result = cpg_db_query($query);
-	if ($result) {
+    $query="INSERT INTO {$CONFIG['TABLE_CMS']} SET title = '$title',conid='0',cpos='{$cms['cpos']}',type='3'";
+    $result = cpg_db_query($query);
+    if ($result) {
         $message = $lang_minicms['page_success'];
     } else {
         $message = $lang_minicms['page_fail'];
     }
-	mysql_free_result($result);
+    mysql_free_result($result);
 }
 
 if(isset($request['delete'])) {
     $id = (int)$request['id'];
-	$query="DELETE FROM {$CONFIG['TABLE_CMS']} WHERE ID = '$id'";
-	$result=cpg_db_query($query);
+    $query="DELETE FROM {$CONFIG['TABLE_CMS']} WHERE ID = '$id'";
+    $result=cpg_db_query($query);
     if ($result) {
         $message = $lang_minicms['page_success'];
     } else {
@@ -81,7 +81,7 @@ if(isset($request['delete'])) {
     if (isset($referer)) {
         $redirect=urldecode($referer);
         pageheader($lang_minicms['minicms'], "<meta http-equiv=\"refresh\" content=\"3;url=$redirect\" />");
-        msg_box($lang_minicms['minicms'], $message,$lang_continue, $redirect);
+        msg_box($lang_minicms['minicms'], $message, $lang_common['continue'], $redirect);
         pagefooter();
         exit;
     }
@@ -97,15 +97,17 @@ if (isset($request['up']) || isset($request['down'])) {
 
         cpg_db_query("UPDATE {$CONFIG['TABLE_CMS']} SET cpos='$cpos2' WHERE ID = '$id' LIMIT 1");
         cpg_db_query("UPDATE {$CONFIG['TABLE_CMS']} SET cpos='$cpos' WHERE ID = '$id2' LIMIT 1");
+
+        $message = $lang_minicms['page_success'];
     } else {
         $message = $lang_minicms['no_change'];
     }
 
     if (isset($referer)) {
         $redirect=urldecode($referer);
-        $message = ($message) ? $message : $lang_continue;
+        $message = ($message) ? $message : $lang_common['continue'];
         pageheader($request['title'], "<meta http-equiv=\"refresh\" content=\"3;url=$redirect\" />");
-        msg_box($lang_minicms['minicms'], $message,$lang_continue, $redirect);
+        msg_box($lang_minicms['minicms'], $message, $lang_common['continue'], $redirect);
         pagefooter();
         exit;
     }
@@ -114,7 +116,7 @@ if (isset($request['up']) || isset($request['down'])) {
 $query = "SELECT * FROM {$CONFIG['TABLE_CMS']} ORDER BY type, conid ,cpos";
 $result = cpg_db_query($query);
 /* if (!mysql_num_rows($result)) //render error instead of blank page.
-	cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
+    cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
 */
 pageheader($lang_minicms['minicms']);
 starttable("100%", $lang_minicms['admin_title'] , 5);
@@ -137,23 +139,23 @@ $counter=0;
 foreach ($cms_array as $key => $cms) {
     $cms['next_ID']=($counter<count($cms_array)-1 && $cms['type']==$cms_array[$counter+1]['type'] && $cms['conid']==$cms_array[$counter+1]['conid'] ) ? '&amp;id2='.$cms_array[$counter+1]['ID'] : '';
     $cms['prev_ID']=($counter>0 && $cms['type']==$cms_array[$counter-1]['type'] && $cms['conid']==$cms_array[$counter-1]['conid']) ? '&amp;id2='.$cms_array[$counter-1]['ID'] : '';
-	$type = "{$MINICMS['conType'][$cms['type']]}";
-	$conid = "{$cms['conid']}";
-	switch($type) {
-		case 'cat':
+    $type = "{$MINICMS['conType'][$cms['type']]}";
+    $conid = "{$cms['conid']}";
+    switch($type) {
+        case 'cat':
             $context_url = "index.php?cat=$conid";
-			break;
-		case 'thumb':
-			$context_url = "thumbnails.php?album=$conid";
-			break;
-		case 'img':
-			$context_url = "displayimage.php?pos=-$conid";
-			break;
+            break;
+        case 'thumb':
+            $context_url = "thumbnails.php?album=$conid";
+            break;
+        case 'img':
+            $context_url = "displayimage.php?pos=-$conid";
+            break;
         case 'section';
             $context_url = "index.php?file=minicms/cms&amp;conid=$conid&amp;type={$cms['type']}";
             break;
-	}
-	print <<<EOT
+    }
+    print <<<EOT
     <tr>
       <td class="tableb" style="white-space:nowrap;">
         <a title="{$lang_minicms['delete']}" href="index.php?file=minicms/cms_admin&amp;delete&amp;id={$cms['ID']}"><img src="images/icons/delete.png" border="0" alt="{$lang_minicms['delete']}" /></a>
@@ -170,14 +172,14 @@ EOT;
 $counter++;
 }
 Print <<<EOT
-	<tr>
-		<td colspan="5" class="tableb">
-			<form method="post" action="index.php?file=minicms/cms_admin">
-				{$lang_minicms['new_content']} {$lang_minicms['title']}: <input type="text" name="title" style="width: 200px; margin-top: 15px;" />
-				<input type="submit" name="submit" value="{$lang_minicms['add']}" />
-			</form>
+    <tr>
+        <td colspan="5" class="tableb">
+            <form method="post" action="index.php?file=minicms/cms_admin">
+                {$lang_minicms['new_content']} {$lang_minicms['title']}: <input type="text" name="title" style="width: 200px; margin-top: 15px;" />
+                <input type="submit" name="submit" value="{$lang_minicms['add']}" />
+            </form>
         </td>
-	</tr>
+    </tr>
 EOT;
 endtable();
 pagefooter();

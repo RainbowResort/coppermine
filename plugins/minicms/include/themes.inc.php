@@ -160,8 +160,9 @@ if (!function_exists('theme_minicms_edit'))
     function theme_minicms_edit(&$cms)
     {
         global $template_minicms, $lang_minicms;
+        $superCage = Inspekt::makeSuperCage();
         pageheader($cms['title'], $template_minicms['edit_meta']);
-        if ($_REQUEST['submit'] == $lang_minicms['preview']) theme_minicms_edit_preview($cms);
+        if ($superCage->post->getRaw('submit') == $lang_minicms['preview']) theme_minicms_edit_preview($cms);
         theme_minicms_edit_editor($cms);
         pagefooter();
     }

@@ -33,11 +33,11 @@ if (!GALLERY_ADMIN_MODE) cpg_die(ERROR, $lang_errors['access_denied'], __FILE__,
 
 
 foreach ($lang_minicms_config as $cnf_item) {
-    if ($val=$superCage->post->getAlnum($cnf_item[1])) {
+    if ($val=$superCage->post->getRaw($cnf_item[1])) {
         $post[$cnf_item[1]]=$val;
     }
 }
-if ($val=$superCage->post->getAlnum('update_config')) {
+if ($val=$superCage->post->getRaw('update_config')) {
         $post['update_config']=$val;
     }
 
@@ -73,7 +73,7 @@ if (count($post) > 0) {
             }
         }
         pageheader($lang_minicms['minicms']);
-        msg_box($lang_minicms['minicms'], $lang_minicms['page_success'], $lang_continue, 'index.php');
+        msg_box($lang_minicms['minicms'], $lang_minicms['page_success'], $lang_common['continue'], 'index.php');
 
     }
 

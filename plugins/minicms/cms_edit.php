@@ -29,17 +29,17 @@ $superCage = Inspekt::makeSuperCage($strict);
 $req_array=array('referer','id','submit','conid','type','title','minicms_content');
 
 foreach ($req_array as $cnf_item) {
-    if ($val=$superCage->get->getAlnum($cnf_item)) {
-        $request[$cnf_item]=$val;
+    if ($superCage->get->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->get->getRaw($cnf_item);
     }
-    if ($val=$superCage->post->getAlnum($cnf_item)) {
-        $request[$cnf_item]=$val;
+    if ($superCage->post->keyExists($cnf_item)) {
+        $request[$cnf_item] = $superCage->post->getRaw($cnf_item);
     }
 }
 
 
 if (!(GALLERY_ADMIN_MODE))
-	cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
+    cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 
 if (isset($request['referer'])) {
     $referer = urlencode(html_entity_decode($request['referer']));
@@ -65,8 +65,8 @@ if(isset($request['submit']) && $request['submit']==$lang_minicms['submit'] && $
     $result = cpg_db_query($query);
     if ($result) {
         $redirect=urldecode($referer);
-        pageheader($_POST['title'], "<meta http-equiv=\"refresh\" content=\"3;url=$redirect\" />");
-        msg_box($lang_minicms['minicms'], $lang_minicms['page_success'],$lang_continue." <br />", $redirect);
+        pageheader($superCage->post->getRaw('title'), "<meta http-equiv=\"refresh\" content=\"3;url=$redirect\" />");
+        msg_box($lang_minicms['minicms'], $lang_minicms['page_success'], $lang_common['continue'], $redirect);
         pagefooter();
         exit;
     }
@@ -86,15 +86,15 @@ if(isset($request['conid']) && isset($request['id']) && $request['id']=='-1' && 
     } else {
         $cms['cpos']=0;
     }
-	$query="INSERT INTO {$CONFIG['TABLE_CMS']} SET title = '$title',conid='{$MINICMS['conid']}',type='{$MINICMS['type']}',cpos='{$cms['cpos']}', content = '$content';";
-	$result = cpg_db_query($query);
-	if ($result) {
+    $query="INSERT INTO {$CONFIG['TABLE_CMS']} SET title = '$title',conid='{$MINICMS['conid']}',type='{$MINICMS['type']}',cpos='{$cms['cpos']}', content = '$content';";
+    $result = cpg_db_query($query);
+    if ($result) {
         $message = $lang_minicms['page_success'];
     } else {
         $message = $lang_minicms['page_fail'];
     }
     $id=mysql_insert_id();
-	mysql_free_result($result);
+    mysql_free_result($result);
 }
 
 if(isset($request['submit']) && $request['submit'] == $lang_minicms['preview']){
@@ -105,7 +105,7 @@ if(isset($request['submit']) && $request['submit'] == $lang_minicms['preview']){
     $cms['type'] = $request['type'];
     //$message = $lang_minicms['preview'];
 } elseif ($request['id']=='new') {
-	$cms['ID'] = -1;
+    $cms['ID'] = -1;
     $cms['conid'] = $request['conid'];
     $cms['title'] = $lang_minicms['new_content'];
     $cms['content'] = '';
@@ -115,7 +115,7 @@ if(isset($request['submit']) && $request['submit'] == $lang_minicms['preview']){
     $query = "SELECT * FROM {$CONFIG['TABLE_CMS']} WHERE ID=$id";
     $result = cpg_db_query($query);
     if (!mysql_num_rows($result))
-	    cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
+        cpg_die(CRITICAL_ERROR, $lang_minicms['non_exist'], __FILE__, __LINE__);
     $cms = mysql_fetch_array($result);
     mysql_free_result($result);
 }
