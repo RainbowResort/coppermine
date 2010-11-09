@@ -44,7 +44,7 @@ if ($superCage->post->keyExists('submit')) {
     } else {
         $success = false;
         if (!array_key_exists('plugin_absolute_url_url', $CONFIG)) {
-            if (cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} ('name', 'value') VALUES ('plugin_absolute_url_url', '$url')")) {
+            if (cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES ('plugin_absolute_url_url', '$url')")) {
                 $success = true;
             }
         } else {
