@@ -21,9 +21,8 @@ $thisplugin->add_filter('picture_url', 'absolute_url_picture_url');
 
 function absolute_url_picture_url($pic_row) {
     global $CONFIG;
-
-    $pic_row['url'] = $CONFIG['ecards_more_pic_target'].$pic_row['url'];
-
+    $url = $CONFIG['plugin_absolute_url_url'] ? $CONFIG['plugin_absolute_url_url'] : $CONFIG['ecards_more_pic_target'];
+    $pic_row['url'] = $url.$pic_row['url'];
     return $pic_row;
 }
 
