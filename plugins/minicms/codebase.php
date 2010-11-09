@@ -183,7 +183,7 @@ function minicms_configure_query($query)
 // Displays the form
 function minicms_configure($stop=true)
 {
-    global $errors, $CONFIG, $CPG_PHP_SELF, $superCage;
+    global $errors, $CONFIG, $CPG_PHP_SELF;
     require ('include/sql_parse.php');
      
     $db_update = 'plugins/minicms/sql/basic.sql';
@@ -197,11 +197,10 @@ function minicms_configure($stop=true)
         $sql_query[] = "UPDATE {$CONFIG['TABLE_CONFIG']} SET value = 'minicms/".$CONFIG['main_page_layout']."'  WHERE name = 'main_page_layout'";
     }
 
-    ?>
+    echo '
         <h2>Performing Database Updates<h2>
         <table class="maintable">
-
-    <?php
+    ';
 
     foreach($sql_query as $q) {
         echo "<tr><td class='tableb'>$q</td>";
@@ -218,9 +217,11 @@ function minicms_configure($stop=true)
     echo "</table>";
 
     if ($stop) {
+        $superCage = Inspekt::makeSuperCage();
+        $request_uri = $superCage->server->getEscaped('REQUEST_URI');
         echo <<< EOT
 
-        <form action="{$superCage->server->getEscaped('REQUEST_URI')}" method="post">
+        <form action="{$request_uri}" method="post">
             <input type="submit" value="Go!" name="submit" />
         </form>
 EOT;
