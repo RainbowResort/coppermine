@@ -76,7 +76,7 @@ echo "
     <tr>
         <td class=\"tableb\" width=\"200\">
             <form action=\"index.php?file=absolute_url/admin\" method=\"post\">
-                URL of your CDN: <img src=\"images/help.gif\" style=\"cursor: help;\"title=\"leave blank if you don't host your pictures on another website\" /> <input type=\"input\" class=\"textinput\" size=\"75\" name=\"url\" value=\"$url\" />
+                URL of your CDN: <img src=\"images/help.gif\" style=\"cursor: help;\"title=\"Leave blank if you don't host your pictures on an external website.\" /> <input type=\"input\" class=\"textinput\" size=\"75\" name=\"url\" value=\"$url\" />
                 <input type=\"submit\" value=\"{$lang_common['apply_changes']}\" name=\"submit\" class=\"button\" />
                 <input type=\"hidden\" name=\"form_token\" value=\"{$form_token}\" />
                 <input type=\"hidden\" name=\"timestamp\" value=\"{$timestamp}\" />
