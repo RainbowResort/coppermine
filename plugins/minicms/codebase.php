@@ -147,9 +147,9 @@ function minicms_install()
 {
     // Install
     //if ($_REQUEST['submit']=='Go!') {
-    global $superCage;
+    $superCage = Inspekt::makeSuperCage();
     $action = $superCage->post->getRaw('submit');
-    if ($action == 'Go') {
+    if ($action == 'Go!') {
         return true;
 
     // Loop again
