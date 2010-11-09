@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   CPG MiniCMS Plugin for Coppermine Photo Gallery
   *************************************************
@@ -15,8 +15,8 @@
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
   *************************************************
-  Coppermine version: 1.4.x
-  $Source: /cvsroot/cpg-contrib/minicms/lang/french.php,v $
+  Coppermine version: 1.5.x
+  $HeadURL$
   $Revision$
   $Author$
   $Date$
@@ -24,7 +24,7 @@
 
 /**
  * French Language File
- * @author Fran�ois Keller <keller.f@wanadoo.fr>
+ * @author François Keller <keller.f@wanadoo.fr>
  * @package language
  * @subpackage French
  * @version 1.6

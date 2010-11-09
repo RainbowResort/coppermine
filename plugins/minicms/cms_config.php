@@ -17,7 +17,7 @@
   (at your option) any later version.
   *************************************************
   Coppermine version: 1.5.x
-  $Source: /cvsroot/cpg-contrib/minicms/cms_config.php,v $
+  $HeadURL$
   $Revision$
   $Author$
   $Date$

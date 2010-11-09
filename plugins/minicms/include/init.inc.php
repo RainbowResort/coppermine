@@ -15,8 +15,8 @@
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
   *************************************************
-  Coppermine version: 1.4.x
-  $Source: /cvsroot/cpg-contrib/minicms/include/init.inc.php,v $
+  Coppermine version: 1.5.x
+  $HeadURL$
   $Revision$
   $Author$
   $Date$
@@ -29,6 +29,7 @@ define('MINICMS_DBVER','1.5.8');
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
 
+global $enabled_languages_array;
 $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
 include('plugins/minicms/lang/english.php');
 if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/minicms/lang/'.$lang.'.php')) {
