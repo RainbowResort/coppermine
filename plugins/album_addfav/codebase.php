@@ -30,7 +30,8 @@ if (defined('THUMBNAILS_PHP')) {
 
 function album_addfav_html($html) {
     $superCage = Inspekt::makeSuperCage();
-    $html = preg_replace('/(<td style="vertical-align:top" class="statlink">.*<h2>)(.*)(<\/h2>.*<\/td>)/Usi', '\\1\\2 <a href="index.php?file=album_addfav/add&amp;aid='.$superCage->get->getInt('album').'" title="Add all pictures of this album to your favorites"><img src="images/icons/favorites.png" border="0" style="display:inline" /></a>\\3', $html, 1);
+    $addfav_button = ' <a href="index.php?file=album_addfav/add&amp;aid='.$superCage->get->getInt('album').'" onclick="return confirm(\'Do you really want to add all files of this album to your favorites?\');" title="Add all pictures of this album to your favorites"><img src="images/icons/favorites.png" border="0" style="display:inline" /></a>';
+    $html = preg_replace('/(<td style="vertical-align:top" class="statlink">.*<h2>)(.*)(<\/h2>.*<\/td>)/Usi', '\\1\\2'.$addfav_button.'\\3', $html, 1);
     return $html;
 }
 

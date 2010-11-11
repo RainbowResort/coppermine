@@ -41,15 +41,17 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 $data = base64_encode(serialize($FAVPICS));
 setcookie($CONFIG['cookie_name'] . '_fav', $data, time() + 86400 * 30, $CONFIG['cookie_path']);
-// If the user is logged in then put it in the DB
-if (USER_ID > 0) {
-    $sql = "UPDATE {$CONFIG['TABLE_FAVPICS']} SET user_favpics = '$data' WHERE user_id = " . USER_ID;
-    cpg_db_query($sql);
-    // User never stored a fav... so insert new row
-    if (!mysql_affected_rows($CONFIG['LINK_ID'])) {
-        $sql = "INSERT INTO {$CONFIG['TABLE_FAVPICS']} ( user_id, user_favpics) VALUES (" . USER_ID . ", '$data')";
-        cpg_db_query($sql);
+
+if (USER_ID) {
+    $sql = "SELECT COUNT(*) FROM {$CONFIG['TABLE_FAVPICS']} WHERE user_id = " . USER_ID;
+    $count = mysql_result(cpg_db_query($sql), 0);
+
+    if ($count) {
+        $sql = "UPDATE {$CONFIG['TABLE_FAVPICS']} SET user_favpics = '$data' WHERE user_id = " . USER_ID;
+    } else {
+        $sql = "INSERT INTO {$CONFIG['TABLE_FAVPICS']} (user_id, user_favpics) VALUES (" . USER_ID . ", '$data')";
     }
+    cpg_db_query($sql);
 }
 
 header("Location: thumbnails.php?album=$aid");
