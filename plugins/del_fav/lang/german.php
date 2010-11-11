@@ -11,13 +11,12 @@
   *************************************************
   Delete all your favorite file with just one click !
   ***************************************************/
-  
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
-// submit your lang file for this plugin on the coppermine forums
-// plugin will try to use the configured language if it is available.
+if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
-if (file_exists("plugins/del_fav/lang/{$CONFIG['lang']}.php")) {
-  require "plugins/del_fav/lang/{$CONFIG['lang']}.php";
-} else {require "plugins/del_fav/lang/english.php";}
+// Lang setting for installation process
+$lang_plugin_delfav = array(
+  'config_button' => 'Alle Favoriten entfernen',
+  'confirm'       => 'Willst du wirklich alle Dateien aus deinen Favoriten entfernen?'
+);
 ?>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   Coppermine 1.4.x Plugin - Delete Favorite 
   *************************************************
@@ -16,12 +16,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 // Lang setting for installation process
 $lang_plugin_delfav = array(
-  'button_install'=> 'Installation',
-  'button_submit' => 'Envoyer',
-  'button_cancel' => 'Annuler',
-  'button_done'   => 'Continuer',
-  'config_button' => 'Supprimer tous les favoris',				// Label of the button on the gallery
-  'delete_msg'    => 'Tous les favoris sont effacés !',				// Message for Deleting
-  'confirm'       => 'Etes vous surs de vouloir supprimer TOUS vos fichiers favoris ?',
+  'config_button' => 'Supprimer tous les favoris',
+  'confirm'       => 'Etes vous surs de vouloir supprimer TOUS vos fichiers favoris ?'
 );
 ?>

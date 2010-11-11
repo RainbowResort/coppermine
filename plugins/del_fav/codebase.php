@@ -14,43 +14,28 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-// Add install & uninstall actions
-$thisplugin->add_action('plugin_install','delfav_install');
-$thisplugin->add_action('plugin_uninstall','delfav_uninstall');
-
-
-// Add a configure action
-$thisplugin->add_action('page_start','delfav_temp');
-
-// Add a filter for the page HTML
-$thisplugin->add_filter('page_html','delfav_main');
-// Installation Function
-function delfav_install() 
-{
-		return true;
+$superCage = Inspekt::makeSuperCage();
+if (defined('THUMBNAILS_PHP') && $superCage->get->getAlpha('album') == 'favpics') {
+    $thisplugin->add_filter('page_html', 'delfav_main');
+    $thisplugin->add_action('page_start','delfav_temp'); 
 }
 
-// Uninstall
-function delfav_uninstall()
-{
-	return true;
-}
 function delfav_temp() {
-	global $lang_plugin_delfav,$CONFIG;
-	require ('plugins/del_fav/include/init.inc.php');
-}
+    global $CONFIG, $enabled_languages_array, $lang_plugin_delfav;
 
-// main function to modify page html
+    $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
+    include('plugins/del_fav/lang/english.php');
+    if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/del_fav/lang/'.$lang.'.php')) {
+        include('plugins/del_fav/lang/'.$lang.'.php');
+    }
+} 
+
 function delfav_main($html) {
-    global $thisplugin, $lang_thumb_view, $lang_plugin_delfav;
-	$exper = "#".$lang_thumb_view['download_zip']."(.*\n.*)</tr>#";
-	if(preg_match($exper,$html,$found)){
-		$delfav_but = $lang_thumb_view['download_zip'].$found[1].'<td class="sortorder_options"><span class="statlink">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?file=del_fav/remfav" onclick="return confirmDelFav(\''.$lang_plugin_delfav['confirm'].'\')">'.$lang_plugin_delfav['config_button'].'</a><script type="text/javascript">function confirmDelFav(text)
-{
-    return confirm(text);
-}</script></span></td></tr>';
-		$html = str_replace($found[0],$delfav_but,$html);
-	}
-	return $html;
+    global $lang_meta_album_names, $lang_plugin_delfav;
+
+    $delfav_but = ' <a href="index.php?file=del_fav/remfav" onclick="return confirm(\''.$lang_plugin_delfav['confirm'].'\');" title="'.$lang_plugin_delfav['config_button'].'"><img src="images/icons/delete.png" border="0" style="display:inline" /></a>';
+    $html = str_replace($lang_meta_album_names['favpics'].'</h2></td>', $lang_meta_album_names['favpics'].$delfav_but.'</h2></td>', $html);
+
+    return $html;
 }
 ?>

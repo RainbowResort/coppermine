@@ -16,12 +16,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 // Lang setting for installation process
 $lang_plugin_delfav = array(
-  'button_install'=> 'Installa',
-  'button_submit' => 'Invia',
-  'button_cancel' => 'Cancella',
-  'button_done'   => 'Fatto',
-  'config_button' => 'Cancella tutti i preferiti',				// Label of the button on the gallery
-  'delete_msg'    => 'Cacenlla tutti i preferiti',				// Message for Deleting
-  'confirm'       => 'Sei sicuro di voler CANCELLARE tutti i tuoi files preferiti?',
+  'config_button' => 'Cancella tutti i preferiti',
+  'confirm'       => 'Sei sicuro di voler CANCELLARE tutti i tuoi files preferiti?'
 );
 ?>

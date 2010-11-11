@@ -16,12 +16,7 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 // Lang setting for installation process
 $lang_plugin_delfav = array(
-  'button_install'=> 'نصب',
-  'button_submit' => 'ارسال',
-  'button_cancel' => 'لغو',
-  'button_done'   => 'تائید',
-  'config_button' => 'حذف همه مورد علاقه ها',				// Label of the button on the gallery
-  'delete_msg'    => 'حذف همه مورد علاقه ها',				// Message for Deleting
-  'confirm'       => 'مطمئن هستید كه می خواهید همه علاقه مندی ها را حذف كنید؟',
+  'config_button' => 'حذف همه مورد علاقه ها',
+  'confirm'       => 'مطمئن هستید كه می خواهید همه علاقه مندی ها را حذف كنید؟'
 );
 ?>

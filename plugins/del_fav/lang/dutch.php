@@ -16,10 +16,6 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 // Lang setting for installation process
 $lang_plugin_delfav = array(
-  'button_install'=> 'Installeer',
-  'button_submit' => 'OK',
-  'button_cancel' => 'Stop',
-  'button_done'   => 'Klaar',
   'config_button' => 'Verwijder alle favorieten',				// Label of the button on the gallery
   'delete_msg'    => 'Verwijder alle favorieten',				// Message for Deleting
   'confirm'       => 'Weet je het zeker, je wilt alle FAVORIETE bestanden verwijderen ?',
