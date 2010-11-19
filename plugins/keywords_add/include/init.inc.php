@@ -21,9 +21,9 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 // plugin will try to use the configured language if it is available.
 
 if (file_exists("plugins/keywords_add/lang/{$CONFIG['lang']}.php")) {
- 	require "plugins/keywords_add/lang/{$CONFIG['lang']}.php";
+    require "plugins/keywords_add/lang/{$CONFIG['lang']}.php";
 } 
 else {
-	require "plugins/keywords_add/lang/english.php";
+    require "plugins/keywords_add/lang/english.php";
 }
 ?>

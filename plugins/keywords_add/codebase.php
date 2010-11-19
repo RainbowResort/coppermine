@@ -17,43 +17,8 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_action('plugin_install','keywords_add_install');
-$thisplugin->add_action('plugin_configure','keywords_add_configure');
-
-
 $thisplugin->add_action('page_start','keywords_add_page_start');
-// Install function
-// Checks if uid is 'me' and pwd is 'you'; If so, then install the plugin
-function keywords_add_install() {
 
-    // Install
-    if ($_POST['submit']==$lang_plugin_keywords_add_config['button_install']) {
-
-        return true;
-
-    // Loop again
-    } else {
-
-        return 1;
-    }
-}
-
-// Configure function
-// Displays the form
-function keywords_add_configure() {
-    global $CONFIG, $lang_plugin_keywords_add, $lang_plugin_keywords_add_config;
-	require ('plugins/keywords_add/include/init.inc.php');
-
-	echo <<< EOT
-		<h2>{$lang_plugin_keywords_add['install_click']}</h2>
-		{$lang_plugin_keywords_add['install_note']}<br />
-		<br />
-		<form action="{$_SERVER['REQUEST_URI']}" method="post">
-		<input type="submit" value="{$lang_plugin_keywords_add_config['button_install']}" name="submit" />
-		</form>
-EOT;
-}
-// add config button
 function keywords_add_config_button($href,$title,$target,$link)
 {
   global $template_gallery_admin_menu;
@@ -72,13 +37,12 @@ function keywords_add_config_button($href,$title,$target,$link)
 // add admin button to start of each page
 function keywords_add_page_start()
 {
-	global $CONFIG, $lang_plugin_keywords_add, $lang_plugin_keywords_add_config, $lang_plugin_keywords_add_manage, $FEX,$lang_plugin_keywords_add_delete;
-	require ('plugins/keywords_add/include/init.inc.php');
-	
+    global $CONFIG, $lang_plugin_keywords_add, $lang_plugin_keywords_add_config, $lang_plugin_keywords_add_manage, $FEX,$lang_plugin_keywords_add_delete;
+    require ('plugins/keywords_add/include/init.inc.php');
 
-	if (GALLERY_ADMIN_MODE) {
-		keywords_add_config_button('index.php?file=keywords_add/plugin_config',$lang_plugin_keywords_add['config_title'],'',$lang_plugin_keywords_add['config_button']);
-	}
+    if (GALLERY_ADMIN_MODE) {
+        keywords_add_config_button('index.php?file=keywords_add/plugin_config',$lang_plugin_keywords_add['config_title'],'',$lang_plugin_keywords_add['config_button']);
+    }
 
 }
 ?>
