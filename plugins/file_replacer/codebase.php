@@ -60,7 +60,9 @@ function file_replacer_page_start() {
             $orig = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['orig_pfx'] . $row['filename'];
             $work_image = $image;
 
-            move_uploaded_file($fileupload['tmp_name'], $image);
+            if (!move_uploaded_file($fileupload['tmp_name'], $image)) {
+                cpg_die(ERROR, sprintf($lang_plugin_file_replacer['error_move_file'], $fileupload['tmp_name'], $image), __FILE__, __LINE__);
+            }
             chmod($image, octdec($CONFIG['default_file_mode']));
 
             if (is_known_filetype($image)) {
