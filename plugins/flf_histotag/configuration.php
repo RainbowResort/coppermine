@@ -42,6 +42,6 @@ EOT;
 
 
 $version='1.4';
-$plugin_cpg_version = array('min' => '1.5');
+$plugin_cpg_version = array('min' => '1.5.10');
 
 ?>

@@ -28,10 +28,21 @@ function album_share_codes_main() {
         if (mysql_num_rows($result) > 0) {
             while($row = mysql_fetch_assoc($result)) {
                 $url = $CONFIG['ecards_more_pic_target'].'displayimage.php?pid='.$row['pid'];
-                $thumb = '[img]'.$CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'thumb').'[/img]';
-                $content1 .= '[url='.$url.']'.$thumb.'[/url]'."\n";
+                $thumb = $CONFIG['ecards_more_pic_target'].get_pic_url($row, 'thumb');
+                $content1 .= '[url='.$url.'][img]'.$thumb.'[/img][/url]'."\n";
+                $content2 .= '<a href="'.$url.'"><img src="'.$thumb.' /></a>'."\n";
             }
-            echo '<tt>[url][img][/url]</tt>: <br /><textarea onfocus="this.select();" onclick="this.select();" class="textinput" rows="1" cols="64" wrap="off" style="overflow:hidden; height:15px;">'.$content1.'</textarea>';
+            starttable(-1, 'Share codes for <i>all files</i> in this album');
+            echo <<<EOT
+                <tr>
+                    <td class="tableb">
+                        <tt>[url][img][/url]</tt>: <textarea onfocus="this.select();" onclick="this.select();" class="textinput" rows="1" cols="64" wrap="off" style="overflow:hidden; height:15px;">{$content1}</textarea>
+                        <br />
+                        <tt>&lt;a&gt;&lt;img&gt;&lt;/a&gt;</tt>: <textarea onfocus="this.select();" onclick="this.select();" class="textinput" rows="1" cols="64" wrap="off" style="overflow:hidden; height:15px;">{$content2}</textarea>
+                    </td>
+                </tr>
+EOT;
+            endtable();
         }
     }
 }

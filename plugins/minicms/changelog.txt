@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 ***************************************************/
 
+2010-11-22 [M] Updated plugin hooks and minimum version info {eenemeenemuu}
+2010-11-19 [B] Fixed issue with special chars for FCKeditor {eenemeenemuu}
 2010-11-09 [B] Fixed language detection {eenemeenemuu}
 2010-11-08 [A] Made fully compatible to cpg1.5.x {eenemeenemuu}
 2010-11-08 [M] Added halnat's version to svn repository {eenemeenemuu}
