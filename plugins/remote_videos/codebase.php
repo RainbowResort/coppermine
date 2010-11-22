@@ -22,7 +22,7 @@ $thisplugin->add_action('plugin_uninstall','remote_videos_uninstall');
 $thisplugin->add_filter('html_other_media','remote_videos_other_media');
 
 if (defined('THUMBNAILS_PHP') && USER_CAN_UPLOAD_PICTURES) {
-    $thisplugin->add_filter('post_breadcrumb','remote_videos_post_breadcrumb');
+    $thisplugin->add_action('post_breadcrumb','remote_videos_post_breadcrumb');
 }
 
 

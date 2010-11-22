@@ -40,7 +40,7 @@ $thisplugin->add_action('page_start','minicms_page_start');
 
 
 // Add a filter
-$thisplugin->add_filter('post_breadcrumb','minicms_print'); //below the breadcrumb
+$thisplugin->add_action('post_breadcrumb','minicms_print'); //below the breadcrumb
 $thisplugin->add_filter('plugin_block','minicms_plugin_block');
 
 

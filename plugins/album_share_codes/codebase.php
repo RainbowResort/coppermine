@@ -17,10 +17,9 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_filter('post_breadcrumb','asc_codes');
+$thisplugin->add_action('post_breadcrumb', 'album_share_codes_main');
 
-
-function asc_codes() {
+function album_share_codes_main() {
     $superCage = Inspekt::makeSuperCage();
     if ($superCage->get->testInt('album')) {
         global $CONFIG;

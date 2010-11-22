@@ -33,7 +33,7 @@ $thisplugin->add_filter('add_file_data', 'video2flash_ffmpeg_add_file_data');
 $thisplugin->add_filter('file_data', 'video2flash_ffmpeg_file_data');
 
 // Add a filter for file delete. When a file is deleted then its thumb should also be deleted
-$thisplugin->add_filter('after_delete_file', 'video2flash_ffmpeg_delete_file');
+$thisplugin->add_action('after_delete_file', 'video2flash_ffmpeg_delete_file');
 
 global $video2flash_ffmpeg_configs;
 $video2flash_ffmpeg_configs = array('video2flash_ffmpeg_ffmpeg_path', 'video2flash_ffmpeg_player_width', 'video2flash_ffmpeg_player_height', 'video2flash_ffmpeg_player_autostart', 'video2flash_ffmpeg_thumb_interval');
