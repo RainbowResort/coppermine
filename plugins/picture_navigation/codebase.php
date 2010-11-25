@@ -84,17 +84,52 @@ function picture_navigation($pic_html) {
       The above code has been copied from theme_html_img_nav_menu()
       Now the main plugin code begins
       ***************************************/
+    global $hook_name;
+
+    if (stripos($hook_name, 'reduced')) {
+        $reduced = true;
+    }
+
+    if ($reduced && preg_match('/(<a href.*<\/a>)/Usi', $pic_html)) {
+        $fullsize_available_allowed = true;
+    }
+
+    if ($reduced) {
+        preg_match('/height="([0-9]+)"/Usi', $pic_html, $matches_h);
+        $height = $matches_h[1];
+        preg_match('/width="([0-9]+)"/Usi', $pic_html, $matches_w);
+        $width = $matches_w[1];
+    } else {
+        $height = $CURRENT_PIC_DATA['pheight'];
+        $width = $CURRENT_PIC_DATA['pwidth'];
+    }
+
+    if ($fullsize_available_allowed) {
+        $width = $width / 4;
+    } else {
+        $width = $width / 2;
+    }
 
     $buttons = '';
     if ($prev_tgt != 'javascript:;') {
-        $buttons = '<div onclick="window.location.href=\''.$prev_tgt.'\'" onmouseover="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev.png\');" onmouseout="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev_inactive.png\');" style="position: absolute; top: 0px; left: 0px; width: '.($CURRENT_PIC_DATA['pwidth'] / 2).'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: left;"><div style="padding: '.($CURRENT_PIC_DATA['pheight']/2-8).'px 10px;"><img id="pn_prev" src="images/navbar/prev_inactive.png" /></div></div>';
+        $buttons .= '<div onclick="window.location.href=\''.$prev_tgt.'\'" onmouseover="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev.png\');" onmouseout="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev_inactive.png\');" style="position: absolute; top: 0px; left: 0px; width: '.$width.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: left; cursor: url(images/navbar/prev.png), w-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_prev" src="images/navbar/prev_inactive.png" /></div></div>';
+    }
+    if ($fullsize_available_allowed) {
+        $pic_html = str_replace('onclick="MM_openBrWindow', 'style = "cursor: url(images/icons/search.png), move;" onclick="MM_openBrWindow', $pic_html);
     }
     if ($next_tgt != 'javascript:;') {
-        $buttons .= '<div onclick="window.location.href=\''.$next_tgt.'\'" onmouseover="$(\'#pn_next\').attr(\'src\',\'images/navbar/next.png\');" onmouseout="$(\'#pn_next\').attr(\'src\',\'images/navbar/next_inactive.png\');" style="position: absolute; top: 0px; right: 0px; width: '.($CURRENT_PIC_DATA['pwidth'] / 2).'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: right;"><div style="padding: '.($CURRENT_PIC_DATA['pheight']/2-8).'px 10px;"><img id="pn_next" src="images/navbar/next_inactive.png" /></div></div>';
+        $buttons .= '<div onclick="window.location.href=\''.$next_tgt.'\'" onmouseover="$(\'#pn_next\').attr(\'src\',\'images/navbar/next.png\');" onmouseout="$(\'#pn_next\').attr(\'src\',\'images/navbar/next_inactive.png\');" style="position: absolute; top: 0px; right: 0px; width: '.$width.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: right; cursor: url(images/navbar/next.png), e-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_next" src="images/navbar/next_inactive.png" /></div></div>';
     }
 
-    $pic_html = preg_replace('/(<img.*\/>)/Usi', $buttons.'\\1', $pic_html);
+    if ($fullsize_available_allowed) {
+        $pic_html = preg_replace('/(<a href.*<\/a>)/Usi', $buttons.'\\1', $pic_html);
+    } else {
+        $pic_html = preg_replace('/(<img.*\/>)/Usi', $buttons.'\\1', $pic_html);
+    }
     return $pic_html;
+
+    //TODO: check if theme has navbar icons
+    //      move css and js to files
 }
 
 ?>
