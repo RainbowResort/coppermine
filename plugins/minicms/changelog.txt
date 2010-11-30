@@ -26,6 +26,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 ***************************************************/
 
+2010-11-30 [M] Public release for cpg1.5.10 {eenemeenemuu}
 2010-11-22 [M] Updated plugin hooks and minimum version info {eenemeenemuu}
 2010-11-19 [B] Fixed issue with special chars for FCKeditor {eenemeenemuu}
 2010-11-09 [B] Fixed language detection {eenemeenemuu}

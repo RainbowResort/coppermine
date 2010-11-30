@@ -23,7 +23,7 @@ $description='MiniCMS provides a small content management system within the Copp
 $author='Created for cpg1.4.x by Donnoman@donovanbray.com';
 $author.='<br />Initial release for cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=41609" rel="external" class="external">halnat</a>.';
 $author.='<br />Made fully compatible to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version='2.0';
+$version='2.1';
 $plugin_cpg_version = array('min' => '1.5.10');
 
 $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
@@ -32,15 +32,6 @@ if (in_array($lang, $enabled_languages_array) == TRUE && file_exists('plugins/mi
     include('plugins/minicms/lang/'.$lang.'.php');
 }
 
-$extra_info=<<<EOT
-    <a href="plugins/minicms/readme.txt" title="README" class="admin_menu">README</a>&nbsp;
-    <a href="plugins/minicms/changelog.txt" title="CHANGELOG" class="admin_menu">CHANGELOG</a>&nbsp;
-    <a href="index.php?file=minicms/cms_config" title="{$lang_minicms['config_title']}" class="admin_menu">{$lang_minicms['config_title']}</a>
-EOT;
-
-$install_info = <<<EOT
-    <a href="plugins/minicms/readme.txt" title="README" class="admin_menu">README</a>&nbsp;
-    <a href="plugins/minicms/changelog.txt" title="CHANGELOG" class="admin_menu">CHANGELOG</a>
-EOT;
+$extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,68455.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
 
 ?>
