@@ -18,9 +18,9 @@
 **********************************************/
 
 $name = 'phpMyAdmin';
-$description = 'This plugin embedds the well-known database manipulation tool phpMyAdmin (version 2.11.9.5) into the layout of coppermine. The coppermine dev team recommends using phpMyAdmin to be used for the purposes of modifying Coppermine tables or performing database backups (dumps).';
+$description = 'This plugin embedds the well-known database manipulation tool phpMyAdmin (version 2.11.9.6) into the layout of coppermine. The coppermine dev team recommends using phpMyAdmin to be used for the purposes of modifying Coppermine tables or performing database backups (dumps).';
 $author = 'Nibbler';
-$version = '1.3';
+$version = '1.4';
 $install_info = 'If you install this plugin you will get a link on your admin menu that will load phpMyAdmin in an iframe. It uses the database information from Coppermine so there is no additional configuration required.<br />&nbsp;<br />';
 $extra_info = 'This copy of phpMyAdmin only contains the default theme, only the English language and no documentation in order to keep the plugin small. Exporting to PDF has also been removed. You can add or replace any files manually via FTP after installation if you please.<br />Use the phpMyAdmin-link from the admin menu or the one below:<br />&nbsp;<br /><a href="index.php?file=phpmyadmin/index" class="admin_menu">';
 if ($CONFIG['enable_menu_icons'] == 2) {
