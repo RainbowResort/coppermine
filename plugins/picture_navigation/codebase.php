@@ -107,7 +107,7 @@ function picture_navigation($pic_html) {
     if ($fullsize_available_allowed) {
         $width = $width / 4;
     } else {
-        if ($CONFIG['transparent_overlay'] {
+        if ($CONFIG['transparent_overlay']) {
             $width = $width / 2;
         } else {
             $width = $width / 3;
