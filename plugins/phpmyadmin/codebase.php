@@ -23,14 +23,14 @@ $thisplugin->add_filter('admin_menu','phpmyadmin_admin_menu_button');
 
 
 function phpmyadmin_admin_menu_button($admin_menu) {
-	global $CONFIG;
-	$new_button = '<div class="admin_menu admin_float"><a href="index.php?file=phpmyadmin/index">';
-	if ($CONFIG['enable_menu_icons'] == 2) {
-		$new_button .= '<img src="./plugins/phpmyadmin/images/icons/pma.png" border="0" width="16" height="16" alt="" class="icon" />';
-	}
-	$new_button .= 'phpMyAdmin</a></div>';
-	$look_for = '<!-- END export -->'; // This is where you determine the place in the admin menu
-	$admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
+    global $CONFIG;
+    $new_button = '<li><a href="index.php?file=phpmyadmin/index"><span>';
+    if ($CONFIG['enable_menu_icons'] == 2) {
+        $new_button .= '<img src="./plugins/phpmyadmin/images/icons/pma.png" border="0" width="16" height="16" alt="" class="icon" />';
+    }
+    $new_button .= 'phpMyAdmin</span></a></li>';
+    $look_for = '<!-- END documentation -->'; // This is where you determine the place in the admin menu
+    $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
     return $admin_menu;
 }
 

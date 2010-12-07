@@ -5,6 +5,25 @@ phpMyAdmin - ChangeLog
 $Id$
 $HeadURL$
 
+2.11.11.1 (2010-11-29)
+- bug #3115519 (private) [security] XSS on db search, see PMASA-2010-8
+
+2.11.11.0 (2010-09-07)
+- [core] Fix broken cleanup of $_GET
+- bug #3054458 [core] Fixed displaying number of rows.
+
+2.11.10.1 (2010-08-20)
+- [setup] Fixed output sanitizing in setup script, see PMASA-2010-4 for
+  more details.
+- [core] Fixed various XSS issues, see PMASA-2010-5 for more details.
+
+2.11.10.0 (2009-12-07)
+- [core] safer handling of temporary files with open_basedir (thanks to Thijs
+  Kinkhorst)
+- [core] do not automatically set and create TempDir, it might lead to security
+  issue (thanks to Thijs Kinkhorst)
+- [setup] avoid usage of (un)serialize, what might be unsafe in some cases
+
 2.11.9.6 (2009-10-12)
 - [security] XSS and SQL injection, thanks to Herman van Rink
 
