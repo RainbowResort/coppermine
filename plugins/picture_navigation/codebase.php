@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - picture_navigation
   *************************************************
-  Copyright (c) 2009-2010 eenemeenemuu
+  Copyright (c) 2010 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ function picture_navigation($pic_html) {
       The above code has been copied from theme_html_img_nav_menu()
       Now the main plugin code begins
       ***************************************/
-    global $hook_name;
+    global $hook_name, $CONFIG;
 
     if (stripos($hook_name, 'reduced')) {
         $reduced = true;
@@ -107,7 +107,11 @@ function picture_navigation($pic_html) {
     if ($fullsize_available_allowed) {
         $width = $width / 4;
     } else {
-        $width = $width / 2;
+        if ($CONFIG['transparent_overlay'] {
+            $width = $width / 2;
+        } else {
+            $width = $width / 3;
+        }
     }
 
     $buttons = '';
