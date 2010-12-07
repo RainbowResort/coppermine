@@ -17,10 +17,15 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_action('page_start', 'skype_demarkup');
-
-function skype_demarkup() {
+$thisplugin->add_action('page_start', 'skype_demarkup_js');
+function skype_demarkup_js() {
     js_include('plugins/skype_demarkup/demark.js');
 }
+
+$thisplugin->add_filter('page_meta', 'skype_demarkup_meta');
+function skype_demarkup_meta($meta) {
+    return $meta.'<meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />';
+}
+
 
 ?>

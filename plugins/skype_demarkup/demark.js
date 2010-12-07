@@ -14,9 +14,16 @@
   $Date$
   **************************************************/
 
+// Function copied from http://www.petefreitag.com/item/751.cfm
+
+function demark() {
+    $('.skype_pnh_container').html('');
+    $('.skype_pnh_print_container').removeClass('skype_pnh_print_container');
+}
+
 $(document).ready(function() {
-    window.setTimeout(function() {
-        $('.skype_pnh_container').html('');
-        $('.skype_pnh_print_container').removeClass('skype_pnh_print_container');
-    }, 800);
+    window.setTimeout(demark, 250);
+    window.setTimeout(demark, 500);
+    window.setTimeout(demark, 1000);
+    window.setTimeout(demark, 2000);
 });
