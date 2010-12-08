@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-12-08 [B] Fixed to work with cpg1.5.10 {eenemeenemuu}
 2010-01-31 [M] Increased plugin version counter to 0.6 {GauGau}
 2010-01-31 [B] Using newly-introduced plugin hooks requires the minimum requirement variable $plugin_cpg_version['min'] to be modified as well! {GauGau}
 2010-01-29 [M] Increased plugin version counter to 0.5 {Timo}

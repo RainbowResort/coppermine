@@ -15,35 +15,18 @@
   $Date$
   **************************************************/
 
-  
 if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
-// Add filter for html thumb title
-$thisplugin->add_filter('thumb_html_title','modify_title');
+$thisplugin->add_filter('thumb_html_title', 'modify_title');
+$thisplugin->add_filter('thumb_strip_html_title', 'modify_title');
 
-// Add filter for html filmstrip thumb title
-$thisplugin->add_filter('thumb_strip_html_title','modify_strip_title');
-
-
-function modify_title($row_data)
-{
-    // replace standard tooltip with pic title
+function modify_title($row_data) {
     if ($row_data[1]['title']) {
-        return $row_data[1]['title'];
+        return array($row_data[1]['title']);
     } else {
-        return $row_data[1]['filename'];
-    }
-}
-
-function modify_strip_title($row_data)
-{
-    // replace standard tooltip with pic title
-    if ($row_data[1]['title']) {
-        return $row_data[1]['title'];
-    } else {
-        return $row_data[1]['filename'];
+        return array($row_data[1]['filename']);
     }
 }
 
