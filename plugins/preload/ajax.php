@@ -26,7 +26,7 @@ if (count($matches[1]) > 0) {
     while($row = mysql_fetch_assoc($result)) {
         if (is_image($row['filename'])) {
             $normal_pfx = file_exists($CONFIG['fullpath'].$row['filepath'].$CONFIG['normal_pfx'].$row['filename']) ? $CONFIG['normal_pfx'] : "";
-            $preload .= "<img src=".$CONFIG['fullpath'].$row['filepath'].$normal_pfx.$row['filename']." /> ";
+            $preload .= "<img src=\"{$CONFIG['fullpath']}{$row['filepath']}{$normal_pfx}{$row['filename']}\" /> ";
         }
     }
 
