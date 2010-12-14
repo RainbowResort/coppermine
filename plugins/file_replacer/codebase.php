@@ -47,10 +47,11 @@ function file_replacer_page_start() {
                 cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
             }
 
-            $fileupload = $superCage->files->getRaw('fileupload');
+            $fileupload = $superCage->files->_source['fileupload'];
 
             if ($fileupload['error']) {
                 load_template();
+                global $lang_errors;
                 cpg_die(ERROR, $lang_errors['error'].' '.$fileupload['error'], __FILE__, __LINE__);
             }
 
@@ -61,6 +62,7 @@ function file_replacer_page_start() {
             $work_image = $image;
 
             if (!move_uploaded_file($fileupload['tmp_name'], $image)) {
+                load_template();
                 cpg_die(ERROR, sprintf($lang_plugin_file_replacer['error_move_file'], $fileupload['tmp_name'], $image), __FILE__, __LINE__);
             }
             chmod($image, octdec($CONFIG['default_file_mode']));
@@ -143,7 +145,7 @@ function file_replacer_page_start() {
 
                 if ($CONFIG['read_exif_data']) {
                     include("include/exif_php.inc.php");
-                    exif_parse_file($image);
+                    exif_parse_file($image, $pid);
                 }
     
                 $CONFIG['site_url'] = rtrim($CONFIG['site_url'], '/');
