@@ -37,6 +37,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-12-19 [A] Added French translation (Translation by FBleu){François Keller}
 2010-04-14 [B] Fixed issue with IE {eenemeenemuu}
 2010-04-14 [B] Fixed button display for regular users {eenemeenemuu}
 2010-03-12 [C] Adjusted plugin to integrate to new file menu (buttonlist) {eenemeenemuu}
