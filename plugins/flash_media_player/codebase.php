@@ -34,6 +34,10 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
         global $CONFIG, $USER;
         $CURRENT_PIC_DATA['pheight'] += 24;
         $thumb = get_pic_url($CURRENT_PIC_DATA, 'thumb');
+        if (file_exists($normal = str_replace($CONFIG['thumb_pfx'], $CONFIG['normal_pfx'], $thumb))) {
+            $thumb = $normal;
+        }
+
         $file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
         $autostart = $CONFIG['media_autostart'] == 1 ? "1" : "0";
