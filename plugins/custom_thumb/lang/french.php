@@ -27,5 +27,7 @@ $lang_plugin_custom_thumb['browse'] = 'Parcourir';
 $lang_plugin_custom_thumb['upload'] = 'Télécharger';
 $lang_plugin_custom_thumb['description'] = 'Télécharger des vignettes personnalisées pour les images et les fichiers';
 $lang_plugin_custom_thumb['announcement_thread'] = 'Sujet d\'annonce';
+$lang_plugin_custom_thumb['create_intermediate'] = 'Create custom intermediate-sized image';
+$lang_plugin_file_replacer['error_move_file'] = 'There was an error moving the file \'%s\' to its destination \'%s\'';
 
 ?>

@@ -17,8 +17,8 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_action('page_start','custom_thumb_page_start');
-$thisplugin->add_filter('file_data','custom_thumb_file_data');
+$thisplugin->add_action('page_start', 'custom_thumb_page_start');
+$thisplugin->add_filter('file_data', 'custom_thumb_file_data');
 
 
 function custom_thumb_page_start() {
@@ -47,7 +47,7 @@ function custom_thumb_page_start() {
                 cpg_die(ERROR, $lang_errors['invalid_form_token'], __FILE__, __LINE__);
             }
 
-            $fileupload = $superCage->files->getRaw('fileupload');
+            $fileupload = $superCage->files->_source['fileupload'];
 
             if ($fileupload['error']) {
                 load_template();
@@ -62,7 +62,15 @@ function custom_thumb_page_start() {
                 $thumb = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['thumb_pfx'] . $row['filename'];
                 if (move_uploaded_file($fileupload['tmp_name'], $thumb) == TRUE) {
                     require('include/picmgmt.inc.php');
+                    if ($superCage->post->keyExists('create_intermediate')) {
+                        $normal = $CONFIG['fullpath'] . $row['filepath'] . $CONFIG['normal_pfx'] . $row['filename'];
+                        $resize_method = $CONFIG['picture_use'] == "thumb" ? ($CONFIG['thumb_use'] == "ex" ? "any" : $CONFIG['thumb_use']) : $CONFIG['picture_use'];
+                        resize_image($thumb, $normal, $CONFIG['picture_width'], $CONFIG['thumb_method'], $resize_method);
+                    }
                     resize_image($thumb, $thumb, $CONFIG['thumb_width'], $CONFIG['thumb_method'], $CONFIG['thumb_use']);
+                } else {
+                    load_template();
+                    cpg_die(ERROR, sprintf($lang_plugin_custom_thumb['error_move_file'], $fileupload['tmp_name'], $thumb), __FILE__, __LINE__);
                 }
             } else {
                 load_template();
@@ -80,10 +88,18 @@ function custom_thumb_page_start() {
             echo <<< EOT
                 <tr>
                     <td class="tableb" valign="top">
-                        {$lang_plugin_custom_thumb['browse']}:
+                        {$lang_plugin_custom_thumb['browse']}
                     </td>
                     <td class="tableb" valign="top">
                         <input type="file" name="fileupload" size="40" class="listbox" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tableb" valign="top">
+                        {$lang_plugin_custom_thumb['create_intermediate']}
+                    </td>
+                    <td class="tableb" valign="top">
+                        <input type="checkbox" name="create_intermediate" />
                     </td>
                 </tr>
                 <tr>

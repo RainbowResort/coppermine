@@ -27,5 +27,7 @@ $lang_plugin_custom_thumb['browse'] = 'Durchsuchen';
 $lang_plugin_custom_thumb['upload'] = 'Hochladen';
 $lang_plugin_custom_thumb['description'] = 'Lade benutzerdefinierte Vorschaubilder für Bilder und Dateien hoch';
 $lang_plugin_custom_thumb['announcement_thread'] = 'Ankündigungs-Thema';
+$lang_plugin_custom_thumb['create_intermediate'] = 'Erzeuge benutzerdefiniertes Bild in Zwischengröße';
+$lang_plugin_file_replacer['error_move_file'] = 'Die Datei \'%s\' konnte nicht nach \'%s\' verschoben werden';
 
 ?>
