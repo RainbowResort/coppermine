@@ -17,8 +17,8 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_action('plugin_install', 'svg_install');
 
+$thisplugin->add_action('plugin_install', 'svg_install');
 function svg_install() {
     global $CONFIG;
     if (!mysql_result(cpg_db_query("SELECT COUNT(*) FROM {$CONFIG['TABLE_FILETYPES']} WHERE extension = 'svg'"), 0)) {
@@ -33,8 +33,8 @@ function svg_install() {
 }
 
 
+// Thumbnail view
 $thisplugin->add_filter('theme_display_thumbnails_params', 'svg_thumbnail_params');
-
 function svg_thumbnail_params($params) {
 
     if (preg_match('/(\.svg)/Usi', $params['{THUMB}'])) {
@@ -62,8 +62,8 @@ function svg_thumbnail_params($params) {
 }
 
 
+// Display image
 $thisplugin->add_filter('html_document', 'svg_html_document');
-
 function svg_html_document($pic_html) {
     global $CONFIG, $CURRENT_PIC_DATA;
     if ($CURRENT_PIC_DATA['mime'] == 'image/svg+xml') {
@@ -83,6 +83,42 @@ function svg_html_document($pic_html) {
         $pic_html = '<object data="'.$file.'" type="image/svg+xml" '.$width_height.'>Your browser doesn\'t support svg files</object>';
     }
     return $pic_html;
+}
+
+
+// Film strip thumbnail
+if (defined('DISPLAYIMAGE_PHP') && $CONFIG['display_film_strip']) {
+    $thisplugin->add_filter('page_html', 'svg_page_html');
+    function svg_page_html($html) {
+        if (preg_match_all('/<a href="displayimage\.php.*pid=([0-9]+)[\D].*<img src="images\/thumbs\/thumb_document\.png" class="strip_image".*alt=".*\.svg".*\/>.*<\/a>/Ui', $html, $matches)) {
+            global $CONFIG;
+            switch ($CONFIG['thumb_use']) {
+                case 'any':
+                case 'ex':
+                    $width_height = 'width="'.$CONFIG['thumb_width'].'" height="'.$CONFIG['thumb_width'].'"';
+                    break;
+                case 'ht':
+                    $width_height = 'height="'.$CONFIG['thumb_width'].'"';
+                    break;
+                case 'wd':
+                    $width_height = 'width="'.$CONFIG['thumb_width'].'"';
+                    break;
+            }
+
+            $pids = implode(', ', $matches[1]);
+            $result = cpg_db_query("SELECT pid, filepath, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid IN ($pids)");
+            while ($row = mysql_fetch_assoc($result)) {
+                $pics[$row['pid']] = $row;
+            }
+            mysql_free_result($result);
+
+            foreach ($pics as $pic) {
+                $pics[$pic['pid']]['object'] = '<div><object data="'.$CONFIG['fullpath'].$pic['filepath'].$pic['filename'].'" type="image/svg+xml" '.$width_height.'>Your browser doesn\'t support svg files</object></div>';
+                $html = preg_replace('/(<img src="images\/thumbs\/thumb_document\.png" class="strip_image".*alt="'.$pic['filename'].'".*\/>)/Ui', $pics[$pic['pid']]['object'], $html);
+            }
+        }
+        return $html;
+    }
 }
 
 ?>
