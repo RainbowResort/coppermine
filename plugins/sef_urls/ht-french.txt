@@ -32,7 +32,7 @@ RewriteRule recherche.html(.*) search.php$1 [NC]
 
 RewriteRule contacter.html(.*) contact.php$1 [NC]
 
-RewriteRule (.*)tresbien(.*) $1toprated$2 [NC]
+RewriteRule (.*)meilleure(.*) $1toprated$2 [NC]
 
 RewriteRule (.*)populaire(.*) $1topn$2 [NC]
 
@@ -40,17 +40,17 @@ RewriteRule (.*)comentairede(.*) $1lastcomby$2 [NC]
 
 RewriteRule (.*)comentaire(.*) $1lastcom$2 [NC]
 
-RewriteRule (.*)fichierclient(.*) $1usermgr$2 [NC]
+RewriteRule (.*)listeutilisateurs(.*) $1usermgr$2 [NC]
 
-RewriteRule (.*)client(.*) $1profile$2 [NC]
+RewriteRule (.*)utilisateurs(.*) $1profile$2 [NC]
 
 RewriteRule (.*)apercu(.*) $1thumbnails$2 [NC]
 
 RewriteRule (.*)photo(.*) $1displayimage$2 [NC]
 
-RewriteRule (.*)neuvede(.*) $1lastupby$2 [NC]
+RewriteRule (.*)nouveaupar(.*) $1lastupby$2 [NC]
 
-RewriteRule (.*)neuve(.*) $1lastup$2 [NC]
+RewriteRule (.*)nouveau(.*) $1lastup$2 [NC]
 
 RewriteRule (.*)recherche(.*) $1search$2 [NC]
 

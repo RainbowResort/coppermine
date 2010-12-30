@@ -67,14 +67,14 @@ function sef_urls_convert($html) {
     } elseif ($sef_language == 'french') {
         $str_thumbnails = 'apercu';
         $str_displayimage = 'photo';
-        $str_toprated = 'tresbien';
+        $str_toprated = 'meilleure';
         $str_topn = 'populaire';
         $str_lastcomby = 'comentairede';
         $str_lastcom = 'comentaire';
         $str_page = 'page';
         $str_profile = 'client';
-        $str_lastupby = 'neuvede';
-        $str_lastup = 'neuve';
+        $str_lastupby = 'nouveaupar';
+        $str_lastup = 'nouveau';
         $str_search = 'recherche';
         $str_contact = 'contacter';
         $str_tdm = '#enhaut';
