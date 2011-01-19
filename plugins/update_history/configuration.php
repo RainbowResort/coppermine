@@ -22,4 +22,5 @@ $description='Displays last updates from the gallery. (adapted from Nibblers mod
 $author='<a href="http://coppermine-gallery.net/forum/index.php?action=profile;u=9980">Frantz</a>, converted for cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=45771">Daxad</a>';
 $version='1.0';
 $plugin_cpg_version = array('min' => '1.5');
+$extra_info = 'after installation add updatehistory to :config => Album list view => The content of the main page';
 ?>
