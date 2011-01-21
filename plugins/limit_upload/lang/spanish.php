@@ -16,7 +16,7 @@
 **************************************************/
 
 if (!defined('IN_COPPERMINE')) {
-    die('No en Coppermine...');
+    die('Not in Coppermine...');
 }
 
 $lang_plugin_limit_upload['limit_upload'] = 'Límite de subidas';
