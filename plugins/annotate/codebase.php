@@ -162,8 +162,9 @@ EOT;
                 return $data;
             }
         }
-
-        $sql = "SELECT n.*, u.user_name FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN {$CONFIG['TABLE_USERS']} u ON n.user_id = u.user_id WHERE n.pid = {$data['pid']}";
+        
+        global $cpg_udb;
+        $sql = "SELECT n.*, u.".$cpg_udb->field['username']." AS user_name FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate n INNER JOIN ".$cpg_udb->usertable." u ON n.user_id = u.".$cpg_udb->field['user_id']." WHERE n.pid = {$data['pid']}";
         $result = cpg_db_query($sql);
 
         $notes = array();
