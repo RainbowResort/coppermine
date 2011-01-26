@@ -858,14 +858,29 @@ function annotate_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
+            $query = "SELECT MAX(nid) AS nid
+                FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON n.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE
+                GROUP BY n.pid 
+                ORDER BY n.nid DESC {$meta['limit']}";
+
+            $result = cpg_db_query($query);
+            $latest_nids_array = array();
+            while ($row = mysql_fetch_assoc($result)) {
+                $latest_nids_array[] = $row['nid'];
+            }
+            mysql_free_result($result);
+
             $query = "SELECT *, user_time AS msg_date
                 FROM {$CONFIG['TABLE_PICTURES']} AS p
-                INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n1 ON p.pid = n1.pid 
+                INNER JOIN {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n ON p.pid = n.pid 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
                 $RESTRICTEDWHERE 
                 AND approved = 'YES'
-                AND n1.nid IN (SELECT MAX(n2.nid) FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate AS n2 WHERE n1.pid = n2.pid)
-                ORDER BY n1.nid DESC {$meta['limit']}";
+                AND n.nid IN (".implode(', ', $latest_nids_array).")
+                ORDER BY n.nid DESC";
 
             $result = cpg_db_query($query);
             $rowset = cpg_db_fetch_rowset($result);
