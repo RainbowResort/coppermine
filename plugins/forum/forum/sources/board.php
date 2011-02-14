@@ -109,7 +109,7 @@ class board_controller extends Controller {
             $data = array(
                 'icon'            => $this->validate->post->getRaw('icon'),
                 'subject'         => $this->validate->post->getEscaped('subject'),
-                'body'            => $this->validate->post->getEscaped('body'),
+                'body'            => $this->validate->post->getRaw('body'),
                 'poster_time'     => time(),
                 'poster_id'       => USER_ID,
                 'poster_name'     => USER_NAME,

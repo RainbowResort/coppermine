@@ -34,7 +34,7 @@ class profile_controller extends Controller {
         $vars['user'] = $user = $this->forum->get_user_data();
         if ($this->validate->post->keyExists('submit')) {
             $data = array(
-                'fr_signature' => $this->validate->post->getEscaped('fr_signature'),
+                'fr_signature' => $this->validate->post->getRaw('fr_signature'),
             );
             if (strlen($data['fr_signature']) > Config::item('fr_signature_max_size') && Config::item('fr_signature_max_size')) {
                 $data['fr_signature'] = substr($data['fr_signature'], 0, Config::item('fr_signature_max_size'));

@@ -97,7 +97,7 @@ class topic_controller extends Controller {
                 'topic_id'        => $vars['topic_id'],
                 'icon'            => $this->validate->post->getRaw('icon'),
                 'subject'         => $this->validate->post->getEscaped('subject'),
-                'body'            => $this->validate->post->getEscaped('body'),
+                'body'            => $this->validate->post->getRaw('body'),
                 'board_id'        => $topic['board_id'],
                 'poster_time'     => time(),
                 'poster_id'       => USER_ID,
