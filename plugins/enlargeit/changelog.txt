@@ -1,4 +1,4 @@
-/**************************************************
+﻿/**************************************************
   Coppermine 1.5.x Plugin - EnlargeIt!
   *************************************************
   Copyright (c) 2010 Timos-Welt (www.timos-welt.de)
@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-02-14 [D] Added French documentation file and update french lang (Translation by FBleu){François Keller}
 2009-12-16 [M] Version count updated to 1.14 {GauGau}
 2009-12-16 [A] Added German documentation file (partial translation) {GauGau}
 2009-12-16 [B] Fixed issue with file extension in uppercase for the histogram {GauGau}
