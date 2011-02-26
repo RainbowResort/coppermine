@@ -1,7 +1,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - external_edit
   *************************************************
-  Copyright (c) 2010 Joachim M�ller
+  Copyright (c) 2010 Joachim Müller
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2010-02-15 [A] Added French translation (Translation by FBleu){François Keller}
 2010-10-15 [A] Added Italian language file (user contribution) {GauGau}
 2010-10-15 [M] Updated file header info to reflect year {GauGau}
 2010-10-15 [M] Counted version up to 2.5 {GauGau}
