@@ -2,7 +2,7 @@
 /*********************************************
   Coppermine 1.5.x Plugin - External tracker
   ********************************************
-  Copyright (c) 2009 - 2010 papukaija
+  Copyright (c) 2009 - 2011 papukaija
   
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
@@ -21,34 +21,63 @@ $thisplugin->add_action('plugin_install','external_tracker_install');
 $thisplugin->add_action('plugin_uninstall','external_tracker_uninstall');
 $thisplugin->add_action('plugin_cleanup','external_tracker_cleanup');
 
-//to edit footer
+//to edit footer, for non-asynchronous trackers
 $thisplugin->add_filter('gallery_footer','external_tracker_footer');
 
-// Adds tracker code if user is not an admin or is using the optional cookie
+//to edit header, for asynchronous trackers
+$thisplugin->add_filter('page_meta','external_tracker_header');
+
+//async
+function external_tracker_header($meta) {
+    global $CONFIG;
+    $superCage = Inspekt::makeSuperCage();
+
+    $stats=''; //Tracker code added if user is not an admin or is using the optional cookie
+    if (!GALLERY_ADMIN_MODE) {
+        $stats = 'yes';
+    }
+    if ($superCage->cookie->keyExists($CONFIG['cookie_name'] . '_ext_stats')) {
+        $stats = $superCage->cookie->getAlpha($CONFIG['cookie_name'] . '_ext_stats');
+        //cookie disables all trackers
+    }
+    
+    $ext_js_async = '';
+    if ($stats == 'yes') {
+        // Query the services
+        $result = cpg_db_query("SELECT service_name_short, tracker, tracker_extra FROM {$CONFIG['TABLE_PREFIX']}plugin_external_tracker WHERE service_active='YES' AND async='YES'");
+        while ($row = mysql_fetch_assoc($result)) {
+            include("./plugins/external_tracker/include/{$row['service_name_short']}.inc.php");
+        }
+        mysql_free_result($result);
+    }
+    return $ext_js_async . $meta;
+}
+
+//non-async
 function external_tracker_footer($html) {
     global $CONFIG;
     $superCage = Inspekt::makeSuperCage();
-    $_GET=$superCage->get->_source; //these are needed for the 3rd party php files (keep them updated)
+    $_GET=$superCage->get->_source; //these are needed for the 3rd party php files
     $_POST=$superCage->post->_source;
     $_COOKIE=$superCage->cookie->_source;
     $_ENV=$superCage->env->_source;
     $_FILES=$superCage->files->_source;
     //$_SESSION=$superCage->session->_source; $_SESSION isn't yet supported by makeSuperCage
     $_SERVER=$superCage->server->_source;
-    
-    $stats='';
+
+    $stats=''; //Tracker code added if user is not an admin or is using the optional cookie
     if (!GALLERY_ADMIN_MODE) {
-            $stats = 'yes';
-        }
+        $stats = 'yes';
+    }
     if ($superCage->cookie->keyExists($CONFIG['cookie_name'] . '_ext_stats')) {
         $stats = $superCage->cookie->getAlpha($CONFIG['cookie_name'] . '_ext_stats');
         //cookie disables all trackers
     }
-
+    
     $ext_js = '';
     if ($stats == 'yes') {
-           // Query the services
-        $result = cpg_db_query("SELECT service_name_short, tracker, tracker_extra FROM {$CONFIG['TABLE_PREFIX']}plugin_external_tracker WHERE service_active='YES'");
+        // Query the services
+        $result = cpg_db_query("SELECT service_name_short, tracker, tracker_extra FROM {$CONFIG['TABLE_PREFIX']}plugin_external_tracker WHERE service_active='YES' AND async='NO'");
         while ($row = mysql_fetch_assoc($result)) {
             include("./plugins/external_tracker/include/{$row['service_name_short']}.inc.php");
         }

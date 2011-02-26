@@ -1,7 +1,7 @@
 #/*********************************************
 #  Coppermine 1.5.x Plugin - External tracker
 #  ********************************************
-#    Copyright (c) 2009 - 2010 papukaija
+#    Copyright (c) 2009 - 2011 papukaija
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 3
@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `CPG_plugin_external_tracker` (
   tracker varchar(30) NOT NULL default '',
   tracker_extra varchar(50) DEFAULT NULL,
   help_url varchar(255) NOT NULL default '',
+  async enum('YES','NO') NOT NULL default 'NO',
   PRIMARY KEY  (service_id),
   UNIQUE KEY service_name_full (service_name_full),
   UNIQUE KEY help_url (help_url)

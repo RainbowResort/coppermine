@@ -1,7 +1,7 @@
 *********************************************
   Coppermine 1.5.x Plugin - External tracker
   ********************************************
-  Copyright (c) 2009 - 2010 papukaija
+  Copyright (c) 2009 - 2011 papukaija
   
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
@@ -11,12 +11,25 @@
   $HeadURL$
   $Revision$
 **********************************************
-2011-02-16 Added French doc translation and update french lang (Translation by FBleu){François Keller}
+2011-02-16 Added French doc translation and update French lang (Translation by FBleu){François Keller}
 ************************************
+2011-02-01 {papukaija}
+Version 2.5
+- Fixed PHP error
+*************************************
+2011-01-31 {papukaija}
+Version 2.4
+- Fixed compatibility issue with Image Scroll and possibly with other plugins too
+*************************************
+2011-01-15 {papukaija}
+Version 2.3
+- Added support for Yahoo! Web Analytics
+- Google Analytics and Piwik now use the new asynchronous javascript tracker
+*************************************
 2010-09-05 {papukaija}
 Version 2.2
 - Moved from inspekt's $strict = FALSE to _source as the $strict has no effect 
-  inside a function (but these superglobals are of course deleted imediately after
+  inside a function (but these superglobals are of course deleted immediately after
   they're not needed)
 ************************************ 
 2010-08-23 {papukaija}
@@ -25,7 +38,7 @@ Version 2.1
 - Updated few links to use /docs/<user's_lang>.html through greybox
 - Changed getRaw to getAlpha in cookie's reading
 - This plugin uses now a language fallback
-- Added form token to clenup's form
+- Added form token to cleanup's form
 - Added 'success' css class to cookie sender's msg_box() in cookie.php
 - inspekt inside external_tracker_footer() is loaded with $strict = FALSE; to
   use php based trackers but the superglobals are removed at functions's end
@@ -36,7 +49,7 @@ Version 2.0
 - Added support for OWA, BBClone and CrawlTrack
 - Added explanation for config screen's Extra setting to README.txt
 - Updated Google Analytics's tracker code (removed pageTracker._initData();
-  which is now only usefull with frame sites, see http://tinyurl.com/33qtqsp )
+  which is now only useful with frame sites, see http://tinyurl.com/33qtqsp )
 - DB schema: Changed the varchar for tracker_extra to 50
 ************************************
 2010-05-26 {papukaija}
@@ -69,4 +82,4 @@ Version 1.1
 ********************************
 2009-08-16 {papukaija}
 Version 1.0
-Intitial release for  cpg 1.5.x
+Initial release for  cpg 1.5.x

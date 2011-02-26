@@ -2,7 +2,7 @@
 /*********************************************
   Coppermine 1.5.x Plugin - External tracker
   ********************************************
-  Copyright (c) 2009 - 2010 papukaija
+  Copyright (c) 2009 - 2011 papukaija
   
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 3
@@ -19,7 +19,7 @@ $name = 'External tracker';
 $description = $lang_plugin_external_tracker['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=56739" rel="external" class="external">papukaija</a>';
 $author .= '<a href="plugins/external_tracker/docs/'.$doc_lng.'.html?hide_nav=1#credits" class="greybox" title="'.$lang_plugin_external_tracker['credits'].'">&nbsp;'.$lang_plugin_external_tracker['credits'].'</a>';
-$version = '2.2';
+$version = '2.5';
 $plugin_cpg_version = array('min' => '1.5');
 $announcement_icon = cpg_fetch_icon('announcement', 1);
 $config_icon = cpg_fetch_icon('config', 1);
@@ -34,7 +34,7 @@ $install_info = <<<EOT
     </tr>
     <tr>
     	<td>
-    		{$lang_plugin_external_tracker['support_track']}: Google Analytics, Open Web Analytics (OWA), BBClone, CrawlTrack {$lang_plugin_external_tracker['and']} Piwik.
+    		{$lang_plugin_external_tracker['support_track']}: Google Analytics, Piwik, Yahoo! Web Analytics, Open Web Analytics (OWA), BBClone {$lang_plugin_external_tracker['and']} CrawlTrack.
     	</td>
     </tr>
     </table>
