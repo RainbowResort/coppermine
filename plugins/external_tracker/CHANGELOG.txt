@@ -11,6 +11,8 @@
   $HeadURL$
   $Revision$
 **********************************************
+2011-02-16 Added French doc translation and update french lang (Translation by FBleu){François Keller}
+************************************
 2010-09-05 {papukaija}
 Version 2.2
 - Moved from inspekt's $strict = FALSE to _source as the $strict has no effect 
