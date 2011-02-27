@@ -28,6 +28,6 @@ $lang_plugin_file_replacer['description'] = 'Autoriser les fichiers à être rem
 $lang_plugin_file_replacer['announcement_thread'] = 'Sujet d\'annonce';
 $lang_plugin_file_replacer['author'] = 'Créer par %s pour cpg1.4.x - Porté sur cpg1.5.x et internationnalisé par %s';
 $lang_plugin_file_replacer['update_timestamp'] = 'Actualiser horodateur';
-$lang_plugin_file_replacer['error_move_file'] = 'There was an error moving the file \'%s\' to its destination \'%s\'';
+$lang_plugin_file_replacer['error_move_file'] = 'Il y a eu une erreur pour déplacer le fichier \'%s\' à sa destination \'%s\'';
 
 ?>
