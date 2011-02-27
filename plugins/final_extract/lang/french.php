@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   Coppermine 1.5.x Plugin - final_extract
   *************************************************
@@ -17,53 +17,49 @@
 
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
-$lang_plugin_final_extract = array(
-  'display_name'  => 'Final Extract',			// Display Name
-  'config_title'  => 'Configuration de Final Extract',			// Title of the button on the gallery config menu
-  'config_button' => 'Final Extract',				// Label of the button on the gallery config menu
-  'page_success'  => 'Parametres de Configuration mis à jour.',		// Page success message
-  'page_failure'  => 'Impossible de mettre à jour les parametres.',		// Page failure message
-  'install_note'  => 'Utilisez le bouton du menu Administrateur pour configurer le plugin.',	// Note about configuring plugin
-  'install_click' => 'Cliquez sur le bouton pour installer le plugin.',	// Message to install plugin
-  'group_name'      => 'Selectionnez le groupe d\'utilisateur',
-  'home_block'      => 'Accueil',
-  'login_block'     => 's\'identifier',
-  'my_galery_block' =>'Ma Galerie',
-  'upload_pic_block'=>'Uploader une image',
-  'album_list_block'=>'Albums',
-  'lastup_block'    =>'Derniers Ajouts',
-  'lastcom_block'   =>'Derniers Commentaires',
-  'topn_block'      =>'Les plus Populaires',
-  'toprated_block'  =>'Le mieux Notées',
-  'favpics_block'   =>'Mes Favoris',
-  'search_block'    =>'Rechercher',
-  'my_profile_block'=>'Mon Profil',
-);
+$lang_plugin_final_extract['display_name'] = 'Extrait final';        // Display Name
+$lang_plugin_final_extract['config_title'] = 'Configuration de Extrait final';        // Title of the button on the gallery config menu
+$lang_plugin_final_extract['config_button'] = 'Extrait final';        // Label of the button on the gallery config menu
+$lang_plugin_final_extract['page_success'] = 'Paramètres de configuration mis à jour.';        // Page success message
+$lang_plugin_final_extract['page_failure'] = 'Impossible de mettre à jour les paramètres.';        // Page failure message
+$lang_plugin_final_extract['install_note'] = 'Utilisez le bouton du menu Administrateur pour configurer le plugin.';        // Note about configuring plugin
+$lang_plugin_final_extract['install_click'] = 'Cliquez sur le bouton pour installer le plugin.';        // Message to install plugin
+$lang_plugin_final_extract['group_name'] = 'Sélectionnez le groupe d\'utilisateur';
+$lang_plugin_final_extract['home_block'] = 'Accueil';
+$lang_plugin_final_extract['login_block'] = 's\'identifier';
+$lang_plugin_final_extract['my_galery_block'] = 'Ma galerie';
+$lang_plugin_final_extract['upload_pic_block'] = 'Télécharger une image';
+$lang_plugin_final_extract['album_list_block'] = 'Albums';
+$lang_plugin_final_extract['lastup_block'] = 'Derniers ajouts';
+$lang_plugin_final_extract['lastcom_block'] = 'Derniers commentaires';
+$lang_plugin_final_extract['topn_block'] = 'Les plus populaires';
+$lang_plugin_final_extract['toprated_block'] = 'Le mieux notées';
+$lang_plugin_final_extract['favpics_block'] = 'Mes favoris';
+$lang_plugin_final_extract['search_block'] = 'Rechercher';
+$lang_plugin_final_extract['my_profile_block'] = 'Mon profil';
 
-$lang_plugin_final_extract_config = array(
-  'status'        => 'Status du Plugin',
-  'button_install'=> 'Installation',
-  'button_submit' => 'Envoyer',
-  'button_cancel' => 'Annuler',
-  'button_done'   => 'Fait',
-  'cleanup_question' => 'Supprimer la table utiliséepour le stockage du paramétrage ?',
-  'expand_all'    => 'Tout Afficher',
-);
+
+
+$lang_plugin_final_extract_config['status'] = 'Status du plugin';
+$lang_plugin_final_extract_config['button_install'] = 'Installation';
+$lang_plugin_final_extract_config['button_submit'] = 'Envoyer';
+$lang_plugin_final_extract_config['button_cancel'] = 'Annuler';
+$lang_plugin_final_extract_config['button_done'] = 'Fait';
+$lang_plugin_final_extract_config['cleanup_question'] = 'Supprimer la table utilisée pour le stockage du paramétrage ?';
+$lang_plugin_final_extract_config['expand_all'] = 'Tout afficher';
+
 // Banner Management
-$lang_plugin_final_extract_manage= array(
-	'list_name'   => 'Nom',
-	'list_submit' => 'Sauvegarder la nouvelle configuration',
-	'list_restore'=> 'Restorer les parametres par défaut',
-	'list_stat'   => 'Effacer', 
-	'list_chstat' => 'Sauvegarder les changements',
-	'list_chkall' => 'Sélectionner tout', // CPA 1.2.2
-	'list_unchkall' => 'Sélectionner rien',
-	'list_check'  => 'Sélection',
-);
+$lang_plugin_final_extract_manage['list_name'] = 'Nom';
+$lang_plugin_final_extract_manage['list_submit'] = 'Sauvegarder la nouvelle configuration';
+$lang_plugin_final_extract_manage['list_restore'] = 'Restaurer les paramètres par défaut';
+$lang_plugin_final_extract_manage['list_stat'] = 'Effacer';
+$lang_plugin_final_extract_manage['list_chstat'] = 'Sauvegarder les changements';
+$lang_plugin_final_extract_manage['list_chkall'] = 'Sélectionner tout';        // CPA 1.2.2
+$lang_plugin_final_extract_manage['list_unchkall'] = 'Sélectionner rien';
+$lang_plugin_final_extract_manage['list_check'] = 'Sélection';
+
 // Delete
-$lang_plugin_final_extract_delete= array(
-  'nothing_do'    => 'Vous ne pouvez rien faire!',
-  'nothing_changed' => 'Tous les blocs sont actif ...',
-  'success'       => 'Final Extract est configuré correctement',
- );
+$lang_plugin_final_extract_delete['nothing_do'] = 'Vous ne pouvez rien faire !';
+$lang_plugin_final_extract_delete['nothing_changed'] = 'Tous les blocs sont actif ...';
+$lang_plugin_final_extract_delete['success'] = 'Extrait final est configuré correctement';
 ?>

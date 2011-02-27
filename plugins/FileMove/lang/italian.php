@@ -15,39 +15,39 @@
   $Date$
   **************************************************/
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
-
-$lang_plugin_FileMove = array(
-  'display_name'    => 'FileMove',			// Display Name
-  'config_title'    => 'Configura FileMove',			// Title of the button on the gallery config menu
-  'config_button'   => 'FileMove',				// Label of the button on the gallery config menu
-  'install_note'    => 'Configura il plugin utilizzando il bottone nella barra admin.',	// Note about configuring plugin
-  'install_click'   => 'Click per installare il plugin.',	// Message to install plugin
-  'version'         => 'Ver 1.1', // Curent plugin version
-  'folder_name'     => 'Seleziona cartell da spostare',
-  'folder_ar'				=> 'Seleziona cartella di destinazione',
-  'some_files'			=> 'Sposta ALCUNI files',
-  'choix'						=>'Scegli operazione',
-  'choix2'					=>'Seleziona cosa fare',
-  'confirm'					=>'Conferma scelta',
-  'confirm_titre' 	=>'<b>Hai selezionato le cartelle seguenti:</b>',
-  'confirm_files' 	=>'<b>Hai selezionato i files seguenti:</b>',
-  'folder'					=> 'Sposta TUTTI i files',
-  'DFolder'					=> 'Cartella origine: ',
-  'AFolder'					=> 'Cartella destinazione: ',
-  'to'							=>' a ',
-  'error'      			=> 'ERRORE!',
-  'file'	  				=> 'File',
-  'files'						=> 'Files',
-  'valid'						=> 'Valido',
-  'continue' 				=> 'Continua',
-  'back'						=> 'Indietro',
-  'transfer'				=> 'Trasferisci il contenuto della ',
-  'transfer_file' 	=> 'Trasferisci alcuni files dalla ',
-  'folder2'					=> 'cartella ',
-  'folder_error'		=> 'Errore, la cartella non esiste!',
-  'traitement'			=> ' Files trasferiti',
-);
-
-
+if (!defined('IN_COPPERMINE')) { 
+	die('Not in Coppermine...'); 
+}
+$lang_plugin_FileMove['display_name'] = 'FileMove';        // Display Name
+$lang_plugin_FileMove['description'] = 'Choose files or a folder to move and modify the database according';
+$lang_plugin_FileMove['author'] = 'Created by Frantz';
+$lang_plugin_FileMove['ported'] = 'Ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
+$lang_plugin_FileMove['config_title'] = 'Configura FileMove';        // Title of the button on the gallery config menu
+$lang_plugin_FileMove['config_button'] = 'FileMove';        // Label of the button on the gallery config menu
+$lang_plugin_FileMove['install_note'] = 'Configura il plugin utilizzando il bottone nella barra admin.';        // Note about configuring plugin
+$lang_plugin_FileMove['install_click'] = 'Click per installare il plugin.';        // Message to install plugin
+$lang_plugin_FileMove['version'] = 'Ver 1.1';        // Curent plugin version
+$lang_plugin_FileMove['folder_name'] = 'Seleziona cartell da spostare';
+$lang_plugin_FileMove['folder_ar'] = 'Seleziona cartella di destinazione';
+$lang_plugin_FileMove['some_files'] = 'Sposta ALCUNI files';
+$lang_plugin_FileMove['choix'] = 'Scegli operazione';
+$lang_plugin_FileMove['choix2'] = 'Seleziona cosa fare';
+$lang_plugin_FileMove['confirm'] = 'Conferma scelta';
+$lang_plugin_FileMove['confirm_titre'] = '<b>Hai selezionato le cartelle seguenti:</b>';
+$lang_plugin_FileMove['confirm_files'] = '<b>Hai selezionato i files seguenti:</b>';
+$lang_plugin_FileMove['folder'] = 'Sposta TUTTI i files';
+$lang_plugin_FileMove['DFolder'] = 'Cartella origine: ';
+$lang_plugin_FileMove['AFolder'] = 'Cartella destinazione: ';
+$lang_plugin_FileMove['to'] = ' a ';
+$lang_plugin_FileMove['error'] = 'ERRORE!';
+$lang_plugin_FileMove['file'] = 'File';
+$lang_plugin_FileMove['files'] = 'Files';
+$lang_plugin_FileMove['valid'] = 'Valido';
+$lang_plugin_FileMove['continue'] = 'Continua';
+$lang_plugin_FileMove['back'] = 'Indietro';
+$lang_plugin_FileMove['transfer'] = 'Trasferisci il contenuto della ';
+$lang_plugin_FileMove['transfer_file'] = 'Trasferisci alcuni files dalla ',
+$lang_plugin_FileMove['folder2'] = 'cartella ';
+$lang_plugin_FileMove['folder_error'] = 'Errore, la cartella non esiste!';
+$lang_plugin_FileMove['traitement'] = ' Files trasferiti';
 ?>

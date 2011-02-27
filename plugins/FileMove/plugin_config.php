@@ -45,7 +45,7 @@ if ($selection1=="ok"){
 
 //affichagede l'entête
 pageheader($lang_plugin_FileMove['display_name']);
-starttable('100%', $lang_plugin_FileMove['display_name'].' - '.$lang_plugin_FileMove['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);
+starttable('100%', $lang_plugin_FileMove['display_name'].' - '.$lang_plugin_FileMove['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">' . $lang_gallery_admin_menu['pluginmgr_lnk'] . '</a>',2);
 //if(isset($selection)){
     switch($selection){
         case "ok":

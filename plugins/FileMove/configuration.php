@@ -15,10 +15,11 @@
   $Date$
   **************************************************/
 
-$name='FileMove';
-$description='Choose files or a folder to move and modify the database according';
-$author='<li>Created by Frantz</li>';
-$author .= '<li>Ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a></li>';
-$version='1.0';
+require_once ('./plugins/FileMove/include/init.inc.php');
+
+$name = $lang_plugin_FileMove['display_name'];
+$author = $lang_plugin_FileMove['author'] .$lang_plugin_FileMove['ported'];
+$description = $lang_plugin_FileMove['description'];
+$version = $lang_plugin_FileMove['version'];
 $plugin_cpg_version = array('min' => '1.5');
 ?>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   Coppermine 1.5.x Plugin - FileMove
   *************************************************
@@ -15,39 +15,39 @@
   $Date$
   **************************************************/
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
-
-$lang_plugin_FileMove = array(
-  'display_name'    => 'FileMove',			// Display Name
-  'config_title'    => 'Configureer FileMove',			// Title of the button on the gallery config menu
-  'config_button'   => 'FileMove',				// Label of the button on the gallery config menu
-  'install_note'    => 'Configureer de plugin via het Admin menu.',	// Note about configuring plugin
-  'install_click'   => 'Click op de knop om te installeren.',	// Message to install plugin
-  'version'         => 'Ver 1.1', // Curent plugin version
-  'folder_name'     => 'Selecteer welke folder je wil verplaatsen',
-  'folder_ar'				=> 'Selecteer doel folder',
-  'some_files'			=> 'Verplaats SOMMIGE bestanden',
-  'choix'						=>'Wat wil je doen?',
-  'choix2'					=>'Kies wat je wilt doen',
-  'confirm'					=>'Bevestig je keuze',
-  'confirm_titre' 	=>'<b>Je hebt de volgende folders geselecteerd:</b>',
-  'confirm_files' 	=>'<b>Je hebt de volgende bestanden geselecteerd:</b>',
-  'folder'					=> 'Verplaats de HELE folder',
-  'DFolder'					=> 'Start folder: ',
-  'AFolder'					=> 'Doel folder: ',
-  'to'							=>' naar de ',
-  'error'      			=> 'ERROR!',
-  'file'	  				=> 'Bestand',
-  'files'						=> 'Bestanden',
-  'valid'						=> 'OK',
-  'continue' 				=> 'Doorgaan',
-  'back'						=> 'Terug',
-  'transfer'				=> 'Verplaatsing van de inhoud van de ',
-  'transfer_file' 	=> 'Sommige bestanden zijn verplaatst van de ',
-  'folder2'					=> 'folder ',
-  'folder_error'		=> 'Error, de folder bestaat niet!',
-  'traitement'			=> ' Bestand(en) verplaatst ',
-);
-
-
+if (!defined('IN_COPPERMINE')) { 
+	die('Not in Coppermine...'); 
+}
+$lang_plugin_FileMove['display_name'] = 'FileMove';        // Display Name
+$lang_plugin_FileMove['description'] = 'Choose files or a folder to move and modify the database according';
+$lang_plugin_FileMove['author'] = 'Created by Frantz';
+$lang_plugin_FileMove['ported'] = 'Ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
+$lang_plugin_FileMove['config_title'] = 'Configureer FileMove';        // Title of the button on the gallery config menu
+$lang_plugin_FileMove['config_button'] = 'FileMove',        // Label of the button on the gallery config menu
+$lang_plugin_FileMove['install_note'] = 'Configureer de plugin via het Admin menu.';        // Note about configuring plugin
+$lang_plugin_FileMove['install_click'] = 'Click op de knop om te installeren.';        // Message to install plugin
+$lang_plugin_FileMove['version'] = 'Ver 1.1';        // Curent plugin version
+$lang_plugin_FileMove['folder_name'] = 'Selecteer welke folder je wil verplaatsen';
+$lang_plugin_FileMove['folder_ar'] = 'Selecteer doel folder';
+$lang_plugin_FileMove['some_files'] = 'Verplaats SOMMIGE bestanden';
+$lang_plugin_FileMove['choix'] = 'Wat wil je doen?';
+$lang_plugin_FileMove['choix2'] = 'Kies wat je wilt doen';
+$lang_plugin_FileMove['confirm'] = 'Bevestig je keuze';
+$lang_plugin_FileMove['confirm_titre'] = '<b>Je hebt de volgende folders geselecteerd:</b>';
+$lang_plugin_FileMove['confirm_files'] = '<b>Je hebt de volgende bestanden geselecteerd:</b>';
+$lang_plugin_FileMove['folder'] = 'Verplaats de HELE folder';
+$lang_plugin_FileMove['DFolder'] = 'Start folder: ';
+$lang_plugin_FileMove['AFolder'] = 'Doel folder: ';
+$lang_plugin_FileMove['to'] = ' naar de ';
+$lang_plugin_FileMove['error'] = 'ERROR!';
+$lang_plugin_FileMove['file'] = 'Bestand';
+$lang_plugin_FileMove['files'] = 'Bestanden';
+$lang_plugin_FileMove['valid'] = 'OK';
+$lang_plugin_FileMove['continue'] = 'Doorgaan';
+$lang_plugin_FileMove['back'] = 'Terug';
+$lang_plugin_FileMove['transfer'] = 'Verplaatsing van de inhoud van de ';
+$lang_plugin_FileMove['transfer_file'] = 'Sommige bestanden zijn verplaatst van de ';
+$lang_plugin_FileMove['folder2'] = 'folder ';
+$lang_plugin_FileMove['folder_error'] = 'Error, de folder bestaat niet!';
+$lang_plugin_FileMove['traitement'] = ' Bestand(en) verplaatst ';
 ?>

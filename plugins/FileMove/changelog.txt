@@ -1,0 +1,30 @@
+/********************************************************
+  Coppermine 1.5.x plugin - FileMove
+  *******************************************************
+  Copyright (c) 2010 Coppermine dev team
+  *******************************************************
+  This program is free software; you can redistribute 
+  it and/or modify it under the terms of the GNU General
+  Public License as published by the Free Software
+  Foundation; either version 3 of the License, or 
+  (at your option) any later version.
+  *******************************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/FileMove/changelog.txt $
+  $Revision: 7983 $
+  $LastChangedBy: eenemeenemuu $
+  $Date: 2010-10-21 10:31:09 +0200 (jeu. 21 oct. 2010) $
+  *******************************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2011-02-22 [D] Update lang files {Fbleu and Frantz}{François Keller}
+2010-10-21 [A] Porting the plugin to cpg1.5.x {eenemeenemuu}
