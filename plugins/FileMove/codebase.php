@@ -16,7 +16,7 @@
   **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
-
+require ('./plugins/FileMove/include/init.inc.php');
 $thisplugin->add_action('page_start','FileMove_page_start');
 
 // add config button
@@ -25,22 +25,23 @@ function FileMove_config_button($href,$title,$target,$link)
   global $template_gallery_admin_menu;
 
   $new_template = $template_gallery_admin_menu;
-  $button = template_extract_block($new_template,'documentation');
+  $button = template_extract_block($new_template,'update_database');
   $params = array(
-      '{DOCUMENTATION_HREF}' => $href,
-      '{DOCUMENTATION_TITLE}' => $title,
+      'update.php' => $href,
+      '{UPDATE_DATABASE_TITLE}' => $title,
       'target="cpg_documentation"' => $target,
-      '{DOCUMENTATION_LNK}' => $link,
+      '{UPDATE_DATABASE_LNK}' => $link,
+      '{UPDATE_DATABASE_ICO}' => cpg_fetch_icon('download', 1),
    );
    $new_button="<!-- BEGIN $link -->".template_eval($button,$params)."<!-- END $link -->\n";
-   template_extract_block($template_gallery_admin_menu,'documentation',"<!-- BEGIN documentation -->" . $button . "<!-- END documentation -->\n" . $new_button);
+   template_extract_block($template_gallery_admin_menu,'update_database',"<!-- BEGIN update_database -->" . $button . "<!-- END update_database -->\n" . $new_button);
 }
 // add admin button to start of each page
 function FileMove_page_start()
 {
     global $CONFIG, $lang_plugin_FileMove ;
-    require ('plugins/FileMove/include/init.inc.php');
-    
+    require ('./plugins/FileMove/include/init.inc.php');
+    $icon = cpg_fetch_icon('download', 1);
 
     if (GALLERY_ADMIN_MODE) {
         FileMove_config_button('index.php?file=FileMove/plugin_config',$lang_plugin_FileMove['config_title'],'',$lang_plugin_FileMove['config_button']);

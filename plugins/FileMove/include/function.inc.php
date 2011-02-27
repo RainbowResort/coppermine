@@ -146,7 +146,7 @@ function indent($max)
    while($entry = readdir($dir_handle))
    {
     $path_parts = pathinfo($entry);   	
-    if ($path_parts['extension'] !="php" && $path_parts['extension']  != "html"&& $entry !="edit" && $path_parts['extension']  !="" && $path_parts['extension']  !="db")
+    if ($path_parts['extension'] !="php" && $path_parts['extension']  != "html"&& $entry !="edit" && $path_parts['extension']  !="" && $path_parts['extension']  !="db" && $path_parts['extension']  != "svn" && $path_parts['extension']  != "DS_Store")
        {
                 if(is_file($dir.'/'.$entry))
                 {
@@ -181,7 +181,7 @@ function list_dir ($path,$step,$dfolder,$selection,$selection1,$Drep)
     $i = 0;
         while($file = readdir($dir))
         {
-            if ($file !="." && $file != ".."&& $file !="edit")
+            if ($file !="." && $file != ".."&& $file !="edit" && $file !=".svn")
                 {
                     if (is_dir($path."/".$file)){
                 // on passe les datas dans un tableau
@@ -260,7 +260,7 @@ function file_dir($dfolder,$nb)
     {
         while($file = readdir($dir))
         {
-            if ($file !="." && $file != ".."&& $file !="edit"&& $file!="index.html"&&$file!="Thumbs.db")
+            if ($file !="." && $file != ".."&& $file !="edit"&& $file!="index.html"&&$file!="Thumbs.db"&&$file!=".DS_Store"&&$file!="no_FTP-uploads_into_this_folder!.txt"&&$file!="index.php")
             {               
                 if (is_file($dfolder."/".$file))
                 {

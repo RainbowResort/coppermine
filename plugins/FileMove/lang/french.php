@@ -18,15 +18,23 @@
 if (!defined('IN_COPPERMINE')) { 
 	die('Not in Coppermine...'); 
 }
-$lang_plugin_FileMove['display_name'] = 'FileMove (Déplacement de Fichiers)';        // Nom d'affichage
+/**************************************************
+ section configuration.php
+**************************************************/
+$lang_plugin_FileMove['display_name'] = 'Déplacement de Fichiers';        // Nom d'affichage
 $lang_plugin_FileMove['description'] = 'Choisissez les fichiers ou un dossier à déplacer et modifier la base de données';
 $lang_plugin_FileMove['author'] = 'Crée par <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=9980" rel="external" class="external">Frantz</a> ';
 $lang_plugin_FileMove['ported'] = 'Porté sur cpg1.5.x par <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=9980" rel="external" class="external">eenemeenemuu</a>';
+$lang_plugin_FileMove['install_info'] = 'Ajoute une option dans la partie Configuration après <b>Mise à jour de la base de donnée</b> pour accéder à la page du plugin';
+$lang_plugin_FileMove['extra_info'] = 'Cliquez sur l\'option <b>FileMove</b> du menu dans la partie Configuration pour accéder à la page du plugin';
+/***********************************************
+ 
+ **********************************************/
 $lang_plugin_FileMove['config_title'] = 'Configuration de FileMove';        // Titre du bouton du menu de configuration dans la galerie
 $lang_plugin_FileMove['config_button'] = 'FileMove';        // Label du bouton du menu de configuration dans la galerie
 $lang_plugin_FileMove['install_note'] = 'Utilisez le bouton du menu Administrateur pour configurer le plugin.';        // Note sur la configuration de plugin
 $lang_plugin_FileMove['install_click'] = 'Cliquez sur le bouton pour installer le plugin.';        // Message d'installation du plugin
-$lang_plugin_FileMove['version'] = '1.1';
+$lang_plugin_FileMove['version'] = '1.2';
 $lang_plugin_FileMove['folder_name'] = 'Sélectionnez le répertoire à déplacer';
 $lang_plugin_FileMove['folder_ar'] = 'Sélectionnez le répertoire de destination';
 $lang_plugin_FileMove['some_files'] = 'Déplacer CERTAINS fichier';

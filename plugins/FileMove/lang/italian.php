@@ -26,7 +26,7 @@ $lang_plugin_FileMove['config_title'] = 'Configura FileMove';        // Title of
 $lang_plugin_FileMove['config_button'] = 'FileMove';        // Label of the button on the gallery config menu
 $lang_plugin_FileMove['install_note'] = 'Configura il plugin utilizzando il bottone nella barra admin.';        // Note about configuring plugin
 $lang_plugin_FileMove['install_click'] = 'Click per installare il plugin.';        // Message to install plugin
-$lang_plugin_FileMove['version'] = 'Ver 1.1';        // Curent plugin version
+$lang_plugin_FileMove['version'] = 'Ver 1.2';        // Curent plugin version
 $lang_plugin_FileMove['folder_name'] = 'Seleziona cartell da spostare';
 $lang_plugin_FileMove['folder_ar'] = 'Seleziona cartella di destinazione';
 $lang_plugin_FileMove['some_files'] = 'Sposta ALCUNI files';
@@ -50,4 +50,5 @@ $lang_plugin_FileMove['transfer_file'] = 'Trasferisci alcuni files dalla ',
 $lang_plugin_FileMove['folder2'] = 'cartella ';
 $lang_plugin_FileMove['folder_error'] = 'Errore, la cartella non esiste!';
 $lang_plugin_FileMove['traitement'] = ' Files trasferiti';
-?>
+$lang_plugin_FileMove['install_info'] = 'Add a menu item after Documentation in the Information menu to access at the plugin page';
+$lang_plugin_FileMove['extra_info'] = 'Click on the FileMove menu item in the Information menu to access at the plugin page';?>

@@ -26,7 +26,7 @@ $lang_plugin_FileMove['config_title'] = 'تنظیمات پلاگین';        //
 $lang_plugin_FileMove['config_button'] = 'FileMove';        // Label of the button on the gallery config menu
 $lang_plugin_FileMove['install_note'] = 'برای تنظیم پلاگین از دکمه اضافه شده به منوی مدیریت استفاده کنید.';        // Note about configuring plugin
 $lang_plugin_FileMove['install_click'] = 'برای نصب بر روی دکمه کلیک کنید.';        // Message to install plugin
-$lang_plugin_FileMove['version'] = 'Ver 1.1';        // Curent plugin version
+$lang_plugin_FileMove['version'] = 'Ver 1.2';        // Curent plugin version
 $lang_plugin_FileMove['folder_name'] = 'پوشه را که میخواهید جابجا کنید انتخاب کنید.';
 $lang_plugin_FileMove['folder_ar'] = 'پوشه مقصد را انتخاب کنید.';
 $lang_plugin_FileMove['some_files'] = 'جابجا کردن فایل';
@@ -50,4 +50,6 @@ $lang_plugin_FileMove['transfer_file'] = 'ارسال چند فایل از ';
 $lang_plugin_FileMove['folder2'] = 'پوشه ';
 $lang_plugin_FileMove['folder_error'] = 'خطا ، پوشه مورد نظر وجود ندارد !';
 $lang_plugin_FileMove['traitement'] = ' فایلها ارسال شدند.';
+$lang_plugin_FileMove['install_info'] = 'Add a menu item after Documentation in the Information menu to access at the plugin page';
+$lang_plugin_FileMove['extra_info'] = 'Click on the FileMove menu item in the Information menu to access at the plugin page';
 ?>

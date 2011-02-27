@@ -15,11 +15,13 @@
   $Date$
   **************************************************/
 
-require_once ('./plugins/FileMove/include/init.inc.php');
+require ('./plugins/FileMove/include/init.inc.php');
 
 $name = $lang_plugin_FileMove['display_name'];
 $author = $lang_plugin_FileMove['author'] .$lang_plugin_FileMove['ported'];
 $description = $lang_plugin_FileMove['description'];
-$version = $lang_plugin_FileMove['version'];
+$version = "1.2";
 $plugin_cpg_version = array('min' => '1.5');
+$extra_info = $lang_plugin_FileMove['extra_info'];
+$install_info = $lang_plugin_FileMove['install_info'];
 ?>

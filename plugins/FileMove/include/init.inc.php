@@ -20,10 +20,10 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.
 
-if (file_exists("plugins/FileMove/lang/{$CONFIG['lang']}.php")) {
-    require "plugins/FileMove/lang/{$CONFIG['lang']}.php";
+if (file_exists("./plugins/FileMove/lang/{$CONFIG['lang']}.php")) {
+    require "./plugins/FileMove/lang/{$CONFIG['lang']}.php";
 } 
 else {
-    require "plugins/FileMove/lang/english.php";
+    require "./plugins/FileMove/lang/english.php";
 }
 ?>
