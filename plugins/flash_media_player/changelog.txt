@@ -1,0 +1,23 @@
+/**************************************************
+  Coppermine 1.5.x Plugin - Flash Media Player
+  *************************************************
+  Copyright (c) 2009 eenemeenemuu
+  ********************************************
+  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/flash_media_player/changelog.txt $
+  $Revision: 6932 $
+  $LastChangedBy: eenemeenemuu $
+  $Date: 2009-12-30 10:54:33 +0100 (mer. 30 déc. 2009) $
+**************************************************/
+
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2010-02-27 [A] Added French lang file (Translation by FBleu){François Keller}
