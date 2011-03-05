@@ -19,11 +19,11 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 $lang_plugin_keywords_add = array(
   'display_name'    => 'Keywords Add',			// Display Name
-  'config_title'    => 'Configure Final Extract',			// Title of the button on the gallery config menu
+  'config_title'    => 'Configure Keywords Add',			// Title of the button on the gallery config menu
   'config_button'   => 'Keywords Add',				// Label of the button on the gallery config menu
   'install_note'    => 'Configure plugin using button on Admin toolbar.',	// Note about configuring plugin
   'install_click'   => 'Click button to install plugin.',	// Message to install plugin
-  'version'         => 'Ver 1.0', // Curent plugin version
+  'version'         => 'V1.2', // Curent plugin version
   'album_name'      => 'Select the album in which you want add information',
   'add_info'        => 'Information to be added',
   'keyword'	    => 'Keywords',

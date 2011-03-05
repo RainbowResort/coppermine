@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   Coppermine 1.5.x Plugin - keywords_add
   *************************************************
@@ -18,12 +18,12 @@
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 $lang_plugin_keywords_add = array(
-  'display_name'  => 'Keywords add',			// Display Name
+  'display_name'  => 'Ajout de mots clés',			// Display Name
   'config_title'  => 'Configuration de Keywords add',			// Title of the button on the gallery config menu
   'config_button' => 'Keywords add',				// Label of the button on the gallery config menu
   'install_note'  => 'Utilisez le bouton du menu Administrateur pour configurer le plugin.',	// Note about configuring plugin
   'install_click' => 'Cliquez sur le bouton pour installer le plugin.',	// Message to install plugin
-  'version'       => 'Ver 1.0',
+  'version'       => 'V1.2',
   'album_name'    => 'Sélectionnez l\'album dans lequel vous voulez ajoutez des informations',
   'add_info'      => 'Informations à ajouter',
   'keyword'	  => 'Mots Clés',
