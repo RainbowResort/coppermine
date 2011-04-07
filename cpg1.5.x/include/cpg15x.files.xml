@@ -13186,6 +13186,14 @@
     <hash>85bad9b396dea88a3b119fe857c28c5c</hash>
   </element>
   <element>
+    <fullpath>lang/serbian.php</fullpath>
+    <version>1.5.12</version>
+    <revision>8154</revision>
+    <status>optional</status>
+    <permission>read</permission>
+    <hash>ae9cb218a8a5c009d30f2d9e0b810aa6</hash>
+  </element>
+  <element>
     <fullpath>lang/slovak.php</fullpath>
     <version>1.5.12</version>
     <revision>8154</revision>
