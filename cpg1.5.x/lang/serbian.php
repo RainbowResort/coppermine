@@ -220,7 +220,7 @@ $lang_gallery_admin_menu['documentation_title'] = 'Coppermine priručnik';
 $lang_gallery_admin_menu['phpinfo_lnk'] = 'phpinfo'; // cpg1.5
 $lang_gallery_admin_menu['phpinfo_title'] = 'Sadrži tehničke informacije o vašem serveru. Ako vam je potrebna podrška, možda će se od vas tražiti da dostavite ove informacije.'; // cpg1.5
 $lang_gallery_admin_menu['update_database_lnk'] = 'Ažurirati bazu podataka'; // cpg1.5
-$lang_gallery_admin_menu['update_database_title'] = 'Ako ste menjali Coppermine fajlove, dodali modifikaciju ili instalirali novu verziju Coppermine, obaezno jednom ažurirajte bazu podataka. To će napraviti neophodne tabele i/ili podesiti vrednosti u vašoj bazi.'; // cpg1.5
+$lang_gallery_admin_menu['update_database_title'] = 'Ako ste menjali Coppermine fajlove, dodali modifikaciju ili instalirali novu verziju Coppermine, obavezno jednom ažurirajte bazu podataka. To će napraviti neophodne tabele i/ili podesiti vrednosti u vašoj bazi.'; // cpg1.5
 $lang_gallery_admin_menu['view_log_files_lnk'] = 'Pregled fajlova sa zapisima'; // cpg1.5
 $lang_gallery_admin_menu['view_log_files_title'] = 'Coppermine može da prati i beleži razne postupke korisnika. Možete da pregledate te zapise, ako ste ih uključili u podešavanju.'; // cpg1.5
 $lang_gallery_admin_menu['check_versions_lnk'] = 'Proveriti verziju'; // cpg1.5
@@ -593,7 +593,7 @@ $lang_contact_php['email_sent'] = 'Vaš imejl je poslat.'; // cpg1.5
 if (defined('ADMIN_PHP')) {
 $lang_admin_php['title'] = 'Podešavanje galerije';
 $lang_admin_php['general_settings'] = 'Opšta podešavanja'; // cpg1.5
-$lang_admin_php['language_charset_settings'] = 'Podešavanja jezika &amp; i pisma'; // cpg1.5
+$lang_admin_php['language_charset_settings'] = 'Podešavanja jezika i pisma'; // cpg1.5
 $lang_admin_php['themes_settings'] = 'Podešavanja tema'; // cpg1.5
 $lang_admin_php['album_list_view'] = 'Prikaz liste albuma'; // cpg1.5
 $lang_admin_php['thumbnail_view'] = 'Prikaz sličica'; // cpg1.5
@@ -638,8 +638,8 @@ $lang_admin_php['no_logs'] = 'Isključeno';
 $lang_admin_php['log_normal'] = 'Normalno';
 $lang_admin_php['log_all'] = 'Sve';
 $lang_admin_php['view_logs'] = 'Pregled zapisa';
-$lang_admin_php['click_expand'] = 'kliknite n ime sekcije da bi se pojavila';
-$lang_admin_php['click_collapse'] = 'kliknite n ime sekcije da bi nestala'; // cpg1.5
+$lang_admin_php['click_expand'] = 'kliknite na ime sekcije da bi se pojavila';
+$lang_admin_php['click_collapse'] = 'kliknite na ime sekcije da bi nestala'; // cpg1.5
 $lang_admin_php['expand_all'] = 'Prikazati sve';
 $lang_admin_php['toggle_all'] = 'Sakriti sve'; // cpg1.5
 $lang_admin_php['notice1'] = '(*) Ova podešavanja se ne smeju menjati ako već imate fajlove u bazi.';
@@ -1152,11 +1152,11 @@ $lang_display_comments['unapproved_comment'] = 'Neodobren komentar'; // cpg1.5
 $lang_display_comments['pending_approval_message'] = 'Neko je poslao komentar ovde. Biće vidljiv kad ga administrator odobri.'; // cpg1.5
 $lang_display_comments['approve'] = 'Odobriti komentar'; // cpg1.5
 $lang_display_comments['disapprove'] = 'Obeleži komentar kao neodobren'; // cpg1.5
-$lang_display_comments['log_in_to_comment'] = 'Anonimni komentari nisu dozvoljeni ovde. %sPrijavite se%s kako bi poslali komentar'; // cpg1.5 // do not translate the %s placeholders - they will be used as wrappers for the link (<a>)
+$lang_display_comments['log_in_to_comment'] = 'Anonimni komentari nisu dozvoljeni ovde. %sPrijavite se%s kako biste poslali komentar'; // cpg1.5 // do not translate the %s placeholders - they will be used as wrappers for the link (<a>)
 $lang_display_comments['default_username_message'] = 'Molimo upišite svoje ime za komentar'; // cpg1.5
 $lang_display_comments['comment_rejected'] = 'Vaš komentar je odbijen'; // cpg1.5
 
-$lang_fullsize_popup['click_to_close'] = 'Kliknite na sliku da bi zatvorili prozor';
+$lang_fullsize_popup['click_to_close'] = 'Kliknite na sliku da biste zatvorili prozor';
 $lang_fullsize_popup['close_window'] = 'Zatvoriti prozor'; // cpg1.5
 }
 
@@ -1312,7 +1312,7 @@ $lang_forgot_passwd_php['submit'] = 'napred';
 $lang_forgot_passwd_php['illegal_session'] = 'Sesija zaboravljene lozinke neispravna ili istekla.';
 $lang_forgot_passwd_php['failed_sending_email'] = 'Imejl sa podsetnikom za lozinku ne može da se pošalje!';
 $lang_forgot_passwd_php['email_sent'] = 'Imejl sa vašim korisničkim imenom i lozinkom je poslat na %s';
-$lang_forgot_passwd_php['verify_email_sent'] = 'Imejl je poslat na %s. Molimo vas da proverite poštu kako bi dovršili proces.';
+$lang_forgot_passwd_php['verify_email_sent'] = 'Imejl je poslat na %s. Molimo vas da proverite poštu kako biste dovršili proces.';
 $lang_forgot_passwd_php['err_unk_user'] = 'Izabrani korisnik ne postoji!';
 $lang_forgot_passwd_php['account_verify_subject'] = '%s - Zahtev za novom lozinkom';
 $lang_forgot_passwd_php['passwd_reset_subject'] = '%s - Vaša nova lozinka';
@@ -1913,6 +1913,7 @@ $lang_reviewcom_php['approval'] = 'Odobreno'; // cpg1.5
 $lang_reviewcom_php['save_changes'] = 'Snimiti promene'; // cpg1.5
 $lang_reviewcom_php['n_confirm_delete'] = 'Da li zaista hoćete da izbrišete izabrane komentare?'; // cpg1.5
 $lang_reviewcom_php['with_selected'] = 'Sa izabranim'; // cpg1.5
+
 $lang_reviewcom_php['delete'] = 'obrisati'; // cpg1.5
 $lang_reviewcom_php['approve'] = 'odobriti'; // cpg1.5
 $lang_reviewcom_php['disapprove'] = 'označiti neodobrene'; // cpg1.5
@@ -2438,6 +2439,7 @@ $lang_versioncheck_php['newer'] = 'novije od %s';
 $lang_versioncheck_php['modified'] = 'promenjeno';
 $lang_versioncheck_php['not_modified'] = 'nepromenjeno'; // cpg1.5
 $lang_versioncheck_php['needs_change'] = 'treba da se promeni';
+
 $lang_versioncheck_php['review_permissions'] = 'Proveriti dozvole';
 $lang_versioncheck_php['inaccessible'] = 'Fajl nije dostupan';
 $lang_versioncheck_php['review_version'] = 'Vaš fajl je zastareo';
