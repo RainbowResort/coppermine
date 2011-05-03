@@ -37,6 +37,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-05-03 [B] Fixed display of annotation buttons for pictures of other users if rapid annotation is enabled and displayed {eenemeenemuu}
 2010-12-19 [A] Added French translation (Translation by FBleu){François Keller}
 2010-04-14 [B] Fixed issue with IE {eenemeenemuu}
 2010-04-14 [B] Fixed button display for regular users {eenemeenemuu}

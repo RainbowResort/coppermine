@@ -332,8 +332,8 @@ EOT;
 
     }
 
-    if (empty($data['menu'])) {
-        $data['menu'] = '<div class="buttonlist align_right"><ul>'.$menu_buttons.'</ul></div>';
+    if (empty($data['menu']) || substr($data['menu'], -6) == '<hr />') {
+        $data['menu'] .= '<div class="buttonlist align_right"><ul>'.$menu_buttons.'</ul></div>';
     } else {
         $data['menu'] = str_replace('</ul>', $menu_buttons.'</ul>', $data['menu']);
     }
