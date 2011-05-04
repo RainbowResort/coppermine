@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Theme switch
   *************************************************
-  Copyright (c) 2010 eenemeenemuu
+  Copyright (c) 2010-2011 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -78,6 +78,26 @@ function theme_switch_page_start() {
         }
     }
 
+}
+
+
+$thisplugin->add_action('plugin_install', 'theme_switch_install');
+
+function theme_switch_install () {
+    global $CONFIG;
+    cpg_db_query("INSERT INTO {$CONFIG['TABLE_CONFIG']} (name, value) VALUES ('theme_switch_mobile_theme', 'water_drop')");
+
+    return true;
+}
+
+
+$thisplugin->add_action('plugin_uninstall', 'theme_switch_uninstall');
+
+function theme_switch_uninstall () {
+    global $CONFIG;
+    cpg_db_query("DELETE FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'theme_switch_mobile_theme'");
+
+    return true;
 }
 
 ?>
