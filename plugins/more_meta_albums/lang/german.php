@@ -30,6 +30,10 @@ $lang_plugin_more_meta_albums['audio_title'] = 'Alle Audiodateien';
 $lang_plugin_more_meta_albums['documents_title'] = 'Alle Dokumente';
 $lang_plugin_more_meta_albums['landscape_title'] = 'Querformat';
 $lang_plugin_more_meta_albums['portrait_title'] = 'Hochformat';
+$lang_plugin_more_meta_albums['panorama_title'] = 'Panoramaformat';
 $lang_plugin_more_meta_albums['newalb_title'] = 'Neueste Alben';
+$lang_plugin_more_meta_albums['randalb_title'] = 'Zufallsalben';
+$lang_plugin_more_meta_albums['randuseralb_title'] = 'Zufallsalben in Benutzerkategorien';
+$lang_plugin_more_meta_albums['randpublicalb_title'] = 'Zufallsalben in öffentlichen Kategorien';
 
 ?>
