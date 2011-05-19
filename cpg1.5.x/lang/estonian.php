@@ -23,7 +23,7 @@ $lang_translation_info['lang_name_native'] = 'Eesti';
 $lang_translation_info['lang_country_code'] = 'ee';
 $lang_translation_info['trans_name'] = 'Craig Tislar'; // Tänud eelmise tõlke eest Mihkel Tõnnovile :)
 $lang_translation_info['trans_email'] = 'kelle@email.ee';
-$lang_translation_info['trans_website'] = '';
+$lang_translation_info['trans_website'] = 'http://forum.coppermine-gallery.net/index.php?action=profile;u=87590';
 $lang_translation_info['trans_date'] = '2010-07-01';
 
 

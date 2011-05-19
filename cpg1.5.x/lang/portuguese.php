@@ -21,9 +21,9 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 $lang_translation_info['lang_name_english'] = 'Portuguese';
 $lang_translation_info['lang_name_native'] = 'Português de Portugal';
 $lang_translation_info['lang_country_code'] = 'pt';
-$lang_translation_info['trans_name'] = 'Pedro Ferreira, Paulo Figueira';
-$lang_translation_info['trans_email'] = 'pedro.m.ferreira@gmail.com, pfigueira@gmail.com';
-$lang_translation_info['trans_website'] = '';
+$lang_translation_info['trans_name'] = array('Pedro Ferreira', 'Paulo Figueira');
+$lang_translation_info['trans_email'] = array('pedro.m.ferreira@gmail.com', 'pfigueira@gmail.com');
+$lang_translation_info['trans_website'] = array('http://forum.coppermine-gallery.net/index.php?action=profile;u=97901', 'http://forum.coppermine-gallery.net/index.php?action=profile;u=102890');
 $lang_translation_info['trans_date'] = '2010-12-09';
 
 

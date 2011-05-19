@@ -18,11 +18,11 @@
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 
 // info about translators and translated language
-$lang_translation_info['lang_name_english'] = 'Spanish';
+$lang_translation_info['lang_name_english'] = 'Mexican Spanish';
 $lang_translation_info['lang_name_native'] = 'Español mexicano';
 $lang_translation_info['lang_country_code'] = 'mx';
 $lang_translation_info['trans_name'] = array('fermunoz', 'Dtc');
-$lang_translation_info['trans_email'] = '';
+$lang_translation_info['trans_email'] = array('', '');
 $lang_translation_info['trans_website'] = array('http://forum.coppermine-gallery.net/index.php?action=profile;u=73025', 'http://dtcsrni.co.cc/');
 $lang_translation_info['trans_date'] = '2010-04-23';
 $lang_charset = 'utf-8';

@@ -21,9 +21,9 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
 $lang_translation_info['lang_name_english'] = 'Norwegian';
 $lang_translation_info['lang_name_native'] = 'Norsk';
 $lang_translation_info['lang_country_code'] = 'no';
-$lang_translation_info['trans_name'] = array('Ronny Hansen');
-$lang_translation_info['trans_email'] = array('rohasol@online.no');
-$lang_translation_info['trans_website'] = array('http://lokalhistoriewiki.no/index.php/Bruker:Ronny_Hansen');
+$lang_translation_info['trans_name'] = 'Ronny Hansen';
+$lang_translation_info['trans_email'] = 'rohasol@online.no';
+$lang_translation_info['trans_website'] = 'http://lokalhistoriewiki.no/index.php/Bruker:Ronny_Hansen';
 $lang_translation_info['trans_date'] = '2011-01-07';
 
 
