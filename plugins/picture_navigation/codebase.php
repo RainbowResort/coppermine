@@ -86,6 +86,16 @@ function picture_navigation($pic_html) {
       ***************************************/
     global $hook_name, $CONFIG;
 
+    if (function_exists('panorama_viewer_is_360_degree_panorama') && panorama_viewer_is_360_degree_panorama()) {
+        foreach(array(8, 4, 2, 1) as $val) {
+            $pic_html = str_replace('onmouseover="backXMove='.$val.';"', 'onclick="window.location.href=\''.$prev_tgt.'\';" style="cursor: url(images/navbar/prev.png), w-resize;" onmouseover="backXMove='.$val.';"', $pic_html);
+        }
+        foreach(array(-8, -4, -2, -1) as $val) {
+            $pic_html = str_replace('onmouseover="backXMove='.$val.';"', 'onclick="window.location.href=\''.$next_tgt.'\';" style="cursor: url(images/navbar/next.png), e-resize;" onmouseover="backXMove='.$val.';"', $pic_html);
+        }
+        return $pic_html;
+    }
+
     if (stripos($hook_name, 'reduced')) {
         $reduced = true;
     }
@@ -113,16 +123,17 @@ function picture_navigation($pic_html) {
             $width_button = $width / 3;
         }
     }
+    $width_button = round($width_button);
 
     $buttons = '';
     if ($prev_tgt != 'javascript:;') {
-        $buttons .= '<div onclick="window.location.href=\''.$prev_tgt.'\'" onmouseover="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev.png\');" onmouseout="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev_inactive.png\');" style="position: absolute; top: 0px; left: 0px; width: '.$width_button.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: left; cursor: url(images/navbar/prev.png), w-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_prev" src="images/navbar/prev_inactive.png" /></div></div>';
+        $buttons .= '<div onclick="window.location.href=\''.$prev_tgt.'\';" onmouseover="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev.png\');" onmouseout="$(\'#pn_prev\').attr(\'src\',\'images/navbar/prev_inactive.png\');" style="position: absolute; top: 0px; left: 0px; width: '.$width_button.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: left; cursor: url(images/navbar/prev.png), w-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_prev" src="images/navbar/prev_inactive.png" /></div></div>';
     }
     if ($fullsize_available_allowed) {
         $pic_html = str_replace('onclick="MM_openBrWindow', 'style = "cursor: url(images/icons/search.png), move;" onclick="MM_openBrWindow', $pic_html);
     }
     if ($next_tgt != 'javascript:;') {
-        $buttons .= '<div onclick="window.location.href=\''.$next_tgt.'\'" onmouseover="$(\'#pn_next\').attr(\'src\',\'images/navbar/next.png\');" onmouseout="$(\'#pn_next\').attr(\'src\',\'images/navbar/next_inactive.png\');" style="position: absolute; top: 0px; right: 0px; width: '.$width_button.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: right; cursor: url(images/navbar/next.png), e-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_next" src="images/navbar/next_inactive.png" /></div></div>';
+        $buttons .= '<div onclick="window.location.href=\''.$next_tgt.'\';" onmouseover="$(\'#pn_next\').attr(\'src\',\'images/navbar/next.png\');" onmouseout="$(\'#pn_next\').attr(\'src\',\'images/navbar/next_inactive.png\');" style="position: absolute; top: 0px; right: 0px; width: '.$width_button.'px; height: '.$CURRENT_PIC_DATA['pheight'].'px; text-align: right; cursor: url(images/navbar/next.png), e-resize;"><div style="padding: '.($height/2-8).'px 10px;"><img id="pn_next" src="images/navbar/next_inactive.png" /></div></div>';
     }
 
     if ($fullsize_available_allowed) {
