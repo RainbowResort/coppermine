@@ -25,7 +25,16 @@ if (defined('DB_INPUT_PHP')) {
 }
 
 function limit_upload_page_start() {
-    if (!GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0) {
+    $superCage = Inspekt::makeSuperCage();
+    if ($matches = $superCage->post->getMatched('event', '/^[a-z_]+$/')) {
+        $event = $matches[0];
+    } elseif ($matches = $superCage->get->getMatched('event', '/^[a-z_]+$/')) {
+        $event = $matches[0];
+    } else {
+        $event = '';
+    }
+    $allowed_events = array('comment_update', 'comment', 'album_update', 'album_reset');
+    if (!GALLERY_ADMIN_MODE && $CONFIG['limit_upload_upload_limit'] >= 0 && !in_array($event, $allowed_events)) {
         global $CONFIG;
 
         switch($CONFIG['limit_upload_time_limit']) {
