@@ -189,7 +189,7 @@ function new_bbcodes($text) {
         $youtube_embed_code_replacement .= "<param name=\"movie\" value=\"http://www.youtube-nocookie.com/v/\\2&hl=de&fs=1\" />";
         $youtube_embed_code_replacement .= "<param name=\"allowfullscreen\" value=\"true\" />";
         $youtube_embed_code_replacement .= "</object>";
-        $text = preg_replace("/\[youtube\](.*)youtube.com\/watch\?v=(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
+        $text = preg_replace("/\[youtube\].*(youtube\.com\/watch\?v=|youtu\.be\/)(.*)\[\/youtube\]/Usi", $youtube_embed_code_replacement, $text);
     }
 
     // insert quote
