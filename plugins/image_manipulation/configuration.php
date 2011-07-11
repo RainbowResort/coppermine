@@ -20,7 +20,7 @@ require('./plugins/image_manipulation/init.inc.php');
 $name = $lang_plugin_image_manipulation['display_name'];
 $description = $lang_plugin_image_manipulation['description'];
 $author = 'Timo Schewe (<a href="http://www.timos-welt.de/" rel="external" class="external">Timos-Welt</a>)';
-$version = '2.2';
+$version = '2.3';
 $plugin_cpg_version = array('min' => '1.5');
 $install_info = $lang_plugin_image_manipulation['install_info'];
 $extra_info = $lang_plugin_image_manipulation['extra_info'];

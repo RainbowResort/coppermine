@@ -25,6 +25,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-07-11 [A] IE9 supports canvas mode => added {Timo}
 2010-02-17 [B] Removed buttons and sliders from documents {eenemeenemuu}
 2010-02-17 [O] Apply plugin hook only if DISPLAYIMAGE_PHP is set {eenemeenemuu}
 2010-01-28 [B] Reduced number of cookies to 1/400 to make Firefox work even better {Timo}

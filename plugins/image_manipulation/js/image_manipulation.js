@@ -20,6 +20,7 @@ var im_isflipv,im_isfliph,im_issepia,im_isbw,im_lightval;
 var im_contrastval,im_isemboss,im_isinvert,im_isblur;
 var im_saturval,im_sharpenval;
 var im_isie = Pixastic.Client.isIE();
+if (document.documentMode==9) im_isie=0;
 var im_oldhash, im_pid;
 
 // page is ready loaded
