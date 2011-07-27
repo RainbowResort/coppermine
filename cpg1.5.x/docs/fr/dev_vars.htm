@@ -427,8 +427,8 @@
 		</td>
 		<td>
 			Le &quot;mode admin&quot; n'est plus beaucoup utilisé - c'est un reste de cpg1.3.x et devrait être enlevé des futures versions. La définition est
-			<pre>define('USER_ADMIN_MODE', USER_ID && USER_CAN_CREATE_ALBUMS && $USER['am'] && !GALLERY_ADMIN_MODE);</pre>
-			elle est donc complétée si un utilisateur est identifié et a les droits d'avoir un album personnel. La constante ne doit pas être complétée si un administrateur est identifié.
+			<pre>define('USER_ADMIN_MODE', USER_ID && USER_CAN_CREATE_ALBUMS && !GALLERY_ADMIN_MODE);</pre>
+			elle est donc complétée si un utilisateur est identifié et a les droits d'avoir un album personnel. La constante ne doit pas être complétée si un administrateur est identifié, unless he hides the admin controls.
 		</td>
 	</tr>
 	<tr>
