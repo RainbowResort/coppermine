@@ -151,10 +151,10 @@ Det här fungerar bara på linux/unix och apache servers OCH bara om du har beh�
 <a name="hacks"></a><h2>Add-ons / Modifieringar / Hacks<a href="#hacks" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h2>
 <a name="jumpToPrivateAlbum"></a>
 <h3>Hur kan jag skicka en användare <strong>direkt till hans/hennes privata album</strong> så snart han/hon loggat in?<a href="#jumpToPrivateAlbum" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
-<p>Redigera<br /><tt class="code">login.php</tt><br />och sök efter<br />
-<tt class="code">pageheader($lang_login_php['login'],&quot;&lt;META http-equiv=\&quot;refresh\&quot; content=\&quot;3;url=$referer\&quot;&gt;&quot;);</tt><br />
-<br />och lägg till <strong>före</strong> det<br />
-<tt class="code">$referer = 'index.php?cat='.(FIRST_USER_CAT+$USER_DATA['user_id']); </tt><br /></p><hr />
+<p>Redigera<br /><tt class="code">login.php</tt><br />och ändra<br />
+<tt class="code">$redirect = ($CPG_REFERER &amp;&amp; (strpos($CPG_REFERER, 'login.php') === false)) ? $CPG_REFERER : 'index.php';</tt><br />
+till<br />
+<tt class="code">$redirect = 'index.php?cat='.(FIRST_USER_CAT+$USER_DATA['user_id']); </tt><br /></p><hr />
 <a name="linksInCustomFields"></a>
 <h3>Hur aktiverar jag klickbara <strong>länkar i anpassade användarfält</strong>?<a href="#linksInCustomFields" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 <p>Redigera displayimage.php och ändra<br />

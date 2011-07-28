@@ -169,10 +169,11 @@ Cela ne fonctionnera que sur les serveurs Linux/Unix et apache ET uniquement si 
 
 <a name="jumpToPrivateAlbum"></a>
 <h3>Comment puis-je diriger un utilisateur <strong>directement vers son album privé</strong> après qu'il se soit identifié ?<a href="#jumpToPrivateAlbum" title="Lien vers cette section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
-<p>ouvrez<br /><tt class="code">login.php</tt><br />et chechez<br />
-<tt class="code">pageheader($lang_login_php['login'],&quot;&lt;META http-equiv=\&quot;refresh\&quot; content=\&quot;3;url=$referer\&quot;&gt;&quot;);</tt><br />
-<br />et ajoutez <strong>avant</strong><br />
-<tt class="code">$referer = 'index.php?cat='.(FIRST_USER_CAT+$USER_DATA['user_id']); </tt><br /></p><hr />
+<p>Ouvrez<br /><tt class="code">login.php</tt><br />et changez<br />
+<tt class="code">$redirect = ($CPG_REFERER &amp;&amp; (strpos($CPG_REFERER, 'login.php') === false)) ? $CPG_REFERER : 'index.php';</tt><br />
+en<br />
+<tt class="code">$redirect = 'index.php?cat='.(FIRST_USER_CAT+$USER_DATA['user_id']); </tt><br /></p><hr />
+
 <a name="linksInCustomFields"></a>
 <h3>Comment activer <strong>les liens cliquables dans les champs utilisateurs personnalisés</strong> ?<a href="#linksInCustomFields" title="Lien vers cette section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
 <p>Ouvrez displayimage.php et changez<br />
@@ -183,7 +184,6 @@ Cela vous autorisera à utiliser les BBCodes dans les champs personnalisés: vou
 <tt class="code">[url]http://www.unsite.com/foo/bar.php?quelque_chose=42[/url]</tt><br />
 ou<br />
 <tt class="code">[url=http://www.unsite.com/foo/bar.php?quelque_chose=42]lien vers un site![/url]</tt><br />dans votre champ utilisateur personnalisé (dont l'affichage doit, bien entendu, être activé dans la page de configuration.).<br /></p><hr />
-
 
 <a name="addFooterBeforePoweredBy"></a>
 <h3>Comment puis-je <strong>ajouter</strong> quelque chose <strong>juste avant</strong> la ligne &quot;Powered by Coppermine&quot; ?<a href="#addFooterBeforePoweredBy" title="Lien vers cette section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
