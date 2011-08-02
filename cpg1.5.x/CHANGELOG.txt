@@ -8,7 +8,7 @@ This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.14
+Coppermine version: 1.5.15
 $HeadURL$
 $Revision$
 *********************************************
@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-08-02 [M] Counted version count up in SVN repository from cpg1.5.14 to cpg1.5.15 {eenemeenemuu}
 2011-08-01 [M] Release of cpg1.5.14 {eenemeenemuu}
 2011-08-01 [B] Added workaround for delayed cookie issue during login (thread ID 73016) {eenemeenemuu}
 2011-08-01 [C] Moved memberlist button to home menu drop-down for theme 'curve' (thread ID 73255) {eenemeenemuu}
@@ -55,6 +56,7 @@ Changelog
 2011-01-18 [A] Added Norwegian language file (user contribution) {eenemeenemuu}
 2011-01-15 [C] Fixed version number displayed on the index page in the doc {Frantz}
 2011-01-11 [B] Fixed username in activation mail (thread ID 69555) {eenemeenemuu}
+2011-01-03 [M] Counted version count up in SVN repository from cpg1.5.12 to cpg1.5.13 {eenemeenemuu}
 2011-01-02 [M] Release of cpg1.5.12 {eenemeenemuu}
 2011-01-02 [S] Fixed XSS issues (thread ID 69327) {eenemeenemuu}
 2011-01-02 [B] Fixed playback of Windows Media Player videos (thread ID 68537) {eenemeenemuu}
