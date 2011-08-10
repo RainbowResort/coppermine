@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-08-10 [B] Fixed 'delete all comments' function in album properties {eenemeenemuu}
 2011-08-02 [M] Counted version count up in SVN repository from cpg1.5.14 to cpg1.5.15 {eenemeenemuu}
 2011-08-01 [M] Release of cpg1.5.14 {eenemeenemuu}
 2011-08-01 [B] Added workaround for delayed cookie issue during login (thread ID 73016) {eenemeenemuu}
