@@ -40,6 +40,15 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
 
         $file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
+        // Support for external files
+        if ($CURRENT_PIC_DATA['filesize'] < 256) {
+            $file_content = file_get_contents($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CURRENT_PIC_DATA['filename']);
+            preg_match('/^(http|ftp)s?:\/\/.*\.'.$CURRENT_PIC_DATA['extension'].'$/i', $file_content, $matches);
+            if (count($matches)) {
+                $file = strip_tags($matches[0]);
+            }
+        }
+
         $autostart = $CONFIG['media_autostart'] == 1 ? "1" : "0";
 
         $theme = $USER['theme'] ? $USER['theme'] : $CONFIG['theme'];
@@ -68,7 +77,7 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
         if ($handle = opendir('plugins/flash_media_player/')) {
             $skins = array();
             while (false !== ($file = readdir($handle))) {
-                if ($file != 'player.swf' && stripos($file, '.swf')) {
+                if ($file != 'player.swf' && stripos($file, '.swf') || stripos($file, '.zip')) {
                     $skins[] = $file;
                 }
             }
