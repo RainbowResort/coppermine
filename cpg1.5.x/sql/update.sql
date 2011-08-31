@@ -531,3 +531,5 @@ UPDATE CPG_albums SET moderator_group = 0;
 ALTER TABLE CPG_users ADD user_email_valid enum('YES','') NOT NULL default '';
 
 INSERT INTO CPG_usergroups VALUES (3, 'Anonymous', 0, 0, 1, 0, 0, 0, 0, 1, 1, 3);
+
+UPDATE CPG_users SET user_actkey = '' WHERE user_active = 'YES';
