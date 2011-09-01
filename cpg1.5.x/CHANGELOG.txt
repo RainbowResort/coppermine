@@ -8,7 +8,7 @@ This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.16
+Coppermine version: 1.5.17
 $HeadURL$
 $Revision$
 *********************************************
@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-09-01 [M] Counted version count up in SVN repository from cpg1.5.16 to cpg1.5.17 {eenemeenemuu}
 2011-09-01 [M] Release of cpg1.5.16 {eenemeenemuu}
 2011-08-31 [A] Also send activation confirmation email if the user has been activated via the user manager (thread ID 69706) {eenemeenemuu}
 2011-08-31 [B] Fixed display of non-image files when 'Go directly from thumbnail to full-sized image' is enabled in config (thread ID 72456) {eenemeenemuu}
