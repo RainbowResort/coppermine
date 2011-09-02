@@ -19,4 +19,4 @@ $name = 'Random File Name Suffix';
 $description = 'Adds a random suffix to the file name during upload';
 $author='eenemeenemuu';
 $version='0.1';
-$plugin_cpg_version = array('min' => '1.5');
+$plugin_cpg_version = array('min' => '1.5.18');
