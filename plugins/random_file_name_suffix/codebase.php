@@ -22,7 +22,8 @@ $thisplugin->add_filter('upload_file_name', 'rfns_upload_file_name');
 function rfns_upload_file_name($picture_name) {
 
     $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for ($i = 0; $i < 6; $i++) {
+    $suffix = '_';
+    for ($i = 0; $i < 8; $i++) {
         $suffix .= $characters[mt_rand(0, strlen($characters)-1)];
     }
 
