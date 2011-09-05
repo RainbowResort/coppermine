@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-09-05 [C] Add default values on 'onlinestats' installation to avoid weird dates right after plugin installation (thread ID 73467) {eenemeenemuu}
 2011-09-02 [A] Added plugin hook 'upload_file_name' {eenemeenemuu}
 2011-09-01 [M] Counted version count up in SVN repository from cpg1.5.16 to cpg1.5.17 {eenemeenemuu}
 2011-09-01 [M] Release of cpg1.5.16 {eenemeenemuu}
