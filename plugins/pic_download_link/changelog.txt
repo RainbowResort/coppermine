@@ -1,0 +1,34 @@
+/**
+ * Coppermine Photo Gallery
+ * Coppermine version: 1.5.xx
+ *
+ * Picture Download Link
+ * Version 1.3
+ *  
+ * Plugin Written by Joe Carver - http://photos-by.joe-carver.com/ - http://gallery.josephcarver.com/natural/ - http://i-imagine.net/artists/
+ * 08 August 2010
+*/
+  
+Changelog
+=========
+[A] = Added new feature
+[B] = Bugfix (fix something that wasn't working as expected)
+[C] = Cosmetical fix (layout, typo etc.)
+[D] = Documentation improvements
+[M] = Maintenance works
+[O] = Optimization of code
+[S] = Security fix (issues that are related to security)
+*********************************************
+
+2011-10-02 [A] French ranslation {Daron Falletta}
+
+2010-12-30 [M] Release of version 1.3 {Roland Fulde}
+2010-12-30 [A] Configure option to show link only for certain categories {Roland Fulde}
+2010-12-29 [M] Release of version 1.2 {Roland Fulde}
+2010-12-29 [A] German translation {Roland Fulde}
+2010-12-29 [A] Content-Disposition -> Save As box in the browser {Roland Fulde}
+2010-12-29 [B] Language files from lang/ were not picked up {Roland Fulde}
+2010-08-08 [M] Release of version 1.1 {Joe Carver}
+2010-08-08 [A] Config option added to show link to logged users only {Joe Carver}
+2010-08-08 [A] Config option added to show pic in info. table {Joe Carver}
+2010-07-05 [M] Release of version 1.0 {Joe Carver}
