@@ -208,7 +208,7 @@ function xfd_head()
 
     if ($album) {
         if ((int)$album) {
-            $albumDetails = get_album_name($album);
+            $albumDetails = get_album_name((int)$album);
             $album = $albumDetails['title'];
         } else {
             $album = ucwords($album);
