@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-10-12 [A] Added anchors on plugin manager {eenemeenemuu}
 2011-10-07 [A] Added upload button after each album name in album manager {eenemeenemuu}
 2011-09-16 [B] Fixed simple upload process when users can just upload to their personal gallery (thread ID 73570) {eenemeenemuu}
 2011-09-13 [O] Updated Arabic language file (user contribution) {eenemeenemuu}
