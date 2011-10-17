@@ -23,7 +23,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
-2011-10-13 [B] Fixed infinite loop for delayed cookie issue workaround {eenemeenemuu}
+2011-10-17 [B] Disallow dots in cookie name (thread ID 73655) {eenemeenemuu}
+2011-10-13 [B] Fixed infinite loop for delayed cookie issue workaround (thread ID 73655) {eenemeenemuu}
 2011-10-12 [A] Added anchors on plugin manager {eenemeenemuu}
 2011-10-07 [A] Added upload button after each album name in album manager {eenemeenemuu}
 2011-09-16 [B] Fixed simple upload process when users can just upload to their personal gallery (thread ID 73570) {eenemeenemuu}
