@@ -110,6 +110,10 @@ function anis_display_fullsize_pic() {
         }
         w = Math.min(w,screen.availWidth);
         h = Math.min(h,screen.availHeight);
+        // full size hack - START
+        w = <?php echo $row['pwidth']; ?>;
+        h = <?php echo $row['pheight']; ?>;
+        // full size hack - END
         window.resizeTo(w,h);
         window.moveTo((screen.availWidth-w)/2, (screen.availHeight-h)/2);
        // alert('<!-- width: ' + w + ' height: ' + h + ' --> ');

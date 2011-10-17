@@ -3,13 +3,33 @@
 <BODY>
 <p><center><h1>Documentation for AniS - the AnimationS
 applet</h1>October 13, 1999
-<br>updated: November, 2005
+<br>updated: May, 2007
 </center>
 <p>
 <hr>
 <center><h3>What's new</h3></center>
-New parameters have been added: <tt>base_static, overlay_static,
-keep_zoom</tt>.  &nbsp;&nbsp;&nbsp;See details below.
+Improved loading of static overlays with limited number
+of frames (using the <tt>numframeschoice</tt> control.
+<p>
+In the previous release, new controls and parameters added:
+New control:  <tt>numframeschoice</tt> that allows you to set up
+a list of the number of frames to be downloaded and displayed. Useful
+to help users with limited bandwidth.  Must be used in conjunction
+with the <tt>num_frames_choice</tt> PARAMeter that specifies a list
+of choices.
+<p>
+New parameter: <tt>overlay_labels_colors</tt> added to allow
+individual colors for overlay labels.  (Does not work on Macs.)
+<p>
+New parameter: <tt>quiet_reload</tt> prevents the display of images
+as they are being loaded (when a "refresh" is done), thus preserving
+the screen as best as possible.  
+
+<p>
+Before that, these parameters were been added: 
+<tt>base_static, overlay_static, keep_zoom, and overlay_zoom</tt>.  
+<p>
+See details below.
 </ul>
 <p>
 <hr>
@@ -59,7 +79,7 @@ appear; otherwise, its default value will be used):
 <xmp>
 <PARAM name="controls" value="startstop, looprock, step, speed, enhance,
     firstlast, refresh, toggle, rotator, zoom, fader, overlay, framelabel, audio,
-    show, setframe">
+    show, setframe, numframeschoice">
 </xmp>
 
 <p>This <tt>controls</tt> parameter will position the controls 
@@ -70,7 +90,7 @@ window, use the <tt>bottom_controls</tt> tag, as in:
 <xmp>
 <PARAM name="bottom_controls" value="startstop, looprock, step, speed, enhance,
     firstlast, refresh, toggle, rotator, zoom, fader, overlay, framelabel, audio,
-    show, setframe">
+    show, setframe, numframeschoice">
 </xmp>
 
 <p><b>Note:</b> You <u>must not</u> specify the same control in
@@ -111,8 +131,8 @@ image in the same window, use "show/same" for the control name.  The
 <li> <b>enhance</b> enables on-the-fly enhancements (colorizing) of
 the gray levels in the base images.  When you specify this control, 
 you <u>must</u> have defined a text file named <i>enh.tab</i> in the 
-same directory as the
-HTML which contains the enhancement curves you want the user to be
+same directory as the image data.  This file
+contains the enhancement curves you want the user to be
 able to choose from.  A sample is provided in the distribution. An
 attempt will be made to read this file, regardless of whether this
 control is specified or not (see the <i>"no_enh"</i> parameter, below).
@@ -125,7 +145,8 @@ image files may be changing. <b>NOTE: </b> <i>If you are using the
 "file_of_filenames" method of naming the image files, it is 
 <u>very important</u>
 not to change the total number of images if you change the
-contents of the "file_of_filenames".</i>
+contents of the "file_of_filenames".</i>  Also, see the
+<tt>quiet_reload</tt> parameter, below.
 
 <li> <b>auto_toggle</b> is a button that will turn the auto
 refresh function on and off.  If you have the ability to zoom
@@ -208,18 +229,26 @@ specified using the <i>frame_label</i> PARAM or from the
 played.  In order to use this option, you must also specify the 
 <i>audio_filename</i> PARAM (see below).
 
+<li>  <b>numframeschoice</b> creates a "choice" that contains a list
+of numbers of frames that will be downloaded and shown.  Without this
+control, all frames defined will be downloaded and shown.  This
+control <u>must</u> be used in conjunction with the 
+<tt>num_frames_choice</tt> PARAMeter (see below) where the choices are
+defined.
+
 </ul>
 
 <hr>
 <p>
 
 <a NAME="params"></a>
-<b>Other parameters </b>that may be used:
+<b>Parameters</b> that may also be used (details for those parameters
+related to filenames, portals and overlays appear after this section):
 
 <b><xmp>
 <PARAM name="use_archive" value="x">
 </xmp></b>
-   <i>specifies that all the data files are contained in
+   specifies that all the data files are contained in
    an archive file that is specified in the &lt;applet&gt; tag. You must
    include all extra files (enh.tab, file-of-filenames) as well.  The
    form of the &lt;applet&gt; tag is like:
@@ -231,13 +260,12 @@ played.  In order to use this option, you must also specify the
    <br>
 
    where the data files are stored in "data.zip".
-   </i>
 
 
 <b><xmp>
 <PARAM name="use_progress_bar" value="false">
 </xmp></b>
-   <i> specifies whether to use the "Progress Bar" to indicate the
+   specifies whether to use the "Progress Bar" to indicate the
    status of loading images from the server.  The default for this
    parameter is "true".  Setting the value to "false" will cause
    a message <tt>Loaded XX of NN</tt> to be displayed on the screen 
@@ -245,33 +273,49 @@ played.  In order to use this option, you must also specify the
    loading value.  This message is also displayed in the "Applet
    Status Line" in the browser.  When using the "Progress Bar" mode,
    the Applet Status Line will show the percentage of images loaded.
-   </i>
+
+<b><xmp>
+<PARAM name="quiet_reload" value="true">
+</xmp></b>
+   when set to <tt>true</tt> this specifies that when images
+   are refreshed or reloaded for any reason, a "preview" of each 
+   image will not be displayed.  This does not impact the
+   initial loading of images, however.  Note: in this mode,
+   sizes of images are not rechecked for consistency.
 
 <b><xmp>
 <PARAM name="active_zoom" value="x">
 </xmp></b>
-   <i>specifies that the zoom ability will always be active; this
+   specifies that the zoom ability will always be active; this
    cannot be used in conjunction with the "zoom control".  If you
    specify this parameter, user left-clicks on the image will zoom
    at that point, right-clicks will zoom out.  While zoomed, the image
    may be roams by dragging the mouse around.
    <p>
    This option should not be used when portals are also used.
-   </i>
 
 <b><xmp>
 <PARAM name="keep_zoom" value="x">
 </xmp></b>
-   <i>specifies that the zoom level and position will be restored
+   specifies that the zoom level and position will be restored
    after a "refresh" is done.  Without this parameter, the zoom
    is reset to the "un-zoomed" view.
-   </i>
 
+<b><xmp>
+<PARAM name="overlay_zoom" value="y,y,y,n">
+</xmp></b>
+   specifies whether an overlay will be zoomed along with other
+   images.  If the value is <tt>"y"</tt>, then the overlay will
+   be zoomed.  This is the default.
+   <p>
+   If the value is <tt>"n"</tt> then the overlay will NOT be zoomed.
+   This is useful for overlays which are legends, since the legend
+   information will remain on the frame during zoom and roam.
 
 <b><xmp>
 <PARAM name="image_window_size" value="400,200">
 </xmp></b>
-   <i>specifies that the images will be displayed in
+   specifies that the images will be displayed in
    a window with a width=400 and a height=200.  Without this
    parameter, the size of the window is the size of the first
    frame (image). When this parameter is used, the images will be rescaled
@@ -280,12 +324,10 @@ played.  In order to use this option, you must also specify the
    <p>
    This option should not be used when portals are also used.
 
-   </i>
-
 <b><xmp>
 <PARAM name="image_preserve" value="0,0,639,49, 610,0,639,479">
 </xmp></b>
-   <i>specifies that when images are zoomed, the two rectangular
+   specifies that when images are zoomed, the two rectangular
    areas specified (top 50 lines, right-most 30 pixels) should be
    preserved from the original image.  This is useful for showing
    labels and logos that are part of the original images.  There
@@ -296,12 +338,13 @@ played.  In order to use this option, you must also specify the
    x_upper_left,y_upper_left, x_lower_right, y_lower_right.
    The (0,0) point for images is in the upper_left corner. The 'x'
    coordinate is horizontal, the 'y' coordinate is vertical.
-   </i>
+   <p>
+   For overlays, see the <tt>overlay_zoom</tt> parameter.
 
 <b><xmp>
 <PARAM name="use_caching" value="true">
 </xmp></b>
-   <i>specifies that the image file reads will use any caching that is 
+   specifies that the image file reads will use any caching that is 
    available.  This may include the brower's own cache and/or the
    caching that might be provided by the server.  For real-time or
    frequently updated images, this option should be used with caution,
@@ -310,12 +353,33 @@ played.  In order to use this option, you must also specify the
    date/time is part of the filename) then this can be very effective.
    The default for this option is to disable caching and always read
    all images.
-   </i>
+
+<b><xmp>
+<PARAM name="exclude_caching" value="match-string">
+</xmp></b>
+   specifies that <u>if</u> caching is enabled, any filename
+   that <u>contains</u> the <i>match-string</i> will have caching
+   disabled when it is read.  This can be used, for example, if
+   the latest image in a loop always has the same name.
+
+<b><xmp>
+<PARAM name="use_anti_caching" value="false">
+</xmp></b>
+   disables the use of altering the filename requested from a 
+   web server for non-cached images.  Normally, AniS will append
+   "?xxxx" to the request for a file from the http server (where
+   'xxxx' is an ever-changing value).  This will normally not 
+   interfere with the http request for the actual file, but has 
+   the effect of usually preventing any intermediate 
+   "caching servers" from caching images inappropriately.  
+   
+   If you experience any difficulties with this, then set the 
+   value to <i>false</i> to prevent this.
 
 <b><xmp>
 <PARAM name="auto_refresh" value="16">
 </xmp></b>
-   <i>specifies that the base images will be automatically
+   specifies that the base images will be automatically
    reloaded from the source every 16 minutes.  An attempt is made
    to by-pass any use of caching (unless "use_caching", above, has
    been set to 'true'), and this process has been found
@@ -323,55 +387,59 @@ played.  In order to use this option, you must also specify the
 
    Note: be somewhat cautious with overlays or portals when using the
    auto_refresh option -- they may not always work as expected.
-   </i>
 
 <b><xmp>
 <PARAM name="base_static" value="true">
 </xmp></b>
-   <i>specifies that the base images will be loaded only one 
+   specifies that the base images will be loaded only one 
    time from the server.  Any "refresh" action (automatic or manual)
    will not cause these images to be reloaded.  This is appropriate
    if your base images are unchanging (for example, a topography
    image).  [See also, the <tt>overlay_static</tt> parameter, below.
-   </i>
+
+<b><xmp>
+<PARAM name="no_controls" value="true">
+</xmp></b>
+  this supresses showing any controls.  Please see "start_looping"
+  parameter, below.
 
 <b><xmp>
 <PARAM name="start_looping" value="false">
 </xmp></b>
-   <i>specifies the initial state of the animation.  A value of "false" means
+   specifies the initial state of the animation.  A value of "false" means
    the animation is not started automatically.  The default value
    is "true", meaning the animation begins automatically as soon
    as all frames are loaded.
    
    Note:  if you do not put in a <tt>startstop</tt> control and
-   set start_looping to "true" then the animation will run "forever".</i>
+   set start_looping to "true" then the animation will run "forever".
 
 <b><xmp>
 <PARAM name="start_frame" value="18">
 </xmp></b>
-   <i>specifies the frame number (starting at zero) of the frame to
+   specifies the frame number (starting at zero) of the frame to
    display after all loading is done.  This option implies
-   "start_looping" is "false".  </i>
+   "start_looping" is "false".
 
 <b><xmp>
 <PARAM name="rate" value="120">
 </xmp></b>
-   <i>specifies the initial loop rate as a number corresponding
+   specifies the initial loop rate as a number corresponding
    to frames per second times 10 (thus, 120 means 12 frames per
-   second).</i>
+   second).
 
 <b><xmp>
 <PARAM name="minimum_dwell" value="30">
 </xmp></b>
-   <i>specifies the minimum dwell (milliseconds) that can be set with the
+   specifies the minimum dwell (milliseconds) that can be set with the
    <tt>speed</tt> slider.  The default value is 30ms; the minimum
    value is 5ms.  Not that using small values can cause slower
-   computers to have problems whilst looping.  </i>
+   computers to have problems whilst looping.
 
 <b><xmp>
 <PARAM name="dwell_rates" value="1000,1000,500,30,1000">
 </xmp></b>
-   <i>specifies the dwell (in milliseconds) for each frame.  There
+   specifies the dwell (in milliseconds) for each frame.  There
    must be the same number of values (comma-separated) as there are
    frames in the animation.  In this example, the first and second
    frames have a fixed dwell if 1s, the third frame is a half-second,
@@ -379,111 +447,123 @@ played.  In order to use this option, you must also specify the
    assume no additional overhead, which is usuallly not the case!
    <p>
    Frame dwell rates may also be set in the file_of_filenames (see
-   below)</i>
+   below)
 
 <b><xmp>
 <PARAM name="rocking" value="true">
 </xmp></b>
-   <i>make "rocking" the startup mode for displaying the sequence;
-   otherwise, "movie loop" is the startup mode.</i>
+   make "rocking" the startup mode for displaying the sequence;
+   otherwise, "movie loop" is the startup mode.
 
 <b><xmp>
 <PARAM name="pause" value="2000">
 </xmp></b>
-   <i>pause on the last frame of a loop the additional number of
+   pause on the last frame of a loop the additional number of
    milliseconds given (2 seconds in this example).  The default
-   is zero. </i>
+   is zero.
 
 <b><xmp>
 <PARAM name="pause_percent" value="250">
 </xmp></b>
-   <i>pause on the last frame of a loop the additional percentage
+   pause on the last frame of a loop the additional percentage
    of the current dwell time specified (250% in this example).  In
    addition, if the current dwell is > 1 second, a fixed value of
    100% will be used whenever this pause_percent option is specified.
-   The default value is zero. </i>
+   The default value is zero.
 
 <b><xmp>
 <PARAM name="transparency" value="#FFFFFF">
 <PARAM name="transparency" value="#000000,#050505">
 </xmp></b>
-   <i>use the color "white" as the transparency value.  This is only
+   use the color "white" as the transparency value.  This is only
    needed for overlays, and is optional for fading.  The value is
    a hex value of red/green/blue (template: #rrggbb).  "black"
    (#000000) is also commonly used.  In the second example, the
    transparent values range from 00 to 05 for red, green and blue.
    This form is particularlly useful when the background is not quite
-   a constant value.</i>
+   a constant value.
+   <p>
+   If the value = "image" then <u>all</u> the images are assumed
+   to be GIF images with the 'transparent' attribute assigned to
+   one color level.  If used, this option will conserve memory and
+   load faster.  When used, the next option
+   (overlay_transparent_amount) cannot be used.
 
 <b><xmp>
 <PARAM name="overlay_transparent_amount" value="100, 40, 20">
 </xmp></b>
-   <i>The non-transparent pixels in overlays should be set to
+   The non-transparent pixels in overlays should be set to
    the opacity percentage indicated.  In this case, the first
    overlay (see overlay_labels) is 100 opaque, the second is 40%
    and the third is 20%.  0 = totally transparent (you will not
    see anything!  100 = totally opaque (what would normally
    happen).
-   </i>
 
 <b><xmp>
 <PARAM name="overlay_zorder" value="3,1,2,0">
 </xmp></b>
-   <i>Changes the order of stacking of the overlays, so that the
+   Changes the order of stacking of the overlays, so that the
    overlay labels may be arranged in an order that is independent of
    the stacking of the overlays.  The default is: 0,1,2...  When using
    this parameter, there must be one and only one value for each
    overlay.  The example says that the first overlay will be "on top"
    and the last one will be on the bottom, with the second and third
    (values 1 & 2) will be in the default order.  
-   </i>
+
+<b><xmp>
+<PARAM name="overlay_labels_colors" value="x000000, xff0000, x00ff00, xff00ff">
+   Specifies the color of the text used to label the overlay selector
+   buttons.  The values are in RGB order (xRRGGBB) and coded as
+   hexadecimal values (00 = 0, ff = 255).  There <u>must</u> be one
+   item for each label -- even if the label is hidden!  See "overlays" below.
+</xmp></b>
 
 <b><xmp>
 <PARAM name="fade" value="true">
 </xmp></b>
-  <i>instead of just showing the images, generate 'faded' images
-between them and use the result as the sequence. </i>
+  instead of just showing the images, generate 'faded' images
+between them and use the result as the sequence.
 
 <b><xmp>
 <PARAM name="fader_label" value="Vis     IR">
 </xmp></b>
-  <i>instead of the "Set Fader Level" label on the fader control, use
+  instead of the "Set Fader Level" label on the fader control, use
   the specified label.  Note the label is <u>centered</u> so you must
   provide ample spaces to ensure the fader control is made large
   enough.  In this case, the user wanted "Vis" on the left and "IR" on
-  the right, so many spaces were put between the words.</i>
+  the right, so many spaces were put between the words.
 
 <b><xmp>
 <PARAM name="backcolor" value="xff00ff">
 </xmp></b>
-  <i>set the applet background color (used for backgrounds of all the
+  set the applet background color (used for backgrounds of all the
   controls as well...) to the RGB value (in hex) given (in
-  this case, red=255, green=0 and blue=255)</i>
+  this case, red=255, green=0 and blue=255).
 
 <b><xmp>
 <PARAM name="forecolor" value="xffffff">
 </xmp></b>
-  <i>set the color of the foreground (used for names on buttons,
+  set the color of the foreground (used for names on buttons,
   etc.) to the RGB value (in hex) given (in this case, white).  Note
   that you should keep a good contrast between the background and 
-  foreground colors.</i>
+  foreground colors.
 
 <b><xmp>
 <PARAM name="setframe_label" value="   Image Frame Number *   ">
 </xmp></b>
-  <i>set the template to use for labelling the "setframe" control
+  set the template to use for labelling the "setframe" control
   slider/scrollbar.  The given string of characters <u>must</u>
   contain an asterisk ("*") character;  the actual frame number
-  will replace this when displayed.</i>
+  will replace this when displayed.
 
 <b><xmp>
 <PARAM name="frame_label" value="label for 1, label for 2, ...">
 </xmp></b>
-  <i>when the <u>framelabel control</u> is specified, the values in
+  when the <u>framelabel control</u> is specified, the values in
   this comma-separated list will be used to label each frame.  If
   you enclose a <u>standard format date-time</u> between a pair
   of "$$" characters, it will be replaced by a string for the
-  computer's local time zone.  For example:  </i>
+  computer's local time zone.  For example:  
   <xmp>
     "Picture from $$5/10/00 15:00 GMT$$ in the morning"
   </xmp>
@@ -496,47 +576,47 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="frame_label_width" value="30">
 </xmp></b>
-  <i>this specifies the width of the text box (in characters) to be
-  used for the frame_label strings.  The default is 20</i>
+  this specifies the width of the text box (in characters) to be
+  used for the frame_label strings.  The default is 20
 
 <b><xmp>
 <PARAM name="audio_filename" value="audioclip.au">
 </xmp></b>
-  <i>this specifies the name of the audio clip to be played when the
-  <b>audio</b> control is specified.  This <u>must</u> be a .AU file.</i>
+  this specifies the name of the audio clip to be played when the
+  <b>audio</b> control is specified.  This <u>must</u> be a .AU file.
 
 <b><xmp>
 <PARAM name="image_base" value="http://www.my.host/mydir/">
 </xmp></b>
-  <i>this directs that the base URL of the image files (and the
+  this directs that the base URL of the image files (and the
   <u>file_of_filenames</u>, if used) should be the value given.  The
   default URL is the directory containing the HTML.  Note that 
   the hostname in the specified URL <u>must</u> be the same as the
-  hostname where the applet is read from.</i>
+  hostname where the applet is read from.
 
 <b><xmp>
 <PARAM name="use_IP" value="true">
 </xmp></b>
-  <i>this specifies that the 'hostname' of the machine from which 
-     the applet was loaded will be converted internally to an IP
-     address, and this IP will be used for all file reading.
-  </i>.  This can be very helpful if
+  this specifies that the 'hostname' of the machine from which 
+  the applet was loaded will be converted internally to an IP
+  address, and this IP will be used for all file reading.
+  <i>This can be very helpful if
   your server uses hostname and IP spoofing for things like
-  loadsharing.  The value "true" <u>must</u> be exactly that!
+  loadsharing.  The value "true" <u>must</u> be exactly that!</i>
 
 <b><xmp>
 <PARAM name="toggle_size" value="5,10,3">
 </xmp></b>
-  <i>this sets the toggle control's little boxes width to 5, the height to 10,
-  and the spacing between them to 3</i>.  This can be very helpful if
+  this sets the toggle control's little boxes width to 5, the height to 10,
+  and the spacing between them to 3.  This can be very helpful if
   you have a large number of frames and don't want to make your applet
   width too large just to accomodate these boxes.
 
 <b><xmp>
 <PARAM name="rotator_labels" value="N, E, S, W">
 </xmp></b>
-  <i>this defines the labels to be used with the <tt>rotator</tt>
-  widget.</i>  You may specify up to 8 labels (more just won't fit...)
+  this defines the labels to be used with the <tt>rotator</tt>
+  widget. You may specify up to 8 labels (more just won't fit...)
   that will be evenly distributed around the circle. The first label
   will be placed at the top ("North"), and sucessive labels will be
   positioned clockwise around the circle.  
@@ -549,7 +629,7 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="rotator_color" value="x00ff00">
 </xmp></b>
-  <i>this defines the color to use for the <tt>rotator</tt> "arm".</i>
+  this defines the color to use for the <tt>rotator</tt> "arm".
   It is in for format:  xRRGGBB, so the value shown will make a green
   colored arm.  The labels and circle will be drawn with the
   foreground color specified.  The default is yellow (xffff00).
@@ -557,8 +637,8 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="enable_png" value="true">
 </xmp></b>
-  <i>this enables the use of PNG files for all JVMs/browser versions
-  by using the <tt>sixlegs<//tt> PNG decoder.  </i>
+  this enables the use of PNG files for all JVMs/browser versions
+  by using the <tt>sixlegs<//tt> PNG decoder.
   If you want to use PNG and do not have control over browser or
   JVM versions, you may want to consider this.  If you use this
   option, then <u>your image file names MUST end with <tt>png</tt></u>
@@ -570,8 +650,8 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="blank_screen" value="true">
 </xmp></b>
-  <i>this will cause the background of each frame to be blanked out
-  priod to showing each image</i>.  This should be used if some
+  this will cause the background of each frame to be blanked out
+  priod to showing each image.  This should be used if some
   of your images have 'transparency' set (for example, GIF and PNG
   images allow you to set a level, like the 'background' to
   transparent).  Enabling this option will prevent the images from
@@ -581,14 +661,14 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="no_enh" value="true">
 </xmp></b>
-  <i>this supresses the attempt to read the "enh.tab" file</i>.
+  this supresses the attempt to read the "enh.tab" file.
   This takes care of a problem when using a firewall with password
   protection, when no enhancement is used.
 
 <b><xmp>
 <PARAM name="locale" value="es">
 </xmp></b>
-  <i>this forces the language to the values 'es' (Spanish)</i>
+  this forces the language to the values 'es' (Spanish)
   Normally, the language of the client
   machine is used.  This parameter provides a way to over-ride
   this, if needed.  Caution: some Unicode characters may not appear
@@ -597,12 +677,64 @@ between them and use the result as the sequence. </i>
 <b><xmp>
 <PARAM name="portal_pointers" value="false">
 </xmp></b>
-  <i>this prevents the display of the portal pointers (cursors)</i> 
+  this prevents the display of the portal pointers (cursors)
   that are normally used to help show the co-locations of points
   within the main and portal images.  The default value for this
   is <tt>true</tt>.  You might want to set this to <tt>false</tt> 
   when you are using, for example, a four-panel display (four portals that
   cover up the background completely).
+
+<b><xmp>
+<PARAM name="num_frames_choice" value="5, 10, 15, all">
+</xmp></b>
+  this defines the contents of the <tt>numframeschoice</tt> control
+  (see above) that allows the user to select the actual number of
+  images (frames) that are downloaded and displayed.  By default,
+  the first element in this list defines the start-up conditions. 
+  In the example herein, only the last 5 frames of the sequence
+  will be initially downloaded and displayed; this includes all
+  overlays and portals defined for only these frames as well.
+  <p>
+  There are some options available:
+  <ul>
+  <li> A value with a preceeding - (minus) sign implies
+       "this many images, sequentially and including the last one"
+       <br> (example:  -4, -8,...)
+  <li> A value with a preceeding + (plus) sign implies
+       "this many images, sequentially and including the first one"
+       <br>(example:  +3, +9, ....)
+  <li> A value with a preceeding -* implies "this
+       many frames, equally spaced from the whole set, but
+       always including the last one"  <br>(example:  -*5, -*10, ...)
+  <li> A value with a preceeding +* implies "this many
+       frames, equally spaced from the whole set, but
+       always including the first one" <br>(example: +*3, +*6,...)
+  <li> The word "all" implies all frames.
+  <li> A value with no preceeding marks, implies a -.
+  </ul>
+
+<b><xmp>
+<PARAM name="default_num_frames_choice" value="2">
+</xmp></b>
+  this sets the initial (default) <i>index</i> of the choice for
+  <tt>num_frames_choice</tt> list (above).  This value is zero-based 
+  and the default value is 0 (zero) meaning the first item in the list.
+
+<b><xmp>
+<PARAM name="basename" value="file">
+<PARAM name="num_frames" value="6">
+<PARAM name="base_starting_number" value="1">
+<PARAM name="filenames" value="file0.gif, file1.gif, file2.gif">
+<PARAM name="file_of_filenames" value="listoffiles.txt">
+</xmp></b>
+These are related to reading image files and are defined in the next
+section.
+<b><xmp>
+<PARAM name="portal_basenamex" value="pfileA, pfileB, pfileC">
+<PARAM name="portal_filenames" value="pfileA0.gif & pfileA1 & pfileA2, pfileB0.gif & pfileB1, pfileB2, pfileC0.gif & pfileC1 & pfileC2">
+</xmp></b>
+These are related to reading <u>portal</u> image files and are defined in the next
+section.
 <p>
 <p>
 <hr>
@@ -705,9 +837,14 @@ You may also use the form:
 the actual filenames in this case must be: <i> file0000.gif,
 file0001.gif, file0002.gif, and file0003.gif</i> <p>
 <p>
-Note that in both these cases, you may also use the 
+Note that in both these cases, 
+<ul>
+<li> you <u>must</u> use the <tt>num_frames</tt> parameter to defined the
+total number of frames
+<li> you <u>may</u> also use the 
 <i>"base_starting_number"</i> parameter to modify the starting 
 value (which otherwise defaults to zero).
+</ul>
 <p>
 <p>
 <hr>
@@ -820,7 +957,9 @@ the <i>transparency</i> parameter (above).  You may also specify the
 opacity/transparency of the non-transparent portions of overlay images
 -- see the <i>overlay_transparent_amount</i> parameter (above).
 <p>
-
+You may also specify the color of the labels for each overlay using
+the <i>overlay_labels_colors</i> parameter (above).
+<p>
 In addition, you need to specify the <i>overlay</i> control, and
 provide a few more parameters:
 
@@ -859,7 +998,9 @@ it), append <i>/always</i> to the label.  For example:
 for it), use <i>/hidden</i>.  This is <u>only</u>useful when
 <tt>linked</tt> to an "owner" and will follow its state.  (the
 "hidden" item should have the <i>negative</i> link value, and thus is
-the "target").
+the "target").  (Please note that if you are specifying the colors for
+the overlay labels (see "overlay_labels_colors")  you must specify a
+color even for a hidden overlay!
 
 <p>
 <li> Using <b>"radio buttons"</b>.  If you want to treat some or all of the
@@ -944,10 +1085,21 @@ not be reloaded.  The third and fourth will be reloaded when the user
 so requests (or the automatic timer goes off).
 
 <p>
-<li> <b>More parameters</b>. 
-See information above about the overlay transparancy and
-"z-ordering" of overlays!  Also, see the <tt>base_static</tt>
-parameter, above.
+<li><b>To zoom, or not to zoom.</b>  It is often times useful for
+some overlays not to be zoomed with the rest of the image(s) -- 
+for example, legends.  To keep a legend overlay on the image while the 
+rest are zoomed, use the <i>overlay_zoom</i> parameter.
+
+<xmp>
+    <PARAM name="overlay_zoom" value="y,y,y,n">
+</xmp>
+Indicates that the first 3 overlays will be zoomed along with the
+base or background image.  The 4th overlay, however, will not be
+zoomed along with them.
+
+<p>
+<li> <b>More parameters for overlays!!</b>. 
+See information above about the overlay transparancy, "z-ordering" of overlays!  Also, see the <tt>base_static</tt> parameter, above.
 
 </ul>
 
