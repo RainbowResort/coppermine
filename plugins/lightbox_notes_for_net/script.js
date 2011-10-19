@@ -7,7 +7,10 @@
   $Revision$
   $LastChangedBy$
   $Date$
-  *****************************************************
+  *****************************************************/
+  /*******************************************************
+			Version 3.1 - 21 June 2010
+  *******************************************************
 [===========================================================================]
 [   Copyright (c) 2009, Helori LAMBERTY                                     ]
 [   All rights reserved.                                                    ]
@@ -131,7 +134,14 @@ $(document).ready(function() {
 			imageFade: js_vars.plugin_lightbox_nfn_imagefade,
 			// Fade time for no animation
 			inFade: js_vars.plugin_lightbox_nfn_containerfade,
-			
+			// Resize image to fir broswer window			
+			imageResize: js_vars.plugin_lightbox_nfn_resize, 
+			// Display Link for user to download fullsize 		
+			showDownload: js_vars.plugin_lightbox_nfn_showdownload,
+			// Download text
+			downloadText: js_vars.lang_lightbox_nfn_downloadtext,
+			downloadTitle: js_vars.lang_lightbox_nfn_downloadtitle,
+
             // Don´t alter these variables in any way
             step: 0,
             imageArray: [],
@@ -203,7 +213,7 @@ $(document).ready(function() {
             // Possible config. set size of empty box for first image			
 			$('#lightbox-container-image-box').css({
                 width: 250,
-                height: 250,
+                height: 250
             });
 
 			// Get page sizes
@@ -224,10 +234,17 @@ $(document).ready(function() {
             }).show();
 
             // Assigning click events in elements to close overlay 
-			// Was commented out 
-                        $('#jquery-overlay,#jquery-lightbox').click(function() {
+			// Was commented out in original
+			// make conditional for use with Download Link and "double click" effect
+             if (settings.showDownload > 0) {                       
+						$('#jquery-overlay').click(function() {
                           _finish();
                         });
+				}  else  {
+						$('#jquery-overlay,#jquery-lightbox').click(function() {
+                          _finish();
+                        });
+				}
             // Assign the _finish function to lightbox-loading-link and lightbox-secNav-btnClose objects
             $('#lightbox-container-image-box-top-right img').click(function() {
                 _finish();
@@ -381,7 +398,7 @@ function getPageSize(){
 }		
         function _resize_container_image_box(intImageWidth, intImageHeight) {
       // Get current width and height
-		var resize = 1;	
+		var resize = settings.imageResize;	
 		if(resize == 1) {//resize mod by magarnicle - borrowed fom lightbox_s.js 
 			useableWidth = 0.9; // 90% of the window - set as variable
 			useableHeight = 0.8; // 80% of the window - set as variable
@@ -440,7 +457,7 @@ function getPageSize(){
 		function _add_hit_count() {
 		if (settings.imageArray[settings.activeImage][4]) {		
 		var picid = (settings.imageArray[settings.activeImage][4]);
-		var url = ("index.php?file=a_light_box/counter&a=" + picid);
+		var url = ("index.php?file=lightbox_notes_for_net/counter&a=" + picid);
 		}		
 		$.get(url);
         }
@@ -459,15 +476,27 @@ function getPageSize(){
 			if (settings.imageArray[settings.activeImage][3]) {
                 $('#lightbox-image-details-description').html(settings.imageArray[settings.activeImage][3]).show();
             }
-            // If we have a image set, display 'Image X of X'
+            // Show download link if active in config. will open in new window			
+            if (settings.showDownload == 1) {
+		var downLink = '<span style="font-weight:bold;"><br /><a target="_blank" href="' + (settings.imageArray[settings.activeImage][0]) + '" title="' + settings.downloadTitle + '">' + settings.downloadText + '</a></span>';
+            }
+			else {
+		var downLink = '';
+            }			
+            // If we have a image set, display 'Image X of X' and download link 
 			$('#lightbox-image-details-currentNumber').hide();
             if (settings.imageArray.length > 1) {
-                $('#lightbox-image-details-currentNumber').html(settings.txtImage + ' ' + (settings.activeImage + 1) + ' ' + settings.txtOf + ' ' + settings.imageArray.length).show();
+                $('#lightbox-image-details-currentNumber').html(settings.txtImage + ' ' + (settings.activeImage + 1) + ' ' + settings.txtOf + ' ' + settings.imageArray.length + downLink).show();
             }
+			else {
+                $('#lightbox-image-details-currentNumber').html( downLink ).show();			
+            }			
 			// Slideshow buttons
+			$('#lightbox-container-image-box-top-left').hide();	
 			$('#lightbox-container-image-box-top-left').show();
+			$('#lightbox-container-image-box-top-right').hide();			
 			$('#lightbox-container-image-box-top-right').show();
-			
+            $('#lightbox-container-image-box-top').hide();			
             $('#lightbox-container-image-box-top').show();
 						
                 var arrPageSizes =getPageSize();               

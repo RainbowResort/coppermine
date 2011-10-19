@@ -9,6 +9,9 @@
   $LastChangedBy$
   $Date$
   *****************************************************/
+  /*******************************************************
+			Version 3.1 - 21 June 2010
+  *******************************************************/
 
 require_once('./plugins/lightbox_notes_for_net/init.inc.php');
 $name = $lang_plugin_lightbox_notes_for_net['display_name'];
@@ -19,7 +22,7 @@ $extra_info = $configuration_link . $documentation_link . $announcement_thread;
 $install_info = $documentation_link . $announcement_thread;
 $author='Joe Carver ' . $lang_plugin_lightbox_notes_for_net['aka'] . ' i-imagine';
 
-$version='2.5';
+$version='3.1';
 $plugin_cpg_version = array('min' => '1.5');
 $description = $lang_plugin_lightbox_notes_for_net['description'];
 ?>

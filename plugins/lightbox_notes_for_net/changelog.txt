@@ -19,7 +19,26 @@ Changelog
 [O] = Optimization of code
 [S] = Security fix (issues that are related to security)
 *********************************************
-
+2010-06-21 [M] Counted version up from 3.0 to 3.1 {Joe Carver}
+2010-06-21 [B] fix counter bug script.js {Joe Carver}
+2010-06-13 [M] Counted version up from 2.9 to 3.0 {Joe Carver}
+2010-06-13 [A] add config. option to show download link to guest, user or none {Joe Carver}
+2010-06-13 [A] add config. option to disable image resizinng {Joe Carver}
+2010-04-11 [M] Counted version up from 2.8 to 2.9 {Joe Carver}
+2010-04-11 [B] codebase.php change addition of head html {Joe Carver}
+2010-04-10 [M] Counted version up from 2.7 to 2.8 {Joe Carver}
+2010-04-10 [A] codebase.php change to add user view f/s access permissions {Joe Carver}
+2010-03-15 [M] Counted version up from 2.6 to 2.7 {Joe Carver}
+2010-03-15 [A] codebase.php add anchors to $picpage {Joe Carver}
+2010-03-15 [O] codebase.php change script call for older IE {Joe Carver}
+2010-03-15 [O] style.css change/remove size defs. for lightbox-container-image-box (Joe Carver}
+2010-03-15 [B] script.js remove extra comma line 206 {Joe Carver}
+2010-03-15 [B] english.htm change image and path for anchor {Joe Carver}
+2010-03-15 [O] admin.php remove commented/uneeded code {Joe Carver}
+2010-03-15 [M] lightbox.init.php removed {Joe Carver}
+2010-02-17 [M] Counted version up from 2.5 to 2.6 {Joe Carver}
+2010-02-17 [O] codebase.php change method of plugin data to <head> {Joe Carver}
+2010-02-17 [O] codebase.php change script call/location to page body {Joe Carver}
 2010-01-25 [M] Counted version up from 2.4 to 2.5 {GauGau}
 2010-01-25 [M] Re-added SVN header data {GauGau}
 2010-01-25 [O] Changed stylesheet layout {GauGau}
