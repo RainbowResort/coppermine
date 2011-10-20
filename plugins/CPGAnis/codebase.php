@@ -110,17 +110,13 @@ function anis_display_fullsize_pic() {
         }
         w = Math.min(w,screen.availWidth);
         h = Math.min(h,screen.availHeight);
-        // full size hack - START
-        w = <?php echo $row['pwidth']; ?>;
-        h = <?php echo $row['pheight']; ?>;
-        // full size hack - END
         window.resizeTo(w,h);
         window.moveTo((screen.availWidth-w)/2, (screen.availHeight-h)/2);
        // alert('<!-- width: ' + w + ' height: ' + h + ' --> ');
        //applet_tag='<APPLET codebase=\"plugins/CPGAnis/anis\" code=\"AniS.class\" width=\"' + w + '\" height=\"' + h + '\">';
        applet_tag1='<PARAM name=\"image_window_size\" value=\"'+(w-diffW)+','+(h-diffH)+'\">\n';
        applet_tag2='<APPLET codebase=\"plugins/CPGAnis/anis\" code=\"AniS.class\" width=\"'+ (w-diffW-5) +'\" height=\"' + (h-diffH-7) + '\">\n';
-       applet_tag=applet_tag1+applet_tag2;
+       applet_tag=applet_tag2+applet_tag1;
 }
   </script>
   <style type="text/css">
