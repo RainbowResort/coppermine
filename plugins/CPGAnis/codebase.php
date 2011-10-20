@@ -110,6 +110,14 @@ function anis_display_fullsize_pic() {
         }
         w = Math.min(w,screen.availWidth);
         h = Math.min(h,screen.availHeight);
+        paspect = <?php echo $row['pwidth']/$row['pheight']; ?>; // Picture aspect ratio
+        caspect = w/h; // Current aspect ratio
+        if (paspect > caspect) {
+            h = Math.round(h / paspect * caspect); // Adjust height
+        }
+        if (paspect < caspect) {
+            w = Math.round(w / caspect * paspect); // Adjust width
+        }
         window.resizeTo(w,h);
         window.moveTo((screen.availWidth-w)/2, (screen.availHeight-h)/2);
        // alert('<!-- width: ' + w + ' height: ' + h + ' --> ');
