@@ -206,7 +206,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p 
+            $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                 $RESTRICTEDWHERE 
                 AND approved = 'YES'
@@ -251,7 +251,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p 
+            $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                 $RESTRICTEDWHERE 
                 AND approved = 'YES'
@@ -283,7 +283,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT *, COUNT(c.pid) AS count FROM {$CONFIG['TABLE_COMMENTS']} c 
+            $query = "SELECT p.*, COUNT(c.pid) AS count FROM {$CONFIG['TABLE_COMMENTS']} c 
                 INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON p.pid = c.pid 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                 $RESTRICTEDWHERE 
@@ -317,7 +317,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT *, p.votes FROM {$CONFIG['TABLE_PICTURES']} AS p 
+            $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
                 $RESTRICTEDWHERE 
                 AND approved = 'YES'
@@ -346,7 +346,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT * FROM {$CONFIG['TABLE_PICTURES']} AS p 
+            $query = "SELECT p.*, alb_hits AS hits  FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
                 $RESTRICTEDWHERE 
                 AND approved = 'YES' 
@@ -387,7 +387,7 @@ function mma_meta_album($meta) {
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
-            $query = "SELECT *
+            $query = "SELECT p.*
                     FROM {$CONFIG['TABLE_PICTURES']} AS r
                     INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = r.aid
                     $RESTRICTEDWHERE
