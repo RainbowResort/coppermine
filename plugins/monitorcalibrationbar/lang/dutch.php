@@ -28,9 +28,3 @@ $lang_plugin_moncalb['not_recommended'] = 'niet aangeraden';
 $lang_plugin_moncalb['announcement_thread'] = 'Mededeling';
 $lang_plugin_moncalb['explain'] = 'Wat nu wordt afgebeeld op je monitor is mogelijk niet zoals de maker van de foto oorspronkelijk bedoelde om te laten zien. De reden hiervooor is dat er diverse factoren zijn die van invloed zijn op je monitor. De helderheid en contrast van je monitor veranderen naarmate die opwarmt en ook de leeftijd van de monitor. Omgevingslicht (daglicht of kamerlicht) hebben hun invloed als ook hoe jij zelf de foto ziet. Dat is waar deze calibratie balk voor dient: het stelt je in staat om je monitor te calibreren. De kleuren in de balk varieren van zwart naar grijs naar wit. Als je scherm te donker is lijken de zwarte kleuren een te worden en als je monitor te licht hetzelfde effect. In elk geval kunnen we aanraden om de helderheid en contrast van je monitor aan te passen tot je een gelijkmatige kleur ziet van links naar rechts. Dit zou er voor moeten zorgen dat je monitor zo dicht mogelijk bij bepaalde standaarden komt zonder additionele calibratie hardware.';
 ?>
-
-
-
-
-
-
