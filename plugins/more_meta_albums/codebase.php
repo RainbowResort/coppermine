@@ -148,8 +148,32 @@ function mma_get_pic_pos($album) {
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                 $RESTRICTEDWHERE
                 AND approved = 'YES'
-                AND p.votes > $votes
-                OR p.votes = $votes AND pid < $pid";
+                AND (p.votes > $votes
+                OR p.votes = $votes AND pid < $pid)";
+
+                $result = cpg_db_query($query);
+
+                list($pos) = mysql_fetch_row($result);
+                mysql_free_result($result);
+            return strval($pos);
+            break;
+
+        case 'lastcommented': // Last commented files
+            $query = "SELECT msg_date FROM {$CONFIG['TABLE_COMMENTS']} WHERE pid = $pid ORDER BY msg_id DESC LIMIT 1";
+            $result = cpg_db_query($query);
+            $msg_date = mysql_result($result, 0);
+            mysql_free_result($result);
+
+            $query = "SELECT COUNT(*) FROM {$CONFIG['TABLE_COMMENTS']} AS c1 
+                LEFT JOIN {$CONFIG['TABLE_COMMENTS']} AS c2 ON (c2.pid = c1.pid AND c2.msg_date > c1.msg_date)
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON p.pid = c1.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND c1.approval = 'YES'
+                AND c2.pid IS NULL
+                AND (c1.msg_date > '$msg_date'
+                OR c1.msg_date = '$msg_date' AND c1.pid < $pid)";
 
                 $result = cpg_db_query($query);
 
@@ -331,6 +355,39 @@ function mma_meta_album($meta) {
             build_caption($rowset, array('pic_rating'));
             break;
 
+        case 'lastcommented': // Last commented files
+            $album_name = cpg_fetch_icon('comment', 2)." ".$lang_plugin_more_meta_albums['lastcommented_title'];
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
+
+            $query = "SELECT DISTINCT c.pid FROM {$CONFIG['TABLE_COMMENTS']} AS c 
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON c.pid = p.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE
+                AND approved = 'YES'
+                AND approval = 'YES'";
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
+
+            $query = "SELECT p.*, c1.*, UNIX_TIMESTAMP(c1.msg_date) AS msg_date FROM {$CONFIG['TABLE_COMMENTS']} AS c1 
+                LEFT JOIN {$CONFIG['TABLE_COMMENTS']} AS c2 ON (c2.pid = c1.pid AND c2.msg_date > c1.msg_date)
+                INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON p.pid = c1.pid 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND c1.approval = 'YES'
+                AND c2.pid IS NULL
+                ORDER BY msg_date DESC 
+                {$meta['limit']}";
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset, array('msg_body', 'msg_date'));
+            break;
+
         case 'newalb': // New albums
             $album_name = cpg_fetch_icon('last_created', 2)." ".$lang_plugin_more_meta_albums['newalb_title'];
             if ($CURRENT_CAT_NAME) {
@@ -365,8 +422,8 @@ function mma_meta_album($meta) {
         case 'randpublicalb': // Random albums in public categories
             $condition = array(
                 'randalb' => '',
-                'randuseralb' => 'AND a.category > '.FIRST_USER_CAT,
-                'randpublicalb' => 'AND a.category < '.FIRST_USER_CAT
+                'randuseralb' => 'AND r.category > '.FIRST_USER_CAT,
+                'randpublicalb' => 'AND r.category < '.FIRST_USER_CAT
             );
 
             $album_name = cpg_fetch_icon('alb_mgr', 2)." ".$lang_plugin_more_meta_albums[$meta['album'].'_title'];
@@ -375,26 +432,26 @@ function mma_meta_album($meta) {
             }
 
             $query = "SELECT COUNT(*)
-                    FROM {$CONFIG['TABLE_PICTURES']} AS r
-                    INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = r.aid
+                    FROM {$CONFIG['TABLE_PICTURES']} AS p
+                    INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                     $RESTRICTEDWHERE
                     AND approved = 'YES'
                     {$condition[$meta['album']]}
-                    GROUP BY r.aid
-                    HAVING COUNT(r.pid) > 0
+                    GROUP BY p.aid
+                    HAVING COUNT(p.pid) > 0
                     ORDER BY RAND()";
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
 
             $query = "SELECT p.*
-                    FROM {$CONFIG['TABLE_PICTURES']} AS r
-                    INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS a ON a.aid = r.aid
+                    FROM {$CONFIG['TABLE_PICTURES']} AS p
+                    INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                     $RESTRICTEDWHERE
                     AND approved = 'YES'
                     {$condition[$meta['album']]}
-                    GROUP BY r.aid
-                    HAVING COUNT(r.pid) > 0
+                    GROUP BY p.aid
+                    HAVING COUNT(p.pid) > 0
                     ORDER BY RAND()
                     {$meta['limit']}";
             $result = cpg_db_query($query);
