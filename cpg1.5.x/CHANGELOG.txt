@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2011-11-17 [A] Added hidden feature "Create sub-directory named according to the album ID in users' upload directories during HTTP upload" {eenemeenemuu}
 2011-11-16 [B] Fixed misleading error message when uploading files that exceed the file size limit with the simple upload form (thread ID 61711) {eenemeenemuu}
 2011-10-28 [B] Fixed critical error for 'lasthits' meta album (thread ID 73801) {eenemeenemuu}
 2011-10-26 [B] Fixed clickable keywords with spaces (thread ID 73804) {eenemeenemuu}

@@ -584,6 +584,27 @@ case 'picture':
             fwrite($fp, ' ');
             fclose($fp);
         }
+
+        // Upload pictures in a sub-directory named according to the album ID
+        if ($CONFIG['upload_create_album_directory']) {
+            $filepath .= '/'.$album;
+            $dest_dir .= '/'.$album;
+            
+            if (!is_dir($dest_dir)) {
+            
+                mkdir($dest_dir, octdec($CONFIG['default_dir_mode']));
+                
+                if (!is_dir($dest_dir)) {
+                    cpg_die(CRITICAL_ERROR, sprintf($lang_db_input_php['err_mkdir'], $dest_dir), __FILE__, __LINE__, true);
+                }
+                
+                chmod($dest_dir, octdec($CONFIG['default_dir_mode']));
+                
+                $fp = fopen($dest_dir . '/index.php', 'w');
+                fwrite($fp, ' ');
+                fclose($fp);
+            }
+        }
         
         $dest_dir .= '/';
         $filepath .= '/';
