@@ -385,7 +385,7 @@ function mma_meta_album($meta) {
             $rowset = cpg_db_fetch_rowset($result);
             mysql_free_result($result);
 
-            build_caption($rowset, array('msg_body', 'msg_date'));
+            build_caption($rowset, array('msg_date'));
             break;
 
         case 'newalb': // New albums
