@@ -36,5 +36,6 @@ $lang_plugin_more_meta_albums['randalb_title'] = 'Random albums';
 $lang_plugin_more_meta_albums['randuseralb_title'] = 'Random albums in user categories';
 $lang_plugin_more_meta_albums['randpublicalb_title'] = 'Random albums in public cagetories';
 $lang_plugin_more_meta_albums['lastcommented_title'] = 'Last commented';
+$lang_plugin_more_meta_albums['toprateda_title'] = 'Top rated (accumulated)';
 
 ?>

@@ -182,6 +182,41 @@ function mma_get_pic_pos($album) {
             return strval($pos);
             break;
 
+        case 'toprateda': // Top rated pictures (accumulated)
+            $query = "SELECT MAX(p.votes * p.pic_rating) FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND p.votes >= {$CONFIG['min_votes_for_rating']}";
+            $result = cpg_db_query($query);
+            $max_rating_points = mysql_result($result, 0);
+            mysql_free_result($result);
+            
+            $query = "SELECT (votes * pic_rating / $max_rating_points * 10000) AS pic_rating FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = $pid";
+            $result = cpg_db_query($query);
+            $pic_rating = mysql_result($result, 0);
+            mysql_free_result($result);
+
+            $query = "SELECT p.pid, (p.votes * p.pic_rating / $max_rating_points * 10000) AS pic_rating FROM {$CONFIG['TABLE_PICTURES']} AS p
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
+                $RESTRICTEDWHERE
+                AND approved = 'YES'
+                AND p.votes >= {$CONFIG['min_votes_for_rating']}
+                ORDER BY pic_rating DESC, pid ASC";
+
+                $result = cpg_db_query($query);
+                $pos = 0;
+                while($row = mysql_fetch_assoc($result)) {
+                    if ($row['pid'] == $pid) {
+                        break;
+                    }
+                    $pos++;
+                }
+                mysql_free_result($result);
+
+            return strval($pos);
+            break;
+
         default: 
             return $album;
     }
@@ -386,6 +421,44 @@ function mma_meta_album($meta) {
             mysql_free_result($result);
 
             build_caption($rowset, array('msg_date'));
+            break;
+
+        case 'toprateda': // Top rated pictures (accumulated)
+            $album_name = cpg_fetch_icon('top_rated', 2)." ".$lang_plugin_more_meta_albums['toprateda_title'];
+            if ($CURRENT_CAT_NAME) {
+                $album_name .= " - $CURRENT_CAT_NAME";
+            }
+
+            $query = "SELECT pid FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND p.votes >= {$CONFIG['min_votes_for_rating']}";
+            $result = cpg_db_query($query);
+            $count = mysql_num_rows($result);
+            mysql_free_result($result);
+
+            $query = "SELECT MAX(p.votes * p.pic_rating) FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND p.votes >= {$CONFIG['min_votes_for_rating']}";
+            $result = cpg_db_query($query);
+            $max_rating_points = mysql_result($result, 0);
+            mysql_free_result($result);
+
+            $query = "SELECT p.*, (p.votes * p.pic_rating / $max_rating_points * 10000) AS pic_rating FROM {$CONFIG['TABLE_PICTURES']} AS p 
+                INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
+                $RESTRICTEDWHERE 
+                AND approved = 'YES'
+                AND p.votes >= {$CONFIG['min_votes_for_rating']}
+                ORDER BY pic_rating DESC, pid ASC
+                {$meta['limit']}";
+            $result = cpg_db_query($query);
+            $rowset = cpg_db_fetch_rowset($result);
+            mysql_free_result($result);
+
+            build_caption($rowset, array('pic_rating'));
             break;
 
         case 'newalb': // New albums

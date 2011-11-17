@@ -36,5 +36,6 @@ $lang_plugin_more_meta_albums['randalb_title'] = 'Zufallsalben';
 $lang_plugin_more_meta_albums['randuseralb_title'] = 'Zufallsalben in Benutzerkategorien';
 $lang_plugin_more_meta_albums['randpublicalb_title'] = 'Zufallsalben in öffentlichen Kategorien';
 $lang_plugin_more_meta_albums['lastcommented_title'] = 'Zuletzt kommentierte Bilder';
+$lang_plugin_more_meta_albums['toprateda_title'] = 'Am besten bewertet (gewichtet)';
 
 ?>
