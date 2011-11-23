@@ -264,6 +264,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
@@ -309,6 +313,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
@@ -341,6 +349,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.*, COUNT(c.pid) AS count FROM {$CONFIG['TABLE_COMMENTS']} c 
                 INNER JOIN {$CONFIG['TABLE_PICTURES']} AS p ON p.pid = c.pid 
@@ -375,6 +387,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.* FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
@@ -405,6 +421,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.*, c1.*, UNIX_TIMESTAMP(c1.msg_date) AS msg_date FROM {$CONFIG['TABLE_COMMENTS']} AS c1 
                 LEFT JOIN {$CONFIG['TABLE_COMMENTS']} AS c2 ON (c2.pid = c1.pid AND c2.msg_date > c1.msg_date)
@@ -437,6 +457,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT MAX(p.votes * p.pic_rating) FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
@@ -475,6 +499,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.*, alb_hits AS hits  FROM {$CONFIG['TABLE_PICTURES']} AS p 
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid 
@@ -516,6 +544,10 @@ function mma_meta_album($meta) {
             $result = cpg_db_query($query);
             $count = mysql_num_rows($result);
             mysql_free_result($result);
+            if (!$count) {
+                $rowset = array();
+                break;
+            }
 
             $query = "SELECT p.*
                     FROM {$CONFIG['TABLE_PICTURES']} AS p
