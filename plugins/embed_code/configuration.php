@@ -11,7 +11,7 @@
   ********************************************
   $HeadURL$
   $Revision$
-  $LastChangedBy: eenemeenemuu $
+  $LastChangedBy$
   $Date$
   **************************************************/
 
