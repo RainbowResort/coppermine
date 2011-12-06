@@ -32,9 +32,6 @@ $thisplugin->add_filter('bbcode','new_bbcodes');
 $thisplugin->add_filter('theme_add_comment','buttons_add_comment');
 $thisplugin->add_filter('theme_edit_comment','buttons_edit_comment');
 
-// bbcodes in file info
-$thisplugin->add_filter('file_info','embed_code');
-
 
 function insert_into_config($name, $value) {
     global $CONFIG;
@@ -54,7 +51,6 @@ function bbcode_install() {
     insert_into_config('bbcode_control_tag_img_localhost_only', '0');
     insert_into_config('bbcode_control_tag_img_max_width', '0');
     insert_into_config('bbcode_control_tag_img_max_height', '0');
-    insert_into_config('bbcode_control_tag_img_embed_code', '0');
 
     return true;
 }
@@ -359,23 +355,6 @@ function buttons_edit_comment($template_image_comments) {
     $template_image_comments = str_replace($search_html_edit_comment, $bbcodes.$search_html_edit_comment , $template_image_comments);
 
     return $template_image_comments;
-}
-
-
-function embed_code($info) {
-    global $CONFIG;
-
-    if ($CONFIG['bbcode_control_tag_img_embed_code'] == 1)
-    {
-        global $CURRENT_PIC_DATA;
-
-        $url = $CONFIG['ecards_more_pic_target'].'displayimage.php?pid='.$CURRENT_PIC_DATA['pid'];
-        $thumb = '[img]'.$CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'thumb').'[/img]';
-
-        $info['BBCode'] = '<textarea onfocus="this.select();" onclick="this.select();" class="textinput" rows="1" cols="64" wrap="off" style="overflow:hidden; height:15px;">[url='.$url.']'.$thumb.'[/url]</textarea>';
-    }
-
-    return $info;
 }
 
 ?>
