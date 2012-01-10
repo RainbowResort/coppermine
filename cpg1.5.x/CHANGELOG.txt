@@ -1,14 +1,14 @@
 ************************
 Coppermine Photo Gallery
 ************************
-Copyright (c) 2003-2011 Coppermine Dev Team
+Copyright (c) 2003-2012 Coppermine Dev Team
 v1.0 originally written by Gregory Demar
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.17
+Coppermine version: 1.5.18
 $HeadURL$
 $Revision$
 *********************************************
@@ -23,6 +23,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2012-01-10 [M] Release of cpg1.5.18 {eenemeenemuu}
+2012-01-10 [M] Updated header information to reflect new year {eenemeenemuu}
 2012-01-10 [O] Updated date/time formats in English (British) language file (thread ID 72549) {eenemeenemuu}
 2011-12-28 [S] Fixed a potential path disclosure vulnerability in core plugin configuration files {Abbas}
 2011-12-16 [A] Added captcha for ecards feature (thread ID 71501) {eenemeenemuu}

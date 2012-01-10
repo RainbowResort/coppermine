@@ -12,7 +12,7 @@
 <!--
   SVN version info:
 
-  Coppermine version: 1.5.17
+  Coppermine version: 1.5.18
   $HeadURL$
   $Revision$
   $Date$
@@ -61,7 +61,7 @@
                 <li>
                     <a name="packaging_steps_loop_through_files_linux"></a><h4>Linux<a href="#packaging_steps_loop_through_files_linux" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
                     On most posix-compliant operating systems (like Unix, Linux, BSD etc.) you should have all needed tools at hand already. Basically you loop through all files with a given extension, search for the string inside it and replace it. The command that can be run in a console could look like this:
-                    <textarea class="code smaller" style="width:100%" rows="1">find /path/on/filesystem/level/to/your/working/copy/ -maxdepth 4 -name "*.php" | xargs sed -i 's/Coppermine version: 1.5.17/Coppermine version: 1.5.18/g'</textarea>
+                    <textarea class="code smaller" style="width:100%" rows="1">find /path/on/filesystem/level/to/your/working/copy/ -maxdepth 4 -name "*.php" | xargs sed -i 's/Coppermine version: 1.5.18/Coppermine version: 1.5.19/g'</textarea>
                     If you want to turn this into a shell script, don't forget the shebang at the start of the file (usually something like <tt class="code">#!/bin/sh</tt>).
                 </li>
                 <li>
@@ -158,6 +158,25 @@
                 <li>
                     <a name="packaging_steps_tortoisesvn"></a><h4>Tortoise SVN<a href="#packaging_steps_tortoisesvn" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
                     tbc
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a name="packaging_steps_create_tag"></a><h3>Create a tag in subversion<a href="#packaging_steps_create_tag" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h3>
+            Create a tag using your svn application. The target directory name will be the abbreviation <tt class="code">cpg</tt> followed by the exact version number. So the target URL will be <tt class="code">https://coppermine.svn.sourceforge.net/svnroot/coppermine/tags/cpg1.5.X</tt>, where X represents the minor version number that you're about to tag.
+            <ul>
+                <li>
+                    <a name="packaging_steps_create_tag_rapidsvn"></a><h4>RapidSVN<a href="#packaging_steps_create_tag_rapidsvn" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+                    tbc
+                </li>
+                <li>
+                    <a name="packaging_steps_create_tag_tortoisesvn"></a><h4>Tortoise SVN<a href="#packaging_steps_create_tag_tortoisesvn" title="Link to this section"><img src="images/anchor.gif" width="15" height="9" border="0" alt="" /></a></h4>
+                    <ul>
+                        <li>In the left frame that represents the folder view, highlight the folder that represents the root of cpg1.5.x</li>
+                        <li>Click on the menu entry "TortoiseSVN" - "Branch/tag..."</li>
+                        <li>In the copy dialog, modify the "To URL" accordingly (see above).</li>
+                        <li>Select "HEAD revision in the repository" as source and click on the "OK" button.</li>
+                    </ul>
                 </li>
             </ul>
         </li>
