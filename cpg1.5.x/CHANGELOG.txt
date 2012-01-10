@@ -8,7 +8,7 @@ This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.18
+Coppermine version: 1.5.19
 $HeadURL$
 $Revision$
 *********************************************
@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2012-01-10 [M] Counted version count up in SVN repository from cpg1.5.18 to cpg1.5.19 {eenemeenemuu}
 2012-01-10 [M] Release of cpg1.5.18 {eenemeenemuu}
 2012-01-10 [M] Updated header information to reflect new year {eenemeenemuu}
 2012-01-10 [O] Updated date/time formats in English (British) language file (thread ID 72549) {eenemeenemuu}
