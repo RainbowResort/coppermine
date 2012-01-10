@@ -26,6 +26,16 @@ $lang_translation_info['trans_email'] = 'nibbler@coppermine-gallery.net';
 $lang_translation_info['trans_website'] = 'http://coppermine-gallery.net/';
 $lang_translation_info['trans_date'] = '2009-07-11';
 
+// The various date formats
+// See http://www.php.net/manual/en/function.strftime.php to define the variable below
+$lang_date['album'] = '%B %d, %Y';
+$lang_date['lastcom'] = '%m/%d/%y at %H:%M';
+$lang_date['lastup'] = '%B %d, %Y';
+$lang_date['register'] = '%B %d, %Y';
+$lang_date['lasthit'] = '%B %d, %Y at %I:%M %p';
+$lang_date['comment'] = '%B %d, %Y at %I:%M %p';
+$lang_date['log'] = '%B %d, %Y at %I:%M %p';
+
 $lang_meta_album_names['favpics'] = 'Favourite files';
 
 $lang_common['captcha_help'] = 'To avoid spam, you have to confirm that you are an actual human being and not just a bot script by entering the displayed text.<br />Capitalisation does not matter, you can type in lowercase.'; // cpg1.5
