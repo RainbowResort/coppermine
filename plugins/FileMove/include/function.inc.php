@@ -150,7 +150,7 @@ function indent($max)
        {
                 if(is_file($dir.'/'.$entry))
                 {
-                    if (strpos($entry, stristr($entry,$CONFIG['normal_pfx'])) !== 0 && strpos($entry, stristr($entry,$CONFIG['thumb_pfx'])) !== 0)
+                    if (strpos($entry, stristr($entry,$CONFIG['normal_pfx'])) !== 0 && strpos($entry, stristr($entry,$CONFIG['thumb_pfx'])) !== 0 && strpos($entry, stristr($entry,$CONFIG['orig_pfx'])) !== 0)
                     {
                         $num++;
                     }
@@ -264,7 +264,7 @@ function file_dir($dfolder,$nb)
             {               
                 if (is_file($dfolder."/".$file))
                 {
-                    if (strpos($file, stristr($file,$CONFIG['normal_pfx'])) !== 0 && strpos($file, stristr($file,$CONFIG['thumb_pfx'])) !== 0)
+                    if (strpos($file, stristr($file,$CONFIG['normal_pfx'])) !== 0 && strpos($file, stristr($file,$CONFIG['thumb_pfx'])) !== 0 && strpos($file, stristr($file,$CONFIG['orig_pfx'])) !== 0)
                     {
                         if ($n < $nb)
                         {
@@ -354,20 +354,20 @@ function file_move($file_name,$DRep,$ARep)
     copy($DFile,$AFile);
     copy($DFile_Thumb,$AFile_Thumb);
     copy($DFile_Normal,$AFile_Normal);
+    $DFile_Orig=$Dpath.$CONFIG['orig_pfx'].$file_name;
+    $AFile_Orig=$Apath.$CONFIG['orig_pfx'].$file_name;
+    if(file_exists($DFile_Orig)){
+        if(copy($DFile_Orig,$AFile_Orig)) {
+            unlink($DFile_Orig);
+        }
+    }
     //modpack compatibility {Stramm}
     if(isset($CONFIG['mini_pfx'])) {
         $DFile_Mini=$Dpath.$CONFIG['mini_pfx'].$file_name;
-        $DFile_Orig=$Dpath.$CONFIG['orig_pfx'].$file_name;
         $AFile_Mini=$Apath.$CONFIG['mini_pfx'].$file_name;
-        $AFile_Orig=$Apath.$CONFIG['orig_pfx'].$file_name;
         if(file_exists($DFile_Mini)){
             if(copy($DFile_Mini,$AFile_Mini)) {
                 unlink($DFile_Mini);
-            }
-        }
-        if(file_exists($DFile_Orig)){
-            if(copy($DFile_Orig,$AFile_Orig)) {
-                unlink($DFile_Orig);
             }
         }
     }

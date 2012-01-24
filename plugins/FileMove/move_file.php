@@ -34,7 +34,7 @@ if ($superCage->cookie->keyExists($CONFIG['cookie_name'].'_filemove')) {
     $file_name = @unserialize(@base64_decode($superCage->cookie->getRaw($CONFIG['cookie_name'].'_filemove')));
     setcookie($CONFIG['cookie_name'].'_filemove', '', 0, $CONFIG['cookie_path']);
 }
-echo "filename:".implode(", ",$file_name);
+//echo "filename:".implode(", ",$file_name);
 //affichagede l'entête
 pageheader($lang_plugin_FileMove['display_name']);
 starttable('100%', $lang_plugin_FileMove['display_name'].' - '.$lang_plugin_FileMove['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>',2);

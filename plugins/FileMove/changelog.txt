@@ -26,6 +26,8 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2012-01-24 [B] Also move watermark backup files (orig_filname.jpg) if present {eenemeenemuu}
+2012-01-24 [B] Missing button for "move some files" {eenemeenemuu}
 2011-02-27 [C] v1.2 Change plugin acon and some other little improvements {François Keller}
 2011-02-22 [D] Update lang files {Fbleu and Frantz}{François Keller}
 2010-10-21 [A] Porting the plugin to cpg1.5.x {eenemeenemuu}

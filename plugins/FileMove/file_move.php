@@ -78,7 +78,7 @@ else
     echo "<tr>";
     file_dir($dfolder,$nb);
     echo "<input type='hidden' name='dfolder' value='{$dfolder}'";
-    echo "<tr><td align='center' colspan='{$nb}'<input type='Submit' value='{$lang_plugin_FileMove['valid']}'></td></tr>";
+    echo "<tr><td align='center' colspan='{$nb}'><input type='Submit' value='{$lang_plugin_FileMove['valid']}'></td></tr>";
     echo "</tr></form>";
     endtable();
     echo "</td></tr>";
