@@ -1,6 +1,6 @@
 <?php
 /**************************************************
-  Coppermine 1.4.x Plugin - Delete Favorite 
+  Coppermine 1.5.x Plugin - Delete Favorite 
   *************************************************
   Copyright (c) 2006 Borzoo Mossavari
   *************************************************

@@ -1,17 +1,16 @@
 <?php
-/*************************
-  Coppermine Photo Gallery
-  ************************
-  Copyright (c) 2003-2006 Coppermine Dev Team
-  v1.1 originally written by Gregory DEMAR
-
+/**************************************************
+  Coppermine 1.5.x Plugin - Delete Favorite 
+  *************************************************
+  Copyright (c) 2006 Borzoo Mossavari
+  *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  ********************************************
-    Delete fav plugin by B.Mossavari
-**********************************************/
+  *************************************************
+  Delete all your favorite file with just one click !
+  ***************************************************/
 
 $FAVPICS = array();
 $data = base64_encode(serialize($FAVPICS));
