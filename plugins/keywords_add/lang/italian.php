@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**************************************************
   Coppermine 1.5.x Plugin - keywords_add
   *************************************************
@@ -26,7 +26,7 @@ $lang_plugin_keywords_add = array(
   'version'       => 'Ver 1.0',
   'album_name'    => 'Selezionare l\'album nel quale aggiungere le informazioni',
   'add_info'      => 'Informazioni da aggiungere',
-  'keyword'	  => 'Parole Chiave',
+  'keyword'       => 'Parole Chiave',
   'caution'       => 'Attenzione: le informazioni già presenti nei campi extra saranno rimpiazzate dalle nuove.<br>Lasciare i campi vuoti per non modificare il contenuto esistente.',
 );
 
@@ -39,5 +39,5 @@ $lang_plugin_keywords_add_config = array(
 // Delete
 $lang_plugin_keywords_add_delete= array(
   'success'       => 'Informazioni aggiunte',
- );
+);
 ?>

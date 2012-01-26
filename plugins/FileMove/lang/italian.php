@@ -46,9 +46,10 @@ $lang_plugin_FileMove['valid'] = 'Valido';
 $lang_plugin_FileMove['continue'] = 'Continua';
 $lang_plugin_FileMove['back'] = 'Indietro';
 $lang_plugin_FileMove['transfer'] = 'Trasferisci il contenuto della ';
-$lang_plugin_FileMove['transfer_file'] = 'Trasferisci alcuni files dalla ',
+$lang_plugin_FileMove['transfer_file'] = 'Trasferisci alcuni files dalla ';
 $lang_plugin_FileMove['folder2'] = 'cartella ';
 $lang_plugin_FileMove['folder_error'] = 'Errore, la cartella non esiste!';
 $lang_plugin_FileMove['traitement'] = ' Files trasferiti';
 $lang_plugin_FileMove['install_info'] = 'Add a menu item after Documentation in the Information menu to access at the plugin page';
-$lang_plugin_FileMove['extra_info'] = 'Click on the FileMove menu item in the Information menu to access at the plugin page';?>
+$lang_plugin_FileMove['extra_info'] = 'Click on the FileMove menu item in the Information menu to access at the plugin page';
+?>

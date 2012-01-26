@@ -18,7 +18,7 @@
 if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 //language variables
 $lang_plugin_slider = array(
-'slider_speed'  => 'Velocità dello Slider',
+'slider_speed'  => 'VelocitÃ  dello Slider',
 'slider_height' => 'Altezza Slider',
 'slider_width'  => 'Larghezza width',
 'slider_numberofpics' => 'Numero dell immagini',
@@ -35,7 +35,7 @@ $lang_plugin_slider = array(
 'submit_button' => 'Invia',
 'update_success' => 'Valori aggiornati con successo.',
 'album' => 'Album dello Slider',
-'skipportrait' => 'Salta immagine modalità portait',
+'skipportrait' => 'Salta immagine modalitÃ  portait',
 'align' => 'Allinea Slider',
 'left' => 'sinistra',
 'right' => 'destra',

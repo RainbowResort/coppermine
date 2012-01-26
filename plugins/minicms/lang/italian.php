@@ -88,6 +88,4 @@ $lang_minicms_config = array(
   array('Dimensione immagini nel feed RSS','rss_image_size',3,'',$lang_minicms_config_related_size),
 );
 
-
-
 ?>
