@@ -19,7 +19,7 @@
 /*********************************************
   Coppermine Plugin - Album Addfav
   ********************************************
-  Copyright (c) 2010 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
 **********************************************/
 
 define('IN_COPPERMINE', true);

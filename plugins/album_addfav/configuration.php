@@ -19,13 +19,13 @@
 /*********************************************
   Coppermine Plugin - Album Addfav
   ********************************************
-  Copyright (c) 2010 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
 **********************************************/
 
 $name = 'Album addfav';
 $description = 'Add all files from a particular album to your favorites.';
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external">eenemeenemuu</a>';
-$version = '1.3';
+$version = '1.4';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,63623.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
 ?>
