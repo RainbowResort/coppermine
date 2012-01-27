@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2012-01-27 [B] Disabled possibility to move albums to root level of user category (thread ID 74323) {eenemeenemuu}
 2012-01-10 [M] Counted version count up in SVN repository from cpg1.5.18 to cpg1.5.19 {eenemeenemuu}
 2012-01-10 [M] Release of cpg1.5.18 {eenemeenemuu}
 2012-01-10 [M] Updated header information to reflect new year {eenemeenemuu}
