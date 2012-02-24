@@ -23,7 +23,7 @@ $lang_translation_info['lang_name_native'] = 'Srpski';
 $lang_translation_info['lang_country_code'] = 'rs';
 $lang_translation_info['trans_name'] = 'Oliver Mihajlović';
 $lang_translation_info['trans_email'] = '';
-$lang_translation_info['trans_website'] = 'http://translations.cz.cc/';
+$lang_translation_info['trans_website'] = 'http://serbiantranslation.info/';
 $lang_translation_info['trans_date'] = '2010-04-03';
 
 
@@ -77,7 +77,7 @@ $lang_errors['invalid_image'] = 'Slika koju ste postavili je neispravna ili se n
 $lang_errors['resize_failed'] = 'Nemoguće je napraviti sličicu ili smanjenu sliku.';
 $lang_errors['no_img_to_display'] = 'Nema slika za prikaz';
 $lang_errors['non_exist_cat'] = 'Izabrana kategorija ne postoji';
-$lang_errors['directory_ro'] = 'Nije dozvoljeno menjanje direktorijuma \'%s\' , fajlovi se ne mogu obrisati';
+$lang_errors['directory_ro'] = 'Nije dozvoljeno menjanje foldera \'%s\' , fajlovi se ne mogu obrisati';
 $lang_errors['pic_in_invalid_album'] = 'Fajl je u nepostojećem albumu(%s)!?';
 $lang_errors['banned'] = 'Trenutno vam je zabranjeno da koristite ovaj sajt.';
 $lang_errors['offline_title'] = 'Nedostupno';
@@ -118,7 +118,7 @@ $lang_common['keyword_separators'] = array(' '=>'razmak', ','=>'zarez', ';'=>'ta
 $lang_common['filename'] = 'Ime fajla'; // cpg1.5
 $lang_common['filesize'] = 'Veličina fajla'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5
-$lang_common['file'] = 'Fajle'; // cpg1.5
+$lang_common['file'] = 'Fajl'; // cpg1.5
 $lang_common['date'] = 'Datum'; // cpg1.5
 $lang_common['help'] = 'Pomoć'; // cpg1.5
 $lang_common['close'] = 'Zatvoriti'; // cpg1.5
@@ -230,7 +230,7 @@ $lang_gallery_admin_menu['bridgemgr_title'] = 'Uključiti/isključiti integracij
 $lang_gallery_admin_menu['pluginmgr_lnk'] = 'Alat za dodatke'; // cpg1.5
 $lang_gallery_admin_menu['pluginmgr_title'] = 'Alat za dodatke'; // cpg1.5
 $lang_gallery_admin_menu['overall_stats_lnk'] = 'Opšta statistika'; // cpg1.5
-$lang_gallery_admin_menu['overall_stats_title'] = 'Pogledati opštu statistiku poseta i operativnog sistema (ako su odgovarajuće mogućnosti uključene u podešavanjima).'; // cpg1.5
+$lang_gallery_admin_menu['overall_stats_title'] = 'Pogledati opštu statistiku poseta i operativnih sistema (ako su odgovarajuće mogućnosti uključene u podešavanjima).'; // cpg1.5
 $lang_gallery_admin_menu['keywordmgr_lnk'] = 'Alat za ključne reči'; // cpg1.5
 $lang_gallery_admin_menu['keywordmgr_title'] = 'Podešavanje ključnih reči (ako su odgovarajuće mogućnosti uključene u podešavanjima).'; // cpg1.5
 $lang_gallery_admin_menu['exifmgr_lnk'] = 'EXIF alat'; // cpg1.5
@@ -263,7 +263,7 @@ $lang_thumb_view['sort_td'] = 'Poređati po naslovu silazno';
 $lang_thumb_view['position'] = 'Položaj';
 $lang_thumb_view['sort_pa'] = 'Poređati po položaju uzlazno';
 $lang_thumb_view['sort_pd'] = 'Poređati po položaju silazno';
-$lang_thumb_view['download_zip'] = 'Snimiti kao Zip fajl';
+$lang_thumb_view['download_zip'] = 'Snimiti kao zip arhivu';
 $lang_thumb_view['pic_on_page'] = 'broj fajlova - %d broj strana - %d';
 $lang_thumb_view['user_on_page'] = 'broj korisnika - %d broj strana - %d';
 $lang_thumb_view['enter_alb_pass'] = 'Unesite lozinku za album';
@@ -370,9 +370,9 @@ $lang_mailer['signing'] = 'Greška sa prijavom: ';
 // ------------------------------------------------------------------------- //
 // File include/plugin_api.inc.php
 // ------------------------------------------------------------------------- //
-$lang_plugin_api['error_install'] = 'Neuspelo instaliranje dodatka \'%s\'';
-$lang_plugin_api['error_uninstall'] = 'Neuspelo deinstaliranje dodatka \'%s\'';
-$lang_plugin_api['error_sleep'] = 'Neuspelo isključivanje dodatka \'%s\''; // cpg1.5
+$lang_plugin_api['error_install'] = 'Instaliranje dodatka nije uspelo \'%s\'';
+$lang_plugin_api['error_uninstall'] = 'Deinstaliranje dodatka nije uspelo \'%s\'';
+$lang_plugin_api['error_sleep'] = 'Isključivanje dodatka nije uspelo \'%s\''; // cpg1.5
 
 // ------------------------------------------------------------------------- //
 // File include/smilies.inc.php
@@ -447,7 +447,7 @@ $lang_banning_php['error_admin_ban'] = 'Ne možete zabraniti pristup samom sebi!
 $lang_banning_php['error_server_ban'] = 'Hteli ste sopstvenom serveru da zabranite pristup? Neće to moći...';
 $lang_banning_php['skipping'] = 'Preskakanje komande.'; // cpg1.5
 $lang_banning_php['lookup_ip'] = 'Pretraga IP Adrese';
-$lang_banning_php['select_date'] = 'izabrati datum';
+$lang_banning_php['select_date'] = 'Izabrati datum';
 $lang_banning_php['delete_comments'] = 'Izbrisati komentare'; // cpg1.5
 $lang_banning_php['current'] = 'trenutno'; // cpg1.5
 $lang_banning_php['all'] = 'sve'; // cpg1.5
@@ -455,7 +455,7 @@ $lang_banning_php['none'] = 'nijedan'; // cpg1.5
 $lang_banning_php['view'] = 'pregled'; // cpg1.5
 $lang_banning_php['ban_id'] = 'Identifikacija zabrane'; // cpg1.5
 $lang_banning_php['existing_bans'] = 'Postojeće zabrane'; // cpg1.5
-$lang_banning_php['no_banning_when_bridged'] = 'Trenutno koristite galeriju spojenu s drugom aplikacijom. Koristite sistem zabrane te aplikacije. Coppermine sistem zabrane verovatno ne radi u režimu spajanja s drugom aplikacijom.'; // cpg1.5
+$lang_banning_php['no_banning_when_bridged'] = 'Trenutno koristite galeriju kao povezanu s drugom aplikacijom. Koristite sistem zabrane te aplikacije. Coppermine sistem zabrane verovatno ne radi kad je uključeno povezivanje s drugom aplikacijom.'; // cpg1.5
 $lang_banning_php['records_on_page'] = 'broj zapisa - %d broj strana - %d'; // cpg1.5
 $lang_banning_php['ascending'] = 'uzlazno'; // cpg1.5
 $lang_banning_php['descending'] = 'silazno'; // cpg1.5
@@ -466,7 +466,7 @@ $lang_banning_php['ban_record_x_deleted'] = 'Zapis o zabranama %s je izbrisan'; 
 $lang_banning_php['new_ban_record_created'] = 'Novi zapis o zabranama je napravljen'; // cpg1.5
 $lang_banning_php['ban_record_x_already_exists'] = 'Zapis o zabranama za %s već postoji!'; // cpg1.5
 $lang_banning_php['comment_deleted'] = '%s komentar koji je ostavio %s je izbrisan'; // cpg1.5
-$lang_banning_php['comments_deleted'] = '%s komentara koje je ostavio %s je izbrisano'; // cpg1.5
+$lang_banning_php['comments_deleted'] = 'komentari (%s) koje je ostavio %s su izbrisani'; // cpg1.5
 $lang_banning_php['email_field_invalid'] = 'Unesite ispravnu imejl adresu'; // cpg1.5
 $lang_banning_php['ip_address_field_invalid'] = 'Unesite ispravnu IP adresu (x.x.x.x)'; // cpg1.5
 $lang_banning_php['expiry_field_invalid'] = 'Unesite ispravan datum isteka (YYYY-MM-DD)'; // cpg1.5
@@ -504,7 +504,7 @@ $lang_bridgemgr_php['title_enable'] = 'Uključiti integraciju/povezivanje sa %s'
 $lang_bridgemgr_php['bridge_enable_yes'] = 'uključiti';
 $lang_bridgemgr_php['bridge_enable_no'] = 'isključiti';
 $lang_bridgemgr_php['error_must_not_be_empty'] = 'ne sme biti prazno';
-$lang_bridgemgr_php['error_either_be'] = 'mora bit ili %s ili %s';
+$lang_bridgemgr_php['error_either_be'] = 'mora biti ili %s ili %s';
 $lang_bridgemgr_php['error_folder_not_exist'] = '%s ne postoji. Ispravite vrednost koju ste uneli za %s';
 $lang_bridgemgr_php['error_cookie_not_readible'] = 'Coppermine ne može da učita kolačić %s. Ispravite vrednost koju ste uneli za %s, ili idite u administratorski deo povezane aplikacije i obavezno podesite putanju kolačića tako da Coppermine može da je čita.';
 $lang_bridgemgr_php['error_mandatory_field_empty'] = 'Ne možete da ostavite polje %s prazno - upišite odgovarajući podatak.';
@@ -571,15 +571,15 @@ $lang_contact_php['your_name'] = 'Ime'; // cpg1.5
 $lang_contact_php['your_email'] = 'Imejl adresa'; // cpg1.5
 $lang_contact_php['subject'] = 'Predmet poruke'; // cpg1.5
 $lang_contact_php['your_message'] = 'Poruka'; // cpg1.5
-$lang_contact_php['name_field_mandatory'] = 'Upišite vaše ime'; // cpg1.5 // js-alert
-$lang_contact_php['name_field_invalid'] = 'Upišite vaše pravo ime'; // cpg1.5 // js-alert
-$lang_contact_php['email_field_mandatory'] = 'Upišite vašu imejl adresu'; // cpg1.5 // js-alert
+$lang_contact_php['name_field_mandatory'] = 'Upišite svoje ime'; // cpg1.5 // js-alert
+$lang_contact_php['name_field_invalid'] = 'Upišite pravo ime'; // cpg1.5 // js-alert
+$lang_contact_php['email_field_mandatory'] = 'Upišite imejl adresu'; // cpg1.5 // js-alert
 $lang_contact_php['email_field_invalid'] = 'Upišite ispravnu imejl adresu'; // cpg1.5 // js-alert
 $lang_contact_php['subject_field_mandatory'] = 'Upišite smislen predmet poruke'; // cpg1.5 // js-alert
-$lang_contact_php['message_field_mandatory'] = 'Upišite vašu poruku'; // cpg1.5 // js-alert
+$lang_contact_php['message_field_mandatory'] = 'Upišite poruku'; // cpg1.5 // js-alert
 $lang_contact_php['confirmation'] = 'Potvrda'; // cpg1.5
 $lang_contact_php['email_headline'] = 'Ovaj imejl je poslat %s pomoću formulara za kontakt na %s sa IP adrese %s'; // cpg1.5
-$lang_contact_php['registered_user'] = 'registrovan korisnik'; // cpg1.5
+$lang_contact_php['registered_user'] = 'registrovani korisnik'; // cpg1.5
 $lang_contact_php['guest'] = 'gost'; // cpg1.5
 $lang_contact_php['unknown'] = 'nepoznat'; // cpg1.5
 $lang_contact_php['user_info'] = '%s po imenu %s sa imejl adresom %s napisao je:'; // cpg1.5
@@ -643,9 +643,9 @@ $lang_admin_php['click_collapse'] = 'kliknite na ime sekcije da bi nestala'; // 
 $lang_admin_php['expand_all'] = 'Prikazati sve';
 $lang_admin_php['toggle_all'] = 'Sakriti sve'; // cpg1.5
 $lang_admin_php['notice1'] = '(*) Ova podešavanja se ne smeju menjati ako već imate fajlove u bazi.';
-$lang_admin_php['notice2'] = '(**) Kad menjate ovo podešavanje, ono utiče samo na fajlove koji se postave od tada, pa se savetuje da se podešavanje ne menja ako već ima fajlova u galeriji. Međutim, možete da primenite podešavanje i na postojeće fajlove pomoću &quot;<a href="util.php">poslovi administratora</a> (smanjiti slike)&quot; iz administratorkog menija.';
+$lang_admin_php['notice2'] = '(**) Kad menjate ovo podešavanje, ono utiče samo na fajlove koji se postave od tada, pa se savetuje da se podešavanje ne menja ako već ima fajlova u galeriji. Međutim, možete da primenite podešavanje i na postojeće fajlove pomoću opcije &quot;<a href="util.php">poslovi administratora</a> (smanjiti slike)&quot; iz administratorkog menija.';
 $lang_admin_php['notice3'] = '(***) Svi fajlovi sa zapisima su pisani na engleskom.';
-$lang_admin_php['bbs_disabled'] = 'Funkcija je isključena kad se koristi spajanje/integracija';
+$lang_admin_php['bbs_disabled'] = 'Funkcija je isključena kad se koristi povezivanje/integracija';
 $lang_admin_php['auto_resize_everyone'] = 'Svako';
 $lang_admin_php['auto_resize_user'] = 'Samo korisnik';
 $lang_admin_php['ascending'] = 'uzlazno';
@@ -671,11 +671,11 @@ $lang_admin_php['home_target'] = 'URL adresa vaše početne strane'; // cpg1.5
 $lang_admin_php['enable_zipdownload'] = 'Dozvoliti snimanje ZIP arhiva omiljenih'; // cpg1.5
 $lang_admin_php['enable_zipdownload_no_textfile'] = 'samo omiljene'; // cpg1.5
 $lang_admin_php['enable_zipdownload_additional_textfile'] = 'omiljene i readme fajl'; // cpg1.5
-$lang_admin_php['time_offset'] = 'Razlika vremenska zone u odnosu na GMT'; // cpg1.5
+$lang_admin_php['time_offset'] = 'Razlika vremenske zone u odnosu na GMT'; // cpg1.5
 $lang_admin_php['time_offset_detail'] = '(trenutno vreme: %s)'; // cpg1.5
 $lang_admin_php['enable_help'] = 'Uključiti ikonice za pomoć'; // cpg1.5
-$lang_admin_php['enable_help_description'] = 'pomoć je delimično dostupna samo na engleskom'; // cpg1.5
-$lang_admin_php['clickable_keyword_search'] = ' U pretrazi uključiti ključne reči na koje se može kliknuti'; // cpg1.5
+$lang_admin_php['enable_help_description'] = 'Pomoć je delimično dostupna samo na engleskom'; // cpg1.5
+$lang_admin_php['clickable_keyword_search'] = 'U pretrazi uključiti ključne reči na koje se može kliknuti'; // cpg1.5
 $lang_admin_php['keyword_separator'] = 'Odvajanje ključnih reči'; // cpg1.5
 $lang_admin_php['keyword_convert'] = 'Promeniti odvajanje ključnih reči'; // cpg1.5
 $lang_admin_php['enable_plugins'] = 'Uključiti dodatke'; // cpg1.5
@@ -752,13 +752,13 @@ $lang_admin_php['max_com_lines'] = 'Maksimalan broj redova u komentaru'; // cpg1
 $lang_admin_php['max_com_size'] = 'Maksimalna dužina komentara'; // cpg1.5
 $lang_admin_php['email_comment_notification'] = 'Obavesti administratora imejlom o komentarima'; // cpg1.5
 $lang_admin_php['comments_sort_descending'] = 'Način ređanja komentara'; // cpg1.5
-$lang_admin_php['comments_per_page'] = 'Komentara po strani'; // cpg1.5
+$lang_admin_php['comments_per_page'] = 'Broj komentara po strani'; // cpg1.5
 $lang_admin_php['comments_anon_pfx'] = 'Prefiks za autore anonimnih komentara'; // cpg1.5
 $lang_admin_php['comment_approval'] = 'Komentari zahtevaju odobrenje'; // cpg1.5
 $lang_admin_php['display_comment_approval_only'] = 'Prikazati komentare koji zahtevaju odobrenje samo na strani &quot;Odobravanje komentara&quot;'; // cpg1.5
 $lang_admin_php['comment_placeholder'] = 'Prikazati korisnicima tekst sa obaveštenjem o komentarima koji čekaju administratorsko odobrenje'; // cpg1.5
 $lang_admin_php['comment_user_edit'] = 'Dozvoliti korisnicima da menjaju svoje komentare'; // cpg1.5
-$lang_admin_php['comment_captcha'] = 'Prikazati Captcha (Vizuelnu potvrdu) prilikom slanja komentara'; // cpg1.5
+$lang_admin_php['comment_captcha'] = 'Prikazati Captcha (vizuelnu potvrdu) prilikom slanja komentara'; // cpg1.5
 $lang_admin_php['comment_akismet_enable'] = 'Akismet opcije'; // cpg1.5
 $lang_admin_php['comment_akismet_enable_description'] = 'Šta uraditi ako Akismet odbaci komentar kao nepoželjan?'; // cpg1.5
 $lang_admin_php['comment_akismet_applicable_only'] = 'Opcije važe samo ako je Akismet uključen unošenjem odgovarajućeg API ključa'; // cpg1.5
@@ -889,7 +889,7 @@ $lang_admin_php['debug_notice'] = 'Prikazati obaveštenja u režimu traženja gr
 $lang_admin_php['offline'] = 'Galerija nije dostupna'; // cpg1.5
 $lang_admin_php['display_coppermine_news'] = 'Prikazati vesti sa coppermine-gallery.net'; // cpg1.5
 $lang_admin_php['display_coppermine_detail'] = 'biće prikazane samo administratoru'; // cpg1.5
-$lang_admin_php['config_setting_invalid'] = 'Vrednost koju ste uneli za &laquo;%s&raquo; nije ispravna, molimo ispravite je.'; // cpg1.5
+$lang_admin_php['config_setting_invalid'] = 'Vrednost koju ste uneli za &laquo;%s&raquo; nije ispravna. Molimo ispravite je.'; // cpg1.5
 $lang_admin_php['config_setting_ok'] = 'Podešavanje za &laquo;%s&raquo; je sačuvano.'; // cpg1.5
 $lang_admin_php['contact_form_settings'] = 'Podešavanja formulara za kontakt'; // cpg1.5
 $lang_admin_php['contact_form_guest_enable'] = 'Prikazati formular za kontakt anonimnim posetiocima (gostima)'; // cpg1.5
@@ -962,7 +962,7 @@ $lang_db_ecard_php['invalid_data'] = 'Podaci o dopisnici kojima pokušavate da p
 // File db_input.php
 // ------------------------------------------------------------------------- //
 if (defined('DB_INPUT_PHP')) {
-$lang_db_input_php['empty_name_or_com'] = 'Treba da upišete ime i komentar';
+$lang_db_input_php['empty_name_or_com'] = 'Potrebno je upisati ime i komentar';
 $lang_db_input_php['com_added'] = 'Vaš komentar je postavljen'; // cpg1.5
 $lang_db_input_php['alb_need_title'] = 'Morate da unesete naslov za album!';
 $lang_db_input_php['no_udp_needed'] = 'Osvežavanje nije potrebno.';
@@ -979,7 +979,7 @@ $lang_db_input_php['allowed_img_types'] = 'Ne možete poslati više od %s slika.
 $lang_db_input_php['err_insert_pic'] = 'Fajl \'%s\' se ne može ubaciti u album';
 $lang_db_input_php['upload_success'] = 'Vaš fajl je uspešno poslat.<br />Biće vidljiv kad administrator odobri.';
 $lang_db_input_php['notify_admin_email_subject'] = '%s - Obaveštenje o postavljanju';
-$lang_db_input_php['notify_admin_email_body'] = '%s je poslao sliku koja zahteva vaše odobrenje. Posetite %s';
+$lang_db_input_php['notify_admin_email_body'] = '%s je poslao/la sliku koja zahteva vaše odobrenje. Posetite %s';
 $lang_db_input_php['info'] = 'Informacije';
 $lang_db_input_php['com_updated'] = 'Komentar promenjen'; // cpg1.5
 $lang_db_input_php['alb_updated'] = 'Album promenjen';
@@ -1050,7 +1050,7 @@ if (defined('DISPLAYIMAGE_PHP')){
 $lang_display_image_php['confirm_del'] = 'Jeste li sigurni da hoćete da IZBRIŠETE ovaj fajl?\\nKomentari će takođe biti izbrisani.'; // js-alert
 $lang_display_image_php['del_pic'] = 'Izbrisati ovaj fajl';
 $lang_display_image_php['size'] = '%s x %s piksela';
-$lang_display_image_php['views'] = '%s puta';
+$lang_display_image_php['views'] = 'broj pregleda - %s';
 $lang_display_image_php['slideshow'] = 'Slajd-šou';
 $lang_display_image_php['stop_slideshow'] = 'Zaustaviti slajd-šou';
 $lang_display_image_php['view_fs'] = 'Kliknite da vidite sliku u punoj veličini';
@@ -1067,7 +1067,7 @@ $lang_picinfo['Displayed'] = 'Prikazano';
 $lang_picinfo['URL'] = 'URL adresa';
 $lang_picinfo['Make'] = 'Marka';
 $lang_picinfo['Model'] = 'Model';
-$lang_picinfo['DateTime'] = 'Datum vreme';
+$lang_picinfo['DateTime'] = 'Datum, vreme';
 $lang_picinfo['ISOSpeedRatings'] = 'ISO';
 $lang_picinfo['MaxApertureValue'] = 'Maksimalan otvor blende';
 $lang_picinfo['FocalLength'] = 'Fokalna dužina';
@@ -1119,7 +1119,7 @@ $lang_picinfo['NoiseReduction'] = 'Smanjenje šuma';
 $lang_picinfo['FlashPixVersion'] = 'FlashPix verzija';
 $lang_picinfo['ExifImageWidth'] = 'EXIF širina slike';
 $lang_picinfo['ExifImageHeight'] = 'EXIF visina slike';
-$lang_picinfo['ExifInteroperabilityOffset'] = 'EXIF Offset interoperabilnosti';
+$lang_picinfo['ExifInteroperabilityOffset'] = 'EXIF ofset interoperabilnosti';
 $lang_picinfo['FileSource'] = 'Poreklo fajla';
 $lang_picinfo['SceneType'] = 'Vrsta scene';
 $lang_picinfo['CustomerRender'] = 'Customer Render';
@@ -1153,7 +1153,7 @@ $lang_display_comments['pending_approval_message'] = 'Neko je poslao komentar ov
 $lang_display_comments['approve'] = 'Odobriti komentar'; // cpg1.5
 $lang_display_comments['disapprove'] = 'Obeleži komentar kao neodobren'; // cpg1.5
 $lang_display_comments['log_in_to_comment'] = 'Anonimni komentari nisu dozvoljeni ovde. %sPrijavite se%s kako biste poslali komentar'; // cpg1.5 // do not translate the %s placeholders - they will be used as wrappers for the link (<a>)
-$lang_display_comments['default_username_message'] = 'Molimo upišite svoje ime za komentar'; // cpg1.5
+$lang_display_comments['default_username_message'] = 'Upišite svoje ime za komentar'; // cpg1.5
 $lang_display_comments['comment_rejected'] = 'Vaš komentar je odbijen'; // cpg1.5
 
 $lang_fullsize_popup['click_to_close'] = 'Kliknite na sliku da biste zatvorili prozor';
@@ -1196,7 +1196,7 @@ $lang_ecard_php['preview_view_ecard'] = 'Ovo će biti alternativna veza za elekt
 
 if (defined('REPORT_FILE_PHP')) {
 $lang_report_php['title'] = 'Prijaviti administratoru';
-$lang_report_php['invalid_email'] = '<strong>Upozorenje</strong> : neispravna imejl adresa!';
+$lang_report_php['invalid_email'] = '<strong>Upozorenje</strong>: neispravna imejl adresa!';
 $lang_report_php['report_subject'] = 'Prijava od %s u galeriji %s';
 $lang_report_php['view_report'] = 'Alternativna veza za slučaj da se prijava ne prikaže pravilno';
 $lang_report_php['view_report_plaintext'] = 'Da biste videli prijavu, iskopirajte ovu url adresu u vaš pregledač:';
@@ -1274,7 +1274,7 @@ $lang_editpics_php['select_unselect'] = 'izabrati/poništiti sve';
 $lang_editpics_php['file_exists'] = 'Fajl \'%s\' već postoji.';
 $lang_editpics_php['rename_failed'] = 'Menjanje imena \'%s\' u \'%s\' nije uspelo.';
 $lang_editpics_php['src_file_missing'] = 'Fajl \'%s\' ne postoji.';
-$lang_editpics_php['mime_conv'] = 'Neuspelo menjanje fajla iz \'%s\' u \'%s\'';
+$lang_editpics_php['mime_conv'] = 'Menjanje fajla iz \'%s\' u \'%s\' nije uspelo';
 $lang_editpics_php['forb_ext'] = 'Zabranjena ekstenzija fajla.';
 $lang_editpics_php['error_editor_class'] = 'Klasa obrade za vaš metod smanjivanja nije instalirana'; // cpg 1.5
 $lang_editpics_php['error_document_size'] = 'Dokument nema ni širinu ni visinu'; // cpg 1.5 // js-alert
@@ -1482,10 +1482,10 @@ $lang_install['perm_ok'] = 'Dozvole određenih foldera su proverene i izgleda da
 $lang_install['perm_not_ok'] = 'Dozvole određenih foldera nisu dobro podešene.<br />Molimo promenite dozvole foldera ispod koji su obeleženi sa "Nije u redu".'; // cpg1.5
 $lang_install['please_go_back'] = 'Molimo %skliknite ovde%s da biste se vratili i rešili ovaj problem pre nego što nastavite.';
 $lang_install['populate_db'] = 'Popunjavanje baze podataka';
-$lang_install['ready_to_roll'] = '<a href="index.php">Coppermine</a> je sada ispravno podešen i spreman za upotrebu.<br /><a href="login.php">PrijaviteLogin</a> se koristeći podatke koje ste dali za administratorski nalog.';
+$lang_install['ready_to_roll'] = '<a href="index.php">Coppermine</a> je sada ispravno podešen i spreman za upotrebu.<br /><a href="login.php">Prijavite</a> se koristeći podatke koje ste dali za administratorski nalog.';
 $lang_install['sect_create_adm'] = 'U ovom delu su potrebni podaci kako bi se napravio administratorski nalog. Koristite samo alfanumeričke znakove. Unesite podatke pažljivo!';
 $lang_install['sect_mysql_info'] = 'U ovom delu su potrebni podaci o načinu pristupa vašoj MySQL bazi podataka.<br />Ako ne znate kako da ih popunite, proverite kod službe provajdera hostinga.';
-$lang_install['sect_mysql_sel_db'] = 'Ovde morate da izaberete koju bazu podataka želite da koristite za Coppermine.<br />Ako vaš MySQL nalog ima odgovarajuće privilegije, možete bazu napraviti u okviru instalacije ili možete koristiti postojeću bazu. Ako vam se ne sviđaju ove mogućnosti, moraćete prvo da napravite bazu van instalacije, a onda se vratite ovde i izaberite bazu iz padajućeg menija ispod. Možete da promenite i prefiks za tabele (ali ne koristite tačke), ali je preporučljivo da zadržite osnovni prefiks.';
+$lang_install['sect_mysql_sel_db'] = 'Ovde morate da izaberete koju bazu podataka želite da koristite za Coppermine.<br />Ako vaš MySQL nalog ima odgovarajuće privilegije, možete bazu napraviti u okviru instalacije ili možete koristiti postojeću bazu. Ako vam se ne sviđaju ove mogućnosti, moraćete prvo da napravite bazu van instalacije, a onda se vratite ovde i izaberite bazu iz padajućeg menija ispod. Možete da promenite i prefiks za tabele (ne koristite tačke), ali je preporučljivo da zadržite osnovni prefiks.';
 $lang_install['select_lang'] = 'Izaberite osnovni jezik: ';
 $lang_install['sql_file_not_found'] = 'Fajl \'%s\' nije pronađen. Proverite da li ste poslali sve Coppermine fajlove na server.';
 $lang_install['status'] = 'Status';
@@ -1511,7 +1511,7 @@ $lang_install['no_cookie'] = 'Vaš pregledač nije prihvatio naš kolačić. Pre
 $lang_install['no_javascript'] = 'Izgleda da vaš pregledač nema uključen Javascript - vrlo je preporučljivo da ga uključite.';
 $lang_install['register_globals_detected'] = 'Izgleda da je vaš PHP podešen na \'register_globals\' - trebalo bi da to isključite iz razloga bezbednosti.';
 $lang_install['more'] = 'još';
-$lang_install['version_undetected'] = 'Skript nije mogao da utvrdi verziju %s koju koristi vaš server. Proverite da li je najmanje %s.';
+$lang_install['version_undetected'] = 'Skript nije mogao da utvrdi verziju %s koju koristi vaš server. Proverite da li je najmanje verzija %s.';
 $lang_install['version_incompatible'] = 'Skript je pronašao nekompatibilnu verziju (%s) softvera %s na vašem serveru.<br />Pre nego što nastavite, obezbedite kompatibilnu verziju (%s ili novija)!';
 $lang_install['read_gif'] = 'Čitanje/upisivanje .gif fajla';
 $lang_install['read_png'] = 'Čitanje/upisivanje .png fajla';
@@ -1521,7 +1521,7 @@ $lang_install['read_error'] = 'Slika nije mogla biti pročitana.';
 $lang_install['combine_error'] = 'Slike nisu mogle da se kombinuju';
 $lang_install['text_error'] = 'Nije bilo moguće dodati tekst slici';
 $lang_install['scale_error'] = 'Sliku nije bilo moguće smanjiti';
-$lang_install['pixels'] = 'piksela';
+$lang_install['pixels'] = 'pikseli';
 $lang_install['combine'] = 'Kombinovati 2 slike';
 $lang_install['text'] = 'Upisati tekst na sliku';
 $lang_install['scale'] = 'Smanjiti sliku';
@@ -1722,7 +1722,7 @@ $lang_pluginmgr_php['confirm_uninstall'] = 'Jeste li sigurni da hoćete da DEINS
 $lang_pluginmgr_php['confirm_remove'] = 'UPOZORENJE: API za dodatke je isključen. Hoćete li da RUČNO UKLONITE ovaj dodatak, zanemarujući postupke čišćenja?'; // cpg1.5
 $lang_pluginmgr_php['confirm_delete'] = 'Jeste li sigurni da hoćete da OBRIŠETE ovaj dodatak?';
 $lang_pluginmgr_php['pmgr'] = 'Upravljanje dodacima';
-$lang_pluginmgr_php['explanation'] = 'Instalacija / deinstalacija / upravljanje dodacima uz pomoć ove strane.'; // cpg1.5
+$lang_pluginmgr_php['explanation'] = 'Instalacija / deinstalacija / upravljanje dodacima se vrši uz pomoć ove strane.'; // cpg1.5
 $lang_pluginmgr_php['plugin_enabled'] = 'API za dodatke uključen'; // cpg1.5
 $lang_pluginmgr_php['name'] = 'Ime';
 $lang_pluginmgr_php['author'] = 'Autor';
@@ -1760,11 +1760,11 @@ $lang_rate_pic_php['forbidden'] = 'Ne možete da ocenjujete sopstvene fajlove.';
 // ------------------------------------------------------------------------- //
 if (defined('REGISTER_PHP') || defined('PROFILE_PHP')) {
 $lang_register_php['disclamer'] = <<< EOT
-Iako će administratori sajta {SITE_NAME} pokušati da uklone ili promene bilo kakav materijal na koji se mogu uputiti zamerke što je pre moguće, nemoguće je pregledati sve što se postavi. Stoga, primite k znanju da sve što se postavi na sajt izražava stavove i mišljenja autora, a ne administratora ili kreatora sajta (osim onog što oni postave), pa se zato ne mogu smatrati odgovornim.<br />
+Iako će administratori sajta {SITE_NAME} pokušati da što je pre moguće uklone ili promene bilo kakav materijal na koji se mogu uputiti zamerke, nemoguće je pregledati sve što se postavi. Stoga, primite k znanju da sve što se postavi na sajt izražava stavove i mišljenja autora, a ne administratora ili kreatora sajta (osim onog što oni postave), pa se zato ne mogu smatrati odgovornim.<br />
 <br />
 Vi prihvatate da ne šaljete sadržaj koji je napad ili kleveta nekog, vulgaran, govor mržnje, pretnja, seksualno zlostavljanje ili bilo šta što može da krši bilo koji zakon koji se može primeniti. Prihvatate da kreator, administrator i nadzornici sajta {SITE_NAME} imaju pravo da uklone ili menjaju bilo koji sadržaj u bilo koje vreme. Kao korisnik, prihvatate da se sve informacije koje ste iznad naveli sačuvaju u bazi podataka. Iako ove informacije neće biti predavane trećim osobama bez vašeg odobrenja, kreator sajta i administrator ne mogu biti odgovorni za bilo kakav pokušaj upada u sajt koji može da dovede do kompromitovanja podataka.<br />
 <br />
-Ovaj sajt koristi kolačiće kako bi sačuvao podatke na vašem kompjuteru. Oni se koriste samo kako bi doneli veće zadovoljstvo pri pregledu sajta. Imejl adresa se koristi samo da bi se potvrdili detalji o vašoj registraciji i lozinka.<br />
+Ovaj sajt koristi kolačiće kako bi sačuvao podatke na vašem kompjuteru. Oni se koriste samo kako bi doprineli boljem pregledu sajta. Imejl adresa se koristi samo da bi se potvrdili detalji o vašoj registraciji i lozinka.<br />
 <br />
 Kad kliknete na 'Slažem se' ispod, prihvatate da budete obavezani ovim uslovima.
 EOT;
@@ -1825,11 +1825,11 @@ $lang_register_php['thank_you_admin_activation'] = 'Hvala.<br />Vaš zahtev za a
 $lang_register_php['acct_active_admin_activation'] = 'Nalog je sada aktivan i imejl je poslat korisniku.';
 $lang_register_php['notify_user_email_subject'] = '%s - Obaveštenje o aktivaciji';
 $lang_register_php['delete_my_account'] = 'Izbrisati svoj korisnički nalog'; // cpg1.5
-$lang_register_php['warning_delete'] = 'Upozorenje: kada se izbriše, nalog se ne može vratiti. Fajlovi (%s) i komentari (%s) koje ste poslali u javne albume se ne brišu kad izbrišete vaš nalog! Međutim, fajlovi koje ste poslali u svoju ličnu galeriju će biti izbrisani.'; // cpg1.5 // The %s-placeholders mustn't be removed, they will later be replaced by the wrappers for the links
+$lang_register_php['warning_delete'] = 'Upozorenje: kada se izbriše, nalog se ne može vratiti. Fajlovi (%s) i komentari (%s) koje ste poslali u javne albume se ne brišu kad izbrišete nalog! Međutim, fajlovi koje ste poslali u svoju ličnu galeriju će biti izbrisani.'; // cpg1.5 // The %s-placeholders mustn't be removed, they will later be replaced by the wrappers for the links
 $lang_register_php['i_am_sure'] = 'Siguran sam da hoću da izbrišem svoj korisnički nalog'; // cpg1.5
 $lang_register_php['really_delete'] = 'Da li stvarno hoćete da izbrišete svoj korisnički nalog?'; // cpg1.5 // js-alert
 $lang_register_php['edit_xs_profile'] = 'Menjanje profila %s'; // cpg1.5
-$lang_register_php['edit_my_profile'] = 'Menjati svoj profil'; // cpg1.5
+$lang_register_php['edit_my_profile'] = 'Menjanje svog profila'; // cpg1.5
 $lang_register_php['none'] = 'none'; // cpg1.5
 $lang_register_php['user_name_banned'] = 'Korisničko ime koje ste izabrali nije dozvoljeno/zabranjeno je. Izaberite drugo korisničko ime'; // cpg1.5
 $lang_register_php['email_address_banned'] = 'Zabranjeno vam je da koristite ovu galeriju. Nije vam dozvoljeno da se ponovo registrujete. Odlazite!'; // cpg1.5
@@ -1913,7 +1913,6 @@ $lang_reviewcom_php['approval'] = 'Odobreno'; // cpg1.5
 $lang_reviewcom_php['save_changes'] = 'Snimiti promene'; // cpg1.5
 $lang_reviewcom_php['n_confirm_delete'] = 'Da li zaista hoćete da izbrišete izabrane komentare?'; // cpg1.5
 $lang_reviewcom_php['with_selected'] = 'Sa izabranim'; // cpg1.5
-
 $lang_reviewcom_php['delete'] = 'obrisati'; // cpg1.5
 $lang_reviewcom_php['approve'] = 'odobriti'; // cpg1.5
 $lang_reviewcom_php['disapprove'] = 'označiti neodobrene'; // cpg1.5
@@ -1925,7 +1924,7 @@ $lang_reviewcom_php['akismet_status'] = 'Poruka Akismeta'; // cpg1.5
 $lang_reviewcom_php['is_spam'] = 'je spam'; // cpg1.5
 $lang_reviewcom_php['is_not_spam'] = 'nije spam'; // cpg1.5
 $lang_reviewcom_php['akismet'] = 'Akismet'; // cpg1.5
-$lang_reviewcom_php['akismet_count'] = 'Akismet je do sada pronašao %s spam poruka'; // cpg1.5
+$lang_reviewcom_php['akismet_count'] = 'Broj spam poruka koje je Akismet do sada pronašao - %s'; // cpg1.5
 $lang_reviewcom_php['akismet_test_result'] = 'Test rezultati za vaš API ključ %s'; // cpg1.5
 $lang_reviewcom_php['invalid'] = 'neispravno'; // cpg1.5
 $lang_reviewcom_php['missing_gallery_url'] = 'Morate da navedete URL adresu galerije u Coppermine podešavanjima'; // cpg1.5
@@ -1946,13 +1945,13 @@ $lang_sidebar_php['install_explain'] = 'Između mnogih zgodnih načina za brzo d
 $lang_sidebar_php['os_browser_detect'] = 'Traženje informacija o vašem OS i pregledaču'; // cpg1.5
 $lang_sidebar_php['os_browser_detect_explain'] = 'Skript pokušava da dobije informacije o verziji vašeg operativnog sistema i pregledača; molimo sačekajte trenutak. Ako automatsko traženje informacija ne uspe, možete da ručno %sprikažete%s sve mogućnosti instalacije bočne trake.'; // cpg1.5
 $lang_sidebar_php['mozilla'] = 'Mozilla, Firefox, Netscape 6+, Konqueror 3.2+'; // cpg1.5
-$lang_sidebar_php['mozilla_explain'] = 'Ako koristite Mozilla 0.9.4 ili kasniju verziju, možete da %sdodate našu bočnu traku vašoj grupi%s. Ovu bočnu traku možete da deinstalirate uz pomoć "Prilagodi bočnu traku" dijaloga u Mozili.'; // cpg1.5
+$lang_sidebar_php['mozilla_explain'] = 'Ako koristite Mozilla 0.9.4 ili kasniju verziju, možete da %sdodate našu bočnu traku vašoj grupi%s. Ovu bočnu traku možete da deinstalirate uz pomoć dijaloga "Prilagodi bočnu traku" u Mozili.'; // cpg1.5
 $lang_sidebar_php['ie_mac'] = 'Internet Explorer 5 i noviji na operativnom sistemu Mac OS'; // cpg1.5
-$lang_sidebar_php['ie_mac_explain'] = 'Aco koristite Internet Explorer 5 ili noviji na MacOSu, %sotvorite našu stranu za bočnu traku%s u posebnom prozoru. U tom prozoru otvorite "Page Holder" karticu na levoj strani prozora. Kliknite na "Add" (Dodaj). Ako hoćete da je sačuvate za ubuduće, kliknite na "Favorites" (Omiljene) i izaberite "Add to Page Holder Favorites" .'; // cpg1.5
+$lang_sidebar_php['ie_mac_explain'] = 'Ako koristite Internet Explorer 5 ili noviji na MacOSu, %sotvorite našu stranu za bočnu traku%s u posebnom prozoru. U tom prozoru otvorite "Page Holder" karticu na levoj strani prozora. Kliknite na "Add" (Dodaj). Ako hoćete da je sačuvate za ubuduće, kliknite na "Favorites" (Omiljene) i izaberite "Add to Page Holder Favorites".'; // cpg1.5
 $lang_sidebar_php['ie_win'] = 'Internet Explorer 5 i noviji na Windows operativnom sistemu'; // cpg1.5
 $lang_sidebar_php['ie_win_explain'] = 'Ako koristite Internet Explorer 5 ili noviji na Windowsu, možete da dodate bočnu traku vašoj traci sa vezama (Links toolbar) ili je možete dodati u omiljene (favorites) i kad kliknete na nju videćete je prikazanu tamo gde je obično traka za pretrage ako kliknete desnim dugmetom %sovde%s i izaberete "Add to favorites" (Dodaj u omiljene) iz menija. Ova veza ne instalira našu traku kao osnovnu traku za pretrage, pa nikakve promene nisu napravljene u vašem sistemu.'; // cpg1.5
 $lang_sidebar_php['ie7_win'] = 'Internet Explorer 7 na Windowsu XP/Vista'; // cpg1.5
-$lang_sidebar_php['ie7_win_explain'] = 'Ako koristite Internet Explorer 7 na Windowsu, možete dodati iskačući prozor za navigaciju vašoj traci sa linkovima ili je možete dodati u omiljene i kad kliknete na nju, videćete našu traku prikazanu kao iskačući prozor ako kliknete desnim dugmetom %sovde%s i izaberete "Add to favorites" (Dodaj u omiljene) iz menija. U prethodnim verzijama IE bilo je moguće dodati pravu bočnu traku, ali u IE7 ovo ne možete uraditi bez komplikovanih podešavanja registry baze. Ako ćelite pravu bočnu traku, preporučuje se da koristite drugi pregledač.'; // cpg1.5
+$lang_sidebar_php['ie7_win_explain'] = 'Ako koristite Internet Explorer 7 na Windowsu, možete dodati iskačući prozor za navigaciju vašoj traci sa linkovima ili je možete dodati u omiljene i kad kliknete na nju, videćete našu traku prikazanu kao iskačući prozor ako kliknete desnim dugmetom %sovde%s i izaberete "Add to favorites" (Dodaj u omiljene) iz menija. U prethodnim verzijama IE bilo je moguće dodati pravu bočnu traku, ali u IE7 ovo ne možete uraditi bez komplikovanih podešavanja registry baze. Ako želite pravu bočnu traku, preporučuje se da koristite drugi pregledač.'; // cpg1.5
 $lang_sidebar_php['opera'] = 'Opera 6 i novije'; // cpg1.5
 $lang_sidebar_php['opera_explain'] = 'Ako koristite Operu, možete da %skliknete na ovu vezu da dodate bočnu traku vašem skupu traka%s. Onda štiklirajte "Show in panel" (Prikazati u panelu). Možete da deinstalirate bočnu traku ako kliknete desnim dugmetom na njen jezičak i izaberete "Delete" (Izbrisati) iz menija.'; // cpg1.5
 $lang_sidebar_php['additional_options'] = 'Dodatne opcije'; // cpg1.5
@@ -2029,7 +2028,7 @@ $lang_search_new_php['check_all'] = 'Izabrati SVE';
 $lang_search_new_php['uncheck_all'] = 'Isključiti SVE';
 $lang_search_new_php['no_folders'] = 'Još uvek nema folder u folderu "albumi". Napravite najmanje jedan folder unutar foldera "albumi" i pošaljite svoje fajlove tamo preko FTP. Ne smete da snimate u foldere "userpics" ili "edit", oni su rezervisani za http slanje i interne potrebe.';
 $lang_search_new_php['browse_batch_add'] = 'Okruženje sa pregledom'; // cpg1.5
-$lang_search_new_php['display_thumbs_batch_add'] = 'Prikaz sličica za prikaz'; // cpg1.5
+$lang_search_new_php['display_thumbs_batch_add'] = 'Prikazivanje sličica za prikaz'; // cpg1.5
 $lang_search_new_php['edit_pics'] = 'Menjanje fajlova';
 $lang_search_new_php['edit_properties'] = 'Svojstva albuma';
 $lang_search_new_php['view_thumbs'] = 'Pregled sličica';
@@ -2156,7 +2155,7 @@ $lang_upload_php['xp_publish_promote'] = 'Ako koristite Windows XP/Vista, možet
 $lang_upload_php['err_js_disabled'] = 'Flash okruženje za slanje nije moglo da se učita. Morate da uključite JavaScript kako biste koristili flash slanje.'; // cpg1.5
 $lang_upload_php['err_flash_disabled'] = 'Okruženju za slanje je potrebno mnogo vremena da se učita ili učitavanje nije uspelo. Molimo proverite da li je Flash dodatak uključen i da li je ispravna verzija Flash plejera instalirana.'; // cpg1.5
 $lang_upload_php['err_alternate_method'] = 'Ili možete da koristite okruženje za <a href="upload.php?single=1">pojedinačno</a> slanje fajlova.'; // cpg1.5
-$lang_upload_php['err_flash_version'] = 'Okrućenje za slanje ne može da se učita. Možda treba da instalirate ili osvežite Flash plejer. Posetite <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">sajt Adobe</a> kako biste preuzeli najnoviji Flash plejer.'; // cpg1.5
+$lang_upload_php['err_flash_version'] = 'Okruženje za slanje ne može da se učita. Možda treba da instalirate ili osvežite Flash plejer. Posetite <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Adobe sajt</a> kako biste preuzeli najnoviji Flash plejer.'; // cpg1.5
 $lang_upload_php['flash_loading'] = 'Okruženje za slanje se učitava. Molimo sačekajte...'; // cpg1.5
 
 $lang_upload_swf_php['browse'] = 'Pronaći...'; //cpg1.5
@@ -2439,7 +2438,6 @@ $lang_versioncheck_php['newer'] = 'novije od %s';
 $lang_versioncheck_php['modified'] = 'promenjeno';
 $lang_versioncheck_php['not_modified'] = 'nepromenjeno'; // cpg1.5
 $lang_versioncheck_php['needs_change'] = 'treba da se promeni';
-
 $lang_versioncheck_php['review_permissions'] = 'Proveriti dozvole';
 $lang_versioncheck_php['inaccessible'] = 'Fajl nije dostupan';
 $lang_versioncheck_php['review_version'] = 'Vaš fajl je zastareo';
@@ -2515,7 +2513,7 @@ $lang_xp_publish_php['howto_install'] = 'Kako istalirati'; // cpg1.5
 $lang_xp_publish_php['install_right_click'] = 'Kliknite desnim dugmetom na %sovu vezu%s i izaberite &quot;save target as...&quot(snimiti);'; // cpg1.5 // translator note: don't replace the %s - that placeholder token needs to go untranslated
 $lang_xp_publish_php['install_save'] = 'Snimite fajl na svoj disk. Kad ga snimate, proverite da li je ponuđeno ime <tt>cpg_###.reg</tt> (### je numerički kod za vreme). Ako je potrebno, upišite to ime (ne dirajte brojeve)'; // cpg1.5
 $lang_xp_publish_php['install_execute'] = 'Kad se snimanje završi, pokrenite fajl dvostrukim klikom kako biste registrovali server pomoću alata web publishing wizard'; // cpg1.5
-$lang_xp_publish_php['usage'] = 'Usage'; // cpg1.5
+$lang_xp_publish_php['usage'] = 'Korišćenje'; // cpg1.5
 $lang_xp_publish_php['select_files'] = 'U Windows Exploreru, izaberite fajlove koje hoćete da pošaljete'; // cpg1.5
 $lang_xp_publish_php['display_tasks'] = 'Proverite da se u levoj traci Explorera ne prikazuju folderi'; // cpg1.5
 $lang_xp_publish_php['publish_on_the_web'] = 'kliknite na &quot;Publish xxx on the web&quot; (objaviti xxx na mreži) u levom delu prozora'; // cpg1.5
@@ -2524,7 +2522,7 @@ $lang_xp_publish_php['select_service'] = 'U spisku servisa koji se pojavi, izabe
 $lang_xp_publish_php['enter_login'] = 'Ako je potrebno, unesite informacije za prijavu'; // cpg1.5
 $lang_xp_publish_php['select_album'] = 'Izaberite album za vaše slike ili napravite novi'; // cpg1.5
 $lang_xp_publish_php['next'] = 'Kliknite na &quot;next&quot (dalje);'; // cpg1.5
-$lang_xp_publish_php['upload_starts'] = 'Postavljanje vaših slika bi trebalo da počne'; // cpg1.5
+$lang_xp_publish_php['upload_starts'] = 'Postavljanje slika bi trebalo da počne'; // cpg1.5
 $lang_xp_publish_php['upload_completed'] = 'Kad se završi, proverite u galeriji da li su slike ispravno poslate'; // cpg1.5
 $lang_xp_publish_php['welcome'] = 'Dobrodošli <strong>%s</strong>,';
 $lang_xp_publish_php['need_login'] = 'Morate da se prijavite u galeriju uz pomoć Internet Explorera pre nego što počnete da koristite ovu mogućnost.<p/><p>Kad se prijavljujete, ne zaboravite da uključite opciju &quot;Zapamtiti&quot; ako postoji.';
@@ -2555,7 +2553,7 @@ $lang_plugin_php['sample_output'] = 'Ovo je uzorak teksta koji je proizveo ovaj 
 $lang_plugin_php['opensearch_config_name'] = 'OpenSearch'; // cpg1.5
 $lang_plugin_php['opensearch_config_description'] = 'Primena skripta <a href="http://www.opensearch.org/" rel="external" class="external">OpenSearch</a> za Coppermine.<br />Kad je uključen, posetioci će moći da dodaju vašu galeriju u traku za pretraživanje u njihovim pregledačima.'; // cpg1.5
 $lang_plugin_php['opensearch_search'] = 'Tražiti %s'; // cpg1.5
-$lang_plugin_php['opensearch_extra'] = 'Možda biste hteli da stavite kraći tekst na sajtu sa opisom funkcija ovog dodatka'; // cpg1.5
+$lang_plugin_php['opensearch_extra'] = 'Možda biste hteli da stavite kratak opis funkcije ovog dodatka na sajt'; // cpg1.5
 $lang_plugin_php['opensearch_failed_to_open_file'] = 'Otvaranje fajla %s nije uspelo - proverite dozvole'; // cpg1.5
 $lang_plugin_php['opensearch_failed_to_write_file'] = 'Upisivanje u fajl %s nije uspelo - proverite dozvole'; // cpg1.5
 $lang_plugin_php['opensearch_form_header'] = 'Unesite detalje koji će se koristiti za fajl sa opisom'; // cpg1.5
