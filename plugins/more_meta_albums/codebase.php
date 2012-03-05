@@ -549,7 +549,7 @@ function mma_meta_album($meta) {
                 break;
             }
 
-            $query = "SELECT p.*
+            $query = "SELECT p.*, r.title
                     FROM {$CONFIG['TABLE_PICTURES']} AS p
                     INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = p.aid
                     $RESTRICTEDWHERE
