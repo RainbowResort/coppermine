@@ -82,7 +82,7 @@ if ($superCage->get->keyExists('album')) {
 
 } else {
     get_meta_album_set(0);
-    $query = "SELECT pid,ctime,title,keywords,filepath,filename,caption,u.user_name FROM {$CONFIG['TABLE_PICTURES']} r, {$CONFIG['TABLE_USERS']} u
+    $query = "SELECT pid,aid,filepath,filename,url_prefix,pwidth,pheight,filesize,ctime,title,keywords,votes,pic_rating,hits,caption,owner_id,u.user_name FROM {$CONFIG['TABLE_PICTURES']} r, {$CONFIG['TABLE_USERS']} u
             $RESTRICTEDWHERE AND r.owner_id = u.user_id AND approved = 'YES' ORDER BY pid DESC LIMIT 0, {$XFDSET['xfd_feed_items']}";;
     $result = cpg_db_query($query);
     $pic_data = cpg_db_fetch_rowset($result);
@@ -133,23 +133,23 @@ function rss20() {
     foreach ($pic_data as $row) {
         $title = $row['title'] ? $row['title'] : $row['filename'];
         print "\t<item>\n";
-        print "\t\t<title>".htmlentities($title)."</title>\n";
+        print "\t\t<title>".htmlspecialchars ($title, ENT_COMPAT, $CONFIG['charset'])."</title>\n";
         print "\t\t<link>$base/displayimage.php?pid={$row['pid']}</link>\n";
         print "\t\t<dc:creator>{$row['owner_name']}</dc:creator>\n";
         print "\t\t<pubDate>" . lmdate($row['ctime']) . "</pubDate>\n";
         print "\t\t<description>";
-        echo  htmlentities("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>");
-        echo  htmlentities("<p>{$row['caption']}&nbsp;</p>");
-        echo  htmlentities("<p>{$row['keywords']}</p>");
+        echo  htmlspecialchars ("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>", ENT_COMPAT, $CONFIG['charset']);
+        echo  htmlspecialchars ("<p>" . bb_decode($row['caption']) ."&nbsp;</p>", ENT_COMPAT, $CONFIG['charset']);
+        echo  htmlspecialchars ("<p>" . bb_decode($row['keywords']) . "</p>", ENT_COMPAT, $CONFIG['charset']);
 
         if (isset($row['msg_body']) && !empty($row['msg_body'])) {
             // We have comment for the photo. Must be lastcom metaalbum feed. Display the comment
-            echo  htmlentities("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
+            echo  htmlspecialchars ("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>", ENT_COMPAT, $CONFIG['charset']);
             if ($CONFIG['enable_smilies']) {
                 include_once("include/smilies.inc.php");
                 $row['msg_body'] = process_smilies($row['msg_body']);
             }
-            echo  htmlentities("<p>".bb_decode($row['msg_body'])."&nbsp;</p>");
+            echo  htmlspecialchars ("<p>" . bb_decode($row['msg_body']) . "&nbsp;</p>", ENT_COMPAT, $CONFIG['charset']);
         }
 
         print "</description>\n";
@@ -193,18 +193,18 @@ function atom10() {
         print "\t\t<id>$base/displayimage.php?pid={$row['pid']}</id>\n";
         print "\t\t<updated>" . rfc3339date($row['ctime']) . "</updated>\n";
         print "\t\t<content type=\"html\">\n";
-        echo  htmlentities("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>");
-        echo  htmlentities("<p>{$row['caption']}&nbsp;</p>");
-        echo  htmlentities("<p>{$row['keywords']}</p>");
+        echo  htmlspecialchars ("<p><img src=\"$base/".get_pic_url($row, 'thumb')."\" alt=\"{$row['filename']}\" /></p>", ENT_COMPAT, $CONFIG['charset']);
+        echo  htmlspecialchars ("<p>" . bb_decode($row['caption']) ."&nbsp;</p>", ENT_COMPAT, $CONFIG['charset']);
+        echo  htmlspecialchars ("<p>" . bb_decode($row['keywords']) . "</p>", ENT_COMPAT, $CONFIG['charset']);
 
         if (isset($row['msg_body']) && !empty($row['msg_body'])) {
             // We have comment for the photo. Must be lastcom metaalbum feed. Display the comment
-            echo  htmlentities("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>");
+            echo  htmlspecialchars ("<p><b>Comment:</b> (<i>".date('Y-m-d H:m:s', $row['msg_date'])."</i>) - {$row['msg_author']}</p>", ENT_COMPAT, $CONFIG['charset']);
             if ($CONFIG['enable_smilies']) {
                 include_once("include/smilies.inc.php");
                 $row['msg_body'] = process_smilies($row['msg_body']);
             }
-            echo  htmlentities("<p>".bb_decode($row['msg_body'])."&nbsp;</p>");
+            echo  htmlspecialchars ("<p>" . bb_decode($row['msg_body']) . "&nbsp;</p>", ENT_COMPAT, $CONFIG['charset']);
         }
 
         print "\n\t\t</content>\n";

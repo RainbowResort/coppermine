@@ -17,7 +17,8 @@
 #  **************************************************/
   
   CREATE TABLE IF NOT EXISTS `CPG_plugin_xfeeds` (
-    `xfd_rss_button` int(2) NOT NULL default '1',
+  	`xfd_rss_button` int(2) NOT NULL default '1',
+  	`xfd_rss_button_position` int(2) NOT NULL default '0',
 	`xfd_standard` int(2) NOT NULL default '1',
 	`xfd_google` int(2) NOT NULL default '1',
 	`xfd_yahoo` int(2) NOT NULL default '1',

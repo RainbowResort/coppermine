@@ -20,7 +20,7 @@
 $name = 'XFeeds';
 $description = 'XFeeds - RSS for Coppermine 1.5';
 $author = '<a href="http://www.adityamooley.net">Aditya Mooley</a>';
-$version = '1.10';
+$version = '1.11';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
 <table border="0" cellspacing="0" cellpadding="0">

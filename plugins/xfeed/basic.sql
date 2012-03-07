@@ -18,6 +18,7 @@
   
   INSERT INTO `CPG_plugin_xfeeds` (
     xfd_rss_button,
+	xfd_rss_button_position,
 	xfd_standard,
 	xfd_google,
 	xfd_yahoo,
@@ -46,6 +47,7 @@
     xfd_feed_items)
 VALUES (
     1,
+	0,
 	1,
 	1,
 	1,

@@ -37,6 +37,7 @@ if ($lang_text_dir == 'ltr') {
 
 if($superCage->post->keyExists('update')) {
     $xfd_rss_button = $superCage->post->getEscaped('xfd_rss_button');
+    $xfd_rss_button_position = $superCage->post->getEscaped('xfd_rss_button_position');
     $xfd_feed_items = $superCage->post->testInt('xfd_feed_items') ? $superCage->post->getInt('xfd_feed_items') : 10;
     $xfd_standard = $superCage->post->getEscaped('xfd_standard');
     $xfd_google = $superCage->post->getEscaped('xfd_google');
@@ -65,6 +66,7 @@ if($superCage->post->keyExists('update')) {
     $xfd_theme = $superCage->post->getEscaped('xfd_theme');
 
     $s  = "UPDATE `{$CONFIG['TABLE_PREFIX']}plugin_xfeeds` SET ";
+    $s .= "xfd_rss_button_position=($xfd_rss_button_position),";
     $s .= "xfd_rss_button=($xfd_rss_button),";
     $s .= "xfd_feed_items=($xfd_feed_items),";
     $s .= "xfd_standard=($xfd_standard),xfd_google=($xfd_google),";
@@ -109,6 +111,15 @@ echo $xfdchk_row['name'];
               <select name="xfd_rss_button" id="xfd_rss_button">
                 <option value="1" <?php if($XFDSET['xfd_rss_button'] == 1) echo 'selected="selected"';?>><?php echo $lang_xfeeds['xfd_yes']?></option>
                 <option value="0" <?php if($XFDSET['xfd_rss_button'] == 0) echo 'selected="selected"';?>><?php echo $lang_xfeeds['xfd_no']?></option>
+          </select>
+          </td>
+        </tr>
+        <tr>
+          <td align="right"><?php echo $lang_xfeeds['xfd_rss_button_position']; ?>&nbsp;&nbsp;</td>
+          <td>
+              <select name="xfd_rss_button_position" id="xfd_rss_button_position">
+                <option value="1" <?php if($XFDSET['xfd_rss_button_position'] == 1) echo 'selected="selected"';?>><?php echo $lang_xfeeds['xfd_rss_button_position_template']?></option>
+                <option value="0" <?php if($XFDSET['xfd_rss_button_position'] == 0) echo 'selected="selected"';?>><?php echo $lang_xfeeds['xfd_rss_button_position_gallery']?></option>
           </select>
           </td>
         </tr>

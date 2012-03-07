@@ -21,8 +21,13 @@ if (!defined('IN_COPPERMINE')) {
     die('Not in Coppermine...');
 }
 
-// RSS Button
-$thisplugin->add_filter('gallery_header','xfd_rss_button');
+
+// RSS Button in template
+$thisplugin->add_filter('template_html','xfd_rss_button_template');
+
+// RSS Button in gallery header
+$thisplugin->add_filter('gallery_header','xfd_rss_button_gallery');
+
 
 // Add page start action for admin button.
 $thisplugin->add_filter('admin_menu','xfd_add_config_button');
@@ -42,10 +47,37 @@ global $XFDSET,$lang_xfeeds;
 require('./plugins/xfeed/include/init.inc.php');
 require('./plugins/xfeed/include/load_xfdset.php');
 
+function xfd_rss_button_template($template) {
+  global $XFDSET;
+
+    $gallery_pos = strpos($template, '{XFD_BUTTON}');
+    if ($gallery_pos) {
+      if ($XFDSET['xfd_rss_button_position'] != '1' || !$XFDSET['xfd_rss_button']) {
+               $template    = str_replace('{XFD_BUTTON}', '', $template); // Remove the token from the output if the corresponding plugin config option hasn't been enabled
+          } else {
+               $template    = str_replace('{XFD_BUTTON}', xfd_rss_button(''), $template);
+          }
+    } else { // There's no placeholder token {XFD_BUTTON} inside $template
+          if ($XFDSET['xfd_rss_button_position'] != '1') {
+              return $template;
+          } else {
+            // fallback if no placeholder token {XFD_BUTTON}
+              $template = str_replace('{GALLERY}', xfd_rss_button('') . '{GALLERY}', $template);
+          }
+    }
+      return $template;
+}
 
 // rss button
-function xfd_rss_button($template_header)
-{
+function xfd_rss_button_gallery($template_header) {
+    global $XFDSET;
+    if (!$XFDSET['xfd_rss_button'] || !$XFDSET['xfd_rss_button_position'] == '0') {
+        return $template_header;
+    }
+    return $template_header.xfd_rss_button();
+}
+// rss button
+function xfd_rss_button() {
     global $XFDSET,$lang_xfeeds,$CONFIG, $album;
 
     $superCage = Inspekt::makeSuperCage();
