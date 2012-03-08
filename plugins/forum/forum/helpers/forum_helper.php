@@ -71,9 +71,17 @@ class forum {
     function paging($paging = array()) {
         $html = "";
         if ($paging['total'] != 0) {
-        $number_of_page = ceil($paging['total'] / $paging['limit']);
-        $current_page   = ceil($paging['start'] / $paging['limit']) + 1;
-        if ($current_page == 0) $current_page = 1;
+            $number_of_page = ceil($paging['total'] / $paging['limit']); //total
+            $current_page   = ceil($paging['start'] / $paging['limit']) + 1; //current
+            if ($current_page == 0) { 
+                $current_page = 1;
+            }
+
+            if ($current_page > 1) {
+                $previous = ($current_page * $paging['limit']) - ($paging['limit'] * 2);
+                $html .= "<a href=\"{$paging['pattern']}&start={$previous}\"><<</a>&nbsp;";
+            }
+
             for ($i=1;$i<=$number_of_page;$i++) {
                 $current_start = ($i-1)*$paging['limit'];
                 if ($current_page == $i) {
@@ -82,8 +90,16 @@ class forum {
                     $html .= "<a href=\"{$paging['pattern']}&start={$current_start}\">{$i}</a>" . NBSP . NBSP;
                 }
             }
+
+            if ($current_page < $number_of_page) {
+                $next = $current_page * $paging['limit'];
+                $html .= "<a href=\"{$paging['pattern']}&start={$next}\">>></a>";
+            }
+
             return $html;
-        } else return TRUE;
+        } else {
+            return TRUE;
+        }
     }
 
     function board_move_box($board_move_data, $board_id, $cat_id, $child_level, $parent_id) {

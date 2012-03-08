@@ -14,7 +14,7 @@
 #  $Date$
 #  **************************************************/
 
-UPDATE `CPG_config` SET value='2.1/Beta/7' where name='fr_version';
+UPDATE `CPG_config` SET value='2.1/Beta/8' where name='fr_version';
 
 CREATE TABLE IF NOT EXISTS `CPG_fr_notify` (
   `user_id` int(10) NOT NULL default '0',

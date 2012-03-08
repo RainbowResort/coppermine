@@ -121,7 +121,7 @@ include(BASE_DIR.'plugins'.DS.'forum'.DS.'forum'.DS.'import.php');
 include(BASE_DIR.'plugins'.DS.'forum'.DS.'forum'.DS.'initialize.php');
 //\$fr_time_end = cpgGetMicroTime();
 //echo round(\$fr_time_end - \$fr_time_start, 3);
-if (!USER_ID && ($CONFIG['fr_guest_browse'] == 0)) {
+if (!USER_ID && (\$CONFIG['fr_guest_browse'] == 0)) {
     header("Location: login.php?force_login=1&referer=forum.php");
     exit();
 }
