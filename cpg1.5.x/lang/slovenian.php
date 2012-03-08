@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Kjučne besede (ločene z %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Vstavi s seznama'; // cpg1.5
 $lang_common['keyword_separator'] = 'Ločilnik ključnih besed'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'presledek', ','=>'pika', ';'=>'podpičje'); // cpg1.5
+$lang_common['owner_name'] = 'Ime lastnika'; // cpg1.5
 $lang_common['filename'] = 'Ime datoteke'; // cpg1.5
 $lang_common['filesize'] = 'Velikost datoteke'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

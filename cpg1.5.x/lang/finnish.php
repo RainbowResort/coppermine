@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Avainsanat (erottajana on %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Lisää listasta'; // cpg1.5
 $lang_common['keyword_separator'] = 'Avainsanojen erotin'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'välilyönti', ','=>'pilkku', ';'=>'puolipiste'); // cpg1.5
+$lang_common['owner_name'] = 'Käyttäjä'; // cpg1.5
 $lang_common['filename'] = 'Tiedostonimi'; // cpg1.5
 $lang_common['filesize'] = 'Tiedostokoko'; // cpg1.5
 $lang_common['album'] = 'Albumi'; // cpg1.5

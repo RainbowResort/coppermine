@@ -111,6 +111,7 @@ $lang_common['keywords_insert1'] = 'Palabras Clave (separadas por %s)'; // cpg1.
 $lang_common['keywords_insert2'] = 'Inserta desde la lista'; // cpg1.5
 $lang_common['keyword_separator'] = 'Separador de Palabras Clave'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'Espacio', ','=>'Coma', ';'=>'Punto y Coma'); // cpg1.5
+$lang_common['owner_name'] = 'Nombre del Propietario'; // cpg1.5
 $lang_common['filename'] = 'Nombre de foto'; // cpg1.5
 $lang_common['filesize'] = 'Tamaño de foto'; // cpg1.5
 $lang_common['album'] = 'Álbum'; // cpg1.5

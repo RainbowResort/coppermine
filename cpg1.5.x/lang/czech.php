@@ -117,6 +117,7 @@ $lang_common['keywords_insert1'] = 'Klíčová slova (oddělovač %s)'; // cpg1.
 $lang_common['keywords_insert2'] = 'Vložit ze seznamu'; // cpg1.5
 $lang_common['keyword_separator'] = 'Oddělovač klíčových slov'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'mezera', ','=>'čárka', ';'=>'středník'); // cpg1.5
+$lang_common['owner_name'] = 'Název vlastníka'; // cpg1.5
 $lang_common['filename'] = 'Název souboru'; // cpg1.5
 $lang_common['filesize'] = 'Velikost souboru'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

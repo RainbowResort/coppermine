@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Nøgleord (adskilt med %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Indsæt fra liste'; // cpg1.5
 $lang_common['keyword_separator'] = 'Nøgleords separator'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'mellemrum', ','=>'komma', ';'=>'semikolon'); // cpg1.5
+$lang_common['owner_name'] = 'Ejers navn'; // cpg1.5
 $lang_common['filename'] = 'Filnavn'; // cpg1.5
 $lang_common['filesize'] = 'Filstørrelse'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

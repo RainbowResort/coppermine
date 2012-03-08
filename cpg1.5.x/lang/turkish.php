@@ -122,7 +122,7 @@ $lang_common['keywords_insert1'] = 'Anahtar kelimeler (%s ile ayırtmak)'; // cp
 $lang_common['keywords_insert2'] = 'Listeden eklemek'; // cpg1.5
 $lang_common['keyword_separator'] = 'Kelimeler ayırıcı'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'space', ','=>'Virgül', ';'=>'Noktalı virgül'); // cpg1.5
-$lang_common['owner_name'] = 'Sahip'; // cpg1.5
+$lang_common['owner_name'] = 'Sahibinin adı'; // cpg1.5
 $lang_common['filename'] = 'Dosya adı'; // cpg1.5
 $lang_common['filesize'] = 'Dosya boyutu'; // cpg1.5
 $lang_common['album'] = 'Albüm'; // cpg1.5

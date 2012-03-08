@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Keywords (separate with %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Insert from list'; // cpg1.5
 $lang_common['keyword_separator'] = 'Keyword separator'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'space', ','=>'comma', ';'=>'semicolon'); // cpg1.5
+$lang_common['owner_name'] = 'Owner name'; // cpg1.5
 $lang_common['filename'] = 'Filename'; // cpg1.5
 $lang_common['filesize'] = 'Filesize'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Stikkorð (aðskilja með %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Setja inn frá lista'; // cpg1.5
 $lang_common['keyword_separator'] = 'Aðskilur stikkorð'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'bil', ','=>'komma', ';'=>'semíkomma'); // cpg1.5
+$lang_common['owner_name'] = 'Eigandinafn'; // cpg1.5
 $lang_common['filename'] = 'Skrárnafn'; // cpg1.5
 $lang_common['filesize'] = 'Skrársafn'; // cpg1.5
 $lang_common['album'] = 'Myndasafn'; // cpg1.5

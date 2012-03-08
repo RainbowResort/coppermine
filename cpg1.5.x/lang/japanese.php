@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'キーワード (セパレータ: %s)';
 $lang_common['keywords_insert2'] = 'リストから追加する';
 $lang_common['keyword_separator'] = 'キーワードセパレータ';
 $lang_common['keyword_separators'] = array(' '=>'スペース', ','=>'カンマ', ';'=>'セミコロン');
+$lang_common['owner_name'] = '所有者名';
 $lang_common['filename'] = 'ファイル名';
 $lang_common['filesize'] = 'ファイルサイズ';
 $lang_common['album'] = 'アルバム';

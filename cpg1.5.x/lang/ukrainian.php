@@ -114,6 +114,7 @@ $lang_common['keywords_insert1'] = 'Ключові слова (розділяй�
 $lang_common['keywords_insert2'] = 'Вставити зі списку'; // cpg1.5
 $lang_common['keyword_separator'] = 'Роздільник ключових слів'; // cpg1.5
 $lang_common['keyword_separators'] = array ('' => 'пробіл',','=>' кома ',';'=>' крапка з комою'); // cpg1.5
+$lang_common['owner_name'] = 'Власник'; // cpg1.5
 $lang_common['filename'] = 'Файл'; // cpg1.5
 $lang_common['filesize'] = 'Розмір файлу'; // cpg1.5
 $lang_common['album'] = 'Альбом'; // cpg1.5

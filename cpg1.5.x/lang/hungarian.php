@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Kulcsszavak (elkülönítve így: %s)'; // c
 $lang_common['keywords_insert2'] = 'Beszúrás listáról'; // cpg1.5
 $lang_common['keyword_separator'] = 'Kulcsszó elkülönítése'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'szóköz', ','=>'vessző', ';'=>'pontosvessző'); // cpg1.5
+$lang_common['owner_name'] = 'Tulajdonos neve'; // cpg1.5
 $lang_common['filename'] = 'Fájlnév'; // cpg1.5
 $lang_common['filesize'] = 'Fájlméret'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

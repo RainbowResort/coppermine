@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Keywords (getrennt matt %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Aus der Lëscht ausfëllen'; // cpg1.5
 $lang_common['keyword_separator'] = 'Keyword Trenn-zeechen'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'Espace', ','=>'Komma', ';'=>'Semicolon'); // cpg1.5
+$lang_common['owner_name'] = 'Owner name'; // cpg1.5
 $lang_common['filename'] = 'Dateinumm'; // cpg1.5
 $lang_common['filesize'] = 'Gréisst vun der Datei'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5

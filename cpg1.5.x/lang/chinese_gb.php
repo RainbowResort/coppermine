@@ -121,7 +121,7 @@ $lang_common['keywords_insert1'] = '关键词 用%s分开)'; // cpg1.5
 $lang_common['keywords_insert2'] = '从列表中插入'; // cpg1.5
 $lang_common['keyword_separator'] = '关键字分离器'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'空格', ','=>'逗号', ';'=>'分号'); // cpg1.5
-///$lang_common['owner_name'] = '画家名称'; // cpg1.5
+$lang_common['owner_name'] = '作者'; // cpg1.5
 $lang_common['filename'] = '作品名'; // cpg1.5
 $lang_common['filesize'] = '作品尺寸'; // cpg1.5
 $lang_common['album'] = '展厅'; // cpg1.5

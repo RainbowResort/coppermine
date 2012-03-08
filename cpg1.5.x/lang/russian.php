@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Ключевые слова (раздели�
 $lang_common['keywords_insert2'] = 'Вставить из списка'; // cpg1.5
 $lang_common['keyword_separator'] = 'Разделитель ключевых слов'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'пробел', ','=>'запятая', ';'=>'точка с запятой'); // cpg1.5
+$lang_common['owner_name'] = 'Имя владельца'; // cpg1.5
 $lang_common['filename'] = 'Имя файла'; // cpg1.5
 $lang_common['filesize'] = 'Размер файла'; // cpg1.5
 $lang_common['album'] = 'Альбом'; // cpg1.5

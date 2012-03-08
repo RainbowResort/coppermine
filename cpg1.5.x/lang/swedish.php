@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'Nyckelord (avdelade med %s)'; // cpg1.5
 $lang_common['keywords_insert2'] = 'Infoga från lista'; // cpg1.5
 $lang_common['keyword_separator'] = 'Nyckelordsavdelare'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'blanktecken', ','=>'komma', ';'=>'semikolon'); // cpg1.5
+$lang_common['owner_name'] = 'Ägarens namn'; // cpg1.5
 $lang_common['filename'] = 'Filnamn'; // cpg1.5
 $lang_common['filesize'] = 'Filstorlek'; // cpg1.5
 $lang_common['album'] = 'Album'; // cpg1.5
@@ -2580,7 +2581,7 @@ $lang_plugin_php['onlinestats_remove'] = 'Radera tabellen som använts för att 
 $lang_plugin_php['link_target_name'] = 'Mållänk';
 $lang_plugin_php['link_target_description'] = 'Ändrar det sätt som externa länkar öppnas: när den här insticksmodulen aktiveras, kommer alla länkas som har attributet rel="external" att öppnas i ett nytt fönster (istället för i samma fönster).';
 $lang_plugin_php['link_target_extra'] = 'Denna insticksmodul påverkar mest "Powered by Coppermine" länken i nederst på sidan.';
-	$lang_plugin_php['link_target_recommendation'] = 'Det rekommenderas att inte använda den här insticksmodulen, eftersom användarna upplever det som jobbigt när varje länk öppnas i nytt fönster.';
+$lang_plugin_php['link_target_recommendation'] = 'Det rekommenderas att inte använda den här insticksmodulen, eftersom användarna upplever det som jobbigt när varje länk öppnas i nytt fönster.';
 }
 
 ?>

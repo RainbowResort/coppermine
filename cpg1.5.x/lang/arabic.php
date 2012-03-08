@@ -115,6 +115,7 @@ $lang_common['keywords_insert1'] = 'الكلمات الإستدلالية (ال�
 $lang_common['keywords_insert2'] = 'إدخال من قائمة'; // cpg1.5
 $lang_common['keyword_separator'] = 'فاصل الكلمات الإستدلالية'; //cpg1.5
 $lang_common['keyword_separators'] = array(' '=>'مسافة', ','=>'فاصلة', ';'=>'فاصلة نقطية'); // cpg1.5
+$lang_common['owner_name'] = 'اسم المالك'; // cpg1.5
 $lang_common['filename'] = 'اسم الصورة'; // cpg1.5
 $lang_common['filesize'] = 'حجم الملف'; // cpg1.5
 $lang_common['album'] = 'ألبوم'; // cpg1.5
