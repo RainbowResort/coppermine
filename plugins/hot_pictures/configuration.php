@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/hot_pictures/configuration.php $
-  $Revision: 7804 $
-  $LastChangedBy: timoswelt $
-  $Date: 2010-07-31 19:08:54 +0200 (Sa, 31 Jul 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
 require_once "./plugins/hot_pictures/lang/english.php";

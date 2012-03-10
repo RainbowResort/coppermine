@@ -1,4 +1,22 @@
 <?php
+/**************************************************
+  Coppermine 1.5.x Plugin - Hot pictures
+  *************************************************
+  Copyright (c) 2012 eenemeenemuu
+  *************************************************
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.
+  ********************************************
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
+**************************************************/
+
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 if (USER_ID) {
     $pid = $superCage->get->getInt('pid');
     $days = $superCage->get->getInt('hot');

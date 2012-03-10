@@ -9,10 +9,10 @@
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/hot_pictures/codebase.php $
-  $Revision: 8146 $
-  $LastChangedBy: eenemeenemuu $
-  $Date: 2010-12-22 15:28:20 +0100 (Mi, 22 Dez 2010) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
