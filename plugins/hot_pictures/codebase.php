@@ -17,16 +17,22 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
+
+// Configuration
+function hot_pictures_button_array() {
+    $buttons = array(1, 2, 3);
+    return $buttons;
+}
+
+
 // Buttons
 $thisplugin->add_filter('file_data', 'hot_pictures_file_data');
 function hot_pictures_file_data($data) {
     if (USER_ID) {
         global $CURRENT_PIC_DATA, $lang_plugin_hot_pictures;
         $superCage = Inspekt::makeSuperCage();
-        if ($superCage->get->keyExists('set')) {
-            $set[$superCage->get->getInt('set')] = ' border-width: 5px;';
-        }
-        $buttons = <<<EOT
+
+        $buttons = "
             <style>
                 .hotbutton, .hotbutton:link, .hotbutton:hover, .hotbutton:visited, .hotbutton:active {
                     padding: 10px;
@@ -35,13 +41,24 @@ function hot_pictures_file_data($data) {
                     text-decoration: none;
                 }
             </style>
-            <a href="index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0" class="hotbutton" style="background: #ccc;{$set[0]}">{$lang_plugin_hot_pictures['hot0']}</a>
-            <a href="index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=1" class="hotbutton" style="background: #f88;{$set[1]}">{$lang_plugin_hot_pictures['hot1']}</a>
-            <a href="index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=2" class="hotbutton" style="background: #f44;{$set[2]}">{$lang_plugin_hot_pictures['hot2']}</a>
-            <a href="index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=3" class="hotbutton" style="background: #f00;{$set[3]}">{$lang_plugin_hot_pictures['hot3']}</a>
-            <br />&nbsp;
-EOT;
-        $data['html'] = str_replace('</td>', $buttons.'</td>', $data['html']);
+            &nbsp;<br />
+            <a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0\" class=\"hotbutton\" style=\"background: #ccc;{$set[0]}\">{$lang_plugin_hot_pictures['hot0']}</a>
+        ";
+        foreach (hot_pictures_button_array() as $days) {
+            if ($days < 1) {
+                continue;
+            }
+            // TODO: calculate color
+            $style = "background: #f88;";
+            if ($superCage->get->keyExists('set') && $superCage->get->getInt('set') == $days) {
+                $style .= " border-width: 3px;";
+            }
+            $text = $days == 1 ? $lang_plugin_hot_pictures['hot1'] : sprintf($lang_plugin_hot_pictures['hotx'], $days);
+            $buttons .= "<a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot={$days}\" class=\"hotbutton\" style=\"{$style}\">$text</a> ";
+        }
+        $buttons .= "<br />&nbsp";
+
+        $data['footer'] .= $buttons;
     }
 
     return $data;

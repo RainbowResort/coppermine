@@ -23,7 +23,7 @@ if (USER_ID) {
     if ($days === 0) {
         cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET hot_expire = 0 WHERE pid = $pid");
         $set = 0;
-    } elseif (in_array($days, array(1, 2, 3))) {
+    } elseif (in_array($days, hot_pictures_button_array())) {
         cpg_db_query("UPDATE {$CONFIG['TABLE_PICTURES']} SET hot_expire = ".(time()+60*60*24*$days)." WHERE pid = $pid");
         $set = $days;
     } else {

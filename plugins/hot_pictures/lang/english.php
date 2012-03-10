@@ -25,8 +25,7 @@ $lang_plugin_hot_pictures['description'] = 'Set pictures as \'hot\' for x days a
 $lang_plugin_hot_pictures['announcement_thread'] = 'Announcement thread';
 $lang_plugin_hot_pictures['hot0'] = 'Not hot';
 $lang_plugin_hot_pictures['hot1'] = 'Hot for 1 day';
-$lang_plugin_hot_pictures['hot2'] = 'Hot for 2 days';
-$lang_plugin_hot_pictures['hot3'] = 'Hot for 3 days';
+$lang_plugin_hot_pictures['hotx'] = 'Hot for %s days';
 
 
 ?>

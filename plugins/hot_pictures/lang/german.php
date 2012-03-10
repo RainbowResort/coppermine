@@ -25,7 +25,6 @@ $lang_plugin_hot_pictures['description'] = 'Bilder für x Tage als "Hot" markier
 $lang_plugin_hot_pictures['announcement_thread'] = 'Ankündigungs-Thema';
 $lang_plugin_hot_pictures['hot0'] = 'Nicht hot';
 $lang_plugin_hot_pictures['hot1'] = 'Hot für 1 Tag';
-$lang_plugin_hot_pictures['hot2'] = 'Hot für 2 Tage';
-$lang_plugin_hot_pictures['hot3'] = 'Hot für 3 Tage';
+$lang_plugin_hot_pictures['hotx'] = 'Hot für %s Tage';
 
 ?>
