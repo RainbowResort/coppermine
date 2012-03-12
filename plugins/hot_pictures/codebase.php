@@ -34,7 +34,6 @@ function hot_pictures_file_data($data) {
         if ($superCage->get->keyExists('set')) {
             $set[$superCage->get->getInt('set')] = ' style="font-weight: bold;"';
         }
-        print_r($set);
         $hot_pictures_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/exif_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
         $buttons = "<li><a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0\"><span{$set[0]}>{$hot_pictures_menu_icon}{$lang_plugin_hot_pictures['hot0']}</span></a></li>";
         foreach (hot_pictures_button_array() as $days) {
