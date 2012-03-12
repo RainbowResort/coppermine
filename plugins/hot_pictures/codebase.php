@@ -28,37 +28,23 @@ function hot_pictures_button_array() {
 // Buttons
 $thisplugin->add_filter('file_data', 'hot_pictures_file_data');
 function hot_pictures_file_data($data) {
-    if (USER_ID) {
-        global $CURRENT_PIC_DATA, $lang_plugin_hot_pictures;
+    global $CONFIG, $CURRENT_ALBUM_DATA, $CURRENT_PIC_DATA, $lang_plugin_hot_pictures;
+    if (GALLERY_ADMIN_MODE) {
         $superCage = Inspekt::makeSuperCage();
-
-        $buttons = "
-            <style>
-                .hotbutton, .hotbutton:link, .hotbutton:hover, .hotbutton:visited, .hotbutton:active {
-                    padding: 10px;
-                    border: solid 1px black;
-                    color: black;
-                    text-decoration: none;
-                }
-            </style>
-            &nbsp;<br />
-            <a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0\" class=\"hotbutton\" style=\"background: #ccc;{$set[0]}\">{$lang_plugin_hot_pictures['hot0']}</a>
-        ";
+        if ($superCage->get->keyExists('set')) {
+            $set[$superCage->get->getInt('set')] = ' style="font-weight: bold;"';
+        }
+        print_r($set);
+        $hot_pictures_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/exif_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
+        $buttons = "<li><a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0\"><span{$set[0]}>{$hot_pictures_menu_icon}{$lang_plugin_hot_pictures['hot0']}</span></a></li>";
         foreach (hot_pictures_button_array() as $days) {
             if ($days < 1) {
                 continue;
             }
-            // TODO: calculate color
-            $style = "background: #f88;";
-            if ($superCage->get->keyExists('set') && $superCage->get->getInt('set') == $days) {
-                $style .= " border-width: 3px;";
-            }
             $text = $days == 1 ? $lang_plugin_hot_pictures['hot1'] : sprintf($lang_plugin_hot_pictures['hotx'], $days);
-            $buttons .= "<a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot={$days}\" class=\"hotbutton\" style=\"{$style}\">$text</a> ";
+            $buttons .= "<li><a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot={$days}\"><span{$set[$days]}>{$hot_pictures_menu_icon}{$text}</span></a></li>";
         }
-        $buttons .= "<br />&nbsp";
-
-        $data['footer'] .= $buttons;
+        $data['menu'] = str_replace('</ul>', $buttons.'</ul>', $data['menu']);
     }
 
     return $data;
@@ -70,9 +56,9 @@ $thisplugin->add_action('page_start', 'hot_pictures_start');
 function hot_pictures_start() {
     global $CONFIG, $lang_meta_album_names, $lang_plugin_hot_pictures, $valid_meta_albums;
 
-    require_once "./plugins/hot_pictures/lang/english.php";
+    require "./plugins/hot_pictures/lang/english.php";
     if ($CONFIG['lang'] != 'english' && file_exists("./plugins/hot_pictures/lang/{$CONFIG['lang']}.php")) {
-        require_once "./plugins/hot_pictures/lang/{$CONFIG['lang']}.php";
+        require "./plugins/hot_pictures/lang/{$CONFIG['lang']}.php";
     }
 
     $meta_album_name = 'hotpics';
