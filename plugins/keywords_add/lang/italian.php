@@ -23,7 +23,6 @@ $lang_plugin_keywords_add = array(
   'config_button' => 'Keywords add',				// Label of the button on the gallery config menu
   'install_note'  => 'Utilizzare il bottone dal menu amministratore per configurare il plugin.',	// Note about configuring plugin
   'install_click' => 'Cliccare sul le bottone per installare il plugin.',	// Message to install plugin
-  'version'       => 'Ver 1.0',
   'album_name'    => 'Selezionare l\'album nel quale aggiungere le informazioni',
   'add_info'      => 'Informazioni da aggiungere',
   'keyword'       => 'Parole Chiave',

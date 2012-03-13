@@ -31,6 +31,10 @@ if($lang_text_dir=='ltr') {
 if ($superCage->post->keyExists('change_stat')) {
 // Set variable values
     $albumid = $superCage->post->keyExists('albumid') ? $superCage->post->getInt('albumid') : 0;
+    if ($albumid < 1) {
+        global $lang_errors;
+        cpg_die(ERROR, $lang_errors['non_exist_ap'], __FILE__, __LINE__);
+    }
     $albstr = ($albumid) ? " WHERE aid = $albumid" : '';
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PICTURES']} $albstr");
     while ($row = mysql_fetch_array($result)) {
@@ -105,20 +109,20 @@ pageheader($lang_plugin_keywords_add['display_name']);
 $sql1="SELECT * FROM `{$CONFIG['TABLE_CONFIG']}`";
 $result1=cpg_db_query($sql1);
 
-starttable('100%', 'Plugin Keywords add - '.$lang_plugin_keywords_add['version'].'    '.'<a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>');
+starttable('100%', 'Plugin Keywords add <a href="pluginmgr.php" class="admin_menu">Plugin Manager</a>');
 ?>
 <form id='albumname' name='albumname' action='<?php echo $superCage->server->getRaw('REQUEST_URI');?>' method='post'>
 <tr>
     <td class="tableh2" align="center"><?php  echo $lang_plugin_keywords_add['album_name']; ?>:
 <?php
 $result = cpg_db_query("SELECT aid, category, IF(user_name IS NOT NULL, CONCAT('(', user_name, ') ',a.title), CONCAT(' - ', a.title)) AS title " . "FROM {$CONFIG['TABLE_ALBUMS']} AS a " . "LEFT JOIN {$CONFIG['TABLE_USERS']} AS u ON category = (" . FIRST_USER_CAT . " + user_id) " . "ORDER BY category, title");
-    echo '&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="albumid" class="listbox">';
-        while ($row = mysql_fetch_array($result)) {
-                $result2 = cpg_db_query("SELECT name FROM {$CONFIG['TABLE_CATEGORIES']} WHERE cid = {$row['category']}");
-                $row2 = mysql_fetch_assoc($result2);
-                echo "<option value=\"{$row['aid']}\">{$row2['name']} {$row['title']}</option>";
-        }
-        echo '</select> &nbsp;&nbsp;&nbsp;&nbsp; ';
+    echo '&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="albumid" class="listbox"><option value="-1" disabled="disabled" selected="selected">'.$lang_plugin_keywords_add['album_name'].'</option>';
+    while ($row = mysql_fetch_array($result)) {
+            $result2 = cpg_db_query("SELECT name FROM {$CONFIG['TABLE_CATEGORIES']} WHERE cid = {$row['category']}");
+            $row2 = mysql_fetch_assoc($result2);
+            echo "<option value=\"{$row['aid']}\">{$row2['name']} {$row['title']}</option>";
+    }
+    echo '</select> &nbsp;&nbsp;&nbsp;&nbsp; ';
 ?>
 </tr>
 <?php

@@ -23,7 +23,6 @@ $lang_plugin_keywords_add = array(
   'config_button'   => 'Zoekbegrippen toevoegen',				// Label of the button on the gallery config menu
   'install_note'    => 'Configureer de plugin via het Admin menu.',	// Note about configuring plugin
   'install_click'   => 'Click op de knop om de plugin te installeren.',	// Message to install plugin
-  'version'         => 'V1.2', // Curent plugin version
   'album_name'      => 'Selecteer het album waar informatie wilt toevoegen',
   'add_info'        => 'Informatie die toegevoegd moet worden',
   'keyword'	    => 'Zoekbegrippen',

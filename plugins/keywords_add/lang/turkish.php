@@ -22,25 +22,25 @@ if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...'); }
 
 $lang_plugin_keywords_add = array(
   'display_name'    => 'Kelime Ekle',			// Display Name
-  'config_title'    => 'Kelime ekle düzenle',			// Title of the button on the gallery config menu
+  'config_title'    => 'Kelime ekle dÃ¼zenle',			// Title of the button on the gallery config menu
   'config_button'   => 'Kelime Ekle',				// Label of the button on the gallery config menu
-  'install_note'    => 'Eklentiyi yönetici ayarlarındaki butondan ayarla.',	// Note about configuring plugin
-  'install_click'   => 'Eklentiyi yüklemek için butona tikla.',	// Message to install plugin
+  'install_note'    => 'Eklentiyi yÃ¶netici ayarlarÃ½ndaki butondan ayarla.',	// Note about configuring plugin
+  'install_click'   => 'Eklentiyi yÃ¼klemek iÃ§in butona tikla.',	// Message to install plugin
   'version'         => 'V1.2', // Curent plugin version
-  'album_name'      => 'Kelime ekleyeceginiz albümü seciniz',
-  'add_info'        => 'Kelimenizi asağıya ekleyin.',
+  'album_name'      => 'Kelime ekleyeceginiz albÃ¼mÃ¼ seciniz',
+  'add_info'        => 'Kelimenizi asaÃ°Ã½ya ekleyin.',
   'keyword'	    => 'Kelime',
-  'caution'         => 'Dikkat: kelime zaten kaydedilmisse,<br>icerik degismeyecekse boş birakin.',
+  'caution'         => 'Dikkat: kelime zaten kaydedilmisse,<br>icerik degismeyecekse boÃ¾ birakin.',
 );
 
 $lang_plugin_keywords_add_config = array(
   'status'        => 'Eklenti durumu',
-  'button_install'=> 'Yükle',
+  'button_install'=> 'YÃ¼kle',
   'button_submit' => 'Ekle',
 );
 
 // Delete
 $lang_plugin_keywords_add_delete= array(
-  'success'       => 'Kelimeler basariyla yüklendi',
+  'success'       => 'Kelimeler basariyla yÃ¼klendi',
  );
 ?>

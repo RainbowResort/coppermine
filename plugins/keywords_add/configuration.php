@@ -19,6 +19,6 @@ $name = 'Keywords_add';
 $description = 'Add Keywords, picture title, picture description and other custom fields contain for all files in a selected album';
 $author = 'Frantz';
 $author .= '<li>Ported to cpg1.5.x by <a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a></li>';
-$version = '1.2';
+$version = '1.3';
 $plugin_cpg_version = array('min' => '1.5');
 ?>
