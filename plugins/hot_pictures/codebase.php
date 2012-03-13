@@ -20,8 +20,8 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 // Configuration
 function hot_pictures_config($what) {
-    $buttons = array(1, 2, 5, 3); // each number will create a button 'Hot for x days'
-    $groups = array(1, 5); // enter the group IDs which should be allowed to set pictures as 'hot'
+    $buttons = array(1, 2, 3); // each number will create a button 'Hot for x days'
+    $groups = array(1); // enter the group IDs which should be allowed to set pictures as 'hot'
 
     if ($what == 'buttons') {
         sort($buttons);
