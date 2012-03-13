@@ -19,9 +19,24 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 
 // Configuration
-function hot_pictures_button_array() {
-    $buttons = array(1, 2, 3);
-    return $buttons;
+function hot_pictures_config($what) {
+    $buttons = array(1, 2, 5, 3); // each number will create a button 'Hot for x days'
+    $groups = array(1, 5); // enter the group IDs which should be allowed to set pictures as 'hot'
+
+    if ($what == 'buttons') {
+        sort($buttons);
+        return array_unique($buttons);
+    }
+
+    if ($what == 'groups') {
+        global $USER_DATA;
+        foreach ($groups as $group_id) {
+            if (in_array($group_id, $USER_DATA['groups'])) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 
@@ -29,14 +44,14 @@ function hot_pictures_button_array() {
 $thisplugin->add_filter('file_data', 'hot_pictures_file_data');
 function hot_pictures_file_data($data) {
     global $CONFIG, $CURRENT_ALBUM_DATA, $CURRENT_PIC_DATA, $lang_plugin_hot_pictures;
-    if (GALLERY_ADMIN_MODE) {
+    if (hot_pictures_config('groups')) {
         $superCage = Inspekt::makeSuperCage();
         if ($superCage->get->keyExists('set')) {
             $set[$superCage->get->getInt('set')] = ' style="font-weight: bold;"';
         }
         $hot_pictures_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/exif_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
         $buttons = "<li><a href=\"index.php?file=hot_pictures/set&amp;pid={$CURRENT_PIC_DATA['pid']}&amp;hot=0\"><span{$set[0]}>{$hot_pictures_menu_icon}{$lang_plugin_hot_pictures['hot0']}</span></a></li>";
-        foreach (hot_pictures_button_array() as $days) {
+        foreach (hot_pictures_config('buttons') as $days) {
             if ($days < 1) {
                 continue;
             }
