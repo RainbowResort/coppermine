@@ -31,7 +31,7 @@ function secondary_user_groups_page_start() {
     }
     mysql_free_result($result);
 
-    $users = cpg_db_fetch_rowset(cpg_db_query("SELECT {$cpg_udb->field['user_id']} FROM {$cpg_udb->usertable}"));
+    $users = cpg_db_fetch_rowset(cpg_db_query("SELECT {$cpg_udb->field['user_id']} AS user_id FROM {$cpg_udb->usertable}"));
     foreach ($users as $user) {
         $group_ids = cpg_get_groups($user['user_id']);
         foreach ($group_ids as $group_id) {
