@@ -23,11 +23,13 @@ if (defined('USERMGR_PHP')) {
 }
 
 function secondary_user_groups_page_start() {
-    global $cpg_udb, $secondary_user_groups_user_groups;
+    global $CONFIG, $cpg_udb, $secondary_user_groups_user_groups;
+
+    $group_id_add = $CONFIG['bridge_enable'] ? 100 : 0;
 
     $result = cpg_db_query("SELECT {$cpg_udb->field['grouptbl_group_id']} AS group_id, {$cpg_udb->field['grouptbl_group_name']} AS group_name FROM {$cpg_udb->groupstable}");
     while ($row = mysql_fetch_assoc($result)) {
-        $group_names[$row['group_id']] = $row['group_name'];
+        $group_names[$row['group_id'] + $group_id_add] = $row['group_name'];
     }
     mysql_free_result($result);
 
