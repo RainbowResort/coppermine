@@ -1,4 +1,3 @@
-
 <?php
 /*************************
   Coppermine Photo Gallery
@@ -11,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.19
+  Coppermine version: 1.5.20
   $HeadURL$
   $Revision$
 **********************************************/

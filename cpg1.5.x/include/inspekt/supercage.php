@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.19
+  Coppermine version: 1.5.20
   $HeadURL$
   $Revision$
 **********************************************/
@@ -23,9 +23,7 @@
  * @package Inspekt
  */
 
-if (!defined('IN_COPPERMINE')) {
-	die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 /**
  * require main Inspekt class

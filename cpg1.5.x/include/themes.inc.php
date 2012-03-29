@@ -10,7 +10,7 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.19
+  Coppermine version: 1.5.20
   $HeadURL$
   $Revision$
 **********************************************/
@@ -39,7 +39,7 @@
       ***********************************/
 // ----------------------------------------------------------------------------- //
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}         //{THEMES}//
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');         //{THEMES}//
 
 // The following terms can be defined in theme.php
 // ('THEME_HAS_RATING_GRAPHICS', 1) : The location for the ratings graphics will

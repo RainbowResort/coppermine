@@ -10,17 +10,15 @@
   as published by the Free Software Foundation.
 
   ********************************************
-  Coppermine version: 1.5.19
+  Coppermine version: 1.5.20
   $HeadURL$
   $Revision$
 **********************************************/
 
-define('COPPERMINE_VERSION', '1.5.19');
+define('COPPERMINE_VERSION', '1.5.20');
 define('COPPERMINE_VERSION_STATUS', 'stable');
 
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 function cpgGetMicroTime()
 {

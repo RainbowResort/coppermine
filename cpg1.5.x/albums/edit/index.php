@@ -9,11 +9,9 @@
 <link rel="shortcut icon" href="../../favicon.ico" />
 <!--
   SVN version info:
-  Coppermine version: 1.5.19
+  Coppermine version: 1.5.20
   $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/trunk/cpg1.5.x/include/index.php $
   $Revision$
-  $LastChangedBy: gaugau $
-  $Date$
 -->
 </head>
 <body>
