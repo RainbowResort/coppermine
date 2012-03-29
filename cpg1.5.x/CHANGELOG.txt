@@ -8,7 +8,7 @@ This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3
 as published by the Free Software Foundation.
 ********************************************
-Coppermine version: 1.5.20
+Coppermine version: 1.5.21
 $HeadURL$
 $Revision$
 *********************************************
@@ -23,6 +23,7 @@ Changelog
 [S] = Security fix (issues that are related to security)
 *********************************************
 
+2012-03-29 [M] Counted version count up in SVN repository from cpg1.5.20 to cpg1.5.21 {eenemeenemuu}
 2012-03-29 [M] Release of cpg1.5.20 {eenemeenemuu}
 2012-03-29 [B] Fixed different gallery behavior for register_globals on/off setting (thread ID 74360) {eenemeenemuu}
 2012-03-29 [B] Fixed error message when activating more than one user in the user manager (thread ID 74326) {eenemeenemuu}
