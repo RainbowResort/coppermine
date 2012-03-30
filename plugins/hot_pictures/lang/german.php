@@ -15,10 +15,7 @@
   $Date$
 **************************************************/
 
-
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_hot_pictures['hot_pictures'] = 'Hot pictures';
 $lang_plugin_hot_pictures['description'] = 'Bilder für x Tage als "Hot" markieren und in einem Meta-Album zeigen';

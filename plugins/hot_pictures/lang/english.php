@@ -15,10 +15,7 @@
   $Date$
 **************************************************/
 
-
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_hot_pictures['hot_pictures'] = 'Hot pictures';
 $lang_plugin_hot_pictures['description'] = 'Set pictures as \'hot\' for x days and display them in a meta album';
@@ -26,6 +23,5 @@ $lang_plugin_hot_pictures['announcement_thread'] = 'Announcement thread';
 $lang_plugin_hot_pictures['hot0'] = 'Not hot';
 $lang_plugin_hot_pictures['hot1'] = 'Hot for 1 day';
 $lang_plugin_hot_pictures['hotx'] = 'Hot for %s days';
-
 
 ?>

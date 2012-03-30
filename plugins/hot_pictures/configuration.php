@@ -15,6 +15,8 @@
   $Date$
 **************************************************/
 
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 require "./plugins/hot_pictures/lang/english.php";
 if ($CONFIG['lang'] != 'english' && file_exists("./plugins/hot_pictures/lang/{$CONFIG['lang']}.php")) {
     require "./plugins/hot_pictures/lang/{$CONFIG['lang']}.php";
@@ -23,7 +25,7 @@ if ($CONFIG['lang'] != 'english' && file_exists("./plugins/hot_pictures/lang/{$C
 $name = $lang_plugin_hot_pictures['hot_pictures'];
 $description = $lang_plugin_hot_pictures['description'];
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
-$version = '1.3';
+$version = '1.4';
 $plugin_cpg_version = array('min' => '1.5');
 $extra_info = $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,TODO.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).$lang_plugin_hot_pictures['announcement_thread'].'</a>';
 
