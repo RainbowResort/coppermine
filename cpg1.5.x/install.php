@@ -1639,6 +1639,7 @@ function getMysqlDbs()
     if (!checkSqlConnection()) {
         return false;
     }
+    global $config;
     // get a list of db's
     if ($db_list = @mysql_list_dbs($GLOBALS['mysql_connection'])) {
         // create dropdown box
