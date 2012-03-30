@@ -122,6 +122,7 @@ function album_voting_meta_album($meta) {
             $query = "SELECT *, COUNT(v.aid) AS album_votes FROM {$CONFIG['TABLE_PREFIX']}album_votes AS v
                 INNER JOIN {$CONFIG['TABLE_ALBUMS']} AS r ON r.aid = v.aid 
                 $RESTRICTEDWHERE 
+                AND r.aid IN (SELECT DISTINCT aid FROM {$CONFIG['TABLE_PICTURES']})
                 GROUP BY v.aid
                 ORDER BY album_votes DESC, v.aid DESC
                 {$meta['limit']}";
@@ -207,7 +208,7 @@ function album_voting_meta_album($meta) {
                     build_caption($rowset, array('ctime'), 'albums');
                 }
             }
-            // Copy -- END
+            // Copied from include/functions.inc.php 'lastalb' meta album code -- START
 
             build_caption($rowset);
             foreach ($rowset as $key => $row) {
