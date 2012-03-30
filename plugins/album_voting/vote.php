@@ -17,7 +17,6 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-
 $aid = $superCage->get->getInt('aid');
 $type = $superCage->get->getInt('type');
 $cat = $superCage->get->keyExists('cat') ? $superCage->get->getInt('cat') : false;

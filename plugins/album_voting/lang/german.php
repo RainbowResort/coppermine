@@ -15,10 +15,7 @@
   $Date$
 **************************************************/
 
-
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_album_voting['album_voting'] = 'Alben bewerten';
 $lang_plugin_album_voting['description'] = 'Ermöglicht das Bewerten von Alben';
