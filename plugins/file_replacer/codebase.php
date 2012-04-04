@@ -17,8 +17,8 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_action('page_start','file_replacer_page_start');
-$thisplugin->add_filter('file_data','file_replacer_id_data');
+$thisplugin->add_action('page_start', 'file_replacer_page_start');
+$thisplugin->add_filter('file_data', 'file_replacer_id_data');
 
 
 function file_replacer_page_start() {
@@ -215,7 +215,7 @@ function file_replacer_id_data($data) {
             require_once "./plugins/file_replacer/lang/{$CONFIG['lang']}.php";
         }
         $file_replacer_menu_icon = ($CONFIG['enable_menu_icons'] > 0) ? '<img src="images/icons/alb_mgr.png" border="0" width="16" height="16" class="icon" /> ' : '';
-        $menu_button = "<li><a href=\"displayimage.php?replacer_id={$data['pid']}\" class=\"admin_menu\">{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</a></li>";
+        $menu_button = "<li><a href=\"displayimage.php?replacer_id={$data['pid']}\"><span>{$file_replacer_menu_icon}{$lang_plugin_file_replacer['replace_file']}</span></a></li>";
         $data['menu'] = str_replace('</ul>', $menu_button.'</ul>', $data['menu']);
     }
     return $data;

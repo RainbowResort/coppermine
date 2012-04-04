@@ -119,8 +119,8 @@ EOT;
             if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
                 $menu_buttons .= <<< EOT
                 <script type="text/javascript">
-                    document.write('<li><a href="javascript:void();" class="admin_menu" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
-                    document.write('{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}');
+                    document.write('<li><a href="javascript:void();" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
+                    document.write('<span>{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}</span>');
                     document.write('</a></li>');
                 </script>
 EOT;
@@ -134,7 +134,7 @@ EOT;
                 }
                 $menu_buttons .= <<< EOT
                 <script type="text/javascript">
-                    document.write('<li>&nbsp;<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
+                    document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
                     $livesearch_script
                 </script>
 EOT;
@@ -148,7 +148,7 @@ EOT;
             }
             $menu_buttons .= <<< EOT
             <script type="text/javascript">
-                document.write('<li>&nbsp;<select id="livesearch_output" size="1" class="button" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
+                document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
                 $livesearch_script
             </script>
 EOT;
