@@ -18,19 +18,19 @@
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 // plugin (un)install
-$thisplugin->add_action('plugin_install','bbcode_install');
-$thisplugin->add_action('plugin_uninstall','bbcode_uninstall');
-$thisplugin->add_action('plugin_cleanup','bbcode_cleanup');
+$thisplugin->add_action('plugin_install', 'bbcode_install');
+$thisplugin->add_action('plugin_uninstall', 'bbcode_uninstall');
+$thisplugin->add_action('plugin_cleanup', 'bbcode_cleanup');
 
 // admin config  button
-$thisplugin->add_filter('admin_menu','bbcode_control_config_button');
+$thisplugin->add_filter('admin_menu', 'bbcode_control_config_button');
 
 // new bbcode tags
-$thisplugin->add_filter('bbcode','new_bbcodes');
+$thisplugin->add_filter('bbcode', 'new_bbcodes');
 
 // bbcode buttons
-$thisplugin->add_filter('theme_add_comment','buttons_add_comment');
-$thisplugin->add_filter('theme_edit_comment','buttons_edit_comment');
+$thisplugin->add_filter('theme_add_comment', 'buttons_add_comment');
+$thisplugin->add_filter('theme_edit_comment', 'buttons_edit_comment');
 
 
 function insert_into_config($name, $value) {
@@ -137,11 +137,11 @@ function bbcode_control_config_button($admin_menu){
 function new_bbcodes($text) {
     global $CONFIG;
 
-    // replace disabled bbcode tags with ""
+    // remove disabled bbcode tags
     $bbcode_tags_disabled = get_bbcode_tags('disabled');
     foreach ($bbcode_tags_disabled as $tag) {
         $text = str_replace("[$tag]", "", $text);
-        $text = preg_replace("/\[$tag=(.*)]/Uis", "", $text);
+        $text = preg_replace("/\[$tag=.*]/Uis", "", $text);
         $text = str_replace("[/$tag]", "", $text);
     }
 
@@ -191,7 +191,7 @@ function new_bbcodes($text) {
     // insert quote
     if (!in_array('quote', $bbcode_tags_disabled)) {
         $style = "style=\"background-image:url(plugins/bbcode_control/images/quote_show.png); background-repeat:no-repeat; background-position:top right; padding-right:40px;\"";
-        $text = preg_replace("/\[quote=(.*)](.*)\[\/quote\]/Uis", "<fieldset $style><legend>\\1</legend>\\2</fieldset>", $text);
+        $text = preg_replace("/\[quote=(.*)\](.*)\[\/quote\]/Uis", "<fieldset $style><legend>\\1</legend>\\2</fieldset>", $text);
         $text = str_replace("[quote]", "<fieldset $style>", $text);
         $text = str_replace("[/quote]", "</fieldset>", $text);
     }
@@ -205,6 +205,24 @@ function new_bbcodes($text) {
     if (!in_array('tt', $bbcode_tags_disabled)) {
         $text = str_replace("[tt]", "<tt>", $text);
         $text = str_replace("[/tt]", "</tt>", $text);
+    }
+
+    // picture in this gallery
+    if (!in_array('pid', $bbcode_tags_disabled)) {
+        $text = preg_replace("/\[pid=([0-9]+)\](.*)\[\/pid\]/Uis", "<a href=\"displayimage.php?pid=\\1#top_display_media\">\\2</a>", $text);
+        $text = preg_replace_callback("/\[pid\]([0-9]+)\[\/pid\]/Uis", 'bbcode_pid_get_str', $text);
+    }
+
+    // album in this gallery
+    if (!in_array('aid', $bbcode_tags_disabled)) {
+        $text = preg_replace("/\[aid=([0-9]+)\](.*)\[\/aid\]/Uis", "<a href=\"thumbnails.php?album=\\1\">\\2</a>", $text);
+        $text = preg_replace_callback("/\[aid\]([0-9]+)\[\/aid\]/Uis", 'bbcode_aid_get_str', $text);
+    }
+
+    // category in this gallery
+    if (!in_array('cid', $bbcode_tags_disabled)) {
+        $text = preg_replace("/\[cid=([0-9]+)\](.*)\[\/cid\]/Uis", "<a href=\"index.php?cat=\\1\">\\2</a>", $text);
+        $text = preg_replace_callback("/\[cid\]([0-9]+)\[\/cid\]/Uis", 'bbcode_cid_get_str', $text);
     }
 
     return $text;
@@ -226,6 +244,9 @@ function get_bbcode_tags($which) {
         'url', // cpg standard
         'img', // cpg standard
         'youtube',
+        'pid', // cpg special for internal referencing
+        'aid', // cpg special for internal referencing
+        'cid', // cpg special for internal referencing
     );
 
     if ($which == 'available') {
@@ -272,6 +293,31 @@ function special_close_tag($tag) {
         case 'hr': return "";
         default: return "[/$tag]";
     }
+}
+
+
+function bbcode_pid_get_str($matches) {
+    global $CONFIG;
+    list($title, $filename) = mysql_fetch_row(cpg_db_query("SELECT title, filename FROM {$CONFIG['TABLE_PICTURES']} WHERE pid = ".$matches[1]));
+    $title = trim($title) ? $title : $filename;
+    $title = trim($title) ? $title : $matches[1];
+    return "<a href=\"displayimage.php?pid={$matches[1]}#top_display_media\">{$title}</a>";
+}
+
+
+function bbcode_aid_get_str($matches) {
+    global $CONFIG;
+    $title = mysql_result(cpg_db_query("SELECT title FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = ".$matches[1]), 0);
+    $title = trim($title) ? $title : $matches[1];
+    return "<a href=\"thumbnails.php?album={$matches[1]}\">{$title}</a>";
+}
+
+
+function bbcode_cid_get_str($matches) {
+    global $CONFIG;
+    $title = mysql_result(cpg_db_query("SELECT name FROM {$CONFIG['TABLE_CATEGORIES']} WHERE cid = ".$matches[1]), 0);
+    $title = trim($title) ? $title : $matches[1];
+    return "<a href=\"index.php?cid={$matches[1]}\">{$title}</a>";
 }
 
 

@@ -46,6 +46,9 @@ $lang_plugin_bbcode_control['quote'] = 'Quote';
 $lang_plugin_bbcode_control['youtube'] = 'Youtube video';
 $lang_plugin_bbcode_control['tt'] = 'Teletype';
 $lang_plugin_bbcode_control['hr'] = 'Horizontal rule';
+$lang_plugin_bbcode_control['pid'] = 'Picture in this gallery';
+$lang_plugin_bbcode_control['aid'] = 'Album in this gallery';
+$lang_plugin_bbcode_control['cid'] = 'Category in this gallery';
 
 // admin.php & configuration.php
 $lang_plugin_bbcode_control['show_in_file_info'] = 'Show pre-built BBCode in file info';

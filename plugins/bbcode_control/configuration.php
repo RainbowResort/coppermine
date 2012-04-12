@@ -15,6 +15,8 @@
   $Date$
   **************************************************/
 
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 global $CONFIG, $enabled_languages_array, $lang_gallery_admin_menu;
 // language detection
 $lang = isset($CONFIG['lang']) ? $CONFIG['lang'] : 'english';
