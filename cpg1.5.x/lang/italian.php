@@ -299,7 +299,7 @@ $lang_rate_pic['great'] = 'Fantastica';
 $lang_rate_pic['js_warning'] = 'Deve essere abilitato Javascript per poter votare'; // cpg1.5
 $lang_rate_pic['already_voted'] = 'Hai gi&agrave; votato per questa foto.'; // cpg1.5
 $lang_rate_pic['forbidden'] = 'Non puoi votare le tue foto.'; // cpg1.5
-$lang_rate_pic['rollover_to_rate'] = 'Clicca sui pallini per votare questa immagine'; // cpg1.5
+$lang_rate_pic['rollover_to_rate'] = 'Passa col mouse qui sotto per votare questa immagine'; // cpg1.5
 
 // ------------------------------------------------------------------------- //
 // File include/functions.inc.php
@@ -1086,7 +1086,7 @@ $lang_picinfo['ExposureProgram'] = 'Programma di esposizione';
 $lang_picinfo['Flash'] = 'Flash';
 $lang_picinfo['MeteringMode'] = 'Modalit&agrave; di misurazione';
 $lang_picinfo['ExposureTime'] = 'Tempo di esposizione';
-$lang_picinfo['ExposureBiasValue'] = 'Sottoesposizione';
+$lang_picinfo['ExposureBiasValue'] = 'Compensazione dell\'esposizione';
 $lang_picinfo['ImageDescription'] = 'Descrizione immagine';
 $lang_picinfo['Orientation'] = 'Orientamento';
 $lang_picinfo['xResolution'] = 'Risoluzione X';
@@ -2074,7 +2074,7 @@ $lang_stat_details_php['ascending'] = 'ascendente';
 $lang_stat_details_php['descending'] = 'discendente';
 $lang_stat_details_php['internal'] = 'int';
 $lang_stat_details_php['close'] = 'chiudi';
-$lang_stat_details_php['hide_internal_referers'] = 'Nascondi riferenze interne';
+$lang_stat_details_php['hide_internal_referers'] = 'Nascondi referenze interne';
 $lang_stat_details_php['date_display'] = 'Visualizzazione data';
 $lang_stat_details_php['records_per_page'] = 'voci per pagina';
 $lang_stat_details_php['submit'] = 'invia / ricarica';
@@ -2469,7 +2469,7 @@ $lang_versioncheck_php['on_screen'] = 'Schermo intero';
 $lang_versioncheck_php['text_only'] = 'Solo testo';
 $lang_versioncheck_php['errors_only'] = 'Mostra solo potenziali errori';
 $lang_versioncheck_php['hide_images'] = 'Nascondi immagini'; // cpg1.5
-$lang_versioncheck_php['no_modification_check'] = 'Non controllare le immagini modificate'; // cpg1.5
+$lang_versioncheck_php['no_modification_check'] = 'Non controllare i file modificati'; // cpg1.5
 $lang_versioncheck_php['do_not_connect_to_online_repository'] = 'Non connetterti al deposito on-line';
 $lang_versioncheck_php['online_repository_explain'] = 'raccomandato solo se la connessione fallisce';
 $lang_versioncheck_php['submit'] = 'invia / ricarica';
