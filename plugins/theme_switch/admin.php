@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Theme switch
   *************************************************
-  Copyright (c) 2010-2011 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -13,8 +13,10 @@
   $Revision$
   $LastChangedBy$
   $Date$
-  **************************************************/
+**************************************************/
 
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+  
 if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }

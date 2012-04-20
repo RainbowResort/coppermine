@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Theme switch
   *************************************************
-  Copyright (c) 2010-2011 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
   $LastChangedBy$
   $Date$
 **************************************************/
+
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 require_once "./plugins/theme_switch/lang/english.php";
 if ($CONFIG['lang'] != 'english' && file_exists("./plugins/theme_switch/lang/{$CONFIG['lang']}.php")) {

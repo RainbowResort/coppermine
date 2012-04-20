@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Theme switch
   *************************************************
-  Copyright (c) 2010-2011 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -15,9 +15,7 @@
   $Date$
 **************************************************/
 
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_theme_switch['theme_switch'] = 'Theme switch';
 $lang_plugin_theme_switch['description'] = 'Ändert das Design für mobile Geräte (z.B. Smartphones)';

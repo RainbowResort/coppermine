@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Theme switch
   *************************************************
-  Copyright (c) 2010-2011 eenemeenemuu
+  Copyright (c) 2010-2012 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 $thisplugin->add_action('page_start', 'theme_switch_page_start');
 
 function theme_switch_page_start() {
-    global $CONFIG, $USER;
+    global $CONFIG, $USER, $CPG_PHP_SELF, $REFERER;
 
     $superCage = Inspekt::makeSuperCage();
 
@@ -69,15 +69,51 @@ function theme_switch_page_start() {
         $mobile_browser++;
     }
 
-    if($mobile_browser > 0) {
-        $mobile_browser_theme = 'water_drop';
-        if (!$superCage->get->keyExists('theme') && $CONFIG['theme'] != $mobile_browser_theme) {
-            $USER['theme'] = $mobile_browser_theme;
-            user_save_profile();
-            header('Location: '.$superCage->server->getRaw('REQUEST_URI'));
+    if ($mobile_browser > 0) {
+        define('MOBILE_BROWSER', TRUE);
+        if (!$superCage->cookie->keyExists($CONFIG['TABLE_PREFIX'].'mobile_theme')) {
+            define('MOBILE_VIEW', TRUE);
+            if ($CONFIG['theme'] != $CONFIG['theme_switch_mobile_theme']) {
+                $USER['theme'] = $CONFIG['theme_switch_mobile_theme'];
+                user_save_profile();
+                header('Location: '.$CPG_PHP_SELF); // TODO: add referer
+            }
         }
     }
 
+}
+
+
+// TODO: find better location for button
+$thisplugin->add_filter('admin_menu', 'theme_switch_admin_menu');
+
+function theme_switch_admin_menu($html) {
+    global $CONFIG;
+
+    if (defined('MOBILE_BROWSER')) {
+        if (defined('MOBILE_VIEW')) {
+            $switch_button['text'] = 'Switch to normal view';
+            $switch_button['href'] = 'normal';
+        } else {
+            $switch_button['text'] = 'Switch to mobile view';
+            $switch_button['href'] = 'mobile';
+        }
+
+        if (stripos($CONFIG['theme'], 'curve') !== FALSE) {
+            // one of the curve themes
+            if ($html == '') {
+                $html = '<ul class="dropmenu"></ul>';
+            }
+            if (stripos($html, '</ul>')) {
+                $html = str_replace('</ul>', '<li><a href="index.php?file=theme_switch/'.$switch_button['href'].'" class="firstlevel"><span class="firstlevel">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</span></a></li></ul>', $html);
+            }
+        } else {
+            // other themes
+            $html .= '<div class="admin_menu admin_float"><a href="index.php?file=theme_switch/'.$switch_button['href'].'">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</a></div>';
+        }
+    }
+
+    return $html;
 }
 
 
