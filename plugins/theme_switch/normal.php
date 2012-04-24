@@ -22,6 +22,6 @@ setcookie($CONFIG['TABLE_PREFIX'].'mobile_theme', 'false', time() + (CPG_WEEK*2)
 $USER['theme'] = mysql_result(cpg_db_query("SELECT value FROM {$CONFIG['TABLE_CONFIG']} WHERE name = 'theme'"), 0);
 user_save_profile();
 
-header("Location: ".$CPG_PHP_SELF); // TODO: add referer
+header('Location: '.urldecode($superCage->get->getRaw('ref')));
 
 ?>

@@ -19,6 +19,6 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 setcookie($CONFIG['TABLE_PREFIX'].'mobile_theme', '', time() - CPG_WEEK, $CONFIG['cookie_path']);
 
-header("Location: ".$CPG_PHP_SELF); // TODO: add referer
+header('Location: '.urldecode($superCage->get->getRaw('ref')));
 
 ?>
