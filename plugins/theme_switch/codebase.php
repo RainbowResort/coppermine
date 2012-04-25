@@ -26,15 +26,15 @@ function theme_switch_page_start() {
 
     $mobile_browser = '0';
  
-    if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone)/i', strtolower($superCage->server->getRaw('HTTP_USER_AGENT')))) {
+    if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android)/i', strtolower($superCage->server->getRaw('HTTP_USER_AGENT')))) {
         $mobile_browser++;
     }
 
-    if((strpos(strtolower($superCage->server->getRaw('HTTP_ACCEPT')),'application/vnd.wap.xhtml+xml')>0) or (($superCage->server->keyExists('HTTP_X_WAP_PROFILE') or $superCage->server->keyExists('HTTP_PROFILE')))) {
+    if ((strpos(strtolower($superCage->server->getRaw('HTTP_ACCEPT')), 'application/vnd.wap.xhtml+xml') > 0) or (($superCage->server->keyExists('HTTP_X_WAP_PROFILE') or $superCage->server->keyExists('HTTP_PROFILE')))) {
         $mobile_browser++;
     }
 
-    $mobile_ua = strtolower(substr($superCage->server->getRaw('HTTP_USER_AGENT'),0,4));
+    $mobile_ua = strtolower(substr($superCage->server->getRaw('HTTP_USER_AGENT'), 0, 4));
     $mobile_agents = array(
         'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
         'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
@@ -44,28 +44,27 @@ function theme_switch_page_start() {
         'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
         'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
         'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
-        'wapr','webc','winw','winw','xda','xda-');
-     
-    if(in_array($mobile_ua,$mobile_agents)) {
+        'wapr','webc','winw','winw','xda ','xda-');
+
+    if (in_array($mobile_ua, $mobile_agents)) {
         $mobile_browser++;
     }
 
-    if (strpos(strtolower($superCage->server->getRaw('ALL_HTTP'),'operamini')>0)) {
+    if (strpos(strtolower($superCage->server->getRaw('ALL_HTTP'), 'operamini') > 0)) {
         $mobile_browser++;
     }
 
-    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')),' ppc;')>0) {
+    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')), ' ppc;') > 0) {
         $mobile_browser++;
     }
 
-    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')),'windows ce')>0) {
+    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')), 'windows ce') > 0) {
         $mobile_browser++;
-    }
-    else if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')),'windows')>0) {
-        $mobile_browser=0;
+    } elseif (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')), 'windows') > 0) {
+        $mobile_browser = 0;
     }
 
-    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')),'iemobile')>0) {
+    if (strpos(strtolower($superCage->server->getRaw('HTTP_USER_AGENT')), 'iemobile') > 0) {
         $mobile_browser++;
     }
 
@@ -73,7 +72,7 @@ function theme_switch_page_start() {
         define('MOBILE_BROWSER', TRUE);
         if (!$superCage->cookie->keyExists($CONFIG['TABLE_PREFIX'].'mobile_theme')) {
             define('MOBILE_VIEW', TRUE);
-            if ($CONFIG['theme'] != $CONFIG['theme_switch_mobile_theme']) {
+            if ($CONFIG['theme'] != $CONFIG['theme_switch_mobile_theme'] && !$superCage->get->keyExists('theme')) {
                 $USER['theme'] = $CONFIG['theme_switch_mobile_theme'];
                 user_save_profile();
                 header('Location: '.urldecode($REFERER));
@@ -84,7 +83,6 @@ function theme_switch_page_start() {
 }
 
 
-// TODO: find better location for button
 $thisplugin->add_filter('admin_menu', 'theme_switch_admin_menu');
 
 function theme_switch_admin_menu($html) {
@@ -99,16 +97,21 @@ function theme_switch_admin_menu($html) {
             $switch_button['href'] = 'mobile';
         }
 
-        if (stripos($CONFIG['theme'], 'curve') !== FALSE) {
-            // one of the curve themes
-            if ($html == '') {
+        if ($html == '') {
+            if (stripos($CONFIG['theme'], 'mobile') !== FALSE) {
+                $html = '<optgroup label="----------"></optgroup>';
+            } else {
                 $html = '<ul class="dropmenu"></ul>';
             }
-            if (stripos($html, '</ul>')) {
-                $html = str_replace('</ul>', '<li><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'" class="firstlevel"><span class="firstlevel">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</span></a></li></ul>', $html);
-            }
+        }
+
+        if (stripos($html, $search = '</ul>')) {
+            $html = str_replace($search, '<li><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'" class="firstlevel"><span class="firstlevel">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</span></a></li>'.$search, $html);
+        } elseif (stripos($html, $search = '</optgroup>')) {
+            $html = str_replace($search, '<option value="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.$switch_button['text'].'</option>'.$search, $html);
+        } elseif (stripos($html, $search = '<div style="clear:left;">')) {
+            $html = str_replace($search, '<div class="admin_menu admin_float"><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</a></div>'.$search, $html);
         } else {
-            // other themes
             $html .= '<div class="admin_menu admin_float"><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</a></div>';
         }
     }
