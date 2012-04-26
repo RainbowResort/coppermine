@@ -88,20 +88,25 @@ $thisplugin->add_filter('admin_menu', 'theme_switch_admin_menu');
 function theme_switch_admin_menu($html) {
     global $CONFIG, $REFERER;
 
+    require_once "./plugins/theme_switch/lang/english.php";
+    if ($CONFIG['lang'] != 'english' && file_exists("./plugins/theme_switch/lang/{$CONFIG['lang']}.php")) {
+        require_once "./plugins/theme_switch/lang/{$CONFIG['lang']}.php";
+    }
+
     $display_button = false;
     if (defined('MOBILE_BROWSER')) {
         $display_button = true;
         if (defined('MOBILE_VIEW')) {
-            $button['text'] = 'Switch to normal view';
+            $button['text'] = $lang_plugin_theme_switch['normal_view'];
             $button['href'] = 'normal';
         } else {
-            $button['text'] = 'Switch to mobile view';
+            $button['text'] = $lang_plugin_theme_switch['mobile_view'];
             $button['href'] = 'mobile';
         }
         $button['href'] = 'index.php?file=theme_switch/'.$button['href'].'&amp;ref='.urlencode($REFERER);
     } elseif ($CONFIG['theme'] == $CONFIG['theme_switch_mobile_theme']) {
         $display_button = true;
-        $button['text'] = 'Use default theme';
+        $button['text'] = $lang_plugin_theme_switch['normal_view'];
         $button['href'] = stripos(urldecode($REFERER), '?') ? urldecode($REFERER).'&theme=xxx' : urldecode($REFERER).'?theme=xxx';
     }
 

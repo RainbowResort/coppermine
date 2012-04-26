@@ -22,5 +22,7 @@ $lang_plugin_theme_switch['description'] = 'Ändert das Design für mobile Gerä
 $lang_plugin_theme_switch['announcement_thread'] = 'Ankündigungs-Thema';
 $lang_plugin_theme_switch['select'] = 'Design für mobile Geräte';
 $lang_plugin_theme_switch['saved'] = 'Deine Einstellungen wurden gespeichert.';
+$lang_plugin_theme_switch['mobile_view'] = 'Mobile Ansicht';
+$lang_plugin_theme_switch['normal_view'] = 'Normale Ansicht';
 
 ?>
