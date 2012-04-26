@@ -88,15 +88,24 @@ $thisplugin->add_filter('admin_menu', 'theme_switch_admin_menu');
 function theme_switch_admin_menu($html) {
     global $CONFIG, $REFERER;
 
+    $display_button = false;
     if (defined('MOBILE_BROWSER')) {
+        $display_button = true;
         if (defined('MOBILE_VIEW')) {
-            $switch_button['text'] = 'Switch to normal view';
-            $switch_button['href'] = 'normal';
+            $button['text'] = 'Switch to normal view';
+            $button['href'] = 'normal';
         } else {
-            $switch_button['text'] = 'Switch to mobile view';
-            $switch_button['href'] = 'mobile';
+            $button['text'] = 'Switch to mobile view';
+            $button['href'] = 'mobile';
         }
+        $button['href'] = 'index.php?file=theme_switch/'.$button['href'].'&amp;ref='.urlencode($REFERER);
+    } elseif ($CONFIG['theme'] == $CONFIG['theme_switch_mobile_theme']) {
+        $display_button = true;
+        $button['text'] = 'Use default theme';
+        $button['href'] = stripos(urldecode($REFERER), '?') ? urldecode($REFERER).'&theme=xxx' : urldecode($REFERER).'?theme=xxx';
+    }
 
+    if ($display_button) {
         if ($html == '') {
             if (stripos($CONFIG['theme'], 'mobile') !== FALSE) {
                 $html = '<optgroup label="----------"></optgroup>';
@@ -106,13 +115,13 @@ function theme_switch_admin_menu($html) {
         }
 
         if (stripos($html, $search = '</ul>')) {
-            $html = str_replace($search, '<li><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'" class="firstlevel"><span class="firstlevel">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</span></a></li>'.$search, $html);
+            $html = str_replace($search, '<li><a href="'.$button['href'].'" class="firstlevel"><span class="firstlevel">'.cpg_fetch_icon('web', 0).$button['text'].'</span></a></li>'.$search, $html);
         } elseif (stripos($html, $search = '</optgroup>')) {
-            $html = str_replace($search, '<option value="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.$switch_button['text'].'</option>'.$search, $html);
+            $html = str_replace($search, '<option value="'.$button['href'].'">'.$button['text'].'</option>'.$search, $html);
         } elseif (stripos($html, $search = '<div style="clear:left;">')) {
-            $html = str_replace($search, '<div class="admin_menu admin_float"><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</a></div>'.$search, $html);
+            $html = str_replace($search, '<div class="admin_menu admin_float"><a href="'.$button['href'].'">'.cpg_fetch_icon('web', 0).$button['text'].'</a></div>'.$search, $html);
         } else {
-            $html .= '<div class="admin_menu admin_float"><a href="index.php?file=theme_switch/'.$switch_button['href'].'&amp;ref='.urlencode($REFERER).'">'.cpg_fetch_icon('web', 0).$switch_button['text'].'</a></div>';
+            $html .= '<div class="admin_menu admin_float"><a href="'.$button['href'].'">'.cpg_fetch_icon('web', 0).$button['text'].'</a></div>';
         }
     }
 
