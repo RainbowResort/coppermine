@@ -132,11 +132,11 @@ echo <<< EOT
 		<strong>Maintain history/log for fullsize downloads:&nbsp;&nbsp;</strong>
 		<input type="checkbox" name="ksfa_hist" value="1" $ksfa_hist>		
 		<br /><br />
-		
+		<!--
 		<strong>Allow ZIP download for albums and favorites:&nbsp;&nbsp;</strong>
 		<input type="checkbox" name="ksfa_zip" value="1" $ksfa_zip>		
 		<br /><br />
-		
+		-->
 		
 		<strong>Send email to admin for each download: &nbsp;&nbsp;</strong>
 		<input type="checkbox" name="ksfa_email" value="1" $ksfa_email>		

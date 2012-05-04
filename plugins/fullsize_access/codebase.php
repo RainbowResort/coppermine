@@ -6,8 +6,8 @@ if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 require_once('fullsize_check.php');
 
 
-
-$thisplugin->add_action('post_breadcrumb','ziplink');
+// ZIP download feature disabled (doesn't work because of missing library)
+//$thisplugin->add_action('post_breadcrumb','ziplink');
 function ziplink(){
 	global $CONFIG;
 	$superCage = Inspekt::makeSuperCage();
