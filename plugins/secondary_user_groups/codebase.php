@@ -25,6 +25,12 @@ if (defined('USERMGR_PHP')) {
 function secondary_user_groups_page_start() {
     global $CONFIG, $cpg_udb, $secondary_user_groups_user_groups;
 
+    if (!$cpg_udb->can_join_tables) {
+        return;
+    } else {
+        define('CAN_JOIN_TABLES', '1');
+    }
+
     $group_id_add = $CONFIG['bridge_enable'] ? 100 : 0;
 
     $result = cpg_db_query("SELECT {$cpg_udb->field['grouptbl_group_id']} AS group_id, {$cpg_udb->field['grouptbl_group_name']} AS group_name FROM {$cpg_udb->groupstable}");
@@ -66,8 +72,9 @@ function append_user_group_names($matches) {
 }
 
 function secondary_user_groups_page_html($html) {
-    $html = preg_replace_callback('/(<tr.*<a href="profile\.php\?uid=([0-9]+)">.*<td.*)(<td.*<\/td>)(.*<\/tr>)/Usi', 'append_user_group_names', $html);
-
+    if (defined('CAN_JOIN_TABLES')) {
+        $html = preg_replace_callback('/(<tr.*<a href="profile\.php\?uid=([0-9]+)">.*<td.*)(<td.*<\/td>)(.*<\/tr>)/Usi', 'append_user_group_names', $html);
+    }
     return $html;
 }
 
