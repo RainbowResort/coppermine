@@ -5,7 +5,6 @@
 
 define('IN_COPPERMINE', true);
 define('CALENDAR_PHP', true);
-require('include/init.inc.php');
 
 
 pageheader('gallery statistics and fullsize image download history');
