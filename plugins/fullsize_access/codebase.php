@@ -52,7 +52,7 @@ function fullsize_disableclick($cpicdata) {
 	global $CONFIG;
 	
 		if(strpos($cpicdata['html'],'fullsize=1') !== false) {
-			$cpicdata['html'] = strip_tags($cpicdata['html'],'<img>');			
+			$cpicdata['html'] = preg_replace('/<a.*fullsize=1.*>(.*)<\/a>/Ui', '\\1', $cpicdata['html']);
 			//$cpicdata['html'] = preg_replace('/alt=\".*\"/i','alt="'.$alt_text.'" title="'.$alt_text.'"',$cpicdata['html']);
 		}
 	
