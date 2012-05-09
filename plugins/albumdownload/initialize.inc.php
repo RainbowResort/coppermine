@@ -9,4 +9,5 @@ function albumdownload_language() {
     }
     return $lang_plugin_albumdownload;
 }
+
 ?>
