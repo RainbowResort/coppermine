@@ -23,7 +23,7 @@ define('THUMBNAILS_PHP', true);
 define('INDEX_PHP', true);
 
 
-include('../../include/archive.php');
+include('include/archive.php');
 
     $filelist = array();
 	$aid = $superCage->get->getInt('aid');

@@ -13,7 +13,10 @@ $thisplugin->add_filter('theme_thumbnails_title','downloadZip_header');
 // Modify template header
 function downloadZip_header($html) {
 	$lang_plugin_albumdownload = albumdownload_language();
-	$html['{ALBUM_NAME}'] = $html['{ALBUM_NAME}'] . ' <a href="index.php?file=albumdownload/albumZip&aid='.$html['{ALBUM_ID}'].'">'.$lang_plugin_albumdownload['albumDownload'].'</a>';
+    $superCage = Inspekt::makeSuperCage();
+    if ($superCage->get->getInt('album') > 0) {
+        $html['{ALBUM_NAME}'] = $html['{ALBUM_NAME}'] . ' <a href="index.php?file=albumdownload/albumZip&aid='.$superCage->get->getInt('album').'">'.$lang_plugin_albumdownload['albumDownload'].'</a>';
+    }
 	return $html;
 }
 
@@ -60,4 +63,3 @@ function downloadZip_configure($action_code) {
 EOT;
     }
 }?>
-
