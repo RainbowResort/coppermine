@@ -23,10 +23,10 @@
 ***************************************************/
 
 /**
- * English Language File
- * @author Donovan Bray <donnoman@donovanbray.com>
+ * German Language File
+ * @author eenemeenemuu
  * @package language
- * @subpackage english
+ * @subpackage german
  * @version 1.7
  */
 

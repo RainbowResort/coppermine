@@ -22,7 +22,7 @@
   $Date$
 ***************************************************/
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 // define('HTML_EDITOR','htmlarea'); //no longer supported by the htmlarea community
 // define('HTML_EDITOR','tinymce'); //only limited functionality

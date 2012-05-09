@@ -21,8 +21,8 @@
   $Author$
   $Date$
 ***************************************************/
-if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $template_minicms['edit_meta'] = <<<EOT
 <!-- tinyMCE -->

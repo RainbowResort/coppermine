@@ -22,9 +22,9 @@
   $Date$
 ***************************************************/
 
-if (!defined('IN_COPPERMINE')) { die('Not in Coppermine...');}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-define('MINICMS_DBVER','1.5.8');
+define('MINICMS_DBVER','1.5.20');
 
 // submit your lang file for this plugin on the coppermine forums
 // plugin will try to use the configured language if it is available.

@@ -16,13 +16,14 @@
   (at your option) any later version.
   *************************************************
   Coppermine version: 1.5.x
-
   $HeadURL$
   $Revision$
   $Author$
   $Date$
 ***************************************************/
+
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 require('include/init.inc.php');
 //require 'plugins/minicms/include/init.inc.php';
 

@@ -21,6 +21,7 @@
   $Author$
   $Date$
 ***************************************************/
+
 require_once('include/init.inc.php');
 
 $req_array=array('referer','up','submit','down','delete','id','id2','cpos','title');

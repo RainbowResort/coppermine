@@ -1,8 +1,8 @@
 <?php
 /**************************************************
-  MiniCMS Plugin for Coppermine Photo Gallery
+  CPG MiniCMS Plugin for Coppermine Photo Gallery
   *************************************************
-  MiniCMS
+  CPGMiniCMS
   Copyright (c) 2005-2006 Donovan Bray <donnoman@donovanbray.com>
   *************************************************
   1.3.0  eXtended miniCMS
@@ -16,7 +16,13 @@
   (at your option) any later version.
   *************************************************
   Coppermine version: 1.5.x
+  $HeadURL$
+  $Revision$
+  $Author$
+  $Date$
 ***************************************************/
+
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $name='MiniCMS';
 $description='MiniCMS provides a small content management system within the Coppermine Picture Gallery application that enables the admin to add textual content to existing coppermine pages and to add new pages with the look and feel of the existing ones.';

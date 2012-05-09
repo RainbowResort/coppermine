@@ -16,15 +16,14 @@
   (at your option) any later version.
   *************************************************
   Coppermine version: 1.5.x
-
   $HeadURL$
   $Revision$
   $Author$
   $Date$
 ***************************************************/
 
-
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
+
 $superCage = Inspekt::makeSuperCage();
 
 // Add an install action
