@@ -32,7 +32,7 @@ CREATE TABLE `CPG_cms` (
   `content` text NOT NULL default '',
   PRIMARY KEY  (`ID`, `catid`),
   FULLTEXT KEY `title` (`title`,`content`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) AUTO_INCREMENT=1 ;
 
 #
 # Table structure for table `CPG_cms_config`
@@ -42,7 +42,7 @@ CREATE TABLE CPG_cms_config (
   name varchar(40) NOT NULL default '',
   value varchar(255) NOT NULL default '',
   PRIMARY KEY  (name)
-) TYPE=MyISAM;
+);
 
 ALTER TABLE `CPG_cms` ADD `pos` int(11) NOT NULL default '0';
 ALTER TABLE `CPG_cms` ADD `type` int(11) NOT NULL default '0';
@@ -71,5 +71,5 @@ ALTER TABLE `CPG_cms` DROP `pos`;
 
 # Write this dbver to the config table
 # This should match the DBVER constant in init.inc.php
-UPDATE CPG_cms_config SET value='1.5.8' WHERE name='dbver';
+UPDATE CPG_cms_config SET value='1.5.20' WHERE name='dbver';
 
