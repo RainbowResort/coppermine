@@ -18,8 +18,8 @@
 
 if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
-$thisplugin->add_filter('admin_menu','verwischt_admin_menu');
-function verwischt_admin_menu($admin_menu) {
+$thisplugin->add_filter('admin_menu', 'check_files_admin_menu');
+function check_files_admin_menu($admin_menu) {
     if (GALLERY_ADMIN_MODE) {
         $new_button = "
             <div class=\"admin_menu admin_float\"><a href=\"index.php?file=check_files/missing_files\">".cpg_fetch_icon('disk_usage', 2)."Search for missing files</a></div>
