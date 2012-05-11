@@ -11,5 +11,5 @@ $plugin_cpg_version = array('min' => '1.5');
 $extra_info = <<<EOT
     <a href="index.php?file=fullsize_access/plugin_config" class="admin_menu">{$config_icon}$name {$lang_gallery_admin_menu['admin_lnk']}</a>
 EOT;
-$extra_info .= $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,74870.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).$lang_plugin_flash_media_player['announcement_thread'].'</a><br />';
+$extra_info .= $install_info = '<a href="http://forum.coppermine-gallery.net/index.php/topic,74870.0.html" rel="external" class="admin_menu">'.cpg_fetch_icon('announcement', 1).'Announcement thread</a>';
 ?>
