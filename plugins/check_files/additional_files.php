@@ -54,9 +54,10 @@ function get_all_directories() {
 } 
 
 if (!$superCage->get->keyExists('dirs_read')) {
-    pageheader("Directory tree");
-    echo "<img src=\"images/loader.gif\" /> Reading directories";
-    pagefooter();
+    pageheader("Search for additional files");
+    starttable("100%", "Search for additional files");
+    echo "<tr><td class=\"tableb\"><img src=\"images/loader.gif\" /> Reading directories</td></tr>";
+    endtable();
     cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
     cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_additional");
     cpg_db_query("CREATE TABLE {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (
@@ -70,6 +71,7 @@ if (!$superCage->get->keyExists('dirs_read')) {
                     PRIMARY KEY (id) )");
     cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (path) VALUES ('".implode("'), ('", get_all_directories())."')");
     echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;dirs_read=done\">";
+    pagefooter();
 } else {
     $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
     while ($row = mysql_fetch_assoc($result)) {
@@ -132,7 +134,7 @@ if (!$superCage->get->keyExists('dirs_read')) {
         $path_id += 1;
         echo "
             <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;dirs_read=done&amp;found=$found&amp;path_id=$path_id&amp;starttime=$starttime\">
-            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}%</td></tr>
+            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking directory $path_id of $num_paths)</td></tr>
             <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
             <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>
             <tr><td class=\"tableb\">Time remaining:</td><td class=\"tableb\">$remaining seconds</td></tr>
