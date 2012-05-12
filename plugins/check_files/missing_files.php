@@ -26,8 +26,8 @@ $numpics = $superCage->get->getInt('numpics') ? $superCage->get->getInt('numpics
 $found = $superCage->get->getInt('found') ? $superCage->get->getInt('found') : 0;
 
 if (!$superCage->get->keyExists('offset')) {
-    cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}check_files");
-    cpg_db_query("CREATE TABLE {$CONFIG['TABLE_PREFIX']}check_files (
+    cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing");
+    cpg_db_query("CREATE TABLE {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (
                     id int(11) NOT NULL auto_increment,
                     filepath varchar(255) NOT NULL,
                     filename varchar(255) NOT NULL,
@@ -43,27 +43,27 @@ while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
 $result = cpg_db_query("SELECT filepath, filename, pwidth, pheight FROM {$CONFIG['TABLE_PICTURES']} ORDER BY filepath LIMIT $limit_offset, $limit_row_count");
 while ($file = mysql_fetch_assoc($result)) {
     if (!file_exists($CONFIG['fullpath'].$file['filepath'].$file['filename'])) {
-        cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}check_files (filepath, filename) VALUES('{$file['filepath']}', '{$file['filename']}')");
+        cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$file['filename']}')");
         $found++;
     }
 
     if (is_image($file['filename'])) {
         if (!file_exists($CONFIG['fullpath'].$file['filepath'].$CONFIG['thumb_pfx'].$file['filename'])) {
             // TODO: check for custom thumbnails (same name but different extension)
-            cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}check_files (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['thumb_pfx']}{$file['filename']}')");
+            cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['thumb_pfx']}{$file['filename']}')");
             $found++;
         }
 
         if ($CONFIG['make_intermediate'] && cpg_picture_dimension_exceeds_intermediate_limit($file['pwidth'], $file['pheight'])) {
             if(!file_exists($CONFIG['fullpath'].$file['filepath'].$CONFIG['normal_pfx'].$file['filename'])) {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}check_files (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['normal_pfx']}{$file['filename']}')");
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['normal_pfx']}{$file['filename']}')");
                 $found++;
             }
         }
         
         if ($CONFIG['enable_watermark']) {
             if(!file_exists($CONFIG['fullpath'].$file['filepath'].$CONFIG['orig_pfx'].$file['filename'])) {
-                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}check_files (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['orig_pfx']}{$file['filename']}')");
+                cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['orig_pfx']}{$file['filename']}')");
                 $found++;
             }
         }
@@ -88,7 +88,7 @@ if ($limit_offset <= $numpics) {
         <tr><td class=\"tableb\">Missing&nbsp;files&nbsp;up&nbsp;to&nbsp;this&nbsp;point:</td><td class=\"tableb\" width=\"100%\">$found</td></tr>
     ";
 } else {
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}check_files");
+    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing");
     while ($row = mysql_fetch_assoc($result)) {
         $missing[$row['filepath']][] = $row['filename'];
     }
@@ -106,7 +106,7 @@ if ($limit_offset <= $numpics) {
             echo "</td></tr></table></tr></td></div>";
         }
     }
-    cpg_db_query("DROP TABLE {$CONFIG['TABLE_PREFIX']}check_files");
+    cpg_db_query("DROP TABLE {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing");
 }
 endtable();
 pagefooter();
