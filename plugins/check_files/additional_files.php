@@ -86,7 +86,13 @@ if (!$superCage->get->keyExists('readdir')) {
         $path = $path_array[$path_id];
         if ($handle = opendir($path)) {
             while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && !is_dir($path.$file)) {
+                if ($file != '.' && $file != '..' && $file != 'no_FTP-uploads_into_this_folder!.txt' && !is_dir($path.$file)) {
+                    if (in_array($file, array('index.htm', 'index.html', 'index.php')) && filesize($path.$file) == 1) {
+                        continue;
+                    }
+                    if ($file == 'index.php' && strpos('<?', file_get_contents($path.$file)) === FALSE) {
+                        continue;
+                    }
                     $file_array[] = $file;
                 }
             }
