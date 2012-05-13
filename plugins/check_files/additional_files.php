@@ -19,6 +19,8 @@ if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
+$CONFIG['debug_mode'] = 0;
+
 // Create database tables
 if (!$superCage->get->keyExists('path_id')) {
     cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");

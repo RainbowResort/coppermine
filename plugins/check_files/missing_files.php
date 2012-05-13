@@ -19,6 +19,8 @@ if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
+$CONFIG['debug_mode'] = 0;
+
 $limit_offset = $superCage->get->getInt('offset') ? $superCage->get->getInt('offset') : 0;
 $limit_row_count = $superCage->get->getInt('row_count') ? $superCage->get->getInt('row_count') : 500;
 $starttime = $superCage->get->getInt('starttime') ? $superCage->get->getInt('starttime') : time();
