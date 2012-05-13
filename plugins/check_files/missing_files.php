@@ -51,7 +51,6 @@ while ($file = mysql_fetch_assoc($result)) {
 
     if (is_image($file['filename'])) {
         if (!file_exists($CONFIG['fullpath'].$file['filepath'].$CONFIG['thumb_pfx'].$file['filename'])) {
-            // TODO: check for custom thumbnails (same name but different extension)
             cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['thumb_pfx']}{$file['filename']}')");
             $found++;
         }
@@ -62,13 +61,15 @@ while ($file = mysql_fetch_assoc($result)) {
                 $found++;
             }
         }
-        
+
+        /*
         if ($CONFIG['enable_watermark']) {
             if(!file_exists($CONFIG['fullpath'].$file['filepath'].$CONFIG['orig_pfx'].$file['filename'])) {
                 cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing (filepath, filename) VALUES('{$file['filepath']}', '{$CONFIG['orig_pfx']}{$file['filename']}')");
                 $found++;
             }
         }
+        */
     }
 }
 $limit_offset += $limit_row_count;
