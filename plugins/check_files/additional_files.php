@@ -35,7 +35,7 @@ if (!$superCage->get->keyExists('path_id')) {
                     filename varchar(255) NOT NULL,
                     PRIMARY KEY (id) )");
     cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (path) VALUES ('{$CONFIG['fullpath']}')");
-    header("Location: index.php?file=check_files/additional_files&path_id=1");
+    header("Location: index.php?file=check_files/additional_files&path_id=1#check_files_top");
 }
 
 // Get directory contents
@@ -121,6 +121,7 @@ foreach ($file_array as $file) {
 // Status
 $starttime = $superCage->get->getInt('starttime') ? $superCage->get->getInt('starttime') : time();
 pageheader("Search for additional files ({$path_id}/{$num_paths})");
+echo "<a name=\"check_files_top\"></a>";
 starttable("100%", "Search for additional files", 2);
 $path_id += 1;
 if ($path_id <= $num_paths) {
@@ -129,7 +130,7 @@ if ($path_id <= $num_paths) {
     $remaining = round ($elapsed/($path_id/$num_paths) - $elapsed, 0);
     $end = date("H:i", time()+$remaining);
     echo "
-        <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;path_id=$path_id&amp;starttime=$starttime&amp;found=$found\">
+        <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;path_id=$path_id&amp;found=$found&amp;starttime=$starttime#check_files_top\">
         <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">Reading directory $path_id of $num_paths (<tt>$dir</tt>)</td></tr>
         <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
         <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>

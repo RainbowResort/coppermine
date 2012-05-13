@@ -79,10 +79,11 @@ $elapsed = time() - $starttime;
 $remaining = round ($elapsed*100/$progress - $elapsed, 0);
 $end = date("H:i", time()+$remaining);
 pageheader("Search for missing files - {$progress}%");
+echo "<a name=\"check_files_top\"></a>";
 starttable("100%", "Search for missing files", 2);
 if ($limit_offset <= $numpics) {
     echo "
-        <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/missing_files&amp;found=$found&amp;offset=$limit_offset&amp;row_count=$limit_row_count&amp;numpics=$numpics&amp;starttime=$starttime\">
+        <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/missing_files&amp;offset=$limit_offset&amp;found=$found&amp;row_count=$limit_row_count&amp;numpics=$numpics&amp;starttime=$starttime#check_files_top\">
         <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking files ".($limit_offset - $limit_row_count)." - $limit_offset of $numpics)</td></tr>
         <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
         <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>

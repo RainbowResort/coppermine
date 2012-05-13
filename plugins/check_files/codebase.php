@@ -22,8 +22,8 @@ $thisplugin->add_filter('admin_menu', 'check_files_admin_menu');
 function check_files_admin_menu($admin_menu) {
     if (GALLERY_ADMIN_MODE) {
         $new_button = "
-            <div class=\"admin_menu admin_float\"><a href=\"index.php?file=check_files/missing_files\">".cpg_fetch_icon('disk_usage', 2)."Search for missing files</a></div>
-            <div class=\"admin_menu admin_float\"><a href=\"index.php?file=check_files/additional_files\">".cpg_fetch_icon('disk_usage', 2)."Search for additional files</a></div>
+            <div class=\"admin_menu admin_float\"><a href=\"index.php?file=check_files/missing_files#check_files_top\">".cpg_fetch_icon('disk_usage', 2)."Search for missing files</a></div>
+            <div class=\"admin_menu admin_float\"><a href=\"index.php?file=check_files/additional_files#check_files_top\">".cpg_fetch_icon('disk_usage', 2)."Search for additional files</a></div>
         ";
         $look_for = "<!-- END documentation -->";
         $admin_menu = str_replace($look_for, $look_for . $new_button, $admin_menu);
