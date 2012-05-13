@@ -118,9 +118,9 @@ if (!$superCage->get->keyExists('dirs_read')) {
                     }
                     // Custom thumbnail?
                     if ($prefix == $CONFIG['thumb_pfx']) {
-                        $filename_wo_prefix_and_extension = substr($filename_wo_prefix, 0, strrpos($filename_wo_prefix, '.'));
-                        foreach ($file_array as $file) {
-                            if (strpos($file, $filename_wo_prefix_and_extension) === 0) {
+                        $filename_wo_prefix_and_extension = substr($filename_wo_prefix, 0, strrpos($filename_wo_prefix, '.') + 1);
+                        foreach ($file_array as $file_tmp) {
+                            if (strpos($file_tmp, $filename_wo_prefix_and_extension) === 0) {
                                 continue 3;
                             }
                         }
