@@ -19,45 +19,7 @@ if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
-// TODO: get paths step by step (execution time limit issues)
-
-function get_all_directories() {
-    global $CONFIG;
-
-    $dir = $CONFIG['fullpath'];
-    $found = array($dir);
-    $directories = array($dir);
-
-    while (sizeof($directories)) {
-        $dir = array_pop($directories);
-        if ($handle = opendir($dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file == '.' || $file == '..') {
-                    continue;
-                }
-                $file  = $dir.$file;
-                if (is_dir($file)) {
-                    $directory_path = $file.DIRECTORY_SEPARATOR;
-                    if ($directory_path == $CONFIG['fullpath'].'edit'.DIRECTORY_SEPARATOR) {
-                        continue;
-                    }
-                    array_push($directories, $directory_path);
-                    $found[] = str_replace('\\', '/', $directory_path);
-                }
-            }
-            closedir($handle);
-        }
-    }
-    sort($found);
-
-    return $found;
-} 
-
-if (!$superCage->get->keyExists('dirs_read')) {
-    pageheader("Search for additional files");
-    starttable("100%", "Search for additional files");
-    echo "<tr><td class=\"tableb\"><img src=\"images/loader.gif\" /> Reading directories</td></tr>";
-    endtable();
+if (!$superCage->get->keyExists('readdir')) {
     cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
     cpg_db_query("DROP TABLE IF EXISTS {$CONFIG['TABLE_PREFIX']}plugin_check_files_additional");
     cpg_db_query("CREATE TABLE {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (
@@ -69,11 +31,45 @@ if (!$superCage->get->keyExists('dirs_read')) {
                     filepath varchar(255) NOT NULL,
                     filename varchar(255) NOT NULL,
                     PRIMARY KEY (id) )");
-    cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (path) VALUES ('".implode("'), ('", get_all_directories())."')");
-    echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;dirs_read=done\">";
+    cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (path) VALUES ('{$CONFIG['fullpath']}')");
+    header("Location: index.php?file=check_files/additional_files&readdir=1");
+} elseif ($superCage->get->getAlpha('readdir') != "done") {
+    $path_id = $superCage->get->getInt('readdir');
+    $dir = mysql_result(cpg_db_query("SELECT path FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs WHERE id = $path_id"), 0);
+    if ($handle = opendir($dir)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            $file = $dir.$file;
+            if (is_dir($file)) {
+                $directory_path = $file.DIRECTORY_SEPARATOR;
+                if ($directory_path == $CONFIG['fullpath'].'edit'.DIRECTORY_SEPARATOR) {
+                    continue;
+                }
+                $found[] = str_replace('\\', '/', $directory_path);
+            }
+        }
+        closedir($handle);
+    }
+    sort($found);
+    foreach ($found as $path) {
+        cpg_db_query("INSERT INTO {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs (path) VALUES ('$path')");
+    }
+    $num_paths = mysql_result(cpg_db_query("SELECT MAX(id) FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs"), 0);
+    pageheader("Search for additional files");
+    starttable("100%", "Search for additional files");
+    echo "<tr><td class=\"tableb\"><img src=\"images/loader.gif\" /> Reading directory $path_id of $num_paths (<tt>$dir</tt>)</td></tr>";
+    endtable();
+    $path_id += 1;
+    if ($path_id > $num_paths) {
+        echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;readdir=done\">";
+    } else {
+        echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;readdir=$path_id\">";
+    }
     pagefooter();
 } else {
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
+    $result = cpg_db_query("SELECT path FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
     while ($row = mysql_fetch_assoc($result)) {
         $path_array[] = $row['path'];
     }
@@ -139,8 +135,8 @@ if (!$superCage->get->keyExists('dirs_read')) {
         $end = date("H:i", time()+$remaining);
         $path_id += 1;
         echo "
-            <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;dirs_read=done&amp;found=$found&amp;path_id=$path_id&amp;starttime=$starttime\">
-            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking directory $path_id of $num_paths - <tt>$path</tt>)</td></tr>
+            <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;readdir=done&amp;found=$found&amp;path_id=$path_id&amp;starttime=$starttime\">
+            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% - checking directory $path_id of $num_paths (<tt>$path</tt>)</td></tr>
             <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
             <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>
             <tr><td class=\"tableb\">Time remaining:</td><td class=\"tableb\">$remaining seconds</td></tr>
