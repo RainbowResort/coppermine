@@ -90,7 +90,7 @@ if ($limit_offset <= $numpics) {
         <tr><td class=\"tableb\">Missing&nbsp;files&nbsp;up&nbsp;to&nbsp;this&nbsp;point:</td><td class=\"tableb\" width=\"100%\">$found</td></tr>
     ";
 } else {
-    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing");
+    $result = cpg_db_query("SELECT * FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_missing ORDER BY filepath ASC, filename ASC");
     while ($row = mysql_fetch_assoc($result)) {
         $missing[$row['filepath']][] = $row['filename'];
     }
