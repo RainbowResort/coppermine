@@ -140,7 +140,7 @@ if (!$superCage->get->keyExists('dirs_read')) {
         $path_id += 1;
         echo "
             <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/additional_files&amp;dirs_read=done&amp;found=$found&amp;path_id=$path_id&amp;starttime=$starttime\">
-            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking directory $path_id of $num_paths)</td></tr>
+            <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking directory $path_id of $num_paths - <tt>$path</tt>)</td></tr>
             <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
             <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>
             <tr><td class=\"tableb\">Time remaining:</td><td class=\"tableb\">$remaining seconds</td></tr>
