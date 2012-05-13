@@ -19,7 +19,7 @@ if (!GALLERY_ADMIN_MODE) {
     cpg_die(ERROR, $lang_errors['access_denied'], __FILE__, __LINE__);
 }
 
-// Check the albums directory recursively for files that weren't added to the database (yet)
+// TODO: get paths step by step (execution time limit issues)
 
 function get_all_directories() {
     global $CONFIG;
@@ -107,9 +107,6 @@ if (!$superCage->get->keyExists('dirs_read')) {
             }
             mysql_free_result($result);
         }
-        //print_r($file_array);
-        //print_r($files_in_db_array);
-        //if ($path_id == 1) die();
 
         $prefix_array = array($CONFIG['thumb_pfx'], $CONFIG['normal_pfx'], $CONFIG['orig_pfx']);
         foreach ($file_array as $file) {
@@ -118,6 +115,15 @@ if (!$superCage->get->keyExists('dirs_read')) {
                     $filename_wo_prefix = substr($file, strlen($prefix));
                     if (in_array($filename_wo_prefix, $file_array)) {
                         continue 2;
+                    }
+                    // Custom thumbnail?
+                    if ($prefix == $CONFIG['thumb_pfx']) {
+                        $filename_wo_prefix_and_extension = substr($filename_wo_prefix, 0, strrpos($filename_wo_prefix, '.'));
+                        foreach ($file_array as $file) {
+                            if (strpos($file, $filename_wo_prefix_and_extension) === 0) {
+                                continue 3;
+                            }
+                        }
                     }
                 }
             }
