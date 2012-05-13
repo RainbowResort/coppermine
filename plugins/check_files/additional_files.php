@@ -147,10 +147,16 @@ if ($path_id <= $num_paths) {
     } else {
         echo "<tr><td class=\"tableb\" colspan=\"2\">The following files aren't added to the database (grouped by expandable paths):</tr></td>";
         foreach($additional as $dir => $files) {
+            if ($dir == '/') {
+                $dir = './';
+            }
             $id = "check_files_additional_".$i++;
             echo "<tr><td class=\"tableb\" colspan=\"2\"><span onclick=\"$('#{$id}').slideToggle();\" style=\"cursor:pointer;\">{$dir} [".count($files)."]</span></td></tr>";
             echo "<tr><td class=\"tableb\" colspan=\"2\"><div id=\"{$id}\" style=\"display:none;\"><table width=\"100%\" cellspacing=\"0\"><tr><td class=\"tableb\">";
             foreach($files as $file) {
+                if ($dir == '/') {
+                    $dir = '';
+                }
                 $path = $CONFIG['fullpath'].$dir.$file;
                 echo "<a href=\"$path\" target=\"check_files\">$path</a><br />";
             }
