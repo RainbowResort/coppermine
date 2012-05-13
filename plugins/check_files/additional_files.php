@@ -161,7 +161,8 @@ if (!$superCage->get->keyExists('dirs_read')) {
                 echo "<tr><td class=\"tableb\" colspan=\"2\"><span onclick=\"$('#{$id}').slideToggle();\" style=\"cursor:pointer;\">{$dir} [".count($files)."]</span></td></tr>";
                 echo "<tr><td class=\"tableb\" colspan=\"2\"><div id=\"{$id}\" style=\"display:none;\"><table width=\"100%\" cellspacing=\"0\"><tr><td class=\"tableb\">";
                 foreach($files as $file) {
-                    echo $CONFIG['fullpath'].$dir.$file."<br />";
+                    $path = $CONFIG['fullpath'].$dir.$file;
+                    echo "<a href=\"$path\" target=\"check_files\">$path</a><br />";
                 }
                 echo "</td></tr></table></tr></td></div>";
             }
