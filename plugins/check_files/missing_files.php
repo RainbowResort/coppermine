@@ -125,7 +125,7 @@ if ($superCage->get->getAlpha('do') == 'search') {
         echo "<a name=\"check_files_top\"></a>";
         starttable("100%", "Search for missing files", 2);
         echo "
-            <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/missing_files&ampdo=search&amp;found=$found&amp;row_count=$limit_row_count&amp;numpics=$numpics&amp;starttime=$starttime#check_files_top\">
+            <meta http-equiv=\"refresh\" content=\"0; URL=index.php?file=check_files/missing_files&amp;do=search&amp;found=$found&amp;row_count=$limit_row_count&amp;numpics=$numpics&amp;starttime=$starttime#check_files_top\">
             <tr><td class=\"tableb\">Progress:</td><td class=\"tableb\">{$progress}% (checking files ".($limit_offset - $limit_row_count)." - $limit_offset of $numpics)</td></tr>
             <tr><td class=\"tableb\">Start:</td><td class=\"tableb\">$begin</td></tr>
             <tr><td class=\"tableb\">Time elapsed:</td><td class=\"tableb\">$elapsed seconds</td></tr>
