@@ -169,6 +169,8 @@ if ($superCage->get->getAlpha('do') == 'search') {
         endtable();
         pagefooter();
     } else {
+        cpg_db_query("DELETE FROM {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs");
+        cpg_db_query("ALTER TABLE {$CONFIG['TABLE_PREFIX']}plugin_check_files_dirs AUTO_INCREMENT = 1");
         cpg_db_query("UPDATE {$CONFIG['TABLE_CONFIG']} SET value = 'complete' WHERE name = 'plugin_check_files_status_additional'");
         header("Location: index.php?file=check_files/additional_files&do=view");
     }
