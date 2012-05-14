@@ -155,7 +155,7 @@ if ($path_id <= $num_paths) {
             echo "<tr><td class=\"tableb\" colspan=\"2\"><span onclick=\"$('#{$id}').slideToggle();\" style=\"cursor:pointer;\">{$dir} [".count($files)."]</span></td></tr>";
             echo "<tr><td class=\"tableb\" colspan=\"2\"><div id=\"{$id}\" style=\"display:none;\"><table width=\"100%\" cellspacing=\"0\"><tr><td class=\"tableb\">";
             foreach($files as $file) {
-                if ($dir == '/') {
+                if ($dir == './') {
                     $dir = '';
                 }
                 $path = $CONFIG['fullpath'].$dir.$file;
