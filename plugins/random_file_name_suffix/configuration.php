@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Random File Name Suffix
   *************************************************
-  Copyright (c) 2011 eenemeenemuu
+  Copyright (c) 2011-2012 eenemeenemuu
   *************************************************
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,3 +20,5 @@ $description = 'Adds a random suffix to the file name during upload';
 $author='eenemeenemuu';
 $version='0.1';
 $plugin_cpg_version = array('min' => '1.5.18');
+
+?>
