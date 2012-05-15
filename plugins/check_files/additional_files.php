@@ -116,6 +116,12 @@ if ($superCage->get->getAlpha('do') == 'search') {
         mysql_free_result($result);
     }
 
+    // If forum plugin is installed, check if current directory is a user directory (needed later for avatar picture check).
+    if (function_exists('forum_start')) {
+        $dir_parts = explode('/', $dir);
+        $current_dir = $dir_parts[count($dir_parts)-2];
+    }
+
     // Add additional files to database
     $found = $superCage->get->getInt('found') ? $superCage->get->getInt('found') : 0;
     $prefix_array = array($CONFIG['thumb_pfx'], $CONFIG['normal_pfx'], $CONFIG['orig_pfx']);
@@ -128,7 +134,7 @@ if ($superCage->get->getAlpha('do') == 'search') {
                 if (in_array($filename_wo_prefix, $file_array)) {
                     continue 2;
                 }
-                // Custom thumbnail?
+                // File = custom thumbnail?
                 if ($prefix == $CONFIG['thumb_pfx']) {
                     $filename_wo_prefix_and_extension = substr($filename_wo_prefix, 0, strrpos($filename_wo_prefix, '.') + 1);
                     foreach ($file_array as $file_tmp) {
@@ -137,6 +143,13 @@ if ($superCage->get->getAlpha('do') == 'search') {
                         }
                     }
                 }
+            }
+        }
+        // File = avatar picture (forum plugin feature)?
+        if (is_numeric($current_dir)) {
+            $filename_wo_extension = substr($file, 0, strrpos($file, '.') + 1);
+            if ($filename_wo_extension == 'user_'.$current_dir.'_avatar.') {
+                continue;
             }
         }
         if (!in_array($file, $files_in_db_array)) {
