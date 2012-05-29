@@ -12,7 +12,7 @@ include('include/archive.php');
 
 $filelist = array();
 $aid = $superCage->get->getInt('aid');
-$query = "SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} AS pictures , (SELECT concat(';', keyword, ';') AS keyword FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = '" . $aid . "' ) as keyword WHERE pictures.aid = '" . $aid . "' OR ( keyword.keyword <> '' AND keywords LIKE CONCAT('%;', keyword.keyword, ';%'))";
+$query = "SELECT filepath, filename FROM {$CONFIG['TABLE_PICTURES']} AS pictures , (SELECT keyword FROM {$CONFIG['TABLE_ALBUMS']} WHERE aid = '" . $aid . "' ) AS keyword WHERE pictures.aid = '" . $aid . "' OR ( keyword.keyword <> '' AND CONCAT(';', keywords, ';') LIKE CONCAT('%;', keyword.keyword, ';%'))";
 $result = cpg_db_query($query);
 $rowset = cpg_db_fetch_rowset($result);
 
