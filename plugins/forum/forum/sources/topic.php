@@ -112,6 +112,21 @@ class topic_controller extends Controller {
             if (strlen($data['body']) > Config::item('fr_msg_max_size') && Config::item('fr_msg_max_size')) {
                 $data['body'] = substr($data['body'], 0, Config::item('fr_msg_max_size'));
             }
+            global $CONFIG;
+            if ($CONFIG['comment_captcha'] == 1 || $CONFIG['comment_captcha'] == 2 && !USER_ID) {
+                if (!captcha_plugin_enabled()) {
+                    global $lang_errors;
+                    $superCage = Inspekt::makeSuperCage();
+                    require("include/captcha.inc.php");
+                    $matches = $superCage->post->getMatched('confirmCode', '/^[a-zA-Z0-9]+$/');
+
+                    if (!$matches[0] || !PhpCaptcha::Validate($matches[0])) {
+                        $errors[] = $lang_errors['captcha_error'];
+                    }
+                } else {
+                    CPGPluginAPI::action('captcha_comment_validate', null);
+                }
+            }
             if (count($errors) == 0) {
                 if ($authorizer->double_post()) {
                     cpg_die(ERROR, Lang::item('error.already_post'), __FILE__, __LINE__);

@@ -160,6 +160,14 @@ echo table::tds(array(
     array('class'=>'tableb', 'text'=>Lang::item('topic.message')),
     array('class'=>'tableb', 'text'=>form::textarea('body')),
 ));
+global $CONFIG;
+if ($CONFIG['comment_captcha'] == 1 || $CONFIG['comment_captcha'] == 2 && !USER_ID) {
+    global $lang_common;
+    print table::tds(array(
+        array('class'=>'tableb', 'text'=>$lang_common['confirm']),
+        array('class'=>'tableb', 'text'=>'<input type="text" name="confirmCode" size="5" maxlength="5" class="textinput" /><img src="captcha.php" align="middle" border="0" alt="" />'),
+    ));
+}
 echo table::tds(array(
     array('class'=>'tableb', 'text'=>NBSP),
     array('class'=>'tableb', 'text'=>generate_smilies('fastreply', 'body')),
