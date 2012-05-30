@@ -2,17 +2,15 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Flash Media Player
   *************************************************
-  Copyright (c) 2009 eenemeenemuu
+  Copyright (c) 2009-2012 eenemeenemuu
   ********************************************
-  $HeadURL: https://coppermine.svn.sourceforge.net/svnroot/coppermine/branches/cpg1.5.x/plugins/flash_media_player/lang/french.php $
-  $Revision: 6932 $
-  $LastChangedBy: eenemeenemuu $
-  $Date: 2009-12-30 10:54:33 +0100 (mer. 30 déc. 2009) $
+  $HeadURL$
+  $Revision$
+  $LastChangedBy$
+  $Date$
 **************************************************/
 
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_flash_media_player['description'] = 'Utiliser %s pour lire les fichiers flv, mp4, mp3 &amp; aac. Prendre en considération la <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US" class="external">licence non-commerciale</a>!';
 $lang_plugin_flash_media_player['announcement_thread'] = 'Sujet d\'annonce';

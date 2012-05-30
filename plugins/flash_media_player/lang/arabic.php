@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Flash Media Player
   *************************************************
-  Copyright (c) 2009 eenemeenemuu
+  Copyright (c) 2009-2012 eenemeenemuu
   ********************************************
   $HeadURL$
   $Revision$
@@ -11,9 +11,8 @@
 **************************************************
 ترجمة ابن غياث ssdaa.com
 **************************************************/
-if (!defined('IN_COPPERMINE')) {
-    die('Not in Coppermine...');
-}
+
+if (!defined('IN_COPPERMINE')) die('Not in Coppermine...');
 
 $lang_plugin_flash_media_player['description'] = 'Use %s to play flv, mp4, mp3 &amp; aac files. Consider the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US" class="external">noncommercial license</a>!';
 $lang_plugin_flash_media_player['announcement_thread'] = 'موضوع الاعلان';

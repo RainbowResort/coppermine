@@ -2,7 +2,7 @@
 /**************************************************
   Coppermine 1.5.x Plugin - Flash Media Player
   *************************************************
-  Copyright (c) 2009 eenemeenemuu
+  Copyright (c) 2009-2012 eenemeenemuu
   ********************************************
   $HeadURL$
   $Revision$
@@ -32,25 +32,34 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
         }
 
         global $CONFIG, $USER;
+
+        // Load language file
+        require_once "./plugins/flash_media_player/lang/english.php";
+        if ($CONFIG['lang'] != 'english' && file_exists("./plugins/flash_media_player/lang/{$CONFIG['lang']}.php")) {
+            require_once "./plugins/flash_media_player/lang/{$CONFIG['lang']}.php";
+        }
+
+        // Add space for the control bar
         $CURRENT_PIC_DATA['pheight'] += 24;
+
+        // Use thumbnail or intermediate-sized image, if exists
         $thumb = get_pic_url($CURRENT_PIC_DATA, 'thumb');
         if (file_exists($normal = str_replace($CONFIG['thumb_pfx'], $CONFIG['normal_pfx'], $thumb))) {
             $thumb = $normal;
         }
-
-        $file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
         // Support for external files
         if ($CURRENT_PIC_DATA['filesize'] < 256) {
             $file_content = file_get_contents($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CURRENT_PIC_DATA['filename']);
             preg_match('/^(http|ftp)s?:\/\/.*\.'.$CURRENT_PIC_DATA['extension'].'$/i', $file_content, $matches);
             if (count($matches)) {
-                $file = strip_tags($matches[0]);
+                $media_file = strip_tags($matches[0]);
             }
+        } else {
+            $media_file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
         }
 
-        $autostart = $CONFIG['media_autostart'] == 1 ? "1" : "0";
-
+        // Read CSS files to set player colors
         $theme = $USER['theme'] ? $USER['theme'] : $CONFIG['theme'];
         $stylesheet = file_get_contents("themes/{$theme}/style.css");
         preg_match_all('/\.tableh2.*{(.*)}/Us', $stylesheet, $matches);
@@ -65,34 +74,39 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
             }
         }
 
-        $player = "plugins/flash_media_player/player.swf";
-        $player .= "?file=$file";
-        $player .= "&image=$thumb";
-        $player .= "&autostart=$autostart";
-        $player .= "&backcolor={$style['background']}";
-        $player .= "&frontcolor={$style['color']}";
-        $player .= "&lightcolor={$style['color']}";
-
         // Use skin if available
-        if ($handle = opendir('plugins/flash_media_player/')) {
+        if ($handle = opendir('plugins/flash_media_player/skins/')) {
             $skins = array();
             while (false !== ($file = readdir($handle))) {
-                if ($file != 'player.swf' && stripos($file, '.swf') || stripos($file, '.zip')) {
+                if (stripos($file, '.swf') || stripos($file, '.zip')) {
                     $skins[] = $file;
                 }
             }
             closedir($handle);
             if (count($skins) == 1) {
-                $player .= "&skin=plugins/flash_media_player/".$skins[0];
+                $skin = "\nskin: \"plugins/flash_media_player/{$skins[0]}\",";
             }
         }
+        
+        $autostart = $CONFIG['media_autostart'] == 1 ? "true" : "false";
 
         $pic_html = <<< EOT
-            <object type="{$CURRENT_PIC_DATA['mime']}" width="{$CURRENT_PIC_DATA['pwidth']}" height="{$CURRENT_PIC_DATA['pheight']}" data="$player">
-            <param name="movie" value="$player" />
-            <param name="allowfullscreen" value="true" />
-            <param name="wmode" value="opaque" />
-            </object>
+            <script type="text/javascript" src="plugins/flash_media_player/jwplayer.js"></script>
+            <div id="flash_media_player">{$lang_plugin_flash_media_player['loading_player']}</div>
+            <script type="text/javascript">
+                jwplayer("flash_media_player").setup({
+                    flashplayer: "plugins/flash_media_player/player.swf",
+                    "controlbar.position": "bottom",
+                    backcolor: "{$style['background']}",
+                    frontcolor: "{$style['color']}",
+                    lightcolor: "{$style['color']}",
+                    autostart: {$autostart},
+                    height: {$CURRENT_PIC_DATA['pheight']},
+                    width: {$CURRENT_PIC_DATA['pwidth']},
+                    file: "{$media_file}",
+                    image: "{$thumb}",{$skin}
+                });
+            </script>
 EOT;
         return $pic_html;
     } else {
