@@ -96,7 +96,7 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
             }
             closedir($handle);
             if (count($skins) == 1) {
-                $skin = "\nskin: \"plugins/flash_media_player/{$skins[0]}\",";
+                $skin = "\nskin: \"plugins/flash_media_player/skins/{$skins[0]}\",";
             }
         }
         
