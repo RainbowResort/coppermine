@@ -51,11 +51,11 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
         }
 
         // Support for external files / YouTube support
-        if ($CURRENT_PIC_DATA['filesize'] < 256) {
+        if ($CURRENT_PIC_DATA['filesize'] < 512) {
             $file_content = file_get_contents($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CURRENT_PIC_DATA['filename']);
             if (preg_match('/^(http|ftp)s?:\/\/.*\.'.$CURRENT_PIC_DATA['extension'].'$/i', $file_content, $matches)) {
                 $media_file = strip_tags($matches[0]);
-            } else {
+            } elseif (is_movie($CURRENT_PIC_DATA['filename'])) {
                 $youtube_support = array(
                     "http://www.youtube.com/watch?v",
                     "http://www.youtube.com/watch#!v=",
