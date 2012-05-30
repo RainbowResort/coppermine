@@ -39,8 +39,10 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
             require_once "./plugins/flash_media_player/lang/{$CONFIG['lang']}.php";
         }
 
-        // Add space for the control bar
+        // Add space for the player control bar
         $CURRENT_PIC_DATA['pheight'] += 24;
+
+        $media_file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
 
         // Use thumbnail or intermediate-sized image, if exists
         $thumb = get_pic_url($CURRENT_PIC_DATA, 'thumb');
@@ -48,15 +50,25 @@ function fmp_get_html($CURRENT_PIC_DATA, $check_only = false) {
             $thumb = $normal;
         }
 
-        // Support for external files
+        // Support for external files / YouTube support
         if ($CURRENT_PIC_DATA['filesize'] < 256) {
             $file_content = file_get_contents($CONFIG['fullpath'].$CURRENT_PIC_DATA['filepath'].$CURRENT_PIC_DATA['filename']);
-            preg_match('/^(http|ftp)s?:\/\/.*\.'.$CURRENT_PIC_DATA['extension'].'$/i', $file_content, $matches);
-            if (count($matches)) {
+            if (preg_match('/^(http|ftp)s?:\/\/.*\.'.$CURRENT_PIC_DATA['extension'].'$/i', $file_content, $matches)) {
                 $media_file = strip_tags($matches[0]);
+            } else {
+                $youtube_support = array(
+                    "http://www.youtube.com/watch?v",
+                    "http://www.youtube.com/watch#!v=",
+                    "http://www.youtube.com/v/",
+                    "http://youtu.be/"
+                );
+                foreach ($youtube_support as $url_format) {
+                    if (stripos($file_content, $url_format) === 0) {
+                        $media_file = $file_content;
+                        break;
+                    }
+                }
             }
-        } else {
-            $media_file = $CONFIG['ecards_more_pic_target'].get_pic_url($CURRENT_PIC_DATA, 'fullsize');
         }
 
         // Read CSS files to set player colors
