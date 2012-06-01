@@ -70,7 +70,7 @@ function theme_switch_page_start() {
 
     if ($mobile_browser > 0) {
         define('MOBILE_BROWSER', TRUE);
-        if (!$superCage->cookie->keyExists($CONFIG['TABLE_PREFIX'].'mobile_theme')) {
+        if (!$superCage->cookie->keyExists($CONFIG['cookie_name'].'_mobile_theme')) {
             define('MOBILE_VIEW', TRUE);
             if ($CONFIG['theme'] != $CONFIG['theme_switch_mobile_theme'] && !$superCage->get->keyExists('theme')) {
                 $USER['theme'] = $CONFIG['theme_switch_mobile_theme'];
