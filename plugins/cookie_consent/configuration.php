@@ -17,7 +17,7 @@ if ($CONFIG['lang'] != 'english' && file_exists("./plugins/cookie_consent/lang/{
     require "./plugins/cookie_consent/lang/{$CONFIG['lang']}.php";
 }
 
-$name = 'Cookie consent';
+$name = $lang_plugin_cookie_consent['name'];
 $description = sprintf($lang_plugin_cookie_consent['description'], '<a href="http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:32009L0136:EN:NOT" rel="external" class="external">Directive 2009/136/EC</a>');
 $author = '<a href="http://forum.coppermine-gallery.net/index.php?action=profile;u=24278" rel="external" class="external">eenemeenemuu</a>';
 $version = '1.0';
