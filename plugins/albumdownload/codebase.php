@@ -11,9 +11,9 @@ $thisplugin->add_filter('theme_thumbnails_title','downloadZip_header');
 function downloadZip_header($html) {
     $lang_plugin_albumdownload = albumdownload_language();
     $superCage = Inspekt::makeSuperCage();
-    if ($aid = $superCage->get->getInt('album') > 0) {
+    if ($superCage->get->getInt('album') > 0) {
         $imgcode = '<img src="plugins/albumdownload/ico/ziparrow.png" alt="'.$lang_plugin_albumdownload['albumDownload'].'" title="'.$lang_plugin_albumdownload['albumDownload'].'" style="vertical-align:text-top;" />';
-        $html['{ALBUM_NAME}'] = $html['{ALBUM_NAME}'] . ' <a href="index.php?file=albumdownload/albumZip&aid='.$aid.'">'.$imgcode.'</a>';
+        $html['{ALBUM_NAME}'] = $html['{ALBUM_NAME}'] . ' <a href="index.php?file=albumdownload/albumZip&aid='.$superCage->get->getInt('album').'">'.$imgcode.'</a>';
     }
     return $html;
 }
