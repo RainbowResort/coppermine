@@ -15,4 +15,4 @@
 INSERT INTO `CPG_final_extract_config` VALUES ('1', '0','0','0','0','0','0','0','0','0','0','0','0');
 INSERT INTO `CPG_final_extract_config` VALUES ('2', '0','1','0','0','0','0','0','0','0','0','0','0');
 INSERT INTO `CPG_final_extract_config` VALUES ('3', '0','0','1','1','1','0','0','0','0','1','0','0');
-INSERT INTO `CPG_final_extract_config` VALUES ('4', '0','1','1','1','1','1','1','1','1','1','1',1');
+INSERT INTO `CPG_final_extract_config` VALUES ('4', '0','1','1','1','1','1','1','1','1','1','1','1');
