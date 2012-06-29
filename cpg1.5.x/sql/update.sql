@@ -535,3 +535,4 @@ INSERT INTO CPG_usergroups VALUES (3, 'Anonymous', 0, 0, 1, 0, 0, 0, 0, 1, 1, 3)
 UPDATE CPG_users SET user_actkey = '' WHERE user_active = 'YES';
 
 INSERT INTO CPG_config VALUES ('cookies_need_consent', '0');
+INSERT INTO CPG_config VALUES ('album_sort_order', 'pa');
