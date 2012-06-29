@@ -24,5 +24,7 @@ $lang_plugin_cookie_consent['cookie_cpg_session'] = 'Session-Cookie für Galerie
 $lang_plugin_cookie_consent['cookie_mambo_sessioncookie'] = 'Session-Cookie für Galerien, die mit der Software "Mambo" verbunden sind';
 $lang_plugin_cookie_consent['cookie_picinfo'] = 'Speichert die letzte Auswahl, ob die Dateiinformationen angezeigt werden soll oder nicht';
 $lang_plugin_cookie_consent['cookie_fav'] = 'Speichert die Favoriten';
+$lang_plugin_cookie_consent['cookie_albpw'] = 'Speichert die eingegebenen Albumpasswörter';
+$lang_plugin_cookie_consent['cookie_client_id'] = '"32-stellige&nbsp;Zeichenkette"';
 
 ?>

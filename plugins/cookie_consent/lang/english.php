@@ -24,5 +24,7 @@ $lang_plugin_cookie_consent['cookie_cpg_session'] = 'Session cookie for unbridge
 $lang_plugin_cookie_consent['cookie_mambo_sessioncookie'] = 'Session cookie when bridged with Mambo';
 $lang_plugin_cookie_consent['cookie_picinfo'] = 'Stores the last status of displaying or hiding the file information box';
 $lang_plugin_cookie_consent['cookie_fav'] = 'Stores the user\'s favorite pictures';
+$lang_plugin_cookie_consent['cookie_albpw'] = 'Stores the entered album passwords';
+$lang_plugin_cookie_consent['cookie_client_id'] = '"32&nbsp;digit&nbsp;string"';
 
 ?>

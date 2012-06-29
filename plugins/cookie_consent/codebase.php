@@ -24,10 +24,11 @@ function cookie_consent_page_start() {
     // Make cookie list accessible to other plugins so they can add their cookies
     $plugin_cookie_consent_cookies = array(
         $CONFIG['cookie_name'].'_data' => $lang_plugin_cookie_consent['cookie_data'],
-        '"32&nbsp;digit&nbsp;MD5&nbsp;hash"' => $lang_plugin_cookie_consent['cookie_cpg_session'],
+        $lang_plugin_cookie_consent['cookie_client_id'] => $lang_plugin_cookie_consent['cookie_cpg_session'],
         'sessioncookie' => $lang_plugin_cookie_consent['cookie_mambo_sessioncookie'],
         'picinfo' => $lang_plugin_cookie_consent['cookie_picinfo'], // TODO <-- add prefix or better: store value in _data
         $CONFIG['cookie_name'].'_fav' => $lang_plugin_cookie_consent['cookie_fav'],
+        $CONFIG['cookie_name'].'_albpw' => $lang_plugin_cookie_consent['cookie_albpw'],
     );
 }
 
