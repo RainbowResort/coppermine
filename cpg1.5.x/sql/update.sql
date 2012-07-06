@@ -360,7 +360,7 @@ INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, avail
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('laothian', 'Laothian ','','la','', 'NO', 'NO');
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('latvian', 'Latvian','Latvian','lv','', 'NO', 'NO');
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('lithuanian', 'Lithuanian','Letzeburgisch','lu','', 'NO', 'NO');
-INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('luxembourgish', 'Luxembourgish','Lietuvi&#0353;kai','lt','', 'YES', 'NO');
+INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('luxembourgish', 'Luxembourgish','Lietuvi&#0353;kai','lu','', 'YES', 'NO');
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('macedonian', 'Macedonian','&#1052;&#1072;&#1082;&#1077;&#1076;&#1086;&#1085;&#1089;&#1082;&#1080;','mk','', 'NO', 'NO');
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('malay', 'Malay','Bahasa Melayu','my','', 'NO', 'NO');
 INSERT INTO CPG_languages (lang_id, english_name, native_name, flag, abbr, available, complete) VALUES ('maltese', 'Maltese','','mt','', 'NO', 'NO');
@@ -536,4 +536,6 @@ UPDATE CPG_users SET user_actkey = '' WHERE user_active = 'YES';
 
 INSERT INTO CPG_config VALUES ('cookies_need_consent', '0');
 INSERT INTO CPG_config VALUES ('album_sort_order', 'pa');
+
+UPDATE CPG_languages SET `flag` = 'lu' WHERE `lang_id`='luxembourgish';
 INSERT INTO CPG_config VALUES ('custom_sortorder_thumbs', '1');
