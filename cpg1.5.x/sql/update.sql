@@ -536,3 +536,4 @@ UPDATE CPG_users SET user_actkey = '' WHERE user_active = 'YES';
 
 INSERT INTO CPG_config VALUES ('cookies_need_consent', '0');
 INSERT INTO CPG_config VALUES ('album_sort_order', 'pa');
+INSERT INTO CPG_config VALUES ('custom_sortorder_thumbs', '1');
