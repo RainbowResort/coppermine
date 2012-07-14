@@ -109,12 +109,12 @@ EOT;
         }
         // list of annotions or user names
         if ($CONFIG['plugin_annotate_type'] != 1) {
-            $select_box = '<select id="livesearch_output" size="1" class="button" onmousedown="load_annotation_list();" onchange="return addnote(this.options[this.selectedIndex].value);"><option selected=\"selected\" disabled=\"disabled\">-- '.$lang_plugin_annotate['annotate'].' --</option></select>';
-            $loading_replacement = '<span id="livesearch_output_loading" style="display: none;"><span class="button" style="padding: 2px">--'.$lang_plugin_annotate['annotate'].' --</span>&nbsp;<img src="images/loader.gif" />&nbsp;</span>';
+            $select_box = '<select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onmousedown="load_annotation_list();" onchange="return addnote(this.options[this.selectedIndex].value);"><option selected=\"selected\" disabled=\"disabled\">-- '.$lang_plugin_annotate['annotate'].' --</option></select>';
+            $loading_replacement = '<span id="livesearch_output_loading" style="display: none; margin-left: 12px;"><img src="images/loader.gif" /></span>';
             $livesearch_button = '<input id="livesearch_input" type="text" class="textinput" size="8" title="'.$lang_plugin_annotate['filter_annotations'].'" style="cursor:help; padding-right: 16px; background-image: url(images/icons/search.png); background-repeat: no-repeat; background-position: right center;" />';
             $menu_buttons .= <<< EOT
             <script type="text/javascript">
-                document.write('<li>{$select_box}{$loading_replacement}{$livesearch_button}</li>');
+                document.write('<li>{$select_box}{$loading_replacement}&nbsp;{$livesearch_button}</li>');
             </script>
             <script type="text/javascript" src="plugins/annotate/lib/livesearch.js"></script>
 EOT;
