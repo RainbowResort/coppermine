@@ -97,43 +97,24 @@ function annotate_file_data($data){
             }
         }
 
-        $livesearch_button = '<input id="livesearch_input" type="text" class="textinput" size="8" title="'.$lang_plugin_annotate['filter_annotations'].'" style="cursor:help; padding-right: 16px; background-image: url(images/icons/search.png); background-repeat: no-repeat; background-position: right center;" />';
-
-        if ($CONFIG['plugin_annotate_type'] > 0) {
-            // free text
-            if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
-                $menu_buttons .= <<< EOT
-                <script type="text/javascript">
-                    document.write('<li><a href="javascript:void();" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
-                    document.write('<span>{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}</span>');
-                    document.write('</a></li>');
-                </script>
-EOT;
-            }
-
-            if ($CONFIG['plugin_annotate_type'] == 2 || $CONFIG['plugin_annotate_type'] == 3) {
-                $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
-                $result = mysql_query("SELECT note FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate GROUP BY note ORDER BY note ASC");
-                while ($row = mysql_fetch_row($result)) {
-                    $select_options .= "<option value=\"{$row[0]}\">{$row[0]}</option>";
-                }
-                $menu_buttons .= <<< EOT
-                <script type="text/javascript">
-                    document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
-                </script>
-                <script type="text/javascript" src="plugins/annotate/lib/livesearch.js"></script>
-EOT;
-            }
-        } else {
-            // user list
-            $select_options = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
-            $result = mysql_query("SELECT user_id, user_name FROM {$CONFIG['TABLE_USERS']} ORDER BY user_name ASC");
-            while ($row = mysql_fetch_assoc($result)) {
-                $select_options .= "<option value=\"{$row['user_name']}\">{$row['user_name']}</option>";
-            }
+        // free text
+        if ($CONFIG['plugin_annotate_type'] == 1 || $CONFIG['plugin_annotate_type'] == 3) {
             $menu_buttons .= <<< EOT
             <script type="text/javascript">
-                document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
+                document.write('<li><a href="javascript:void();" title="{$lang_plugin_annotate['plugin_name']}" onclick="return addnote(\'\');" rel="nofollow">');
+                document.write('<span>{$annotate_icon_array['annotate']}{$lang_plugin_annotate['annotate']}</span>');
+                document.write('</a></li>');
+            </script>
+EOT;
+        }
+        // list of annotions or user names
+        if ($CONFIG['plugin_annotate_type'] != 1) {
+            $select_box = '<select id="livesearch_output" size="1" class="button" onmousedown="load_annotation_list();" onchange="return addnote(this.options[this.selectedIndex].value);"><option selected=\"selected\" disabled=\"disabled\">-- '.$lang_plugin_annotate['annotate'].' --</option></select>';
+            $loading_replacement = '<span id="livesearch_output_loading" style="display: none;"><span class="button" style="padding: 2px">--'.$lang_plugin_annotate['annotate'].' --</span>&nbsp;<img src="images/loader.gif" />&nbsp;</span>';
+            $livesearch_button = '<input id="livesearch_input" type="text" class="textinput" size="8" title="'.$lang_plugin_annotate['filter_annotations'].'" style="cursor:help; padding-right: 16px; background-image: url(images/icons/search.png); background-repeat: no-repeat; background-position: right center;" />';
+            $menu_buttons .= <<< EOT
+            <script type="text/javascript">
+                document.write('<li>{$select_box}{$loading_replacement}{$livesearch_button}</li>');
             </script>
             <script type="text/javascript" src="plugins/annotate/lib/livesearch.js"></script>
 EOT;

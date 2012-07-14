@@ -979,6 +979,3 @@ DragResize.prototype.mouseUp = function(e) { with (this)
     if (ondragend) this.ondragend();
     deselect(true);
 }};
-
-
-

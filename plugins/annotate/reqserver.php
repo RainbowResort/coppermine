@@ -55,35 +55,37 @@ if ($superCage->post->keyExists('add')) {
     cpg_db_query($sql);
     die("$nid");
 } elseif ($superCage->post->keyExists('livesearch')) {
-	header("Content-Type: text/html; charset={$CONFIG['charset']}");
+    header("Content-Type: text/html; charset={$CONFIG['charset']}");
     $q = $superCage->post->getRaw('q');
+    $tablename = $CONFIG['plugin_annotate_type'] > 0 ? 'plugin_annotate' : 'users';
+    $fieldname = $CONFIG['plugin_annotate_type'] > 0 ? 'note' : 'user_name';
     if (strlen(trim($q)) > 0) {
         $searchword = explode(" ", $q);
         for( $i = 0; $i < sizeof($searchword); $i++ ) {
-            $searchword[$i] = "note LIKE '%" .$searchword[$i]. "%'";
+            $searchword[$i] = "$fieldname LIKE '%" .$searchword[$i]. "%'";
         }
         $ready = implode(" AND ", $searchword);
 
         $result = cpg_db_query("
-            SELECT DISTINCT note
-            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate
+            SELECT DISTINCT $fieldname
+            FROM {$CONFIG['TABLE_PREFIX']}{$tablename}
             WHERE $ready
-            ORDER BY note ASC
+            ORDER BY $fieldname ASC
         ");
         $hint = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['search_results']} (".mysql_num_rows($result)."): $q --</option>";
         while ($row = mysql_fetch_assoc($result)) {
-            $hint .= "<option value=\"{$row['note']}\">{$row['note']}</option>";
+            $hint .= "<option value=\"{$row[$fieldname]}\">{$row[$fieldname]}</option>";
         }
         mysql_free_result($result);
     } else {
         $result = cpg_db_query("
-            SELECT DISTINCT note
-            FROM {$CONFIG['TABLE_PREFIX']}plugin_annotate
-            ORDER BY note ASC
+            SELECT DISTINCT $fieldname
+            FROM {$CONFIG['TABLE_PREFIX']}{$tablename}
+            ORDER BY $fieldname ASC
         ");
         $hint = "<option selected=\"selected\" disabled=\"disabled\">-- {$lang_plugin_annotate['annotate']} --</option>";
         while ($row = mysql_fetch_assoc($result)) {
-            $hint .= "<option value=\"{$row['note']}\">{$row['note']}</option>";
+            $hint .= "<option value=\"{$row[$fieldname]}\">{$row[$fieldname]}</option>";
         }
         mysql_free_result($result);
     }
@@ -96,4 +98,7 @@ if ($superCage->post->keyExists('add')) {
     echo $response;
     die();
 }
+
 die("0"); // Just a precaution
+
+?>
