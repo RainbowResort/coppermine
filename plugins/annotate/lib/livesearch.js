@@ -19,7 +19,7 @@ function load_annotation_list() {
         $('#livesearch_output_loading').show();
         $.post('index.php?file=annotate/reqserver', {livesearch:'1',q:$('#livesearch_input').val()}, function(data) {
             $('#livesearch_output_loading').hide();
-            $('#livesearch_output').html(data).show().expand(); 
+            $('#livesearch_output').html(data).show(); 
         });
         loaded = true;
     }
