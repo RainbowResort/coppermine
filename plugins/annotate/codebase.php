@@ -98,21 +98,6 @@ function annotate_file_data($data){
         }
 
         $livesearch_button = '<input id="livesearch_input" type="text" class="textinput" size="8" title="'.$lang_plugin_annotate['filter_annotations'].'" style="cursor:help; padding-right: 16px; background-image: url(images/icons/search.png); background-repeat: no-repeat; background-position: right center;" />';
-        $livesearch_script = <<< EOT
-            $(document).ready(function() {
-                var alertTimerId = 0;
-                $('#livesearch_input').keyup(function() {
-                    $('#livesearch_input').addClass('blue');
-                    clearTimeout(alertTimerId);
-                    alertTimerId = setTimeout(function () {
-                        $.post('index.php?file=annotate/reqserver', {livesearch:'1',q:$('#livesearch_input').val()}, function(data) { 
-                            $('#livesearch_output').html(data); 
-                            $('#livesearch_input').removeClass('blue');
-                        });
-                    }, 250);
-                });
-            });
-EOT;
 
         if ($CONFIG['plugin_annotate_type'] > 0) {
             // free text
@@ -135,8 +120,8 @@ EOT;
                 $menu_buttons .= <<< EOT
                 <script type="text/javascript">
                     document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
-                    $livesearch_script
                 </script>
+                <script type="text/javascript" src="plugins/annotate/lib/livesearch.js"></script>
 EOT;
             }
         } else {
@@ -149,8 +134,8 @@ EOT;
             $menu_buttons .= <<< EOT
             <script type="text/javascript">
                 document.write('<li><select id="livesearch_output" size="1" class="button" style="margin-left: 12px;" onchange="return addnote(this.options[this.selectedIndex].value);">$select_options</select>$livesearch_button</li>');
-                $livesearch_script
             </script>
+            <script type="text/javascript" src="plugins/annotate/lib/livesearch.js"></script>
 EOT;
         }
     }
